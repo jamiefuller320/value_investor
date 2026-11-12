@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-11T07:51:22.306905+00:00",
+  "generated_at": "2026-11-12T02:35:31.096993+00:00",
   "observe_only": true,
-  "open_ideas": 668,
-  "with_trigger": 32,
+  "open_ideas": 679,
+  "with_trigger": 37,
   "met": [
     {
       "id": "L616",
@@ -78,6 +78,48 @@
           "actual": 8
         }
       ]
+    },
+    {
+      "id": "N262",
+      "title": "Strategy-book memo use tracking (memo fed an entry decision vs unused)",
+      "status": "open",
+      "first_met_at": "2026-11-12T02:35:31.096993+00:00",
+      "conditions": [
+        {
+          "condition": {
+            "file": "docs/data/strategy_book_registration.json",
+            "path": "forward_live",
+            "op": "truthy"
+          },
+          "state": "met",
+          "actual": true
+        },
+        {
+          "condition": {
+            "on_or_after": "2026-12-08"
+          },
+          "state": "unmet",
+          "actual": "2026-11-12"
+        }
+      ]
+    },
+    {
+      "id": "L709",
+      "title": "Show strategy-book demo slippage on the observe dashboard",
+      "status": "open",
+      "first_met_at": "2026-11-12T02:35:31.096993+00:00",
+      "conditions": [
+        {
+          "condition": {
+            "file": "docs/data/strategy_book_demo_ledger.json",
+            "path": "slippage.measured_count",
+            "op": ">=",
+            "value": 1
+          },
+          "state": "met",
+          "actual": 1
+        }
+      ]
     }
   ],
   "unknown": [
@@ -123,7 +165,9 @@
     }
   ],
   "unmet": [
+    "N13",
     "N135",
+    "N14",
     "L541",
     "L558",
     "N198",
@@ -143,11 +187,12 @@
     "N246",
     "N259",
     "L699",
-    "N262",
     "L703",
     "L704",
     "L705",
-    "L706"
+    "L706",
+    "N264",
+    "L707"
   ],
   "frozen_mentions": [],
   "unknown_grace_days": 7

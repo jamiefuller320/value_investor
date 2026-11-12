@@ -65,6 +65,23 @@ See module constants in `src/value_investor/eodhd_coverage_check.py` and the
   rehearsal).
 - Euro symbols use exchange codes **LSE**, **XETRA** and **PA** (Paris) per EODHD.
 
+## First run (2026-11-12)
+
+Verdict **fail**, 564 calls. Read per check:
+
+- **A, prices:** 10 of 11 failed names found in the delisted list with prices to the event.
+  Patisserie's prices stop at its October 2018 suspension, before the administration date
+  used as its event date.
+- **A, fundamentals:** only 3 of 11 have statements from 2013 (Aggreko, Morrison,
+  Wirecard; intu from 2016). Carillion, Thomas Cook, Debenhams, Patisserie, Sirius, GKN and
+  Sky return company details but no statements. This is the real gap: the failures a
+  survivorship-free replay most needs are the names without fundamentals.
+- **B, active sample:** pass (statements from 2013 on 85%, dated periods 99.8%, currency
+  100%, shares history 97.5%). Misses are names listed after 2013.
+- **D:** the 0% was a parsing bug, not missing data. EODHD puts a bare year or quarter in
+  `outstandingShares[*].date`; the check now reads `dateFormatted`. Re-run to get the true D
+  share. The bars were not changed after seeing the results.
+
 ## Automation
 
 - **Workflow:** `.github/workflows/eodhd-coverage-check.yml` (dispatch only). Missing

@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-11T07:53:47.172050+00:00",
+  "generated_at": "2026-11-12T02:37:55.902000+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
-  "checklist_updated_at": "2026-11-10",
+  "checklist_updated_at": "2026-11-11",
   "counts": {
     "new_info": 7,
-    "unacked": 14,
+    "unacked": 17,
     "acked": 35,
     "automated": 20,
-    "human": 56
+    "human": 59
   },
   "tasks": [
     {
@@ -29,11 +29,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "2 attention-parked eng tasks",
-        "updated_at": "2026-11-11T07:52:32.230668+00:00",
+        "updated_at": "2026-11-12T02:36:30.636245+00:00",
         "fingerprint": "0a2dad58594e26e2",
         "bullets": [
           "Parked tasks: 3 (attention ~2)",
-          "Queue-clearing pause active: False — evaluated 2026-11-11T07:52:32.230668+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-11-12T02:36:30.636245+00:00",
           "Traffic pause active: False",
           "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
           "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
@@ -72,15 +72,15 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary not scored",
-        "updated_at": "2026-11-11T07:51:22.265337+00:00",
+        "updated_at": "2026-11-12T02:35:31.057947+00:00",
         "fingerprint": "94066622535964a2",
         "bullets": [
-          "ai_judgment_matched30_fair: total return +0.5% vs FTAL.L +0.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.6% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-          "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.082",
-          "vs control buy_tier_matched30_fair: difference 0.0162 (common window, not significance)",
+          "ai_judgment_matched30_fair: total return -0.4% vs FTAL.L +0.2% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.0888",
+          "vs control buy_tier_matched30_fair: difference 0.0133 (common window, not significance)",
           "AI gate binds: False (N189 while it never binds)",
           "twin ai_judgment_matched30_fair: difference -0.0158 over 10 days",
-          "twin buy_tier_matched30_fair: difference -0.036 over 16 days",
+          "twin buy_tier_matched30_fair: difference -0.033 over 17 days",
           "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15), stop_ai_judgment_fair_3name_v1 (2026-10-31)"
         ],
         "source_keys": [
@@ -113,7 +113,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-11-11T07:37:58.315527+00:00",
+        "updated_at": "2026-11-11T23:15:15.249878+00:00",
         "fingerprint": "024552489bf2820b",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=38",
@@ -123,7 +123,7 @@
           "atx: phase=0 ai=False knob=False holdings=3",
           "bel20: phase=0 ai=False knob=False holdings=2",
           "cac40: phase=1 ai=False knob=False holdings=11",
-          "dax: phase=1 ai=False knob=False holdings=3"
+          "dax: phase=1 ai=False knob=False holdings=5"
         ],
         "source_keys": [
           "market_status"
@@ -155,7 +155,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-11-11T07:35:37.459904+00:00",
+        "updated_at": "2026-11-11T23:13:33.051844+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -192,10 +192,10 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-11-10T19:27:53.308928+00:00",
-        "fingerprint": "ec740315e99a1692",
+        "updated_at": "2026-11-11T20:38:14.415955+00:00",
+        "fingerprint": "c660aaf87d333566",
         "bullets": [
-          "Occasions logged: 363",
+          "Occasions logged: 368",
           "PR mergeable=CONFLICTING against main: 7",
           "validate failed: 7",
           "validate check failed: 6",
@@ -359,6 +359,37 @@
       "ack_sufficient": false
     },
     {
+      "id": "adhoc-eodhd-coverage-trial",
+      "title": "Run the one-month EODHD coverage trial for step 3.3",
+      "summary": "Subscribe to EODHD ALL-IN-ONE for one month, add GitHub secret EODHD_API_TOKEN, dispatch eodhd-coverage-check.yml, read the verdict in docs/data/eodhd_coverage_check.json, then cancel the subscription and remove the secret if the check fails or you are not proceeding to a UK/Europe replay.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/eodhd-coverage-check.md",
+      "doc_anchor": null,
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/eodhd-coverage-check.md",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "3f6a07b7cef9f481",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
       "id": "adhoc-memo-model-comparison-blind-review",
       "title": "Rate the memo model comparison calibration sample",
       "summary": "Rule v2 (owner, 2026-11-10): an LLM judge (gpt-5.6-luna) scores every pair blind in both orders; you rate only a calibration sample of at least 4 names, so the judge can be checked against you. When ops shows 'Memo model comparison ready for owner calibration', read docs/data/memo_model_comparison/review.md (sample only, memos labelled A/B). Copy ratings_template.json to ratings.json and rate each memo 1-5 on evidence, thesis break and verdict justified, plus a preferred memo (A, B or tie). Commit ratings.json to main without opening blind_key.json, results.json, judge_results.json, calibration.json, judgements/, judge_status.json or the status.json cost fields, then run gh workflow run memo-model-comparison.yml -f action=decide. Your picks decide whether the judge is trusted, and govern any pair where the two verdicts differ on blocking entry. A switch needs owner approval, an operational_switches row on the registration and its own memo-model PR; otherwise composer-2.5 stays.",
@@ -423,7 +454,7 @@
     {
       "id": "adhoc-strategy-book-memo-spend",
       "title": "Flip strategy-book forward go-live after the Phase 1 gate review",
-      "summary": "The Phase 1 gate review is done (accepted with one adjustment, 2026-11-10), and #1346, #1347, #1349 and #1350 have merged. On the go-live date, set forward_live true and forward_start to that date (YYYY-MM-DD) on docs/data/strategy_book_registration.json in the same commit (owner, 2026-11-10: forward_start will equal the go-live date; recorded in phase1_gate_decision.forward_start_alignment). Phase 1 governs go-live, not the signature. Until forward_live is true the forward job dry-runs and writes no scored store. Memo spend is already on: the owner set spend_enabled true on 2026-11-10 (logged in operational_switches), independent of forward_live; its review is monthly-strategy-book-memo-spend-review. Neither job flips its own flag.",
+      "summary": "DONE 2026-11-11 (owner): forward_live true, forward_start 2026-11-10, logged in operational_switches. The Phase 1 gate review is done (accepted with one adjustment, 2026-11-10), and #1346, #1347, #1349 and #1350 have merged. On the go-live date, set forward_live true and forward_start to that date (YYYY-MM-DD) on docs/data/strategy_book_registration.json in the same commit (owner, 2026-11-10: forward_start will equal the go-live date; recorded in phase1_gate_decision.forward_start_alignment). Phase 1 governs go-live, not the signature. Until forward_live is true the forward job dry-runs and writes no scored store. Memo spend is already on: the owner set spend_enabled true on 2026-11-10 (logged in operational_switches), independent of forward_live; its review is monthly-strategy-book-memo-spend-review. Neither job flips its own flag.",
       "automated": false,
       "cadence": "ad_hoc",
       "section_id": "ad_hoc",
@@ -437,6 +468,37 @@
         "headline": "See runbook for analysis inputs",
         "updated_at": null,
         "fingerprint": "89bb9573940c47e5",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-strategy-book-step-5-5-decision",
+      "title": "Decide on step 5.5 when every proof bar is met",
+      "summary": "The proof board was signed off on 2026-11-11 (step 3.2 done). When forward.all_bars_met in docs/data/strategy_book_proof_board.json turns true (N13 and N14 revisit triggers fire), read the forward block and decide whether to start plan step 5.5 (small live capital), after steps 5.2 to 5.4. The flag does not open live capital, change the book, or make the decision. The archive replay block in the same file is survivorship-biased and is not the proof.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/strategy-book-proof.md",
+      "doc_anchor": "owner-sign-off",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/strategy-book-proof.md#owner-sign-off",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "2510f27b2d4a87c6",
         "bullets": [],
         "source_keys": []
       },
@@ -516,7 +578,7 @@
     {
       "id": "adhoc-strategy-version-review",
       "title": "Strategy book version review",
-      "summary": "At the strategy book's thickness gate, then at most every 26 weeks: read the supervising agent's evidence pack (overall and per-market boards, both controls, the challenger bench, the selection board, the gate-rejected shadows, the US rehearsal, post-sale reviews, five-lever scores, deferred ideas tagged strategy-version-review). Promote at most one bench challenger that has met its bar (2.5 standard errors on 48 counted mature episodes, same sign in both halves) into a new registration_id, or none; retire bench challengers that failed; seal any new bench challengers (at most four at once) before their scores are read.",
+      "summary": "At the strategy book's thickness gate, then at most every 26 weeks: read the supervising agent's evidence pack (overall and per-market boards, both controls, the challenger bench, the selection board, the gate-rejected shadows, the US rehearsal, strategy-book reviews and five-lever scores in docs/data/strategy_book_review_queue.json (docs/ops/strategy-book-reviews.md; primary closes are the attention list, other columns are queued beside them), deferred ideas tagged strategy-version-review). Promote at most one bench challenger that has met its bar (2.5 standard errors on 48 counted mature episodes, same sign in both halves) into a new registration_id, or none; retire bench challengers that failed; seal any new bench challengers (at most four at once) before their scores are read. Do not tune the book between reviews.",
       "automated": false,
       "cadence": "ad_hoc",
       "section_id": "ad_hoc",
@@ -561,6 +623,37 @@
         "headline": "See runbook for analysis inputs",
         "updated_at": null,
         "fingerprint": "671e81a13721c1cb",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-t212-demo-mirror-secrets",
+      "title": "Create a Trading 212 practice-account API key and add the demo secrets",
+      "summary": "Create an API key on a Trading 212 PRACTICE account (not the live catalogue key) with orders and portfolio scopes, and add GitHub Actions secrets TRADING212_DEMO_API_KEY and TRADING212_DEMO_API_SECRET. The strategy-book forward job then places primary limit orders on the demo host only. Until the secrets exist the job plans rows and sends nothing.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/strategy-book-demo-mirror.md",
+      "doc_anchor": "owner-setup",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/strategy-book-demo-mirror.md#owner-setup",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "04dd1d59bf287f76",
         "bullets": [],
         "source_keys": []
       },
@@ -745,7 +838,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-11-10T13:45:40.108180+00:00",
+        "updated_at": "2026-11-11T12:58:08.773384+00:00",
         "fingerprint": "2b0e33e50082be09",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -1630,7 +1723,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-11-10T13:45:40.105703+00:00",
+        "updated_at": "2026-11-11T12:58:08.771212+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
