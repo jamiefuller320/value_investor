@@ -71,6 +71,9 @@ See module constants in `src/value_investor/eodhd_coverage_check.py` and the
   secret → exit 0, no commit.
 - **Ops-monitor:** `check_eodhd_coverage` — info with verdict when the report exists; no
   finding when absent; warn if unreadable. `auto_fixable=false`. `influences_live=false`.
+- **Companies House follow-up** for the seven UK names with no EODHD statements:
+  [ch-failed-name-statements.md](ch-failed-name-statements.md). Observe-only. The
+  combined check A count is the EODHD depth flag or a Companies House EPS from 2013.
 
 Sample sources:
 
