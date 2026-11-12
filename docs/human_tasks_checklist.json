@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-11",
+  "updated_at": "2026-11-12",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -641,6 +641,14 @@
           "summary": "Subscribe to EODHD ALL-IN-ONE for one month, add GitHub secret EODHD_API_TOKEN, dispatch eodhd-coverage-check.yml, read the verdict in docs/data/eodhd_coverage_check.json, then cancel the subscription and remove the secret if the check fails or you are not proceeding to a UK/Europe replay.",
           "automated": false,
           "doc_path": "docs/ops/eodhd-coverage-check.md"
+        },
+        {
+          "id": "adhoc-strategy-uk-replay-seal",
+          "title": "Sign the UK/Europe replay registration before any replay fetch",
+          "summary": "Plan step 3.3. Read docs/ops/strategy-book-uk-replay-design.md and the draft registration. Sign the draft, or change a proposed number once, before any replay call to EODHD. That seal is the first stamp (target 2026-11-18). After the development aggregates are committed, the second stamp authorises the single holdout reveal (target 2026-12-03). Neither stamp changes a sealed parent rule. The paid month started 2026-11-12 and is treated as ending 2026-12-12.",
+          "automated": false,
+          "doc_path": "docs/ops/strategy-book-uk-replay-registration-draft.md",
+          "doc_anchor": "owner-sign-off"
         },
         {
           "id": "adhoc-strategy-us-pit-rehearsal",
