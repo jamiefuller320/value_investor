@@ -24,7 +24,9 @@ concurrency:
 jobs:
   replay:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    # The LSE fetch is ~26.7k requests at <=5/s; the runner stops itself at
+    # UK_REPLAY_MAX_MINUTES so the cache is saved before this limit.
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v5
 
@@ -79,6 +81,7 @@ jobs:
         env:
           EODHD_API_TOKEN: ${{ secrets.EODHD_API_TOKEN }}
           UK_REPLAY_CACHE: ${{ runner.temp }}/uk-replay-cache
+          UK_REPLAY_MAX_MINUTES: "320"
           PHASE: ${{ inputs.phase }}
         run: |
           set -euo pipefail
@@ -97,9 +100,15 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$CACHE_DIR"
-          tar -czf - -C "$CACHE_DIR" . | openssl enc -aes-256-cbc -pbkdf2 -salt \
-            -pass env:EODHD_API_TOKEN -out "$CACHE_FILE"
-          rm -rf "$CACHE_DIR"
+          plain="$RUNNER_TEMP/uk-replay-cache.tgz"
+          # GNU tar exits 1 when a file changed while it was read (a cancelled
+          # run still writing). The runner writes atomically, so that is safe.
+          rc=0
+          tar -czf "$plain" -C "$CACHE_DIR" . || rc=$?
+          if [ "$rc" -gt 1 ]; then exit "$rc"; fi
+          openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:EODHD_API_TOKEN \
+            -in "$plain" -out "$CACHE_FILE"
+          rm -rf "$CACHE_DIR" "$plain"
 
       - name: Save encrypted resume cache
         if: always() && steps.secrets.outputs.ready == 'true'

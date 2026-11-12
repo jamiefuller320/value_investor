@@ -580,3 +580,69 @@ def test_workflow_keeps_the_cache_outside_the_checkout() -> None:
         if "uk-replay-cache" in line and ("path:" in line or "_CACHE:" in line or "CACHE_" in line):
             assert "${{ runner.temp }}/" in line, line
     assert "--cache uk-replay-cache" not in text
+
+
+def test_time_budget_stops_cleanly_and_the_next_run_resumes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = _repo(tmp_path, sealed=True)
+    monkeypatch.setitem(REGISTRATION_CONSTANTS, "DAILY_CALL_BUDGET_SOFT_CAP", 100)
+    calls: list[str] = []
+
+    def opener(url: str, timeout: int = 60) -> _Resp:
+        del timeout
+        calls.append(url)
+        return _route(url)
+
+    ticks = iter(range(1000))
+    cache = tmp_path / "cache"
+    client = EodhdClient("secret-token", opener=opener, min_interval=0)
+    first = run_fetch(
+        client,
+        repo_root=root,
+        cache=cache,
+        today=date(2026, 11, 18),
+        exchanges=["LSE"],
+        max_minutes=3 / 60,
+        clock=lambda: float(next(ticks)),
+    )
+    assert first["status"] == "partial"
+    assert first["stopped_by"] == "time_budget"
+    cursor = json.loads((cache / "cursor.json").read_text(encoding="utf-8"))
+    assert cursor["today_weighted"] == first["weighted"] > 0
+    before = len(calls)
+    second = run_fetch(
+        client, repo_root=root, cache=cache, today=date(2026, 11, 18), exchanges=["LSE"]
+    )
+    assert second["status"] == "complete"
+    assert second["stopped_by"] is None
+    assert second["weighted"] > first["weighted"]
+    assert len(calls) > before
+
+
+def test_a_truncated_raw_file_is_fetched_again(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = _repo(tmp_path, sealed=True)
+    monkeypatch.setitem(REGISTRATION_CONSTANTS, "DAILY_CALL_BUDGET_SOFT_CAP", 100)
+    calls: list[str] = []
+
+    def opener(url: str, timeout: int = 60) -> _Resp:
+        del timeout
+        calls.append(url)
+        return _route(url)
+
+    cache = tmp_path / "cache"
+    client = EodhdClient("secret-token", opener=opener, min_interval=0)
+    run_fetch(client, repo_root=root, cache=cache, today=date(2026, 11, 18), exchanges=["LSE"])
+    eod = cache / "raw" / "AAA.LSE" / "eod.json"
+    eod.write_text('[{"date": "2020-01-0', encoding="utf-8")
+    cursor = json.loads((cache / "cursor.json").read_text(encoding="utf-8"))
+    cursor["done"] = {}
+    (cache / "cursor.json").write_text(json.dumps(cursor), encoding="utf-8")
+    calls.clear()
+    run_fetch(client, repo_root=root, cache=cache, today=date(2026, 11, 18), exchanges=["LSE"])
+    assert [url for url in calls if "eod/AAA.LSE" in url]
+    assert not [url for url in calls if "fundamentals/AAA.LSE" in url]
+    json.loads(eod.read_text(encoding="utf-8"))
+    assert not list(cache.rglob("*.partial"))

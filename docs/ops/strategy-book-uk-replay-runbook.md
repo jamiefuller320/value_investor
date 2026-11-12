@@ -63,6 +63,16 @@ next UTC day resumes. It does not drop the unfinished names quietly. One probe
 symbol is fetched first. A fundamentals or dividend response that carries a
 call-weight header other than 10 or 1 stops the job before the loop.
 
+Time limit: the LSE plan is about 26,700 requests at no more than 5 a second,
+so one fetch can take several hours. The job limit is 350 minutes and the
+runner stops itself after `UK_REPLAY_MAX_MINUTES` (320 in the workflow) with
+`status: partial`, `stopped_by: time_budget`. Re-dispatch `fetch` to resume.
+The cursor is saved every 25 names and every cache file is written atomically,
+so a hard cancel loses at most 25 names of done-flags; those names are skipped
+on resume because their files are already there. A cache file that does not
+parse is fetched again. Re-dispatching on the same UTC day counts against the
+same soft cap.
+
 XETRA and PA that are still unfinished after 2026-11-24 are dropped.
 `europe_not_fetched` is set and the scored book is LSE only.
 
