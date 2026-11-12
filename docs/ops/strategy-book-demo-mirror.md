@@ -299,7 +299,9 @@ orders, dividends and transactions.
 
 `match` means no difference. `mismatch` is the ops warn. Dry-run (no demo
 key) stores `skipped` and does not call the API. Missing broker fields are
-`insufficient_data`, not a guessed match.
+`insufficient_data`, not a guessed match. A history order with no fill block
+and a status that is not filled (a cancelled or rejected limit) is not a fill
+and is skipped; a filled order without a `fill.id` is still a gap.
 
 ## Safety
 
