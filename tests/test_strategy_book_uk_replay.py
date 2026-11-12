@@ -570,3 +570,13 @@ def test_plan_does_not_need_a_seal_and_a_missing_token_is_a_soft_skip(
     assert uk.main(["fetch"]) == 0
     monkeypatch.setenv("EODHD_API_TOKEN", "secret-token")
     assert uk.main(["fetch"]) == 2
+
+
+def test_workflow_keeps_the_cache_outside_the_checkout() -> None:
+    text = (Path(uk.REPO_ROOT) / ".github/workflows/strategy-book-uk-replay.yml").read_text(
+        encoding="utf-8"
+    )
+    for line in text.splitlines():
+        if "uk-replay-cache" in line and ("path:" in line or "_CACHE:" in line or "CACHE_" in line):
+            assert "${{ runner.temp }}/" in line, line
+    assert "--cache uk-replay-cache" not in text
