@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-12T18:56:10.073678+00:00",
+  "run_at": "2026-11-12T21:14:00.912645+00:00",
   "market_id": "sp500",
   "targets": [
     "NRG"
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-12T18:55:50.314247+00:00",
+    "snapshot_at": "2026-11-12T21:12:05.519851+00:00",
     "market_id": "sp500",
     "buy_tier_count": 146,
     "unmeasured_buy_tier": 0,
@@ -131,7 +131,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-12T18:56:05.718456+00:00",
+    "snapshot_at": "2026-11-12T21:12:30.263083+00:00",
     "market_id": "sp500",
     "buy_tier_count": 146,
     "unmeasured_buy_tier": 0,
@@ -167,30 +167,66 @@
       "BXP",
       "EME",
       "LH",
-      "LMT"
-    ],
-    "parked_count": 5,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
+      "LMT",
       "NRG"
     ],
-    "ingest_exhausted": false
+    "parked_count": 6,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "sp500",
+    "to_market": "asx200",
+    "stream_markets_after": [
+      "asx200"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "sp500",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "APTV",
+        "BXP",
+        "EME",
+        "LH",
+        "LMT",
+        "NRG"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "asx200",
+      "forced": true,
+      "prior_screen_at": "2026-11-12T06:53:31.052063+00:00",
+      "prior_age_days": 0,
+      "run_at": "2026-11-12T21:13:55.175007+00:00",
+      "shortlist_count": 32,
+      "ticker_count": 196
+    },
+    "at": "2026-11-12T21:12:33.718857+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-11-12T18:55:56.154835+00:00",
+    "assessed_at": "2026-11-12T21:12:16.334568+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -255,21 +291,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 3.6969452429999876,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2096.303054757,
+  "used_seconds": 3.160588195999992,
+  "budget_seconds": 87.5,
+  "leftover_seconds": 84.33941180400001,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "NRG"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-11-12T18:56:05.726155+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-11-12T21:12:30.274862+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -331,6 +365,18 @@
         "indexed_without_body": 3,
         "thin": false,
         "source_surface": "sec_edgar"
+      },
+      {
+        "ticker": "NRG",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-12T21:12:30.274862+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 20,
+        "filings_with_body": 19,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "sec_edgar"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -345,59 +391,54 @@
       "LMT",
       "NRG"
     ],
-    "unparked_leftover": [
-      "NRG"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/sp500/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "sp500"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "sp500",
+    "ingest_exhausted_markets": [
+      "aex",
+      "aim",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
-    "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 64,
-    "candidate_count": 56,
-    "skipped_resolved_tickers": [
-      "ACKB.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "DQ7A.IR",
-      "EVN.VI",
-      "UCB.BR",
-      "WIE.VI",
-      "LMT",
-      "APTV",
-      "BXP",
-      "DFS.L",
-      "MER.L",
-      "TPT.L",
-      "FOXT.L",
-      "ULTP.L",
-      "APTD.L",
-      "GIB-A.TO",
-      "SU.TO",
-      "NTR.TO",
-      "MFC.TO",
-      "BAS.DE",
-      "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "HNR1.DE",
-      "PST.MI",
-      "APAM.AS",
-      "0285.HK",
-      "0857.HK",
-      "0288.HK",
-      "0883.HK",
-      "2331.HK",
-      "EVN.VI",
-      "WIE.VI"
+    "compiled_count": 1,
+    "task_ids": [
+      "eng-20261112-03"
     ],
-    "wait_behind_task_id": ""
+    "task_count": 273,
+    "market_id": "sp500",
+    "hunter_ticker": "NRG",
+    "hunter_tickers": [
+      "NRG"
+    ],
+    "priority_score": 12.0,
+    "wait_behind_task_id": "",
+    "leftover_key_bodies": false
   }
 }
