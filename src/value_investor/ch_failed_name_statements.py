@@ -2308,13 +2308,15 @@ def _token_text(chars: list[_Char]) -> str:
     return "".join(out)
 
 
-def _page_image(doc: Any, index: int, *, zoom: float = 2.2) -> Any:
+def _page_image(doc: Any, index: int, *, zoom: float = 2.2, prefer_embedded: bool = True) -> Any:
     from PIL import Image
 
     page = doc[index]
     images = page.get_images()
     text = (page.get_text("text") or "").strip()
-    if len(images) == 1 and len(text) < 40:
+    # The raw fax is higher resolution but Tesseract drops digits inside
+    # parentheses on it. Statement pages are rendered instead.
+    if prefer_embedded and len(images) == 1 and len(text) < 40:
         xref = images[0][0]
         info = doc.extract_image(xref)
         image = Image.open(__import__("io").BytesIO(info["image"]))
@@ -2618,7 +2620,7 @@ def extract_statement_pages(
                 text = "\n".join(str(line) for line in cached["lines"])
                 method = str(cached.get("method") or "ocr")
             else:
-                image = _page_image(doc, index, zoom=statement_zoom)
+                image = _page_image(doc, index, zoom=statement_zoom, prefer_embedded=False)
                 lines = _ocr_image_lines(image, header_only=False)
                 text = "\n".join(lines)
                 method = "ocr"
