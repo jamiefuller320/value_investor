@@ -73,7 +73,9 @@ jobs:
 
       - name: Sync main before commit
         if: steps.draft.outputs.drafted == 'true'
-        run: git pull --rebase --autostash origin main
+        run: |
+          git pull --rebase --autostash origin main
+          python3 scripts/check_committed_data_json.py --changed
 
       - name: Commit drafted CI-fix task
         if: steps.draft.outputs.drafted == 'true'

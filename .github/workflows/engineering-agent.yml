@@ -229,7 +229,9 @@ jobs:
 
       - name: Sync main before no-diff queue commit
         if: steps.no_diff.outputs.recorded == 'true'
-        run: git pull --rebase --autostash origin main
+        run: |
+          git pull --rebase --autostash origin main
+          python3 scripts/check_committed_data_json.py --changed
 
       - name: Commit no-diff queue state
         if: steps.no_diff.outputs.recorded == 'true'
@@ -452,7 +454,9 @@ jobs:
         if: >-
           github.event.inputs.compile_only != 'true'
           && steps.pr.outputs.opened == 'true'
-        run: git pull --rebase --autostash origin main
+        run: |
+          git pull --rebase --autostash origin main
+          python3 scripts/check_committed_data_json.py --changed
 
       - name: Commit queue state on main
         if: >-
