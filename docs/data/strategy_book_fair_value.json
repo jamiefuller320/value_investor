@@ -2,9 +2,9 @@
   "schema_version": 1,
   "influences_live": false,
   "registration_id": "owner-strategy-book-v0",
-  "generated_at": "2026-11-12T21:33:24.099205+00:00",
-  "observe_data_commit": "43eb87325a52b5bbd3587c6ae4d988f711fd753d",
-  "observe_generated_at": "2026-11-12T21:33:04.572391+00:00",
+  "generated_at": "2026-11-12T22:54:12.082544+00:00",
+  "observe_data_commit": "9452c9897437e493787035f29e948d0ed728ffdb",
+  "observe_generated_at": "2026-11-12T22:53:50.286098+00:00",
   "observe_store": "docs/data/strategy_book_observe.json",
   "observe_error": null,
   "constants": {
@@ -107,10 +107,11 @@
   },
   "coverage": {
     "episodes": 94,
-    "with_range": 76,
-    "insufficient_data": 18,
+    "with_range": 75,
+    "insufficient_data": 19,
     "reasons": {
-      "currency_sources_disagree": 5,
+      "currency_sources_disagree": 4,
+      "financials_after_signal": 2,
       "implausible_multiple": 1,
       "reporting_currency_unstated": 12
     },
@@ -169,7 +170,7 @@
       "buy_on_signal": {
         "population": "mature or closed episodes with a range",
         "n": 0,
-        "n_with_range": 59,
+        "n_with_range": 58,
         "verdict": "insufficient_data",
         "minimum_n": 12,
         "buckets": [
@@ -1422,114 +1423,39 @@
       "mature": false,
       "fair_cost_return": -0.034259017481743814,
       "matched_excess": -0.029642157780997137,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-12 is after the signal session 2026-11-09.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 45.14,
       "entry_reference_unit": "USD",
       "price_unit": "USD",
       "major_currency": "USD",
-      "statement_currency": "USD",
+      "statement_currency": null,
       "currency": {
-        "currency": "USD",
-        "sources": [
-          {
-            "source": "sec_companyfacts.annual.currency",
-            "path": "docs/data/library/markets/sp500/screen/research/AMCR/sources/sec_companyfacts.json",
-            "state": "file",
-            "first_filed": "2026-08-14",
-            "currency": "USD"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/library/markets/sp500/screen/research/AMCR/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-06",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2023,
-            "eps": 3.525,
-            "fcf": 735000000.0,
-            "shares": 295200000.0,
-            "fcf_per_share": 2.489837
-          },
-          {
-            "year": 2024,
-            "eps": 2.525,
-            "fcf": 829000000.0,
-            "shares": 288200000.0,
-            "fcf_per_share": 2.876475
-          },
-          {
-            "year": 2025,
-            "eps": 1.6,
-            "fcf": 810000000.0,
-            "shares": 318600000.0,
-            "fcf_per_share": 2.542373
-          },
-          {
-            "year": 2026,
-            "eps": 2.38,
-            "fcf": 1229000000.0,
-            "shares": 463800000.0,
-            "fcf_per_share": 2.649849
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 2.5075,
-        "latest_per_share": 2.38,
-        "normalised_unit": "USD",
-        "implied_trailing_pe": 18.9664,
-        "implied_trailing_pe_close": 45.14,
-        "implied_trailing_pe_eps": 2.38,
-        "implied_trailing_pe_currency": "USD",
-        "fx": null,
-        "normalised_per_share_price_units": 2.5075,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-12",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/AMCR.json"
       },
-      "range": {
-        "low": 25.075,
-        "mid": 37.6125,
-        "high": 50.15,
-        "unit": "USD"
-      },
-      "margin_of_safety": -0.200133,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 2.38,
-        "low": 23.8,
-        "mid": 29.75,
-        "high": 39.6667,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.055549
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 2.639634,
-        "range": {
-          "low": 26.3963,
-          "mid": 39.5945,
-          "high": 52.7927
-        },
-        "cross_check": "inside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "between_mid_and_high"
+      }
     },
     {
       "episode_id": "ftse350:ATYM.L:buy_on_signal:2026-11-10",
@@ -6957,17 +6883,16 @@
       "fair_cost_return": -0.0035,
       "matched_excess": 0.0,
       "verdict": "insufficient_data",
-      "reason": "currency_sources_disagree",
-      "reason_detail": "Statement currency sources disagree: filing_body_unit=AUD, sec_companyfacts.annual.currency=USD",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-12 is after the signal session 2026-11-11.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 26.83,
       "entry_reference_unit": "USD",
       "price_unit": "USD",
       "major_currency": "USD",
-      "statement_currency": null,
+      "statement_currency": "AUD",
       "currency": {
-        "reason": "currency_sources_disagree",
-        "detail": "Statement currency sources disagree: filing_body_unit=AUD, sec_companyfacts.annual.currency=USD",
+        "currency": "AUD",
         "sources": [
           {
             "source": "filing_body_unit",
@@ -6975,21 +6900,14 @@
             "published_at": "2026-11-05",
             "headline": "10-Q: 10-Q",
             "currency": "AUD"
-          },
-          {
-            "source": "sec_companyfacts.annual.currency",
-            "path": "docs/data/library/markets/sp500/screen/research/NWSA/sources/sec_companyfacts.json",
-            "state": "file",
-            "first_filed": "2026-08-07",
-            "currency": "USD"
           }
         ]
       },
       "method": null,
       "inputs": {
         "financials_path": "docs/data/library/markets/sp500/screen/research/NWSA/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-10",
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-12",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/NWSA.json"
