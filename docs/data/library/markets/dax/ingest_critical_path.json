@@ -1,30 +1,48 @@
 {
   "market_id": "dax",
-  "assessed_at": "2026-11-11T14:19:47.686531+00:00",
+  "assessed_at": "2026-11-12T16:11:37.592096+00:00",
   "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
+  "indexed_without_body": [
+    {
+      "ticker": "MTX.DE",
+      "indexed_without_body": 10,
+      "filings_total": 18,
+      "filings_with_body": 8
+    },
+    {
+      "ticker": "BNR.DE",
+      "indexed_without_body": 2,
+      "filings_total": 25,
+      "filings_with_body": 23
+    }
+  ],
   "thin_need_discovery": [
     "DTE.DE",
-    "DTG.DE",
     "BAS.DE",
     "HNR1.DE",
-    "HEN3.DE"
+    "DTG.DE"
   ],
-  "thin_need_bodies": [],
-  "primary_blocker": "thin_need_discovery",
+  "thin_need_bodies": [
+    "MTX.DE"
+  ],
+  "primary_blocker": "indexed_without_body",
   "force_discovery_scan": true,
-  "auto_pin_tickers": [],
+  "auto_pin_tickers": [
+    "MTX.DE",
+    "BNR.DE"
+  ],
   "recommended_actions": [
-    "Discovery/IR seed for 5 thin ticker(s) that already have bodies for every indexed filing",
+    "Prefer indexed-without-body body refetch (2 tickers, top: MTX.DE(10), BNR.DE(2))",
+    "Discovery/IR seed for 4 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
-    "thin_need_discovery": 5,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 2,
+    "indexed_without_body_rows": 12,
+    "thin_need_discovery": 4,
+    "thin_need_bodies": 1
   }
 }
