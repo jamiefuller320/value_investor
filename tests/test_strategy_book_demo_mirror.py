@@ -1274,6 +1274,17 @@ def test_strategy_book_demo_ingest_matches_statement() -> None:
     assert fill["slippage"]["slippage_pct"] == pytest.approx(0.0)
 
 
+def test_strategy_book_demo_cancelled_order_is_not_a_fill_gap() -> None:
+    statement = {
+        "history_orders": [
+            {"order": {"id": 12, "ticker": "FOURl_EQ", "side": "BUY", "status": "CANCELLED"}},
+            {"order": {"id": 13, "ticker": "FOURl_EQ", "side": "BUY", "status": "FILLED"}},
+        ]
+    }
+    gaps = ingest_statement([], [], statement, {}, {})
+    assert gaps == ["history fill without fill.id"]
+
+
 EPISODE = "ftse350:FOUR.L:primary:2026-11-10"
 CATCH_NOW = datetime(2026, 11, 12, 18, 0, tzinfo=UTC)
 ENV = {DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"}

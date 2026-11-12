@@ -161,6 +161,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git pull --rebase --autostash origin main
+          python3 scripts/check_committed_data_json.py --changed
 
       - name: Commit fragment weeder + horizon artifacts
         uses: stefanzweifel/git-auto-commit-action@v6

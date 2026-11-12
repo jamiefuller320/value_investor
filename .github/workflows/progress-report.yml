@@ -89,7 +89,9 @@ jobs:
         if: steps.gate.outputs.should_run == 'true'
         env:
           BRANCH: ${{ github.ref_name }}
-        run: git pull --rebase --autostash origin "$BRANCH"
+        run: |
+          git pull --rebase --autostash origin "$BRANCH"
+          python3 scripts/check_committed_data_json.py --changed
 
       - name: Commit progress report artifacts
         id: commit

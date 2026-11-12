@@ -1258,6 +1258,10 @@ def ingest_statement(
             continue
         fill_id = item.get("fill_id")
         if fill_id is None:
+            status = str(item.get("status") or "").upper()
+            unfilled = all(item.get(key) is None for key in ("quantity", "price", "filled_at"))
+            if unfilled and "FILLED" not in status:
+                continue
             gaps.append("history fill without fill.id")
             continue
         fill_type = str(item.get("fill_type") or "TRADE")

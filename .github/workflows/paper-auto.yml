@@ -218,7 +218,9 @@ jobs:
             --sync-task-status || true
 
       - name: Sync main before commit
-        run: git pull --rebase --autostash origin main
+        run: |
+          git pull --rebase --autostash origin main
+          python3 scripts/check_committed_data_json.py --changed
 
       - name: Commit automation artifacts
         id: paper_commit
