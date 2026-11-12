@@ -20,7 +20,10 @@ are the US rehearsal functions.
 
 EODHD prices, statement values, dividend amounts and per-episode rows are not
 committed. A run caches them under `UK_REPLAY_CACHE` (default: the system temp
-dir `strategy_book_uk_replay`, or `uk-replay-cache/` on the Actions runner).
+dir `strategy_book_uk_replay`, or `uk-replay-cache/` on the Actions runner). Between
+Actions runs the cache is kept only as `uk-replay-cache.tar.enc`, AES-256 encrypted with
+the `EODHD_API_TOKEN` secret: Actions caches in a public repo can be restored by fork-PR
+workflows, which never receive secrets.
 That directory is gitignored. The workflow deletes the raw files after a
 development or reveal walk. The resume cursor keeps symbol done-flags and the
 day's weighted-call count. It is not committed.
