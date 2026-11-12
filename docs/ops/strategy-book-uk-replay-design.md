@@ -2,8 +2,9 @@
 
 **Status: design only.** Plan step 3.3. The draft registration is
 [`strategy-book-uk-replay-registration-draft.md`](strategy-book-uk-replay-registration-draft.md).
-It is **not sealed**. This change writes no runner, no workflow, and no results
-store. `influences_live` is false.
+It is **not sealed**. `influences_live` is false. The dispatch-only runner that
+follows this design is [`strategy-book-uk-replay-runbook.md`](strategy-book-uk-replay-runbook.md).
+It refuses every EODHD call until the owner seals the registration.
 
 Parent rules: [`strategy-book-registration.md`](strategy-book-registration.md)
 (`owner-strategy-book-v0`, signed 2026-11-05). Template:
@@ -514,7 +515,7 @@ Left out of this registration, and queued behind P1/P2 except where noted:
 
 | Item | Where it sits |
 |---|---|
-| The runner, the Actions workflow, the aggregate store, and the ops-monitor finding | The next package after the seal, inside this paid month. Dispatch-only, same shape as the coverage check. Not a daily cron. Not queued. L664 stays open until a reveal is committed. |
+| The runner, the Actions workflow, the aggregate store, and the ops-monitor finding | Shipped as the dispatch-only runner in [strategy-book-uk-replay-runbook.md](strategy-book-uk-replay-runbook.md). It does not run until the owner seal. Not a daily cron. L664 stays open until a reveal is committed. |
 | Editing the plan status row for step 3.3 | The owner updates the plan. |
 | Editing the signed parent registration | Frozen. |
 | Official FTSE 350, DAX, and CAC constituent histories | Queued as L717. Cap rank is the proxy this draft seals. |
