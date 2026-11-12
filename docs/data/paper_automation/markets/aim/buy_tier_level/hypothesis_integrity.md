@@ -1,27 +1,27 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-11T14:17:24.062046+00:00
+Track: `buy_tier_level` · updated 2026-11-12T07:39:26.298506+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **7** / 14 (50% count, 49% NAV)
-- Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
-- Balancing hint: `trim_weakening_losers`
+- Losers: **4** / 14 (29% count, 27% NAV)
+- Tolerance: count ≤ 40%, NAV ≤ 35% → within band
+- Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
-### PMI.L — weakening / watch_review (-17.5%)
+### IPX.L — weakening / watch_review (-17.0%)
+- research verdict caution
+- still strong_buy
+- cheapness family still passes
+
+### PMI.L — weakening / watch_review (-16.8%)
 - research verdict caution
 - conviction 23% below intact floor
 - still buy
 - cheapness family still passes
 
-### IPX.L — weakening / watch_review (-16.5%)
-- research verdict caution
-- still strong_buy
-- cheapness family still passes
-
-### MPE.L — intact / hold_tolerate (-12.3%)
+### MPE.L — intact / hold_tolerate (-9.2%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
@@ -29,70 +29,70 @@ Track: `buy_tier_level` · updated 2026-11-11T14:17:24.062046+00:00
 - data_quality 0.95
 - conviction 74%
 
-### PEBB.L — intact / hold_tolerate (-9.0%)
-- price drawdown alone does not invalidate value thesis
+### CAM.L — weakening / watch_review (-5.1%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
+### ASY.L — intact / hold_tolerate (-4.2%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 55%
+
+### PEBB.L — intact / hold_tolerate (-3.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 51%
 
-### ASY.L — intact / hold_tolerate (-5.6%)
-- price drawdown alone does not invalidate value thesis
+### KGH.L — intact / hold_tolerate (-2.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 56%
+- conviction 58%
 
-### CAM.L — weakening / watch_review (-5.3%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
-### RWS.L — weakening / watch_review (-5.1%)
-- research verdict caution
-- conviction 25% below intact floor
-- still buy
-- cheapness family still passes
-
-### IGR.L — weakening / watch_review (-4.0%)
-- research verdict caution
-- conviction 22% below intact floor
-- still buy
-- cheapness family still passes
-
-### KGH.L — intact / hold_tolerate (-3.7%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 59%
-
-### CRW.L — weakening / watch_review (-2.7%)
-- research verdict neutral
-- still buy
-- cheapness family still passes
-
-### WJG.L — weakening / watch_review (-0.4%)
+### WJG.L — weakening / watch_review (-1.1%)
 - research verdict caution
 - conviction 18% below intact floor
 - still buy
 - cheapness family still passes
 
-### JHD.L — weakening / watch_review (+3.5%)
+### RWS.L — weakening / watch_review (-0.2%)
+- research verdict caution
+- conviction 24% below intact floor
+- still buy
+- cheapness family still passes
+
+### TFW.L — intact / hold_tolerate (+0.3%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 50%
+
+### CRW.L — weakening / watch_review (+0.9%)
+- research verdict neutral
+- conviction 30% below intact floor
+- still buy
+- cheapness family still passes
+
+### JHD.L — weakening / watch_review (+3.1%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### TFW.L — intact / hold_tolerate (+6.9%)
-- still buy
-- research accumulate
+### IGR.L — weakening / watch_review (+4.0%)
+- left buy tier (hold)
+- research verdict caution
+- conviction 13% below intact floor
 - cheapness family still passes
 - data_quality 1.00
-- conviction 65%
 
-### YNGN.L — weakening / watch_review (+15.0%)
+### YNGN.L — weakening / watch_review (+16.7%)
 - research verdict caution
 - still buy
 - cheapness family still passes

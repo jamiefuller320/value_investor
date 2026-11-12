@@ -1,40 +1,30 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `still_in_buy_set` · updated 2026-11-09T07:37:47.662521+00:00
+Track: `still_in_buy_set` · updated 2026-11-12T07:41:48.787904+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 5 (20% count, 19% NAV)
+- Losers: **0** / 5 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `tolerate_intact_losers`
-- Selection feedback:
-  - quality fails more often among losers (100% vs 0%)
+- Balancing hint: `maintain`
 
 ## Holding reviews
 
-### OIZ.IR — intact / hold_tolerate (-6.1%)
-- price drawdown alone does not invalidate value thesis
+### OIZ.IR — intact / hold_tolerate (-3.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 69%
 
-### MELE.BR — intact / hold_tolerate (+0.0%)
-- still strong_buy
+### DTE.DE — intact / hold_tolerate (+0.0%)
+- still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 76%
+- conviction 75%
 
-### UMI.BR — intact / hold_tolerate (+3.8%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 90%
-
-### DG.PA — intact / hold_tolerate (+4.5%)
+### UMI.BR — intact / hold_tolerate (+4.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
@@ -47,3 +37,10 @@ Track: `still_in_buy_set` · updated 2026-11-09T07:37:47.662521+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 76%
+
+### DG.PA — intact / hold_tolerate (+7.4%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 90%

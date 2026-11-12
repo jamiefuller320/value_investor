@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-11T14:17:04.466472+00:00",
+    "local_time": "2026-11-12T07:38:58.241269+00:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-11-11T08:00:00+00:00",
-    "settle_at": "2026-11-11T09:15:00+00:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-11-12T08:00:00+00:00",
+    "settle_at": "2026-11-12T09:15:00+00:00",
+    "can_act": false,
+    "reason": "before market open"
   },
   "trades": [],
   "plan": {
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1126.59,
+    "nav": 1166.66,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,42 +36,64 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 375.53,
+    "target_sleeve_value": 388.82,
     "targets": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.6839000000000001,
+        "price": 84.6
+      },
       {
         "ticker": "CAPD.L",
         "name": "Capital Limited",
         "signal": "strong_buy",
         "conviction_score": 0.6733,
-        "price": 108.5
+        "price": 112.0
       },
       {
         "ticker": "SBRE.L",
         "name": "Sabre Insurance Group plc",
         "signal": "buy",
-        "conviction_score": 0.3307,
-        "price": 174.0
-      },
-      {
-        "ticker": "TRI.L",
-        "name": "Trifast plc",
-        "signal": "buy",
-        "conviction_score": 0.259,
-        "price": 84.4
+        "conviction_score": 0.3775,
+        "price": 181.6
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "TRI.L",
+        "name": "Trifast plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 4.446225,
+        "price": 87.0,
+        "value": 386.82
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "reason": "New sleeve",
+        "value": 386.63,
+        "price": 84.6,
+        "target_value": 388.82,
+        "conviction_score": 0.6839000000000001,
+        "signal": "strong_buy"
+      }
+    ],
     "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "CAPD.L",
         "name": "Capital Limited",
         "reason": "Already near equal-weight target",
-        "value": 377.35,
-        "target_value": 375.53,
+        "value": 389.52,
+        "target_value": 388.82,
         "conviction_score": 0.6733,
         "signal": "strong_buy"
       },
@@ -80,33 +102,15 @@
         "ticker": "SBRE.L",
         "name": "Sabre Insurance Group plc",
         "reason": "Already near equal-weight target",
-        "value": 373.98,
-        "target_value": 375.53,
-        "conviction_score": 0.3307,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "TRI.L",
-        "name": "Trifast plc",
-        "reason": "Already near equal-weight target",
-        "value": 375.26,
-        "target_value": 375.53,
-        "conviction_score": 0.259,
+        "value": 390.31,
+        "target_value": 388.82,
+        "conviction_score": 0.3775,
         "signal": "buy"
       }
     ],
     "skipped": [],
-    "waitlisted": [
-      {
-        "ticker": "CARD.L",
-        "name": "Card Factory plc",
-        "signal": "strong_buy",
-        "conviction_score": 0.6839000000000001,
-        "reason": "timing_signal=wait \u2014 skipped until timing improves"
-      }
-    ],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "waitlisted": [],
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -114,8 +118,8 @@
       "name": "Capital Limited",
       "source": "paper",
       "severity": "info",
-      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
-      "mark": 108.5,
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 112.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -124,9 +128,9 @@
       "ticker": "TRI.L",
       "name": "Trifast plc",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 84.4,
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 87.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -137,7 +141,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 174.0,
+      "mark": 181.6,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -3220,11 +3224,29 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-12T07:38:58.241269+00:00",
+        "portfolio_value": 1166.66,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-11T14:17:04.466472+00:00",
+    "last_mark_at": "2026-11-12T07:38:58.241269+00:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "TRI.L": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
@@ -3235,7 +3257,7 @@
     "schema_version": 2,
     "market_id": "ftse_smallcap",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-11T14:17:04.539701+00:00",
+    "generated_at": "2026-11-12T07:38:58.257127+00:00",
     "observe_only": true,
     "open_count": 29,
     "closed_count": 0,
@@ -3314,7 +3336,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-11T14:17:04.543841+00:00",
+    "generated_at": "2026-11-12T07:38:58.260428+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -3370,7 +3392,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 27,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 15,
+      "hold_with_data_quality_count": 16,
       "gaps": [
         "swap_rotation closed rotations=0 (target >=10)"
       ],
@@ -3378,10 +3400,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 1,
-        "recovered_to_breakeven": 0,
+        "count": 2,
+        "recovered_to_breakeven": 1,
         "close_reasons": {
-          "open": 1
+          "open": 2
         }
       },
       "closed": {
@@ -3405,12 +3427,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 2
     }
   },
   "hypothesis_integrity": {
@@ -3418,8 +3440,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-11T14:17:04.571323+00:00",
-    "as_of": "2026-11-11T14:17:04.466472+00:00",
+    "updated_at": "2026-11-12T07:38:58.265579+00:00",
+    "as_of": "2026-11-12T07:38:58.241269+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3432,42 +3454,40 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 3,
-    "underwater_count": 1,
+    "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 1,
-      "weakening": 2,
+      "intact": 2,
+      "weakening": 1,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
       "holding_count": 3,
-      "loser_count": 1,
-      "loser_share": 0.3333,
-      "loser_nav_share": 0.335,
+      "loser_count": 0,
+      "loser_share": 0.0,
+      "loser_nav_share": 0.0,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
-      "intact_loser_count": 1,
+      "intact_loser_count": 0,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
         "quality": 0.0,
-        "dividend": 1.0,
+        "dividend": 0.0,
         "garp": 0.0,
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.5,
-        "dividend": 0.5,
-        "garp": 1.0,
+        "quality": 0.3333,
+        "dividend": 0.6667,
+        "garp": 0.6667,
         "risk": 0.0
       },
-      "selection_feedback_flags": [
-        "dividend fails more often among losers (100% vs 50%)"
-      ],
-      "balancing_hint": "tolerate_intact_losers",
+      "selection_feedback_flags": [],
+      "balancing_hint": "maintain",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
@@ -3476,10 +3496,10 @@
         "name": "Capital Limited",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
-        "underwater": true,
+        "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.062,
-        "mark": 108.5,
+        "unrealized_pct": -0.0318,
+        "mark": 112.0,
         "avg_cost": 115.6742,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -3496,7 +3516,6 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "price drawdown alone does not invalidate value thesis",
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
@@ -3520,12 +3539,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 84.4,
+        "unrealized_pct": 0.0308,
+        "mark": 87.0,
         "avg_cost": 84.4,
-        "signal": "buy",
+        "signal": "hold",
         "timing_signal": "neutral",
-        "conviction_score": 0.259,
+        "conviction_score": 0.168,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -3538,34 +3557,35 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "conviction 26% below intact floor",
-          "still buy",
-          "research accumulate"
+          "left buy tier (hold)",
+          "conviction 17% below intact floor",
+          "research accumulate",
+          "cheapness family still passes"
         ],
         "intact_reasons": [
-          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95"
         ],
         "weaken_reasons": [
-          "conviction 26% below intact floor"
+          "left buy tier (hold)",
+          "conviction 17% below intact floor"
         ],
         "broken_reasons": []
       },
       {
         "ticker": "SBRE.L",
         "name": "Sabre Insurance Group plc",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 174.0,
+        "unrealized_pct": 0.0437,
+        "mark": 181.6,
         "avg_cost": 174.0,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.3307,
+        "conviction_score": 0.3775,
         "data_quality_score": 0.85,
         "passed_families": [
           "cheapness",
@@ -3578,19 +3598,20 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "conviction 33% below intact floor",
           "still buy",
-          "research accumulate"
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.85",
+          "conviction 38%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 0.85"
+          "data_quality 0.85",
+          "conviction 38%"
         ],
-        "weaken_reasons": [
-          "conviction 33% below intact floor"
-        ],
+        "weaken_reasons": [],
         "broken_reasons": []
       }
     ],
@@ -3601,7 +3622,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-11T14:17:04.578640+00:00",
+    "generated_at": "2026-11-12T07:38:58.271809+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -3609,7 +3630,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 27,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 1,
+      "open_with_thesis": 2,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -3674,7 +3695,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-11T14:17:04.618661+00:00",
+    "generated_at": "2026-11-12T07:38:58.284910+00:00",
     "open_count": 2,
     "closed_count": 26,
     "scored_count": 10,
@@ -3741,7 +3762,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-11T14:17:04.466472+00:00",
+    "generated_at": "2026-11-12T07:38:58.241269+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -3798,12 +3819,12 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-11T14:17:04.466472+00:00",
+    "generated_at": "2026-11-12T07:38:58.241269+00:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "evidence_heuristic",
-    "judge_spec_id": "heuristic.v1",
-    "parent_spec_id": null,
+    "judge_backend": "llm",
+    "judge_spec_id": "llm.v1",
+    "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
     "proposal_count": 0,
@@ -3816,16 +3837,21 @@
     "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
     "cards": [],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
+    "llm_judge": {
+      "attempted": true,
+      "ok": true,
+      "fallback": null
+    },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-11T14:17:04.466472+00:00",
+      "generated_at": "2026-11-12T07:38:58.241269+00:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "evidence_heuristic",
-      "judge_spec_id": "heuristic.v1",
-      "parent_spec_id": null,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
       "card_count": 0,
       "verdict_counts": {
@@ -3846,10 +3872,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-11T14:17:04.632210+00:00",
+  "generated_at": "2026-11-12T07:38:58.427027+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

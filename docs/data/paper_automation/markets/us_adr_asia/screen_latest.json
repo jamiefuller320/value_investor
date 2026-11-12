@@ -1,15 +1,14 @@
 {
-  "generated_at": "2026-11-09T07:36:50.934494+00:00",
-  "run_at": "2026-11-09T06:53:19.890728+00:00",
+  "generated_at": "2026-11-12T07:40:06.996500+00:00",
+  "run_at": "2026-11-12T06:53:31.052063+00:00",
   "meta": {
     "universe": "us_adr_asia",
     "universe_label": "us_adr_asia",
     "company_count": 20,
     "signal_counts": {
-      "hold": 13,
-      "avoid": 5,
-      "buy": 4,
-      "strong_buy": 2
+      "hold": 12,
+      "buy": 6,
+      "avoid": 6
     },
     "shard": true,
     "benchmark_ticker": "^GSPC",
@@ -20,35 +19,36 @@
       "ticker": "WIT",
       "name": "Wipro Limited",
       "sector": "Technology",
-      "signal": "strong_buy",
-      "models_passed": 10,
+      "signal": "buy",
+      "models_passed": 11,
       "model_count": 22,
-      "composite_score": 0.725,
-      "sector_composite_score": 0.675,
+      "composite_score": 0.7167,
+      "sector_composite_score": 0.6666666666666667,
       "families_passed": 4,
       "passed_families": "cheapness,quality,dividend,risk",
       "family_count": 5,
       "data_quality_score": 1.0,
       "metrics_present": 20,
       "metrics_total": 20,
-      "weeks_at_signal": 42,
-      "signal_trend": "stable",
-      "conviction_score": 0.56,
-      "stability_label": "persistent",
-      "signal_since": "2026-07-18",
-      "timing_signal": "neutral",
-      "timing_score": 0.375,
-      "rsi_14": 69.19864737804676,
+      "weeks_at_signal": 1,
+      "signal_trend": "deteriorating",
+      "conviction_score": 0.3458,
+      "stability_label": "new",
+      "signal_since": "2026-11-12",
+      "timing_signal": "wait",
+      "timing_score": 0.25,
+      "rsi_14": 66.70803717788026,
       "price_vs_sma200_pct": null,
       "action_note": "Research: Neutral, Medium risk — Filings show solid cash conversion and ongoing payouts, but low CC growth, Q1 FY27 margin/FCF-to-NI at 88% (below 1×) and unreadable 20-Fs weaken confirming the screen’s dividend/FCF-yield strong buy (Yahoo INR/TTM not filing-aligned).",
       "trade_plan": null,
-      "summary": "Strong Buy (10/22 models, composite 72%, sector-relative 68%). Families: 4/5 (cheapness, quality, dividend, risk). Data quality: 20/20 (high). Conviction 56% (persistent, 42w at signal, stable). Timing: Neutral, RSI 69 (no clear technical edge) Key metrics: P/E 15.4, P/B 2.5, Yield 4.0%, ROE 15.9%. Passes: Graham Enterprising, FCF Yield, Quality Value, Buffett Quality, Economic Moat +5 more. Highlights: P/E < 25: P/E=15.4; P/B < 3: P/B=2.54; Debt/equity < 100%: D/E=28%. Research overlay: Research: Neutral, Medium risk — Filings show solid cash conversion and ongoing payouts, but low CC growth, Q1 FY27 margin/FCF-to-NI at 88% (below 1×) and unreadable 20-Fs weaken confirming the screen’s dividend/FCF-yield strong buy (Yahoo INR/TTM not filing-aligned)..",
+      "summary": "Buy (11/22 models, composite 72%, sector-relative 67%). Families: 4/5 (cheapness, quality, dividend, risk). Data quality: 20/20 (high). Conviction 35% (new, 1w at signal, deteriorating). Timing: Wait, RSI 67 (no clear technical edge) Key metrics: P/E 15.4, P/B 2.5, Yield 4.0%, ROE 15.9%. Passes: Graham Enterprising, FCF Yield, Quality Value, Buffett Quality, Economic Moat +6 more. Highlights: P/E < 25: P/E=15.4; P/B < 3: P/B=2.54; Debt/equity < 100%: D/E=28%. Research overlay: Research: Neutral, Medium risk — Filings show solid cash conversion and ongoing payouts, but low CC growth, Q1 FY27 margin/FCF-to-NI at 88% (below 1×) and unreadable 20-Fs weaken confirming the screen’s dividend/FCF-yield strong buy (Yahoo INR/TTM not filing-aligned)..",
       "passed_models": [
         "Graham Enterprising",
         "FCF Yield",
         "Quality Value",
         "Buffett Quality",
         "Economic Moat",
+        "High Dividend Yield",
         "Dividend Growth",
         "Acquirer's Multiple",
         "Composite Value",
@@ -64,7 +64,6 @@
         "Low P/E + High Yield",
         "Lynch PEG",
         "Neff PEGY",
-        "High Dividend Yield",
         "Magic Formula",
         "Dreman Contrarian",
         "Piotroski F-Score"
@@ -96,9 +95,6 @@
         ],
         "Neff PEGY": [
           "PEGY 1.81 >= 1.0"
-        ],
-        "High Dividend Yield": [
-          "not in top quartile for yield"
         ],
         "Magic Formula": [
           "below top half on combined Magic Formula rank"
@@ -1045,6 +1041,34 @@
         ],
         "attached": true
       },
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Technology",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 5
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -1090,7 +1114,7 @@
       "fcf_dividend_coverage": null,
       "fcf_definition_divergence": false,
       "fcf_divergence_flagged": false,
-      "adjusted_signal": "strong_buy",
+      "adjusted_signal": "buy",
       "research_verdict": "neutral",
       "research_risk_level": "medium",
       "research_confidence": 0.62,
@@ -1107,7 +1131,7 @@
       "name": "Sony Group Corporation",
       "sector": "Technology",
       "signal": "buy",
-      "models_passed": 11,
+      "models_passed": 12,
       "model_count": 22,
       "composite_score": 0.6583,
       "sector_composite_score": 0.5916666666666667,
@@ -1117,23 +1141,24 @@
       "data_quality_score": 1.0,
       "metrics_present": 20,
       "metrics_total": 20,
-      "weeks_at_signal": 31,
+      "weeks_at_signal": 32,
       "signal_trend": "stable",
       "conviction_score": 0.675,
       "stability_label": "persistent",
       "signal_since": "2026-10-01",
       "timing_signal": "neutral",
-      "timing_score": 0.5,
-      "rsi_14": 67.34293334152211,
+      "timing_score": 0.375,
+      "rsi_14": 60.25407948807298,
       "price_vs_sma200_pct": null,
       "action_note": "Research: Accumulate, Medium risk — FY2026 filings show stronger continuing operating income and OCF (~¥1,946bn) with FCF well above cash dividends (~¥135bn), but consolidated net loss from Financial Services separation and Yahoo statutory growth/yield distort the screen buy.",
       "trade_plan": null,
-      "summary": "Buy (11/22 models, composite 66%, sector-relative 59%). Families: 5/5 (cheapness, quality, dividend, GARP, risk). Data quality: 20/20 (high). Conviction 62% (persistent, 31w at signal, stable). Timing: Neutral, RSI 67 (no clear technical edge) Key metrics: P/E 20.1, P/B 2.9, Yield 59.0%, ROE 15.0%. Passes: Graham Enterprising, FCF Yield, Lynch PEG, Neff PEGY, Buffett Quality +6 more. Highlights: P/E < 25: P/E=20.1; P/B < 3: P/B=2.92; Debt/equity < 100%: D/E=23%. Research overlay: Research: Accumulate, Medium risk — FY2026 filings show stronger continuing operating income and OCF (~¥1,946bn) with FCF well above cash dividends (~¥135bn), but consolidated net loss from Financial Services separation and Yahoo statutory growth/yield distort the screen buy..",
+      "summary": "Buy (12/22 models, composite 66%, sector-relative 59%). Families: 5/5 (cheapness, quality, dividend, GARP, risk). Data quality: 20/20 (high). Conviction 62% (persistent, 32w at signal, stable). Timing: Neutral, RSI 60 (no clear technical edge) Key metrics: P/E 19.8, P/B 2.9, Yield 60.0%, ROE 15.0%. Passes: Graham Enterprising, FCF Yield, Lynch PEG, Neff PEGY, Quality Value +7 more. Highlights: P/E < 25: P/E=19.8; P/B < 3: P/B=2.86; Debt/equity < 100%: D/E=23%. Research overlay: Research: Accumulate, Medium risk — FY2026 filings show stronger continuing operating income and OCF (~¥1,946bn) with FCF well above cash dividends (~¥135bn), but consolidated net loss from Financial Services separation and Yahoo statutory growth/yield distort the screen buy..",
       "passed_models": [
         "Graham Enterprising",
         "FCF Yield",
         "Lynch PEG",
         "Neff PEGY",
+        "Quality Value",
         "Buffett Quality",
         "High Dividend Yield",
         "Dividend Growth",
@@ -1149,7 +1174,6 @@
         "Deep Value",
         "Earnings Yield",
         "Low P/E + High Yield",
-        "Quality Value",
         "Economic Moat",
         "Acquirer's Multiple",
         "Dreman Contrarian",
@@ -1171,14 +1195,10 @@
           "P/B not below 1.0"
         ],
         "Earnings Yield": [
-          "earnings yield 5.0% below 8%"
+          "earnings yield 5.1% below 8%"
         ],
         "Low P/E + High Yield": [
           "P/E not below 12.0"
-        ],
-        "Quality Value": [
-          "thin margins",
-          "P/E >= 20"
         ],
         "Economic Moat": [
           "ROE below 18%",
@@ -1202,20 +1222,20 @@
         "earnings_growth_pct": 0.273,
         "statutory_earnings_growth_pct": 0.273,
         "ncav_available": false,
-        "dividend_yield_raw": 0.59,
+        "dividend_yield_raw": 0.6,
         "model_earnings_growth_pct": 0.273,
         "adjusted_eps_filing_screen_divergence_warning": false,
         "earnings_growth_pct_source": "yahoo_statutory",
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.738067912087912,
-        "lynch_peg_model": 0.738067912087912
+        "lynch_peg_statutory": 0.7241265934065934,
+        "lynch_peg_model": 0.7241265934065934
       },
       "key_metrics": {
-        "P/E": "20.1",
+        "P/E": "19.8",
         "P/B": "2.9",
-        "Yield": "59.0%",
+        "Yield": "60.0%",
         "ROE": "15.0%",
         "FCF": "2302711955456.0"
       },
@@ -1330,8 +1350,8 @@
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.738067912087912,
-        "lynch_peg_model": 0.738067912087912
+        "lynch_peg_statutory": 0.7241265934065934,
+        "lynch_peg_model": 0.7241265934065934
       },
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
@@ -2126,6 +2146,34 @@
         ],
         "attached": true
       },
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Technology",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 7
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -2152,7 +2200,7 @@
       "quality_family_avoid_gate_detail": {
         "observe_only": true,
         "quality_family_avoid_gate": false,
-        "quality_family_composite_score": 0.5945,
+        "quality_family_composite_score": 0.6444,
         "quality_family_failed": false,
         "quality_family_avoid_gate_action": null,
         "quality_family_avoid_gate_observe_signal": null,
@@ -2177,9 +2225,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 27.0,
-      "price": 27.0,
-      "last": 27.0
+      "last_price": 26.49,
+      "price": 26.49,
+      "last": 26.49
     },
     {
       "ticker": "NMR",
@@ -2196,18 +2244,18 @@
       "data_quality_score": 0.8,
       "metrics_present": 16,
       "metrics_total": 20,
-      "weeks_at_signal": 42,
+      "weeks_at_signal": 43,
       "signal_trend": "stable",
       "conviction_score": 0.4211,
       "stability_label": "persistent",
       "signal_since": "2026-07-18",
       "timing_signal": "neutral",
       "timing_score": 0.5,
-      "rsi_14": 48.33148943739847,
+      "rsi_14": 55.18078555171103,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Hold (7/22 models, composite 90%, sector-relative 86%). Families: 3/5 (cheapness, dividend, GARP). Data quality: 16/20 (high). Conviction 42% (persistent, 42w at signal, stable). Timing: Neutral, RSI 48 (no clear technical edge) Key metrics: P/E 10.8, P/B 1.2, Yield 3.4%, ROE 11.5%. Passes: Graham Enterprising, Earnings Yield, Lynch PEG, Neff PEGY, Dividend Growth +2 more. Highlights: P/E < 25: P/E=10.8; P/B < 3: P/B=1.15; ROE > 8%: ROE=11.5%. Gaps: FCF Yield: FCF yield nan% below 5%; Graham Defensive: current ratio < 2.",
+      "summary": "Hold (7/22 models, composite 90%, sector-relative 86%). Families: 3/5 (cheapness, dividend, GARP). Data quality: 16/20 (high). Conviction 42% (persistent, 43w at signal, stable). Timing: Neutral, RSI 55 (no clear technical edge) Key metrics: P/E 10.9, P/B 1.2, Yield 3.3%, ROE 11.5%. Passes: Graham Enterprising, Earnings Yield, Lynch PEG, Neff PEGY, Dividend Growth +2 more. Highlights: P/E < 25: P/E=10.9; P/B < 3: P/B=1.19; ROE > 8%: ROE=11.5%. Gaps: FCF Yield: FCF yield nan% below 5%; Graham Defensive: current ratio < 2.",
       "passed_models": [
         "Graham Enterprising",
         "Earnings Yield",
@@ -2302,20 +2350,20 @@
         "earnings_growth_pct": 0.136,
         "statutory_earnings_growth_pct": 0.136,
         "ncav_available": false,
-        "dividend_yield_raw": 0.0344,
+        "dividend_yield_raw": 0.0334,
         "model_earnings_growth_pct": 0.136,
         "adjusted_eps_filing_screen_divergence_warning": false,
         "earnings_growth_pct_source": "yahoo_statutory",
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.7961460294117646,
-        "lynch_peg_model": 0.7961460294117646
+        "lynch_peg_statutory": 0.8005617647058823,
+        "lynch_peg_model": 0.8005617647058823
       },
       "key_metrics": {
-        "P/E": "10.8",
+        "P/E": "10.9",
         "P/B": "1.2",
-        "Yield": "3.4%",
+        "Yield": "3.3%",
         "ROE": "11.5%"
       },
       "cashflow_metrics": {
@@ -2418,12 +2466,40 @@
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.7961460294117646,
-        "lynch_peg_model": 0.7961460294117646
+        "lynch_peg_statutory": 0.8005617647058823,
+        "lynch_peg_model": 0.8005617647058823
       },
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Financial Services",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 3
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -2478,41 +2554,39 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 9.42,
-      "price": 9.42,
-      "last": 9.42
+      "last_price": 9.69,
+      "price": 9.69,
+      "last": 9.69
     },
     {
       "ticker": "HMC",
       "name": "Honda Motor Co., Ltd.",
       "sector": "Consumer Cyclical",
       "signal": "hold",
-      "models_passed": 4,
+      "models_passed": 2,
       "model_count": 22,
-      "composite_score": 0.7389,
-      "sector_composite_score": 0.7222222222222222,
-      "families_passed": 2,
-      "passed_families": "cheapness,dividend",
+      "composite_score": 0.7722,
+      "sector_composite_score": 0.7472222222222222,
+      "families_passed": 1,
+      "passed_families": "cheapness",
       "family_count": 5,
       "data_quality_score": 0.95,
       "metrics_present": 19,
       "metrics_total": 20,
-      "weeks_at_signal": 42,
+      "weeks_at_signal": 43,
       "signal_trend": "stable",
-      "conviction_score": 0.2776,
+      "conviction_score": 0.1443,
       "stability_label": "persistent",
       "signal_since": "2026-07-18",
       "timing_signal": "neutral",
-      "timing_score": 0.5,
-      "rsi_14": 66.88088470787557,
+      "timing_score": 0.625,
+      "rsi_14": 44.891533389050466,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Hold (4/22 models, composite 74%, sector-relative 72%). Families: 2/5 (cheapness, dividend). Data quality: 19/20 (high). Conviction 28% (persistent, 42w at signal, stable). Timing: Neutral, RSI 67 (no clear technical edge) Key metrics: P/B 0.6, Yield 3.7%, ROE -0.8%, FCF 267755618304.0. Passes: Deep Value, FCF Yield, Dividend Growth, Composite Value. Highlights: P/B=0.59; EV/EBITDA=7.2; FCF yield=576.7%. Gaps: Earnings Yield: earnings yield nan% below 8%; High Dividend Yield: not in top quartile for yield.",
+      "summary": "Hold (2/22 models, composite 77%, sector-relative 75%). Families: 1/5 (cheapness). Data quality: 19/20 (high). Conviction 14% (persistent, 43w at signal, stable). Timing: Neutral, RSI 45 (no clear technical edge) Key metrics: P/B 0.6, Yield 4.0%, ROE -1.2%, FCF 500341997568.0. Passes: FCF Yield, Composite Value. Highlights: FCF yield=1157.7%; top-tier on price_to_book (percentile 100%); top-tier on dividend_yield (percentile 88%). Gaps: Earnings Yield: earnings yield nan% below 8%; High Dividend Yield: not in top quartile for yield.",
       "passed_models": [
-        "Deep Value",
         "FCF Yield",
-        "Dividend Growth",
         "Composite Value"
       ],
       "failed_models": [
@@ -2520,6 +2594,7 @@
         "Graham Enterprising",
         "Graham Net-Net",
         "Schloss Low P/B",
+        "Deep Value",
         "Earnings Yield",
         "Low P/E + High Yield",
         "Lynch PEG",
@@ -2528,6 +2603,7 @@
         "Buffett Quality",
         "Economic Moat",
         "High Dividend Yield",
+        "Dividend Growth",
         "Magic Formula",
         "Acquirer's Multiple",
         "Dreman Contrarian",
@@ -2543,13 +2619,17 @@
         "Graham Enterprising": [
           "missing P/E",
           "excessive leverage",
-          "ROE <= 8%"
+          "ROE <= 8%",
+          "negative earnings growth"
         ],
         "Graham Net-Net": [
           "missing NCAV (balance sheet data)"
         ],
         "Schloss Low P/B": [
           "too much leverage"
+        ],
+        "Deep Value": [
+          "EV/EBITDA not below 8"
         ],
         "Earnings Yield": [
           "earnings yield nan% below 8%"
@@ -2558,8 +2638,11 @@
           "P/E not below 12.0",
           "yield below 4%"
         ],
+        "Lynch PEG": [
+          "missing or negative earnings growth"
+        ],
         "Neff PEGY": [
-          "PEGY nan >= 1.0"
+          "no growth or dividend yield"
         ],
         "Quality Value": [
           "ROE below 12%",
@@ -2582,6 +2665,10 @@
         "High Dividend Yield": [
           "not in top quartile for yield",
           "no positive earnings"
+        ],
+        "Dividend Growth": [
+          "earnings not growing",
+          "P/E out of range"
         ],
         "Magic Formula": [
           "below top half on combined Magic Formula rank"
@@ -2608,13 +2695,13 @@
         ]
       },
       "screening_inputs": {
-        "debt_to_equity": 113.838,
+        "debt_to_equity": 117.341,
         "current_ratio": 1.2812756749976482,
-        "earnings_growth_pct": 1.475,
-        "statutory_earnings_growth_pct": 1.475,
+        "earnings_growth_pct": -0.417,
+        "statutory_earnings_growth_pct": -0.417,
         "ncav_available": false,
-        "dividend_yield_raw": 0.037200000000000004,
-        "model_earnings_growth_pct": 1.475,
+        "dividend_yield_raw": 0.039900000000000005,
+        "model_earnings_growth_pct": -0.417,
         "adjusted_eps_filing_screen_divergence_warning": false,
         "earnings_growth_pct_source": "yahoo_statutory",
         "statutory_earnings_growth_source": "yahoo_statutory",
@@ -2623,18 +2710,18 @@
       },
       "key_metrics": {
         "P/B": "0.6",
-        "Yield": "3.7%",
-        "ROE": "-0.8%",
-        "FCF": "267755618304.0"
+        "Yield": "4.0%",
+        "ROE": "-1.2%",
+        "FCF": "500341997568.0"
       },
       "cashflow_metrics": {
         "operating_cashflow": 1135261000000.0,
-        "free_cashflow": 267755618304.0
+        "free_cashflow": 500341997568.0
       },
       "fcf": {
-        "canonical": 267755618304.0,
+        "canonical": 500341997568.0,
         "source": "auto_fallback_screen_ttm",
-        "screen_ttm": 267755618304.0,
+        "screen_ttm": 500341997568.0,
         "screen_ttm_unverified": false,
         "divergence_flagged": false,
         "fcf_divergence_flagged": false,
@@ -2648,18 +2735,18 @@
           "screen_ttm"
         ],
         "auto_policy_discarded": [],
-        "policy_fcf": 267755618304.0,
+        "policy_fcf": 500341997568.0,
         "policy_basis": "screen_ttm",
         "currency": "USD",
-        "primary_fcf": 267755618304.0,
+        "primary_fcf": 500341997568.0,
         "primary_fcf_basis": "screen_ttm",
         "fcf_basis_registry": {
           "selected_basis": "screen_ttm",
-          "selected_fcf": 267755618304.0,
-          "primary_fcf": 267755618304.0,
+          "selected_fcf": 500341997568.0,
+          "primary_fcf": 500341997568.0,
           "primary_fcf_basis": "screen_ttm",
           "filing_aligned": null,
-          "screen_ttm": 267755618304.0,
+          "screen_ttm": 500341997568.0,
           "company_adjusted": null,
           "screen_ttm_unverified": false,
           "company_adjusted_stale_year": false,
@@ -2669,7 +2756,7 @@
           "bridge_resolved": true,
           "auto_policy_method": "fallback_screen_ttm"
         },
-        "filing_aligned": 267755618304.0
+        "filing_aligned": 500341997568.0
       },
       "piotroski_f_score": {
         "score": 3,
@@ -2725,8 +2812,8 @@
       "cyclical_exposure_detected": false,
       "earnings_basis_overlay": false,
       "earnings_growth_overlay": {
-        "statutory_earnings_growth_pct": 1.475,
-        "model_earnings_growth_pct": 1.475,
+        "statutory_earnings_growth_pct": -0.417,
+        "model_earnings_growth_pct": -0.417,
         "adjusted_eps_growth_pct": null,
         "adjusted_eps_growth_screen_pct": null,
         "filing_latest_adjusted_eps_growth_pct": null,
@@ -2744,6 +2831,34 @@
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Consumer Cyclical",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 3
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -2777,6 +2892,7 @@
         "quality_family_avoid_gate_would_block_upgrade": false,
         "co_failed_families": [
           "quality",
+          "dividend",
           "garp",
           "risk"
         ],
@@ -2799,9 +2915,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 35.78,
-      "price": 35.78,
-      "last": 35.78
+      "last_price": 33.35,
+      "price": 33.35,
+      "last": 33.35
     },
     {
       "ticker": "SMFG",
@@ -2818,18 +2934,18 @@
       "data_quality_score": 0.7,
       "metrics_present": 14,
       "metrics_total": 20,
-      "weeks_at_signal": 42,
+      "weeks_at_signal": 43,
       "signal_trend": "stable",
       "conviction_score": 0.2442,
       "stability_label": "persistent",
       "signal_since": "2026-07-18",
       "timing_signal": "neutral",
-      "timing_score": 0.5,
-      "rsi_14": 36.99601797693969,
+      "timing_score": 0.625,
+      "rsi_14": 52.25503250628039,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Hold (4/22 models, composite 62%, sector-relative 55%). Families: 3/5 (cheapness, dividend, GARP). Data quality: 14/20 (adequate). Conviction 24% (persistent, 42w at signal, stable). Timing: Neutral, RSI 37 (no clear technical edge) Key metrics: P/E 13.5, P/B 1.4, Yield 2.5%, ROE 8.6%. Passes: Graham Enterprising, Lynch PEG, Neff PEGY, Dividend Growth. Highlights: P/E < 25: P/E=13.5; P/B < 3: P/B=1.45; ROE > 8%: ROE=8.6%. Gaps: FCF Yield: FCF yield nan% below 5%; Graham Defensive: current ratio < 2.",
+      "summary": "Hold (4/22 models, composite 62%, sector-relative 55%). Families: 3/5 (cheapness, dividend, GARP). Data quality: 14/20 (adequate). Conviction 24% (persistent, 43w at signal, stable). Timing: Neutral, RSI 52 (no clear technical edge) Key metrics: P/E 14.1, P/B 1.5, Yield 2.4%, ROE 8.6%. Passes: Graham Enterprising, Lynch PEG, Neff PEGY, Dividend Growth. Highlights: P/E < 25: P/E=14.1; P/B < 3: P/B=1.54; ROE > 8%: ROE=8.6%. Gaps: FCF Yield: FCF yield nan% below 5%; Graham Defensive: current ratio < 2.",
       "passed_models": [
         "Graham Enterprising",
         "Lynch PEG",
@@ -2872,7 +2988,7 @@
           "EV/EBITDA not below 8"
         ],
         "Earnings Yield": [
-          "earnings yield 7.4% below 8%"
+          "earnings yield 7.1% below 8%"
         ],
         "FCF Yield": [
           "FCF yield nan% below 5%"
@@ -2896,7 +3012,7 @@
           "leverage too high"
         ],
         "High Dividend Yield": [
-          "yield 2.5% below 3% floor",
+          "yield 2.4% below 3% floor",
           "not in top quartile for yield"
         ],
         "Magic Formula": [
@@ -2936,20 +3052,20 @@
         "earnings_growth_pct": 0.35,
         "statutory_earnings_growth_pct": 0.35,
         "ncav_available": false,
-        "dividend_yield_raw": 0.0254,
+        "dividend_yield_raw": 0.0239,
         "model_earnings_growth_pct": 0.35,
         "adjusted_eps_filing_screen_divergence_warning": false,
         "earnings_growth_pct_source": "yahoo_statutory",
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.38497108571428573,
-        "lynch_peg_model": 0.38497108571428573
+        "lynch_peg_statutory": 0.4017857142857143,
+        "lynch_peg_model": 0.4017857142857143
       },
       "key_metrics": {
-        "P/E": "13.5",
-        "P/B": "1.4",
-        "Yield": "2.5%",
+        "P/E": "14.1",
+        "P/B": "1.5",
+        "Yield": "2.4%",
         "ROE": "8.6%"
       },
       "cashflow_metrics": {
@@ -3052,12 +3168,40 @@
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.38497108571428573,
-        "lynch_peg_model": 0.38497108571428573
+        "lynch_peg_statutory": 0.4017857142857143,
+        "lynch_peg_model": 0.4017857142857143
       },
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Financial Services",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 3
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -3112,16 +3256,16 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 23.31,
-      "price": 23.31,
-      "last": 23.31
+      "last_price": 24.75,
+      "price": 24.75,
+      "last": 24.75
     },
     {
       "ticker": "MFG",
       "name": "Mizuho Financial Group, Inc.",
       "sector": "Financial Services",
       "signal": "hold",
-      "models_passed": 4,
+      "models_passed": 3,
       "model_count": 22,
       "composite_score": 0.5769,
       "sector_composite_score": 0.6190476190476191,
@@ -3131,23 +3275,22 @@
       "data_quality_score": 0.7,
       "metrics_present": 14,
       "metrics_total": 20,
-      "weeks_at_signal": 20,
+      "weeks_at_signal": 21,
       "signal_trend": "stable",
       "conviction_score": 0.1674,
       "stability_label": "persistent",
       "signal_since": "2026-10-16",
       "timing_signal": "neutral",
-      "timing_score": 0.5,
-      "rsi_14": 35.939537059335606,
+      "timing_score": 0.625,
+      "rsi_14": 53.40964274607642,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Hold (4/22 models, composite 58%, sector-relative 62%). Families: 2/5 (cheapness, GARP). Data quality: 14/20 (adequate). Conviction 17% (persistent, 20w at signal, stable). Timing: Neutral, RSI 36 (no clear technical edge) Key metrics: P/E 12.9, P/B 1.6, Yield 1.9%, ROE 12.5%. Passes: Graham Enterprising, Lynch PEG, Neff PEGY, Dreman Contrarian. Highlights: P/E < 25: P/E=12.9; P/B < 3: P/B=1.57; ROE > 8%: ROE=12.5%. Gaps: FCF Yield: FCF yield nan% below 5%; Graham Defensive: current ratio < 2.",
+      "summary": "Hold (3/22 models, composite 58%, sector-relative 62%). Families: 2/5 (cheapness, GARP). Data quality: 14/20 (adequate). Conviction 17% (persistent, 21w at signal, stable). Timing: Neutral, RSI 53 (no clear technical edge) Key metrics: P/E 13.9, P/B 1.7, Yield 1.8%, ROE 12.5%. Passes: Graham Enterprising, Lynch PEG, Neff PEGY. Highlights: P/E < 25: P/E=13.9; P/B < 3: P/B=1.70; ROE > 8%: ROE=12.5%. Gaps: FCF Yield: FCF yield nan% below 5%; Dividend Growth: yield too low.",
       "passed_models": [
         "Graham Enterprising",
         "Lynch PEG",
-        "Neff PEGY",
-        "Dreman Contrarian"
+        "Neff PEGY"
       ],
       "failed_models": [
         "Graham Defensive",
@@ -3164,6 +3307,7 @@
         "Dividend Growth",
         "Magic Formula",
         "Acquirer's Multiple",
+        "Dreman Contrarian",
         "Piotroski F-Score",
         "Composite Value",
         "Earnings Quality",
@@ -3171,6 +3315,7 @@
       ],
       "model_failures": {
         "Graham Defensive": [
+          "valuation too rich on P/B or P/E×P/B",
           "current ratio < 2"
         ],
         "Graham Net-Net": [
@@ -3185,7 +3330,7 @@
           "EV/EBITDA not below 8"
         ],
         "Earnings Yield": [
-          "earnings yield 7.8% below 8%"
+          "earnings yield 7.2% below 8%"
         ],
         "FCF Yield": [
           "FCF yield nan% below 5%"
@@ -3208,7 +3353,7 @@
           "leverage too high"
         ],
         "High Dividend Yield": [
-          "yield 1.9% below 3% floor",
+          "yield 1.8% below 3% floor",
           "not in top quartile for yield"
         ],
         "Dividend Growth": [
@@ -3219,6 +3364,10 @@
         ],
         "Acquirer's Multiple": [
           "could not rank EV/EBIT"
+        ],
+        "Dreman Contrarian": [
+          "P/B not cheap vs universe",
+          "dividend yield below median"
         ],
         "Piotroski F-Score": [
           "F-Score 4/9 below 7",
@@ -3246,20 +3395,20 @@
         "earnings_growth_pct": 0.497,
         "statutory_earnings_growth_pct": 0.497,
         "ncav_available": false,
-        "dividend_yield_raw": 0.0195,
+        "dividend_yield_raw": 0.0181,
         "model_earnings_growth_pct": 0.497,
         "adjusted_eps_filing_screen_divergence_warning": false,
         "earnings_growth_pct_source": "yahoo_statutory",
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.25908877263581487,
-        "lynch_peg_model": 0.25908877263581487
+        "lynch_peg_statutory": 0.2800363782696177,
+        "lynch_peg_model": 0.2800363782696177
       },
       "key_metrics": {
-        "P/E": "12.9",
-        "P/B": "1.6",
-        "Yield": "1.9%",
+        "P/E": "13.9",
+        "P/B": "1.7",
+        "Yield": "1.8%",
         "ROE": "12.5%"
       },
       "cashflow_metrics": {
@@ -3362,12 +3511,40 @@
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.25908877263581487,
-        "lynch_peg_model": 0.25908877263581487
+        "lynch_peg_statutory": 0.2800363782696177,
+        "lynch_peg_model": 0.2800363782696177
       },
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Financial Services",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 4
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -3423,332 +3600,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 9.4,
-      "price": 9.4,
-      "last": 9.4
-    },
-    {
-      "ticker": "BABA",
-      "name": "Alibaba Group Holding Limited",
-      "sector": "Consumer Cyclical",
-      "signal": "hold",
-      "models_passed": 3,
-      "model_count": 22,
-      "composite_score": 0.5042,
-      "sector_composite_score": 0.4854166666666666,
-      "families_passed": 3,
-      "passed_families": "cheapness,dividend,risk",
-      "family_count": 5,
-      "data_quality_score": 1.0,
-      "metrics_present": 20,
-      "metrics_total": 20,
-      "weeks_at_signal": 4,
-      "signal_trend": "stable",
-      "conviction_score": 0.2969,
-      "stability_label": "persistent",
-      "signal_since": "2026-11-06",
-      "timing_signal": "neutral",
-      "timing_score": 0.625,
-      "rsi_14": 57.68661226980031,
-      "price_vs_sma200_pct": null,
-      "action_note": "",
-      "trade_plan": null,
-      "summary": "Hold (3/22 models, composite 50%, sector-relative 49%). Families: 3/5 (cheapness, dividend, risk). Data quality: 20/20 (high). Conviction 30% (persistent, 4w at signal, stable). Timing: Neutral, RSI 58 (no clear technical edge) Key metrics: P/E 26.5, P/B 1.6, Yield 96.0%, ROE 6.4%. Passes: High Dividend Yield, Magic Formula, Financial Health. Highlights: yield=96.0%; universe rank 92%; earnings yield rank 78%. Gaps: Dreman Contrarian: P/E not in bottom quartile; Schloss Low P/B: P/B too high.",
-      "passed_models": [
-        "High Dividend Yield",
-        "Magic Formula",
-        "Financial Health"
-      ],
-      "failed_models": [
-        "Graham Defensive",
-        "Graham Enterprising",
-        "Graham Net-Net",
-        "Schloss Low P/B",
-        "Deep Value",
-        "Earnings Yield",
-        "FCF Yield",
-        "Low P/E + High Yield",
-        "Lynch PEG",
-        "Neff PEGY",
-        "Quality Value",
-        "Buffett Quality",
-        "Economic Moat",
-        "Dividend Growth",
-        "Acquirer's Multiple",
-        "Dreman Contrarian",
-        "Piotroski F-Score",
-        "Composite Value",
-        "Earnings Quality"
-      ],
-      "model_failures": {
-        "Graham Defensive": [
-          "P/E >= 15",
-          "valuation too rich on P/B or P/E×P/B",
-          "current ratio < 2"
-        ],
-        "Graham Enterprising": [
-          "P/E >= 25",
-          "ROE <= 8%",
-          "negative earnings growth"
-        ],
-        "Graham Net-Net": [
-          "missing NCAV (balance sheet data)"
-        ],
-        "Schloss Low P/B": [
-          "P/B too high"
-        ],
-        "Deep Value": [
-          "P/B not below 1.0"
-        ],
-        "Earnings Yield": [
-          "earnings yield 3.8% below 8%"
-        ],
-        "FCF Yield": [
-          "FCF yield -30.4% below 5%"
-        ],
-        "Low P/E + High Yield": [
-          "P/E not below 12.0"
-        ],
-        "Lynch PEG": [
-          "missing or negative earnings growth"
-        ],
-        "Neff PEGY": [
-          "PEGY 1.60 >= 1.0"
-        ],
-        "Quality Value": [
-          "ROE below 12%",
-          "P/E >= 20",
-          "FCF yield below 3%"
-        ],
-        "Buffett Quality": [
-          "ROE too low",
-          "thin margins",
-          "P/E too high"
-        ],
-        "Economic Moat": [
-          "ROE below 18%",
-          "ROA below 8%",
-          "margins below 12%"
-        ],
-        "Dividend Growth": [
-          "earnings not growing",
-          "P/E out of range"
-        ],
-        "Acquirer's Multiple": [
-          "not in top 40% cheapest on EV/EBIT"
-        ],
-        "Dreman Contrarian": [
-          "P/E not in bottom quartile"
-        ],
-        "Piotroski F-Score": [
-          "F-Score 3/9 below 7",
-          "ROA improving",
-          "OCF > net income",
-          "leverage declining",
-          "current ratio improving",
-          "gross margin improving",
-          "asset turnover improving"
-        ],
-        "Earnings Quality": [
-          "weak free-cash conversion",
-          "operating cash below earnings"
-        ]
-      },
-      "screening_inputs": {
-        "debt_to_equity": 23.928,
-        "current_ratio": 1.2820561799167922,
-        "earnings_growth_pct": -0.794,
-        "statutory_earnings_growth_pct": -0.794,
-        "ncav_available": false,
-        "dividend_yield_raw": 0.96,
-        "model_earnings_growth_pct": -0.794,
-        "adjusted_eps_filing_screen_divergence_warning": false,
-        "earnings_growth_pct_source": "yahoo_statutory",
-        "statutory_earnings_growth_source": "yahoo_statutory",
-        "model_earnings_growth_source": "yahoo_statutory",
-        "bps_divergence_warning": false
-      },
-      "key_metrics": {
-        "P/E": "26.5",
-        "P/B": "1.6",
-        "Yield": "96.0%",
-        "ROE": "6.4%",
-        "FCF": "-82644123648.0"
-      },
-      "cashflow_metrics": {
-        "operating_cashflow": 76213000000.0,
-        "free_cashflow": -82644123648.0
-      },
-      "fcf": {
-        "canonical": -82644123648.0,
-        "source": "auto_fallback_screen_ttm",
-        "screen_ttm": -82644123648.0,
-        "screen_ttm_unverified": false,
-        "divergence_flagged": false,
-        "fcf_divergence_flagged": false,
-        "fcf_definition_divergence": false,
-        "filing_screen_mismatch": false,
-        "ttm_suppressed_screen_filing_mismatch": false,
-        "bridge_resolved": true,
-        "auto_policy_resolved": true,
-        "auto_policy_method": "fallback_screen_ttm",
-        "auto_policy_cluster": [
-          "screen_ttm"
-        ],
-        "auto_policy_discarded": [],
-        "policy_fcf": -82644123648.0,
-        "policy_basis": "screen_ttm",
-        "currency": "USD",
-        "primary_fcf": -82644123648.0,
-        "primary_fcf_basis": "screen_ttm",
-        "fcf_basis_registry": {
-          "selected_basis": "screen_ttm",
-          "selected_fcf": -82644123648.0,
-          "primary_fcf": -82644123648.0,
-          "primary_fcf_basis": "screen_ttm",
-          "filing_aligned": null,
-          "screen_ttm": -82644123648.0,
-          "company_adjusted": null,
-          "screen_ttm_unverified": false,
-          "company_adjusted_stale_year": false,
-          "fiscal_year": null,
-          "currency": "USD",
-          "selection_source": "auto_fallback_screen_ttm",
-          "bridge_resolved": true,
-          "auto_policy_method": "fallback_screen_ttm"
-        },
-        "filing_aligned": -82644123648.0
-      },
-      "piotroski_f_score": {
-        "score": 3,
-        "max_score": 9,
-        "passed": false,
-        "components": [
-          {
-            "name": "positive net income",
-            "passed": true
-          },
-          {
-            "name": "positive operating cash flow",
-            "passed": true
-          },
-          {
-            "name": "ROA improving",
-            "passed": false
-          },
-          {
-            "name": "OCF > net income",
-            "passed": false
-          },
-          {
-            "name": "leverage declining",
-            "passed": false
-          },
-          {
-            "name": "current ratio improving",
-            "passed": false
-          },
-          {
-            "name": "no share dilution",
-            "passed": true
-          },
-          {
-            "name": "gross margin improving",
-            "passed": false
-          },
-          {
-            "name": "asset turnover improving",
-            "passed": false
-          }
-        ]
-      },
-      "healthcare_overlay": false,
-      "healthcare_price_erosion_overlay": false,
-      "cash_conversion_overlay": true,
-      "dividend_yield_overlay": true,
-      "dividend_sustainability_overlay": false,
-      "interim_dividend_cut_flagged": false,
-      "interim_quality_overlay": false,
-      "cyclical_exposure_overlay": false,
-      "cyclical_exposure_detected": false,
-      "earnings_basis_overlay": false,
-      "earnings_growth_overlay": {
-        "statutory_earnings_growth_pct": -0.794,
-        "model_earnings_growth_pct": -0.794,
-        "adjusted_eps_growth_pct": null,
-        "adjusted_eps_growth_screen_pct": null,
-        "filing_latest_adjusted_eps_growth_pct": null,
-        "adjusted_eps_filing_screen_divergence_warning": false,
-        "yahoo_normalized_income_growth_pct": null,
-        "earnings_growth_screen_ttm_pct": null,
-        "diluted_eps_growth_pct": null,
-        "earnings_growth_pct_source": "yahoo_statutory",
-        "statutory_earnings_growth_source": "yahoo_statutory",
-        "model_earnings_growth_source": "yahoo_statutory",
-        "bps_divergence_warning": false,
-        "lynch_peg_statutory": null,
-        "lynch_peg_model": null
-      },
-      "earnings_growth_bps_divergence_warning": false,
-      "adjusted_eps_filing_screen_divergence_warning": false,
-      "peer_model_pass_table": {},
-      "fcf_basis_overlay": false,
-      "fcf_three_way_conviction_overlay": false,
-      "fcf_three_way_conviction_overlay_detail": {
-        "fcf_three_way_conviction_overlay": false,
-        "profit_to_cash_current_pct": null,
-        "profit_to_cash_prior_pct": null,
-        "profit_to_cash_yoy_decline_pp": null
-      },
-      "transition_key": "new",
-      "prior_signal": null,
-      "conviction_timing_overlay": false,
-      "conviction_timing_overlay_detail": {
-        "observe_only": true,
-        "transition_key": "new",
-        "prior_signal": null,
-        "conviction_timing_overlay": false,
-        "conviction_timing_overlay_score": null,
-        "conviction_timing_overlay_timing": null,
-        "conviction_timing_overlay_action": null,
-        "archive_1w_positive_rate": null,
-        "baseline_1w_hit_rate": 0.4205
-      },
-      "quality_family_avoid_gate": false,
-      "quality_family_avoid_gate_detail": {
-        "observe_only": true,
-        "quality_family_avoid_gate": false,
-        "quality_family_composite_score": 0.3083,
-        "quality_family_failed": true,
-        "quality_family_avoid_gate_action": null,
-        "quality_family_avoid_gate_observe_signal": null,
-        "quality_family_avoid_gate_would_block_upgrade": false,
-        "co_failed_families": [
-          "quality",
-          "garp"
-        ],
-        "archive_avoid_quality_fail_count": 37,
-        "archive_loser_card_count": 53
-      },
-      "leverage_override": false,
-      "dual_leverage_display": false,
-      "operating_cashflow": 76213000000.0,
-      "fcf_dividend_coverage_gross": null,
-      "fcf_dividend_coverage_net": null,
-      "fcf_dividend_coverage": null,
-      "fcf_definition_divergence": false,
-      "fcf_divergence_flagged": false,
-      "adjusted_signal": "hold",
-      "research_verdict": null,
-      "research_risk_level": null,
-      "research_confidence": null,
-      "research_rationale": null,
-      "interim_eps_decline_pct": null,
-      "adjusted_eps_growth_pct": null,
-      "yahoo_normalized_income_growth_pct": null,
-      "last_price": 109.45,
-      "price": 109.45,
-      "last": 109.45
+      "last_price": 10.16,
+      "price": 10.16,
+      "last": 10.16
     },
     {
       "ticker": "MUFG",
@@ -3765,18 +3619,18 @@
       "data_quality_score": 0.7,
       "metrics_present": 14,
       "metrics_total": 20,
-      "weeks_at_signal": 42,
+      "weeks_at_signal": 43,
       "signal_trend": "stable",
       "conviction_score": 0.2,
       "stability_label": "persistent",
       "signal_since": "2026-07-18",
       "timing_signal": "neutral",
       "timing_score": 0.625,
-      "rsi_14": 39.176029410168795,
+      "rsi_14": 51.48883156555681,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Hold (4/22 models, composite 50%, sector-relative 45%). Families: 3/5 (cheapness, dividend, GARP). Data quality: 14/20 (adequate). Conviction 20% (persistent, 42w at signal, stable). Timing: Neutral, RSI 39 (no clear technical edge) Key metrics: P/E 13.7, P/B 1.6, Yield 2.6%, ROE 9.5%. Passes: Graham Enterprising, Lynch PEG, Neff PEGY, Dividend Growth. Highlights: P/E < 25: P/E=13.7; P/B < 3: P/B=1.64; ROE > 8%: ROE=9.5%. Gaps: FCF Yield: FCF yield nan% below 5%; Earnings Yield: earnings yield 7.3% below 8%.",
+      "summary": "Hold (4/22 models, composite 50%, sector-relative 45%). Families: 3/5 (cheapness, dividend, GARP). Data quality: 14/20 (adequate). Conviction 20% (persistent, 43w at signal, stable). Timing: Neutral, RSI 51 (no clear technical edge) Key metrics: P/E 14.2, P/B 1.7, Yield 2.5%, ROE 9.5%. Passes: Graham Enterprising, Lynch PEG, Neff PEGY, Dividend Growth. Highlights: P/E < 25: P/E=14.2; P/B < 3: P/B=1.72; ROE > 8%: ROE=9.5%. Gaps: FCF Yield: FCF yield nan% below 5%; Earnings Yield: earnings yield 7.1% below 8%.",
       "passed_models": [
         "Graham Enterprising",
         "Lynch PEG",
@@ -3820,7 +3674,7 @@
           "EV/EBITDA not below 8"
         ],
         "Earnings Yield": [
-          "earnings yield 7.3% below 8%"
+          "earnings yield 7.1% below 8%"
         ],
         "FCF Yield": [
           "FCF yield nan% below 5%"
@@ -3844,7 +3698,7 @@
           "leverage too high"
         ],
         "High Dividend Yield": [
-          "yield 2.6% below 3% floor",
+          "yield 2.5% below 3% floor",
           "not in top quartile for yield"
         ],
         "Magic Formula": [
@@ -3886,20 +3740,20 @@
         "earnings_growth_pct": 0.509,
         "statutory_earnings_growth_pct": 0.509,
         "ncav_available": false,
-        "dividend_yield_raw": 0.025699999999999997,
+        "dividend_yield_raw": 0.0246,
         "model_earnings_growth_pct": 0.509,
         "adjusted_eps_filing_screen_divergence_warning": false,
         "earnings_growth_pct_source": "yahoo_statutory",
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.2692707662082515,
-        "lynch_peg_model": 0.2692707662082515
+        "lynch_peg_statutory": 0.2780911493123772,
+        "lynch_peg_model": 0.2780911493123772
       },
       "key_metrics": {
-        "P/E": "13.7",
-        "P/B": "1.6",
-        "Yield": "2.6%",
+        "P/E": "14.2",
+        "P/B": "1.7",
+        "Yield": "2.5%",
         "ROE": "9.5%"
       },
       "cashflow_metrics": {
@@ -4002,12 +3856,40 @@
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.2692707662082515,
-        "lynch_peg_model": 0.2692707662082515
+        "lynch_peg_statutory": 0.2780911493123772,
+        "lynch_peg_model": 0.2780911493123772
       },
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Financial Services",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 2
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -4062,9 +3944,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 20.97,
-      "price": 20.97,
-      "last": 20.97
+      "last_price": 21.94,
+      "price": 21.94,
+      "last": 21.94
     },
     {
       "ticker": "TAK",
@@ -4073,26 +3955,26 @@
       "signal": "hold",
       "models_passed": 1,
       "model_count": 22,
-      "composite_score": 0.4882,
-      "sector_composite_score": 0.46801900584795325,
+      "composite_score": 0.4923,
+      "sector_composite_score": 0.4673245614035088,
       "families_passed": 1,
       "passed_families": "cheapness",
       "family_count": 5,
       "data_quality_score": 1.0,
       "metrics_present": 20,
       "metrics_total": 20,
-      "weeks_at_signal": 42,
+      "weeks_at_signal": 43,
       "signal_trend": "stable",
-      "conviction_score": 0.0956,
+      "conviction_score": 0.096,
       "stability_label": "persistent",
       "signal_since": "2026-07-18",
-      "timing_signal": "neutral",
-      "timing_score": 0.375,
-      "rsi_14": 68.59814087119686,
+      "timing_signal": "wait",
+      "timing_score": 0.25,
+      "rsi_14": 63.4913544561498,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Hold (1/22 models, composite 49%, sector-relative 47%). Families: 1/5 (cheapness). Data quality: 20/20 (high). Conviction 10% (persistent, 42w at signal, stable). Timing: Neutral, RSI 69 (no clear technical edge) Key metrics: P/E 300.3, P/B 1.4, Yield 2.9%, ROE 0.6%. Passes: FCF Yield. Highlights: FCF yield=1014.6%. Gaps: Financial Health: weak liquidity; Piotroski F-Score: F-Score 5/9 below 7.",
+      "summary": "Hold (1/22 models, composite 49%, sector-relative 47%). Families: 1/5 (cheapness). Data quality: 20/20 (high). Conviction 10% (persistent, 43w at signal, stable). Timing: Wait, RSI 63 (no clear technical edge) Key metrics: P/E 297.7, P/B 1.4, Yield 3.0%, ROE 0.6%. Passes: FCF Yield. Highlights: FCF yield=1023.4%. Gaps: Financial Health: weak liquidity; High Dividend Yield: yield 3.0% below 3% floor.",
       "passed_models": [
         "FCF Yield"
       ],
@@ -4167,7 +4049,7 @@
           "leverage too high"
         ],
         "High Dividend Yield": [
-          "yield 2.9% below 3% floor",
+          "yield 3.0% below 3% floor",
           "not in top quartile for yield"
         ],
         "Dividend Growth": [
@@ -4201,14 +4083,14 @@
         "debt_to_equity": 72.23,
         "current_ratio": 1.0912507935880207,
         "ncav_available": false,
-        "dividend_yield_raw": 0.029300000000000003,
+        "dividend_yield_raw": 0.0296,
         "adjusted_eps_filing_screen_divergence_warning": false,
         "bps_divergence_warning": false
       },
       "key_metrics": {
-        "P/E": "300.3",
+        "P/E": "297.7",
         "P/B": "1.4",
-        "Yield": "2.9%",
+        "Yield": "3.0%",
         "ROE": "0.6%",
         "FCF": "681377136640.0"
       },
@@ -4329,6 +4211,36 @@
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Healthcare",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": true,
+            "eligible": true,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 5
+          }
+        ],
+        "active_hook_ids": [
+          "healthcare_negative_fcf_low_piotroski"
+        ]
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -4385,9 +4297,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 21.02,
-      "price": 21.02,
-      "last": 21.02
+      "last_price": 20.84,
+      "price": 20.84,
+      "last": 20.84
     },
     {
       "ticker": "BIDU",
@@ -4404,18 +4316,18 @@
       "data_quality_score": 0.95,
       "metrics_present": 19,
       "metrics_total": 20,
-      "weeks_at_signal": 29,
+      "weeks_at_signal": 30,
       "signal_trend": "stable",
       "conviction_score": 0.1777,
       "stability_label": "persistent",
       "signal_since": "2026-10-05",
       "timing_signal": "neutral",
       "timing_score": 0.625,
-      "rsi_14": 50.79796347467306,
+      "rsi_14": 44.96984585856663,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Hold (4/22 models, composite 48%, sector-relative 45%). Families: 2/5 (cheapness, risk). Data quality: 19/20 (high). Conviction 18% (persistent, 29w at signal, stable). Timing: Neutral, RSI 51 (no clear technical edge) Key metrics: P/B 0.7, Yield 0.0%, ROE -1.4%, FCF -2095374976.0. Passes: Schloss Low P/B, Deep Value, Acquirer's Multiple, Financial Health. Highlights: P/B < 1.2: P/B=0.68; D/E < 50.0%: D/E=38%; P/B=0.68. Gaps: Earnings Yield: earnings yield nan% below 8%; Graham Defensive: no positive trailing P/E.",
+      "summary": "Hold (4/22 models, composite 48%, sector-relative 45%). Families: 2/5 (cheapness, risk). Data quality: 19/20 (high). Conviction 18% (persistent, 30w at signal, stable). Timing: Neutral, RSI 45 (no clear technical edge) Key metrics: P/B 0.7, Yield 0.0%, ROE -1.4%, FCF -2095374976.0. Passes: Schloss Low P/B, Deep Value, Acquirer's Multiple, Financial Health. Highlights: P/B < 1.2: P/B=0.67; D/E < 50.0%: D/E=38%; P/B=0.67. Gaps: Earnings Yield: earnings yield nan% below 8%; Graham Defensive: no positive trailing P/E.",
       "passed_models": [
         "Schloss Low P/B",
         "Deep Value",
@@ -4459,7 +4371,7 @@
           "earnings yield nan% below 8%"
         ],
         "FCF Yield": [
-          "FCF yield -7.5% below 5%"
+          "FCF yield -7.7% below 5%"
         ],
         "Low P/E + High Yield": [
           "P/E not below 12.0",
@@ -4658,6 +4570,34 @@
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Communication Services",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 2
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -4713,589 +4653,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 81.87,
-      "price": 81.87,
-      "last": 81.87
-    },
-    {
-      "ticker": "IBN",
-      "name": "ICICI Bank Limited",
-      "sector": "Financial Services",
-      "signal": "hold",
-      "models_passed": 6,
-      "model_count": 22,
-      "composite_score": 0.4231,
-      "sector_composite_score": 0.4523809523809524,
-      "families_passed": 4,
-      "passed_families": "cheapness,quality,dividend,garp",
-      "family_count": 5,
-      "data_quality_score": 0.7,
-      "metrics_present": 14,
-      "metrics_total": 20,
-      "weeks_at_signal": 42,
-      "signal_trend": "stable",
-      "conviction_score": 0.2451,
-      "stability_label": "persistent",
-      "signal_since": "2026-07-18",
-      "timing_signal": "neutral",
-      "timing_score": 0.375,
-      "rsi_14": 80.42838889260305,
-      "price_vs_sma200_pct": null,
-      "action_note": "",
-      "trade_plan": null,
-      "summary": "Hold (6/22 models, composite 42%, sector-relative 45%). Families: 4/5 (cheapness, quality, dividend, GARP). Data quality: 14/20 (adequate). Conviction 25% (persistent, 42w at signal, stable). Timing: Neutral, RSI 80 (no clear technical edge) Key metrics: P/E 19.3, P/B 2.9, Yield 74.0%, ROE 16.5%. Passes: Graham Enterprising, Lynch PEG, Neff PEGY, Buffett Quality, High Dividend Yield +1 more. Highlights: P/E < 25: P/E=19.3; P/B < 3: P/B=2.94; ROE > 8%: ROE=16.5%. Gaps: FCF Yield: FCF yield nan% below 5%; Earnings Quality: weak free-cash conversion.",
-      "passed_models": [
-        "Graham Enterprising",
-        "Lynch PEG",
-        "Neff PEGY",
-        "Buffett Quality",
-        "High Dividend Yield",
-        "Dividend Growth"
-      ],
-      "failed_models": [
-        "Graham Defensive",
-        "Graham Net-Net",
-        "Schloss Low P/B",
-        "Deep Value",
-        "Earnings Yield",
-        "FCF Yield",
-        "Low P/E + High Yield",
-        "Quality Value",
-        "Economic Moat",
-        "Magic Formula",
-        "Acquirer's Multiple",
-        "Dreman Contrarian",
-        "Piotroski F-Score",
-        "Composite Value",
-        "Earnings Quality",
-        "Financial Health"
-      ],
-      "model_failures": {
-        "Graham Defensive": [
-          "P/E >= 15",
-          "valuation too rich on P/B or P/E×P/B",
-          "current ratio < 2"
-        ],
-        "Graham Net-Net": [
-          "missing NCAV (balance sheet data)"
-        ],
-        "Schloss Low P/B": [
-          "P/B too high",
-          "too much leverage"
-        ],
-        "Deep Value": [
-          "P/B not below 1.0",
-          "EV/EBITDA not below 8"
-        ],
-        "Earnings Yield": [
-          "earnings yield 5.2% below 8%"
-        ],
-        "FCF Yield": [
-          "FCF yield nan% below 5%"
-        ],
-        "Low P/E + High Yield": [
-          "P/E not below 12.0"
-        ],
-        "Quality Value": [
-          "high leverage",
-          "FCF yield below 3%"
-        ],
-        "Economic Moat": [
-          "ROE below 18%",
-          "ROA below 8%",
-          "leverage too high"
-        ],
-        "Magic Formula": [
-          "missing EBIT/EV or ROIC inputs"
-        ],
-        "Acquirer's Multiple": [
-          "could not rank EV/EBIT"
-        ],
-        "Dreman Contrarian": [
-          "P/E not in bottom quartile",
-          "P/B not cheap vs universe"
-        ],
-        "Piotroski F-Score": [
-          "F-Score 5/9 below 7",
-          "ROA improving",
-          "current ratio improving",
-          "gross margin improving",
-          "asset turnover improving"
-        ],
-        "Composite Value": [
-          "missing fcf_yield",
-          "missing ev_ebitda"
-        ],
-        "Earnings Quality": [
-          "weak free-cash conversion"
-        ],
-        "Financial Health": [
-          "high debt to equity",
-          "weak liquidity",
-          "weak interest coverage"
-        ]
-      },
-      "screening_inputs": {
-        "earnings_growth_pct": 0.221,
-        "statutory_earnings_growth_pct": 0.221,
-        "ncav_available": false,
-        "dividend_yield_raw": 0.74,
-        "model_earnings_growth_pct": 0.221,
-        "adjusted_eps_filing_screen_divergence_warning": false,
-        "earnings_growth_pct_source": "yahoo_statutory",
-        "statutory_earnings_growth_source": "yahoo_statutory",
-        "model_earnings_growth_source": "yahoo_statutory",
-        "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.8712978280542986,
-        "lynch_peg_model": 0.8712978280542986
-      },
-      "key_metrics": {
-        "P/E": "19.3",
-        "P/B": "2.9",
-        "Yield": "74.0%",
-        "ROE": "16.5%"
-      },
-      "cashflow_metrics": {
-        "operating_cashflow": 673254189000.0
-      },
-      "fcf": {
-        "source": "none",
-        "screen_ttm_unverified": false,
-        "divergence_flagged": false,
-        "fcf_divergence_flagged": false,
-        "fcf_definition_divergence": false,
-        "filing_screen_mismatch": false,
-        "ttm_suppressed_screen_filing_mismatch": false,
-        "bridge_resolved": false,
-        "auto_policy_resolved": false,
-        "auto_policy_cluster": [],
-        "auto_policy_discarded": [],
-        "currency": "USD",
-        "fcf_basis_registry": {
-          "selected_basis": null,
-          "selected_fcf": null,
-          "primary_fcf": null,
-          "primary_fcf_basis": null,
-          "filing_aligned": null,
-          "screen_ttm": null,
-          "company_adjusted": null,
-          "screen_ttm_unverified": false,
-          "company_adjusted_stale_year": false,
-          "fiscal_year": null,
-          "currency": "USD",
-          "selection_source": "none",
-          "bridge_resolved": false,
-          "auto_policy_method": null
-        }
-      },
-      "piotroski_f_score": {
-        "score": 5,
-        "max_score": 9,
-        "passed": false,
-        "components": [
-          {
-            "name": "positive net income",
-            "passed": true
-          },
-          {
-            "name": "positive operating cash flow",
-            "passed": true
-          },
-          {
-            "name": "ROA improving",
-            "passed": false
-          },
-          {
-            "name": "OCF > net income",
-            "passed": true
-          },
-          {
-            "name": "leverage declining",
-            "passed": true
-          },
-          {
-            "name": "current ratio improving",
-            "passed": false
-          },
-          {
-            "name": "no share dilution",
-            "passed": true
-          },
-          {
-            "name": "gross margin improving",
-            "passed": false
-          },
-          {
-            "name": "asset turnover improving",
-            "passed": false
-          }
-        ]
-      },
-      "healthcare_overlay": false,
-      "healthcare_price_erosion_overlay": false,
-      "cash_conversion_overlay": false,
-      "dividend_yield_overlay": true,
-      "dividend_sustainability_overlay": false,
-      "interim_dividend_cut_flagged": false,
-      "interim_quality_overlay": false,
-      "cyclical_exposure_overlay": false,
-      "cyclical_exposure_detected": false,
-      "earnings_basis_overlay": false,
-      "earnings_growth_overlay": {
-        "statutory_earnings_growth_pct": 0.221,
-        "model_earnings_growth_pct": 0.221,
-        "adjusted_eps_growth_pct": null,
-        "adjusted_eps_growth_screen_pct": null,
-        "filing_latest_adjusted_eps_growth_pct": null,
-        "adjusted_eps_filing_screen_divergence_warning": false,
-        "yahoo_normalized_income_growth_pct": null,
-        "earnings_growth_screen_ttm_pct": null,
-        "diluted_eps_growth_pct": null,
-        "earnings_growth_pct_source": "yahoo_statutory",
-        "statutory_earnings_growth_source": "yahoo_statutory",
-        "model_earnings_growth_source": "yahoo_statutory",
-        "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.8712978280542986,
-        "lynch_peg_model": 0.8712978280542986
-      },
-      "earnings_growth_bps_divergence_warning": false,
-      "adjusted_eps_filing_screen_divergence_warning": false,
-      "peer_model_pass_table": {},
-      "fcf_basis_overlay": false,
-      "fcf_three_way_conviction_overlay": false,
-      "fcf_three_way_conviction_overlay_detail": {
-        "fcf_three_way_conviction_overlay": false,
-        "profit_to_cash_current_pct": null,
-        "profit_to_cash_prior_pct": null,
-        "profit_to_cash_yoy_decline_pp": null
-      },
-      "transition_key": "new",
-      "prior_signal": null,
-      "conviction_timing_overlay": false,
-      "conviction_timing_overlay_detail": {
-        "observe_only": true,
-        "transition_key": "new",
-        "prior_signal": null,
-        "conviction_timing_overlay": false,
-        "conviction_timing_overlay_score": null,
-        "conviction_timing_overlay_timing": null,
-        "conviction_timing_overlay_action": null,
-        "archive_1w_positive_rate": null,
-        "baseline_1w_hit_rate": 0.4205
-      },
-      "quality_family_avoid_gate": false,
-      "quality_family_avoid_gate_detail": {
-        "observe_only": true,
-        "quality_family_avoid_gate": false,
-        "quality_family_composite_score": 0.5389,
-        "quality_family_failed": false,
-        "quality_family_avoid_gate_action": null,
-        "quality_family_avoid_gate_observe_signal": null,
-        "quality_family_avoid_gate_would_block_upgrade": false,
-        "co_failed_families": [
-          "risk"
-        ],
-        "archive_avoid_quality_fail_count": 37,
-        "archive_loser_card_count": 53
-      },
-      "leverage_override": false,
-      "dual_leverage_display": false,
-      "operating_cashflow": 673254189000.0,
-      "fcf_dividend_coverage_gross": null,
-      "fcf_dividend_coverage_net": null,
-      "fcf_dividend_coverage": null,
-      "fcf_definition_divergence": false,
-      "fcf_divergence_flagged": false,
-      "adjusted_signal": "hold",
-      "research_verdict": null,
-      "research_risk_level": null,
-      "research_confidence": null,
-      "research_rationale": null,
-      "interim_eps_decline_pct": null,
-      "adjusted_eps_growth_pct": null,
-      "yahoo_normalized_income_growth_pct": null,
-      "last_price": 33.89,
-      "price": 33.89,
-      "last": 33.89
-    },
-    {
-      "ticker": "TSM",
-      "name": "Taiwan Semiconductor Manufacturing Company Limited",
-      "sector": "Technology",
-      "signal": "hold",
-      "models_passed": 12,
-      "model_count": 22,
-      "composite_score": 0.4,
-      "sector_composite_score": 0.42500000000000004,
-      "families_passed": 5,
-      "passed_families": "cheapness,quality,dividend,garp,risk",
-      "family_count": 5,
-      "data_quality_score": 1.0,
-      "metrics_present": 20,
-      "metrics_total": 20,
-      "weeks_at_signal": 42,
-      "signal_trend": "stable",
-      "conviction_score": 0.4125,
-      "stability_label": "persistent",
-      "signal_since": "2026-07-18",
-      "timing_signal": "accumulate",
-      "timing_score": 0.75,
-      "rsi_14": 36.28101555800432,
-      "price_vs_sma200_pct": null,
-      "action_note": "",
-      "trade_plan": null,
-      "summary": "Hold (12/22 models, composite 40%, sector-relative 43%). Families: 5/5 (cheapness, quality, dividend, GARP, risk). Data quality: 20/20 (high). Conviction 41% (persistent, 42w at signal, stable). Timing: Accumulate, RSI 36 (no clear technical edge) Key metrics: P/E 24.3, P/B 71.6, Yield 100.0%, ROE 41.9%. Passes: FCF Yield, Lynch PEG, Neff PEGY, Quality Value, Buffett Quality +7 more. Highlights: FCF yield=61.8%; PEG=0.35; growth=68.7%. Gaps: Graham Enterprising: P/B >= 3; Graham Defensive: P/E >= 15.",
-      "passed_models": [
-        "FCF Yield",
-        "Lynch PEG",
-        "Neff PEGY",
-        "Quality Value",
-        "Buffett Quality",
-        "Economic Moat",
-        "High Dividend Yield",
-        "Dividend Growth",
-        "Magic Formula",
-        "Piotroski F-Score",
-        "Earnings Quality",
-        "Financial Health"
-      ],
-      "failed_models": [
-        "Graham Defensive",
-        "Graham Enterprising",
-        "Graham Net-Net",
-        "Schloss Low P/B",
-        "Deep Value",
-        "Earnings Yield",
-        "Low P/E + High Yield",
-        "Acquirer's Multiple",
-        "Dreman Contrarian",
-        "Composite Value"
-      ],
-      "model_failures": {
-        "Graham Defensive": [
-          "P/E >= 15",
-          "valuation too rich on P/B or P/E×P/B"
-        ],
-        "Graham Enterprising": [
-          "P/B >= 3"
-        ],
-        "Graham Net-Net": [
-          "missing NCAV (balance sheet data)"
-        ],
-        "Schloss Low P/B": [
-          "P/B too high"
-        ],
-        "Deep Value": [
-          "P/B not below 1.0"
-        ],
-        "Earnings Yield": [
-          "earnings yield 4.1% below 8%"
-        ],
-        "Low P/E + High Yield": [
-          "P/E not below 12.0"
-        ],
-        "Acquirer's Multiple": [
-          "not in top 40% cheapest on EV/EBIT"
-        ],
-        "Dreman Contrarian": [
-          "P/E not in bottom quartile",
-          "P/B not cheap vs universe"
-        ]
-      },
-      "screening_inputs": {
-        "debt_to_equity": 11.619,
-        "current_ratio": 2.5072882934602547,
-        "earnings_growth_pct": 0.687,
-        "statutory_earnings_growth_pct": 0.687,
-        "ncav_available": false,
-        "dividend_yield_raw": 1.0,
-        "model_earnings_growth_pct": 0.687,
-        "adjusted_eps_filing_screen_divergence_warning": false,
-        "earnings_growth_pct_source": "yahoo_statutory",
-        "statutory_earnings_growth_source": "yahoo_statutory",
-        "model_earnings_growth_source": "yahoo_statutory",
-        "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.35417497816593885,
-        "lynch_peg_model": 0.35417497816593885
-      },
-      "key_metrics": {
-        "P/E": "24.3",
-        "P/B": "71.6",
-        "Yield": "100.0%",
-        "ROE": "41.9%",
-        "FCF": "1203071877120.0"
-      },
-      "cashflow_metrics": {
-        "operating_cashflow": 2274975600000.0,
-        "free_cashflow": 1203071877120.0
-      },
-      "fcf": {
-        "canonical": 1203071877120.0,
-        "source": "auto_fallback_screen_ttm",
-        "screen_ttm": 1203071877120.0,
-        "screen_ttm_unverified": false,
-        "divergence_flagged": false,
-        "fcf_divergence_flagged": false,
-        "fcf_definition_divergence": false,
-        "filing_screen_mismatch": false,
-        "ttm_suppressed_screen_filing_mismatch": false,
-        "bridge_resolved": true,
-        "auto_policy_resolved": true,
-        "auto_policy_method": "fallback_screen_ttm",
-        "auto_policy_cluster": [
-          "screen_ttm"
-        ],
-        "auto_policy_discarded": [],
-        "policy_fcf": 1203071877120.0,
-        "policy_basis": "screen_ttm",
-        "currency": "USD",
-        "primary_fcf": 1203071877120.0,
-        "primary_fcf_basis": "screen_ttm",
-        "fcf_basis_registry": {
-          "selected_basis": "screen_ttm",
-          "selected_fcf": 1203071877120.0,
-          "primary_fcf": 1203071877120.0,
-          "primary_fcf_basis": "screen_ttm",
-          "filing_aligned": null,
-          "screen_ttm": 1203071877120.0,
-          "company_adjusted": null,
-          "screen_ttm_unverified": false,
-          "company_adjusted_stale_year": false,
-          "fiscal_year": null,
-          "currency": "USD",
-          "selection_source": "auto_fallback_screen_ttm",
-          "bridge_resolved": true,
-          "auto_policy_method": "fallback_screen_ttm"
-        },
-        "filing_aligned": 1203071877120.0
-      },
-      "piotroski_f_score": {
-        "score": 9,
-        "max_score": 9,
-        "passed": true,
-        "components": [
-          {
-            "name": "positive net income",
-            "passed": true
-          },
-          {
-            "name": "positive operating cash flow",
-            "passed": true
-          },
-          {
-            "name": "ROA improving",
-            "passed": true
-          },
-          {
-            "name": "OCF > net income",
-            "passed": true
-          },
-          {
-            "name": "leverage declining",
-            "passed": true
-          },
-          {
-            "name": "current ratio improving",
-            "passed": true
-          },
-          {
-            "name": "no share dilution",
-            "passed": true
-          },
-          {
-            "name": "gross margin improving",
-            "passed": true
-          },
-          {
-            "name": "asset turnover improving",
-            "passed": true
-          }
-        ]
-      },
-      "healthcare_overlay": false,
-      "healthcare_price_erosion_overlay": false,
-      "cash_conversion_overlay": false,
-      "dividend_yield_overlay": false,
-      "dividend_sustainability_overlay": false,
-      "interim_dividend_cut_flagged": false,
-      "interim_quality_overlay": false,
-      "cyclical_exposure_overlay": false,
-      "cyclical_exposure_detected": false,
-      "earnings_basis_overlay": false,
-      "earnings_growth_overlay": {
-        "statutory_earnings_growth_pct": 0.687,
-        "model_earnings_growth_pct": 0.687,
-        "adjusted_eps_growth_pct": null,
-        "adjusted_eps_growth_screen_pct": null,
-        "filing_latest_adjusted_eps_growth_pct": null,
-        "adjusted_eps_filing_screen_divergence_warning": false,
-        "yahoo_normalized_income_growth_pct": null,
-        "earnings_growth_screen_ttm_pct": null,
-        "diluted_eps_growth_pct": null,
-        "earnings_growth_pct_source": "yahoo_statutory",
-        "statutory_earnings_growth_source": "yahoo_statutory",
-        "model_earnings_growth_source": "yahoo_statutory",
-        "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.35417497816593885,
-        "lynch_peg_model": 0.35417497816593885
-      },
-      "earnings_growth_bps_divergence_warning": false,
-      "adjusted_eps_filing_screen_divergence_warning": false,
-      "peer_model_pass_table": {},
-      "fcf_basis_overlay": false,
-      "fcf_three_way_conviction_overlay": false,
-      "fcf_three_way_conviction_overlay_detail": {
-        "fcf_three_way_conviction_overlay": false,
-        "profit_to_cash_current_pct": null,
-        "profit_to_cash_prior_pct": null,
-        "profit_to_cash_yoy_decline_pp": null
-      },
-      "transition_key": "new",
-      "prior_signal": null,
-      "conviction_timing_overlay": false,
-      "conviction_timing_overlay_detail": {
-        "observe_only": true,
-        "transition_key": "new",
-        "prior_signal": null,
-        "conviction_timing_overlay": false,
-        "conviction_timing_overlay_score": null,
-        "conviction_timing_overlay_timing": null,
-        "conviction_timing_overlay_action": null,
-        "archive_1w_positive_rate": null,
-        "baseline_1w_hit_rate": 0.4205
-      },
-      "quality_family_avoid_gate": false,
-      "quality_family_avoid_gate_detail": {
-        "observe_only": true,
-        "quality_family_avoid_gate": false,
-        "quality_family_composite_score": 0.95,
-        "quality_family_failed": false,
-        "quality_family_avoid_gate_action": null,
-        "quality_family_avoid_gate_observe_signal": null,
-        "quality_family_avoid_gate_would_block_upgrade": false,
-        "co_failed_families": [],
-        "archive_avoid_quality_fail_count": 37,
-        "archive_loser_card_count": 53
-      },
-      "leverage_override": false,
-      "dual_leverage_display": false,
-      "operating_cashflow": 2274975600000.0,
-      "fcf_dividend_coverage_gross": null,
-      "fcf_dividend_coverage_net": null,
-      "fcf_dividend_coverage": null,
-      "fcf_definition_divergence": false,
-      "fcf_divergence_flagged": false,
-      "adjusted_signal": "hold",
-      "research_verdict": null,
-      "research_risk_level": null,
-      "research_confidence": null,
-      "research_rationale": null,
-      "interim_eps_decline_pct": null,
-      "adjusted_eps_growth_pct": null,
-      "yahoo_normalized_income_growth_pct": null,
-      "last_price": 375.44,
-      "price": 375.44,
-      "last": 375.44
+      "last_price": 79.76,
+      "price": 79.76,
+      "last": 79.76
     },
     {
       "ticker": "INFY",
@@ -5304,26 +4664,26 @@
       "signal": "hold",
       "models_passed": 9,
       "model_count": 22,
-      "composite_score": 0.3917,
-      "sector_composite_score": 0.425,
+      "composite_score": 0.4333,
+      "sector_composite_score": 0.4666666666666667,
       "families_passed": 4,
       "passed_families": "cheapness,quality,dividend,risk",
       "family_count": 5,
       "data_quality_score": 1.0,
       "metrics_present": 20,
       "metrics_total": 20,
-      "weeks_at_signal": 33,
+      "weeks_at_signal": 34,
       "signal_trend": "stable",
-      "conviction_score": 0.3767,
+      "conviction_score": 0.41,
       "stability_label": "persistent",
       "signal_since": "2026-08-02",
-      "timing_signal": "wait",
-      "timing_score": 0.25,
-      "rsi_14": 56.488853686126625,
+      "timing_signal": "neutral",
+      "timing_score": 0.375,
+      "rsi_14": 52.84701415208419,
       "price_vs_sma200_pct": null,
       "action_note": "Research: Accumulate, Medium risk — Deep research broadly confirms the screen’s buy signal on cash-backed quality and shareholder returns, tempered by sector cyclicality, AI-disruption uncertainty, and incomplete interim filing data for recent quarters.",
       "trade_plan": null,
-      "summary": "Hold (9/22 models, composite 39%, sector-relative 42%). Families: 4/5 (cheapness, quality, dividend, risk). Data quality: 20/20 (high). Conviction 33% (persistent, 33w at signal, stable). Timing: Wait, RSI 56 (no clear technical edge) Key metrics: P/E 15.4, P/B 9.8, Yield 4.4%, ROE 30.0%. Passes: FCF Yield, Quality Value, Buffett Quality, Economic Moat, High Dividend Yield +4 more. Highlights: FCF yield=6.5%; ROE >= 12%: ROE=30.0%; Profit margin >= 5%: margin=16.2%. Gaps: Piotroski F-Score: F-Score 6/9 below 7; Graham Enterprising: P/B >= 3. Research overlay: Research: Accumulate, Medium risk — Deep research broadly confirms the screen’s buy signal on cash-backed quality and shareholder returns, tempered by sector cyclicality, AI-disruption uncertainty, and incomplete interim filing data for recent quarters..",
+      "summary": "Hold (9/22 models, composite 43%, sector-relative 47%). Families: 4/5 (cheapness, quality, dividend, risk). Data quality: 20/20 (high). Conviction 36% (persistent, 34w at signal, stable). Timing: Neutral, RSI 53 (no clear technical edge) Key metrics: P/E 15.2, P/B 9.6, Yield 4.5%, ROE 30.0%. Passes: FCF Yield, Quality Value, Buffett Quality, Economic Moat, High Dividend Yield +4 more. Highlights: FCF yield=6.6%; ROE >= 12%: ROE=30.0%; Profit margin >= 5%: margin=16.2%. Gaps: Piotroski F-Score: F-Score 6/9 below 7; Graham Enterprising: P/B >= 3. Research overlay: Research: Accumulate, Medium risk — Deep research broadly confirms the screen’s buy signal on cash-backed quality and shareholder returns, tempered by sector cyclicality, AI-disruption uncertainty, and incomplete interim filing data for recent quarters..",
       "passed_models": [
         "FCF Yield",
         "Quality Value",
@@ -5371,7 +4731,7 @@
           "EV/EBITDA not below 8"
         ],
         "Earnings Yield": [
-          "earnings yield 6.5% below 8%"
+          "earnings yield 6.6% below 8%"
         ],
         "Low P/E + High Yield": [
           "P/E not below 12.0"
@@ -5380,10 +4740,10 @@
           "missing or negative earnings growth"
         ],
         "Neff PEGY": [
-          "PEGY 3.51 >= 1.0"
+          "PEGY 3.40 >= 1.0"
         ],
         "Acquirer's Multiple": [
-          "EV/EBIT 24.0 above 12.0",
+          "EV/EBIT 23.6 above 12.0",
           "not in top 40% cheapest on EV/EBIT"
         ],
         "Dreman Contrarian": [
@@ -5403,7 +4763,7 @@
         "earnings_growth_pct": -0.0,
         "statutory_earnings_growth_pct": -0.0,
         "ncav_available": false,
-        "dividend_yield_raw": 0.044000000000000004,
+        "dividend_yield_raw": 0.0447,
         "model_earnings_growth_pct": -0.0,
         "adjusted_eps_filing_screen_divergence_warning": false,
         "earnings_growth_pct_source": "yahoo_statutory",
@@ -5412,9 +4772,9 @@
         "bps_divergence_warning": false
       },
       "key_metrics": {
-        "P/E": "15.4",
-        "P/B": "9.8",
-        "Yield": "4.4%",
+        "P/E": "15.2",
+        "P/B": "9.6",
+        "Yield": "4.5%",
         "ROE": "30.0%",
         "FCF": "3300624896.0"
       },
@@ -5535,6 +4895,34 @@
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Technology",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 6
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -5588,9 +4976,654 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 12.5,
-      "price": 12.5,
-      "last": 12.5
+      "last_price": 12.3,
+      "price": 12.3,
+      "last": 12.3
+    },
+    {
+      "ticker": "IBN",
+      "name": "ICICI Bank Limited",
+      "sector": "Financial Services",
+      "signal": "hold",
+      "models_passed": 5,
+      "model_count": 22,
+      "composite_score": 0.4231,
+      "sector_composite_score": 0.4523809523809524,
+      "families_passed": 3,
+      "passed_families": "quality,dividend,garp",
+      "family_count": 5,
+      "data_quality_score": 0.7,
+      "metrics_present": 14,
+      "metrics_total": 20,
+      "weeks_at_signal": 43,
+      "signal_trend": "stable",
+      "conviction_score": 0.1839,
+      "stability_label": "persistent",
+      "signal_since": "2026-07-18",
+      "timing_signal": "wait",
+      "timing_score": 0.25,
+      "rsi_14": 81.3076614298379,
+      "price_vs_sma200_pct": null,
+      "action_note": "",
+      "trade_plan": null,
+      "summary": "Hold (5/22 models, composite 42%, sector-relative 45%). Families: 3/5 (quality, dividend, GARP). Data quality: 14/20 (adequate). Conviction 18% (persistent, 43w at signal, stable). Timing: Wait, RSI 81 (no clear technical edge) Key metrics: P/E 19.7, P/B 3.0, Yield 72.0%, ROE 16.5%. Passes: Lynch PEG, Neff PEGY, Buffett Quality, High Dividend Yield, Dividend Growth. Highlights: PEG=0.89; growth=22.1%; PEGY=0.21. Gaps: FCF Yield: FCF yield nan% below 5%; Earnings Quality: weak free-cash conversion.",
+      "passed_models": [
+        "Lynch PEG",
+        "Neff PEGY",
+        "Buffett Quality",
+        "High Dividend Yield",
+        "Dividend Growth"
+      ],
+      "failed_models": [
+        "Graham Defensive",
+        "Graham Enterprising",
+        "Graham Net-Net",
+        "Schloss Low P/B",
+        "Deep Value",
+        "Earnings Yield",
+        "FCF Yield",
+        "Low P/E + High Yield",
+        "Quality Value",
+        "Economic Moat",
+        "Magic Formula",
+        "Acquirer's Multiple",
+        "Dreman Contrarian",
+        "Piotroski F-Score",
+        "Composite Value",
+        "Earnings Quality",
+        "Financial Health"
+      ],
+      "model_failures": {
+        "Graham Defensive": [
+          "P/E >= 15",
+          "valuation too rich on P/B or P/E×P/B",
+          "current ratio < 2"
+        ],
+        "Graham Enterprising": [
+          "P/B >= 3",
+          "excessive leverage"
+        ],
+        "Graham Net-Net": [
+          "missing NCAV (balance sheet data)"
+        ],
+        "Schloss Low P/B": [
+          "P/B too high",
+          "too much leverage"
+        ],
+        "Deep Value": [
+          "P/B not below 1.0",
+          "EV/EBITDA not below 8"
+        ],
+        "Earnings Yield": [
+          "earnings yield 5.1% below 8%"
+        ],
+        "FCF Yield": [
+          "FCF yield nan% below 5%"
+        ],
+        "Low P/E + High Yield": [
+          "P/E not below 12.0"
+        ],
+        "Quality Value": [
+          "high leverage",
+          "FCF yield below 3%"
+        ],
+        "Economic Moat": [
+          "ROE below 18%",
+          "ROA below 8%",
+          "leverage too high"
+        ],
+        "Magic Formula": [
+          "missing EBIT/EV or ROIC inputs"
+        ],
+        "Acquirer's Multiple": [
+          "could not rank EV/EBIT"
+        ],
+        "Dreman Contrarian": [
+          "P/E not in bottom quartile",
+          "P/B not cheap vs universe"
+        ],
+        "Piotroski F-Score": [
+          "F-Score 5/9 below 7",
+          "ROA improving",
+          "current ratio improving",
+          "gross margin improving",
+          "asset turnover improving"
+        ],
+        "Composite Value": [
+          "missing fcf_yield",
+          "missing ev_ebitda"
+        ],
+        "Earnings Quality": [
+          "weak free-cash conversion"
+        ],
+        "Financial Health": [
+          "high debt to equity",
+          "weak liquidity",
+          "weak interest coverage"
+        ]
+      },
+      "screening_inputs": {
+        "earnings_growth_pct": 0.221,
+        "statutory_earnings_growth_pct": 0.221,
+        "ncav_available": false,
+        "dividend_yield_raw": 0.72,
+        "model_earnings_growth_pct": 0.221,
+        "adjusted_eps_filing_screen_divergence_warning": false,
+        "earnings_growth_pct_source": "yahoo_statutory",
+        "statutory_earnings_growth_source": "yahoo_statutory",
+        "model_earnings_growth_source": "yahoo_statutory",
+        "bps_divergence_warning": false,
+        "lynch_peg_statutory": 0.8931510407239819,
+        "lynch_peg_model": 0.8931510407239819
+      },
+      "key_metrics": {
+        "P/E": "19.7",
+        "P/B": "3.0",
+        "Yield": "72.0%",
+        "ROE": "16.5%"
+      },
+      "cashflow_metrics": {
+        "operating_cashflow": 673254189000.0
+      },
+      "fcf": {
+        "source": "none",
+        "screen_ttm_unverified": false,
+        "divergence_flagged": false,
+        "fcf_divergence_flagged": false,
+        "fcf_definition_divergence": false,
+        "filing_screen_mismatch": false,
+        "ttm_suppressed_screen_filing_mismatch": false,
+        "bridge_resolved": false,
+        "auto_policy_resolved": false,
+        "auto_policy_cluster": [],
+        "auto_policy_discarded": [],
+        "currency": "USD",
+        "fcf_basis_registry": {
+          "selected_basis": null,
+          "selected_fcf": null,
+          "primary_fcf": null,
+          "primary_fcf_basis": null,
+          "filing_aligned": null,
+          "screen_ttm": null,
+          "company_adjusted": null,
+          "screen_ttm_unverified": false,
+          "company_adjusted_stale_year": false,
+          "fiscal_year": null,
+          "currency": "USD",
+          "selection_source": "none",
+          "bridge_resolved": false,
+          "auto_policy_method": null
+        }
+      },
+      "piotroski_f_score": {
+        "score": 5,
+        "max_score": 9,
+        "passed": false,
+        "components": [
+          {
+            "name": "positive net income",
+            "passed": true
+          },
+          {
+            "name": "positive operating cash flow",
+            "passed": true
+          },
+          {
+            "name": "ROA improving",
+            "passed": false
+          },
+          {
+            "name": "OCF > net income",
+            "passed": true
+          },
+          {
+            "name": "leverage declining",
+            "passed": true
+          },
+          {
+            "name": "current ratio improving",
+            "passed": false
+          },
+          {
+            "name": "no share dilution",
+            "passed": true
+          },
+          {
+            "name": "gross margin improving",
+            "passed": false
+          },
+          {
+            "name": "asset turnover improving",
+            "passed": false
+          }
+        ]
+      },
+      "healthcare_overlay": false,
+      "healthcare_price_erosion_overlay": false,
+      "cash_conversion_overlay": false,
+      "dividend_yield_overlay": true,
+      "dividend_sustainability_overlay": false,
+      "interim_dividend_cut_flagged": false,
+      "interim_quality_overlay": false,
+      "cyclical_exposure_overlay": false,
+      "cyclical_exposure_detected": false,
+      "earnings_basis_overlay": false,
+      "earnings_growth_overlay": {
+        "statutory_earnings_growth_pct": 0.221,
+        "model_earnings_growth_pct": 0.221,
+        "adjusted_eps_growth_pct": null,
+        "adjusted_eps_growth_screen_pct": null,
+        "filing_latest_adjusted_eps_growth_pct": null,
+        "adjusted_eps_filing_screen_divergence_warning": false,
+        "yahoo_normalized_income_growth_pct": null,
+        "earnings_growth_screen_ttm_pct": null,
+        "diluted_eps_growth_pct": null,
+        "earnings_growth_pct_source": "yahoo_statutory",
+        "statutory_earnings_growth_source": "yahoo_statutory",
+        "model_earnings_growth_source": "yahoo_statutory",
+        "bps_divergence_warning": false,
+        "lynch_peg_statutory": 0.8931510407239819,
+        "lynch_peg_model": 0.8931510407239819
+      },
+      "earnings_growth_bps_divergence_warning": false,
+      "adjusted_eps_filing_screen_divergence_warning": false,
+      "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Financial Services",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 5
+          }
+        ],
+        "active_hook_ids": []
+      },
+      "fcf_basis_overlay": false,
+      "fcf_three_way_conviction_overlay": false,
+      "fcf_three_way_conviction_overlay_detail": {
+        "fcf_three_way_conviction_overlay": false,
+        "profit_to_cash_current_pct": null,
+        "profit_to_cash_prior_pct": null,
+        "profit_to_cash_yoy_decline_pp": null
+      },
+      "transition_key": "new",
+      "prior_signal": null,
+      "conviction_timing_overlay": false,
+      "conviction_timing_overlay_detail": {
+        "observe_only": true,
+        "transition_key": "new",
+        "prior_signal": null,
+        "conviction_timing_overlay": false,
+        "conviction_timing_overlay_score": null,
+        "conviction_timing_overlay_timing": null,
+        "conviction_timing_overlay_action": null,
+        "archive_1w_positive_rate": null,
+        "baseline_1w_hit_rate": 0.4205
+      },
+      "quality_family_avoid_gate": false,
+      "quality_family_avoid_gate_detail": {
+        "observe_only": true,
+        "quality_family_avoid_gate": false,
+        "quality_family_composite_score": 0.5389,
+        "quality_family_failed": false,
+        "quality_family_avoid_gate_action": null,
+        "quality_family_avoid_gate_observe_signal": null,
+        "quality_family_avoid_gate_would_block_upgrade": false,
+        "co_failed_families": [
+          "cheapness",
+          "risk"
+        ],
+        "archive_avoid_quality_fail_count": 37,
+        "archive_loser_card_count": 53
+      },
+      "leverage_override": false,
+      "dual_leverage_display": false,
+      "operating_cashflow": 673254189000.0,
+      "fcf_dividend_coverage_gross": null,
+      "fcf_dividend_coverage_net": null,
+      "fcf_dividend_coverage": null,
+      "fcf_definition_divergence": false,
+      "fcf_divergence_flagged": false,
+      "adjusted_signal": "hold",
+      "research_verdict": null,
+      "research_risk_level": null,
+      "research_confidence": null,
+      "research_rationale": null,
+      "interim_eps_decline_pct": null,
+      "adjusted_eps_growth_pct": null,
+      "yahoo_normalized_income_growth_pct": null,
+      "last_price": 34.74,
+      "price": 34.74,
+      "last": 34.74
+    },
+    {
+      "ticker": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing Company Limited",
+      "sector": "Technology",
+      "signal": "hold",
+      "models_passed": 11,
+      "model_count": 22,
+      "composite_score": 0.4,
+      "sector_composite_score": 0.42500000000000004,
+      "families_passed": 5,
+      "passed_families": "cheapness,quality,dividend,garp,risk",
+      "family_count": 5,
+      "data_quality_score": 1.0,
+      "metrics_present": 20,
+      "metrics_total": 20,
+      "weeks_at_signal": 43,
+      "signal_trend": "stable",
+      "conviction_score": 0.4125,
+      "stability_label": "persistent",
+      "signal_since": "2026-07-18",
+      "timing_signal": "neutral",
+      "timing_score": 0.5,
+      "rsi_14": 49.63483487608617,
+      "price_vs_sma200_pct": null,
+      "action_note": "",
+      "trade_plan": null,
+      "summary": "Hold (11/22 models, composite 40%, sector-relative 43%). Families: 5/5 (cheapness, quality, dividend, GARP, risk). Data quality: 20/20 (high). Conviction 41% (persistent, 43w at signal, stable). Timing: Neutral, RSI 50 (no clear technical edge) Key metrics: P/E 26.8, P/B 78.9, Yield 91.0%, ROE 41.9%. Passes: FCF Yield, Lynch PEG, Neff PEGY, Quality Value, Economic Moat +6 more. Highlights: FCF yield=56.1%; PEG=0.39; growth=68.7%. Gaps: Buffett Quality: P/E too high; Graham Enterprising: P/E >= 25.",
+      "passed_models": [
+        "FCF Yield",
+        "Lynch PEG",
+        "Neff PEGY",
+        "Quality Value",
+        "Economic Moat",
+        "High Dividend Yield",
+        "Dividend Growth",
+        "Magic Formula",
+        "Piotroski F-Score",
+        "Earnings Quality",
+        "Financial Health"
+      ],
+      "failed_models": [
+        "Graham Defensive",
+        "Graham Enterprising",
+        "Graham Net-Net",
+        "Schloss Low P/B",
+        "Deep Value",
+        "Earnings Yield",
+        "Low P/E + High Yield",
+        "Buffett Quality",
+        "Acquirer's Multiple",
+        "Dreman Contrarian",
+        "Composite Value"
+      ],
+      "model_failures": {
+        "Graham Defensive": [
+          "P/E >= 15",
+          "valuation too rich on P/B or P/E×P/B"
+        ],
+        "Graham Enterprising": [
+          "P/E >= 25",
+          "P/B >= 3"
+        ],
+        "Graham Net-Net": [
+          "missing NCAV (balance sheet data)"
+        ],
+        "Schloss Low P/B": [
+          "P/B too high"
+        ],
+        "Deep Value": [
+          "P/B not below 1.0"
+        ],
+        "Earnings Yield": [
+          "earnings yield 3.7% below 8%"
+        ],
+        "Low P/E + High Yield": [
+          "P/E not below 12.0"
+        ],
+        "Buffett Quality": [
+          "P/E too high"
+        ],
+        "Acquirer's Multiple": [
+          "not in top 40% cheapest on EV/EBIT"
+        ],
+        "Dreman Contrarian": [
+          "P/E not in bottom quartile",
+          "P/B not cheap vs universe"
+        ]
+      },
+      "screening_inputs": {
+        "debt_to_equity": 11.619,
+        "current_ratio": 2.5072882934602547,
+        "earnings_growth_pct": 0.687,
+        "statutory_earnings_growth_pct": 0.687,
+        "ncav_available": false,
+        "dividend_yield_raw": 0.91,
+        "model_earnings_growth_pct": 0.687,
+        "adjusted_eps_filing_screen_divergence_warning": false,
+        "earnings_growth_pct_source": "yahoo_statutory",
+        "statutory_earnings_growth_source": "yahoo_statutory",
+        "model_earnings_growth_source": "yahoo_statutory",
+        "bps_divergence_warning": false,
+        "lynch_peg_statutory": 0.3899377438136827,
+        "lynch_peg_model": 0.3899377438136827
+      },
+      "key_metrics": {
+        "P/E": "26.8",
+        "P/B": "78.9",
+        "Yield": "91.0%",
+        "ROE": "41.9%",
+        "FCF": "1203071877120.0"
+      },
+      "cashflow_metrics": {
+        "operating_cashflow": 2274975600000.0,
+        "free_cashflow": 1203071877120.0
+      },
+      "fcf": {
+        "canonical": 1203071877120.0,
+        "source": "auto_fallback_screen_ttm",
+        "screen_ttm": 1203071877120.0,
+        "screen_ttm_unverified": false,
+        "divergence_flagged": false,
+        "fcf_divergence_flagged": false,
+        "fcf_definition_divergence": false,
+        "filing_screen_mismatch": false,
+        "ttm_suppressed_screen_filing_mismatch": false,
+        "bridge_resolved": true,
+        "auto_policy_resolved": true,
+        "auto_policy_method": "fallback_screen_ttm",
+        "auto_policy_cluster": [
+          "screen_ttm"
+        ],
+        "auto_policy_discarded": [],
+        "policy_fcf": 1203071877120.0,
+        "policy_basis": "screen_ttm",
+        "currency": "USD",
+        "primary_fcf": 1203071877120.0,
+        "primary_fcf_basis": "screen_ttm",
+        "fcf_basis_registry": {
+          "selected_basis": "screen_ttm",
+          "selected_fcf": 1203071877120.0,
+          "primary_fcf": 1203071877120.0,
+          "primary_fcf_basis": "screen_ttm",
+          "filing_aligned": null,
+          "screen_ttm": 1203071877120.0,
+          "company_adjusted": null,
+          "screen_ttm_unverified": false,
+          "company_adjusted_stale_year": false,
+          "fiscal_year": null,
+          "currency": "USD",
+          "selection_source": "auto_fallback_screen_ttm",
+          "bridge_resolved": true,
+          "auto_policy_method": "fallback_screen_ttm"
+        },
+        "filing_aligned": 1203071877120.0
+      },
+      "piotroski_f_score": {
+        "score": 9,
+        "max_score": 9,
+        "passed": true,
+        "components": [
+          {
+            "name": "positive net income",
+            "passed": true
+          },
+          {
+            "name": "positive operating cash flow",
+            "passed": true
+          },
+          {
+            "name": "ROA improving",
+            "passed": true
+          },
+          {
+            "name": "OCF > net income",
+            "passed": true
+          },
+          {
+            "name": "leverage declining",
+            "passed": true
+          },
+          {
+            "name": "current ratio improving",
+            "passed": true
+          },
+          {
+            "name": "no share dilution",
+            "passed": true
+          },
+          {
+            "name": "gross margin improving",
+            "passed": true
+          },
+          {
+            "name": "asset turnover improving",
+            "passed": true
+          }
+        ]
+      },
+      "healthcare_overlay": false,
+      "healthcare_price_erosion_overlay": false,
+      "cash_conversion_overlay": false,
+      "dividend_yield_overlay": false,
+      "dividend_sustainability_overlay": false,
+      "interim_dividend_cut_flagged": false,
+      "interim_quality_overlay": false,
+      "cyclical_exposure_overlay": false,
+      "cyclical_exposure_detected": false,
+      "earnings_basis_overlay": false,
+      "earnings_growth_overlay": {
+        "statutory_earnings_growth_pct": 0.687,
+        "model_earnings_growth_pct": 0.687,
+        "adjusted_eps_growth_pct": null,
+        "adjusted_eps_growth_screen_pct": null,
+        "filing_latest_adjusted_eps_growth_pct": null,
+        "adjusted_eps_filing_screen_divergence_warning": false,
+        "yahoo_normalized_income_growth_pct": null,
+        "earnings_growth_screen_ttm_pct": null,
+        "diluted_eps_growth_pct": null,
+        "earnings_growth_pct_source": "yahoo_statutory",
+        "statutory_earnings_growth_source": "yahoo_statutory",
+        "model_earnings_growth_source": "yahoo_statutory",
+        "bps_divergence_warning": false,
+        "lynch_peg_statutory": 0.3899377438136827,
+        "lynch_peg_model": 0.3899377438136827
+      },
+      "earnings_growth_bps_divergence_warning": false,
+      "adjusted_eps_filing_screen_divergence_warning": false,
+      "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Technology",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 9
+          }
+        ],
+        "active_hook_ids": []
+      },
+      "fcf_basis_overlay": false,
+      "fcf_three_way_conviction_overlay": false,
+      "fcf_three_way_conviction_overlay_detail": {
+        "fcf_three_way_conviction_overlay": false,
+        "profit_to_cash_current_pct": null,
+        "profit_to_cash_prior_pct": null,
+        "profit_to_cash_yoy_decline_pp": null
+      },
+      "transition_key": "new",
+      "prior_signal": null,
+      "conviction_timing_overlay": false,
+      "conviction_timing_overlay_detail": {
+        "observe_only": true,
+        "transition_key": "new",
+        "prior_signal": null,
+        "conviction_timing_overlay": false,
+        "conviction_timing_overlay_score": null,
+        "conviction_timing_overlay_timing": null,
+        "conviction_timing_overlay_action": null,
+        "archive_1w_positive_rate": null,
+        "baseline_1w_hit_rate": 0.4205
+      },
+      "quality_family_avoid_gate": false,
+      "quality_family_avoid_gate_detail": {
+        "observe_only": true,
+        "quality_family_avoid_gate": false,
+        "quality_family_composite_score": 0.8875,
+        "quality_family_failed": false,
+        "quality_family_avoid_gate_action": null,
+        "quality_family_avoid_gate_observe_signal": null,
+        "quality_family_avoid_gate_would_block_upgrade": false,
+        "co_failed_families": [],
+        "archive_avoid_quality_fail_count": 37,
+        "archive_loser_card_count": 53
+      },
+      "leverage_override": false,
+      "dual_leverage_display": false,
+      "operating_cashflow": 2274975600000.0,
+      "fcf_dividend_coverage_gross": null,
+      "fcf_dividend_coverage_net": null,
+      "fcf_dividend_coverage": null,
+      "fcf_definition_divergence": false,
+      "fcf_divergence_flagged": false,
+      "adjusted_signal": "hold",
+      "research_verdict": null,
+      "research_risk_level": null,
+      "research_confidence": null,
+      "research_rationale": null,
+      "interim_eps_decline_pct": null,
+      "adjusted_eps_growth_pct": null,
+      "yahoo_normalized_income_growth_pct": null,
+      "last_price": 413.35,
+      "price": 413.35,
+      "last": 413.35
     },
     {
       "ticker": "TM",
@@ -5599,26 +5632,26 @@
       "signal": "hold",
       "models_passed": 4,
       "model_count": 22,
-      "composite_score": 0.3688,
-      "sector_composite_score": 0.39999999999999997,
+      "composite_score": 0.3938,
+      "sector_composite_score": 0.41875,
       "families_passed": 2,
       "passed_families": "cheapness,dividend",
       "family_count": 5,
       "data_quality_score": 1.0,
       "metrics_present": 20,
       "metrics_total": 20,
-      "weeks_at_signal": 42,
+      "weeks_at_signal": 43,
       "signal_trend": "stable",
-      "conviction_score": 0.1538,
+      "conviction_score": 0.1625,
       "stability_label": "persistent",
       "signal_since": "2026-07-18",
       "timing_signal": "neutral",
       "timing_score": 0.375,
-      "rsi_14": 73.53745623582327,
+      "rsi_14": 65.81675506974432,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Hold (4/22 models, composite 37%, sector-relative 40%). Families: 2/5 (cheapness, dividend). Data quality: 20/20 (high). Conviction 15% (persistent, 42w at signal, stable). Timing: Neutral, RSI 74 (no clear technical edge) Key metrics: P/E 9.9, P/B 17.2, Yield 2.9%, ROE 11.6%. Passes: Earnings Yield, Dividend Growth, Magic Formula, Dreman Contrarian. Highlights: E/P=10.1% (P/E=9.9); dividend payer: yield=2.9%; reasonable P/E: P/E=9.9. Gaps: Earnings Quality: weak free-cash conversion; Piotroski F-Score: F-Score 6/9 below 7.",
+      "summary": "Hold (4/22 models, composite 39%, sector-relative 42%). Families: 2/5 (cheapness, dividend). Data quality: 20/20 (high). Conviction 16% (persistent, 43w at signal, stable). Timing: Neutral, RSI 66 (no clear technical edge) Key metrics: P/E 9.7, P/B 17.0, Yield 2.9%, ROE 11.6%. Passes: Earnings Yield, Dividend Growth, Magic Formula, Dreman Contrarian. Highlights: E/P=10.3% (P/E=9.7); dividend payer: yield=2.9%; reasonable P/E: P/E=9.7. Gaps: Earnings Quality: weak free-cash conversion; Piotroski F-Score: F-Score 6/9 below 7.",
       "passed_models": [
         "Earnings Yield",
         "Dividend Growth",
@@ -5666,7 +5699,7 @@
           "P/B not below 1.0"
         ],
         "FCF Yield": [
-          "FCF yield -1194.8% below 5%"
+          "FCF yield -1212.6% below 5%"
         ],
         "Low P/E + High Yield": [
           "yield below 4%"
@@ -5719,7 +5752,7 @@
         "earnings_growth_pct": -0.101,
         "statutory_earnings_growth_pct": -0.101,
         "ncav_available": false,
-        "dividend_yield_raw": 0.028999999999999998,
+        "dividend_yield_raw": 0.0294,
         "model_earnings_growth_pct": -0.101,
         "adjusted_eps_filing_screen_divergence_warning": false,
         "earnings_growth_pct_source": "yahoo_statutory",
@@ -5728,8 +5761,8 @@
         "bps_divergence_warning": false
       },
       "key_metrics": {
-        "P/E": "9.9",
-        "P/B": "17.2",
+        "P/E": "9.7",
+        "P/B": "17.0",
         "Yield": "2.9%",
         "ROE": "11.6%",
         "FCF": "-3042246918144.0"
@@ -5851,6 +5884,34 @@
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Consumer Cyclical",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 6
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -5906,9 +5967,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 216.19,
-      "price": 216.19,
-      "last": 216.19
+      "last_price": 213.0,
+      "price": 213.0,
+      "last": 213.0
     },
     {
       "ticker": "ASX",
@@ -5925,18 +5986,18 @@
       "data_quality_score": 1.0,
       "metrics_present": 20,
       "metrics_total": 20,
-      "weeks_at_signal": 42,
+      "weeks_at_signal": 43,
       "signal_trend": "stable",
       "conviction_score": 0.1325,
       "stability_label": "persistent",
       "signal_since": "2026-07-18",
       "timing_signal": "neutral",
-      "timing_score": 0.625,
-      "rsi_14": 33.46408872901449,
+      "timing_score": 0.5,
+      "rsi_14": 47.30428570290133,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Hold (4/22 models, composite 22%, sector-relative 22%). Families: 3/5 (cheapness, quality, GARP). Data quality: 20/20 (high). Conviction 13% (persistent, 42w at signal, stable). Timing: Neutral, RSI 33 (no clear technical edge) Key metrics: P/E 30.4, P/B 5.3, Yield 1.3%, ROE 19.9%. Passes: Lynch PEG, Neff PEGY, Magic Formula, Piotroski F-Score. Highlights: PEG=0.21; growth=142.7%; PEGY=0.21. Gaps: Financial Health: high debt to equity; Earnings Quality: weak free-cash conversion.",
+      "summary": "Hold (4/22 models, composite 22%, sector-relative 22%). Families: 3/5 (cheapness, quality, GARP). Data quality: 20/20 (high). Conviction 13% (persistent, 43w at signal, stable). Timing: Neutral, RSI 47 (no clear technical edge) Key metrics: P/E 36.4, P/B 6.4, Yield 1.1%, ROE 19.9%. Passes: Lynch PEG, Neff PEGY, Magic Formula, Piotroski F-Score. Highlights: PEG=0.26; growth=142.5%; PEGY=0.25. Gaps: Financial Health: high debt to equity; Earnings Quality: weak free-cash conversion.",
       "passed_models": [
         "Lynch PEG",
         "Neff PEGY",
@@ -5984,10 +6045,10 @@
           "P/B not below 1.0"
         ],
         "Earnings Yield": [
-          "earnings yield 3.3% below 8%"
+          "earnings yield 2.7% below 8%"
         ],
         "FCF Yield": [
-          "FCF yield -275.3% below 5%"
+          "FCF yield -199.8% below 5%"
         ],
         "Low P/E + High Yield": [
           "P/E not below 12.0",
@@ -6008,7 +6069,7 @@
           "leverage too high"
         ],
         "High Dividend Yield": [
-          "yield 1.3% below 3% floor",
+          "yield 1.1% below 3% floor",
           "not in top quartile for yield"
         ],
         "Dividend Growth": [
@@ -6031,36 +6092,36 @@
         ]
       },
       "screening_inputs": {
-        "debt_to_equity": 86.888,
+        "debt_to_equity": 87.302,
         "current_ratio": 1.2628628933828632,
-        "earnings_growth_pct": 1.427,
-        "statutory_earnings_growth_pct": 1.427,
+        "earnings_growth_pct": 1.425,
+        "statutory_earnings_growth_pct": 1.425,
         "ncav_available": false,
-        "dividend_yield_raw": 0.0132,
-        "model_earnings_growth_pct": 1.427,
+        "dividend_yield_raw": 0.011000000000000001,
+        "model_earnings_growth_pct": 1.425,
         "adjusted_eps_filing_screen_divergence_warning": false,
         "earnings_growth_pct_source": "yahoo_statutory",
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.21312867554309736,
-        "lynch_peg_model": 0.21312867554309736
+        "lynch_peg_statutory": 0.255195698245614,
+        "lynch_peg_model": 0.255195698245614
       },
       "key_metrics": {
-        "P/E": "30.4",
-        "P/B": "5.3",
-        "Yield": "1.3%",
+        "P/E": "36.4",
+        "P/B": "6.4",
+        "Yield": "1.1%",
         "ROE": "19.9%",
-        "FCF": "-192200818688.0"
+        "FCF": "-166852001792.0"
       },
       "cashflow_metrics": {
         "operating_cashflow": 142249287000.0,
-        "free_cashflow": -192200818688.0
+        "free_cashflow": -166852001792.0
       },
       "fcf": {
-        "canonical": -192200818688.0,
+        "canonical": -166852001792.0,
         "source": "auto_fallback_screen_ttm",
-        "screen_ttm": -192200818688.0,
+        "screen_ttm": -166852001792.0,
         "screen_ttm_unverified": false,
         "divergence_flagged": false,
         "fcf_divergence_flagged": false,
@@ -6074,18 +6135,18 @@
           "screen_ttm"
         ],
         "auto_policy_discarded": [],
-        "policy_fcf": -192200818688.0,
+        "policy_fcf": -166852001792.0,
         "policy_basis": "screen_ttm",
         "currency": "USD",
-        "primary_fcf": -192200818688.0,
+        "primary_fcf": -166852001792.0,
         "primary_fcf_basis": "screen_ttm",
         "fcf_basis_registry": {
           "selected_basis": "screen_ttm",
-          "selected_fcf": -192200818688.0,
-          "primary_fcf": -192200818688.0,
+          "selected_fcf": -166852001792.0,
+          "primary_fcf": -166852001792.0,
           "primary_fcf_basis": "screen_ttm",
           "filing_aligned": null,
-          "screen_ttm": -192200818688.0,
+          "screen_ttm": -166852001792.0,
           "company_adjusted": null,
           "screen_ttm_unverified": false,
           "company_adjusted_stale_year": false,
@@ -6095,7 +6156,7 @@
           "bridge_resolved": true,
           "auto_policy_method": "fallback_screen_ttm"
         },
-        "filing_aligned": -192200818688.0
+        "filing_aligned": -166852001792.0
       },
       "piotroski_f_score": {
         "score": 7,
@@ -6151,8 +6212,8 @@
       "cyclical_exposure_detected": false,
       "earnings_basis_overlay": false,
       "earnings_growth_overlay": {
-        "statutory_earnings_growth_pct": 1.427,
-        "model_earnings_growth_pct": 1.427,
+        "statutory_earnings_growth_pct": 1.425,
+        "model_earnings_growth_pct": 1.425,
         "adjusted_eps_growth_pct": null,
         "adjusted_eps_growth_screen_pct": null,
         "filing_latest_adjusted_eps_growth_pct": null,
@@ -6164,12 +6225,40 @@
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.21312867554309736,
-        "lynch_peg_model": 0.21312867554309736
+        "lynch_peg_statutory": 0.255195698245614,
+        "lynch_peg_model": 0.255195698245614
       },
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Technology",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 7
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -6224,9 +6313,365 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 31.63,
-      "price": 31.63,
-      "last": 31.63
+      "last_price": 37.82,
+      "price": 37.82,
+      "last": 37.82
+    },
+    {
+      "ticker": "BABA",
+      "name": "Alibaba Group Holding Limited",
+      "sector": "Consumer Cyclical",
+      "signal": "avoid",
+      "models_passed": 2,
+      "model_count": 22,
+      "composite_score": 0.4292,
+      "sector_composite_score": 0.42916666666666664,
+      "families_passed": 2,
+      "passed_families": "cheapness,risk",
+      "family_count": 5,
+      "data_quality_score": 1.0,
+      "metrics_present": 20,
+      "metrics_total": 20,
+      "weeks_at_signal": 1,
+      "signal_trend": "deteriorating",
+      "conviction_score": 0.1073,
+      "stability_label": "new",
+      "signal_since": "2026-11-12",
+      "timing_signal": "neutral",
+      "timing_score": 0.625,
+      "rsi_14": 42.89748966410354,
+      "price_vs_sma200_pct": null,
+      "action_note": "",
+      "trade_plan": null,
+      "summary": "Avoid (2/22 models, composite 43%, sector-relative 43%). Families: 2/5 (cheapness, risk). Data quality: 20/20 (high). Conviction 11% (new, 1w at signal, deteriorating). Timing: Neutral, RSI 43 (no clear technical edge) Key metrics: P/E 24.6, P/B 1.5, Yield 1.0%, ROE 6.4%. Passes: Magic Formula, Financial Health. Highlights: earnings yield rank 78%; D/E=24%; leverage=14.8%. Gaps: Graham Enterprising: ROE <= 8%; Schloss Low P/B: P/B too high. Quality-family avoid gate (observe-only): avoid cohort with quality failure (composite 37%, co-failed quality,dividend,garp).",
+      "passed_models": [
+        "Magic Formula",
+        "Financial Health"
+      ],
+      "failed_models": [
+        "Graham Defensive",
+        "Graham Enterprising",
+        "Graham Net-Net",
+        "Schloss Low P/B",
+        "Deep Value",
+        "Earnings Yield",
+        "FCF Yield",
+        "Low P/E + High Yield",
+        "Lynch PEG",
+        "Neff PEGY",
+        "Quality Value",
+        "Buffett Quality",
+        "Economic Moat",
+        "High Dividend Yield",
+        "Dividend Growth",
+        "Acquirer's Multiple",
+        "Dreman Contrarian",
+        "Piotroski F-Score",
+        "Composite Value",
+        "Earnings Quality"
+      ],
+      "model_failures": {
+        "Graham Defensive": [
+          "P/E >= 15",
+          "valuation too rich on P/B or P/E×P/B",
+          "current ratio < 2"
+        ],
+        "Graham Enterprising": [
+          "ROE <= 8%",
+          "negative earnings growth"
+        ],
+        "Graham Net-Net": [
+          "missing NCAV (balance sheet data)"
+        ],
+        "Schloss Low P/B": [
+          "P/B too high"
+        ],
+        "Deep Value": [
+          "P/B not below 1.0"
+        ],
+        "Earnings Yield": [
+          "earnings yield 4.1% below 8%"
+        ],
+        "FCF Yield": [
+          "FCF yield -32.7% below 5%"
+        ],
+        "Low P/E + High Yield": [
+          "P/E not below 12.0",
+          "yield below 4%"
+        ],
+        "Lynch PEG": [
+          "missing or negative earnings growth"
+        ],
+        "Neff PEGY": [
+          "no growth or dividend yield"
+        ],
+        "Quality Value": [
+          "ROE below 12%",
+          "P/E >= 20",
+          "FCF yield below 3%"
+        ],
+        "Buffett Quality": [
+          "ROE too low",
+          "thin margins"
+        ],
+        "Economic Moat": [
+          "ROE below 18%",
+          "ROA below 8%",
+          "margins below 12%"
+        ],
+        "High Dividend Yield": [
+          "yield 1.0% below 3% floor",
+          "not in top quartile for yield"
+        ],
+        "Dividend Growth": [
+          "yield too low",
+          "earnings not growing"
+        ],
+        "Acquirer's Multiple": [
+          "not in top 40% cheapest on EV/EBIT"
+        ],
+        "Dreman Contrarian": [
+          "P/E not in bottom quartile",
+          "dividend yield below median"
+        ],
+        "Piotroski F-Score": [
+          "F-Score 3/9 below 7",
+          "ROA improving",
+          "OCF > net income",
+          "leverage declining",
+          "current ratio improving",
+          "gross margin improving",
+          "asset turnover improving"
+        ],
+        "Earnings Quality": [
+          "weak free-cash conversion",
+          "operating cash below earnings"
+        ]
+      },
+      "screening_inputs": {
+        "debt_to_equity": 23.928,
+        "current_ratio": 1.2820561799167922,
+        "earnings_growth_pct": -0.794,
+        "statutory_earnings_growth_pct": -0.794,
+        "ncav_available": false,
+        "dividend_yield_raw": 0.0103,
+        "model_earnings_growth_pct": -0.794,
+        "adjusted_eps_filing_screen_divergence_warning": false,
+        "earnings_growth_pct_source": "yahoo_statutory",
+        "statutory_earnings_growth_source": "yahoo_statutory",
+        "model_earnings_growth_source": "yahoo_statutory",
+        "bps_divergence_warning": false
+      },
+      "key_metrics": {
+        "P/E": "24.6",
+        "P/B": "1.5",
+        "Yield": "1.0%",
+        "ROE": "6.4%",
+        "FCF": "-82644123648.0"
+      },
+      "cashflow_metrics": {
+        "operating_cashflow": 76213000000.0,
+        "free_cashflow": -82644123648.0
+      },
+      "fcf": {
+        "canonical": -82644123648.0,
+        "source": "auto_fallback_screen_ttm",
+        "screen_ttm": -82644123648.0,
+        "screen_ttm_unverified": false,
+        "divergence_flagged": false,
+        "fcf_divergence_flagged": false,
+        "fcf_definition_divergence": false,
+        "filing_screen_mismatch": false,
+        "ttm_suppressed_screen_filing_mismatch": false,
+        "bridge_resolved": true,
+        "auto_policy_resolved": true,
+        "auto_policy_method": "fallback_screen_ttm",
+        "auto_policy_cluster": [
+          "screen_ttm"
+        ],
+        "auto_policy_discarded": [],
+        "policy_fcf": -82644123648.0,
+        "policy_basis": "screen_ttm",
+        "currency": "USD",
+        "primary_fcf": -82644123648.0,
+        "primary_fcf_basis": "screen_ttm",
+        "fcf_basis_registry": {
+          "selected_basis": "screen_ttm",
+          "selected_fcf": -82644123648.0,
+          "primary_fcf": -82644123648.0,
+          "primary_fcf_basis": "screen_ttm",
+          "filing_aligned": null,
+          "screen_ttm": -82644123648.0,
+          "company_adjusted": null,
+          "screen_ttm_unverified": false,
+          "company_adjusted_stale_year": false,
+          "fiscal_year": null,
+          "currency": "USD",
+          "selection_source": "auto_fallback_screen_ttm",
+          "bridge_resolved": true,
+          "auto_policy_method": "fallback_screen_ttm"
+        },
+        "filing_aligned": -82644123648.0
+      },
+      "piotroski_f_score": {
+        "score": 3,
+        "max_score": 9,
+        "passed": false,
+        "components": [
+          {
+            "name": "positive net income",
+            "passed": true
+          },
+          {
+            "name": "positive operating cash flow",
+            "passed": true
+          },
+          {
+            "name": "ROA improving",
+            "passed": false
+          },
+          {
+            "name": "OCF > net income",
+            "passed": false
+          },
+          {
+            "name": "leverage declining",
+            "passed": false
+          },
+          {
+            "name": "current ratio improving",
+            "passed": false
+          },
+          {
+            "name": "no share dilution",
+            "passed": true
+          },
+          {
+            "name": "gross margin improving",
+            "passed": false
+          },
+          {
+            "name": "asset turnover improving",
+            "passed": false
+          }
+        ]
+      },
+      "healthcare_overlay": false,
+      "healthcare_price_erosion_overlay": false,
+      "cash_conversion_overlay": false,
+      "dividend_yield_overlay": false,
+      "dividend_sustainability_overlay": false,
+      "interim_dividend_cut_flagged": false,
+      "interim_quality_overlay": false,
+      "cyclical_exposure_overlay": false,
+      "cyclical_exposure_detected": false,
+      "earnings_basis_overlay": false,
+      "earnings_growth_overlay": {
+        "statutory_earnings_growth_pct": -0.794,
+        "model_earnings_growth_pct": -0.794,
+        "adjusted_eps_growth_pct": null,
+        "adjusted_eps_growth_screen_pct": null,
+        "filing_latest_adjusted_eps_growth_pct": null,
+        "adjusted_eps_filing_screen_divergence_warning": false,
+        "yahoo_normalized_income_growth_pct": null,
+        "earnings_growth_screen_ttm_pct": null,
+        "diluted_eps_growth_pct": null,
+        "earnings_growth_pct_source": "yahoo_statutory",
+        "statutory_earnings_growth_source": "yahoo_statutory",
+        "model_earnings_growth_source": "yahoo_statutory",
+        "bps_divergence_warning": false,
+        "lynch_peg_statutory": null,
+        "lynch_peg_model": null
+      },
+      "earnings_growth_bps_divergence_warning": false,
+      "adjusted_eps_filing_screen_divergence_warning": false,
+      "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Consumer Cyclical",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 3
+          }
+        ],
+        "active_hook_ids": []
+      },
+      "fcf_basis_overlay": false,
+      "fcf_three_way_conviction_overlay": false,
+      "fcf_three_way_conviction_overlay_detail": {
+        "fcf_three_way_conviction_overlay": false,
+        "profit_to_cash_current_pct": null,
+        "profit_to_cash_prior_pct": null,
+        "profit_to_cash_yoy_decline_pp": null
+      },
+      "transition_key": "new",
+      "prior_signal": null,
+      "conviction_timing_overlay": false,
+      "conviction_timing_overlay_detail": {
+        "observe_only": true,
+        "transition_key": "new",
+        "prior_signal": null,
+        "conviction_timing_overlay": false,
+        "conviction_timing_overlay_score": null,
+        "conviction_timing_overlay_timing": null,
+        "conviction_timing_overlay_action": null,
+        "archive_1w_positive_rate": null,
+        "baseline_1w_hit_rate": 0.4205
+      },
+      "quality_family_avoid_gate": true,
+      "quality_family_avoid_gate_detail": {
+        "observe_only": true,
+        "quality_family_avoid_gate": true,
+        "quality_family_composite_score": 0.3708,
+        "quality_family_failed": true,
+        "quality_family_avoid_gate_action": "cohort_watch",
+        "quality_family_avoid_gate_observe_signal": "avoid",
+        "quality_family_avoid_gate_would_block_upgrade": false,
+        "co_failed_families": [
+          "quality",
+          "dividend",
+          "garp"
+        ],
+        "archive_avoid_quality_fail_count": 37,
+        "archive_loser_card_count": 53
+      },
+      "leverage_override": false,
+      "dual_leverage_display": false,
+      "operating_cashflow": 76213000000.0,
+      "fcf_dividend_coverage_gross": null,
+      "fcf_dividend_coverage_net": null,
+      "fcf_dividend_coverage": null,
+      "fcf_definition_divergence": false,
+      "fcf_divergence_flagged": false,
+      "adjusted_signal": "avoid",
+      "research_verdict": null,
+      "research_risk_level": null,
+      "research_confidence": null,
+      "research_rationale": null,
+      "interim_eps_decline_pct": null,
+      "adjusted_eps_growth_pct": null,
+      "yahoo_normalized_income_growth_pct": null,
+      "last_price": 101.52,
+      "price": 101.52,
+      "last": 101.52
     },
     {
       "ticker": "XPEV",
@@ -6243,18 +6688,18 @@
       "data_quality_score": 0.9,
       "metrics_present": 18,
       "metrics_total": 20,
-      "weeks_at_signal": 29,
+      "weeks_at_signal": 30,
       "signal_trend": "stable",
       "conviction_score": 0.0675,
       "stability_label": "persistent",
       "signal_since": "2026-10-05",
       "timing_signal": "neutral",
-      "timing_score": 0.625,
-      "rsi_14": 58.85592639396503,
+      "timing_score": 0.5,
+      "rsi_14": 51.45719475838701,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Avoid (1/22 models, composite 41%, sector-relative 34%). Families: 1/5 (quality). Data quality: 18/20 (high). Conviction 7% (persistent, 29w at signal, stable). Timing: Neutral, RSI 59 (no clear technical edge) Key metrics: P/B 2.4, Yield 0.0%, ROE -10.9%. Passes: Piotroski F-Score. Highlights: F-Score=7/9; positive operating cash flow; ROA improving. Gaps: Earnings Yield: earnings yield nan% below 8%; FCF Yield: FCF yield nan% below 5%.",
+      "summary": "Avoid (1/22 models, composite 41%, sector-relative 34%). Families: 1/5 (quality). Data quality: 18/20 (high). Conviction 7% (persistent, 30w at signal, stable). Timing: Neutral, RSI 51 (no clear technical edge) Key metrics: P/B 2.3, Yield 0.0%, ROE -10.9%. Passes: Piotroski F-Score. Highlights: F-Score=7/9; positive operating cash flow; ROA improving. Gaps: Earnings Yield: earnings yield nan% below 8%; FCF Yield: FCF yield nan% below 5%.",
       "passed_models": [
         "Piotroski F-Score"
       ],
@@ -6377,7 +6822,7 @@
         "bps_divergence_warning": false
       },
       "key_metrics": {
-        "P/B": "2.4",
+        "P/B": "2.3",
         "Yield": "0.0%",
         "ROE": "-10.9%"
       },
@@ -6487,6 +6932,34 @@
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Consumer Cyclical",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 7
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -6543,9 +7016,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 10.24,
-      "price": 10.24,
-      "last": 10.24
+      "last_price": 9.83,
+      "price": 9.83,
+      "last": 9.83
     },
     {
       "ticker": "RDY",
@@ -6554,26 +7027,26 @@
       "signal": "avoid",
       "models_passed": 3,
       "model_count": 22,
-      "composite_score": 0.3138,
-      "sector_composite_score": 0.2825657894736842,
+      "composite_score": 0.3221,
+      "sector_composite_score": 0.28881578947368425,
       "families_passed": 3,
       "passed_families": "cheapness,dividend,risk",
       "family_count": 5,
       "data_quality_score": 1.0,
       "metrics_present": 20,
       "metrics_total": 20,
-      "weeks_at_signal": 39,
+      "weeks_at_signal": 40,
       "signal_trend": "stable",
-      "conviction_score": 0.1789,
+      "conviction_score": 0.1833,
       "stability_label": "persistent",
       "signal_since": "2026-07-25",
-      "timing_signal": "neutral",
-      "timing_score": 0.375,
-      "rsi_14": 78.04523542815058,
+      "timing_signal": "wait",
+      "timing_score": 0.25,
+      "rsi_14": 72.77757331396779,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Avoid (3/22 models, composite 31%, sector-relative 28%). Families: 3/5 (cheapness, dividend, risk). Data quality: 20/20 (high). Conviction 18% (persistent, 39w at signal, stable). Timing: Neutral, RSI 78 (no clear technical edge) Key metrics: P/E 41.4, P/B 18.2, Yield 56.0%, ROE 7.3%. Passes: High Dividend Yield, Magic Formula, Financial Health. Highlights: yield=56.0%; universe rank 79%; earnings yield rank 83%. Gaps: Earnings Quality: weak free-cash conversion; Schloss Low P/B: P/B too high. Quality-family avoid gate (observe-only): avoid cohort with quality failure (composite 40%, co-failed quality,garp).",
+      "summary": "Avoid (3/22 models, composite 32%, sector-relative 29%). Families: 3/5 (cheapness, dividend, risk). Data quality: 20/20 (high). Conviction 18% (persistent, 40w at signal, stable). Timing: Wait, RSI 73 (no clear technical edge) Key metrics: P/E 41.2, P/B 18.1, Yield 56.0%, ROE 7.3%. Passes: High Dividend Yield, Magic Formula, Financial Health. Highlights: yield=56.0%; universe rank 83%; earnings yield rank 83%. Gaps: Earnings Quality: weak free-cash conversion; Schloss Low P/B: P/B too high. Quality-family avoid gate (observe-only): avoid cohort with quality failure (composite 40%, co-failed quality,garp).",
       "passed_models": [
         "High Dividend Yield",
         "Magic Formula",
@@ -6625,7 +7098,7 @@
           "earnings yield 2.4% below 8%"
         ],
         "FCF Yield": [
-          "FCF yield -53.0% below 5%"
+          "FCF yield -53.3% below 5%"
         ],
         "Low P/E + High Yield": [
           "P/E not below 12.0"
@@ -6634,7 +7107,7 @@
           "missing or negative earnings growth"
         ],
         "Neff PEGY": [
-          "PEGY 2.04 >= 1.0"
+          "PEGY 2.03 >= 1.0"
         ],
         "Quality Value": [
           "ROE below 12%",
@@ -6688,8 +7161,8 @@
         "bps_divergence_warning": false
       },
       "key_metrics": {
-        "P/E": "41.4",
-        "P/B": "18.2",
+        "P/E": "41.2",
+        "P/B": "18.1",
         "Yield": "56.0%",
         "ROE": "7.3%",
         "FCF": "-6592000000.0"
@@ -6811,6 +7284,36 @@
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Healthcare",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": true,
+            "eligible": true,
+            "triggered": true,
+            "overlay_applied": true,
+            "piotroski_f_score": 4
+          }
+        ],
+        "active_hook_ids": [
+          "healthcare_negative_fcf_low_piotroski"
+        ]
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -6865,9 +7368,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 14.91,
-      "price": 14.91,
-      "last": 14.91
+      "last_price": 14.84,
+      "price": 14.84,
+      "last": 14.84
     },
     {
       "ticker": "LI",
@@ -6884,18 +7387,18 @@
       "data_quality_score": 0.95,
       "metrics_present": 19,
       "metrics_total": 20,
-      "weeks_at_signal": 31,
+      "weeks_at_signal": 32,
       "signal_trend": "stable",
       "conviction_score": 0.0536,
       "stability_label": "persistent",
       "signal_since": "2026-10-01",
       "timing_signal": "neutral",
-      "timing_score": 0.625,
-      "rsi_14": 66.0624013476507,
+      "timing_score": 0.5,
+      "rsi_14": 57.37636386004314,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Avoid (1/22 models, composite 27%, sector-relative 29%). Families: 1/5 (risk). Data quality: 19/20 (high). Conviction 5% (persistent, 31w at signal, stable). Timing: Neutral, RSI 66 (no clear technical edge) Key metrics: P/B 1.3, Yield 0.0%, ROE -6.6%, FCF -9747736576.0. Passes: Financial Health. Highlights: D/E=22%; leverage=11.5%; CR=1.81. Gaps: Earnings Yield: earnings yield nan% below 8%; Schloss Low P/B: P/B too high. Quality-family avoid gate (observe-only): avoid cohort with quality failure (composite 23%, co-failed cheapness,quality,dividend,garp).",
+      "summary": "Avoid (1/22 models, composite 27%, sector-relative 29%). Families: 1/5 (risk). Data quality: 19/20 (high). Conviction 5% (persistent, 32w at signal, stable). Timing: Neutral, RSI 57 (no clear technical edge) Key metrics: P/B 1.2, Yield 0.0%, ROE -6.6%, FCF -9747736576.0. Passes: Financial Health. Highlights: D/E=22%; leverage=11.5%; CR=1.81. Gaps: Earnings Yield: earnings yield nan% below 8%; Schloss Low P/B: P/B too high. Quality-family avoid gate (observe-only): avoid cohort with quality failure (composite 23%, co-failed cheapness,quality,dividend,garp).",
       "passed_models": [
         "Financial Health"
       ],
@@ -6947,7 +7450,7 @@
           "earnings yield nan% below 8%"
         ],
         "FCF Yield": [
-          "FCF yield -79.6% below 5%"
+          "FCF yield -82.2% below 5%"
         ],
         "Low P/E + High Yield": [
           "P/E not below 12.0",
@@ -7018,7 +7521,7 @@
         "bps_divergence_warning": false
       },
       "key_metrics": {
-        "P/B": "1.3",
+        "P/B": "1.2",
         "Yield": "0.0%",
         "ROE": "-6.6%",
         "FCF": "-9747736576.0"
@@ -7140,6 +7643,34 @@
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Consumer Cyclical",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 2
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -7196,9 +7727,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 12.53,
-      "price": 12.53,
-      "last": 12.53
+      "last_price": 12.14,
+      "price": 12.14,
+      "last": 12.14
     },
     {
       "ticker": "NIO",
@@ -7215,7 +7746,7 @@
       "data_quality_score": 0.9,
       "metrics_present": 18,
       "metrics_total": 20,
-      "weeks_at_signal": 42,
+      "weeks_at_signal": 43,
       "signal_trend": "stable",
       "conviction_score": 0.0,
       "stability_label": "persistent",
@@ -7226,7 +7757,7 @@
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Avoid (0/22 models, composite 26%, sector-relative 20%). Data quality: 18/20 (high). Conviction 0% (persistent, 42w at signal, stable). Key metrics: P/B 13.9, Yield 0.0%, ROE -45.3%. Gaps: Earnings Yield: earnings yield nan% below 8%; FCF Yield: FCF yield nan% below 5%. Quality-family avoid gate (observe-only): avoid cohort with quality failure (composite 17%, co-failed cheapness,quality,dividend,garp,risk).",
+      "summary": "Avoid (0/22 models, composite 26%, sector-relative 20%). Data quality: 18/20 (high). Conviction 0% (persistent, 43w at signal, stable). Key metrics: P/B 13.3, Yield 0.0%, ROE -45.3%. Gaps: Earnings Yield: earnings yield nan% below 8%; FCF Yield: FCF yield nan% below 5%. Quality-family avoid gate (observe-only): avoid cohort with quality failure (composite 17%, co-failed cheapness,quality,dividend,garp,risk).",
       "passed_models": [],
       "failed_models": [
         "Graham Defensive",
@@ -7356,7 +7887,7 @@
         "bps_divergence_warning": false
       },
       "key_metrics": {
-        "P/B": "13.9",
+        "P/B": "13.3",
         "Yield": "0.0%",
         "ROE": "-45.3%"
       },
@@ -7466,6 +7997,34 @@
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Consumer Cyclical",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 6
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -7523,9 +8082,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 3.39,
-      "price": 3.39,
-      "last": 3.39
+      "last_price": 3.24,
+      "price": 3.24,
+      "last": 3.24
     },
     {
       "ticker": "HDB",
@@ -7542,18 +8101,18 @@
       "data_quality_score": 0.7,
       "metrics_present": 14,
       "metrics_total": 20,
-      "weeks_at_signal": 22,
+      "weeks_at_signal": 23,
       "signal_trend": "stable",
       "conviction_score": 0.0276,
       "stability_label": "persistent",
       "signal_since": "2026-10-14",
-      "timing_signal": "neutral",
-      "timing_score": 0.375,
-      "rsi_14": 70.29430123090842,
+      "timing_signal": "wait",
+      "timing_score": 0.25,
+      "rsi_14": 74.54026241269693,
       "price_vs_sma200_pct": null,
       "action_note": "",
       "trade_plan": null,
-      "summary": "Avoid (2/22 models, composite 18%, sector-relative 21%). Families: 1/5 (GARP). Data quality: 14/20 (adequate). Conviction 3% (persistent, 22w at signal, stable). Timing: Neutral, RSI 70 (no clear technical edge) Key metrics: P/E 16.2, P/B 10.0, Yield 1.6%, ROE 11.0%. Passes: Lynch PEG, Neff PEGY. Highlights: PEG=0.76; growth=21.3%; PEGY=0.71. Gaps: FCF Yield: FCF yield nan% below 5%; Dividend Growth: yield too low. Quality-family avoid gate (observe-only): avoid cohort with quality failure (composite 43%, co-failed cheapness,quality,dividend,risk).",
+      "summary": "Avoid (2/22 models, composite 18%, sector-relative 21%). Families: 1/5 (GARP). Data quality: 14/20 (adequate). Conviction 3% (persistent, 23w at signal, stable). Timing: Wait, RSI 75 (no clear technical edge) Key metrics: P/E 16.8, P/B 10.4, Yield 1.6%, ROE 11.0%. Passes: Lynch PEG, Neff PEGY. Highlights: PEG=0.79; growth=21.3%; PEGY=0.73. Gaps: FCF Yield: FCF yield nan% below 5%; Dividend Growth: yield too low. Quality-family avoid gate (observe-only): avoid cohort with quality failure (composite 43%, co-failed cheapness,quality,dividend,risk).",
       "passed_models": [
         "Lynch PEG",
         "Neff PEGY"
@@ -7602,7 +8161,7 @@
           "EV/EBITDA not below 8"
         ],
         "Earnings Yield": [
-          "earnings yield 6.2% below 8%"
+          "earnings yield 6.0% below 8%"
         ],
         "FCF Yield": [
           "FCF yield nan% below 5%"
@@ -7667,19 +8226,19 @@
         "earnings_growth_pct": 0.213,
         "statutory_earnings_growth_pct": 0.213,
         "ncav_available": false,
-        "dividend_yield_raw": 0.0163,
+        "dividend_yield_raw": 0.015700000000000002,
         "model_earnings_growth_pct": 0.213,
         "adjusted_eps_filing_screen_divergence_warning": false,
         "earnings_growth_pct_source": "yahoo_statutory",
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.7614720657276995,
-        "lynch_peg_model": 0.7614720657276995
+        "lynch_peg_statutory": 0.7881266666666666,
+        "lynch_peg_model": 0.7881266666666666
       },
       "key_metrics": {
-        "P/E": "16.2",
-        "P/B": "10.0",
+        "P/E": "16.8",
+        "P/B": "10.4",
         "Yield": "1.6%",
         "ROE": "11.0%"
       },
@@ -7783,12 +8342,40 @@
         "statutory_earnings_growth_source": "yahoo_statutory",
         "model_earnings_growth_source": "yahoo_statutory",
         "bps_divergence_warning": false,
-        "lynch_peg_statutory": 0.7614720657276995,
-        "lynch_peg_model": 0.7614720657276995
+        "lynch_peg_statutory": 0.7881266666666666,
+        "lynch_peg_model": 0.7881266666666666
       },
       "earnings_growth_bps_divergence_warning": false,
       "adjusted_eps_filing_screen_divergence_warning": false,
       "peer_model_pass_table": {},
+      "sector_cyclical_overlay_registry": {
+        "registry_version": 1,
+        "hooks": [
+          {
+            "id": "agriculture_commodities_plantation",
+            "active": false,
+            "scoring_sector": "Financial Services",
+            "peer_group_override": false
+          },
+          {
+            "id": "uk_contractor_backlog_margin",
+            "active": false,
+            "uk_contractor": false,
+            "uk_contractor_ch_backlog_margin_cyclical_detected": false,
+            "public_capex_exposure_detected": false,
+            "uk_contractor_revenue_fcf_warning": false
+          },
+          {
+            "id": "healthcare_negative_fcf_low_piotroski",
+            "active": false,
+            "eligible": false,
+            "triggered": false,
+            "overlay_applied": false,
+            "piotroski_f_score": 5
+          }
+        ],
+        "active_hook_ids": []
+      },
       "fcf_basis_overlay": false,
       "fcf_three_way_conviction_overlay": false,
       "fcf_three_way_conviction_overlay_detail": {
@@ -7845,9 +8432,9 @@
       "interim_eps_decline_pct": null,
       "adjusted_eps_growth_pct": null,
       "yahoo_normalized_income_growth_pct": null,
-      "last_price": 25.14,
-      "price": 25.14,
-      "last": 25.14
+      "last_price": 26.02,
+      "price": 26.02,
+      "last": 26.02
     }
   ]
 }
