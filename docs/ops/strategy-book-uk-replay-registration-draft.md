@@ -69,6 +69,8 @@ One pooled book. Per-market boards are report-only. A name that qualifies in two
 
 **Splits.** `splits/{symbol}` rows with `split` parsed as `new/old`. A split dated after the shares `dateFormatted` and on or before the session scales the shares by `new/old`. A split in that window that does not parse makes the cap not computable for that month. Count `split_unparsed`. No single-number split is applied.
 
+**Pence.** The listing unit is `General.CurrencyCode`. `GBX`/`GBp` closes divide by 100 into GBP before the cap; `GBP` is used as is; a missing or unrecognised code is not computable. A cap above GBP 500bn or below GBP 1m is not computable (`cap_unit_implausible`, counted). Episode returns are ratios, so the unit does not enter them.
+
 **FX.** `EURGBP.FOREX` close is GBP per 1 EUR. `USDGBP.FOREX` close is GBP per 1 USD. USD into EUR is USDGBP / EURGBP. The first 2024 session of EURGBP must lie in [0.70, 0.95] and USDGBP in [0.65, 0.90], or the job stops. Pairs are not inverted in code. Any other listing currency is not computable that month.
 
 **Funds, trusts, and non-common stock.** Drop `General.Type` when it is present and is not `Common Stock`. Drop a name `classify_fund_or_trust` marks from `General.Name`, `General.Sector`, `General.Industry`, and `General.Type`. REIT names and the real-estate sector stay in. The live override file is not applied. Counts: `excluded_not_common`, `excluded_fund_or_trust`.

@@ -90,7 +90,11 @@ left out of that month's rank. It is counted (`cap_not_computable`). It is not
 filled from last month's cap, and it is not ranked as zero. Leaving the rank
 stops a new entry. An open episode stays open until its own exit.
 
-**Currency.** GBP names on LSE need no FX. EUR on LSE uses `EURGBP.FOREX`
+**Currency.** Most LSE closes are quoted in pence. The listing unit is EODHD
+`General.CurrencyCode`: `GBX` (or `GBp`) divides the close by 100 before the cap,
+`GBP` needs no conversion. A missing or unrecognised code is not computable that
+month. A cap above GBP 500bn or below GBP 1m is not computable either and is counted
+(`cap_unit_implausible`), since it is almost always a pence/pound slip. EUR on LSE uses `EURGBP.FOREX`
 (GBP per 1 EUR). USD on LSE uses `USDGBP.FOREX` (GBP per 1 USD). A USD name on
 XETRA or PA uses USDGBP / EURGBP. Any other currency is not computable that
 month. Before any rank is kept, the first 2024 session of `EURGBP.FOREX` must
