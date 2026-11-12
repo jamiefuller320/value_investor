@@ -2979,6 +2979,50 @@ def check_eodhd_coverage(
     ]
 
 
+def check_ch_failed_name_statements(
+    *,
+    repo_root: Path | None = None,
+) -> list[OpsFinding]:
+    """Read the Companies House failed-name statement store. Does not call the API.
+
+    Observe-only (``auto_fixable=False``). The store is a one-off research artifact.
+    See docs/ops/ch-failed-name-statements.md.
+    """
+    from value_investor.ch_failed_name_statements import (
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        load_store,
+        ops_findings_from_ch_failed_name_statements,
+    )
+
+    root = Path(repo_root) if repo_root is not None else Path()
+    path = root / DEFAULT_STORE_PATH
+    if not path.is_file():
+        return []
+    try:
+        payload = load_store(path)
+    except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Companies House statements for failed UK names"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in ops_findings_from_ch_failed_name_statements(payload)
+    ]
+
+
 def check_strategy_book_reviews(
     *,
     repo_root: Path | None = None,
@@ -5312,6 +5356,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_strategy_book_demo_mirror))
     findings.extend(_guarded_check(check_strategy_book_proof))
     findings.extend(_guarded_check(check_eodhd_coverage))
+    findings.extend(_guarded_check(check_ch_failed_name_statements))
     findings.extend(_guarded_check(check_strategy_book_memo_free_shadow))
     findings.extend(_guarded_check(check_n200_tech_timing_observe))
     findings.extend(_guarded_check(check_n201_value_mom_observe))
