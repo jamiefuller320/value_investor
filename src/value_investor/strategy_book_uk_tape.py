@@ -625,13 +625,20 @@ def interim_eps_rows(fundamentals: Mapping[str, Any] | None) -> list[dict[str, A
     return out
 
 
-def _visible_rows(rows: Sequence[Mapping[str, Any]], session: date) -> list[Mapping[str, Any]]:
+def _visible_rows(
+    rows: Sequence[Mapping[str, Any]], session: date, *, fresh: bool = True
+) -> list[Mapping[str, Any]]:
+    """Rows filed by ``session``. ``fresh`` also drops stale rows.
+
+    Staleness applies to the latest statement only. A prior year is a
+    comparator: it needs to be visible, not fresh (as in the US rehearsal).
+    """
     kept = []
     for row in rows:
         visible = row.get("visible_from")
         if visible is None or visible > session:
             continue
-        if is_stale(session, row.get("period_end")):
+        if fresh and is_stale(session, row.get("period_end")):
             continue
         kept.append(row)
     return kept
@@ -658,6 +665,7 @@ def decline_verdict(
     hard: list[str] = []
     soft: list[str] = []
     visible = _visible_rows(annual, session)
+    compared = _visible_rows(annual, session, fresh=False)
     revenue_ok = margin_ok = eps_ok = False
     mismatch = 0
     checks: dict[str, Any] = {
@@ -668,8 +676,8 @@ def decline_verdict(
     }
     if visible:
         latest = max(visible, key=lambda row: (row.get("period_end") or date.min, row["year"]))
-        prior = _prior_year(visible, int(latest["year"]) - 1)
-        prior2 = _prior_year(visible, int(latest["year"]) - 2)
+        prior = _prior_year(compared, int(latest["year"]) - 1)
+        prior2 = _prior_year(compared, int(latest["year"]) - 2)
         change = _change(
             latest.get("total_revenue"), None if prior is None else prior.get("total_revenue")
         )
@@ -789,18 +797,31 @@ def year_before(day: date) -> date:
         return day.replace(year=day.year - 1, day=28)
 
 
-def _interim_revenue(rows: Sequence[Mapping[str, Any]], session: date) -> float | None:
+def _interim_rows(
+    rows: Sequence[Mapping[str, Any]], session: date
+) -> tuple[list[Mapping[str, Any]], list[Mapping[str, Any]]]:
+    """(filed by ``session``, of those the ones within the age limit).
+
+    The age limit applies to the latest quarter; the year-earlier quarter is a
+    comparator and needs only to be filed.
+    """
     visible = [
         row
         for row in rows
         if row.get("visible_from") is not None
         and row["visible_from"] <= session
         and row.get("period_end") is not None
-        and (session - row["period_end"]).days <= int(_const("INTERIM_MAX_AGE_DAYS"))
     ]
-    if not visible:
+    limit = int(_const("INTERIM_MAX_AGE_DAYS"))
+    fresh = [row for row in visible if (session - row["period_end"]).days <= limit]
+    return visible, fresh
+
+
+def _interim_revenue(rows: Sequence[Mapping[str, Any]], session: date) -> float | None:
+    visible, fresh = _interim_rows(rows, session)
+    if not fresh:
         return None
-    latest = max(visible, key=lambda row: row["period_end"])
+    latest = max(fresh, key=lambda row: row["period_end"])
     target = year_before(latest["period_end"])
     window = int(_const("INTERIM_YOY_WINDOW_DAYS"))
     prior = None
@@ -820,17 +841,10 @@ def _interim_revenue(rows: Sequence[Mapping[str, Any]], session: date) -> float 
 def _interim_eps(
     rows: Sequence[Mapping[str, Any]], session: date, soft: list[str]
 ) -> tuple[bool, float | None]:
-    visible = [
-        row
-        for row in rows
-        if row.get("visible_from") is not None
-        and row["visible_from"] <= session
-        and row.get("period_end") is not None
-        and (session - row["period_end"]).days <= int(_const("INTERIM_MAX_AGE_DAYS"))
-    ]
-    if not visible:
+    visible, fresh = _interim_rows(rows, session)
+    if not fresh:
         return False, None
-    latest = max(visible, key=lambda row: row["period_end"])
+    latest = max(fresh, key=lambda row: row["period_end"])
     target = year_before(latest["period_end"])
     window = int(_const("INTERIM_YOY_WINDOW_DAYS"))
     prior = None

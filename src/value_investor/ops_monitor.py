@@ -3026,8 +3026,10 @@ def check_strategy_book_uk_replay(
     """Observe-only UK/Europe strategy-book replay. Does not call EODHD.
 
     No finding when ``docs/data/strategy_book_uk_replay.json`` is absent. Info
-    names the phase and verdict when the file reads. Warn only when it does not.
-    ``auto_fixable=False``. See docs/ops/strategy-book-uk-replay-runbook.md.
+    names the phase and verdict when the file reads. Warn when it does not, or
+    when a change marker asks for development to be recomputed and the store has
+    not logged that amendment. ``auto_fixable=False``. See
+    docs/ops/strategy-book-uk-replay-runbook.md.
     """
     from value_investor.strategy_book_uk_replay import REPO_ROOT, TITLE_FAILED, findings
 

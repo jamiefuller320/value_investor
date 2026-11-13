@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-13T08:26:44+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-13T17:48:15+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -297,6 +297,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | N270 | **Fair-value average not pulled down by one loss year** | v0 averages up to five annual EPS figures, including losses. One loss year can put the range far below a later price. Changing that rule is a version-review choice, not a fit to the current episodes. | A strategy-book version review of the v0 fair-value constants. |
 | N271 | **Dividend-cut soft check on the UK replay** | The UK replay fetches EODHD dividend history for the screen's dividend yield and does not fire the decline gate's dividend-cut check. A DPS cut rule would be a new threshold and a new registration_id, taken up at a version review rather than inside strategy-book-uk-replay-v0. | The next strategy-book version review (at the thickness gate, then at most every 26 weeks) asks for a dividend-cut soft check. |
 | N272 | **UK replay markets beyond LSE, XETRA and Paris** | Step 3.3 scores an approximate FTSE 350 and, when the fetch finishes, approximate DAX and CAC ranks. Other European exchanges stay out of this registration so the paid month is spent on the three lists. | The UK replay reveal is committed and a version review asks for another European exchange. |
+| N273 | **UK replay: market cap for failed names from Companies House shares** | In UK replay development, collapsed names (Carillion, Thomas Cook, Debenhams, Intu) never entered the universe because EODHD has no fundamentals or outstandingShares for them; mean cap_not_computable share was 51%. A Companies House weighted-shares fallback for the cap would be a rule change, needing a new registration id. | After the UK replay reveal verdict, or if the owner rules the development survivorship gap blocks the reveal stamp |
 
 ---
 

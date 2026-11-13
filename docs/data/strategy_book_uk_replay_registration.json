@@ -379,6 +379,21 @@
       "fix": "assemble_specs returns each name's resolved Companies House key and merged statements; the sector pass and the probe flags read those.",
       "unchanged": "Same matching rule (ch-matching-v1), same one-source-per-year merge.",
       "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
+    },
+    {
+      "marker_id": "strategy-book-uk-replay-v0-prior-year-visible-v1",
+      "at": "2026-11-13T18:00:00Z",
+      "kind": "implementation",
+      "rule_change": false,
+      "recompute_development": true,
+      "approved_by": "owner (pending: merging this change approves it)",
+      "new_registration_id": false,
+      "logged_on_registration_id": "strategy-book-uk-replay-v0",
+      "sealed_text": "Availability ... Stale when the period end is more than STALE_FILING_DAYS 456 before the session. revenue_growth: prior <= 0, or either year not visible. interim_revenue: the quarter within 45 days of one year earlier. Age <= 460 days. STALE_FILING_DAYS 456: matches US. Section 9: a bug fix is an amendment, and development is recomputed before the reveal.",
+      "what_was_wrong": "The runner applied the 456-day staleness (and the 460-day interim age) to the prior-year comparator as well as the latest statement. With no filing date a statement is visible 182 days after its year end, when the prior year's period end is 547 days old, so the year-on-year revenue, margin, EPS and FCF checks and the screen's prior-year columns were almost never evaluable (development bias: revenue not evaluable for 89% of ranked still-listed names). The US rehearsal, which the constant matches, applies staleness to the latest statement only.",
+      "fix": "Staleness and the interim age limit apply to the latest statement; the prior year (and the year-earlier quarter) needs only to be visible. Development is recomputed with develop --amend (workflow phase development-amendment); the superseded block's summary and sha256 are logged in the store's amendments.",
+      "unchanged": "No constant, threshold, window, universe rule or call budget changed. The holdout has not been read. Development committed 2026-11-13 15:04 UTC is superseded, not deleted from the record.",
+      "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
     }
   ]
 }
