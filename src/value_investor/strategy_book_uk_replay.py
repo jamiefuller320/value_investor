@@ -20,6 +20,7 @@ import hashlib
 import json
 import os
 import tempfile
+import time
 from collections import Counter
 from collections.abc import Callable, Mapping, Sequence
 from datetime import UTC, date, datetime, timedelta
@@ -216,6 +217,8 @@ REGISTRATION_CONSTANTS: dict[str, Any] = {
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 REGISTRATION_PATH = Path("docs/data/strategy_book_uk_replay_registration.json")
+CURSOR_SAVE_EVERY = 25
+FETCH_MAX_MINUTES_ENV = "UK_REPLAY_MAX_MINUTES"
 STORE_PATH = Path("docs/data/strategy_book_uk_replay.json")
 DOCUMENT_PATH = Path("docs/ops/strategy-book-uk-replay-registration-draft.md")
 RUNBOOK_PATH = "docs/ops/strategy-book-uk-replay-runbook.md"
@@ -278,6 +281,10 @@ class RevealRefused(ReplayRefused):
 
 class BudgetExhausted(RuntimeError):
     """The soft cap stopped the day. The cursor is saved. Nothing is dropped quietly."""
+
+
+class TimeBudgetExhausted(RuntimeError):
+    """The wall-clock budget stopped the run before the job limit. The cursor is saved."""
 
 
 class WeightProbeFailed(ReplayRefused):
@@ -466,23 +473,51 @@ def load_cursor(cache: Path, day: str) -> dict[str, Any]:
     return payload
 
 
+def _write_atomic(path: Path, text: str) -> None:
+    """A killed job leaves the old file or the new one, never a truncated one."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    partial = path.with_name(path.name + ".partial")
+    partial.write_text(text, encoding="utf-8")
+    os.replace(partial, path)
+
+
+def _readable_json(path: Path) -> bool:
+    try:
+        json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return False
+    return True
+
+
 def save_cursor(cache: Path, cursor: Mapping[str, Any]) -> None:
-    cache.mkdir(parents=True, exist_ok=True)
-    (cache / "cursor.json").write_text(json.dumps(cursor, indent=2) + "\n", encoding="utf-8")
+    _write_atomic(cache / "cursor.json", json.dumps(cursor, indent=2) + "\n")
 
 
 class _Budget:
     """Soft cap for one UTC day. Exhaustion raises; it does not return an empty body."""
 
-    def __init__(self, client: EodhdClient, cursor: dict[str, Any], cap: int) -> None:
+    def __init__(
+        self,
+        client: EodhdClient,
+        cursor: dict[str, Any],
+        cap: int,
+        *,
+        stop_at: float | None = None,
+        clock: Callable[[], float] = time.monotonic,
+    ) -> None:
         self.client = client
         self.cursor = cursor
         self.cap = cap
+        self.stop_at = stop_at
+        self.clock = clock
 
     def remaining(self) -> int:
         return self.cap - int(self.cursor.get("today_weighted") or 0)
 
     def call(self, weight: int, fetch: Callable[[], Any]) -> Any:
+        if self.stop_at is not None and self.clock() >= self.stop_at:
+            self.cursor["status"] = "partial"
+            raise TimeBudgetExhausted("The wall-clock budget is spent. The next run resumes.")
         if self.remaining() < weight:
             self.cursor["status"] = "partial"
             raise BudgetExhausted(
@@ -538,8 +573,14 @@ def run_fetch(
     cache: Path | None = None,
     today: date | None = None,
     exchanges: Sequence[str] | None = None,
+    max_minutes: float | None = None,
+    clock: Callable[[], float] = time.monotonic,
 ) -> dict[str, Any]:
-    """Fill the gitignored cache. A sealed registration is required before the first call."""
+    """Fill the gitignored cache. A sealed registration is required before the first call.
+
+    ``max_minutes`` stops the run cleanly before the CI job limit, so the cursor
+    and cache are saved instead of being cut off mid-write.
+    """
     require_sealed(repo_root)
     cache = Path(cache) if cache is not None else default_cache_dir()
     _outside_repo(cache, repo_root)
@@ -547,7 +588,8 @@ def run_fetch(
     day = (today or datetime.now(UTC).date()).isoformat()
     cursor = load_cursor(cache, day)
     cap = int(REGISTRATION_CONSTANTS["DAILY_CALL_BUDGET_SOFT_CAP"])
-    budget = _Budget(client, cursor, cap)
+    stop_at = clock() + max_minutes * 60 if max_minutes else None
+    budget = _Budget(client, cursor, cap, stop_at=stop_at, clock=clock)
     wanted = list(exchanges or ("LSE", "XETRA", "PA"))
     deadline = date.fromisoformat(str(REGISTRATION_CONSTANTS["EUROPE_FETCH_DEADLINE"]))
     if (today or datetime.now(UTC).date()) > deadline:
@@ -556,6 +598,7 @@ def run_fetch(
                 cursor["europe_not_fetched"] = True
                 wanted = [item for item in wanted if item == "LSE"]
     status = "complete"
+    stopped_by = None
     try:
         _fetch_lists(budget, cache, cursor, wanted)
         _fetch_fx(budget, cache, cursor)
@@ -565,6 +608,11 @@ def run_fetch(
     except BudgetExhausted:
         status = "partial"
         cursor["status"] = "partial"
+        stopped_by = "soft_cap"
+    except TimeBudgetExhausted:
+        status = "partial"
+        cursor["status"] = "partial"
+        stopped_by = "time_budget"
     else:
         pending = [
             symbol
@@ -577,6 +625,7 @@ def run_fetch(
     summary = {
         "status": status,
         "phase": "fetch",
+        "stopped_by": stopped_by,
         "utc_day": day,
         "weighted": cursor["today_weighted"],
         "http": cursor["today_http"],
@@ -601,9 +650,9 @@ def _fetch_lists(
                     exchange, delisted=delisted
                 ),
             )
-            path = cache / "lists" / f"{key}.json"
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(json.dumps(rows if isinstance(rows, list) else []), encoding="utf-8")
+            _write_atomic(
+                cache / "lists" / f"{key}.json", json.dumps(rows if isinstance(rows, list) else [])
+            )
             cursor["lists"][key] = True
 
 
@@ -617,9 +666,9 @@ def _fetch_fx(budget: _Budget, cache: Path, cursor: dict[str, Any]) -> None:
                 symbol, from_date=str(REGISTRATION_CONSTANTS["EOD_FROM"])
             ),
         )
-        path = cache / "fx" / f"{symbol}.json"
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(rows if isinstance(rows, list) else []), encoding="utf-8")
+        _write_atomic(
+            cache / "fx" / f"{symbol}.json", json.dumps(rows if isinstance(rows, list) else [])
+        )
         cursor["fx"][symbol] = True
 
 
@@ -671,9 +720,7 @@ def _probe(budget: _Budget, cache: Path, cursor: dict[str, Any]) -> None:
 
 
 def _write_raw(cache: Path, symbol: str, kind: str, payload: Any) -> None:
-    path = cache / "raw" / symbol / f"{kind}.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload), encoding="utf-8")
+    _write_atomic(cache / "raw" / symbol / f"{kind}.json", json.dumps(payload))
 
 
 def _fetch_names(
@@ -686,6 +733,7 @@ def _fetch_names(
         "dividends": int(REGISTRATION_CONSTANTS["DIV_CALL_WEIGHT"]),
         "splits": int(REGISTRATION_CONSTANTS["SPLIT_CALL_WEIGHT"]),
     }
+    finished = 0
     for exchange in exchanges:
         for symbol in _listed_symbols(cache, exchange):
             if cursor["done"].get(symbol):
@@ -698,11 +746,19 @@ def _fetch_names(
             }
             for kind, fetch in parts.items():
                 target = cache / "raw" / symbol / f"{kind}.json"
-                if target.exists():
+                if target.exists() and _readable_json(target):
                     continue
                 payload = budget.call(weights[kind], fetch)
                 _write_raw(cache, symbol, kind, payload if payload is not None else [])
             cursor["done"][symbol] = True
+            finished += 1
+            if finished % CURSOR_SAVE_EVERY == 0:
+                save_cursor(cache, cursor)
+                print(
+                    f"fetch progress: {exchange} {finished} names this run, "
+                    f"{cursor['today_weighted']} weighted today",
+                    flush=True,
+                )
 
 
 def _call_rows(cursor: Mapping[str, Any]) -> list[dict[str, Any]]:
@@ -2175,6 +2231,12 @@ def main(argv: list[str] | None = None) -> int:
     stamp_p.add_argument("--owner", required=True)
     fetch_p = sub.add_parser("fetch", help="Fill the gitignored cache under the soft cap.")
     fetch_p.add_argument("--cache", type=Path)
+    fetch_p.add_argument(
+        "--max-minutes",
+        type=float,
+        default=None,
+        help=f"Stop cleanly after this many minutes (default ${FETCH_MAX_MINUTES_ENV}, else none).",
+    )
     dev_p = sub.add_parser("develop", help="Development walk. Commits aggregates only.")
     dev_p.add_argument("--cache", type=Path)
     rev_p = sub.add_parser("reveal", help="The single holdout write.")
@@ -2207,7 +2269,12 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         client = EodhdClient(token, max_calls=int(REGISTRATION_CONSTANTS["DAILY_CALL_LIMIT"]))
         if args.command == "fetch":
-            summary = run_fetch(client, repo_root=args.repo, cache=args.cache)
+            max_minutes = args.max_minutes
+            if max_minutes is None and os.environ.get(FETCH_MAX_MINUTES_ENV):
+                max_minutes = float(os.environ[FETCH_MAX_MINUTES_ENV])
+            summary = run_fetch(
+                client, repo_root=args.repo, cache=args.cache, max_minutes=max_minutes
+            )
             previous = _read_store(args.repo)
             payload = committed_store(
                 results=None,
@@ -2218,7 +2285,16 @@ def main(argv: list[str] | None = None) -> int:
             )
             payload["status"] = summary["status"]
             write_store(payload, args.repo)
-            print(json.dumps({"status": summary["status"], "weighted": summary["weighted"]}))
+            print(
+                json.dumps(
+                    {
+                        "status": summary["status"],
+                        "stopped_by": summary["stopped_by"],
+                        "weighted": summary["weighted"],
+                        "done_symbols": summary["done_symbols"],
+                    }
+                )
+            )
             return 0
         if args.command == "develop":
             develop(repo_root=args.repo, client=client, cache=args.cache)
