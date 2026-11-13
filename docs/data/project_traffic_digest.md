@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-13T19:58:38.351034+00:00`
+Generated: `2026-11-13T22:46:29.550898+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,6 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `human`/human PR #1398 `eng-20261113-05` — Hunt fetchable IR source for parked ibex35 leftover LOG.MC
 - `parked_hunter`/verified PR #1396 `eng-20261113-04` — Hunt fetchable IR source for parked dax leftover BNR.DE
 - `ingest_narrow`/verified PR #1395 `eng-20261113-03` — Close stubborn ingest gaps for ITV.L (chain 2/3: 0/0 bodies, run igc-20261113-02)
 - `ingest_narrow`/verified PR #1394 `eng-20261113-02` — Close stubborn ingest gaps for ITV.L (chain 1/3: 0/0 bodies, run igc-20261113-02)
