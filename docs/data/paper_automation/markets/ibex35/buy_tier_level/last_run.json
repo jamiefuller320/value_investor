@@ -1,15 +1,63 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-12T07:39:30.319885+00:00",
+    "local_time": "2026-11-13T07:36:22.149075+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-12T08:00:00+00:00",
-    "settle_at": "2026-11-12T09:15:00+00:00",
+    "market_open_at": "2026-11-13T08:00:00+00:00",
+    "settle_at": "2026-11-13T09:15:00+00:00",
     "can_act": false,
     "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "ffee71e4-74d3-4bb4-a944-b6f15dbfd866",
+      "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+      "acted_at": "2026-11-13T07:36:22.149075+00:00",
+      "ticker": "REP.MC",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 5.776418,
+      "price": 29.9,
+      "gross": 172.71,
+      "cost": 0.3,
+      "net_cash": 172.41,
+      "note": "Automated trim",
+      "name": "Repsol, S.A.",
+      "avg_cost_at_exit": 29.615
+    },
+    {
+      "id": "0df1df9c-526a-41da-9f76-6da8ca0ee9ca",
+      "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+      "acted_at": "2026-11-13T07:36:22.149075+00:00",
+      "ticker": "AENA.MC",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 6.286183,
+      "price": 28.74,
+      "gross": 180.66,
+      "cost": 0.32,
+      "net_cash": 180.35,
+      "note": "Automated trim",
+      "name": "Aena S.M.E., S.A.",
+      "avg_cost_at_exit": 28.28
+    },
+    {
+      "id": "2d3113f9-101d-4833-9354-d64bd775e8ab",
+      "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+      "acted_at": "2026-11-13T07:36:22.149075+00:00",
+      "ticker": "LOG.MC",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 9.400564,
+      "price": 37.46,
+      "gross": 352.15,
+      "cost": 0.62,
+      "net_cash": -352.76,
+      "note": "Automated buy",
+      "name": "Logista Integral, S.A."
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,7 +71,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1049.34,
+    "nav": 1057.05,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,40 +84,69 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 524.67,
+    "target_sleeve_value": 352.35,
     "targets": [
       {
         "ticker": "REP.MC",
         "name": "Repsol, S.A.",
         "signal": "strong_buy",
-        "conviction_score": 0.702185,
-        "price": 29.56
+        "conviction_score": 0.707795,
+        "price": 29.9
       },
       {
         "ticker": "AENA.MC",
         "name": "Aena S.M.E., S.A.",
         "signal": "buy",
-        "conviction_score": 0.6369,
-        "price": 28.58
+        "conviction_score": 0.6455000000000001,
+        "price": 28.74
+      },
+      {
+        "ticker": "LOG.MC",
+        "name": "Logista Integral, S.A.",
+        "signal": "buy",
+        "conviction_score": 0.18411,
+        "price": 37.46
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
-    "anticipated_holds": [],
-    "skipped": [
+    "anticipated_holds": [
       {
+        "action": "hold",
         "ticker": "REP.MC",
         "name": "Repsol, S.A.",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 524.67,
-        "conviction_score": 0.702185,
+        "reason": "Already near equal-weight target",
+        "value": 352.46,
+        "target_value": 352.35,
+        "conviction_score": 0.707795,
         "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "AENA.MC",
+        "name": "Aena S.M.E., S.A.",
+        "reason": "Already near equal-weight target",
+        "value": 352.45,
+        "target_value": 352.35,
+        "conviction_score": 0.6455000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "LOG.MC",
+        "name": "Logista Integral, S.A.",
+        "reason": "Already near equal-weight target",
+        "value": 352.15,
+        "target_value": 352.35,
+        "conviction_score": 0.18411,
+        "signal": "buy"
       }
     ],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -78,7 +155,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 29.56,
+      "mark": 29.9,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -89,7 +166,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 28.58,
+      "mark": 28.74,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "LOG.MC",
+      "name": "Logista Integral, S.A.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 37.46,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -116,7 +204,7 @@
     "holdings": {
       "REP.MC": {
         "ticker": "REP.MC",
-        "shares": 17.564349,
+        "shares": 11.787931,
         "avg_cost": 29.615,
         "name": "Repsol, S.A.",
         "sector": "Energy",
@@ -127,7 +215,7 @@
       },
       "AENA.MC": {
         "ticker": "AENA.MC",
-        "shares": 18.549413,
+        "shares": 12.26323,
         "avg_cost": 28.28,
         "name": "Aena S.M.E., S.A.",
         "sector": "Industrials",
@@ -135,6 +223,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-11-07T12:49:40.811527+00:00"
+      },
+      "LOG.MC": {
+        "ticker": "LOG.MC",
+        "shares": 9.400564,
+        "avg_cost": 37.46,
+        "name": "Logista Integral, S.A.",
+        "sector": "Industrials",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-11-13T07:36:22.149075+00:00"
       }
     },
     "trades": [
@@ -497,6 +596,53 @@
         "net_cash": -525.5,
         "note": "Automated buy",
         "name": "Aena S.M.E., S.A."
+      },
+      {
+        "id": "ffee71e4-74d3-4bb4-a944-b6f15dbfd866",
+        "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+        "acted_at": "2026-11-13T07:36:22.149075+00:00",
+        "ticker": "REP.MC",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 5.776418,
+        "price": 29.9,
+        "gross": 172.71,
+        "cost": 0.3,
+        "net_cash": 172.41,
+        "note": "Automated trim",
+        "name": "Repsol, S.A.",
+        "avg_cost_at_exit": 29.615
+      },
+      {
+        "id": "0df1df9c-526a-41da-9f76-6da8ca0ee9ca",
+        "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+        "acted_at": "2026-11-13T07:36:22.149075+00:00",
+        "ticker": "AENA.MC",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 6.286183,
+        "price": 28.74,
+        "gross": 180.66,
+        "cost": 0.32,
+        "net_cash": 180.35,
+        "note": "Automated trim",
+        "name": "Aena S.M.E., S.A.",
+        "avg_cost_at_exit": 28.28
+      },
+      {
+        "id": "2d3113f9-101d-4833-9354-d64bd775e8ab",
+        "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+        "acted_at": "2026-11-13T07:36:22.149075+00:00",
+        "ticker": "LOG.MC",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 9.400564,
+        "price": 37.46,
+        "gross": 352.15,
+        "cost": 0.62,
+        "net_cash": -352.76,
+        "note": "Automated buy",
+        "name": "Logista Integral, S.A."
       }
     ],
     "equity_curve": [
@@ -1237,9 +1383,26 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-13T07:36:22.149075+00:00",
+        "portfolio_value": 883.48,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.8358
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-12T07:39:30.319885+00:00",
+    "last_mark_at": "2026-11-13T07:36:22.149075+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1247,12 +1410,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (3 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "ibex35",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-12T07:39:30.386722+00:00",
+    "generated_at": "2026-11-13T07:36:22.263539+00:00",
     "observe_only": true,
     "open_count": 4,
     "closed_count": 0,
@@ -1331,7 +1494,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-12T07:39:30.387766+00:00",
+    "generated_at": "2026-11-13T07:36:22.264830+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1387,7 +1550,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 4,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 5,
+      "hold_with_data_quality_count": 6,
       "gaps": [
         "hold_recovery closed episodes=4 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -1396,10 +1559,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 1,
-        "recovered_to_breakeven": 1,
+        "count": 2,
+        "recovered_to_breakeven": 2,
         "close_reasons": {
-          "open": 1
+          "open": 2
         }
       },
       "closed": {
@@ -1412,9 +1575,9 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 5,
+        "count": 6,
         "verdicts": {
-          "open": 5
+          "open": 6
         }
       },
       "closed": {
@@ -1423,8 +1586,8 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 0
+      "hold_episodes": 1,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -1436,8 +1599,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-12T07:39:30.389078+00:00",
-    "as_of": "2026-11-12T07:39:30.319885+00:00",
+    "updated_at": "2026-11-13T07:36:22.266324+00:00",
+    "as_of": "2026-11-13T07:36:22.149075+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1449,16 +1612,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 2,
+    "holding_count": 3,
     "underwater_count": 0,
     "thesis_status_counts": {
       "intact": 1,
-      "weakening": 1,
+      "weakening": 2,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 2,
+      "holding_count": 3,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -1477,9 +1640,9 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.0,
+        "quality": 0.3333,
         "dividend": 0.0,
-        "garp": 0.0,
+        "garp": 0.3333,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -1488,18 +1651,59 @@
     },
     "holdings": [
       {
+        "ticker": "LOG.MC",
+        "name": "Logista Integral, S.A.",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 37.46,
+        "avg_cost": 37.46,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.1841,
+        "data_quality_score": 0.95,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "quality",
+          "garp"
+        ],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "conviction 18% below intact floor",
+          "still buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "cheapness family still passes",
+          "data_quality 0.95"
+        ],
+        "weaken_reasons": [
+          "research verdict caution",
+          "conviction 18% below intact floor"
+        ],
+        "broken_reasons": []
+      },
+      {
         "ticker": "REP.MC",
         "name": "Repsol, S.A.",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0019,
-        "mark": 29.56,
+        "unrealized_pct": 0.0096,
+        "mark": 29.9,
         "avg_cost": 29.615,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.7022,
+        "conviction_score": 0.7078,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1519,7 +1723,7 @@
           "still strong_buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 70%"
+          "conviction 71%"
         ],
         "weaken_reasons": [
           "research verdict caution"
@@ -1533,12 +1737,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0106,
-        "mark": 28.58,
+        "unrealized_pct": 0.0163,
+        "mark": 28.74,
         "avg_cost": 28.28,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6369,
+        "conviction_score": 0.6455,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1554,14 +1758,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 64%"
+          "conviction 65%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 64%"
+          "conviction 65%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1574,7 +1778,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-12T07:39:30.390683+00:00",
+    "generated_at": "2026-11-13T07:36:22.268184+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1582,7 +1786,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 4,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 1,
+      "open_with_thesis": 2,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -1649,8 +1853,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-12T07:39:30.394281+00:00",
-    "open_count": 1,
+    "generated_at": "2026-11-13T07:36:22.271630+00:00",
+    "open_count": 2,
     "closed_count": 5,
     "scored_count": 5,
     "scored_count_all": 5,
@@ -1710,14 +1914,14 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 1,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-12T07:39:30.319885+00:00",
+    "generated_at": "2026-11-13T07:36:22.149075+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1741,10 +1945,10 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 5,
+    "open_count": 6,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 2,
+      "on_book": 3,
       "off_book": 3,
       "never_funded": 0
     },
@@ -1765,16 +1969,16 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 0,
+      "opened": 1,
       "closed": 0,
-      "tagged_on_book": 0,
+      "tagged_on_book": 1,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-12T07:39:30.319885+00:00",
+    "generated_at": "2026-11-13T07:36:22.149075+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1785,59 +1989,36 @@
     "proposal_count": 1,
     "card_count": 1,
     "verdict_counts": {
-      "agree": 1,
-      "veto": 0,
+      "agree": 0,
+      "veto": 1,
       "abstain": 0
     },
     "by_algo_action": {
-      "rebuy_skip": {
-        "agree": 1,
-        "veto": 0,
+      "buy": {
+        "agree": 0,
+        "veto": 1,
         "abstain": 0
       }
     },
-    "disagree_vs_heuristic_count": 0,
+    "disagree_vs_heuristic_count": 1,
     "cards": [
       {
-        "ticker": "REP.MC",
-        "name": "Repsol, S.A.",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
+        "ticker": "LOG.MC",
+        "name": "Logista Integral, S.A.",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "veto",
         "reasons": [
-          "Rebuy_skip is driven by algo_reason (insufficient cash after higher-conviction fills), not a discretionary exit from the buy cohort.",
-          "still_buyish is true with screen_signal buy, conviction_rank 1, entry_rank 1, and rank_drop 0\u2014no hold-gate sell pressure and no capacity-bump sell pattern to veto.",
-          "research_verdict caution with overlay_bound true is a bound overlay, not evidence of a decisive leave-buy-cohort case that would contradict cash-priority skip."
+          "still_buyish is false at decision time, so the name is not buy/strong_buy on the decision screen.",
+          "Effective screen_signal is hold, which conflicts with an automated buy action.",
+          "research_verdict is caution with overlay_bound true, weighing against initiating or adding exposure."
         ],
         "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
           {
             "kind": "screen_signal",
             "source": "candidates",
             "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 1
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
+            "value": "hold"
           },
           {
             "kind": "research_verdict",
@@ -1849,7 +2030,7 @@
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
+            "value": false
           },
           {
             "kind": "overlay_bound",
@@ -1863,10 +2044,10 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-12T07:39:30.319885+00:00",
-        "proposal_id": "buy_tier_level:REP.MC:rebuy_skip:2026-11-12T07:39:30.319885+00:00",
+        "logged_at": "2026-11-13T07:36:22.149075+00:00",
+        "proposal_id": "buy_tier_level:LOG.MC:buy:2026-11-13T07:36:22.149075+00:00",
         "meta": {
-          "still_buyish": true,
+          "still_buyish": false,
           "rank_drop": 0,
           "rank_drop_exit_min": 3,
           "research_verdict": "caution",
@@ -1881,9 +2062,9 @@
             "adjusted_eps_growth_pct": null
           },
           "heuristic_baseline": {
-            "shadow_verdict": "agree",
+            "shadow_verdict": "abstain",
             "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              "Buy while not buyish \u2014 abstain."
             ],
             "judge_spec_id": "heuristic.v1"
           },
@@ -1903,7 +2084,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-12T07:39:30.319885+00:00",
+      "generated_at": "2026-11-13T07:36:22.149075+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -1912,14 +2093,14 @@
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
       "card_count": 1,
       "verdict_counts": {
-        "agree": 1,
-        "veto": 0,
+        "agree": 0,
+        "veto": 1,
         "abstain": 0
       },
       "by_algo_action": {
-        "rebuy_skip": {
-          "agree": 1,
-          "veto": 0,
+        "buy": {
+          "agree": 0,
+          "veto": 1,
           "abstain": 0
         }
       },
@@ -1938,7 +2119,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-12T07:39:35.199961+00:00",
+  "generated_at": "2026-11-13T07:36:27.010628+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-11-12T07:40:07.108921+00:00",
+  "updated_at": "2026-11-13T07:37:09.222755+00:00",
   "hold_episodes": [
     {
       "episode_id": "buy_tier_level:UMC:2026-10-07T09:47:45.703747+01:00",
@@ -268,7 +268,7 @@
       "ticker": "WIT",
       "name": "Wipro Limited",
       "started_at": "2026-11-12T07:40:07.006456+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -300,11 +300,11 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": 0.0305,
-      "trough_unrealized_pct": 0.0305,
+      "trough_unrealized_pct": 0.0162,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-13T07:37:09.148358+00:00",
+      "linked_sell_trade_id": "63c80a47-729f-4dd5-b91e-c369d84b087d"
     }
   ],
   "swap_rotations": [
@@ -367,10 +367,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "WIT": 0.2558
+        "WIT": 0.2384
       },
       "buy_returns_since_rotation": {
-        "SONY": 0.1121
+        "SONY": 0.1192
       },
       "verdict": null,
       "closed_at": null
@@ -460,8 +460,8 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "WIT": 0.2558,
-        "SONY": 0.1121
+        "WIT": 0.2384,
+        "SONY": 0.1192
       },
       "buy_returns_since_rotation": {
         "UMC": 0.0
@@ -529,7 +529,7 @@
         "UMC": 0.0
       },
       "buy_returns_since_rotation": {
-        "SONY": 0.1292
+        "SONY": 0.1364
       },
       "verdict": null,
       "closed_at": null
@@ -612,8 +612,8 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "SONY": 0.0647,
-        "WIT": 0.1077
+        "SONY": 0.0715,
+        "WIT": 0.0923
       },
       "buy_returns_since_rotation": {
         "UMC": 0.3254
@@ -681,8 +681,8 @@
         "UMC": 0.3254
       },
       "buy_returns_since_rotation": {
-        "SONY": 0.0694,
-        "WIT": 0.1192
+        "SONY": 0.0763,
+        "WIT": 0.1036
       },
       "verdict": null,
       "closed_at": null
@@ -765,8 +765,8 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "SONY": 0.0111,
-        "WIT": -0.0137
+        "SONY": 0.0176,
+        "WIT": -0.0274
       },
       "buy_returns_since_rotation": {
         "UMC": 0.4177
@@ -850,11 +850,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "WIT": 0.0237,
+        "WIT": 0.0095,
         "UMC": 0.4177
       },
       "buy_returns_since_rotation": {
-        "SONY": 0.0157
+        "SONY": 0.0222
       },
       "verdict": null,
       "closed_at": null
@@ -911,10 +911,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "SONY": 0.0504
+        "SONY": 0.0571
       },
       "buy_returns_since_rotation": {
-        "WIT": 0.0485
+        "WIT": 0.034
       },
       "verdict": null,
       "closed_at": null
@@ -997,8 +997,8 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "SONY": 0.047,
-        "WIT": 0.0
+        "SONY": 0.0538,
+        "WIT": -0.0139
       },
       "buy_returns_since_rotation": {
         "UMC": 0.5749
@@ -1066,8 +1066,8 @@
         "UMC": 0.5749
       },
       "buy_returns_since_rotation": {
-        "SONY": 0.047,
-        "WIT": 0.0
+        "SONY": 0.0538,
+        "WIT": -0.0139
       },
       "verdict": null,
       "closed_at": null
@@ -1114,16 +1114,77 @@
           "cost": 0.05
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-13T07:37:09.148358+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.032,
+          "avg_buy_return": -0.0139,
+          "replacement_delta": 0.0181
+        }
+      ],
       "sell_returns_since_rotation": {
-        "SONY": -0.0381
+        "SONY": -0.032
       },
       "buy_returns_since_rotation": {
+        "WIT": -0.0139
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-13T07:37:09.148358+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-13T07:37:09.148358+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "WIT",
+          "price": 2.13,
+          "shares": 289.91944,
+          "gross": 617.53,
+          "cost": 1.08,
+          "avg_cost_at_exit": 2.096,
+          "realized_pct": 0.0162,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "research verdict neutral",
+            "cheapness family no longer passes",
+            "still buy",
+            "data_quality 1.00"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "neutral",
+          "unrealized_pct_at_thesis": 0.0162
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "SONY",
+          "price": 26.66,
+          "shares": 23.082177,
+          "gross": 615.37,
+          "cost": 1.08
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
         "WIT": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "SONY": 0.0
       },
       "verdict": null,
       "closed_at": null
     }
   ],
-  "hypothesis_outcome_link_updated_at": "2026-11-12T07:40:07.006456+00:00"
+  "hypothesis_outcome_link_updated_at": "2026-11-13T07:37:09.148358+00:00"
 }

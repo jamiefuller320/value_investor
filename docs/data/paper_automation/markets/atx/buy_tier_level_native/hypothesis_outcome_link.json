@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-11-12T07:40:21.741909+00:00",
+  "generated_at": "2026-11-13T07:37:34.693603+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 1,
+    "closed_total": 2,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,7 +27,14 @@
         }
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.062,
+        "mean_trough_unrealized_pct": 0.0149,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -55,11 +62,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 1,
+    "hold_closed_with_thesis": 2,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=1 (target >=8)",
-      "hold thesis buckets thin (weakening=1; target >=3 each)",
+      "hold closed with thesis=2 (target >=8)",
+      "hold thesis buckets thin (weakening=1, broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -246,7 +253,7 @@
       "ticker": "ANDR.VI",
       "name": "Andritz AG",
       "started_at": "2026-11-06T07:54:00.582947+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -274,13 +281,22 @@
       "conviction_score": 0.32,
       "exit_streak_at_start": 1,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-13T07:37:34.683626+00:00",
+          "days_after": 7,
+          "price": 84.8,
+          "unrealized_pct": 0.0521,
+          "peak_unrealized_pct": 0.062,
+          "trough_unrealized_pct": 0.0149
+        }
+      ],
       "peak_unrealized_pct": 0.062,
       "trough_unrealized_pct": 0.0149,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-13T07:37:34.683626+00:00",
+      "linked_sell_trade_id": "25599507-c8b4-4ad2-acca-a28ef810a9cb"
     }
   ],
   "swap_rotations": [
@@ -343,10 +359,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "OMV.VI": -0.0184
+        "OMV.VI": -0.0075
       },
       "buy_returns_since_rotation": {
-        "STR.VI": 0.1109
+        "STR.VI": 0.0806
       },
       "verdict": null,
       "closed_at": null
@@ -410,10 +426,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "OMV.VI": -0.0237
+        "OMV.VI": -0.0129
       },
       "buy_returns_since_rotation": {
-        "STR.VI": 0.0954
+        "STR.VI": 0.0656
       },
       "verdict": null,
       "closed_at": null
@@ -509,9 +525,9 @@
         "WIE.VI": 0.0
       },
       "buy_returns_since_rotation": {
-        "STR.VI": 0.0954,
-        "OMV.VI": -0.0096,
-        "CAI.VI": 0.0024
+        "STR.VI": 0.0656,
+        "OMV.VI": 0.0014,
+        "CAI.VI": -0.0024
       },
       "verdict": null,
       "closed_at": null
@@ -618,12 +634,12 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "STR.VI": 0.0911,
-        "CAI.VI": 0.012,
-        "OMV.VI": -0.0538
+        "STR.VI": 0.0614,
+        "CAI.VI": 0.0072,
+        "OMV.VI": -0.0433
       },
       "buy_returns_since_rotation": {
-        "ANDR.VI": 0.062
+        "ANDR.VI": 0.0521
       },
       "verdict": null,
       "closed_at": null
@@ -686,12 +702,12 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "OMV.VI": 0.0042
+        "OMV.VI": 0.0153
       },
       "buy_returns_since_rotation": {
-        "STR.VI": 0.0868,
-        "CAI.VI": -0.0071,
-        "ANDR.VI": 0.0465
+        "STR.VI": 0.0572,
+        "CAI.VI": -0.0118,
+        "ANDR.VI": 0.0367
       },
       "verdict": null,
       "closed_at": null
@@ -772,8 +788,66 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "STR.VI": 0.0,
-        "CAI.VI": 0.0
+        "STR.VI": -0.0272,
+        "CAI.VI": -0.0048
+      },
+      "buy_returns_since_rotation": {
+        "OMV.VI": 0.0111,
+        "VOE.VI": -0.0151
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-11-13T07:37:34.683626+00:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-11-13T07:37:34.683626+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "ANDR.VI",
+          "price": 84.8,
+          "shares": 4.088171,
+          "gross": 346.68,
+          "cost": 0.09,
+          "avg_cost_at_exit": 80.8821,
+          "realized_pct": 0.0484,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0484
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "OMV.VI",
+          "price": 72.85,
+          "shares": 2.130408,
+          "gross": 155.2,
+          "cost": 0.04
+        },
+        {
+          "ticker": "VOE.VI",
+          "price": 37.8,
+          "shares": 4.993973,
+          "gross": 188.77,
+          "cost": 0.05
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "ANDR.VI": 0.0
       },
       "buy_returns_since_rotation": {
         "OMV.VI": 0.0,

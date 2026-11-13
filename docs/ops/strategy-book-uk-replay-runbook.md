@@ -95,3 +95,14 @@ this runner does not rewrite the block.
 the aggregate store is absent. Info with the phase and verdict when it reads.
 Warn when the JSON is unreadable. `auto_fixable` is false. The check does not
 call EODHD and does not heal the store.
+
+## Companies House matching
+
+The development and reveal walks read every name in
+`docs/data/ch_failed_name_statements.json` at the development commit. A store
+row is attached to an EODHD symbol only when its EPIC equals the symbol code
+(or the code's `_`-suffixed delisted form) and its leaving date is within 31
+days of the symbol's last bar. Rows without an EPIC need a name match plus the
+leaving date. The seven hand-verified probe names carry neither and keep the
+name match. Two candidates for one symbol match nothing. See
+`match_ch_record` in `src/value_investor/strategy_book_uk_tape.py`.

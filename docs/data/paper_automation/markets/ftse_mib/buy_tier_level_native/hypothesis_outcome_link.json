@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-11-12T07:39:41.439888+00:00",
+  "generated_at": "2026-11-13T07:36:37.442473+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 3,
+    "closed_total": 4,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 4,
+    "open_with_thesis": 3,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,7 +27,14 @@
         }
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0732,
+        "mean_trough_unrealized_pct": 0.0623,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -55,10 +62,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 3,
+    "hold_closed_with_thesis": 4,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=3 (target >=8)",
+      "hold closed with thesis=4 (target >=8)",
+      "hold thesis buckets thin (broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -225,7 +233,7 @@
           "trough_unrealized_pct": -0.0287
         }
       ],
-      "peak_unrealized_pct": 0.1706,
+      "peak_unrealized_pct": 0.1786,
       "trough_unrealized_pct": -0.0287,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -275,6 +283,14 @@
           "unrealized_pct": 0.0564,
           "peak_unrealized_pct": 0.0673,
           "trough_unrealized_pct": 0.042
+        },
+        {
+          "scored_at": "2026-11-13T07:36:37.427975+00:00",
+          "days_after": 28,
+          "price": 25.47,
+          "unrealized_pct": 0.0297,
+          "peak_unrealized_pct": 0.1178,
+          "trough_unrealized_pct": 0.0127
         }
       ],
       "peak_unrealized_pct": 0.1178,
@@ -395,7 +411,7 @@
       "ticker": "UNI.MI",
       "name": "Unipol Assicurazioni S.p.A.",
       "started_at": "2026-11-12T07:39:41.425583+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -425,11 +441,11 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": 0.0732,
-      "trough_unrealized_pct": 0.0732,
+      "trough_unrealized_pct": 0.0623,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-13T07:36:37.427975+00:00",
+      "linked_sell_trade_id": "36c002f1-a2a2-497b-bb24-1d9311ba8b29"
     }
   ],
   "swap_rotations": [
@@ -543,12 +559,12 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "ENI.MI": 0.0418,
-        "REC.MI": -0.0029,
-        "AMP.MI": 0.0545
+        "ENI.MI": 0.0529,
+        "REC.MI": -0.0019,
+        "AMP.MI": -0.0013
       },
       "buy_returns_since_rotation": {
-        "BZU.MI": 0.1638
+        "BZU.MI": 0.1717
       },
       "verdict": null,
       "closed_at": null
@@ -670,13 +686,13 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "REC.MI": 0.001,
-        "ENI.MI": 0.0418,
-        "AMP.MI": 0.0397
+        "REC.MI": 0.0019,
+        "ENI.MI": 0.0529,
+        "AMP.MI": -0.0154
       },
       "buy_returns_since_rotation": {
-        "BZU.MI": 0.1672,
-        "TEN.MI": 0.1009
+        "BZU.MI": 0.1751,
+        "TEN.MI": 0.1037
       },
       "verdict": null,
       "closed_at": null
@@ -759,13 +775,13 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "TEN.MI": 0.1009
+        "TEN.MI": 0.1037
       },
       "buy_returns_since_rotation": {
-        "BZU.MI": 0.1889,
-        "REC.MI": -0.0104,
-        "ENI.MI": 0.0398,
-        "AMP.MI": 0.0062
+        "BZU.MI": 0.197,
+        "REC.MI": -0.0094,
+        "ENI.MI": 0.051,
+        "AMP.MI": -0.0471
       },
       "verdict": null,
       "closed_at": null
@@ -905,13 +921,13 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "BZU.MI": 0.1953,
-        "REC.MI": -0.0104,
-        "ENI.MI": -0.0004,
-        "AMP.MI": -0.0525
+        "BZU.MI": 0.2035,
+        "REC.MI": -0.0094,
+        "ENI.MI": 0.0103,
+        "AMP.MI": -0.1026
       },
       "buy_returns_since_rotation": {
-        "LTMC.MI": 0.1431
+        "LTMC.MI": 0.1423
       },
       "verdict": null,
       "closed_at": null
@@ -980,11 +996,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "LTMC.MI": 0.1431
+        "LTMC.MI": 0.1423
       },
       "buy_returns_since_rotation": {
-        "REC.MI": -0.0104,
-        "ENI.MI": -0.0183
+        "REC.MI": -0.0094,
+        "ENI.MI": -0.0078
       },
       "verdict": null,
       "closed_at": null
@@ -1053,11 +1069,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "AMP.MI": -0.0093
+        "AMP.MI": -0.0618
       },
       "buy_returns_since_rotation": {
-        "ENI.MI": -0.0208,
-        "BZU.MI": 0.2038
+        "ENI.MI": -0.0103,
+        "BZU.MI": 0.212
       },
       "verdict": null,
       "closed_at": null
@@ -1159,13 +1175,13 @@
       ],
       "sell_returns_since_rotation": {
         "FCT.MI": 0.0,
-        "MONC.MI": 0.0356
+        "MONC.MI": 0.0323
       },
       "buy_returns_since_rotation": {
-        "UNI.MI": 0.0562,
-        "LTMC.MI": 0.0996,
-        "BZU.MI": 0.1076,
-        "INW.MI": 0.0425
+        "UNI.MI": 0.0454,
+        "LTMC.MI": 0.0988,
+        "BZU.MI": 0.1151,
+        "INW.MI": 0.0306
       },
       "verdict": null,
       "closed_at": null
@@ -1220,10 +1236,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "INW.MI": 0.0177
+        "INW.MI": 0.0061
       },
       "buy_returns_since_rotation": {
-        "IG.MI": 0.0192
+        "IG.MI": 0.0382
       },
       "verdict": null,
       "closed_at": null
@@ -1397,15 +1413,105 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "ENI.MI": 0.006,
-        "MONC.MI": -0.0306,
-        "IG.MI": -0.0002,
-        "UNI.MI": 0.0495,
-        "LTMC.MI": 0.017,
-        "BZU.MI": 0.0394
+        "ENI.MI": 0.0168,
+        "MONC.MI": -0.0337,
+        "IG.MI": 0.0184,
+        "UNI.MI": 0.0388,
+        "LTMC.MI": 0.0163,
+        "BZU.MI": 0.0465
       },
       "buy_returns_since_rotation": {
-        "AZM.MI": 0.0371
+        "AZM.MI": 0.0366
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-11-13T07:36:37.427975+00:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-11-13T07:36:37.427975+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "UNI.MI",
+          "price": 26.25,
+          "shares": 6.31137,
+          "gross": 165.67,
+          "cost": 0.04,
+          "avg_cost_at_exit": 24.7106,
+          "realized_pct": 0.0623,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0623
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "ENI.MI",
+          "price": 25.47,
+          "shares": 1.083431,
+          "gross": 27.59,
+          "cost": 0.01
+        },
+        {
+          "ticker": "MONC.MI",
+          "price": 43.84,
+          "shares": 0.813196,
+          "gross": 35.65,
+          "cost": 0.01
+        },
+        {
+          "ticker": "AZM.MI",
+          "price": 37.13,
+          "shares": 0.659173,
+          "gross": 24.48,
+          "cost": 0.01
+        },
+        {
+          "ticker": "IG.MI",
+          "price": 9.29,
+          "shares": 2.942391,
+          "gross": 27.33,
+          "cost": 0.01
+        },
+        {
+          "ticker": "LTMC.MI",
+          "price": 28.02,
+          "shares": 0.987569,
+          "gross": 27.67,
+          "cost": 0.01
+        },
+        {
+          "ticker": "BZU.MI",
+          "price": 44.36,
+          "shares": 0.515409,
+          "gross": 22.86,
+          "cost": 0.01
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "UNI.MI": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "ENI.MI": 0.0,
+        "MONC.MI": 0.0,
+        "AZM.MI": 0.0,
+        "IG.MI": 0.0,
+        "LTMC.MI": 0.0,
+        "BZU.MI": 0.0
       },
       "verdict": null,
       "closed_at": null

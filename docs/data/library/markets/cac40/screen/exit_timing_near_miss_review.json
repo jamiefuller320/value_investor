@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "track_id": "archive_near_miss",
-  "generated_at": "2026-11-12T07:35:27.199442+00:00",
+  "generated_at": "2026-11-13T07:31:45.232038+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -69,13 +69,17 @@
     "ready_for_probability_analysis": true,
     "hold_closed_count": 491,
     "swap_closed_count": 491,
-    "hold_with_data_quality_count": 491,
+    "hold_with_data_quality_count": 496,
     "gaps": [],
     "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
   },
   "hold_recovery": {
     "open": {
-      "count": 0
+      "count": 5,
+      "recovered_to_breakeven": 0,
+      "close_reasons": {
+        "open": 5
+      }
     },
     "closed": {
       "count": 491,
@@ -90,26 +94,29 @@
   },
   "swap_rotation": {
     "open": {
-      "count": 0
+      "count": 5,
+      "verdicts": {
+        "open": 5
+      }
     },
     "closed": {
       "count": 491,
       "verdicts": {
-        "exit_outperformed": 229,
-        "replacement_outperformed": 232,
-        "inconclusive": 30
+        "exit_outperformed": 231,
+        "replacement_outperformed": 236,
+        "inconclusive": 24
       }
     }
   },
   "note": "Archive near-miss + held-book observe sim \u2014 priors only; pair with live learning_tracks_exit_timing.json for paper-track evidence. Wider gate: min_conviction=0.28, max_episodes_per_week=25.",
   "scope": "archive_near_miss",
-  "snapshot_count": 54,
+  "snapshot_count": 55,
   "episodes_opened": {
-    "hold_recovery": 491,
-    "hold_recovery_near_miss": 491,
+    "hold_recovery": 496,
+    "hold_recovery_near_miss": 496,
     "hold_recovery_held_book": 0,
-    "swap_rotation": 491,
-    "swap_rotation_near_miss": 491,
+    "swap_rotation": 496,
+    "swap_rotation_near_miss": 496,
     "swap_rotation_log_book": 0
   },
   "by_conviction_band": {

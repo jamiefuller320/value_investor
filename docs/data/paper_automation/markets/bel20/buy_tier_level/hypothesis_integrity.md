@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-12T07:39:42.935511+00:00
+Track: `buy_tier_level` · updated 2026-11-13T07:36:57.239213+00:00
 
 ## Portfolio loser feedback
 
@@ -10,16 +10,14 @@ Track: `buy_tier_level` · updated 2026-11-12T07:39:42.935511+00:00
 
 ## Holding reviews
 
-### UMI.BR — intact / hold_tolerate (-1.9%)
+### UMI.BR — intact / hold_tolerate (-4.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 77%
 
-### AED.BR — intact / hold_tolerate (+3.9%)
-- still strong_buy
+### AED.BR — weakening / watch_review (+4.4%)
+- conviction 34% below intact floor
+- still buy
 - research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 41%
