@@ -829,6 +829,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.mtu.de/fileadmin/DE/5_Investoren/Financial_Report/2025_Results/MTUAeroEnginesAG_AnnualReport_2025_en_locked.pdf",
         "https://www.mtu.de/fileadmin/EN/5_Investors/7_Financial_Reports/PDFs/2025_H1_Finanzbericht2025_EN.pdf",
     ],
+    # dax leftover BNR.DE — eng-20261113-04: unfetchable_iwb; Investegate BNR epic is Burning
+    # Rock Biotech (NASDAQ), not Brenntag SE; corporate.brenntag.com is Cloudflare-gated;
+    # brenntagprod-media.e-spirit.cloud FY2024 annual + H1 2025 half-year PDFs fetch.
+    "BNR.DE": [
+        "https://brenntagprod-media.e-spirit.cloud/06432017-be1f-41ce-8d1d-564e2a66d213/documents/corporate/investor-relations/2024/annual-report-2024/brenntag_annual-report-2024_en.pdf",
+        "https://brenntagprod-media.e-spirit.cloud/06432017-be1f-41ce-8d1d-564e2a66d213/documents/corporate/investor-relations/2025/q2-2025/brenntag_half-year-financial-report-2025_en.pdf",
+    ],
     # asx200 buy-tier deepen — unmeasured EBO.AX (Markit latest-five feed is capital-change only).
     "EBO.AX": [
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-02984095-2A1616605",

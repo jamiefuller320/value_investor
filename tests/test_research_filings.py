@@ -14177,6 +14177,29 @@ def test_parked_source_hunter_sie_de_dax_has_fetchable_ir():
     assert valid, reason
 
 
+def test_parked_source_hunter_bnr_de_dax_has_fetchable_ir_eng_20261113_04():
+    """eng-20261113-04: BNR.DE e-spirit FY2024 annual + H1 2025 half-year PDFs fetch and validate."""
+    assert "BNR.DE" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("BNR.DE")
+    assert len(rows) == 2
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) == 1
+    assert len(interim) == 1
+    assert "annual-report-2024" in annual[0]["url"]
+    assert "half-year-financial-report-2025" in interim[0]["url"]
+    annual_body = fetch_filing_body(annual[0]["url"])
+    assert annual_body and len(annual_body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], annual_body, ticker="BNR.DE")
+    assert valid, reason
+    interim_body = fetch_filing_body(interim[0]["url"])
+    assert interim_body and len(interim_body) >= 40000
+    valid_i, reason_i = _validate_ir_allowlist_body_content(
+        interim[0], interim_body, ticker="BNR.DE"
+    )
+    assert valid_i, reason_i
+
+
 def test_parked_source_hunter_mtx_de_dax_has_fetchable_ir_eng_20261113_01():
     """eng-20261113-01: MTX.DE mtu.de FY2025 annual + H1-2025 interim PDFs fetch and validate."""
     assert "MTX.DE" not in PARKED_SOURCE_HUNTER_SKIP
