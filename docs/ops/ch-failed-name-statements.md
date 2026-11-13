@@ -316,22 +316,51 @@ Seed `random.Random(20261113)`, 20 rows, drawn only from values that still had a
 
 Nineteen matched. One did not. That is inside the bar of one miss in twenty, so the sample was not redrawn. The Dairy Crest figure is now null: the page prints (12.8) and the OCR token was (42.8). Nothing was substituted.
 
+Seed `random.Random(20261115)`, 20 rows, drawn only from gate-passed values on the 52 takeover names that were still pending after that first window. Three did not match: Britvic 2012 operating cash was stored as 1,323 against the printed 132.3, HomeServe 2012 operating cash was stored as 777 against 77.7, and Signature Aviation 2016 operating cash was stored as 374.3 against 374.9. A higher-zoom read of the same row now nulls a millions integer whose point was dropped. Those three values were set to null and nothing was substituted. The sample was redrawn.
+
+Seed `random.Random(20261116)`, 20 rows, from the same names after that check (427 candidates).
+
+| Name | Year | Field | PDF | Stored | Result |
+|------|------|-------|-----|--------|--------|
+| Clipper Logistics | 2020 | Revenue | 500,671 £'000 | 500671 thousands | Match |
+| Clipper Logistics | 2020 | Basic EPS | 15.9p | 15.9 | Match |
+| Tyman | 2017 | Basic EPS | 17.61p | 17.61 | Match |
+| Euromoney | 2019 | Revenue | 256,051 £'000, 2019 column of the five-year record | 256051 thousands | Match |
+| Euromoney | 2012 | Revenue | 394,144 £'000 | 394144 thousands | Match |
+| AVEVA | 2016 | Basic shares | 63,925,508 | 63925508 | Match |
+| Redrow | 2014 | Basic EPS | 28.3p | 28.3 | Match |
+| Brewin Dolphin | 2016 | Operating profit | 49,743 £'000 | 49743 thousands | Match |
+| Wincanton | 2017 | Capital expenditure | (18.0) £m | -18 millions | Match |
+| SDL | 2020 | Profit attributable | 4.3 £m | 43 millions | Miss. The point was dropped. Value then set to null. |
+| AVEVA | 2015 | Profit attributable | 41,559 £'000 | 41559 thousands | Match |
+| Clipper Logistics | 2018 | Basic EPS | 14.2p | 14.2 | Match |
+| Tritax EuroBox | 2020 | Operating cash flow | 32.28 £m | 32.28 millions | Match |
+| SDL | 2018 | Operating cash flow | 36.0 £m | 36 millions | Match |
+| Hargreaves Lansdown | 2015 | Revenue | 395,137 £'000 | 395137 thousands | Match |
+| AVEVA | 2018 | Operating cash flow | 65,572 £'000 | 65572 thousands | Match |
+| AVEVA | 2016 | Capital expenditure | (2,056) + (393) £'000 | -2449 thousands | Match |
+| Tyman | 2015 | Basic EPS | 4.57p | 4.57 | Match |
+| Euromoney | 2014 | Operating profit | 103,601 £'000 | 103601 thousands | Match |
+| Meggitt | 2013 | Revenue | 1,637.3 £m | 1637.3 | Match |
+
+Nineteen matched. One did not. That is inside the bar, so the sample stops here. The SDL figure is now null. Nothing was substituted.
+
 ### Coverage so far
 
 The leaver list has 155 names: 143 takeover, 4 failure, 8 other. Companies House resolution: 124 UK plcs, 16 not applicable (overseas issuer), 15 unresolved. No number was guessed. GKN is 04191106 and Sky is 02247735, the same numbers as the hand-verified filings.
 
-`leaver_coverage` after the OCR window (one Tesseract process, about four hours, a commit every ten names). "With any statement year" means a year with revenue or basic EPS. "Every year" means every expected year has basic EPS.
+`leaver_coverage` after the second OCR window (one Tesseract process, a commit every ten names, stopped when the four-hour window closed). "With any statement year" means a year with revenue or basic EPS. "Every year" means every expected year has basic EPS.
 
 | Reason | Names | CH applicable | With any statement year | Every year |
 |--------|------:|-------------:|------------------------:|-----------:|
-| Takeover | 143 | 117 | 34 | 1 |
+| Takeover | 143 | 117 | 58 | 2 |
 | Failure | 4 | 4 | 1 | 0 |
 | Other | 8 | 3 | 1 | 0 |
-| Total | 155 | 124 | 36 | 1 |
+| Total | 155 | 124 | 60 | 2 |
 
-The one failure with a revenue year is NMC Health (2015, 2017, 2018). Asia Dragon Trust and Perpetual Income & Growth have operating-cash years and no revenue or EPS, so they stay in the "no statement year" column. Finablr has no filled statement line. 52 takeover names are still on `leaver_cursor.pending_keys`, starting at SDL.
+The one failure with a revenue year is NMC Health (2015, 2017, 2018). Asia Dragon Trust and Perpetual Income & Growth have operating-cash years and no revenue or EPS, so they stay in the "no statement year" column. Finablr has no filled statement line. Two takeover names are still on `leaver_cursor.pending_keys`: Assura and Warehouse REIT. They were not started because the window had closed.
 
-The gate left 58 values null on 26 names, and the hand check left one more null: `scale_jump` 47, `digit_count` 6, `sign` 3, `row_decimal` 2, `hand_check` 1. Per-name totals are `values_nulled`. Cited OCR lines are about 80 KB of the store. The rest is the filing records, including empty fields for years not yet read. Page text is not stored, only the page number, method and statement kind.
+On the 50 names read in this window the gate left 30 values null: `scale_jump` 12, `second_reading` 9, `digit_count` 3, `row_decimal` 2, `eps_versus_earnings` 2, `eps_decimal` 1, `operating_profit_above_revenue` 1. The hand check left four more null (Signature Aviation 374.3, William Hill 287.6, Countryside 922, SDL 43). `second_reading` is a higher-zoom read of the same row that shows a dropped millions decimal. A changed digit is not nulled by that check. Per-name totals are `values_nulled`. Page text is not stored, only the page number, method and statement kind.
 
 Image OCR is resumable. One Tesseract process scans headers at zoom 1.6 (at most the first 100 pages and the last 40) and OCRs the income page, the cash-flow page and one EPS note at zoom 2.2. A name already finished is skipped unless `--refresh --only <key>` is set.
 
