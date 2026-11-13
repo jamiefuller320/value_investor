@@ -1862,6 +1862,7 @@ GATE_EPS_EARNINGS = "eps_versus_earnings"
 GATE_OPERATING_PROFIT = "operating_profit_above_revenue"
 GATE_SCALE_JUMP = "scale_jump"
 GATE_ROW_DECIMAL = "row_decimal"
+GATE_SECOND_READING = "second_reading"
 _GATE_REASONS = {
     GATE_DIGIT_COUNT,
     GATE_SIGN,
@@ -1870,6 +1871,14 @@ _GATE_REASONS = {
     GATE_OPERATING_PROFIT,
     GATE_SCALE_JUMP,
     GATE_ROW_DECIMAL,
+    GATE_SECOND_READING,
+}
+_MONEY_FIELDS = {
+    "revenue",
+    "operating_profit",
+    "profit_attributable_to_owners",
+    "net_cash_from_operating_activities",
+    "capital_expenditure",
 }
 _ROW_AMOUNT_RE = re.compile(r"[(\[{]?-?\d[\d,]*(?:\.\d+)?[)\]}]?")
 
@@ -1910,6 +1919,105 @@ def _classify_row_amounts(line: str) -> list[tuple[Decimal, str]]:
         except InvalidOperation:
             continue
     return found
+
+
+def lost_decimal_integer(value: Decimal, line: str) -> bool:
+    """True when this integer is a one-decimal amount with the point dropped.
+
+    ``2417`` beside ``294.3``, and ``2068`` beside ``198.0``. A comma-grouped
+    thousands amount is not this pattern. ``198`` beside ``198.0`` is the same
+    number. Nothing is rewritten; the caller leaves the value absent.
+    """
+    if value != value.to_integral_value():
+        return False
+    magnitude = abs(value)
+    if not (Decimal("100") <= magnitude <= Decimal("9999")):
+        return False
+    want = _significant_digits(format(magnitude, "f"))
+    if len(want) > 3 and f"{want[:-3]},{want[-3:]}" in line.replace(" ", ""):
+        # ``1,064`` is a thousands group, not ``106.4`` with the point dropped.
+        return False
+    bare = False
+    for _digits, token in _citation_tokens(line):
+        if _significant_digits(token) != want:
+            continue
+        if "." in token or "," in token:
+            return False
+        bare = True
+    if not bare:
+        return False
+    for sibling, kind in _classify_row_amounts(line):
+        if kind != "decimal" or sibling <= 0:
+            continue
+        if max(magnitude, sibling) / min(magnitude, sibling) <= Decimal("5"):
+            continue
+        repaired = magnitude / Decimal("10")
+        if max(repaired, sibling) / min(repaired, sibling) <= Decimal("5"):
+            return True
+    return False
+
+
+def _money_tokens(line: str) -> list[str]:
+    """Year-column amounts, skipping a one- or two-digit note reference."""
+    found: list[str] = []
+    for _digits, token in _citation_tokens(repair_spaced_decimals(line)):
+        bare = token.strip("()[]{}")
+        if bare.startswith("-"):
+            bare = bare[1:]
+        digits = re.sub(r"\D", "", bare)
+        if "." in bare or "," in token or len(digits) >= 3:
+            found.append(token)
+    return found
+
+
+def second_reading_disagrees(
+    value: Decimal,
+    stored_line: str,
+    new_line: str,
+    *,
+    comparative: bool,
+) -> bool:
+    """True when a second read of the same row does not support the stored value.
+
+    A lost point (``1323`` against ``132.3``) and a same-length digit change
+    (``374.3`` against ``374.9``) disagree. A shorter second read does not,
+    and ``198`` against ``198.0`` is the same number. The caller decides the
+    new line is the same row.
+    """
+    stored = _money_tokens(stored_line)
+    new = _money_tokens(new_line)
+    if not stored or not new or len(stored) != len(new):
+        return False
+    want = _significant_digits(format(abs(value), "f"))
+    matches = [index for index, token in enumerate(stored) if _significant_digits(token) == want]
+    if len(matches) != 1:
+        return False
+    index = matches[0]
+    if comparative and index != len(stored) - 1:
+        return False
+    if not comparative and len(stored) >= 2 and index != len(stored) - 2:
+        return False
+    new_index = len(new) - (len(stored) - index)
+    if new_index < 0 or new_index >= len(new):
+        return False
+    token = new[new_index]
+    if value == value.to_integral_value() and "." in token:
+        head, _, frac = token.partition(".")
+        head_digits = re.sub(r"\D", "", head)
+        frac_digits = re.sub(r"\D", "", frac)
+        if frac_digits.strip("0") == "" and head_digits == want:
+            return False
+        if head_digits + frac_digits == want:
+            return True
+    sig = _significant_digits(token)
+    if sig == want:
+        if value == value.to_integral_value() and "." in token:
+            frac = re.sub(r"\D", "", token.split(".", 1)[1])
+            if frac.strip("0"):
+                return True
+        return False
+    # A different digit (``374.3`` against ``374.9``) is not decided here.
+    return False
 
 
 def row_decimal_conflict(value: Decimal, line: str) -> bool:
@@ -2117,10 +2225,9 @@ def apply_value_gate(filings: list[dict[str, Any]], *, financial: bool = False) 
         if not sign_ok:
             _null_value(row, GATE_SIGN, counts)
             continue
-        if (
-            row.get("scale") == "millions"
-            and name not in {"basic_eps", "weighted_average_basic_shares", "dividends_per_share"}
-            and row_decimal_conflict(value, _citation_line(row))
+        if name in _MONEY_FIELDS and (
+            (row.get("scale") == "millions" and row_decimal_conflict(value, _citation_line(row)))
+            or lost_decimal_integer(value, _citation_line(row))
         ):
             _null_value(row, GATE_ROW_DECIMAL, counts)
             continue
@@ -2585,7 +2692,7 @@ def _insert_decimal_from_boxes(token: str, boxes: list[_Char]) -> str:
     return f"{match.group(1)}{repaired}{match.group(3)}{match.group(4)}"
 
 
-def _ocr_statement_lines(image: Any) -> list[str]:
+def _ocr_statement_lines(image: Any, *, force_gap_repair: bool = False) -> list[str]:
     """Line text from Tesseract, with a decimal restored on £m amounts.
 
     Gap repair runs only when the page is denominated in millions. £'000
@@ -2624,7 +2731,7 @@ def _ocr_statement_lines(image: Any) -> list[str]:
         re.search(r"£\s?m\b|£\s?million|(?:us)?\$\s?m\b|€\s?m\b|\bmillion\b", blob)
     )
     thousands = bool(re.search(r"£\s?'?0{3}|\$\s?'?0{3}|€\s?'?0{3}", blob))
-    if not millions or thousands:
+    if thousands or not (millions or force_gap_repair):
         return lines
     repaired_lines: list[str] = []
     for _line, indexes in zip(lines, words_by_line, strict=True):
@@ -2657,7 +2764,106 @@ def _ocr_statement_lines(image: Any) -> list[str]:
     return repaired_lines
 
 
-def _ocr_image_lines(image: Any, *, header_only: bool = False) -> list[str]:
+def confirm_second_reading(
+    names: list[dict[str, Any]],
+    *,
+    cache_dir: Path,
+    keys: set[str],
+) -> dict[str, int]:
+    """Null a published value when a higher-zoom read of its own row disagrees.
+
+    Only names in ``keys`` are opened. A line that cannot be found again is
+    left as stored. The second read is not written in place of the value.
+    """
+    import pymupdf
+
+    counts: dict[str, int] = {}
+    page_lines: dict[tuple[str, int], list[str] | None] = {}
+
+    def lines_for(pdf: Path, page_number: int) -> list[str] | None:
+        key = (str(pdf), page_number)
+        if key in page_lines:
+            return page_lines[key]
+        if not pdf.is_file() or page_number < 1:
+            page_lines[key] = None
+            return None
+        doc = pymupdf.open(pdf)
+        try:
+            if page_number > doc.page_count:
+                page_lines[key] = None
+                return None
+            image = _page_image(doc, page_number - 1, zoom=3.0, prefer_embedded=False)
+        finally:
+            doc.close()
+            page_lines[key] = _ocr_image_lines(image, header_only=False, force_gap_repair=True)
+        return page_lines[key]
+
+    for name in names:
+        if str(name.get("key") or "") not in keys:
+            continue
+        if name.get("extraction_status") == "preserved":
+            continue
+        for filing in name.get("filings") or []:
+            end = str(filing.get("fiscal_year_end") or "")
+            pdf = cache_dir / f"{name['key']}_{end}.pdf"
+            blocks: list[tuple[bool, dict[str, Any]]] = []
+            for field_name, row in (filing.get("fields") or {}).items():
+                if field_name in _MONEY_FIELDS and isinstance(row, dict):
+                    blocks.append((False, row))
+            for field_name, row in ((filing.get("comparative") or {}).get("fields") or {}).items():
+                if field_name in _MONEY_FIELDS and isinstance(row, dict):
+                    blocks.append((True, row))
+            for comparative, row in blocks:
+                if row.get("value") in (None, ""):
+                    continue
+                citation = row.get("citation") or {}
+                stored_line = str(citation.get("line") or "")
+                page = citation.get("page")
+                if not stored_line or not isinstance(page, int):
+                    continue
+                label = re.findall(r"[A-Za-z']{3,}", re.split(r"\d", stored_line, maxsplit=1)[0])
+                label = [word.lower() for word in label]
+                if len(label) < 3:
+                    continue
+                fresh = lines_for(pdf, page)
+                if not fresh:
+                    continue
+                ranked: list[tuple[int, str]] = []
+                for line in fresh:
+                    if not _money_tokens(line):
+                        continue
+                    low = line.lower()
+                    score = sum(1 for word in label if word in low)
+                    if score:
+                        ranked.append((score, line))
+                ranked.sort(key=lambda item: item[0], reverse=True)
+                if not ranked or ranked[0][0] < min(3, len(label)):
+                    continue
+                if len(ranked) > 1 and ranked[1][0] == ranked[0][0]:
+                    continue
+                try:
+                    value = Decimal(str(row.get("value")))
+                except InvalidOperation:
+                    continue
+                if not second_reading_disagrees(
+                    value, stored_line, ranked[0][1], comparative=comparative
+                ):
+                    continue
+                logger.info(
+                    "second reading nulls %s %s %s stored %s line %s",
+                    name.get("key"),
+                    "comparative" if comparative else "primary",
+                    row.get("value"),
+                    stored_line[:80],
+                    ranked[0][1][:80],
+                )
+                _null_value(row, GATE_SECOND_READING, counts)
+    return counts
+
+
+def _ocr_image_lines(
+    image: Any, *, header_only: bool = False, force_gap_repair: bool = False
+) -> list[str]:
     """Tesseract's own line grouping. Full-page character boxes split these fax scans."""
     import pytesseract
 
@@ -2665,7 +2871,7 @@ def _ocr_image_lines(image: Any, *, header_only: bool = False) -> list[str]:
         work = image.crop((0, 0, image.width, max(40, int(image.height * 0.22))))
         text = pytesseract.image_to_string(work, config="--psm 6")
         return [line.strip() for line in text.splitlines() if line.strip()]
-    return _ocr_statement_lines(image)
+    return _ocr_statement_lines(image, force_gap_repair=force_gap_repair)
 
 
 def _cache_dir(cache: Path, transaction_id: str) -> Path:
