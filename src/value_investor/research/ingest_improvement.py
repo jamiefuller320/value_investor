@@ -421,6 +421,26 @@ def _is_uk_listed(*, market: str | None, ticker: str) -> bool:
     return _market_bucket(market, ticker) == "uk"
 
 
+def _intensive_refetch_before_source_ingest(
+    *,
+    intensive_gap_closure: bool,
+    require_outstanding_gaps: bool,
+    pin_tickers: list[str] | None,
+) -> bool:
+    """
+    Run primary body refetch before ``ingest_research_sources`` on intensive pins.
+
+    Gap-closure verification pins (e.g. ITV.L, igc-20261113-02) otherwise spend the
+    per-ticker budget on CH listing deepen and news before Investegate refetch runs,
+    yielding 0/0 refetch stats while indexed-without-body gaps remain.
+    """
+    if not pin_tickers:
+        return False
+    if intensive_gap_closure:
+        return True
+    return bool(require_outstanding_gaps)
+
+
 def _uk_statutory_interim_listing_missing(coverage: dict[str, int], *, ticker: str) -> bool:
     """UK issuer with bodied annual index but no interim row (e.g. fresh H1 RNS)."""
     if not ticker.upper().endswith(".L"):
@@ -775,6 +795,180 @@ def _invoke_with_transient_fetch_retry(
             time.sleep(delay)
     assert last_exc is not None
     raise last_exc
+
+
+def _run_improvement_primary_body_refetch(
+    *,
+    target: IngestImprovementTarget,
+    market: str | None,
+    sources_dir: Path,
+    target_max_bodies: int,
+    prune_failed_residual_fetches: bool,
+    inventory: dict[str, Any],
+    before: int,
+) -> dict[str, Any]:
+    """UK/Euro primary + mandatory IR refetch for one ingest-improvement ticker."""
+    ch_refetch: dict[str, Any] = {}
+    ch_annual_year_in_numbers: dict[str, Any] = {}
+    investegate_refetch: dict[str, Any] = {}
+    ticker_rns_refetch: dict[str, Any] = {}
+    indexed_refetch: dict[str, Any] = {}
+    residual_refetch: dict[str, Any] = {}
+    euro_primary: dict[str, Any] = {}
+    ir_refetch: dict[str, Any] = {}
+    ir_presentation_metrics: dict[str, Any] = {}
+    if _is_uk_listed(market=market, ticker=target.ticker):
+        primary_refetch = _invoke_with_transient_fetch_retry(
+            refetch_uk_primary_filing_bodies,
+            sources_dir / "filings",
+            ticker=target.ticker,
+            company_name=target.name,
+            max_bodies=target_max_bodies,
+        )
+        ch_refetch = dict(primary_refetch.get("companies_house") or {})
+        indexed_refetch = dict(primary_refetch.get("rns") or {})
+        investegate_refetch = dict(indexed_refetch.get("investegate") or {})
+        ticker_rns_refetch = dict(indexed_refetch.get("ticker_rns") or {})
+        residual_refetch = dict(primary_refetch.get("residual") or {})
+        if int(primary_refetch.get("fetched") or 0) > 0:
+            inventory = inspect_local_sources(sources_dir)
+            before = int(
+                (inventory.get("filings_summary") or {}).get("with_body")
+                or inventory.get("filings_indexed_bodies")
+                or before
+            )
+        from value_investor.research.filings import extract_ch_annual_year_in_numbers
+        from value_investor.research.ingest import attach_ch_annual_year_in_numbers
+
+        ch_annual_year_in_numbers = extract_ch_annual_year_in_numbers(
+            sources_dir / "filings",
+            target.ticker,
+            sources_dir=sources_dir,
+        )
+        financials_path = sources_dir / "financials_annual.json"
+        resolved_financials = resolve_json_path(financials_path)
+        if resolved_financials is not None:
+            try:
+                financials_payload = read_json(resolved_financials)
+                merged_financials = attach_ch_annual_year_in_numbers(
+                    financials_payload,
+                    filings_dir=sources_dir / "filings",
+                    ticker=target.ticker,
+                    sources_dir=sources_dir,
+                )
+                if merged_financials.get("ch_annual_year_in_numbers"):
+                    write_json(
+                        financials_path,
+                        merged_financials,
+                        compact=True,
+                        compress=False,
+                    )
+            except (OSError, ValueError, TypeError):
+                pass
+    else:
+        euro_primary = _invoke_with_transient_fetch_retry(
+            refetch_euro_filings_primary_bodies,
+            sources_dir / "filings",
+            ticker=target.ticker,
+            company_name=target.name,
+            max_bodies=target_max_bodies,
+            prune_unfetchable_after_attempt=prune_failed_residual_fetches,
+        )
+        residual_refetch = dict(euro_primary.get("residual") or {})
+        if int(euro_primary.get("fetched") or 0) > 0:
+            inventory = inspect_local_sources(sources_dir)
+            before = int(
+                (inventory.get("filings_summary") or {}).get("with_body")
+                or inventory.get("filings_indexed_bodies")
+                or before
+            )
+    ir_allowlist_rows = fetch_filings_ir_allowlist(target.ticker)
+    if ir_allowlist_rows:
+        if _is_uk_listed(market=market, ticker=target.ticker):
+            ir_refetch = _invoke_with_transient_fetch_retry(
+                refetch_ir_allowlist_filing_bodies,
+                sources_dir / "filings",
+                target.ticker,
+                company_name=target.name,
+                max_bodies=target_max_bodies,
+                sources_dir=sources_dir,
+            )
+        else:
+            ir_refetch = dict(euro_primary.get("ir_allowlist") or {})
+            if int(ir_refetch.get("fetched") or 0) <= 0:
+                ir_refetch = _invoke_with_transient_fetch_retry(
+                    refetch_ir_allowlist_filing_bodies,
+                    sources_dir / "filings",
+                    target.ticker,
+                    company_name=target.name,
+                    max_bodies=target_max_bodies,
+                    sources_dir=sources_dir,
+                )
+        ir_refetch["mandatory"] = True
+        ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
+        ir_presentation_metrics = dict(ir_refetch.get("ir_presentation_metrics") or {})
+        if not ir_presentation_metrics:
+            from value_investor.research.filings import extract_ir_presentation_metrics
+
+            full_metrics = extract_ir_presentation_metrics(
+                sources_dir / "filings",
+                target.ticker,
+                sources_dir=sources_dir,
+            )
+            ir_presentation_metrics = {
+                "bridge_count": full_metrics.get("bridge_count", 0),
+                "segment_split_count": full_metrics.get("segment_split_count", 0),
+                "lease_maturity_count": full_metrics.get("lease_maturity_count", 0),
+                "mandatory": full_metrics.get("mandatory", False),
+            }
+        from value_investor.research.filings import extract_filing_interim_financials
+        from value_investor.research.ingest import attach_filing_interim_financials
+
+        extract_filing_interim_financials(
+            sources_dir / "filings",
+            target.ticker,
+            sources_dir=sources_dir,
+        )
+        financials_path = sources_dir / "financials_annual.json"
+        resolved_financials = resolve_json_path(financials_path)
+        if resolved_financials is not None:
+            try:
+                financials_payload = read_json(resolved_financials)
+                merged_financials = attach_filing_interim_financials(
+                    financials_payload,
+                    filings_dir=sources_dir / "filings",
+                    ticker=target.ticker,
+                    sources_dir=sources_dir,
+                )
+                if merged_financials.get("filing_interim_financials"):
+                    write_json(
+                        financials_path,
+                        merged_financials,
+                        compact=True,
+                        compress=False,
+                    )
+            except (OSError, ValueError, TypeError):
+                pass
+        if int(ir_refetch.get("fetched") or 0) > 0:
+            inventory = inspect_local_sources(sources_dir)
+            before = int(
+                (inventory.get("filings_summary") or {}).get("with_body")
+                or inventory.get("filings_indexed_bodies")
+                or before
+            )
+    return {
+        "inventory": inventory,
+        "before": before,
+        "ch_refetch": ch_refetch,
+        "ch_annual_year_in_numbers": ch_annual_year_in_numbers,
+        "investegate_refetch": investegate_refetch,
+        "ticker_rns_refetch": ticker_rns_refetch,
+        "indexed_refetch": indexed_refetch,
+        "residual_refetch": residual_refetch,
+        "euro_primary": euro_primary,
+        "ir_refetch": ir_refetch,
+        "ir_presentation_metrics": ir_presentation_metrics,
+    }
 
 
 def _ingest_pass_should_cutoff(
@@ -1184,17 +1378,13 @@ def _execute_ingest_improvement_pass(
                 company_name=target.name,
                 ticker=target.ticker,
             )
-            source_meta = ingest_research_sources(
-                ticker=target.ticker,
-                company_name=target.name,
-                screening_snapshot=report.to_dict(),
-                sources_dir=sources_dir,
-                since=None,
-                market=market,
-                deepen_history=True,
+            ingest_suggestions = suggestions_by_ticker.get(target.ticker.upper(), [])
+            refetch_before_sources = _intensive_refetch_before_source_ingest(
+                intensive_gap_closure=intensive_gap_closure,
+                require_outstanding_gaps=require_outstanding_gaps,
+                pin_tickers=pin_tickers,
             )
             inventory = inspect_local_sources(sources_dir)
-            ingest_suggestions = suggestions_by_ticker.get(target.ticker.upper(), [])
             before = int(
                 (inventory.get("filings_summary") or {}).get("with_body")
                 or inventory.get("filings_indexed_bodies")
@@ -1207,71 +1397,74 @@ def _execute_ingest_improvement_pass(
             indexed_refetch: dict[str, Any] = {}
             residual_refetch: dict[str, Any] = {}
             euro_primary: dict[str, Any] = {}
-            if _is_uk_listed(market=market, ticker=target.ticker):
-                primary_refetch = _invoke_with_transient_fetch_retry(
-                    refetch_uk_primary_filing_bodies,
-                    sources_dir / "filings",
-                    ticker=target.ticker,
-                    company_name=target.name,
-                    max_bodies=target_max_bodies,
-                )
-                ch_refetch = dict(primary_refetch.get("companies_house") or {})
-                indexed_refetch = dict(primary_refetch.get("rns") or {})
-                investegate_refetch = dict(indexed_refetch.get("investegate") or {})
-                ticker_rns_refetch = dict(indexed_refetch.get("ticker_rns") or {})
-                residual_refetch = dict(primary_refetch.get("residual") or {})
-                if int(primary_refetch.get("fetched") or 0) > 0:
-                    inventory = inspect_local_sources(sources_dir)
-                    before = int(
-                        (inventory.get("filings_summary") or {}).get("with_body")
-                        or inventory.get("filings_indexed_bodies")
-                        or before
-                    )
-                from value_investor.research.filings import extract_ch_annual_year_in_numbers
-                from value_investor.research.ingest import attach_ch_annual_year_in_numbers
+            ir_refetch: dict[str, Any] = {}
+            ir_presentation_metrics: dict[str, Any] = {}
+            body_refetch_completed = False
 
-                ch_annual_year_in_numbers = extract_ch_annual_year_in_numbers(
-                    sources_dir / "filings",
-                    target.ticker,
-                    sources_dir=sources_dir,
+            def _apply_body_refetch_bundle(bundle: dict[str, Any]) -> None:
+                nonlocal inventory, before, ch_refetch, ch_annual_year_in_numbers
+                nonlocal investegate_refetch, ticker_rns_refetch, indexed_refetch
+                nonlocal residual_refetch, euro_primary, ir_refetch, ir_presentation_metrics
+                nonlocal body_refetch_completed
+                inventory = dict(bundle["inventory"])
+                before = int(bundle["before"])
+                ch_refetch = dict(bundle["ch_refetch"])
+                ch_annual_year_in_numbers = dict(bundle["ch_annual_year_in_numbers"])
+                investegate_refetch = dict(bundle["investegate_refetch"])
+                ticker_rns_refetch = dict(bundle["ticker_rns_refetch"])
+                indexed_refetch = dict(bundle["indexed_refetch"])
+                residual_refetch = dict(bundle["residual_refetch"])
+                euro_primary = dict(bundle["euro_primary"])
+                ir_refetch = dict(bundle["ir_refetch"])
+                ir_presentation_metrics = dict(bundle["ir_presentation_metrics"])
+                body_refetch_completed = True
+
+            refetch_kwargs = {
+                "target": target,
+                "market": market,
+                "sources_dir": sources_dir,
+                "target_max_bodies": target_max_bodies,
+                "prune_failed_residual_fetches": prune_failed_residual_fetches,
+                "inventory": inventory,
+                "before": before,
+            }
+
+            if refetch_before_sources:
+                _apply_body_refetch_bundle(_run_improvement_primary_body_refetch(**refetch_kwargs))
+
+            source_meta = ingest_research_sources(
+                ticker=target.ticker,
+                company_name=target.name,
+                screening_snapshot=report.to_dict(),
+                sources_dir=sources_dir,
+                since=None,
+                market=market,
+                deepen_history=True,
+            )
+            if not body_refetch_completed:
+                refetch_kwargs["inventory"] = inspect_local_sources(sources_dir)
+                refetch_kwargs["before"] = int(
+                    (refetch_kwargs["inventory"].get("filings_summary") or {}).get("with_body")
+                    or refetch_kwargs["inventory"].get("filings_indexed_bodies")
+                    or before
                 )
-                financials_path = sources_dir / "financials_annual.json"
-                resolved_financials = resolve_json_path(financials_path)
-                if resolved_financials is not None:
-                    try:
-                        financials_payload = read_json(resolved_financials)
-                        merged_financials = attach_ch_annual_year_in_numbers(
-                            financials_payload,
-                            filings_dir=sources_dir / "filings",
-                            ticker=target.ticker,
-                            sources_dir=sources_dir,
-                        )
-                        if merged_financials.get("ch_annual_year_in_numbers"):
-                            write_json(
-                                financials_path,
-                                merged_financials,
-                                compact=True,
-                                compress=False,
-                            )
-                    except (OSError, ValueError, TypeError):
-                        pass
-            else:
-                euro_primary = _invoke_with_transient_fetch_retry(
-                    refetch_euro_filings_primary_bodies,
-                    sources_dir / "filings",
-                    ticker=target.ticker,
-                    company_name=target.name,
-                    max_bodies=target_max_bodies,
-                    prune_unfetchable_after_attempt=prune_failed_residual_fetches,
+                _apply_body_refetch_bundle(
+                    _run_improvement_primary_body_refetch(**refetch_kwargs),
                 )
-                residual_refetch = dict(euro_primary.get("residual") or {})
-                if int(euro_primary.get("fetched") or 0) > 0:
-                    inventory = inspect_local_sources(sources_dir)
-                    before = int(
-                        (inventory.get("filings_summary") or {}).get("with_body")
-                        or inventory.get("filings_indexed_bodies")
-                        or before
-                    )
+            elif not refetch_before_sources:
+                inventory = inspect_local_sources(sources_dir)
+                before = int(
+                    (inventory.get("filings_summary") or {}).get("with_body")
+                    or inventory.get("filings_indexed_bodies")
+                    or before
+                )
+            if body_refetch_completed:
+                inventory = inspect_local_sources(sources_dir)
+                before = int(
+                    (inventory.get("filings_summary") or {}).get("with_body")
+                    or inventory.get("filings_indexed_bodies")
+                    or before
+                )
             planned = _planned_sources_for_ticker(
                 ticker=target.ticker,
                 market=market,
@@ -1279,82 +1472,6 @@ def _execute_ingest_improvement_pass(
                 ingest_suggestions=ingest_suggestions,
                 filings_with_body=before,
             )
-            ir_refetch: dict[str, Any] = {}
-            ir_presentation_metrics: dict[str, Any] = {}
-            ir_allowlist_rows = fetch_filings_ir_allowlist(target.ticker)
-            if ir_allowlist_rows:
-                if _is_uk_listed(market=market, ticker=target.ticker):
-                    ir_refetch = _invoke_with_transient_fetch_retry(
-                        refetch_ir_allowlist_filing_bodies,
-                        sources_dir / "filings",
-                        target.ticker,
-                        company_name=target.name,
-                        max_bodies=target_max_bodies,
-                        sources_dir=sources_dir,
-                    )
-                else:
-                    ir_refetch = dict(euro_primary.get("ir_allowlist") or {})
-                    if int(ir_refetch.get("fetched") or 0) <= 0:
-                        ir_refetch = _invoke_with_transient_fetch_retry(
-                            refetch_ir_allowlist_filing_bodies,
-                            sources_dir / "filings",
-                            target.ticker,
-                            company_name=target.name,
-                            max_bodies=target_max_bodies,
-                            sources_dir=sources_dir,
-                        )
-                ir_refetch["mandatory"] = True
-                ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
-                ir_presentation_metrics = dict(ir_refetch.get("ir_presentation_metrics") or {})
-                if not ir_presentation_metrics:
-                    from value_investor.research.filings import extract_ir_presentation_metrics
-
-                    full_metrics = extract_ir_presentation_metrics(
-                        sources_dir / "filings",
-                        target.ticker,
-                        sources_dir=sources_dir,
-                    )
-                    ir_presentation_metrics = {
-                        "bridge_count": full_metrics.get("bridge_count", 0),
-                        "segment_split_count": full_metrics.get("segment_split_count", 0),
-                        "lease_maturity_count": full_metrics.get("lease_maturity_count", 0),
-                        "mandatory": full_metrics.get("mandatory", False),
-                    }
-                from value_investor.research.filings import extract_filing_interim_financials
-                from value_investor.research.ingest import attach_filing_interim_financials
-
-                extract_filing_interim_financials(
-                    sources_dir / "filings",
-                    target.ticker,
-                    sources_dir=sources_dir,
-                )
-                financials_path = sources_dir / "financials_annual.json"
-                resolved_financials = resolve_json_path(financials_path)
-                if resolved_financials is not None:
-                    try:
-                        financials_payload = read_json(resolved_financials)
-                        merged_financials = attach_filing_interim_financials(
-                            financials_payload,
-                            filings_dir=sources_dir / "filings",
-                            ticker=target.ticker,
-                            sources_dir=sources_dir,
-                        )
-                        if merged_financials.get("filing_interim_financials"):
-                            write_json(
-                                financials_path,
-                                merged_financials,
-                                compact=True,
-                                compress=False,
-                            )
-                    except (OSError, ValueError, TypeError):
-                        pass
-                if int(ir_refetch.get("fetched") or 0) > 0:
-                    inventory = inspect_local_sources(sources_dir)
-                    before = int(
-                        (inventory.get("filings_summary") or {}).get("with_body")
-                        or inventory.get("filings_indexed_bodies")
-                        or before
-                    )
             screen_run_manifest = attach_screen_run_manifest(
                 sources_dir,
                 target.ticker,

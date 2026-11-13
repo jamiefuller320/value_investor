@@ -3068,6 +3068,66 @@ def test_refetch_investegate_prioritises_itv_statutory_interim_before_sky_sale(
     assert by_id["10f52d865099383d"]["has_body"] is False
 
 
+def test_refetch_investegate_itv_q3_2026_trading_update(tmp_path: Path, monkeypatch):
+    """eng-20261113-02: igc-20261113-02 leftover — Nov 2026 Q3 TU Investegate slug with trailing dash."""
+    from value_investor.research.filings import refetch_investegate_filing_bodies
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    q3_url = (
+        "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-q3-trading-update-/9868646"
+    )
+    q3_body = (
+        "Disclaimer* ITV PLC 11 November 2026 ITV plc Q3 Trading Update for the nine months "
+        "to 30 September 2026 Total advertising revenue grew 2% with ITV Studios revenue up 4%. "
+    ) + ("x" * 400)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "7eca999143e33602",
+                        "source": "investegate_direct",
+                        "headline": "ITV plc Q3 Trading Update",
+                        "published_at": "2026-11-11T00:00:00+00:00",
+                        "url": q3_url,
+                        "period": "trading_update",
+                        "has_body": False,
+                        "priority": 80,
+                    }
+                ],
+                "summary": {"total": 1, "with_body": 0, "trading_update": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.filter_misattributed_filings",
+        lambda rows, **kwargs: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda url: (q3_body, None) if url == q3_url else (None, None),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=2,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = saved["filings"][0]
+    assert row["has_body"] is True
+    assert "Q3 Trading Update" in (bodies_dir / "7eca999143e33602.txt").read_text(encoding="utf-8")
+
+
 def test_refetch_ir_allowlist_itv_statutory_report_before_presentation(tmp_path: Path, monkeypatch):
     """eng-20260918-12: IR refetch prefers H1 statutory report over results deck when capped."""
     allowlist_path = tmp_path / "empty_ir.json"

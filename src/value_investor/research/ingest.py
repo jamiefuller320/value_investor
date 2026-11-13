@@ -1577,6 +1577,12 @@ def ingest_research_sources(
                 needs_body_refetch = (
                     int(summary.get("with_body") or 0) == 0 and int(summary.get("total") or 0) > 0
                 ) or int(listing_refresh.get("added") or 0) > 0
+                if deepen_history and int(summary.get("total") or 0) > int(
+                    summary.get("with_body") or 0
+                ):
+                    # eng-20261113-02: ITV.L had bodied packs but an indexed Q3 TU gap;
+                    # UK primary refetch must run during deepen, not only on zero-body packs.
+                    needs_body_refetch = True
                 if uk_statutory_interim_missing:
                     needs_body_refetch = True
                 if needs_body_refetch:
