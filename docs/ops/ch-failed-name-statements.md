@@ -371,4 +371,41 @@ PYTHONPATH=$PWD/src python3 -m value_investor.ch_failed_name_statements \
   --cache-dir /tmp/ch-pdfs
 ```
 
+Share counts for UK replay market-cap fallback (when EODHD has no `outstandingShares`) are filled without re-reading other statement fields:
+
+```bash
+PYTHONPATH=$PWD/src python3 -m value_investor.ch_failed_name_statements \
+  --reextract-shares --allow-ocr \
+  --out docs/data/ch_failed_name_statements.json \
+  --cache-dir /tmp/ch-pdfs
+```
+
+The run skips `not_applicable` and `unresolved` names. It processes `complete`, `preserved`, and `needs_ocr` when `--allow-ocr` is set. Order is failures, then applicable listing-moves, then takeovers by leaving date. The store is rewritten after each name.
+
 `statements_every_year` is true only when every expected year has a basic EPS. A missing year stays missing. The committed store is the cursor after the four-hour window, not a finished coverage rate. Resume with the command above; it skips names that are already complete.
+
+## Shares in issue
+
+Field `shares_in_issue` on each filing (`fields` and comparative `fields` where printed): the number of ordinary shares allotted, called up and fully paid at the balance-sheet date, from the share-capital note or iXBRL tags such as `NumberSharesIssuedFullyPaid` / `NumberOfSharesIssued`. Stored like other counts: `value` is a plain number with `scale` (`units`, `thousands`, or `millions`), `citation` carries transaction id, page and line (or tag name), and `basis` is `in_issue` or `in_issue_excluding_treasury` when the note states treasury shares separately. Preference and deferred share classes are skipped. Absent stays absent with `absent_reason`; nothing is guessed.
+
+The same pass re-tries `weighted_average_basic_shares` on the EPS note when it was absent, without changing other stored fields. The seven hand-verified names may gain these fields; their other fields are not re-extracted.
+
+### Shares value gate
+
+`apply_value_gate` nulls `shares_in_issue` when:
+
+| Check | What is nulled |
+|-------|----------------|
+| `digit_count` | Same rule as other gated fields: the citation line has no token with the same digits. |
+| `shares_jump` | Adjacent years differ by more than 3× after scale, and the citation does not mention a placing, rights issue, consolidation, share split, scheme of arrangement, bonus issue or capital reduction. |
+| `shares_vs_weighted_average` | For the same year, `weighted_average_basic_shares` exists and the absolute counts differ by more than 2× after scale. |
+
+`values_nulled.by_check` records these like the existing gate checks. Preserved hand-verified filings are not gated.
+
+### Share coverage
+
+Store summary `share_coverage`: `names_with_any_shares_in_issue`, `filings_with_shares_in_issue`, `names_every_expected_year` (every year in `leaver_coverage.expected_years`), and the same counts by `reason_class` (`failure`, `other`, `takeover`). Per name, `leaver_coverage.years_with_shares_in_issue` lists fiscal years with a non-null value. Ops-monitor info summary includes the store-level share coverage when present.
+
+### Hand check of shares in issue
+
+<!-- Filled after extraction run with seed random.Random(20261114), 20 draws. -->

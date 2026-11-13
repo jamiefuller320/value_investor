@@ -91,6 +91,14 @@ _FIELD_TAGS: dict[str, tuple[str, ...]] = {
         "netcashflowsfromoperatingactivities",
     ),
     "dividends_per_share": ("dividendspershare",),
+    "shares_in_issue": (
+        "numbersharesallottedcalledupandfullypaid",
+        "numberofsharesissuedfullypaid",
+        "numbersharesissuedfullypaid",
+        "numberofsharesissued",
+        "numberordinarysharesinissue",
+        "numberofordinarysharesinissue",
+    ),
 }
 _CAPEX_TAGS = (
     "purchaseofpropertyplantandequipment",
@@ -257,7 +265,7 @@ def _field_from_fact(fact: dict[str, Any], *, field: str, transaction_id: str) -
     if field == "weighted_average_basic_shares":
         scale = fact.get("scale")
         currency = None
-    return {
+    row: dict[str, Any] = {
         "value": fact["value"],
         "scale": scale,
         "currency": currency,
@@ -271,6 +279,11 @@ def _field_from_fact(fact: dict[str, Any], *, field: str, transaction_id: str) -
             "method": "ixbrl",
         },
     }
+    if field == "shares_in_issue":
+        row["basis"] = "in_issue"
+        row["scale"] = fact.get("scale") or "units"
+        row["currency"] = None
+    return row
 
 
 def parse_ixbrl_html(
@@ -751,6 +764,9 @@ def assemble_store(
     payload = build_store(rows, eodhd_payload=eodhd_payload)
     payload["leaver_list"] = "docs/data/ftse350_leavers_2013_2025.json"
     payload["leaver_coverage"] = summarise_leaver_coverage(rows)
+    from value_investor.ch_failed_name_statements import summarise_share_coverage
+
+    payload["share_coverage"] = summarise_share_coverage(rows)
     pending = iter_pending(records, done)
     payload["leaver_cursor"] = {
         "ocr_workers": LEAVER_OCR_WORKERS,
