@@ -1862,6 +1862,15 @@ GATE_EPS_EARNINGS = "eps_versus_earnings"
 GATE_OPERATING_PROFIT = "operating_profit_above_revenue"
 GATE_SCALE_JUMP = "scale_jump"
 GATE_ROW_DECIMAL = "row_decimal"
+_GATE_REASONS = {
+    GATE_DIGIT_COUNT,
+    GATE_SIGN,
+    GATE_EPS_DECIMAL,
+    GATE_EPS_EARNINGS,
+    GATE_OPERATING_PROFIT,
+    GATE_SCALE_JUMP,
+    GATE_ROW_DECIMAL,
+}
 _ROW_AMOUNT_RE = re.compile(r"[(\[{]?-?\d[\d,]*(?:\.\d+)?[)\]}]?")
 
 
@@ -2222,7 +2231,28 @@ def apply_value_gate(filings: list[dict[str, Any]], *, financial: bool = False) 
                 continue
             _null_value(row, GATE_SCALE_JUMP, counts)
 
-    return {"total": sum(counts.values()), "by_check": counts}
+    # Count values that are absent because a gate check failed, including ones
+    # nulled on an earlier pass and left absent.
+    standing: dict[str, int] = {}
+    for filing in filings:
+        blocks = [filing.get("fields") or {}]
+        comp = filing.get("comparative") or {}
+        if comp.get("fields"):
+            blocks.append(comp["fields"])
+        for fields in blocks:
+            if not isinstance(fields, dict):
+                continue
+            for name, row in fields.items():
+                if name not in _GATED_FIELDS or not isinstance(row, dict):
+                    continue
+                reason = row.get("absent_reason")
+                if (
+                    row.get("value") in (None, "")
+                    and row.get("nulled_from") not in (None, "")
+                    and reason in _GATE_REASONS
+                ):
+                    standing[reason] = standing.get(reason, 0) + 1
+    return {"total": sum(standing.values()), "by_check": standing}
 
 
 def merge_ocr_readings(primary: dict[str, Any], secondary: dict[str, Any]) -> dict[str, Any]:
