@@ -1359,6 +1359,97 @@ def test_intensive_pin_refetches_before_slow_source_ingest(
     assert summary.results[0]["investegate_refetch"]["fetched"] == 1
 
 
+@patch("value_investor.research.ingest_improvement.fetch_filings_ir_allowlist", return_value=[])
+@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
+@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
+@patch("value_investor.research.ingest_improvement.ingest_research_sources")
+@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+@patch("value_investor.research.ingest_improvement.refetch_uk_primary_filing_bodies")
+def test_intensive_pin_keeps_refetch_stats_when_source_ingest_raises(
+    mock_primary_refetch,
+    mock_bootstrap,
+    mock_sanitize,
+    mock_ingest_sources,
+    mock_alternate,
+    mock_deepen,
+    mock_ir_allowlist,
+    tmp_path: Path,
+):
+    """eng-20261113-03: igc-20261113-02 chain 2 — Yahoo failure must not yield 0/0 refetch stats."""
+    output_dir = tmp_path / "output"
+    sources = output_dir / "research" / "ITV.L" / "sources" / "filings"
+    sources.mkdir(parents=True)
+    (sources / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 2, "with_body": 1, "trading_update": 1},
+                "filings": [
+                    {
+                        "id": "7eca999143e33602",
+                        "source": "investegate_direct",
+                        "headline": "ITV plc Q3 Trading Update",
+                        "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-q3-trading-update-/9868646",
+                        "period": "trading_update",
+                        "has_body": False,
+                    },
+                    {
+                        "id": "29bdb56d3cedb539",
+                        "source": "investegate_direct",
+                        "headline": "ITV plc Full Year Results 2025",
+                        "has_body": True,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    mock_ingest_sources.side_effect = RuntimeError("*** YAHOO! FINANCE IS CURRENTLY DOWN! ***")
+    mock_alternate.return_value = {"fetched": 0}
+    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
+    mock_primary_refetch.return_value = {
+        "companies_house": {"attempted": 0, "fetched": 0},
+        "rns": {
+            "investegate": {"attempted": 1, "fetched": 1, "with_body_after": 2},
+            "ticker_rns": {"attempted": 0, "fetched": 0, "with_body_after": 2},
+            "attempted": 1,
+            "fetched": 1,
+            "with_body_before": 1,
+            "with_body_after": 2,
+        },
+        "residual": {"attempted": 0, "fetched": 0},
+        "attempted": 1,
+        "fetched": 1,
+        "with_body_before": 1,
+        "with_body_after": 2,
+    }
+
+    summary = run_ingest_improvement_pass(
+        reports=[_report("ITV.L", "ITV plc")],
+        output_dir=output_dir,
+        market="ftse350",
+        max_targets=1,
+        suggestions_path=tmp_path / "missing.json",
+        require_outstanding_gaps=True,
+        pin_tickers=["ITV.L"],
+        intensive_gap_closure=True,
+        discovery_scan=False,
+    )
+
+    mock_primary_refetch.assert_called_once()
+    assert summary.results
+    assert summary.results[0]["ticker"] == "ITV.L"
+    assert summary.results[0]["investegate_refetch"]["attempted"] == 1
+    assert summary.results[0]["investegate_refetch"]["fetched"] == 1
+    assert any("YAHOO" in err for err in summary.errors)
+
+    from value_investor.ingest_gap_closure import _refetch_stats_from_improvement_row
+
+    stats = _refetch_stats_from_improvement_row(summary.results[0])
+    assert stats["attempted"] >= 1
+    assert stats["fetched"] >= 1
+
+
 @patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
 @patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
 @patch("value_investor.research.ingest_improvement.ingest_research_sources")
