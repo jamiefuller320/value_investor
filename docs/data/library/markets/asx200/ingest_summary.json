@@ -1,58 +1,58 @@
 {
-  "run_at": "2026-11-12T22:33:30.715396+00:00",
+  "run_at": "2026-11-13T13:35:54.638544+00:00",
   "market_id": "asx200",
   "targets": [
-    "IMD.AX"
+    "CYL.AX"
   ],
   "target_details": [
     {
-      "ticker": "IMD.AX",
-      "priority_score": 14.8028,
-      "filings_total": 12,
-      "filings_with_body": 11,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
+      "ticker": "CYL.AX",
+      "priority_score": 16.4435,
+      "filings_total": 20,
+      "filings_with_body": 9,
+      "indexed_without_body": 0,
+      "reason": "thin_bodies"
     }
   ],
   "results": [
     {
-      "ticker": "IMD.AX",
-      "reason": "indexed_without_body",
+      "ticker": "CYL.AX",
+      "reason": "thin_bodies",
       "before": {
-        "filings_total": 12,
-        "filings_with_body": 11,
-        "indexed_without_body": 1
+        "filings_total": 20,
+        "filings_with_body": 9,
+        "indexed_without_body": 0
       },
       "after": {
-        "filings_total": 12,
-        "filings_with_body": 11,
-        "indexed_without_body": 1
+        "filings_total": 20,
+        "filings_with_body": 20,
+        "indexed_without_body": 0
       },
-      "improved": false,
+      "improved": true,
       "regime": "asx_announcements",
       "filings_summary": {
-        "total": 12,
-        "annual": 2,
-        "interim": 2,
+        "total": 20,
+        "annual": 8,
+        "interim": 0,
         "trading_update": 0,
-        "other": 8,
-        "with_body": 11,
+        "other": 12,
+        "with_body": 19,
         "period_coverage": {
           "annual": {
-            "total": 2,
-            "with_body": 2
+            "total": 8,
+            "with_body": 8
           },
           "interim": {
-            "total": 2,
-            "with_body": 1
+            "total": 0,
+            "with_body": 0
           },
           "trading_update": {
             "total": 0,
             "with_body": 0
           },
           "other": {
-            "total": 8,
-            "with_body": 8
+            "total": 12,
+            "with_body": 11
           }
         }
       },
@@ -62,15 +62,15 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 11,
-        "with_body_after": 11,
+        "with_body_before": 20,
+        "with_body_after": 20,
         "investegate_fallbacks": 0,
-        "skipped_unfetchable": 1,
+        "skipped_unfetchable": 0,
         "deadline_hit": false,
         "merge": {
           "added": 0,
-          "total_allowlist": 2,
-          "note": "merge_ir_allowlist_filings"
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
         },
         "shared_body_propagated": 0,
         "ir_metadata_reconciled": 0,
@@ -78,20 +78,22 @@
       }
     }
   ],
-  "improved": [],
+  "improved": [
+    "CYL.AX"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-12T22:31:50.995366+00:00",
+    "snapshot_at": "2026-11-13T13:34:46.991452+00:00",
     "market_id": "asx200",
-    "buy_tier_count": 32,
+    "buy_tier_count": 33,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 2,
     "bodies_min": 8,
-    "bodies_median": 28.0,
+    "bodies_median": 28,
     "bodies_max": 169,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -107,28 +109,26 @@
       "SMR.AX": 1
     },
     "parked_tickers": [
-      "ALK.AX",
+      "IMD.AX",
       "SMR.AX"
     ],
     "parked_count": 2,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
-      "IMD.AX"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-12T22:32:07.917665+00:00",
+    "snapshot_at": "2026-11-13T13:35:47.330050+00:00",
     "market_id": "asx200",
-    "buy_tier_count": 32,
+    "buy_tier_count": 33,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 2,
     "bodies_min": 8,
-    "bodies_median": 28.0,
+    "bodies_median": 28,
     "bodies_max": 169,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -160,46 +160,37 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 33,
+    "hits": 27,
+    "new_rows_total": 13,
+    "curiosity_total": 34,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "IMD.AX",
+      "SMR.AX"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "advanced": true,
-    "parallel_stream": 1,
-    "from_market": "asx200",
-    "to_market": "dax",
-    "stream_markets_after": [
-      "dax"
-    ],
-    "parity_event": {
-      "recorded": false,
-      "reason": "ingest_exhausted_leftover_gaps",
-      "market_id": "asx200",
-      "ingest_exhausted": true,
-      "exhausted_maintenance_recorded": true,
-      "parked_tickers": [
-        "IMD.AX",
-        "SMR.AX"
-      ],
-      "learning_admitted_changed": false,
-      "learning_admitted": true
-    },
-    "screen_refresh": {
-      "refreshed": true,
-      "market_id": "dax",
-      "forced": true,
-      "prior_screen_at": "2026-11-12T06:53:31.052063+00:00",
-      "prior_age_days": 0,
-      "run_at": "2026-11-12T22:33:23.948065+00:00",
-      "shortlist_count": 11,
-      "ticker_count": 40
-    },
-    "at": "2026-11-12T22:32:21.075162+00:00",
-    "ingest_parity_recorded": false
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "asx200"
   },
   "critical_path": {
     "market_id": "asx200",
-    "assessed_at": "2026-11-12T22:31:53.781581+00:00",
+    "assessed_at": "2026-11-13T13:34:50.324179+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -236,9 +227,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 11.34961612699999,
-  "budget_seconds": 87.5,
-  "leftover_seconds": 76.15038387300001,
+  "used_seconds": 53.629417965000016,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3546.370582035,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -246,9 +237,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "asx200",
-    "updated_at": "2026-11-12T22:32:07.922533+00:00",
+    "updated_at": "2026-11-13T13:35:47.335501+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 4,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -279,7 +270,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "IMD.AX",
       "SMR.AX"
@@ -322,8 +313,8 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 65,
-    "candidate_count": 57,
+    "tried_count": 67,
+    "candidate_count": 56,
     "skipped_resolved_tickers": [
       "ACKB.BR",
       "APAM.AS",
@@ -332,18 +323,18 @@
       "EVN.VI",
       "UCB.BR",
       "WIE.VI",
+      "ESSITY-B.ST",
       "LMT",
       "APTV",
-      "BXP",
       "DFS.L",
       "MER.L",
       "TPT.L",
       "FOXT.L",
       "ULTP.L",
       "APTD.L",
-      "GIB-A.TO",
       "SU.TO",
       "NTR.TO",
+      "GIB-A.TO",
       "MFC.TO",
       "BAS.DE",
       "PDD",
