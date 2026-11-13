@@ -26839,8 +26839,117 @@
         "per_ticker": []
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261113-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "BNR.DE",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "BNR.DE"
+        ],
+        "market_id": "dax",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261113-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-11-13T20:51:50.307059+00:00",
+      "completed_at": "2026-11-13T20:53:34.595416+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "BNR.DE"
+        ],
+        "results": [
+          {
+            "ticker": "BNR.DE",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 27,
+              "filings_with_body": 25,
+              "indexed_without_body": 2
+            },
+            "after": {
+              "filings_total": 27,
+              "filings_with_body": 25,
+              "indexed_without_body": 2
+            },
+            "improved": false,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 27,
+              "annual": 9,
+              "interim": 14,
+              "trading_update": 0,
+              "other": 4,
+              "with_body": 25,
+              "period_coverage": {
+                "annual": {
+                  "total": 9,
+                  "with_body": 9
+                },
+                "interim": {
+                  "total": 14,
+                  "with_body": 12
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 4,
+                  "with_body": 4
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 25,
+              "with_body_after": 25,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 2,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "BNR.DE",
+            "with_body_before": 25,
+            "with_body_after": 25,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-11-13T07:49:01.017701+00:00",
+  "updated_at": "2026-11-13T20:53:34.595434+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
