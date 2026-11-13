@@ -816,6 +816,39 @@ def test_false_decimal_and_lost_intangible_decimal_are_left_absent() -> None:
     assert counts["by_check"]["row_decimal"] == 2
 
 
+def test_trailing_zero_in_the_citation_is_the_same_number() -> None:
+    from decimal import Decimal
+
+    from value_investor.ch_failed_name_statements import citation_supports
+
+    # Spirit 2015. The stored 124 is the printed 124.0, not a dropped digit.
+    assert citation_supports(
+        Decimal("124"), "Net cash generated from operating activities 124.0 165.2"
+    )[0]
+    assert citation_supports(Decimal("10.6"), "Basic 5 10.60 15.59")[0]
+    # Essar 2014 and the sales-tax line stay rejected.
+    assert not citation_supports(Decimal("-10.1"), "Owners of the Company (310.1) (162.8)")[0]
+    assert not citation_supports(Decimal("20903"), "Revenue 20,9030 10,0056")[0]
+    restored = [
+        {
+            "fiscal_year": 2015,
+            "fields": {
+                "net_cash_from_operating_activities": {
+                    "value": None,
+                    "nulled_from": "124",
+                    "absent_reason": "digit_count",
+                    "scale": "millions",
+                    "citation": {
+                        "line": "Net cash generated from operating activities 124.0 165.2"
+                    },
+                }
+            },
+        }
+    ]
+    apply_value_gate(restored, financial=False)
+    assert restored[0]["fields"]["net_cash_from_operating_activities"]["value"] == "124"
+
+
 def test_value_gate_nulls_the_four_bad_citations_and_keeps_a_match() -> None:
     def field(value: str, line: str, **extra: object) -> dict:
         row = {

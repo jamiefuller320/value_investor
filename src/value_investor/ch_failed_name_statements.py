@@ -1966,10 +1966,28 @@ def _token_is_negative(token: str) -> bool:
     return token.startswith("(") or token.startswith("-") or token.endswith(")")
 
 
+def _significant_digits(token: str) -> str:
+    """Digits with a trailing fractional zero removed. ``124.0`` and ``124`` agree."""
+    body = token.strip().replace(",", "")
+    body = body.strip("()[]{}")
+    if body.startswith("-"):
+        body = body[1:]
+    if re.fullmatch(r"\d+\s\d", body):
+        # ``1,764 1`` is ``1764.1`` once the thousands comma has been removed.
+        body = body.replace(" ", ".")
+    if "." in body:
+        head, _, frac = body.partition(".")
+        if head.isdigit() and frac.isdigit():
+            return head + frac.rstrip("0")
+    return re.sub(r"\D", "", body)
+
+
 def citation_supports(value: Decimal, line: str) -> tuple[bool, bool, bool]:
     """Return (digits match a token, sign matches, a matching token has a decimal)."""
-    want = re.sub(r"\D", "", format(abs(value), "f"))
-    matches = [token for digits, token in _citation_tokens(line) if digits == want]
+    want = _significant_digits(format(abs(value), "f"))
+    matches = [
+        token for digits, token in _citation_tokens(line) if _significant_digits(token) == want
+    ]
     if not matches:
         return False, False, False
     if value < 0:
@@ -1980,6 +1998,25 @@ def citation_supports(value: Decimal, line: str) -> tuple[bool, bool, bool]:
         sign_ok = True
     has_decimal = any("." in token for token in matches)
     return True, sign_ok, has_decimal
+
+
+def _restore_if_citation_supports(row: dict[str, Any]) -> None:
+    """Put back a value an earlier digit check rejected only because ``.0`` was trimmed."""
+    if row.get("value") not in (None, "") or row.get("absent_reason") != GATE_DIGIT_COUNT:
+        return
+    prior = row.get("nulled_from")
+    if prior in (None, ""):
+        return
+    try:
+        value = Decimal(str(prior))
+    except InvalidOperation:
+        return
+    digits_ok, sign_ok, _has_decimal = citation_supports(value, _citation_line(row))
+    if not (digits_ok and sign_ok):
+        return
+    row["value"] = str(prior)
+    row["absent_reason"] = None
+    row.pop("nulled_from", None)
 
 
 def _null_value(row: dict[str, Any], reason: str, counts: dict[str, int]) -> None:
@@ -2031,6 +2068,8 @@ def apply_value_gate(filings: list[dict[str, Any]], *, financial: bool = False) 
             for name, row in fields.items():
                 if name not in _GATED_FIELDS:
                     continue
+                if isinstance(row, dict):
+                    _restore_if_citation_supports(row)
                 if isinstance(row, dict) and row.get("value") not in (None, ""):
                     live.append((str(name), int(year) if year is not None else -1, row))
 

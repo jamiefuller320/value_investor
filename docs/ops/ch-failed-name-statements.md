@@ -255,7 +255,7 @@ seven hand-verified filings are not gated. Each other name records
 
 | Check | What is nulled |
 |-------|----------------|
-| `digit_count` | The citation line has no token with the same digits as the stored value. A glued `20,9030` is not read as 20,903.0. |
+| `digit_count` | The citation line has no token with the same digits as the stored value. A glued `20,9030` is not read as 20,903.0. A trailing `.0` (`124.0` and `124`) is the same number. |
 | `sign` | The value's sign disagrees with the parenthesis or minus on that token. |
 | `eps_decimal` | Basic EPS is an integer of 10 or more and the citation token has no decimal point. `125` is not kept in place of `12.5`. |
 | `eps_versus_earnings` | EPS is more than 15% away from profit attributable divided by weighted shares, as pence and as pounds when the unit is blank. |
