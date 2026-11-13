@@ -3391,6 +3391,16 @@ def _fast_statement_pages(headers: list[str]) -> list[int]:
     return chosen
 
 
+def _fast_share_capital_pages(headers: list[str]) -> list[int]:
+    chosen: list[int] = []
+    for index, header in enumerate(headers):
+        if "share_capital" in _heading_kinds(str(header)) or _SHARE_CAPITAL_HINT_RE.search(
+            str(header)
+        ):
+            chosen.extend([index, index + 1])
+    return chosen[:8]
+
+
 def extract_share_capital_pages(
     pdf_path: Path,
     *,
@@ -3400,36 +3410,95 @@ def extract_share_capital_pages(
     page_zoom: float = 2.2,
     max_pages: int = 8,
 ) -> list[StatementPage]:
-    """Pages that may hold ordinary shares in issue (share-capital note or balance sheet lines)."""
-    statement_pages = extract_statement_pages(
-        pdf_path,
-        transaction_id=transaction_id,
-        cache_dir=cache_dir,
-        zoom=zoom,
-        page_zoom=page_zoom,
-    )
-    share_pages = [
-        page
-        for page in statement_pages
-        if "share_capital" in _heading_kinds(page.text) or _SHARE_CAPITAL_HINT_RE.search(page.text)
-    ]
-    if share_pages:
-        return share_pages[:max_pages]
+    """Share-capital note pages only (no income or cash statement OCR)."""
     import pymupdf
 
     doc = pymupdf.open(pdf_path)
     try:
-        extra: list[StatementPage] = []
+        sample = [i for i in (0, doc.page_count // 2) if i < doc.page_count]
+        has_text = any(len((doc[i].get_text("text") or "").strip()) > 80 for i in sample)
+        if has_text:
+            pages: list[StatementPage] = []
+            for index in range(doc.page_count):
+                text = doc[index].get_text("text") or ""
+                if _SHARE_CAPITAL_HINT_RE.search(text) or _ORDINARY_SHARES_COUNT_RE.search(text):
+                    pages.append(StatementPage(page=index + 1, text=text, method="pymupdf"))
+                    if len(pages) >= max_pages:
+                        break
+            return pages
+        if not _ocr_enabled():
+            return []
+        page_cache = cache_dir / f"ocr-v{CACHE_VERSION}-z{page_zoom:.1f}" / transaction_id
+        page_cache.mkdir(parents=True, exist_ok=True)
+        header_path = cache_dir / f"ocr-headers-z{zoom:.1f}" / transaction_id / "headers.json"
+        headers = _load_json(header_path)
+        chosen: list[int] = []
+        if isinstance(headers, list) and len(headers) == doc.page_count:
+            chosen = _fast_share_capital_pages(headers)
+        if not chosen:
+            limit = min(doc.page_count, 120)
+            for index in range(limit):
+                image = _page_image(doc, index, zoom=zoom)
+                header = "\n".join(_ocr_image_lines(image, header_only=True))
+                if "share_capital" in _heading_kinds(header) or _SHARE_CAPITAL_HINT_RE.search(header):
+                    chosen.extend([index, index + 1])
+                if len(chosen) >= max_pages:
+                    break
+        seen: set[int] = set()
+        ordered: list[int] = []
+        for index in chosen:
+            if index not in seen and index < doc.page_count:
+                seen.add(index)
+                ordered.append(index)
+        pages: list[StatementPage] = []
+        for index in ordered[:max_pages]:
+            page_path = page_cache / f"share-p{index + 1}.json"
+            cached = _load_json(page_path)
+            if isinstance(cached, dict) and isinstance(cached.get("lines"), list):
+                text = "\n".join(str(line) for line in cached["lines"])
+            else:
+                image = _page_image(doc, index, zoom=page_zoom, prefer_embedded=False)
+                lines = _ocr_image_lines(image, header_only=False)
+                text = "\n".join(lines)
+                page_path.write_text(json.dumps({"lines": lines}), encoding="utf-8")
+            pages.append(StatementPage(page=index + 1, text=text, method="ocr"))
+        return pages
+    finally:
+        doc.close()
+
+
+def extract_eps_note_pages(
+    pdf_path: Path,
+    *,
+    transaction_id: str,
+    cache_dir: Path,
+    zoom: float = 1.6,
+    page_zoom: float = 2.2,
+) -> list[StatementPage]:
+    """One EPS note page for a weighted-average retry (minimal OCR)."""
+    import pymupdf
+
+    doc = pymupdf.open(pdf_path)
+    try:
         for index in range(doc.page_count):
             text = doc[index].get_text("text") or ""
-            if not text.strip() and page_zoom:
-                image = _page_image(doc, index, zoom=page_zoom, prefer_embedded=False)
-                text = "\n".join(_ocr_image_lines(image, header_only=False))
-            if _SHARE_CAPITAL_HINT_RE.search(text) or _ORDINARY_SHARES_COUNT_RE.search(text):
-                extra.append(StatementPage(page=index + 1, text=text, method="pymupdf"))
-                if len(extra) >= max_pages:
+            if "eps_note" in _heading_kinds(text):
+                return [StatementPage(page=index + 1, text=text, method="pymupdf")]
+        if not _ocr_enabled():
+            return []
+        header_path = cache_dir / f"ocr-headers-z{zoom:.1f}" / transaction_id / "headers.json"
+        headers = _load_json(header_path)
+        chosen = None
+        if isinstance(headers, list):
+            for index, header in enumerate(headers):
+                if "eps_note" in _heading_kinds(str(header)):
+                    chosen = index
                     break
-        return extra or statement_pages[:max_pages]
+        if chosen is None:
+            return []
+        image = _page_image(doc, chosen, zoom=page_zoom, prefer_embedded=False)
+        lines = _ocr_image_lines(image, header_only=False)
+        return [StatementPage(page=chosen + 1, text="\n".join(lines), method="ocr")]
     finally:
         doc.close()
 

@@ -11,8 +11,8 @@ from typing import Any
 from value_investor.ch_failed_name_statements import (
     DEFAULT_STORE_PATH,
     ensure_pdf,
+    extract_eps_note_pages,
     extract_share_capital_pages,
-    extract_statement_pages,
     list_aa_filings,
     load_eodhd_report,
     load_store,
@@ -118,7 +118,7 @@ def refresh_filing_share_fields(
             zoom=LEAVER_OCR_ZOOM,
             page_zoom=LEAVER_PAGE_ZOOM,
         )
-        stmt_pages = extract_statement_pages(
+        stmt_pages = extract_eps_note_pages(
             pdf,
             transaction_id=transaction_id,
             cache_dir=cache_dir,
