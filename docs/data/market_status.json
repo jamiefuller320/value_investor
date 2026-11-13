@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-12T21:10:46.171212+00:00",
+  "generated_at": "2026-11-12T22:37:31.467267+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -71,10 +71,10 @@
       "us_adr_asia"
     ],
     "spare_sprint": {
-      "1": "sp500",
-      "2": "tsx60"
+      "1": "asx200",
+      "2": "sp500"
     },
-    "equal_support_generated_at": "2026-11-12T17:06:15.594854+00:00"
+    "equal_support_generated_at": "2026-11-12T21:52:08.578683+00:00"
   },
   "markets": [
     {
@@ -776,9 +776,9 @@
           },
           {
             "date": "2026-11-12",
-            "held": 1013.94,
-            "nav": 1013.94,
-            "held_stock": 1013.94,
+            "held": 1014.97,
+            "nav": 1014.97,
+            "held_stock": 1014.97,
             "cash": 0.0,
             "positions": 63,
             "contributed_capital": null,
@@ -851,11 +851,11 @@
         ],
         "last": {
           "date": "2026-11-12",
-          "held": 1013.94,
+          "held": 1014.97,
           "market": 1018.19,
-          "nav": 1013.94,
+          "nav": 1014.97,
           "positions": 63,
-          "excess_pct": -0.004174
+          "excess_pct": -0.003162
         }
       },
       "learning_depth": null,
@@ -1823,6 +1823,888 @@
       }
     },
     {
+      "market_id": "asx200",
+      "label": "S&P/ASX 200",
+      "exchange": "ASX",
+      "currency": "AUD",
+      "role": "sprint",
+      "is_live": false,
+      "is_focus": false,
+      "is_graduated": true,
+      "is_queue": true,
+      "is_admitted": true,
+      "is_ftse_equivalent": false,
+      "ingest": "sprint",
+      "ingest_stream": 1,
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=2)",
+      "ingest_parity_met": false,
+      "ingest_exhausted": true,
+      "queue_rank": 2,
+      "shared_maintenance": true,
+      "health": "ok",
+      "coverage_pct": 0.98,
+      "honest_coverage_pct": 0.98,
+      "ticker_count": 196,
+      "stale": 0,
+      "fresh": 200,
+      "failed_fetch_count": 4,
+      "last_metrics_refresh": "2026-11-12T07:04:11.241668+00:00",
+      "last_constituents_refresh": "2026-11-12T07:01:46.538182+00:00",
+      "last_screen_at": "2026-11-12T21:13:55.175007+00:00",
+      "signal_counts": {
+        "hold": 105,
+        "avoid": 56,
+        "buy": 26,
+        "strong_buy": 6,
+        "insufficient_data": 3
+      },
+      "shortlist_count": 32,
+      "strong_buy": 6,
+      "buy": 26,
+      "learning_phase": 1,
+      "learning_phase_label": "Epoch-0 level",
+      "phase_blockers": [
+        "asx200 not in ladder.weekly_paper_shard_markets"
+      ],
+      "expected_epoch0_blockers": [
+        "asx200 not in ladder.weekly_paper_shard_markets"
+      ],
+      "learning": {
+        "current_phase": 1,
+        "next_phase": 1,
+        "phase1_ready": true,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": true,
+        "blockers": [
+          "asx200 not in ladder.weekly_paper_shard_markets"
+        ],
+        "phase1": {
+          "screen_archives": 80,
+          "observe_snapshot_count": 80
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 4
+        }
+      },
+      "filing_health": {
+        "buy_tier_count": 32,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 2,
+        "bodies_median": 28.0,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "ingest_exhausted": false,
+        "parked_count": 2,
+        "zero_body_tickers": [],
+        "thin_body_tickers": [],
+        "unmeasured_tickers": [],
+        "parked_tickers": [
+          "ALK.AX",
+          "SMR.AX"
+        ]
+      },
+      "filing_gaps": 0,
+      "paper_instrument": "buy_tier_level_native",
+      "ai_judgment": false,
+      "knob_apply": false,
+      "epoch0": {
+        "present": true,
+        "paper_instrument": "buy_tier_level",
+        "ai_judgment": false,
+        "knob_apply": false,
+        "acted": true,
+        "last_run_at": "2026-11-12T07:38:34.736040+00:00",
+        "holdings": 31,
+        "nav": 515.33,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "weekday_batch_count": 52,
+        "epoch0_batch_count": 24
+      },
+      "equal_support": {
+        "present": true,
+        "ai_judgment": false,
+        "knob_apply": false,
+        "paper_instrument": "buy_tier_level",
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 49,
+        "not_buy_tier_count": 164,
+        "never_buy_tier_count": 141,
+        "rememo_eligible_count": 0,
+        "first_time_memo_count": 0,
+        "exclusion_ready_for_priors": null
+      },
+      "near_miss": {
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 49,
+        "not_buy_tier_count": 164,
+        "never_buy_tier_count": 141,
+        "timing_signal_present": false,
+        "observe_only": true,
+        "watch_cut": "buy_not_now + hold_near_buy",
+        "census_groups": "not_buy_tier + never_buy_tier",
+        "buy_tier_not_now_sample": [],
+        "hold_near_buy_sample": [
+          "GQG.AX",
+          "LSF.AX",
+          "RIO.AX",
+          "SPK.AX",
+          "PRU.AX",
+          "SHL.AX",
+          "SUL.AX",
+          "AZJ.AX"
+        ]
+      },
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 4,
+        "targets": 8,
+        "improved": 6,
+        "improved_tickers": [
+          "PXA.AX",
+          "AAI.AX",
+          "GMD.AX",
+          "CLW.AX",
+          "BPT.AX",
+          "WGX.AX"
+        ],
+        "last_run_at": "2026-11-12T10:44:35.674836+00:00",
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 2,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 2,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "remaining": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 2,
+          "filing_gaps": 0
+        },
+        "admission_ready": true,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [],
+        "sprint_entered_at": "2026-11-12T21:12:33.718857+00:00"
+      },
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "ok",
+        "reason": null,
+        "market_id": "asx200",
+        "source": "paper_fund",
+        "paper_instrument": "buy_tier_level_native",
+        "currency": "AUD",
+        "benchmark_ticker": "^AXJO",
+        "held_path": "equity_marks",
+        "market_path": "index_levels",
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [
+          {
+            "date": "2026-09-25",
+            "held": 985.31,
+            "nav": 985.31,
+            "held_stock": 985.31,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 465.92
+            },
+            "market": 985.31
+          },
+          {
+            "date": "2026-09-27",
+            "held": 985.3,
+            "nav": 985.3,
+            "held_stock": 985.3,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 465.62
+            },
+            "market": 985.31
+          },
+          {
+            "date": "2026-09-28",
+            "held": 977.69,
+            "nav": 977.69,
+            "held_stock": 977.69,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 442.71
+            },
+            "market": 986.98
+          },
+          {
+            "date": "2026-09-29",
+            "held": 981.88,
+            "nav": 981.88,
+            "held_stock": 981.88,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 443.44
+            },
+            "market": 990.35
+          },
+          {
+            "date": "2026-09-30",
+            "held": 993.97,
+            "nav": 993.97,
+            "held_stock": 993.97,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 466.14
+            },
+            "market": 999.44
+          },
+          {
+            "date": "2026-10-01",
+            "held": 991.86,
+            "nav": 993.95,
+            "held_stock": 991.86,
+            "cash": 2.09,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 445.37
+            },
+            "market": 999.44
+          },
+          {
+            "date": "2026-10-02",
+            "held": 991.86,
+            "nav": 993.95,
+            "held_stock": 991.86,
+            "cash": 2.09,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 446.22
+            },
+            "market": 987.25
+          },
+          {
+            "date": "2026-10-04",
+            "held": 979.87,
+            "nav": 979.87,
+            "held_stock": 979.87,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 478.44
+            },
+            "market": 987.25
+          },
+          {
+            "date": "2026-10-05",
+            "held": 973.52,
+            "nav": 973.52,
+            "held_stock": 973.52,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 458.16
+            },
+            "market": 987.74
+          },
+          {
+            "date": "2026-10-06",
+            "held": 973.48,
+            "nav": 973.48,
+            "held_stock": 973.48,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 424.09
+            },
+            "market": 987.74
+          },
+          {
+            "date": "2026-10-07",
+            "held": 973.48,
+            "nav": 973.48,
+            "held_stock": 973.48,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 423.53
+            },
+            "market": 992.44
+          },
+          {
+            "date": "2026-10-08",
+            "held": 904.36,
+            "nav": 978.77,
+            "held_stock": 904.36,
+            "cash": 74.41,
+            "positions": 24,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 445.02
+            },
+            "market": 984.84
+          },
+          {
+            "date": "2026-10-09",
+            "held": 989.57,
+            "nav": 989.57,
+            "held_stock": 989.57,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 488.55
+            },
+            "market": 991.18
+          },
+          {
+            "date": "2026-10-11",
+            "held": 992.79,
+            "nav": 992.79,
+            "held_stock": 992.79,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 472.19
+            },
+            "market": 991.18
+          },
+          {
+            "date": "2026-10-12",
+            "held": 990.25,
+            "nav": 990.25,
+            "held_stock": 990.25,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 471.54
+            },
+            "market": 998.75
+          },
+          {
+            "date": "2026-10-13",
+            "held": 954.86,
+            "nav": 990.24,
+            "held_stock": 954.86,
+            "cash": 35.38,
+            "positions": 25,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 451.96
+            },
+            "market": 998.75
+          },
+          {
+            "date": "2026-10-14",
+            "held": 986.06,
+            "nav": 986.06,
+            "held_stock": 986.06,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 499.43
+            },
+            "market": 992.46
+          },
+          {
+            "date": "2026-10-15",
+            "held": 977.8,
+            "nav": 977.8,
+            "held_stock": 977.8,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 484.68
+            },
+            "market": 991.53
+          },
+          {
+            "date": "2026-10-16",
+            "held": 994.91,
+            "nav": 994.91,
+            "held_stock": 994.91,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 492.91
+            },
+            "market": 1001.42
+          },
+          {
+            "date": "2026-10-18",
+            "held": 994.91,
+            "nav": 994.91,
+            "held_stock": 994.91,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 497.41
+            },
+            "market": 1001.42
+          },
+          {
+            "date": "2026-10-19",
+            "held": 1001.05,
+            "nav": 1001.05,
+            "held_stock": 1001.05,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 502.59
+            },
+            "market": 1005.86
+          },
+          {
+            "date": "2026-10-20",
+            "held": 993.94,
+            "nav": 993.94,
+            "held_stock": 993.94,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 491.5
+            },
+            "market": 1002.58
+          },
+          {
+            "date": "2026-10-21",
+            "held": 995.64,
+            "nav": 995.64,
+            "held_stock": 995.64,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 500.71
+            },
+            "market": 1004.22
+          },
+          {
+            "date": "2026-10-22",
+            "held": 951.29,
+            "nav": 995.61,
+            "held_stock": 951.29,
+            "cash": 44.32,
+            "positions": 25,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 452.48
+            },
+            "market": 999.89
+          },
+          {
+            "date": "2026-10-23",
+            "held": 981.1,
+            "nav": 981.1,
+            "held_stock": 981.1,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 493.39
+            },
+            "market": 1000.12
+          },
+          {
+            "date": "2026-10-25",
+            "held": 981.1,
+            "nav": 981.1,
+            "held_stock": 981.1,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 494.61
+            },
+            "market": 1000.12
+          },
+          {
+            "date": "2026-10-26",
+            "held": 981.06,
+            "nav": 981.06,
+            "held_stock": 981.06,
+            "cash": 0.0,
+            "positions": 28,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 493.82
+            },
+            "market": 1000.12
+          },
+          {
+            "date": "2026-10-27",
+            "held": 981.06,
+            "nav": 981.06,
+            "held_stock": 981.06,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 494.32
+            },
+            "market": 1000.12
+          },
+          {
+            "date": "2026-10-28",
+            "held": 981.06,
+            "nav": 981.06,
+            "held_stock": 981.06,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 497.42
+            },
+            "market": 1000.12
+          },
+          {
+            "date": "2026-10-29",
+            "held": 996.77,
+            "nav": 996.77,
+            "held_stock": 996.77,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 506.08
+            },
+            "market": 1011.1
+          },
+          {
+            "date": "2026-10-30",
+            "held": 995.98,
+            "nav": 995.98,
+            "held_stock": 995.98,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 500.82
+            },
+            "market": 1012.95
+          },
+          {
+            "date": "2026-11-01",
+            "held": 995.97,
+            "nav": 995.97,
+            "held_stock": 995.97,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 501.8
+            },
+            "market": 1012.95
+          },
+          {
+            "date": "2026-11-02",
+            "held": 986.6,
+            "nav": 986.6,
+            "held_stock": 986.6,
+            "cash": 0.0,
+            "positions": 28,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 489.5
+            },
+            "market": 1007.09
+          },
+          {
+            "date": "2026-11-03",
+            "held": 986.6,
+            "nav": 986.6,
+            "held_stock": 986.6,
+            "cash": 0.0,
+            "positions": 28,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 493.42
+            },
+            "market": 1007.09
+          },
+          {
+            "date": "2026-11-04",
+            "held": 988.7,
+            "nav": 988.7,
+            "held_stock": 988.7,
+            "cash": 0.0,
+            "positions": 28,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 491.46
+            },
+            "market": 1007.09
+          },
+          {
+            "date": "2026-11-05",
+            "held": 988.68,
+            "nav": 988.68,
+            "held_stock": 988.68,
+            "cash": 0.0,
+            "positions": 28,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 493.01
+            },
+            "market": 1007.09
+          },
+          {
+            "date": "2026-11-06",
+            "held": 1023.06,
+            "nav": 1023.06,
+            "held_stock": 1023.06,
+            "cash": 0.0,
+            "positions": 29,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 504.7
+            },
+            "market": 1025.77
+          },
+          {
+            "date": "2026-11-07",
+            "held": 1023.06,
+            "nav": 1023.06,
+            "held_stock": 1023.06,
+            "cash": 0.0,
+            "positions": 29,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 505.88
+            },
+            "market": 1025.77
+          },
+          {
+            "date": "2026-11-08",
+            "held": 1017.1,
+            "nav": 1017.1,
+            "held_stock": 1017.1,
+            "cash": 0.0,
+            "positions": 30,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 502.93
+            },
+            "market": 1025.77
+          },
+          {
+            "date": "2026-11-09",
+            "held": 1017.08,
+            "nav": 1017.08,
+            "held_stock": 1017.08,
+            "cash": 0.0,
+            "positions": 31,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 503.36
+            },
+            "market": 1026.78
+          },
+          {
+            "date": "2026-11-10",
+            "held": 1032.89,
+            "nav": 1032.89,
+            "held_stock": 1032.89,
+            "cash": 0.0,
+            "positions": 32,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 510.27
+            },
+            "market": 1026.78
+          },
+          {
+            "date": "2026-11-11",
+            "held": 1032.89,
+            "nav": 1032.89,
+            "held_stock": 1032.89,
+            "cash": 0.0,
+            "positions": 31,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 510.07
+            },
+            "market": 1026.78
+          },
+          {
+            "date": "2026-11-12",
+            "held": 1045.15,
+            "nav": 1045.15,
+            "held_stock": 1045.15,
+            "cash": 0.0,
+            "positions": 31,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 515.33
+            },
+            "market": 1040.1
+          }
+        ],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^AXJO equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          },
+          {
+            "id": "branch:buy_tier_level_gbp_fx_warped",
+            "label": "GBP book (FX-warped archive)",
+            "kind": "branch",
+            "status": "active",
+            "color": "#7c3aed",
+            "knobs": {
+              "reporting_currency": "GBP",
+              "capital_epoch": "contaminated_gbp_unit_mismatch",
+              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
+            }
+          }
+        ],
+        "branches": [
+          {
+            "id": "buy_tier_level_gbp_fx_warped",
+            "label": "GBP book (FX-warped archive)",
+            "kind": "branch",
+            "status": "active",
+            "knobs": {
+              "reporting_currency": "GBP",
+              "capital_epoch": "contaminated_gbp_unit_mismatch",
+              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
+            },
+            "point_count": 58
+          }
+        ],
+        "last": {
+          "date": "2026-11-12",
+          "held": 1045.15,
+          "market": 1040.1,
+          "nav": 1045.15,
+          "positions": 31,
+          "excess_pct": 0.004855
+        }
+      },
+      "learning_depth": null,
+      "learning_gate": {
+        "schema_version": 2,
+        "observe_only": true,
+        "current_id": "ftse_parity_learning",
+        "start_complete": true,
+        "bodies_complete": true,
+        "sprint_complete": true,
+        "admit_complete": true,
+        "epoch0_complete": true,
+        "trajectory_ready": false,
+        "learning_ready": false,
+        "live_ready": false,
+        "filing_ready": true,
+        "span_weeks": null,
+        "unique_days": null,
+        "leftover": 2,
+        "steps": [
+          {
+            "id": "start",
+            "label": "Start",
+            "gate": "ingest_clock",
+            "status": "done"
+          },
+          {
+            "id": "bodies",
+            "label": "Bodies",
+            "gate": "unmeasured_zero_clear",
+            "status": "done"
+          },
+          {
+            "id": "sprint_complete",
+            "label": "Sprint",
+            "gate": "sprint_ingest_complete",
+            "status": "done"
+          },
+          {
+            "id": "admit",
+            "label": "Admit",
+            "gate": "l322_admit",
+            "status": "done"
+          },
+          {
+            "id": "epoch0",
+            "label": "Epoch-0",
+            "gate": "epoch0_marks",
+            "status": "done"
+          },
+          {
+            "id": "ftse_parity_learning",
+            "label": "Parity",
+            "gate": "learning_ready",
+            "status": "current"
+          },
+          {
+            "id": "live_ready",
+            "label": "Live",
+            "gate": "phase_4_live_screen",
+            "status": "pending"
+          }
+        ],
+        "next_gate": {
+          "id": "ftse_parity_learning",
+          "name": "FTSE-parity learning",
+          "gate": "learning_ready",
+          "criteria": "learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json.",
+          "timeframe": "Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
+        },
+        "annotation": "Next: FTSE-parity learning — learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json. Timeframe: Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
+      }
+    },
+    {
       "market_id": "sp500",
       "label": "S&P 500",
       "exchange": "US",
@@ -1835,8 +2717,8 @@
       "is_admitted": true,
       "is_ftse_equivalent": true,
       "ingest": "sprint",
-      "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=9)",
+      "ingest_stream": 2,
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=8)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 1,
@@ -1850,7 +2732,7 @@
       "failed_fetch_count": 0,
       "last_metrics_refresh": "2026-11-12T07:01:13.294815+00:00",
       "last_constituents_refresh": "2026-11-12T06:55:45.725134+00:00",
-      "last_screen_at": "2026-11-12T06:53:31.052063+00:00",
+      "last_screen_at": "2026-11-12T22:34:47.225856+00:00",
       "signal_counts": {
         "hold": 257,
         "avoid": 100,
@@ -1893,7 +2775,7 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 9,
+        "indexed_without_body": 8,
         "bodies_median": 23.0,
         "coverage_scope": "canonical",
         "ftse_equivalent": true,
@@ -1904,10 +2786,10 @@
         "unmeasured_tickers": [],
         "parked_tickers": [
           "APTV",
-          "BXP",
           "EME",
           "LH",
-          "LMT"
+          "LMT",
+          "NRG"
         ]
       },
       "filing_gaps": 0,
@@ -1974,52 +2856,58 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 6,
-        "targets": 11,
-        "improved": 6,
+        "run_count": 7,
+        "targets": 20,
+        "improved": 15,
         "improved_tickers": [
           "TROW",
           "DG",
           "IVZ",
           "GPN",
           "NRG",
-          "VST"
+          "VST",
+          "INVH",
+          "OXY",
+          "ZBH",
+          "AMCR",
+          "HST",
+          "TGT"
         ],
-        "last_run_at": "2026-11-12T18:56:05.722700+00:00",
+        "last_run_at": "2026-11-12T22:29:45.933052+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 7,
+          "indexed_without_body": 8,
           "filing_gaps": 0
         },
         "gaps_after": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 9,
+          "indexed_without_body": 8,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 2,
+          "indexed_without_body": 0,
           "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 9,
+          "indexed_without_body": 8,
           "filing_gaps": 0
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
         "admission_warnings": [],
-        "sprint_entered_at": "2026-11-11T18:07:27.791974+00:00"
+        "sprint_entered_at": "2026-11-12T22:33:31.812718+00:00"
       },
       "held_vs_market": {
         "schema_version": 1,
@@ -2641,7 +3529,7 @@
         "filing_ready": false,
         "span_weeks": 16.71,
         "unique_days": 61,
-        "leftover": 9,
+        "leftover": 8,
         "steps": [
           {
             "id": "start",
@@ -2694,866 +3582,6 @@
           "timeframe": "Sunday archive clock: ~0w and 0 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
         },
         "annotation": "Next: FTSE-parity learning — learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now 16.71w / 61 unique days. Timeframe: Sunday archive clock: ~0w and 0 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
-      }
-    },
-    {
-      "market_id": "tsx60",
-      "label": "S&P/TSX 60",
-      "exchange": "TSX",
-      "currency": "CAD",
-      "role": "sprint",
-      "is_live": false,
-      "is_focus": false,
-      "is_graduated": true,
-      "is_queue": true,
-      "is_admitted": true,
-      "is_ftse_equivalent": false,
-      "ingest": "sprint",
-      "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=2, indexed_without_body=90)",
-      "ingest_parity_met": false,
-      "ingest_exhausted": true,
-      "queue_rank": 4,
-      "shared_maintenance": true,
-      "health": "ok",
-      "coverage_pct": 1.0,
-      "honest_coverage_pct": 1.0,
-      "ticker_count": 59,
-      "stale": 0,
-      "fresh": 59,
-      "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-11-12T07:06:51.235279+00:00",
-      "last_constituents_refresh": "2026-11-12T07:06:13.484723+00:00",
-      "last_screen_at": "2026-11-12T07:43:26.361175+00:00",
-      "signal_counts": {
-        "hold": 30,
-        "buy": 12,
-        "avoid": 12,
-        "strong_buy": 5
-      },
-      "shortlist_count": 17,
-      "strong_buy": 5,
-      "buy": 12,
-      "learning_phase": 1,
-      "learning_phase_label": "Epoch-0 level",
-      "phase_blockers": [
-        "tsx60 not in ladder.weekly_paper_shard_markets"
-      ],
-      "expected_epoch0_blockers": [
-        "tsx60 not in ladder.weekly_paper_shard_markets"
-      ],
-      "learning": {
-        "current_phase": 1,
-        "next_phase": 1,
-        "phase1_ready": true,
-        "phase2_ready": false,
-        "phase3_ready": false,
-        "weekly_paper_enabled": false,
-        "weekday_paper_enabled": true,
-        "blockers": [
-          "tsx60 not in ladder.weekly_paper_shard_markets"
-        ],
-        "phase1": {
-          "screen_archives": 62,
-          "observe_snapshot_count": 62
-        },
-        "phase2": {
-          "weekly_batch_count": 0,
-          "min_weekly_batches": 4
-        }
-      },
-      "filing_health": {
-        "buy_tier_count": 17,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 2,
-        "indexed_without_body": 90,
-        "bodies_median": 33.0,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
-        "ingest_exhausted": false,
-        "parked_count": 5,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "MFC.TO",
-          "AEM.TO"
-        ],
-        "unmeasured_tickers": [],
-        "parked_tickers": [
-          "CVE.TO",
-          "GIB-A.TO",
-          "MFC.TO",
-          "NTR.TO",
-          "SU.TO"
-        ]
-      },
-      "filing_gaps": 0,
-      "paper_instrument": "buy_tier_level_native",
-      "ai_judgment": false,
-      "knob_apply": false,
-      "epoch0": {
-        "present": true,
-        "paper_instrument": "buy_tier_level",
-        "ai_judgment": false,
-        "knob_apply": false,
-        "acted": true,
-        "last_run_at": "2026-11-12T07:39:08.941127+00:00",
-        "holdings": 12,
-        "nav": 523.01,
-        "cash": -0.0,
-        "contributed_capital": 1000.0,
-        "weekday_batch_count": 52,
-        "epoch0_batch_count": 36
-      },
-      "equal_support": {
-        "present": true,
-        "ai_judgment": false,
-        "knob_apply": false,
-        "paper_instrument": "buy_tier_level",
-        "timing_signal_present": false,
-        "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 15,
-        "not_buy_tier_count": 42,
-        "never_buy_tier_count": 35,
-        "rememo_eligible_count": 0,
-        "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": null
-      },
-      "near_miss": {
-        "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 15,
-        "not_buy_tier_count": 42,
-        "never_buy_tier_count": 35,
-        "timing_signal_present": false,
-        "observe_only": true,
-        "watch_cut": "buy_not_now + hold_near_buy",
-        "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [],
-        "hold_near_buy_sample": [
-          "FFH.TO",
-          "CTC-A.TO",
-          "PPL.TO",
-          "BAM.TO",
-          "IFC.TO",
-          "IMO.TO",
-          "QSR.TO",
-          "CM.TO"
-        ]
-      },
-      "sprint_progress": {
-        "window_days": 2,
-        "run_count": 2,
-        "targets": 0,
-        "improved": 0,
-        "improved_tickers": [],
-        "last_run_at": "2026-11-11T23:02:22.121528+00:00",
-        "runtime_cutoff_runs": 0,
-        "error_runs": 0,
-        "gaps_before": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 1,
-          "indexed_without_body": 65,
-          "filing_gaps": 0
-        },
-        "gaps_after": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 1,
-          "indexed_without_body": 65,
-          "filing_gaps": 0
-        },
-        "gap_delta": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 0,
-          "filing_gaps": 0
-        },
-        "remaining": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 2,
-          "indexed_without_body": 90,
-          "filing_gaps": 0
-        },
-        "admission_ready": true,
-        "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "zero_improve_stall",
-            "severity": "high",
-            "summary": "Last 2 days improved nobody while filing gaps remain"
-          }
-        ],
-        "sprint_entered_at": "2026-11-12T07:43:26.361157+00:00"
-      },
-      "held_vs_market": {
-        "schema_version": 1,
-        "status": "ok",
-        "reason": null,
-        "market_id": "tsx60",
-        "source": "paper_fund",
-        "paper_instrument": "buy_tier_level_native",
-        "currency": "CAD",
-        "benchmark_ticker": "^GSPTSE",
-        "held_path": "equity_marks",
-        "market_path": "index_levels",
-        "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
-        "points": [
-          {
-            "date": "2026-09-25",
-            "held": 999.75,
-            "nav": 999.75,
-            "held_stock": 999.75,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 511.26
-            },
-            "market": 999.75
-          },
-          {
-            "date": "2026-09-27",
-            "held": 1005.42,
-            "nav": 1005.42,
-            "held_stock": 1005.42,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 503.17
-            },
-            "market": 999.75
-          },
-          {
-            "date": "2026-09-28",
-            "held": 1005.42,
-            "nav": 1005.42,
-            "held_stock": 1005.42,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 502.89
-            },
-            "market": 991.07
-          },
-          {
-            "date": "2026-09-29",
-            "held": 998.51,
-            "nav": 998.51,
-            "held_stock": 998.51,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 499.0
-            },
-            "market": 990.24
-          },
-          {
-            "date": "2026-09-30",
-            "held": 990.53,
-            "nav": 990.53,
-            "held_stock": 990.53,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 499.29
-            },
-            "market": 990.24
-          },
-          {
-            "date": "2026-10-01",
-            "held": 990.53,
-            "nav": 990.53,
-            "held_stock": 990.53,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 499.01
-            },
-            "market": 990.24
-          },
-          {
-            "date": "2026-10-02",
-            "held": 990.53,
-            "nav": 990.53,
-            "held_stock": 990.53,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 503.1
-            },
-            "market": 991.42
-          },
-          {
-            "date": "2026-10-04",
-            "held": 995.17,
-            "nav": 995.17,
-            "held_stock": 995.17,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 504.72
-            },
-            "market": 991.42
-          },
-          {
-            "date": "2026-10-05",
-            "held": 995.17,
-            "nav": 995.17,
-            "held_stock": 995.17,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 500.74
-            },
-            "market": 991.42
-          },
-          {
-            "date": "2026-10-06",
-            "held": 995.17,
-            "nav": 995.17,
-            "held_stock": 995.17,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 498.74
-            },
-            "market": 991.42
-          },
-          {
-            "date": "2026-10-07",
-            "held": 978.98,
-            "nav": 978.98,
-            "held_stock": 978.98,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 497.8
-            },
-            "market": 978.55
-          },
-          {
-            "date": "2026-10-08",
-            "held": 978.54,
-            "nav": 978.54,
-            "held_stock": 978.54,
-            "cash": 0.0,
-            "positions": 12,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 498.14
-            },
-            "market": 981.44
-          },
-          {
-            "date": "2026-10-09",
-            "held": 987.75,
-            "nav": 987.75,
-            "held_stock": 987.75,
-            "cash": 0.0,
-            "positions": 12,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 502.15
-            },
-            "market": 995.94
-          },
-          {
-            "date": "2026-10-11",
-            "held": 984.83,
-            "nav": 994.01,
-            "held_stock": 984.83,
-            "cash": 9.18,
-            "positions": 12,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 504.53
-            },
-            "market": 995.94
-          },
-          {
-            "date": "2026-10-12",
-            "held": 984.83,
-            "nav": 994.01,
-            "held_stock": 984.83,
-            "cash": 9.18,
-            "positions": 12,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 504.15
-            },
-            "market": 995.94
-          },
-          {
-            "date": "2026-10-13",
-            "held": 984.83,
-            "nav": 994.01,
-            "held_stock": 984.83,
-            "cash": 9.18,
-            "positions": 12,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 505.2
-            },
-            "market": 1004.86
-          },
-          {
-            "date": "2026-10-14",
-            "held": 1008.55,
-            "nav": 1008.55,
-            "held_stock": 1008.55,
-            "cash": 0.0,
-            "positions": 14,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 492.57
-            },
-            "market": 993.71
-          },
-          {
-            "date": "2026-10-15",
-            "held": 1001.71,
-            "nav": 1001.71,
-            "held_stock": 1001.71,
-            "cash": 0.0,
-            "positions": 14,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 508.59
-            },
-            "market": 1009.14
-          },
-          {
-            "date": "2026-10-16",
-            "held": 1023.32,
-            "nav": 1023.32,
-            "held_stock": 1023.32,
-            "cash": 0.0,
-            "positions": 14,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 518.75
-            },
-            "market": 1010.24
-          },
-          {
-            "date": "2026-10-18",
-            "held": 1018.43,
-            "nav": 1028.63,
-            "held_stock": 1018.43,
-            "cash": 10.2,
-            "positions": 14,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 522.18
-            },
-            "market": 1010.24
-          },
-          {
-            "date": "2026-10-19",
-            "held": 1028.62,
-            "nav": 1028.62,
-            "held_stock": 1028.62,
-            "cash": 0.0,
-            "positions": 14,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 524.25
-            },
-            "market": 1003.32
-          },
-          {
-            "date": "2026-10-20",
-            "held": 1020.86,
-            "nav": 1020.86,
-            "held_stock": 1020.86,
-            "cash": 0.0,
-            "positions": 14,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 520.22
-            },
-            "market": 1008.33
-          },
-          {
-            "date": "2026-10-21",
-            "held": 1029.34,
-            "nav": 1029.34,
-            "held_stock": 1029.34,
-            "cash": 0.0,
-            "positions": 14,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 523.89
-            },
-            "market": 1014.39
-          },
-          {
-            "date": "2026-10-23",
-            "held": 1029.7,
-            "nav": 1029.7,
-            "held_stock": 1029.7,
-            "cash": 0.0,
-            "positions": 14,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 519.28
-            },
-            "market": 999.4
-          },
-          {
-            "date": "2026-10-25",
-            "held": 1023.55,
-            "nav": 1023.55,
-            "held_stock": 1023.55,
-            "cash": 0.0,
-            "positions": 14,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 523.35
-            },
-            "market": 999.4
-          },
-          {
-            "date": "2026-10-26",
-            "held": 979.04,
-            "nav": 1023.49,
-            "held_stock": 979.04,
-            "cash": 44.45,
-            "positions": 12,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 504.6
-            },
-            "market": 999.4
-          },
-          {
-            "date": "2026-10-27",
-            "held": 979.04,
-            "nav": 1023.49,
-            "held_stock": 979.04,
-            "cash": 44.45,
-            "positions": 12,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 505.83
-            },
-            "market": 999.4
-          },
-          {
-            "date": "2026-10-28",
-            "held": 979.04,
-            "nav": 1023.49,
-            "held_stock": 979.04,
-            "cash": 44.45,
-            "positions": 12,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 506.78
-            },
-            "market": 1012.71
-          },
-          {
-            "date": "2026-10-29",
-            "held": 1027.66,
-            "nav": 1027.66,
-            "held_stock": 1027.66,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 527.89
-            },
-            "market": 1012.26
-          },
-          {
-            "date": "2026-10-30",
-            "held": 1024.49,
-            "nav": 1024.49,
-            "held_stock": 1024.49,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 523.97
-            },
-            "market": 994.7
-          },
-          {
-            "date": "2026-11-01",
-            "held": 1012.16,
-            "nav": 1012.16,
-            "held_stock": 1012.16,
-            "cash": 0.0,
-            "positions": 15,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 517.43
-            },
-            "market": 994.7
-          },
-          {
-            "date": "2026-11-02",
-            "held": 1012.16,
-            "nav": 1012.16,
-            "held_stock": 1012.16,
-            "cash": 0.0,
-            "positions": 15,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 516.37
-            },
-            "market": 994.7
-          },
-          {
-            "date": "2026-11-03",
-            "held": 1000.93,
-            "nav": 1012.09,
-            "held_stock": 1000.93,
-            "cash": 11.16,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 468.09
-            },
-            "market": 994.7
-          },
-          {
-            "date": "2026-11-04",
-            "held": 1000.94,
-            "nav": 1012.1,
-            "held_stock": 1000.94,
-            "cash": 11.16,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 467.47
-            },
-            "market": 994.7
-          },
-          {
-            "date": "2026-11-05",
-            "held": 1009.77,
-            "nav": 1009.86,
-            "held_stock": 1009.77,
-            "cash": 0.09,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 512.42
-            },
-            "market": 994.29
-          },
-          {
-            "date": "2026-11-06",
-            "held": 1026.95,
-            "nav": 1026.95,
-            "held_stock": 1026.95,
-            "cash": 0.0,
-            "positions": 12,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 520.25
-            },
-            "market": 999.42
-          },
-          {
-            "date": "2026-11-07",
-            "held": 1034.8,
-            "nav": 1034.8,
-            "held_stock": 1034.8,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 524.12
-            },
-            "market": 999.42
-          },
-          {
-            "date": "2026-11-08",
-            "held": 1026.16,
-            "nav": 1026.16,
-            "held_stock": 1026.16,
-            "cash": 0.0,
-            "positions": 13,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 519.31
-            },
-            "market": 999.42
-          },
-          {
-            "date": "2026-11-10",
-            "held": 1026.16,
-            "nav": 1026.16,
-            "held_stock": 1026.16,
-            "cash": 0.0,
-            "positions": 12,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 516.86
-            },
-            "market": 999.42
-          },
-          {
-            "date": "2026-11-11",
-            "held": 985.87,
-            "nav": 1026.12,
-            "held_stock": 985.87,
-            "cash": 40.25,
-            "positions": 11,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 505.04
-            },
-            "market": 1016.81
-          },
-          {
-            "date": "2026-11-12",
-            "held": 1035.83,
-            "nav": 1035.83,
-            "held_stock": 1035.83,
-            "cash": 0.0,
-            "positions": 12,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 523.01
-            },
-            "market": 1016.81
-          }
-        ],
-        "series": [
-          {
-            "id": "held",
-            "label": "Held book",
-            "kind": "held",
-            "color": "#2b6cb0"
-          },
-          {
-            "id": "market",
-            "label": "^GSPTSE equivalent",
-            "kind": "market",
-            "color": "#64748b"
-          },
-          {
-            "id": "branch:buy_tier_level_gbp_fx_warped",
-            "label": "GBP book (FX-warped archive)",
-            "kind": "branch",
-            "status": "active",
-            "color": "#7c3aed",
-            "knobs": {
-              "reporting_currency": "GBP",
-              "capital_epoch": "contaminated_gbp_unit_mismatch",
-              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
-            }
-          }
-        ],
-        "branches": [
-          {
-            "id": "buy_tier_level_gbp_fx_warped",
-            "label": "GBP book (FX-warped archive)",
-            "kind": "branch",
-            "status": "active",
-            "knobs": {
-              "reporting_currency": "GBP",
-              "capital_epoch": "contaminated_gbp_unit_mismatch",
-              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
-            },
-            "point_count": 54
-          }
-        ],
-        "last": {
-          "date": "2026-11-12",
-          "held": 1035.83,
-          "market": 1016.81,
-          "nav": 1035.83,
-          "positions": 12,
-          "excess_pct": 0.018706
-        }
-      },
-      "learning_depth": null,
-      "learning_gate": {
-        "schema_version": 2,
-        "observe_only": true,
-        "current_id": "ftse_parity_learning",
-        "start_complete": true,
-        "bodies_complete": true,
-        "sprint_complete": true,
-        "admit_complete": true,
-        "epoch0_complete": true,
-        "trajectory_ready": false,
-        "learning_ready": false,
-        "live_ready": false,
-        "filing_ready": true,
-        "span_weeks": null,
-        "unique_days": null,
-        "leftover": 92,
-        "steps": [
-          {
-            "id": "start",
-            "label": "Start",
-            "gate": "ingest_clock",
-            "status": "done"
-          },
-          {
-            "id": "bodies",
-            "label": "Bodies",
-            "gate": "unmeasured_zero_clear",
-            "status": "done"
-          },
-          {
-            "id": "sprint_complete",
-            "label": "Sprint",
-            "gate": "sprint_ingest_complete",
-            "status": "done"
-          },
-          {
-            "id": "admit",
-            "label": "Admit",
-            "gate": "l322_admit",
-            "status": "done"
-          },
-          {
-            "id": "epoch0",
-            "label": "Epoch-0",
-            "gate": "epoch0_marks",
-            "status": "done"
-          },
-          {
-            "id": "ftse_parity_learning",
-            "label": "Parity",
-            "gate": "learning_ready",
-            "status": "current"
-          },
-          {
-            "id": "live_ready",
-            "label": "Live",
-            "gate": "phase_4_live_screen",
-            "status": "pending"
-          }
-        ],
-        "next_gate": {
-          "id": "ftse_parity_learning",
-          "name": "FTSE-parity learning",
-          "gate": "learning_ready",
-          "criteria": "learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json.",
-          "timeframe": "Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
-        },
-        "annotation": "Next: FTSE-parity learning — learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json. Timeframe: Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
       }
     },
     {
@@ -14929,10 +14957,10 @@
       }
     },
     {
-      "market_id": "asx200",
-      "label": "S&P/ASX 200",
-      "exchange": "ASX",
-      "currency": "AUD",
+      "market_id": "tsx60",
+      "label": "S&P/TSX 60",
+      "exchange": "TSX",
+      "currency": "CAD",
       "role": "admitted",
       "is_live": false,
       "is_focus": false,
@@ -14945,35 +14973,34 @@
       "ingest_reason": null,
       "ingest_parity_met": null,
       "ingest_exhausted": true,
-      "queue_rank": 2,
+      "queue_rank": 4,
       "shared_maintenance": true,
       "health": "ok",
-      "coverage_pct": 0.98,
-      "honest_coverage_pct": 0.98,
-      "ticker_count": 196,
+      "coverage_pct": 1.0,
+      "honest_coverage_pct": 1.0,
+      "ticker_count": 59,
       "stale": 0,
-      "fresh": 200,
-      "failed_fetch_count": 4,
-      "last_metrics_refresh": "2026-11-12T07:04:11.241668+00:00",
-      "last_constituents_refresh": "2026-11-12T07:01:46.538182+00:00",
-      "last_screen_at": "2026-11-12T06:53:31.052063+00:00",
+      "fresh": 59,
+      "failed_fetch_count": 0,
+      "last_metrics_refresh": "2026-11-12T07:06:51.235279+00:00",
+      "last_constituents_refresh": "2026-11-12T07:06:13.484723+00:00",
+      "last_screen_at": "2026-11-12T07:43:26.361175+00:00",
       "signal_counts": {
-        "hold": 105,
-        "avoid": 56,
-        "buy": 26,
-        "strong_buy": 6,
-        "insufficient_data": 3
+        "hold": 30,
+        "buy": 12,
+        "avoid": 12,
+        "strong_buy": 5
       },
-      "shortlist_count": 32,
-      "strong_buy": 6,
-      "buy": 26,
+      "shortlist_count": 17,
+      "strong_buy": 5,
+      "buy": 12,
       "learning_phase": 1,
       "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
-        "asx200 not in ladder.weekly_paper_shard_markets"
+        "tsx60 not in ladder.weekly_paper_shard_markets"
       ],
       "expected_epoch0_blockers": [
-        "asx200 not in ladder.weekly_paper_shard_markets"
+        "tsx60 not in ladder.weekly_paper_shard_markets"
       ],
       "learning": {
         "current_phase": 1,
@@ -14984,11 +15011,11 @@
         "weekly_paper_enabled": false,
         "weekday_paper_enabled": true,
         "blockers": [
-          "asx200 not in ladder.weekly_paper_shard_markets"
+          "tsx60 not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
-          "screen_archives": 80,
-          "observe_snapshot_count": 80
+          "screen_archives": 62,
+          "observe_snapshot_count": 62
         },
         "phase2": {
           "weekly_batch_count": 0,
@@ -15006,13 +15033,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-11-12T07:38:34.736040+00:00",
-        "holdings": 31,
-        "nav": 515.33,
-        "cash": 0.0,
+        "last_run_at": "2026-11-12T07:39:08.941127+00:00",
+        "holdings": 12,
+        "nav": 523.01,
+        "cash": -0.0,
         "contributed_capital": 1000.0,
         "weekday_batch_count": 52,
-        "epoch0_batch_count": 24
+        "epoch0_batch_count": 36
       },
       "equal_support": {
         "present": true,
@@ -15021,32 +15048,32 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 49,
-        "not_buy_tier_count": 164,
-        "never_buy_tier_count": 141,
+        "hold_near_buy_count": 15,
+        "not_buy_tier_count": 42,
+        "never_buy_tier_count": 35,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 49,
-        "not_buy_tier_count": 164,
-        "never_buy_tier_count": 141,
-        "timing_signal_present": true,
+        "hold_near_buy_count": 15,
+        "not_buy_tier_count": 42,
+        "never_buy_tier_count": 35,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
         "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
-          "GQG.AX",
-          "LSF.AX",
-          "RIO.AX",
-          "SPK.AX",
-          "PRU.AX",
-          "SHL.AX",
-          "SUL.AX",
-          "AZJ.AX"
+          "FFH.TO",
+          "CTC-A.TO",
+          "PPL.TO",
+          "BAM.TO",
+          "IFC.TO",
+          "IMO.TO",
+          "QSR.TO",
+          "CM.TO"
         ]
       },
       "sprint_progress": null,
@@ -15054,11 +15081,11 @@
         "schema_version": 1,
         "status": "ok",
         "reason": null,
-        "market_id": "asx200",
+        "market_id": "tsx60",
         "source": "paper_fund",
         "paper_instrument": "buy_tier_level_native",
-        "currency": "AUD",
-        "benchmark_ticker": "^AXJO",
+        "currency": "CAD",
+        "benchmark_ticker": "^GSPTSE",
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
@@ -15066,562 +15093,536 @@
         "points": [
           {
             "date": "2026-09-25",
-            "held": 985.31,
-            "nav": 985.31,
-            "held_stock": 985.31,
+            "held": 999.75,
+            "nav": 999.75,
+            "held_stock": 999.75,
             "cash": 0.0,
-            "positions": 26,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 465.92
+              "buy_tier_level_gbp_fx_warped": 511.26
             },
-            "market": 985.31
+            "market": 999.75
           },
           {
             "date": "2026-09-27",
-            "held": 985.3,
-            "nav": 985.3,
-            "held_stock": 985.3,
+            "held": 1005.42,
+            "nav": 1005.42,
+            "held_stock": 1005.42,
             "cash": 0.0,
-            "positions": 27,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 465.62
+              "buy_tier_level_gbp_fx_warped": 503.17
             },
-            "market": 985.31
+            "market": 999.75
           },
           {
             "date": "2026-09-28",
-            "held": 977.69,
-            "nav": 977.69,
-            "held_stock": 977.69,
+            "held": 1005.42,
+            "nav": 1005.42,
+            "held_stock": 1005.42,
             "cash": 0.0,
-            "positions": 26,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 442.71
+              "buy_tier_level_gbp_fx_warped": 502.89
             },
-            "market": 986.98
+            "market": 991.07
           },
           {
             "date": "2026-09-29",
-            "held": 981.88,
-            "nav": 981.88,
-            "held_stock": 981.88,
+            "held": 998.51,
+            "nav": 998.51,
+            "held_stock": 998.51,
             "cash": 0.0,
-            "positions": 26,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 443.44
+              "buy_tier_level_gbp_fx_warped": 499.0
             },
-            "market": 990.35
+            "market": 990.24
           },
           {
             "date": "2026-09-30",
-            "held": 993.97,
-            "nav": 993.97,
-            "held_stock": 993.97,
+            "held": 990.53,
+            "nav": 990.53,
+            "held_stock": 990.53,
             "cash": 0.0,
-            "positions": 26,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 466.14
+              "buy_tier_level_gbp_fx_warped": 499.29
             },
-            "market": 999.44
+            "market": 990.24
           },
           {
             "date": "2026-10-01",
-            "held": 991.86,
-            "nav": 993.95,
-            "held_stock": 991.86,
-            "cash": 2.09,
-            "positions": 26,
+            "held": 990.53,
+            "nav": 990.53,
+            "held_stock": 990.53,
+            "cash": 0.0,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 445.37
+              "buy_tier_level_gbp_fx_warped": 499.01
             },
-            "market": 999.44
+            "market": 990.24
           },
           {
             "date": "2026-10-02",
-            "held": 991.86,
-            "nav": 993.95,
-            "held_stock": 991.86,
-            "cash": 2.09,
-            "positions": 26,
+            "held": 990.53,
+            "nav": 990.53,
+            "held_stock": 990.53,
+            "cash": 0.0,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 446.22
+              "buy_tier_level_gbp_fx_warped": 503.1
             },
-            "market": 987.25
+            "market": 991.42
           },
           {
             "date": "2026-10-04",
-            "held": 979.87,
-            "nav": 979.87,
-            "held_stock": 979.87,
+            "held": 995.17,
+            "nav": 995.17,
+            "held_stock": 995.17,
             "cash": 0.0,
-            "positions": 27,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 478.44
+              "buy_tier_level_gbp_fx_warped": 504.72
             },
-            "market": 987.25
+            "market": 991.42
           },
           {
             "date": "2026-10-05",
-            "held": 973.52,
-            "nav": 973.52,
-            "held_stock": 973.52,
+            "held": 995.17,
+            "nav": 995.17,
+            "held_stock": 995.17,
             "cash": 0.0,
-            "positions": 26,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 458.16
+              "buy_tier_level_gbp_fx_warped": 500.74
             },
-            "market": 987.74
+            "market": 991.42
           },
           {
             "date": "2026-10-06",
-            "held": 973.48,
-            "nav": 973.48,
-            "held_stock": 973.48,
+            "held": 995.17,
+            "nav": 995.17,
+            "held_stock": 995.17,
             "cash": 0.0,
-            "positions": 26,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 424.09
+              "buy_tier_level_gbp_fx_warped": 498.74
             },
-            "market": 987.74
+            "market": 991.42
           },
           {
             "date": "2026-10-07",
-            "held": 973.48,
-            "nav": 973.48,
-            "held_stock": 973.48,
+            "held": 978.98,
+            "nav": 978.98,
+            "held_stock": 978.98,
             "cash": 0.0,
-            "positions": 26,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 423.53
+              "buy_tier_level_gbp_fx_warped": 497.8
             },
-            "market": 992.44
+            "market": 978.55
           },
           {
             "date": "2026-10-08",
-            "held": 904.36,
-            "nav": 978.77,
-            "held_stock": 904.36,
-            "cash": 74.41,
-            "positions": 24,
+            "held": 978.54,
+            "nav": 978.54,
+            "held_stock": 978.54,
+            "cash": 0.0,
+            "positions": 12,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 445.02
+              "buy_tier_level_gbp_fx_warped": 498.14
             },
-            "market": 984.84
+            "market": 981.44
           },
           {
             "date": "2026-10-09",
-            "held": 989.57,
-            "nav": 989.57,
-            "held_stock": 989.57,
+            "held": 987.75,
+            "nav": 987.75,
+            "held_stock": 987.75,
             "cash": 0.0,
-            "positions": 26,
+            "positions": 12,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 488.55
+              "buy_tier_level_gbp_fx_warped": 502.15
             },
-            "market": 991.18
+            "market": 995.94
           },
           {
             "date": "2026-10-11",
-            "held": 992.79,
-            "nav": 992.79,
-            "held_stock": 992.79,
-            "cash": 0.0,
-            "positions": 26,
+            "held": 984.83,
+            "nav": 994.01,
+            "held_stock": 984.83,
+            "cash": 9.18,
+            "positions": 12,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 472.19
+              "buy_tier_level_gbp_fx_warped": 504.53
             },
-            "market": 991.18
+            "market": 995.94
           },
           {
             "date": "2026-10-12",
-            "held": 990.25,
-            "nav": 990.25,
-            "held_stock": 990.25,
-            "cash": 0.0,
-            "positions": 26,
+            "held": 984.83,
+            "nav": 994.01,
+            "held_stock": 984.83,
+            "cash": 9.18,
+            "positions": 12,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 471.54
+              "buy_tier_level_gbp_fx_warped": 504.15
             },
-            "market": 998.75
+            "market": 995.94
           },
           {
             "date": "2026-10-13",
-            "held": 954.86,
-            "nav": 990.24,
-            "held_stock": 954.86,
-            "cash": 35.38,
-            "positions": 25,
+            "held": 984.83,
+            "nav": 994.01,
+            "held_stock": 984.83,
+            "cash": 9.18,
+            "positions": 12,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 451.96
+              "buy_tier_level_gbp_fx_warped": 505.2
             },
-            "market": 998.75
+            "market": 1004.86
           },
           {
             "date": "2026-10-14",
-            "held": 986.06,
-            "nav": 986.06,
-            "held_stock": 986.06,
+            "held": 1008.55,
+            "nav": 1008.55,
+            "held_stock": 1008.55,
             "cash": 0.0,
-            "positions": 26,
+            "positions": 14,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 499.43
+              "buy_tier_level_gbp_fx_warped": 492.57
             },
-            "market": 992.46
+            "market": 993.71
           },
           {
             "date": "2026-10-15",
-            "held": 977.8,
-            "nav": 977.8,
-            "held_stock": 977.8,
+            "held": 1001.71,
+            "nav": 1001.71,
+            "held_stock": 1001.71,
             "cash": 0.0,
-            "positions": 26,
+            "positions": 14,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 484.68
+              "buy_tier_level_gbp_fx_warped": 508.59
             },
-            "market": 991.53
+            "market": 1009.14
           },
           {
             "date": "2026-10-16",
-            "held": 994.91,
-            "nav": 994.91,
-            "held_stock": 994.91,
+            "held": 1023.32,
+            "nav": 1023.32,
+            "held_stock": 1023.32,
             "cash": 0.0,
-            "positions": 27,
+            "positions": 14,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 492.91
+              "buy_tier_level_gbp_fx_warped": 518.75
             },
-            "market": 1001.42
+            "market": 1010.24
           },
           {
             "date": "2026-10-18",
-            "held": 994.91,
-            "nav": 994.91,
-            "held_stock": 994.91,
-            "cash": 0.0,
-            "positions": 27,
+            "held": 1018.43,
+            "nav": 1028.63,
+            "held_stock": 1018.43,
+            "cash": 10.2,
+            "positions": 14,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 497.41
+              "buy_tier_level_gbp_fx_warped": 522.18
             },
-            "market": 1001.42
+            "market": 1010.24
           },
           {
             "date": "2026-10-19",
-            "held": 1001.05,
-            "nav": 1001.05,
-            "held_stock": 1001.05,
+            "held": 1028.62,
+            "nav": 1028.62,
+            "held_stock": 1028.62,
             "cash": 0.0,
-            "positions": 27,
+            "positions": 14,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 502.59
+              "buy_tier_level_gbp_fx_warped": 524.25
             },
-            "market": 1005.86
+            "market": 1003.32
           },
           {
             "date": "2026-10-20",
-            "held": 993.94,
-            "nav": 993.94,
-            "held_stock": 993.94,
+            "held": 1020.86,
+            "nav": 1020.86,
+            "held_stock": 1020.86,
             "cash": 0.0,
-            "positions": 27,
+            "positions": 14,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 491.5
+              "buy_tier_level_gbp_fx_warped": 520.22
             },
-            "market": 1002.58
+            "market": 1008.33
           },
           {
             "date": "2026-10-21",
-            "held": 995.64,
-            "nav": 995.64,
-            "held_stock": 995.64,
+            "held": 1029.34,
+            "nav": 1029.34,
+            "held_stock": 1029.34,
             "cash": 0.0,
-            "positions": 27,
+            "positions": 14,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 500.71
+              "buy_tier_level_gbp_fx_warped": 523.89
             },
-            "market": 1004.22
-          },
-          {
-            "date": "2026-10-22",
-            "held": 951.29,
-            "nav": 995.61,
-            "held_stock": 951.29,
-            "cash": 44.32,
-            "positions": 25,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 452.48
-            },
-            "market": 999.89
+            "market": 1014.39
           },
           {
             "date": "2026-10-23",
-            "held": 981.1,
-            "nav": 981.1,
-            "held_stock": 981.1,
+            "held": 1029.7,
+            "nav": 1029.7,
+            "held_stock": 1029.7,
             "cash": 0.0,
-            "positions": 27,
+            "positions": 14,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 493.39
+              "buy_tier_level_gbp_fx_warped": 519.28
             },
-            "market": 1000.12
+            "market": 999.4
           },
           {
             "date": "2026-10-25",
-            "held": 981.1,
-            "nav": 981.1,
-            "held_stock": 981.1,
+            "held": 1023.55,
+            "nav": 1023.55,
+            "held_stock": 1023.55,
             "cash": 0.0,
-            "positions": 27,
+            "positions": 14,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 494.61
+              "buy_tier_level_gbp_fx_warped": 523.35
             },
-            "market": 1000.12
+            "market": 999.4
           },
           {
             "date": "2026-10-26",
-            "held": 981.06,
-            "nav": 981.06,
-            "held_stock": 981.06,
-            "cash": 0.0,
-            "positions": 28,
+            "held": 979.04,
+            "nav": 1023.49,
+            "held_stock": 979.04,
+            "cash": 44.45,
+            "positions": 12,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 493.82
+              "buy_tier_level_gbp_fx_warped": 504.6
             },
-            "market": 1000.12
+            "market": 999.4
           },
           {
             "date": "2026-10-27",
-            "held": 981.06,
-            "nav": 981.06,
-            "held_stock": 981.06,
-            "cash": 0.0,
-            "positions": 27,
+            "held": 979.04,
+            "nav": 1023.49,
+            "held_stock": 979.04,
+            "cash": 44.45,
+            "positions": 12,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 494.32
+              "buy_tier_level_gbp_fx_warped": 505.83
             },
-            "market": 1000.12
+            "market": 999.4
           },
           {
             "date": "2026-10-28",
-            "held": 981.06,
-            "nav": 981.06,
-            "held_stock": 981.06,
-            "cash": 0.0,
-            "positions": 27,
+            "held": 979.04,
+            "nav": 1023.49,
+            "held_stock": 979.04,
+            "cash": 44.45,
+            "positions": 12,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 497.42
+              "buy_tier_level_gbp_fx_warped": 506.78
             },
-            "market": 1000.12
+            "market": 1012.71
           },
           {
             "date": "2026-10-29",
-            "held": 996.77,
-            "nav": 996.77,
-            "held_stock": 996.77,
+            "held": 1027.66,
+            "nav": 1027.66,
+            "held_stock": 1027.66,
             "cash": 0.0,
-            "positions": 27,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 506.08
+              "buy_tier_level_gbp_fx_warped": 527.89
             },
-            "market": 1011.1
+            "market": 1012.26
           },
           {
             "date": "2026-10-30",
-            "held": 995.98,
-            "nav": 995.98,
-            "held_stock": 995.98,
+            "held": 1024.49,
+            "nav": 1024.49,
+            "held_stock": 1024.49,
             "cash": 0.0,
-            "positions": 27,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 500.82
+              "buy_tier_level_gbp_fx_warped": 523.97
             },
-            "market": 1012.95
+            "market": 994.7
           },
           {
             "date": "2026-11-01",
-            "held": 995.97,
-            "nav": 995.97,
-            "held_stock": 995.97,
+            "held": 1012.16,
+            "nav": 1012.16,
+            "held_stock": 1012.16,
             "cash": 0.0,
-            "positions": 27,
+            "positions": 15,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 501.8
+              "buy_tier_level_gbp_fx_warped": 517.43
             },
-            "market": 1012.95
+            "market": 994.7
           },
           {
             "date": "2026-11-02",
-            "held": 986.6,
-            "nav": 986.6,
-            "held_stock": 986.6,
+            "held": 1012.16,
+            "nav": 1012.16,
+            "held_stock": 1012.16,
             "cash": 0.0,
-            "positions": 28,
+            "positions": 15,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 489.5
+              "buy_tier_level_gbp_fx_warped": 516.37
             },
-            "market": 1007.09
+            "market": 994.7
           },
           {
             "date": "2026-11-03",
-            "held": 986.6,
-            "nav": 986.6,
-            "held_stock": 986.6,
-            "cash": 0.0,
-            "positions": 28,
+            "held": 1000.93,
+            "nav": 1012.09,
+            "held_stock": 1000.93,
+            "cash": 11.16,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 493.42
+              "buy_tier_level_gbp_fx_warped": 468.09
             },
-            "market": 1007.09
+            "market": 994.7
           },
           {
             "date": "2026-11-04",
-            "held": 988.7,
-            "nav": 988.7,
-            "held_stock": 988.7,
-            "cash": 0.0,
-            "positions": 28,
+            "held": 1000.94,
+            "nav": 1012.1,
+            "held_stock": 1000.94,
+            "cash": 11.16,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 491.46
+              "buy_tier_level_gbp_fx_warped": 467.47
             },
-            "market": 1007.09
+            "market": 994.7
           },
           {
             "date": "2026-11-05",
-            "held": 988.68,
-            "nav": 988.68,
-            "held_stock": 988.68,
-            "cash": 0.0,
-            "positions": 28,
+            "held": 1009.77,
+            "nav": 1009.86,
+            "held_stock": 1009.77,
+            "cash": 0.09,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 493.01
+              "buy_tier_level_gbp_fx_warped": 512.42
             },
-            "market": 1007.09
+            "market": 994.29
           },
           {
             "date": "2026-11-06",
-            "held": 1023.06,
-            "nav": 1023.06,
-            "held_stock": 1023.06,
+            "held": 1026.95,
+            "nav": 1026.95,
+            "held_stock": 1026.95,
             "cash": 0.0,
-            "positions": 29,
+            "positions": 12,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 504.7
+              "buy_tier_level_gbp_fx_warped": 520.25
             },
-            "market": 1025.77
+            "market": 999.42
           },
           {
             "date": "2026-11-07",
-            "held": 1023.06,
-            "nav": 1023.06,
-            "held_stock": 1023.06,
+            "held": 1034.8,
+            "nav": 1034.8,
+            "held_stock": 1034.8,
             "cash": 0.0,
-            "positions": 29,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 505.88
+              "buy_tier_level_gbp_fx_warped": 524.12
             },
-            "market": 1025.77
+            "market": 999.42
           },
           {
             "date": "2026-11-08",
-            "held": 1017.1,
-            "nav": 1017.1,
-            "held_stock": 1017.1,
+            "held": 1026.16,
+            "nav": 1026.16,
+            "held_stock": 1026.16,
             "cash": 0.0,
-            "positions": 30,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 502.93
+              "buy_tier_level_gbp_fx_warped": 519.31
             },
-            "market": 1025.77
-          },
-          {
-            "date": "2026-11-09",
-            "held": 1017.08,
-            "nav": 1017.08,
-            "held_stock": 1017.08,
-            "cash": 0.0,
-            "positions": 31,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 503.36
-            },
-            "market": 1026.78
+            "market": 999.42
           },
           {
             "date": "2026-11-10",
-            "held": 1032.89,
-            "nav": 1032.89,
-            "held_stock": 1032.89,
+            "held": 1026.16,
+            "nav": 1026.16,
+            "held_stock": 1026.16,
             "cash": 0.0,
-            "positions": 32,
+            "positions": 12,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 510.27
+              "buy_tier_level_gbp_fx_warped": 516.86
             },
-            "market": 1026.78
+            "market": 999.42
           },
           {
             "date": "2026-11-11",
-            "held": 1032.89,
-            "nav": 1032.89,
-            "held_stock": 1032.89,
-            "cash": 0.0,
-            "positions": 31,
+            "held": 985.87,
+            "nav": 1026.12,
+            "held_stock": 985.87,
+            "cash": 40.25,
+            "positions": 11,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 510.07
+              "buy_tier_level_gbp_fx_warped": 505.04
             },
-            "market": 1026.78
+            "market": 1016.81
           },
           {
             "date": "2026-11-12",
-            "held": 1045.15,
-            "nav": 1045.15,
-            "held_stock": 1045.15,
+            "held": 1035.83,
+            "nav": 1035.83,
+            "held_stock": 1035.83,
             "cash": 0.0,
-            "positions": 31,
+            "positions": 12,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 515.33
+              "buy_tier_level_gbp_fx_warped": 523.01
             },
-            "market": 1040.1
+            "market": 1016.81
           }
         ],
         "series": [
@@ -15633,7 +15634,7 @@
           },
           {
             "id": "market",
-            "label": "^AXJO equivalent",
+            "label": "^GSPTSE equivalent",
             "kind": "market",
             "color": "#64748b"
           },
@@ -15661,16 +15662,16 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 58
+            "point_count": 54
           }
         ],
         "last": {
           "date": "2026-11-12",
-          "held": 1045.15,
-          "market": 1040.1,
-          "nav": 1045.15,
-          "positions": 31,
-          "excess_pct": 0.004855
+          "held": 1035.83,
+          "market": 1016.81,
+          "nav": 1035.83,
+          "positions": 12,
+          "excess_pct": 0.018706
         }
       },
       "learning_depth": null,

@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-11-12T19:38:45.034826+00:00",
+  "compiled_at": "2026-11-12T23:29:51.991171+00:00",
   "run_at": null,
-  "task_count": 272,
+  "task_count": 274,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -4058,14 +4058,14 @@
       "id": "eng-20261112-02",
       "area": "scoring",
       "title": "Workflow fix: library ingest sprint 2 failure",
-      "summary": "GitHub workflow library-ingest-sprint-2.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/43284295893",
+      "summary": "GitHub workflow library-ingest-sprint-2.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/43322528965",
       "priority": "high",
       "priority_score": 90.0,
       "source": "workflow_failure",
       "evidence": {
         "workflow": "library-ingest-sprint-2.yml",
-        "run_id": "43284295893",
-        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/43284295893",
+        "run_id": "43322528965",
+        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/43322528965",
         "signature": null
       },
       "acceptance_criteria": [
@@ -13916,6 +13916,118 @@
       "merged_at": "2026-10-02T10:55:17.370432+00:00"
     },
     {
+      "id": "eng-20261112-04",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked tsx60 leftover AEM.TO",
+      "summary": "Library market tsx60 (S&P/TSX 60) parked AEM.TO after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statuto",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "tsx60",
+        "library_market": "tsx60",
+        "hunter_market_id": "tsx60",
+        "hunter_ticker": "AEM.TO",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "merge_class": "parked_hunter"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for AEM.TO only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20261112-04.md",
+      "branch_name": "cursor/eng-20261112-04-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-11-12T23:24:36.167958+00:00",
+      "merge_class": "parked_hunter",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1386",
+      "pr_number": 1386,
+      "merged_at": "2026-11-12T23:38:13.850030+00:00"
+    },
+    {
+      "id": "eng-20261112-03",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked sp500 leftover NRG",
+      "summary": "Library market sp500 (S&P 500) parked NRG after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statutory rep",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "sp500",
+        "library_market": "sp500",
+        "hunter_market_id": "sp500",
+        "hunter_ticker": "NRG",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "merge_class": "parked_hunter"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for NRG only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20261112-03.md",
+      "branch_name": "cursor/eng-20261112-03-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-11-12T21:48:50.039695+00:00",
+      "merge_class": "parked_hunter",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1385",
+      "pr_number": 1385,
+      "merged_at": "2026-11-12T22:02:39.748233+00:00"
+    },
+    {
       "id": "eng-20261106-02",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked asx200 leftover ALK.AX",
@@ -17606,7 +17718,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-11-12T12:33:03.033213+00:00",
+    "evaluated_at": "2026-11-12T22:50:39.248716+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -17667,7 +17779,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 3,
-    "evaluated_at": "2026-11-12T20:19:03.471741+00:00",
+    "evaluated_at": "2026-11-13T02:22:54.440081+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -17681,8 +17793,10 @@
     "cooldown_hours": 12.0
   },
   "workflow_failure_compiled": true,
-  "micro_compile_source": "ingest_gap_closure",
+  "micro_compile_source": "parked_source_hunter",
   "source_gap_closure_run_id": "igc-20260911-02",
   "source_trial_id": "igc-20260911-02",
-  "source_chain_root_id": "igc-20260911-02"
+  "source_chain_root_id": "igc-20260911-02",
+  "library_market_id": "tsx60",
+  "hunter_ticker": "AEM.TO"
 }

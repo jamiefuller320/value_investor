@@ -13751,6 +13751,24 @@ def test_parked_source_hunter_skip_lmt_sp500():
     assert fetch_filings_ir_allowlist("LMT") == []
 
 
+def test_parked_source_hunter_skip_nrg_sp500():
+    """eng-20261112-03: NRG leftover IWB is Item 7.01 LS Power sale 8-K, not missing 10-K/10-Q."""
+    assert "NRG" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["NRG"]
+    assert "7.01" in reason
+    assert "8-K" in reason
+    assert "LS Power" in reason
+    assert "substantiveness" in reason
+    assert "EX-99.1" in reason
+    assert "10-K/10-Q" in reason
+    assert "403" in reason
+    assert fetch_filings_ir_allowlist("NRG") == []
+    reg_fd_8k = (
+        "https://www.sec.gov/Archives/edgar/data/1013871/000110465926124147/tm2629302d1_8k.htm"
+    )
+    assert fetch_filing_body(reg_fd_8k) is None
+
+
 def test_parked_source_hunter_skip_tsn_sp500():
     """eng-20260907-08: TSN leftover IWB is Item 8.01 segment-recast 8-K, not missing 10-K/10-Q."""
     assert "TSN" in PARKED_SOURCE_HUNTER_SKIP
@@ -15091,6 +15109,37 @@ def test_parked_source_hunter_ppl_to_tsx60_has_fetchable_ir():
     assert all("sec.gov" in url for url in urls)
     aif_url = next(url for url in urls if "aifppcq42025.htm" in url)
     body = _live_fetch_filing_body(aif_url)
+    if not body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) >= 50000
+
+
+def test_fetch_filings_ir_allowlist_tsx60_aem_to_builtins(tmp_path: Path):
+    """Regression: AEM.TO parked IWB — SEC FY2025 annual MD&A + Q2 2026 interim MD&A HTML."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("AEM.TO", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("aem-20251231xex99d3.htm" in url for url in urls)
+    assert any("tm2619289d3_ex99-1.htm" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 1
+    assert sum(1 for row in rows if row["period"] == "interim") >= 1
+    assert {row["period"] for row in rows} <= {"annual", "interim", "other"}
+    assert len(fetch_filings_ir_allowlist("AEM", path=allowlist_path)) == 2
+
+
+def test_parked_source_hunter_aem_to_tsx60_has_fetchable_ir():
+    """eng-20261112-04: AEM.TO has live-fetchable Agnico Eagle SEC statutory HTML."""
+    assert "AEM.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("AEM.TO")
+    assert len(rows) == 2
+    urls = [row["url"] for row in rows]
+    assert all("sec.gov" in url for url in urls)
+    annual_url = next(url for url in urls if "aem-20251231xex99d3.htm" in url)
+    body = _live_fetch_filing_body(annual_url)
     if not body:
         pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
     assert len(body) >= 50000

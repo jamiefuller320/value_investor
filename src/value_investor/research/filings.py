@@ -1028,6 +1028,17 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1546066/000154606626000014/aifppcq42025.htm",
         "https://www.sec.gov/Archives/edgar/data/1546066/000154606626000082/q32026interimreport.htm",
     ],
+    # tsx60 IWB blocker — eng-20261112-04: AEM.TO parked unfetchable_iwb; SEC FY2025 40-F
+    # EX-99.3 annual MD&A + Q2 2026 interim 6-K EX-99.1 HTML (live-fetchable; 40-F cover alone
+    # is thin vs full statutory MD&A exhibit).
+    "AEM.TO": [
+        "https://www.sec.gov/Archives/edgar/data/2809/000110465926032153/aem-20251231xex99d3.htm",
+        "https://www.sec.gov/Archives/edgar/data/2809/000110465926088216/tm2619289d3_ex99-1.htm",
+    ],
+    "AEM": [
+        "https://www.sec.gov/Archives/edgar/data/2809/000110465926032153/aem-20251231xex99d3.htm",
+        "https://www.sec.gov/Archives/edgar/data/2809/000110465926088216/tm2619289d3_ex99-1.htm",
+    ],
     # hang_seng buy-tier deepen — eng-20260930-03: asia_filings Google News miss / zero-body;
     # seed HKEX statutory PDFs and issuer IR mirrors for stalled buy-tier names.
     "1099.HK": [
@@ -1218,6 +1229,13 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "below the substantiveness gate; narrative extraction trims at a forward-looking "
         "Management's Discussion cross-reference and SEC complete-submission .txt is fetchable "
         "but not the indexed URL and 10-K/10-Q are already bodied."
+    ),
+    "NRG": (
+        "sp500 leftover IWB: indexed-without-body row is Item 7.01 Regulation FD LS Power "
+        "asset-sale 8-K iXBRL primary below the substantiveness gate; EX-99.1 press release "
+        "fetches but is not the indexed URL and duplicates same-day Item 2.02 earnings 8-K "
+        "already bodied; investors.nrg.com IR is bot-gated (403); 10-K/10-Q are already "
+        "bodied via sec_edgar."
     ),
     "TSN": (
         "Leftover indexed-without-body row is Item 8.01 segment-reporting recast 8-K iXBRL "
@@ -1436,6 +1454,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # tsx60 ABX.TO — d833573* / d67611* SEC slugs lack issuer tokens for IR title gate.
     "ABX": ("Barrick", "Barrick Gold", "Barrick Gold Corporation"),
     "GOLD": ("Barrick", "Barrick Gold", "Barrick Gold Corporation"),
+    # tsx60 AEM.TO — aem-* / tm2619289* SEC slugs lack issuer tokens for IR title gate.
+    "AEM": ("Agnico", "Agnico Eagle", "Agnico Eagle Mines"),
+    "AEM.TO": ("Agnico", "Agnico Eagle", "Agnico Eagle Mines"),
     # tsx60 CVE.TO — a2025annualinformationform / q32026managementsdiscussio SEC slugs
     # are run-together words, so the IR title gate needs the issuer name.
     "CVE": ("Cenovus", "Cenovus Energy", "Cenovus Energy Inc."),
@@ -6196,6 +6217,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.sec.gov/Archives/edgar/data/756894/000119312526079253/d833573dex991.htm": "annual",
     "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex991.htm": "interim",
     "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex992.htm": "interim",
+    # eng-20261112-04: AEM.TO — FY2025 40-F EX-99.3 + Q2 2026 6-K EX-99.1 slugs lack period tokens.
+    "https://www.sec.gov/Archives/edgar/data/2809/000110465926032153/aem-20251231xex99d3.htm": "annual",
+    "https://www.sec.gov/Archives/edgar/data/2809/000110465926088216/tm2619289d3_ex99-1.htm": "interim",
     # eng-20261107-02: AZM.MI — emarketstorage CONSOB comunicati slugs are date_hash only.
     "https://www.emarketstorage.it/sites/default/files/comunicati/2026-04/20260402_181268.pdf": "annual",
     "https://www.emarketstorage.it/sites/default/files/comunicati/2025-07/20250731_170567.pdf": "interim",

@@ -268,6 +268,20 @@
       "fix": "The workflow keeps the decrypted cache and the encrypted tarball under the runner temp dir, outside the checkout. The runner guard is unchanged.",
       "unchanged": "No EODHD call was made by the failed run and nothing was committed. No rule or constant changed.",
       "doc": ".github/workflows/strategy-book-uk-replay.yml"
+    },
+    {
+      "marker_id": "strategy-book-uk-replay-v0-fetch-resilience-v1",
+      "at": "2026-11-12T21:40:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner (pending: merging this change approves it)",
+      "new_registration_id": false,
+      "logged_on_registration_id": "strategy-book-uk-replay-v0",
+      "sealed_text": "Hitting the soft cap writes status partial and a cursor; the next run resumes and does not drop unfinished names quietly.",
+      "what_was_wrong": "The second fetch (run 43287164973, 2026-11-12 19:09-21:09 UTC) hit the 120-minute job limit, which cannot hold ~26.7k requests at <=5/s. The cursor was saved only at the end, so its done-flags and the day's call count were lost; cache files were written in place, so a cancelled write could leave a truncated file that resume would skip; and the encrypt step failed on tar's 'file changed as we read it' warning (the encrypted cache was still saved).",
+      "fix": "Job limit 350 minutes; the runner stops itself after UK_REPLAY_MAX_MINUTES (320) as partial/time_budget; the cursor is saved every 25 names; every cache file is written atomically; a cache file that does not parse is fetched again; the encrypt step tolerates tar exit 1.",
+      "unchanged": "No constant, window, call weight, soft cap or scoring rule changed. Files already fetched are kept and skipped on resume.",
+      "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
     }
   ]
 }
