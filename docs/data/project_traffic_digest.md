@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-13T07:57:00.287380+00:00`
+Generated: `2026-11-13T12:32:38.679056+00:00`
 Trajectory: **blocked_by_pr_queue**
 Dispatch pause: **active** (stuck PRs: 0)
 
@@ -26,18 +26,18 @@ Dispatch pause: **active** (stuck PRs: 0)
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
 - [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-11-13T02:32:07.318079+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Ops monitor overall=warn at 2026-11-13T07:46:55.247575+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=True; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `stop_automation_waste` — signals=1; parked=eng-20261113-01; pause=True (applied)
+- `stop_automation_waste` — signals=1; parked=eng-20261113-02; pause=True (applied)
 - `pause_dispatch` — paused — 0 stuck PR(s); reasons=['automation_waste'] (applied)
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `parked_hunter`/verified PR #1392 `eng-20261113-01` — Hunt fetchable IR source for parked dax leftover MTX.DE
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 374
+- Occasion count: 378
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate failed` — 7×
 - `validate check failed` — 6×
@@ -46,22 +46,6 @@ Dispatch pause: **active** (stuck PRs: 0)
 - `validate job failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `ruff_format` — 2×
-
-## Ops-monitor email handoff
-- Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 13 (open=13, resolved=0)
-- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Sector headwind gate coverage gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Memo model comparison failed — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Chart highs and lows incomplete — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Strategy-book US rehearsal: licensed data deletion due — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Deferred idea triggers met — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Deferred idea triggers unreadable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
