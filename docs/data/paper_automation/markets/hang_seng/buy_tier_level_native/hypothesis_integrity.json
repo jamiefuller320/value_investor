@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "updated_at": "2026-11-12T07:39:59.944614+00:00",
-  "as_of": "2026-11-12T07:39:59.925863+00:00",
+  "updated_at": "2026-11-13T07:37:04.453186+00:00",
+  "as_of": "2026-11-13T07:37:04.433773+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -17,7 +17,7 @@
     "skip_underwater_urgency_when_intact": true
   },
   "holding_count": 14,
-  "underwater_count": 3,
+  "underwater_count": 4,
   "thesis_status_counts": {
     "intact": 3,
     "weakening": 11,
@@ -26,31 +26,31 @@
   },
   "portfolio_feedback": {
     "holding_count": 14,
-    "loser_count": 3,
-    "loser_share": 0.2143,
-    "loser_nav_share": 0.2165,
+    "loser_count": 4,
+    "loser_share": 0.2857,
+    "loser_nav_share": 0.2866,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
-    "intact_loser_count": 0,
+    "intact_loser_count": 1,
     "weakening_loser_count": 3,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
       "quality": 0.0,
       "dividend": 0.0,
-      "garp": 0.6667,
+      "garp": 0.5,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
       "cheapness": 0.0,
-      "quality": 0.2727,
-      "dividend": 0.1818,
-      "garp": 0.6364,
+      "quality": 0.3,
+      "dividend": 0.2,
+      "garp": 0.7,
       "risk": 0.0
     },
     "selection_feedback_flags": [],
-    "balancing_hint": "maintain",
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
@@ -61,12 +61,12 @@
       "recommended_action": "watch_review",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0898,
-      "mark": 23.88,
+      "unrealized_pct": -0.1203,
+      "mark": 23.08,
       "avg_cost": 26.2356,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.27,
+      "conviction_score": 0.3239,
       "data_quality_score": 0.9,
       "passed_families": [
         "cheapness",
@@ -80,7 +80,7 @@
       "research_verdict": "caution",
       "reasons": [
         "research verdict caution",
-        "conviction 27% below intact floor",
+        "conviction 32% below intact floor",
         "still strong_buy",
         "cheapness family still passes"
       ],
@@ -91,7 +91,7 @@
       ],
       "weaken_reasons": [
         "research verdict caution",
-        "conviction 27% below intact floor"
+        "conviction 32% below intact floor"
       ],
       "broken_reasons": []
     },
@@ -102,8 +102,8 @@
       "recommended_action": "watch_review",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0804,
-      "mark": 8.405,
+      "unrealized_pct": -0.1192,
+      "mark": 8.05,
       "avg_cost": 9.1397,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -141,8 +141,8 @@
       "recommended_action": "watch_review",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0551,
-      "mark": 27.02,
+      "unrealized_pct": -0.0915,
+      "mark": 25.98,
       "avg_cost": 28.5967,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -179,10 +179,10 @@
       "name": "China Hongqiao Group Limited",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0372,
-      "mark": 19.9,
+      "unrealized_pct": -0.056,
+      "mark": 19.51,
       "avg_cost": 20.6684,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -198,6 +198,7 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
@@ -215,14 +216,54 @@
       "broken_reasons": []
     },
     {
+      "ticker": "1099.HK",
+      "name": "Sinopharm Group Co. Ltd.",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 16.68,
+      "avg_cost": 16.68,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.705,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "neutral",
+      "reasons": [
+        "research verdict neutral",
+        "still strong_buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 70%"
+      ],
+      "weaken_reasons": [
+        "research verdict neutral"
+      ],
+      "broken_reasons": []
+    },
+    {
       "ticker": "0101.HK",
       "name": "Hang Lung Properties Limited",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0076,
-      "mark": 6.535,
+      "unrealized_pct": 0.0038,
+      "mark": 6.51,
       "avg_cost": 6.4854,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -256,18 +297,58 @@
       "broken_reasons": []
     },
     {
+      "ticker": "2618.HK",
+      "name": "JD Logistics, Inc.",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0356,
+      "mark": 10.29,
+      "avg_cost": 9.9359,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.36,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "neutral",
+      "reasons": [
+        "research verdict neutral",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 36%"
+      ],
+      "weaken_reasons": [
+        "research verdict neutral"
+      ],
+      "broken_reasons": []
+    },
+    {
       "ticker": "2382.HK",
       "name": "Sunny Optical Technology (Group) Company Limited",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0159,
-      "mark": 64.0,
+      "unrealized_pct": 0.0429,
+      "mark": 65.7,
       "avg_cost": 63.0,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.305,
+      "conviction_score": 0.3475,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -280,7 +361,7 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "conviction 30% below intact floor",
+        "conviction 35% below intact floor",
         "still buy",
         "research accumulate"
       ],
@@ -291,7 +372,7 @@
         "data_quality 1.00"
       ],
       "weaken_reasons": [
-        "conviction 30% below intact floor"
+        "conviction 35% below intact floor"
       ],
       "broken_reasons": []
     },
@@ -302,8 +383,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0287,
-      "mark": 100.2,
+      "unrealized_pct": 0.0452,
+      "mark": 101.8,
       "avg_cost": 97.4,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -342,12 +423,12 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0535,
-      "mark": 68.8,
+      "unrealized_pct": 0.0504,
+      "mark": 68.6,
       "avg_cost": 65.3061,
-      "signal": "hold",
+      "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.3232,
+      "conviction_score": 0.3357,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -360,19 +441,18 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "left buy tier (hold)",
-        "conviction 32% below intact floor",
-        "research accumulate",
-        "cheapness family still passes"
+        "conviction 34% below intact floor",
+        "still buy",
+        "research accumulate"
       ],
       "intact_reasons": [
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00"
       ],
       "weaken_reasons": [
-        "left buy tier (hold)",
-        "conviction 32% below intact floor"
+        "conviction 34% below intact floor"
       ],
       "broken_reasons": []
     },
@@ -383,8 +463,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0566,
-      "mark": 21.08,
+      "unrealized_pct": 0.0516,
+      "mark": 20.98,
       "avg_cost": 19.95,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -418,54 +498,14 @@
       "broken_reasons": []
     },
     {
-      "ticker": "2618.HK",
-      "name": "JD Logistics, Inc.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0628,
-      "mark": 10.56,
-      "avg_cost": 9.9359,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.36,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "neutral",
-      "reasons": [
-        "research verdict neutral",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 36%"
-      ],
-      "weaken_reasons": [
-        "research verdict neutral"
-      ],
-      "broken_reasons": []
-    },
-    {
       "ticker": "0291.HK",
       "name": "China Resources Beer (Holdings) Company Limited",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.071,
-      "mark": 20.72,
+      "unrealized_pct": 0.0544,
+      "mark": 20.4,
       "avg_cost": 19.3467,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -510,7 +550,7 @@
       "avg_cost": 9.217,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4439,
+      "conviction_score": 0.4278,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -531,7 +571,7 @@
         "still buy",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 44%"
+        "conviction 43%"
       ],
       "weaken_reasons": [
         "research verdict caution"
@@ -545,8 +585,8 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.1036,
-      "mark": 49.26,
+      "unrealized_pct": 0.1027,
+      "mark": 49.22,
       "avg_cost": 44.636,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -574,48 +614,6 @@
       ],
       "weaken_reasons": [
         "research verdict neutral"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "2313.HK",
-      "name": "Shenzhou International Group Holdings Limited",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.1992,
-      "mark": 42.14,
-      "avg_cost": 35.1387,
-      "signal": "hold",
-      "timing_signal": "wait",
-      "conviction_score": 0.2332,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "left buy tier (hold)",
-        "research verdict caution",
-        "conviction 23% below intact floor",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "intact_reasons": [
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "left buy tier (hold)",
-        "research verdict caution",
-        "conviction 23% below intact floor"
       ],
       "broken_reasons": []
     }

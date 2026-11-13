@@ -51391,7 +51391,7 @@
       "cards": []
     },
     {
-      "logged_at": "2026-11-13T09:46:51.983204+01:00",
+      "logged_at": "2026-11-13T08:23:39.875573+01:00",
       "verdict_counts": {
         "agree": 1,
         "veto": 0,
@@ -51412,14 +51412,12 @@
           "algo_reason": "Automated buy",
           "shadow_verdict": "agree",
           "reasons": [
-            "Buy into buyish target set \u2014 agree with algo selection."
+            "Screen signal is buy and still_buyish is true at decision time, so the name remains in the buyish cohort.",
+            "rank_drop is 0 (conviction_rank 21 vs entry_rank 21), so there is no rank deterioration that would argue against adding or holding the sleeve.",
+            "Research overlay is bound with verdict accumulate, consistent with an automated buy rather than a veto.",
+            "fcf_basis_overlay is false, so no extra FCF-basis flag conflicts with proceeding on the supplied overlay."
           ],
           "evidence": [
-            {
-              "kind": "algo_reason",
-              "source": "plan_or_trade",
-              "detail": "Automated buy"
-            },
             {
               "kind": "screen_signal",
               "source": "candidates",
@@ -51430,13 +51428,13 @@
               "kind": "conviction_rank",
               "source": "candidates",
               "detail": "1-based conviction rank among buyish names",
-              "value": 23
+              "value": 21
             },
             {
               "kind": "entry_rank",
               "source": "rebalance_state",
               "detail": "Conviction rank recorded at sleeve entry",
-              "value": 23
+              "value": 21
             },
             {
               "kind": "rank_drop",
@@ -51449,12 +51447,6 @@
               "source": "candidates",
               "detail": "Research overlay verdict at decision time",
               "value": "accumulate"
-            },
-            {
-              "kind": "conviction_score",
-              "source": "candidates",
-              "detail": "Conviction score at decision time",
-              "value": 0.5632
             },
             {
               "kind": "still_buyish",
@@ -51475,13 +51467,13 @@
               "value": true
             }
           ],
-          "judge_backend": "evidence_heuristic",
-          "judge_spec_id": "heuristic.v1",
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
           "influences_live": false,
           "observe_only": true,
           "track_id": "buy_tier_level",
-          "logged_at": "2026-11-13T09:46:51.983204+01:00",
-          "proposal_id": "buy_tier_level:ESSITY-B.ST:buy:2026-11-13T09:46:51.983204+01:00",
+          "logged_at": "2026-11-13T08:23:39.875573+01:00",
+          "proposal_id": "buy_tier_level:ESSITY-B.ST:buy:2026-11-13T08:23:39.875573+01:00",
           "meta": {
             "still_buyish": true,
             "rank_drop": 0,
@@ -51496,24 +51488,335 @@
               "overlay_bound": true,
               "interim_eps_decline_pct": null,
               "adjusted_eps_growth_pct": null
-            }
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
           },
-          "schema_version": 1
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
         }
       ]
+    },
+    {
+      "logged_at": "2026-11-13T08:35:05.830739+01:00",
+      "verdict_counts": {
+        "agree": 2,
+        "veto": 0,
+        "abstain": 1
+      },
+      "by_algo_action": {
+        "sell": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 1
+        }
+      },
+      "cards": [
+        {
+          "ticker": "MIO.IR",
+          "name": "Mincon Group plc",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "still_buyish is false \u2014 name no longer in buy/strong_buy cohort at decision time.",
+            "Effective screen_signal is hold with research_verdict caution; exit aligns with leaving the target set per algo_reason.",
+            "No still_buyish capacity-bump case \u2014 sell is not veto-worthy under rank_drop sell rule."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-11-13T08:35:05.830739+01:00",
+          "proposal_id": "buy_tier_level:MIO.IR:sell:2026-11-13T08:35:05.830739+01:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "PRX.AS",
+          "name": "Prosus N.V.",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "abstain",
+          "reasons": [
+            "still_buyish is false while algo proposes buy \u2014 effective screen_signal is hold, not buy/strong_buy.",
+            "Research overlay bound with research_verdict caution; conviction_rank equals entry_rank with rank_drop 0 but buyish gate not met.",
+            "Evidence does not decisively support or block the buy without inventing buy cohort membership."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 31
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 31
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-11-13T08:35:05.830739+01:00",
+          "proposal_id": "buy_tier_level:PRX.AS:buy:2026-11-13T08:35:05.830739+01:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "abstain",
+              "reasons": [
+                "Buy while not buyish \u2014 abstain."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "VOE.VI",
+          "name": "Voestalpine AG",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "still_buyish is true with effective screen_signal buy \u2014 name remains in buyish target set.",
+            "research_verdict accumulate with overlay_bound; rank_drop 0 (conviction_rank 34, entry_rank 34) shows no material rank deterioration.",
+            "Buy is consistent with buyish screen and research overlay at decision time."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 34
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 34
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.3092
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-11-13T08:35:05.830739+01:00",
+          "proposal_id": "buy_tier_level:VOE.VI:buy:2026-11-13T08:35:05.830739+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    },
+    {
+      "logged_at": "2026-11-13T08:38:49.028908+01:00",
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {},
+      "cards": []
     }
   ],
   "observe_only": true,
   "influences_live": false,
   "track_id": "buy_tier_level",
   "last_pass": {
-    "logged_at": "2026-11-13T09:46:51.983204+01:00",
-    "card_count": 1,
+    "logged_at": "2026-11-13T08:38:49.028908+01:00",
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 1,
+      "agree": 0,
       "veto": 0,
       "abstain": 0
     }
   },
-  "updated_at": "2026-11-13T08:46:52.803866+00:00"
+  "updated_at": "2026-11-13T07:38:55.284726+00:00"
 }

@@ -1,31 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-12T02:39:04.208507-05:00",
+    "local_time": "2026-11-13T02:35:26.034847-05:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-12T09:30:00-05:00",
-    "settle_at": "2026-11-12T10:00:00-05:00",
+    "market_open_at": "2026-11-13T09:30:00-05:00",
+    "settle_at": "2026-11-13T10:00:00-05:00",
     "can_act": false,
     "reason": "before market open"
   },
-  "trades": [
-    {
-      "id": "e672e640-7881-440b-a422-a153f1ebbc42",
-      "fund_id": "0fa099b3-4ae8-4e4c-99e1-4c3733b6161d",
-      "acted_at": "2026-11-12T02:39:04.208507-05:00",
-      "ticker": "AEM.TO",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.151832,
-      "price": 265.03,
-      "gross": 40.24,
-      "cost": 0.01,
-      "net_cash": -40.25,
-      "note": "Automated buy",
-      "name": "Agnico Eagle Mines Limited"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -39,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1035.83,
+    "nav": 1028.48,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -52,126 +36,197 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 86.32,
+    "target_sleeve_value": 93.5,
     "targets": [
       {
         "ticker": "WSP.TO",
         "name": "WSP Global Inc.",
         "signal": "strong_buy",
-        "conviction_score": 0.8792000000000001,
-        "price": 184.67
+        "conviction_score": 0.9125000000000001,
+        "price": 184.33
       },
       {
         "ticker": "OTEX.TO",
         "name": "Open Text Corporation",
         "signal": "strong_buy",
-        "conviction_score": 0.8550000000000001,
-        "price": 35.61
+        "conviction_score": 0.8450000000000001,
+        "price": 35.38
       },
       {
         "ticker": "K.TO",
         "name": "Kinross Gold Corporation",
         "signal": "strong_buy",
-        "conviction_score": 0.8094,
-        "price": 30.56
+        "conviction_score": 0.8312,
+        "price": 29.53
       },
       {
         "ticker": "CNQ.TO",
         "name": "Canadian Natural Resources Limited",
         "signal": "buy",
         "conviction_score": 0.7104,
-        "price": 69.69
+        "price": 70.04
+      },
+      {
+        "ticker": "MG.TO",
+        "name": "Magna International Inc.",
+        "signal": "buy",
+        "conviction_score": 0.6625,
+        "price": 88.96
       },
       {
         "ticker": "L.TO",
         "name": "Loblaw Companies Limited",
         "signal": "buy",
         "conviction_score": 0.66,
-        "price": 69.11
-      },
-      {
-        "ticker": "MG.TO",
-        "name": "Magna International Inc.",
-        "signal": "buy",
-        "conviction_score": 0.6208,
-        "price": 89.34
+        "price": 69.35
       },
       {
         "ticker": "TECK-B.TO",
         "name": "Teck Resources Limited",
-        "signal": "buy",
-        "conviction_score": 0.4816,
-        "price": 90.71
+        "signal": "strong_buy",
+        "conviction_score": 0.49529999999999996,
+        "price": 87.23
       },
       {
         "ticker": "CP.TO",
         "name": "Canadian Pacific Kansas City Limited",
         "signal": "buy",
-        "conviction_score": 0.4467,
-        "price": 133.6
+        "conviction_score": 0.47,
+        "price": 134.75
       },
       {
         "ticker": "ABX.TO",
         "name": "Barrick Mining Corporation",
         "signal": "buy",
-        "conviction_score": 0.4381,
-        "price": 55.67
+        "conviction_score": 0.4512,
+        "price": 53.96
       },
       {
         "ticker": "MRU.TO",
         "name": "Metro Inc.",
         "signal": "buy",
         "conviction_score": 0.416,
-        "price": 98.49
-      },
-      {
-        "ticker": "AEM.TO",
-        "name": "Agnico Eagle Mines Limited",
-        "signal": "buy",
-        "conviction_score": 0.3957,
-        "price": 265.03
+        "price": 98.59
       },
       {
         "ticker": "SAP.TO",
         "name": "Saputo Inc.",
         "signal": "buy",
         "conviction_score": 0.3876,
-        "price": 44.46
+        "price": 45.07
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "AEM.TO",
+        "name": "Agnico Eagle Mines Limited",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.151832,
+        "price": 265.03,
+        "value": 40.24
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [],
-    "skipped": [
+    "anticipated_buys": [
       {
+        "action": "buy",
         "ticker": "K.TO",
         "name": "Kinross Gold Corporation",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 86.32,
-        "conviction_score": 0.8094,
+        "reason": "Top-up to equal weight",
+        "value": 12.3,
+        "price": 29.53,
+        "target_value": 93.5,
+        "conviction_score": 0.8312,
+        "signal": "strong_buy"
+      }
+    ],
+    "anticipated_holds": [
+      {
+        "action": "hold",
+        "ticker": "WSP.TO",
+        "name": "WSP Global Inc.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 90.82,
+        "target_value": 93.5,
+        "conviction_score": 0.9125000000000001,
         "signal": "strong_buy"
       },
       {
-        "ticker": "AEM.TO",
-        "name": "Agnico Eagle Mines Limited",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 86.32,
-        "conviction_score": 0.3957,
+        "action": "hold",
+        "ticker": "OTEX.TO",
+        "name": "Open Text Corporation",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 90.29,
+        "target_value": 93.5,
+        "conviction_score": 0.8450000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "L.TO",
+        "name": "Loblaw Companies Limited",
+        "reason": "Already near equal-weight target",
+        "value": 93.15,
+        "target_value": 93.5,
+        "conviction_score": 0.66,
         "signal": "buy"
       },
       {
+        "action": "hold",
+        "ticker": "TECK-B.TO",
+        "name": "Teck Resources Limited",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 85.11,
+        "target_value": 93.5,
+        "conviction_score": 0.49529999999999996,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "CP.TO",
+        "name": "Canadian Pacific Kansas City Limited",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 89.95,
+        "target_value": 93.5,
+        "conviction_score": 0.47,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "ABX.TO",
+        "name": "Barrick Mining Corporation",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 87.93,
+        "target_value": 93.5,
+        "conviction_score": 0.4512,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "MRU.TO",
+        "name": "Metro Inc.",
+        "reason": "Already near equal-weight target",
+        "value": 93.26,
+        "target_value": 93.5,
+        "conviction_score": 0.416,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
         "ticker": "SAP.TO",
         "name": "Saputo Inc.",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 86.32,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 86.07,
+        "target_value": 93.5,
         "conviction_score": 0.3876,
         "signal": "buy"
       }
     ],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 12 equal-weight sleeve(s)."
+    "summary": "Next rebalance would target 11 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 8 near-target holding(s)."
   },
   "alerts": [
     {
@@ -180,7 +235,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 35.61,
+      "mark": 35.38,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -190,11 +245,11 @@
       "name": "Barrick Mining Corporation",
       "source": "paper",
       "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 55.67,
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
+      "mark": 53.96,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "K.TO",
@@ -202,7 +257,7 @@
       "source": "paper",
       "severity": "watch",
       "message": "Underwater \u2014 re-check hypothesis: research verdict neutral; still strong_buy",
-      "mark": 30.56,
+      "mark": 29.53,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -213,7 +268,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 98.49,
+      "mark": 98.59,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -224,7 +279,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 89.34,
+      "mark": 88.96,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -235,7 +290,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 44.46,
+      "mark": 45.07,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -246,7 +301,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 184.67,
+      "mark": 184.33,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -257,7 +312,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 90.71,
+      "mark": 87.23,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -268,7 +323,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 69.11,
+      "mark": 69.35,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -279,7 +334,7 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 69.69,
+      "mark": 70.04,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -290,7 +345,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 133.6,
+      "mark": 134.75,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -304,7 +359,7 @@
       "mark": 265.03,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": null
     }
   ],
   "fund": {
@@ -2393,22 +2448,40 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-13T02:35:26.034847-05:00",
+        "portfolio_value": 1028.48,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 12,
+        "reporting_currency": "CAD",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "CAD": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-12T02:39:04.208507-05:00",
+    "last_mark_at": "2026-11-13T02:35:26.034847-05:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "AEM.TO": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (1 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "tsx60",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-12T07:39:04.226466+00:00",
+    "generated_at": "2026-11-13T07:35:26.045538+00:00",
     "observe_only": true,
     "open_count": 11,
     "closed_count": 0,
@@ -2481,13 +2554,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 2,
-    "checkpoints_added_this_pass": 2
+    "ingested_this_pass": 0,
+    "checkpoints_added_this_pass": 1
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-12T07:39:04.228484+00:00",
+    "generated_at": "2026-11-13T07:35:26.047134+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2552,10 +2625,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 8,
-        "recovered_to_breakeven": 5,
+        "count": 9,
+        "recovered_to_breakeven": 6,
         "close_reasons": {
-          "open": 8
+          "open": 9
         }
       },
       "closed": {
@@ -2579,11 +2652,11 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 1
     }
   },
@@ -2592,8 +2665,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-11-12T07:39:04.231885+00:00",
-    "as_of": "2026-11-12T02:39:04.208507-05:00",
+    "updated_at": "2026-11-13T07:35:26.049471+00:00",
+    "as_of": "2026-11-13T02:35:26.034847-05:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2606,37 +2679,37 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 12,
-    "underwater_count": 2,
+    "underwater_count": 3,
     "thesis_status_counts": {
-      "intact": 8,
+      "intact": 7,
       "weakening": 4,
-      "broken": 0,
+      "broken": 1,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
       "holding_count": 12,
-      "loser_count": 2,
-      "loser_share": 0.1667,
-      "loser_nav_share": 0.1728,
+      "loser_count": 3,
+      "loser_share": 0.25,
+      "loser_nav_share": 0.2573,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
-      "intact_loser_count": 1,
+      "intact_loser_count": 2,
       "weakening_loser_count": 1,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
         "quality": 0.0,
-        "dividend": 0.0,
-        "garp": 0.0,
+        "dividend": 0.3333,
+        "garp": 0.3333,
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.1,
-        "quality": 0.0,
-        "dividend": 0.3,
-        "garp": 0.2,
-        "risk": 0.0
+        "cheapness": 0.2222,
+        "quality": 0.1111,
+        "dividend": 0.3333,
+        "garp": 0.2222,
+        "risk": 0.1111
       },
       "selection_feedback_flags": [],
       "balancing_hint": "tolerate_intact_losers",
@@ -2644,18 +2717,50 @@
     },
     "holdings": [
       {
+        "ticker": "AEM.TO",
+        "name": "AEM.TO",
+        "thesis_status": "broken",
+        "recommended_action": "exit_candidate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 265.03,
+        "avg_cost": 265.03,
+        "signal": null,
+        "timing_signal": null,
+        "conviction_score": null,
+        "data_quality_score": null,
+        "passed_families": [],
+        "failed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "research_verdict": null,
+        "reasons": [
+          "cheapness lost and not in buy tier"
+        ],
+        "intact_reasons": [],
+        "weaken_reasons": [],
+        "broken_reasons": [
+          "cheapness lost and not in buy tier"
+        ]
+      },
+      {
         "ticker": "K.TO",
         "name": "Kinross Gold Corporation",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0806,
-        "mark": 30.56,
+        "unrealized_pct": -0.1116,
+        "mark": 29.53,
         "avg_cost": 33.2403,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.8094,
+        "conviction_score": 0.8312,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2675,11 +2780,53 @@
           "still strong_buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 81%"
+          "conviction 83%"
         ],
         "weaken_reasons": [
           "research verdict neutral"
         ],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "ABX.TO",
+        "name": "Barrick Mining Corporation",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": true,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0708,
+        "mark": 53.96,
+        "avg_cost": 58.0702,
+        "signal": "buy",
+        "timing_signal": "accumulate",
+        "conviction_score": 0.4512,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "risk"
+        ],
+        "failed_families": [
+          "dividend",
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "price drawdown alone does not invalidate value thesis",
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 45%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 45%"
+        ],
+        "weaken_reasons": [],
         "broken_reasons": []
       },
       {
@@ -2689,8 +2836,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0688,
-        "mark": 69.69,
+        "unrealized_pct": -0.0641,
+        "mark": 70.04,
         "avg_cost": 74.8372,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2724,59 +2871,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "ABX.TO",
-        "name": "Barrick Mining Corporation",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0413,
-        "mark": 55.67,
-        "avg_cost": 58.0702,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.4381,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "risk"
-        ],
-        "failed_families": [
-          "dividend",
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 44%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 44%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "TECK-B.TO",
         "name": "Teck Resources Limited",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0086,
-        "mark": 90.71,
+        "unrealized_pct": -0.0466,
+        "mark": 87.23,
         "avg_cost": 91.4931,
-        "signal": "buy",
+        "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4816,
+        "conviction_score": 0.4953,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2788,58 +2894,18 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 48%"
+          "conviction 50%"
         ],
         "intact_reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 48%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "AEM.TO",
-        "name": "Agnico Eagle Mines Limited",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 265.03,
-        "avg_cost": 265.03,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.3957,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 40%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 40%"
+          "conviction 50%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2851,12 +2917,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0165,
-        "mark": 89.34,
+        "unrealized_pct": 0.0122,
+        "mark": 88.96,
         "avg_cost": 87.8885,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6208,
+        "conviction_score": 0.6625,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2876,7 +2942,7 @@
           "still buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 62%"
+          "conviction 66%"
         ],
         "weaken_reasons": [
           "research verdict neutral"
@@ -2890,8 +2956,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0233,
-        "mark": 69.11,
+        "unrealized_pct": 0.0268,
+        "mark": 69.35,
         "avg_cost": 67.5386,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2930,12 +2996,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0304,
-        "mark": 184.67,
+        "unrealized_pct": 0.0285,
+        "mark": 184.33,
         "avg_cost": 179.2185,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.8792,
+        "conviction_score": 0.9125,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2951,57 +3017,16 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 88%"
+          "conviction 91%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 88%"
+          "conviction 91%"
         ],
         "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "CP.TO",
-        "name": "Canadian Pacific Kansas City Limited",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0624,
-        "mark": 133.6,
-        "avg_cost": 125.7499,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.4467,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "cheapness"
-        ],
-        "research_verdict": "neutral",
-        "reasons": [
-          "research verdict neutral",
-          "cheapness family no longer passes",
-          "still buy",
-          "data_quality 1.00"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "data_quality 1.00",
-          "conviction 45%"
-        ],
-        "weaken_reasons": [
-          "research verdict neutral",
-          "cheapness family no longer passes"
-        ],
         "broken_reasons": []
       },
       {
@@ -3011,8 +3036,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0638,
-        "mark": 98.49,
+        "unrealized_pct": 0.0648,
+        "mark": 98.59,
         "avg_cost": 92.5867,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -3046,18 +3071,59 @@
         "broken_reasons": []
       },
       {
+        "ticker": "CP.TO",
+        "name": "Canadian Pacific Kansas City Limited",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0716,
+        "mark": 134.75,
+        "avg_cost": 125.7499,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.47,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "cheapness"
+        ],
+        "research_verdict": "neutral",
+        "reasons": [
+          "research verdict neutral",
+          "cheapness family no longer passes",
+          "still buy",
+          "data_quality 1.00"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "data_quality 1.00",
+          "conviction 47%"
+        ],
+        "weaken_reasons": [
+          "research verdict neutral",
+          "cheapness family no longer passes"
+        ],
+        "broken_reasons": []
+      },
+      {
         "ticker": "OTEX.TO",
         "name": "Open Text Corporation",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0804,
-        "mark": 35.61,
+        "unrealized_pct": 0.0734,
+        "mark": 35.38,
         "avg_cost": 32.9611,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.855,
+        "conviction_score": 0.845,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3073,14 +3139,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 86%"
+          "conviction 85%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 86%"
+          "conviction 85%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3092,8 +3158,8 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.104,
-        "mark": 44.46,
+        "unrealized_pct": 0.1192,
+        "mark": 45.07,
         "avg_cost": 40.27,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -3133,15 +3199,15 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-12T07:39:04.236396+00:00",
+    "generated_at": "2026-11-13T07:35:26.052702+00:00",
     "stamped_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
       "closed_total": 9,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 8,
+      "open_with_thesis": 9,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -3206,7 +3272,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-11-12T07:39:04.248351+00:00",
+    "generated_at": "2026-11-13T07:35:26.059974+00:00",
     "open_count": 3,
     "closed_count": 18,
     "scored_count": 17,
@@ -3268,14 +3334,14 @@
       "recommit_scored": 1
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "marked_this_pass": 3,
-    "closed_this_pass": 1
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-12T02:39:04.208507-05:00",
+    "generated_at": "2026-11-13T02:35:26.034847-05:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -3323,16 +3389,16 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 1,
+      "opened": 0,
       "closed": 0,
-      "tagged_on_book": 1,
-      "tagged_off_book": 1
+      "tagged_on_book": 0,
+      "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-12T02:39:04.208507-05:00",
+    "generated_at": "2026-11-13T02:35:26.034847-05:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -3340,375 +3406,39 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 4,
-    "card_count": 4,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 4,
+      "agree": 0,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "rebuy_skip": {
-        "agree": 3,
-        "veto": 0,
-        "abstain": 0
-      },
-      "buy": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
+    "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
-    "cards": [
-      {
-        "ticker": "K.TO",
-        "name": "Kinross Gold Corporation",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Explicit algo_reason is insufficient cash after higher-conviction fills, so deferring rebuy is a portfolio constraint rather than a thesis exit.",
-          "still_buyish is true with screen_signal strong_buy and rank_drop 0 versus entry_rank, so skip does not imply leaving the buy cohort."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 3
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level_native",
-        "logged_at": "2026-11-12T02:39:04.208507-05:00",
-        "proposal_id": "buy_tier_level_native:K.TO:rebuy_skip:2026-11-12T02:39:04.208507-05:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "neutral",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "AEM.TO",
-        "name": "Agnico Eagle Mines Limited",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Rebuy is blocked by stated insufficient cash after higher-conviction fills.",
-          "Name remains still_buyish on buy screen_signal with rank_drop 0 and research_verdict accumulate, so skipping rebuy is consistent with low-churn hold semantics."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level_native",
-        "logged_at": "2026-11-12T02:39:04.208507-05:00",
-        "proposal_id": "buy_tier_level_native:AEM.TO:rebuy_skip:2026-11-12T02:39:04.208507-05:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "SAP.TO",
-        "name": "Saputo Inc.",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Cash constraint in algo_reason explains the rebuy_skip independent of signal quality.",
-          "still_buyish is false with screen_signal hold and research_verdict caution, so not re-adding exposure aligns with no longer being in the buyish cohort."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "hold"
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "caution"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level_native",
-        "logged_at": "2026-11-12T02:39:04.208507-05:00",
-        "proposal_id": "buy_tier_level_native:SAP.TO:rebuy_skip:2026-11-12T02:39:04.208507-05:00",
-        "meta": {
-          "still_buyish": false,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "caution",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "AEM.TO",
-        "name": "Agnico Eagle Mines Limited",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Automated buy into still_buyish name with screen_signal buy and stable conviction_rank matching entry_rank (rank_drop 0).",
-          "Research overlay bound with research_verdict accumulate supports adding within the ranked buy set."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 11
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 11
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level_native",
-        "logged_at": "2026-11-12T02:39:04.208507-05:00",
-        "proposal_id": "buy_tier_level_native:AEM.TO:buy:2026-11-12T02:39:04.208507-05:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Buy into buyish target set \u2014 agree with algo selection."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      }
-    ],
+    "cards": [],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null,
-      "llm_card_count": 4
+      "fallback": null
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-11-12T02:39:04.208507-05:00",
+      "generated_at": "2026-11-13T02:35:26.034847-05:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 4,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 4,
+        "agree": 0,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "rebuy_skip": {
-          "agree": 3,
-          "veto": 0,
-          "abstain": 0
-        },
-        "buy": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
+      "by_algo_action": {},
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -3724,7 +3454,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-12T07:39:08.803771+00:00",
+  "generated_at": "2026-11-13T07:35:26.069322+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (CAD reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

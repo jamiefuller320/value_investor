@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `ai_judgment` · updated 2026-11-12T07:41:22.310387+00:00
+Track: `ai_judgment` · updated 2026-11-13T07:38:14.081573+00:00
 
 ## Portfolio loser feedback
 
@@ -10,35 +10,35 @@ Track: `ai_judgment` · updated 2026-11-12T07:41:22.310387+00:00
 
 ## Holding reviews
 
-### UMI.BR — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 90%
-
-### EG7.IR — intact / hold_tolerate (+0.0%)
+### EG7.IR — intact / hold_tolerate (-1.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 76%
+- conviction 75%
 
-### DTE.DE — intact / hold_tolerate (+0.0%)
+### UMI.BR — intact / hold_tolerate (+0.5%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 91%
+
+### DTE.DE — intact / hold_tolerate (+1.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 75%
 
-### AD.AS — intact / hold_tolerate (+2.4%)
+### AD.AS — intact / hold_tolerate (+2.9%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 86%
 
-### C5H.IR — intact / hold_tolerate (+4.6%)
+### C5H.IR — intact / hold_tolerate (+3.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

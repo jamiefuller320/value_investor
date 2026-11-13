@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "track_id": "archive_near_miss",
-  "generated_at": "2026-11-12T07:37:36.738394+00:00",
+  "generated_at": "2026-11-13T07:33:27.104974+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -69,13 +69,17 @@
     "ready_for_probability_analysis": true,
     "hold_closed_count": 119,
     "swap_closed_count": 119,
-    "hold_with_data_quality_count": 119,
+    "hold_with_data_quality_count": 121,
     "gaps": [],
     "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
   },
   "hold_recovery": {
     "open": {
-      "count": 0
+      "count": 2,
+      "recovered_to_breakeven": 0,
+      "close_reasons": {
+        "open": 2
+      }
     },
     "closed": {
       "count": 119,
@@ -88,26 +92,29 @@
   },
   "swap_rotation": {
     "open": {
-      "count": 0
+      "count": 2,
+      "verdicts": {
+        "open": 2
+      }
     },
     "closed": {
       "count": 119,
       "verdicts": {
-        "replacement_outperformed": 32,
-        "exit_outperformed": 75,
-        "inconclusive": 12
+        "replacement_outperformed": 33,
+        "exit_outperformed": 77,
+        "inconclusive": 9
       }
     }
   },
   "note": "Archive near-miss + held-book observe sim \u2014 priors only; pair with live learning_tracks_exit_timing.json for paper-track evidence. Wider gate: min_conviction=0.28, max_episodes_per_week=25.",
   "scope": "archive_near_miss",
-  "snapshot_count": 28,
+  "snapshot_count": 29,
   "episodes_opened": {
-    "hold_recovery": 119,
-    "hold_recovery_near_miss": 119,
+    "hold_recovery": 121,
+    "hold_recovery_near_miss": 121,
     "hold_recovery_held_book": 0,
-    "swap_rotation": 119,
-    "swap_rotation_near_miss": 119,
+    "swap_rotation": 121,
+    "swap_rotation_near_miss": 121,
     "swap_rotation_log_book": 0
   },
   "by_conviction_band": {

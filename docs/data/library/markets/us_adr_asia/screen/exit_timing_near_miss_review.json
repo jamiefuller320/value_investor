@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "track_id": "archive_near_miss",
-  "generated_at": "2026-11-12T07:37:19.880940+00:00",
+  "generated_at": "2026-11-13T07:33:14.363665+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -69,13 +69,17 @@
     "ready_for_probability_analysis": true,
     "hold_closed_count": 190,
     "swap_closed_count": 190,
-    "hold_with_data_quality_count": 190,
+    "hold_with_data_quality_count": 193,
     "gaps": [],
     "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
   },
   "hold_recovery": {
     "open": {
-      "count": 0
+      "count": 3,
+      "recovered_to_breakeven": 0,
+      "close_reasons": {
+        "open": 3
+      }
     },
     "closed": {
       "count": 190,
@@ -90,26 +94,29 @@
   },
   "swap_rotation": {
     "open": {
-      "count": 0
+      "count": 3,
+      "verdicts": {
+        "open": 3
+      }
     },
     "closed": {
       "count": 190,
       "verdicts": {
-        "exit_outperformed": 42,
-        "replacement_outperformed": 121,
-        "inconclusive": 27
+        "exit_outperformed": 45,
+        "replacement_outperformed": 135,
+        "inconclusive": 10
       }
     }
   },
   "note": "Archive near-miss + held-book observe sim \u2014 priors only; pair with live learning_tracks_exit_timing.json for paper-track evidence. Wider gate: min_conviction=0.28, max_episodes_per_week=25.",
   "scope": "archive_near_miss",
-  "snapshot_count": 45,
+  "snapshot_count": 46,
   "episodes_opened": {
-    "hold_recovery": 190,
-    "hold_recovery_near_miss": 190,
+    "hold_recovery": 193,
+    "hold_recovery_near_miss": 193,
     "hold_recovery_held_book": 0,
-    "swap_rotation": 190,
-    "swap_rotation_near_miss": 190,
+    "swap_rotation": 193,
+    "swap_rotation_near_miss": 193,
     "swap_rotation_log_book": 0
   },
   "by_conviction_band": {

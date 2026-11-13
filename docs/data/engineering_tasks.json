@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-11-13T07:55:35.746239+00:00",
+  "compiled_at": "2026-11-13T03:17:43.327359+00:00",
   "run_at": null,
   "task_count": 275,
   "tasks": [
@@ -13964,9 +13964,9 @@
       ],
       "auto_merge": false,
       "status": "parked",
-      "parked_reason": "automation waste reburn — 6 engineering-agent failure(s) in 6h without an in-flight PR (PM stop_automation_waste)",
-      "parked_policy": "reburn_loop",
-      "parked_at": "2026-11-13T07:53:36.266046+00:00"
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_policy": "preflight_clash",
+      "parked_at": "2026-11-13T06:24:06.706041+00:00"
     },
     {
       "id": "eng-20261112-04",
@@ -17771,20 +17771,20 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-11-13T07:53:36.244019+00:00",
-    "pause_active": true,
-    "automation_waste_active": true,
+    "evaluated_at": "2026-11-13T02:37:15.229311+00:00",
+    "pause_active": false,
+    "automation_waste_active": false,
     "automation_waste_signals": [
       {
         "kind": "eng_agent_reburn",
         "title": "Automation waste: engineering agent reburn",
         "severity": "fail",
-        "summary": "6 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261113-01) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
+        "summary": "3 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261103-09) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
         "workflow": "engineering-agent.yml",
         "task_ids": [
-          "eng-20261113-01"
+          "eng-20261103-09"
         ],
-        "failure_count": 6,
+        "failure_count": 3,
         "window_hours": 6.0,
         "auto_remediable": true,
         "evidence": {
@@ -17795,7 +17795,7 @@
       }
     ],
     "automation_waste_parked_task_ids": [
-      "eng-20261113-01"
+      "eng-20261103-09"
     ],
     "automation_waste_cleared_at": "2026-11-04T17:32:59.305864+00:00",
     "last_change": {
@@ -17827,15 +17827,12 @@
         "last_head_sha": null
       }
     },
-    "last_action_at": "2026-11-13T07:53:36.244019+00:00",
-    "pause_reasons": [
-      "automation_waste"
-    ],
-    "pause_started_at": "2026-11-13T07:53:36.244019+00:00"
+    "last_action_at": "2026-11-04T17:32:59.305864+00:00",
+    "resumed_at": "2026-11-04T17:32:59.305864+00:00"
   },
   "queue_clearing": {
-    "attention_parked_count": 4,
-    "evaluated_at": "2026-11-13T08:18:56.843738+00:00",
+    "attention_parked_count": 3,
+    "evaluated_at": "2026-11-13T06:18:19.735651+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -17849,7 +17846,7 @@
     "cooldown_hours": 12.0
   },
   "workflow_failure_compiled": true,
-  "micro_compile_source": "ingest_gap_closure",
+  "micro_compile_source": "parked_source_hunter",
   "source_gap_closure_run_id": "igc-20261005-01",
   "source_trial_id": "igc-20261005-01",
   "source_chain_root_id": "igc-20261005-01",
