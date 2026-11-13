@@ -296,6 +296,19 @@
       "fix": "match_ch_record attaches a store row when its EPIC equals the EODHD symbol code (or its _-suffixed delisted form) and the leaving date is within 31 days of the symbol's last bar; rows without an EPIC need a name match plus the leaving date; the seven hand-verified probe names keep the name match; two candidates match nothing. Dry run on the part-1 store: all 123 EPIC rows match only themselves.",
       "unchanged": "No constant, window, scoring rule or call budget changed. The 31-day tolerance is the reading of 'consistent'; it is recorded here before any development score exists.",
       "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
+    },
+    {
+      "marker_id": "strategy-book-uk-replay-v0-development-date-v1",
+      "at": "2026-11-13T09:45:00Z",
+      "kind": "schedule",
+      "rule_change": false,
+      "approved_by": "jamiefuller320 (asked to start the development run 2026-11-13)",
+      "new_registration_id": false,
+      "logged_on_registration_id": "strategy-book-uk-replay-v0",
+      "sealed_text": "Section 8 timetable: development 2026-11-25, after the fetch window to 2026-11-24.",
+      "what_changed": "The fetch completed on 2026-11-13 (LSE, XETRA and PA; 77,863 weighted calls), so development runs as soon as the Companies House store (parts 1 and 2) and the EPIC/leaving-date matching are on main, instead of waiting to 2026-11-25. The encrypted Actions cache is evicted after 7 days unused, which waiting would risk.",
+      "unchanged": "No constant, window, scoring rule or call budget changed. The Companies House store is frozen at the development commit as sealed. The reveal still needs the owner stamp; the last call day stays 2026-12-10.",
+      "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
     }
   ]
 }
