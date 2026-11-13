@@ -132,18 +132,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           MAX_WAIT_SECONDS: "2400"
         run: |
-          set -euo pipefail
-          if bash scripts/wait_for_workflow_idle.sh euro-ingest-loop.yml; then
-            echo "idle=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          rc=$?
-          if [ "$rc" -eq 75 ]; then
-            echo "idle=false" >> "$GITHUB_OUTPUT"
-            echo "Head still running after wait — skip maintenance this slot"
-            exit 0
-          fi
-          exit "$rc"
+          bash scripts/record_predecessor_idle.sh \
+            "Head still queued or running after wait — skip maintenance this slot" \
+            euro-ingest-loop.yml
 
       - name: Refresh library state after euro finishes
         if: steps.wait_head.outputs.idle == 'true'
@@ -197,6 +188,7 @@ jobs:
 
       - name: Evaluate library gap-closure follow-up
         id: gap_followup
+        if: steps.wait_head.outputs.idle == 'true'
         run: |
           set -euo pipefail
           ftse-library ingest-gap-closure-followup \
@@ -223,6 +215,7 @@ jobs:
         run: bash scripts/dispatch_library_gap_closure_followups.sh /tmp/gap_followup.json
 
       - name: Refresh completion gate and sync crons
+        if: steps.wait_head.outputs.idle == 'true'
         env:
           CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
           WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
@@ -266,6 +259,7 @@ jobs:
           PY
 
       - name: Commit and push library ingest artifacts
+        if: steps.wait_head.outputs.idle == 'true'
         env:
           DISPATCH_PAGES: "true"
           GH_TOKEN: ${{ github.token }}

@@ -3,6 +3,9 @@ name: Library ingest sprint 2 (parallel)
 # Spare-capacity buy-tier filing deepen for the second parallel queue stream
 # (e.g. asx200). Waits on euro + stream 1, then spends leftover / spare fraction
 # or fill-down. Hour skip is a local fallback only. Cadence: focus +60 min.
+# A predecessor that stays queued or running through the wait yields this slot
+# (idle=false): ingest, gap-closure follow-up, and the artifact push are skipped
+# and the job succeeds. Follow-up needs the loop JSON only the ingest step writes.
 on:
   schedule:
     - cron: "15 8 * * 1-6"
@@ -128,18 +131,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           MAX_WAIT_SECONDS: "2400"
         run: |
-          set -euo pipefail
-          if bash scripts/wait_for_workflow_idle.sh euro-ingest-loop.yml library-ingest-sprint.yml; then
-            echo "idle=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          rc=$?
-          if [ "$rc" -eq 75 ]; then
-            echo "idle=false" >> "$GITHUB_OUTPUT"
-            echo "Predecessor still running after wait — skip spare stream 2"
-            exit 0
-          fi
-          exit "$rc"
+          bash scripts/record_predecessor_idle.sh \
+            "Predecessor still queued or running after wait — skip spare stream 2" \
+            euro-ingest-loop.yml library-ingest-sprint.yml
 
       - name: Refresh library state after predecessors finish
         if: steps.wait_head.outputs.idle == 'true'
@@ -189,6 +183,7 @@ jobs:
 
       - name: Evaluate library gap-closure follow-up
         id: gap_followup
+        if: steps.wait_head.outputs.idle == 'true'
         run: |
           set -euo pipefail
           ftse-library ingest-gap-closure-followup \
@@ -215,6 +210,7 @@ jobs:
         run: bash scripts/dispatch_library_gap_closure_followups.sh /tmp/gap_followup.json
 
       - name: Commit and push library ingest artifacts
+        if: steps.wait_head.outputs.idle == 'true'
         env:
           DISPATCH_PAGES: "true"
           GH_TOKEN: ${{ github.token }}
