@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-11-12T07:47:07.386850+00:00",
+  "run_at": "2026-11-13T02:32:07.318079+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "info",
       "category": "budget",
       "title": "Agent token usage (measuring)",
-      "summary": "Week 2026-W46: raw $0.0000, charged $0.0000, tokens 0 (in 0 / out 0 / cache_read 0 / cache_write 0). Top jobs: research_memo $0.0000 (40 runs), memo_model_comparison $0.0000 (24 runs), memo_model_judge $0.0000 (23 runs). Research memo raw median n/a / p90 n/a vs ledger estimate $0.40 (0 of 40 runs with cost). Estimated-USD ledger this week $31.20. Measuring mode (token_usage_weekly_warning_raw_usd is null).",
+      "summary": "Week 2026-W46: raw $0.0000, charged $0.0000, tokens 0 (in 0 / out 0 / cache_read 0 / cache_write 0). Top jobs: llm_agree_veto_shadow $0.0000 (57 runs), research_memo $0.0000 (44 runs), memo_model_judge $0.0000 (28 runs). Research memo raw median n/a / p90 n/a vs ledger estimate $0.40 (0 of 44 runs with cost). Estimated-USD ledger this week $41.10. Measuring mode (token_usage_weekly_warning_raw_usd is null).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -15,7 +15,7 @@
       "severity": "info",
       "category": "budget",
       "title": "Agent token usage coverage gap",
-      "summary": "Week 2026-W46: 125 of 125 rows (100%) have usage_error or are still cost-pending after 48h (usage_error 125, pending after 48h 70). Coverage gap only — the estimated-USD cap is unchanged.",
+      "summary": "Week 2026-W46: 175 of 175 rows (100%) have usage_error or are still cost-pending after 48h (usage_error 175, pending after 48h 74). Coverage gap only — the estimated-USD cap is unchanged.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -30,10 +30,19 @@
       "action_taken": null
     },
     {
+      "severity": "warn",
+      "category": "ingest",
+      "title": "New buy-tier not yet usable",
+      "summary": "1 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across dax: dax/MTX.DE (no_key_bodies, 26.54h since flip). Blocking: no_key_bodies=1.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
       "severity": "info",
       "category": "research",
       "title": "Library decision-input binds (observe)",
-      "summary": "Graduated library buy-tier names: 383; all four binds true: 47. Gaps: key_filing_bodies=4, fcf_basis_bound=1, overlay_bound=53, memo_recent=335. Largest gap: memo_recent. Observe-only — do not rememo, ingest, or open an engineering task from this finding. See docs/data/library_decision_input_inventory.json.",
+      "summary": "Graduated library buy-tier names: 378; all four binds true: 42. Gaps: key_filing_bodies=6, fcf_basis_bound=1, overlay_bound=49, memo_recent=334. Largest gap: memo_recent. Observe-only — do not rememo, ingest, or open an engineering task from this finding. See docs/data/library_decision_input_inventory.json.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -42,7 +51,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Longer holds beat live exit buffer in replay",
-      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: buy_tier_matched30_fair: exit_confirm_screens 10 vs live 2 +2.3% over 17 passes (48 vs 82 trades; realised median hold 6.6d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
+      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: buy_tier_matched30_fair: exit_confirm_screens 10 vs live 2 +2.5% over 18 passes (48 vs 82 trades; realised median hold 6.6d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -60,7 +69,7 @@
       "severity": "info",
       "category": "research",
       "title": "Post-sale review queue (observe)",
-      "summary": "Active uncommented post-sale reviews: 149; actioned history=138; candidates sealed+control=480. Accept/Comment/Duplicate observe-only (influences_live=false).",
+      "summary": "Active uncommented post-sale reviews: 147; actioned history=138; candidates sealed+control=480. Accept/Comment/Duplicate observe-only (influences_live=false).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -123,7 +132,7 @@
       "severity": "info",
       "category": "research",
       "title": "Entry-blind review queue (observe)",
-      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=18; candidates=67. PIT-only; influences_live=false.",
+      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=18; candidates=55. PIT-only; influences_live=false.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -150,7 +159,7 @@
       "severity": "info",
       "category": "research",
       "title": "Operating-decline gate refreshed (observe)",
-      "summary": "as_of 2026-11-12: 784 names — clear 542, declining 204, insufficient_data 38; FTSE buy-tier covered 66/70, fund/trust 1 (insufficient_data by rule; 8 across all names), flagged declining 10; interim EPS on 177 names, interim revenue on 166 names, FTSE buy-tier interim revenue 34/70, interim EPS 35/70, latest revenue FY 2026:165, 2025:587: BT-A.L (revenue_two_year_decline); CKN.L (operating_margin_drop); CNA.L (revenue_two_year_decline, operating_margin_drop, eps_decline_annual, fcf_sharp_fall); COST.L (revenue_decline, revenue_two_year_decline); FGP.L (revenue_decline, eps_decline_interim) (+5 more). Observe-only — influences_live false; no book, knob or signal writes.",
+      "summary": "as_of 2026-11-13: 787 names — clear 544, declining 205, insufficient_data 38; FTSE buy-tier covered 66/70, fund/trust 1 (insufficient_data by rule; 8 across all names), flagged declining 10; interim EPS on 184 names, interim revenue on 176 names, FTSE buy-tier interim revenue 34/70, interim EPS 35/70, latest revenue FY 2026:165, 2025:590: BT-A.L (revenue_two_year_decline); CKN.L (operating_margin_drop); CNA.L (revenue_two_year_decline, operating_margin_drop, eps_decline_annual, fcf_sharp_fall); COST.L (revenue_decline, revenue_two_year_decline); FGP.L (revenue_decline, eps_decline_interim) (+5 more). Observe-only — influences_live false; no book, knob or signal writes.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -159,7 +168,7 @@
       "severity": "info",
       "category": "research",
       "title": "Sector headwind gate refreshed (observe)",
-      "summary": "22 markets, 212 sectors: sound=76, headwind=20, insufficient_data=116; headwind sectors=Energy, Real Estate, aex:Basic Materials, aex:Technology, aim:Consumer Cyclical, aim:Financial Services, aim:Healthcare, asx200:Energy, bel20:Basic Materials, cac40:Consumer Cyclical, dax:Basic Materials, ftse_smallcap:Financial Services, hang_seng:Energy, hang_seng:Real Estate, and 6 more library sectors; buy-tier names in headwind sectors=56. Observe-only; influences_live=false; no book or knob edits.",
+      "summary": "22 markets, 213 sectors: sound=76, headwind=20, insufficient_data=117; headwind sectors=Energy, Real Estate, aex:Basic Materials, aex:Technology, aim:Consumer Cyclical, aim:Financial Services, aim:Healthcare, asx200:Energy, bel20:Basic Materials, cac40:Consumer Cyclical, dax:Basic Materials, ftse_smallcap:Financial Services, hang_seng:Energy, hang_seng:Real Estate, and 6 more library sectors; buy-tier names in headwind sectors=60. Observe-only; influences_live=false; no book or knob edits.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -177,7 +186,7 @@
       "severity": "info",
       "category": "research",
       "title": "Sector headwind gate fallback reliance (observe)",
-      "summary": "Buy-tier names by sector basis: own_market sound=334 headwind=40 insufficient_data=34; regional sound=28 headwind=16 insufficient_data=1. Buy-tier names by earnings fallback: used sound=288 headwind=54 insufficient_data=32; not_used sound=74 headwind=2 insufficient_data=3. Signal-risk labels for the strategy book; observe-only; influences_live=false; no rememo, ingest, or fetch.",
+      "summary": "Buy-tier names by sector basis: own_market sound=325 headwind=43 insufficient_data=34; regional sound=28 headwind=17 insufficient_data=1. Buy-tier names by earnings fallback: used sound=281 headwind=58 insufficient_data=32; not_used sound=72 headwind=2 insufficient_data=3. Signal-risk labels for the strategy book; observe-only; influences_live=false; no rememo, ingest, or fetch.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -186,7 +195,7 @@
       "severity": "info",
       "category": "research",
       "title": "Strategy book memo job refreshed",
-      "summary": "Spend on. Signals 10, all-but-memo 0, memo needed 0, dry-run requests 0. First tickers: none. sp500 signals 7 all_but_memo 0 memo_needed 0; nasdaq100 signals 2 all_but_memo 0 memo_needed 0; tsx60 signals 1 all_but_memo 0 memo_needed 0 Observe-only; no rememo or ingest from this finding.",
+      "summary": "Spend on. Signals 18, all-but-memo 4, memo needed 0, dry-run requests 0. First tickers: none. ftse350 signals 7 all_but_memo 4 memo_needed 0; asx200 signals 2 all_but_memo 0 memo_needed 0; aex signals 0 all_but_memo 0 memo_needed 0; aim signals 7 all_but_memo 0 memo_needed 0; atx signals 0 all_but_memo 0 memo_needed 0; bel20 signals 0 all_but_memo 0 memo_needed 0; cac40 signals 0 all_but_memo 0 memo_needed 0; dax signals 0 all_but_memo 0 memo_needed 0 Observe-only; no rememo or ingest from this finding.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -195,7 +204,7 @@
       "severity": "info",
       "category": "research",
       "title": "Strategy book memo spend this week",
-      "summary": "2026-W46: 4 memos requested ($1.60 at $0.40), 0 budget skips, 4 memo needed. Since switch-on 2026-11-10: 4 memos ($1.60). weekly_ops cap $124.50, remaining $112.50. Spend-vs-use review next 2026-12-08. Whether a memo fed an entry decision is not tracked yet. Observe-only; no rememo or ingest from this finding.",
+      "summary": "2026-W46: 4 memos requested ($1.60 at $0.40), 0 budget skips, 4 memo needed. Since switch-on 2026-11-10: 4 memos ($1.60). weekly_ops cap $124.50, remaining $106.20. Spend-vs-use review next 2026-12-08. Whether a memo fed an entry decision is not tracked yet. Observe-only; no rememo or ingest from this finding.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -204,7 +213,16 @@
       "severity": "warn",
       "category": "research",
       "title": "Memo model comparison failed",
-      "summary": "Judge incomplete; 3 pairs judged. ftse350__VLX.L AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 5424 (char 5423)); ftse350__VLX.L BA: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 5311 (char 5310)); ftse350__KLR.L AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 4702 (char 4701)); ftse350__BP.L AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 5186 (char 5185))",
+      "summary": "Judge ready_for_calibration; 5 pairs judged. ftse350__KLR.L AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 1505 (char 1504)); sp500__FIS: sources changed since generation; judge refuses this pair; sp500__SNDK: sources changed since generation; judge refuses this pair; asx200__PLS.AX: sources changed since generation; judge refuses this pair",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "Memo model comparison ready for owner calibration",
+      "summary": "0/4 calibration names rated; ready 0 days. Read docs/data/memo_model_comparison/review.md, copy ratings_template.json to ratings.json and fill it (human task adhoc-memo-model-comparison-blind-review). Observe-only.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -213,7 +231,16 @@
       "severity": "info",
       "category": "research",
       "title": "Strategy book observe refreshed",
-      "summary": "Signals 5, entries that would open 4. Blocked: already_open_skip 1, f9 1, gate 179, not_buy_tier 11, price 217. First tickers: FOUR.L, MEGP.L, CRM, FIS.",
+      "summary": "Signals 6, entries that would open 5. Blocked: already_open_skip 1, f9 1, gate 176, not_buy_tier 11, price 221. First tickers: FOUR.L, MEGP.L, CRM, FIS, NWSA.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "Strategy book closes short of session",
+      "summary": "aim: 1 of 14 buy-tier charts end before 2026-11-12 after the fetch. First tickers: CAM.L. The next forward slot retries them. No rememo or ingest.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -222,7 +249,7 @@
       "severity": "info",
       "category": "research",
       "title": "Strategy book reviews queued",
-      "summary": "Strategy book reviews: closed=0 primary=0 companion=0 open_skipped=86 provenance_missing=0. Primary closes are the attention list. Comparison, control, shadow and bench closes are queued beside them. influences_live=false. Opinion model off. Evidence for the version review only. Awaiting first close.",
+      "summary": "Strategy book reviews: closed=2 primary=0 companion=2 open_skipped=92 provenance_missing=0. Primary closes are the attention list. Comparison, control, shadow and bench closes are queued beside them. influences_live=false. Opinion model off. Evidence for the version review only.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -248,6 +275,15 @@
     {
       "severity": "info",
       "category": "research",
+      "title": "Strategy book fair value",
+      "summary": "Primary episodes with a range 4 of 4, insufficient_data 0, primary median margin 0.215. All columns: 75 with a range, 19 insufficient_data. Scoring verdict insufficient_data. Observe-only; it does not change the book.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
       "title": "EODHD coverage check",
       "summary": "EODHD coverage check verdict fail (generated 2026-11-12). Calls used 564/3000. See docs/ops/eodhd-coverage-check.md. Check A: only 3 of 11 names have fundamentals depth from 2013 (need 7).",
       "auto_fixable": false,
@@ -257,8 +293,17 @@
     {
       "severity": "info",
       "category": "research",
+      "title": "Companies House statements for failed UK names",
+      "summary": "Combined check A names with statements from 2013: 8 of 11 (bar 7). Generated 2026-11-12. Observe-only. See docs/ops/ch-failed-name-statements.md.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
       "title": "Strategy book memo-free shadow refreshed",
-      "summary": "Shadow episodes 4 (open 4, mature 0, pending fill 0). Markets: ftse350 2, sp500 2. Failed-bind labels: memo_recent 2, none 2. Early-outcome board insufficient_data (minimum 8). Report-only. It does not open book episodes.",
+      "summary": "Shadow episodes 4 (open 4, mature 0, pending fill 1). Markets: ftse350 2, sp500 2. Failed-bind labels: memo_recent 2, none 2. Early-outcome board insufficient_data (minimum 8). Report-only. It does not open book episodes.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -285,7 +330,7 @@
       "severity": "info",
       "category": "research",
       "title": "N201 value-mom observe refreshed",
-      "summary": "strand-c-short-horizon-value-mom-v0: 163 completed episodes over 16 weeks; entries/week=10.188; smooth_ret_cohort_median=0.033245 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.018475; stress_3pct_report_only=-0.04048; skipped_missing_entry_fields=99167. Observe-only — launch-queue waiter; no live writes (F8).",
+      "summary": "strand-c-short-horizon-value-mom-v0: 172 completed episodes over 16 weeks; entries/week=10.75; smooth_ret_cohort_median=0.036314 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.021695; stress_3pct_report_only=-0.041579; skipped_missing_entry_fields=101355. Observe-only — launch-queue waiter; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -312,7 +357,7 @@
       "severity": "info",
       "category": "research",
       "title": "N206 plain-EY observe refreshed",
-      "summary": "strand-d-plain-ey-identity-v0: 270 completed episodes over 16 weeks; entries/week=16.875; smooth_ret_cohort_median=0.01313 (fair costs primary; fixed-stake %; independent of fund NAV); cash_excess_report_only=0.01313; stress_3pct_report_only=-0.042635; skipped_missing_entry_fields=0. Observe-only — influences_live false; alone-first; no filing ingest sprint; no live writes (F8).",
+      "summary": "strand-d-plain-ey-identity-v0: 275 completed episodes over 16 weeks; entries/week=17.188; smooth_ret_cohort_median=0.013732 (fair costs primary; fixed-stake %; independent of fund NAV); cash_excess_report_only=0.013732; stress_3pct_report_only=-0.041172; skipped_missing_entry_fields=0. Observe-only — influences_live false; alone-first; no filing ingest sprint; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -330,7 +375,7 @@
       "severity": "info",
       "category": "research",
       "title": "N215 soft-band technical veto observe refreshed",
-      "summary": "n215-soft-band-veto-v0: N200 closed=114; deep=8 large=8; SOFT_VETO+ catch=2/8 miss=1/8; hard any-of-six catch=5/8 miss=6/8. n215-grind-mid60-pass-v0: N200 catch=3/8 miss=0/8 Δsum=0.704382; N206_post_warm(n>=2026-10-23) closed=27 Δsum=-0.049898. live_veto=False observe_sketch_interesting=False. Observe-only — no live writes (F8).",
+      "summary": "n215-soft-band-veto-v0: N200 closed=114; deep=8 large=8; SOFT_VETO+ catch=2/8 miss=1/8; hard any-of-six catch=5/8 miss=6/8. n215-grind-mid60-pass-v0: N200 catch=3/8 miss=0/8 Δsum=0.704382; N206_post_warm(n>=2026-10-23) closed=31 Δsum=-0.122591. live_veto=False observe_sketch_interesting=False. Observe-only — no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -348,7 +393,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Two-lot retention beats full exit in replay",
-      "summary": "buy_tier_level: core_kept beats full exit by +1.5% over 44 passes (2026-09-07 to 2026-11-11; core value £899.56, rank exits 25 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
+      "summary": "buy_tier_level: core_kept beats full exit by +1.5% over 45 passes (2026-09-07 to 2026-11-12; core value £901.43, rank exits 25 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -357,7 +402,7 @@
       "severity": "warn",
       "category": "research",
       "title": "SEC filed FCF diverges from Yahoo basis on US buy-tier",
-      "summary": "13 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (14 of 236 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); GM (sp500) FY2025 SEC 17,564M vs Yahoo 1,771M (90%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.",
+      "summary": "13 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (14 of 239 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); GM (sp500) FY2025 SEC 17,564M vs Yahoo 1,771M (90%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -366,7 +411,7 @@
       "severity": "warn",
       "category": "research",
       "title": "SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier",
-      "summary": "58 US buy-tier memo name(s) where feeding SEC companyfacts into reconcile_fcf filing_aligned would change policy FCF/basis or mismatch flags vs the live Yahoo path (69 of 249 compared overall): FANG (nasdaq100) Yahoo filing_aligned/-703M → SEC filing_aligned/2,820M; WIT (us_adr_asia) Yahoo filing_aligned/133,713M → SEC filing_aligned/1,810M; UMC (us_adr_asia) Yahoo filing_aligned/49,131M → SEC filing_aligned/163M; GM (sp500) Yahoo filing_aligned/1,771M → SEC filing_aligned/17,564M; BIDU (us_adr_asia) Yahoo filing_aligned/-16,430M → SEC filing_aligned/-2,157M. Observe twin sec-filing-aligned-twin-v0 (influences_live=false); live scoring still reads Yahoo. See docs/ops/sec-companyfacts.md.",
+      "summary": "59 US buy-tier memo name(s) where feeding SEC companyfacts into reconcile_fcf filing_aligned would change policy FCF/basis or mismatch flags vs the live Yahoo path (70 of 252 compared overall): FANG (nasdaq100) Yahoo filing_aligned/-703M → SEC filing_aligned/2,820M; WIT (us_adr_asia) Yahoo filing_aligned/133,713M → SEC filing_aligned/1,810M; UMC (us_adr_asia) Yahoo filing_aligned/49,131M → SEC filing_aligned/163M; GM (sp500) Yahoo filing_aligned/1,771M → SEC filing_aligned/17,564M; BIDU (us_adr_asia) Yahoo filing_aligned/-16,430M → SEC filing_aligned/-2,157M. Observe twin sec-filing-aligned-twin-v0 (influences_live=false); live scoring still reads Yahoo. See docs/ops/sec-companyfacts.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -375,7 +420,7 @@
       "severity": "info",
       "category": "research",
       "title": "Trading 212 catalogue fresh",
-      "summary": "Catalogue age 2.75 days (fetched 2026-11-09T13:45:23.337923+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
+      "summary": "Catalogue age 3.54 days (fetched 2026-11-09T13:45:23.337923+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -420,7 +465,7 @@
       "severity": "warn",
       "category": "backtest",
       "title": "Strategy-book US rehearsal: licensed data deletion due",
-      "summary": "Licensed Sharadar files were first used 2026-11-07T11:48:55+00:00; delete them and every derived file by 2026-12-07 (25 days), then run `ftse-strategy-book-rehearsal confirm-deleted`.",
+      "summary": "Licensed Sharadar files were first used 2026-11-07T11:48:55+00:00; delete them and every derived file by 2026-12-07 (24 days), then run `ftse-strategy-book-rehearsal confirm-deleted`.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -456,31 +501,24 @@
       "severity": "warn",
       "category": "engineering",
       "title": "Parked engineering tasks need manual review",
-      "summary": "2 parked task(s): eng-20261104-01, eng-20261103-09",
+      "summary": "3 parked task(s): eng-20261112-02, eng-20261104-01, eng-20261103-09",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
     }
   ],
-  "auto_fixes": [
-    {
-      "action": "market_eng_gap_burndown",
-      "detail": "gap_closure_compile for euro_depth → eng-20261112-02"
-    }
-  ],
-  "drafted_task_ids": [
-    "eng-20261112-02"
-  ],
+  "auto_fixes": [],
+  "drafted_task_ids": [],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-11-12T07:20:15+00:00",
-      "last_success_run_id": 43174505074,
-      "age_hours": 0.5,
+      "last_success_at": "2026-11-13T02:23:37+00:00",
+      "last_success_run_id": 43351849358,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -489,11 +527,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-11T18:47:58+00:00",
-      "last_success_run_id": 43081164251,
-      "age_hours": 13.1,
+      "last_success_at": "2026-11-12T18:59:57+00:00",
+      "last_success_run_id": 43285581301,
+      "age_hours": 7.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -504,9 +542,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 26,
-      "last_success_at": "2026-11-12T07:15:35+00:00",
-      "last_success_run_id": 43173933525,
-      "age_hours": 0.6,
+      "last_success_at": "2026-11-13T02:19:02+00:00",
+      "last_success_run_id": 43351284778,
+      "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -517,11 +555,11 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-11-12T07:40:35+00:00",
-      "last_success_run_id": 43177010345,
-      "age_hours": 0.2,
+      "last_success_at": "2026-11-13T02:30:54+00:00",
+      "last_success_run_id": 43352696663,
+      "age_hours": 0.1,
       "stale": false,
-      "recent_failures_24h": 1,
+      "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     },
     {
@@ -530,9 +568,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-12T07:31:00+00:00",
-      "last_success_run_id": 43175827071,
-      "age_hours": 0.3,
+      "last_success_at": "2026-11-12T16:05:30+00:00",
+      "last_success_run_id": 43254852656,
+      "age_hours": 10.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -545,7 +583,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-08T15:24:55+00:00",
       "last_success_run_id": 42494688914,
-      "age_hours": 88.4,
+      "age_hours": 107.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -556,9 +594,9 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-11-09T06:52:00+00:00",
-      "last_success_run_id": 42575692247,
-      "age_hours": 73.0,
+      "last_success_at": "2026-11-12T06:52:08+00:00",
+      "last_success_run_id": 43171142084,
+      "age_hours": 19.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -571,7 +609,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-08T08:24:43+00:00",
       "last_success_run_id": 42462822729,
-      "age_hours": 95.4,
+      "age_hours": 114.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -584,7 +622,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-10T00:51:34+00:00",
       "last_success_run_id": 42731496776,
-      "age_hours": 55.0,
+      "age_hours": 73.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -597,7 +635,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-08T17:58:45+00:00",
       "last_success_run_id": 42507623200,
-      "age_hours": 85.9,
+      "age_hours": 104.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -608,9 +646,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-11T12:55:47+00:00",
-      "last_success_run_id": 43024578848,
-      "age_hours": 18.9,
+      "last_success_at": "2026-11-12T13:57:18+00:00",
+      "last_success_run_id": 43232249628,
+      "age_hours": 12.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -621,9 +659,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-12T02:30:38+00:00",
-      "last_success_run_id": 43141909206,
-      "age_hours": 5.3,
+      "last_success_at": "2026-11-12T20:47:20+00:00",
+      "last_success_run_id": 43303761140,
+      "age_hours": 5.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -632,8 +670,8 @@
   "queue_status": {
     "open_count": 0,
     "pr_open_count": 0,
-    "parked_count": 3,
-    "merged_count": 222,
+    "parked_count": 4,
+    "merged_count": 224,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
@@ -642,7 +680,7 @@
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": true,
+  "should_dispatch_engineering": false,
   "email_deferred": false,
   "email_defer_reasons": []
 }
