@@ -915,6 +915,58 @@ def match_ch_key(name: str | None) -> str | None:
     return None
 
 
+CH_LEAVING_DATE_TOLERANCE_DAYS = 31
+
+
+def _symbol_code(symbol: str) -> str:
+    return str(symbol or "").split(".", 1)[0].upper()
+
+
+def _leaving_date_consistent(leaving: Any, last_bar: date | None) -> bool:
+    left = _parse_date(leaving)
+    if left is None or last_bar is None:
+        return False
+    return abs((last_bar - left).days) <= CH_LEAVING_DATE_TOLERANCE_DAYS
+
+
+def match_ch_record(
+    store: Mapping[str, Any],
+    *,
+    symbol: str,
+    name: str | None,
+    last_bar: date | None,
+) -> str | None:
+    """The store key whose record names this listed company, or None.
+
+    Sealed rule (UK replay registration, owner sign-off): a Companies House
+    record is used only when its EPIC and leaving date are consistent with the
+    EODHD symbol. Rows without an EPIC need a name match plus the leaving date.
+    The seven hand-verified probe names carry neither and keep the name match.
+    More than one candidate is ambiguous and matches nothing.
+    """
+    code = _symbol_code(symbol)
+    found: set[str] = set()
+    for row in store.get("names") or []:
+        if not isinstance(row, Mapping) or not row.get("key"):
+            continue
+        key = str(row["key"])
+        epic = str(row.get("epic") or "").upper()
+        leaving = row.get("leaving_date")
+        row_name = str(row.get("name") or "")
+        named = bool(name) and (_name_matches(row_name, name) or _name_matches(name, row_name))
+        if epic:
+            if (code == epic or code.startswith(epic + "_")) and _leaving_date_consistent(
+                leaving, last_bar
+            ):
+                found.add(key)
+        elif leaving:
+            if named and _leaving_date_consistent(leaving, last_bar):
+                found.add(key)
+        elif key in CH_NAME_BY_KEY and named:
+            found.add(key)
+    return found.pop() if len(found) == 1 else None
+
+
 def gross_margin(gross_profit: float | None, revenue: float | None) -> float | None:
     if gross_profit is None or revenue is None or revenue <= 0:
         return None

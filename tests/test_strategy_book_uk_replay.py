@@ -646,3 +646,40 @@ def test_a_truncated_raw_file_is_fetched_again(
     assert not [url for url in calls if "fundamentals/AAA.LSE" in url]
     json.loads(eod.read_text(encoding="utf-8"))
     assert not list(cache.rglob("*.partial"))
+
+
+def test_companies_house_match_needs_epic_and_leaving_date() -> None:
+    store = {
+        "names": [
+            {"key": "gkn", "name": "GKN plc", "epic": "GKN", "leaving_date": "2018-04-24"},
+            {"key": "sky", "name": "Sky plc", "epic": None, "leaving_date": "2018-10-12"},
+            {"key": "carillion", "name": "Carillion plc"},
+            {"key": "stranger", "name": "Stranger plc"},
+        ]
+    }
+    match = tape.match_ch_record
+    assert match(store, symbol="GKN.LSE", name="GKN", last_bar=date(2018, 4, 20)) == "gkn"
+    assert match(store, symbol="GKN_old.LSE", name=None, last_bar=date(2018, 4, 23)) == "gkn"
+    # A reused EPIC on a later listing does not pick up the leaver's filings.
+    assert match(store, symbol="GKN.LSE", name="GKN", last_bar=date(2025, 9, 30)) is None
+    assert match(store, symbol="SKYB.LSE", name="Sky plc", last_bar=date(2018, 10, 5)) == "sky"
+    assert match(store, symbol="SKYB.LSE", name="Sky plc", last_bar=date(2025, 9, 30)) is None
+    assert match(store, symbol="SKYB.LSE", name="Other", last_bar=date(2018, 10, 5)) is None
+    assert (
+        match(store, symbol="CLLN.LSE", name="Carillion", last_bar=date(2018, 1, 12)) == "carillion"
+    )
+    # A name outside the hand-verified seven with no EPIC or leaving date never matches.
+    assert match(store, symbol="STR.LSE", name="Stranger", last_bar=date(2019, 1, 1)) is None
+
+
+def test_companies_house_match_is_ambiguous_with_two_candidates() -> None:
+    store = {
+        "names": [
+            {"key": "a", "name": "Alpha plc", "epic": "ALP", "leaving_date": "2016-05-01"},
+            {"key": "b", "name": "Alpha Group plc", "epic": "ALP", "leaving_date": "2016-05-20"},
+        ]
+    }
+    assert (
+        tape.match_ch_record(store, symbol="ALP.LSE", name="Alpha", last_bar=date(2016, 5, 10))
+        is None
+    )

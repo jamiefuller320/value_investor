@@ -282,6 +282,20 @@
       "fix": "Job limit 350 minutes; the runner stops itself after UK_REPLAY_MAX_MINUTES (320) as partial/time_budget; the cursor is saved every 25 names; every cache file is written atomically; a cache file that does not parse is fetched again; the encrypt step tolerates tar exit 1.",
       "unchanged": "No constant, window, call weight, soft cap or scoring rule changed. Files already fetched are kept and skipped on resume.",
       "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
+    },
+    {
+      "marker_id": "strategy-book-uk-replay-v0-ch-matching-v1",
+      "at": "2026-11-13T03:00:00Z",
+      "kind": "implementation",
+      "rule_change": false,
+      "approved_by": "owner (pending: merging this change approves it)",
+      "new_registration_id": false,
+      "logged_on_registration_id": "strategy-book-uk-replay-v0",
+      "sealed_text": "Owner sign-off: 'A name is used only when its Companies House record names the same listed company as the EODHD symbol (EPIC and leaving date consistent); otherwise it is not matched.'",
+      "what_was_wrong": "The runner still matched Companies House rows by name against the seven hard-coded probe names only, so the sealed wider scope (every store name, EPIC and leaving date consistent) was not applied.",
+      "fix": "match_ch_record attaches a store row when its EPIC equals the EODHD symbol code (or its _-suffixed delisted form) and the leaving date is within 31 days of the symbol's last bar; rows without an EPIC need a name match plus the leaving date; the seven hand-verified probe names keep the name match; two candidates match nothing. Dry run on the part-1 store: all 123 EPIC rows match only themselves.",
+      "unchanged": "No constant, window, scoring rule or call budget changed. The 31-day tolerance is the reading of 'consistent'; it is recorded here before any development score exists.",
+      "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
     }
   ]
 }
