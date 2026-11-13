@@ -9947,6 +9947,21 @@ def test_fetch_filings_ir_allowlist_dax_sie_de_builtins(tmp_path: Path):
     assert sum(1 for row in rows if row["period"] == "interim") == 1
 
 
+def test_fetch_filings_ir_allowlist_dax_mtx_de_builtins_eng_20261113_01(tmp_path: Path):
+    """eng-20261113-01: MTX.DE buy_tier_no_key_bodies — mtu.de FY2025 annual + H1-2025 interim PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("MTX.DE", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("MTUAeroEnginesAG_AnnualReport_2025" in url for url in urls)
+    assert any("2025_H1_Finanzbericht2025_EN" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
 def test_fetch_filings_ir_allowlist_atx_cai_vi_builtins(tmp_path: Path):
     """eng-20261021-08: CAI.VI awaiting_periodic_report — caimmo.com FY2025 annual + H1 2026 interim PDFs."""
     allowlist_path = tmp_path / "ir.json"
@@ -14099,6 +14114,29 @@ def test_parked_source_hunter_sie_de_dax_has_fetchable_ir():
     if not interim_body:
         pytest.skip("SIE.DE EQS Q1 body fetch unavailable (rate-limit / network) — retry later")
     valid, reason = _validate_ir_allowlist_body_content(interim[0], interim_body, ticker="SIE.DE")
+    assert valid, reason
+
+
+def test_parked_source_hunter_mtx_de_dax_has_fetchable_ir_eng_20261113_01():
+    """eng-20261113-01: MTX.DE mtu.de FY2025 annual + H1-2025 interim PDFs fetch and validate."""
+    assert "MTX.DE" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("MTX.DE")
+    assert len(rows) == 2
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) == 1
+    assert len(interim) == 1
+    assert "MTUAeroEnginesAG_AnnualReport_2025" in annual[0]["url"]
+    assert "2025_H1_Finanzbericht2025_EN" in interim[0]["url"]
+    annual_body = fetch_filing_body(annual[0]["url"])
+    assert annual_body
+    assert len(annual_body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], annual_body, ticker="MTX.DE")
+    assert valid, reason
+    interim_body = fetch_filing_body(interim[0]["url"])
+    assert interim_body
+    assert len(interim_body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(interim[0], interim_body, ticker="MTX.DE")
     assert valid, reason
 
 

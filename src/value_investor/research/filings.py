@@ -823,6 +823,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.eqs-news.com/media/document/53433340-4eb8-4612-836a-b20b58ed33de/assets/DE0007236101-JA-2024-EQ-E-00.pdf",
         "https://ir-api.eqs.com/storage/ir/f63333/documents/db728c41-10af-4deb-b10e-9b162a9b7f8a/DE0007236101-Q1-2025-EQ-E-00.pdf",
     ],
+    # dax leftover MTX.DE — eng-20261113-01: buy_tier_no_key_bodies; ESEF/Google empty;
+    # mtu.de fileadmin FY2025 annual report + H1-2025 interim report PDFs fetch.
+    "MTX.DE": [
+        "https://www.mtu.de/fileadmin/DE/5_Investoren/Financial_Report/2025_Results/MTUAeroEnginesAG_AnnualReport_2025_en_locked.pdf",
+        "https://www.mtu.de/fileadmin/EN/5_Investors/7_Financial_Reports/PDFs/2025_H1_Finanzbericht2025_EN.pdf",
+    ],
     # asx200 buy-tier deepen — unmeasured EBO.AX (Markit latest-five feed is capital-change only).
     "EBO.AX": [
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-02984095-2A1616605",
