@@ -15,6 +15,7 @@ from value_investor.universe_filing_archive_status import (
 
 def test_status_missing_pack_run() -> None:
     payload = build_universe_filing_archive_status(
+        prior_status={},
         pack_run={},
         bottleneck={},
         now=datetime(2026, 10, 2, 18, 0, tzinfo=UTC),
@@ -48,6 +49,7 @@ def test_status_dry_complete_next_widen_need_apply() -> None:
         "max_units": 8,
     }
     payload = build_universe_filing_archive_status(
+        prior_status={},
         pack_run=pack_run,
         bottleneck={"errors": [], "throughput": {}, "bottlenecks": []},
         now=datetime(2026, 10, 2, 18, 0, tzinfo=UTC),
@@ -86,6 +88,7 @@ def test_status_apply_isolation_ok_accumulate() -> None:
         "assemble_caps": {"max_http_fetches": 32, "max_tickers_per_unit": 2},
     }
     payload = build_universe_filing_archive_status(
+        prior_status={},
         pack_run=pack_run,
         bottleneck={"errors": []},
         now=datetime(2026, 10, 3, 8, 0, tzinfo=UTC),
@@ -97,6 +100,7 @@ def test_status_apply_isolation_ok_accumulate() -> None:
 
 def test_status_failures_hold_widen() -> None:
     payload = build_universe_filing_archive_status(
+        prior_status={},
         pack_run={
             "generated_at": "2026-10-02T22:05:00+00:00",
             "outcome": "apply_complete",
@@ -114,6 +118,7 @@ def test_status_failures_hold_widen() -> None:
 
 def test_status_isolation_fail_holds() -> None:
     payload = build_universe_filing_archive_status(
+        prior_status={},
         pack_run={
             "generated_at": "2026-10-02T22:05:00+00:00",
             "outcome": "apply_complete",
@@ -134,6 +139,7 @@ def test_status_isolation_fail_holds() -> None:
 
 def test_status_suspend_waits_gate() -> None:
     payload = build_universe_filing_archive_status(
+        prior_status={},
         pack_run={
             "generated_at": "2026-10-02T22:05:00+00:00",
             "outcome": "suspend",
