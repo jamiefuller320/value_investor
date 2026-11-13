@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-12T07:48:33.568575+00:00",
+  "generated_at": "2026-11-13T02:33:32.535061+00:00",
   "source": "strategy_book",
   "book": "strategy_book",
   "book_id": "owner-strategy-book-v0",
@@ -20,7 +20,7 @@
   },
   "learning_question": "For every closed strategy-book episode: what happened (entry, path, exit reason versus the registered rule), was the outcome attributable to entry timing, the exit rule, a thesis break, a gate miss or market drift, and which of the five levers would have helped?",
   "observe_status": "ok",
-  "scoring_date": "2026-11-12",
+  "scoring_date": "2026-11-13",
   "influences_live": false,
   "observe_only": true,
   "opinion_llm": false,
@@ -40,19 +40,2315 @@
     "fail_closed": "Missing data is insufficient_data. A provenance miss is not evidence."
   },
   "counts": {
-    "episodes": 86,
-    "closed": 0,
+    "episodes": 94,
+    "closed": 2,
     "primary": 0,
-    "companion": 0,
+    "companion": 2,
     "active": 0,
-    "open_skipped": 86,
+    "open_skipped": 92,
     "provenance_missing": 0,
     "missing": 0,
     "missing_older_than_lag": 0
   },
   "active": [],
-  "companion": [],
-  "rows": [],
+  "companion": [
+    {
+      "review_id": "sp500:ADM:decline_rejected_shadow:2026-11-10",
+      "episode_id": "sp500:ADM:decline_rejected_shadow:2026-11-10",
+      "review_fingerprint": "3bca39f2086c8323168c",
+      "episode_key": "strategy_book:decline_rejected_shadow|ADM|2026-11-11|2026-11-12",
+      "source": "strategy_book",
+      "book": "strategy_book",
+      "book_id": "owner-strategy-book-v0",
+      "book_tag": "Strategy book",
+      "column": "decline_rejected_shadow",
+      "column_role": "shadow",
+      "attention": "companion",
+      "market": "sp500",
+      "ticker": "ADM",
+      "currency": "USD",
+      "signal_session": "2026-11-10",
+      "fill_session": "2026-11-11",
+      "exit_session": "2026-11-12",
+      "exit_reason": "thesis_break",
+      "exit_fill": 70.97,
+      "fair_cost_return": -0.0027949802594472964,
+      "fair_cost_return_pct": -0.28,
+      "matched_excess": 0.010813534505446856,
+      "matched_excess_pct": 1.08,
+      "recovery_label": false,
+      "launched": false,
+      "memo_verdict": "accumulate",
+      "memo_rationale": null,
+      "snapshot": {
+        "signal_session": "2026-11-10",
+        "screen_run_date": "2026-11-09",
+        "gate_as_of": "2026-11-09",
+        "market": "sp500",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "research_verdict": "nan",
+        "research_confidence": null,
+        "sector": "Consumer Defensive",
+        "conviction_score": 0.456,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector_basis": "own_market",
+        "region": null,
+        "earnings_breadth_sources": null,
+        "sector_inputs": null,
+        "decline_checks": {
+          "dividend": {
+            "evaluable": false,
+            "fired": false,
+            "why": "dividend_flag_not_on_screen_row"
+          },
+          "eps_annual": {
+            "evaluable": true,
+            "fired": true,
+            "label": "Diluted EPS",
+            "latest": 2.23,
+            "latest_year": 2025,
+            "prior": 3.65,
+            "strength": "soft"
+          },
+          "eps_interim": {
+            "change_pct": -0.1774,
+            "citation": "429.2m £521.0m -18% Earnings per share from continuing operations 109.0p 132.5p -18% Interim dividend per share 70.5p 115.0p -39% Share buyback 3 £45.0m - nm 4 Total Shareholder distributions 1 £258",
+            "evaluable": true,
+            "fired": true,
+            "interim_eps_decline_pct": 0.1774,
+            "label": "Earnings per share",
+            "latest": 109.0,
+            "period_end": "2026-06-30",
+            "prior": 132.5,
+            "prior_period_end": "2025-06-30",
+            "published_at": "2026-08-06",
+            "source": "filing_interim_financials.json:21f75a22fc847b02",
+            "strength": "soft"
+          },
+          "fcf": {
+            "evaluable": true,
+            "fired": false,
+            "label": "Free Cash Flow",
+            "latest": 4204000000.0,
+            "latest_year": 2025,
+            "prior": 1227000000.0,
+            "strength": "soft"
+          },
+          "interim_revenue": {
+            "change_pct": 0.0032,
+            "citation": "5% 57% -12pts Group turnover 1 £3.11bn £3.10bn -% Insurance revenue £2.44bn £2.47bn -1% Group risks 1 12.03m 11.42m +5% UK insurance risks 1 9.73m 9.30m +5% European insurance risks 1 2.01",
+            "currency": "GBP",
+            "evaluable": true,
+            "fired": false,
+            "label": "turnover",
+            "latest": 3.11,
+            "period_end": "2026-06-30",
+            "prior": 3.1,
+            "prior_period_end": "2025-06-30",
+            "published_at": "2026-08-06",
+            "source": "filing_interim_financials.json:21f75a22fc847b02",
+            "strength": "hard",
+            "unit": "billions"
+          },
+          "operating_margin": {
+            "change_pp": -0.0065,
+            "evaluable": true,
+            "fired": false,
+            "label": "Operating Income / Total Revenue",
+            "latest_margin": 0.0177,
+            "latest_year": 2025,
+            "prior_margin": 0.0242,
+            "strength": "hard"
+          },
+          "profit_warning": {
+            "evaluable": true,
+            "fired": false,
+            "lookback_days": 180,
+            "scanned_items": 29,
+            "strength": "soft"
+          },
+          "revenue": {
+            "change_pct": -0.0615,
+            "evaluable": true,
+            "fired": true,
+            "label": "Total Revenue",
+            "latest_year": 2025,
+            "prior_change_pct": -0.0895,
+            "strength": "hard"
+          }
+        },
+        "soft_checks": [],
+        "revenue_change_pct": -0.0615,
+        "memo_age_days": 1.43,
+        "memo_by_signal_job": false,
+        "vol_60": 0.017710251455019397,
+        "close_vs_sma200": -0.08940875954609717,
+        "fall_from_high_252": -0.21915492957746485,
+        "return_126": -0.13048933500627358,
+        "range_pos_126": 0.0,
+        "return_20": -0.1670673076923077,
+        "rsi_14": 22.034731233874325,
+        "inputs_not_after_signal": true
+      },
+      "decision_log": [
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "close": 70.92,
+          "entry_fill": 70.92,
+          "action": "fill",
+          "launched": false,
+          "floor": null,
+          "download_as_of": "2026-11-12"
+        },
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "close": 70.92,
+          "entry_fill": 70.92,
+          "action": "thesis_break",
+          "launched": false,
+          "floor": null,
+          "highest_checkpoint": null,
+          "recovery": false,
+          "reasons": [
+            "declining"
+          ]
+        }
+      ],
+      "reviews": [],
+      "floor_history": [],
+      "cited_inputs": [
+        {
+          "path": "docs/data/charts/ADM.json",
+          "sha256": "bcaa2b5e89799b7f5718285d7b6664dd8f5ce31a739d0222a87f3efa4ff66c80"
+        },
+        {
+          "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
+          "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+        },
+        {
+          "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
+          "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+        },
+        {
+          "path": "docs/data/library/markets/sp500/screen/history/run_20261111_180727.json.gz",
+          "sha256": "7367721508e22ea1fc473ff66a092f03ab20db577f295921d34b0540e0db3d8d"
+        },
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "inputs": [
+            {
+              "path": "docs/data/charts/ADM.json",
+              "sha256": "bcaa2b5e89799b7f5718285d7b6664dd8f5ce31a739d0222a87f3efa4ff66c80"
+            },
+            {
+              "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
+              "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+            },
+            {
+              "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
+              "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+            },
+            {
+              "path": "docs/data/library/markets/sp500/screen/history/run_20261111_180727.json.gz",
+              "sha256": "7367721508e22ea1fc473ff66a092f03ab20db577f295921d34b0540e0db3d8d"
+            }
+          ],
+          "action": "thesis_break"
+        }
+      ],
+      "pit_gate_log": [
+        {
+          "kind": "session",
+          "as_of": "2026-11-10",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "entry",
+          "as_of": "2026-11-10",
+          "column": "decline_rejected_shadow",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-11",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-12",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "exit",
+          "as_of": "2026-11-12",
+          "column": "decline_rejected_shadow",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": "thesis_break"
+        }
+      ],
+      "pit_gate_log_count": 5,
+      "hindsight": [],
+      "same_day": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": [],
+        "same_calendar_day": false,
+        "soft_bias": false,
+        "major_error_reverse": false,
+        "exception": null
+      },
+      "attribution": {
+        "label": "gate_miss",
+        "because": "gate_rejected_shadow_column",
+        "cites": [
+          "column=decline_rejected_shadow",
+          "column_role=shadow",
+          "exit_reason=thesis_break",
+          "fair_cost_return=-0.0027949802594472964",
+          "matched_excess=0.010813534505446856"
+        ],
+        "counts_as_evidence": true
+      },
+      "levers": [
+        {
+          "id": "stock_choice",
+          "definition": "Accepted vs skipped PIT cues; fair-cost forward %",
+          "not": "cue-book path %; live NAV",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "no",
+          "status": "scored",
+          "value": -0.28,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=-0.0027949802594472964"
+          ],
+          "hindsight": [],
+          "because": "shadow_return_inside_band"
+        },
+        {
+          "id": "buy_timing",
+          "definition": "vs immediate-on-cue; fair-cost delta",
+          "not": "watermark brackets (N217)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=-0.0027949802594472964",
+            "entry_window_sessions=10"
+          ],
+          "hindsight": [],
+          "because": "no_point_in_time_buy_on_signal_or_primary_close",
+          "outside_window": [],
+          "entry_window_sessions": 10
+        },
+        {
+          "id": "buy_strategy",
+          "definition": "Single-shot vs scale-in within fixed stake",
+          "not": "DCA / cash drag (later twins)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "sizing=fixed_stake_single_shot",
+            "stake=100.0"
+          ],
+          "hindsight": [],
+          "because": "no_scale_in_counterfactual_on_the_episode"
+        },
+        {
+          "id": "sell_timing",
+          "definition": "vs registered hold counterfactuals; default bias against same-calendar-day exit",
+          "not": "N200 leave-tier as this lab's skill; same-day without error evidence",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=thesis_break",
+            "fair_cost_return=-0.0027949802594472964",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "no_paired_close_on_or_before_this_exit"
+        },
+        {
+          "id": "sell_strategy",
+          "definition": "Rule-family by epoch; fair-cost; same-day exit allowed only as major_error_reverse with durable cites",
+          "not": "Hard live veto; Package L; silent same-day churn",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "rule_fired",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=thesis_break",
+            "registered_family_hit=True",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "registered_family_fired_without_a_paired_counterfactual"
+        }
+      ],
+      "judgment_in_the_round": {
+        "rubric_id": "judgment_in_the_round_v0",
+        "influences_live": false,
+        "observe_only": true,
+        "rules_role": "scaffold_propose",
+        "buy": {
+          "B1": {
+            "answer": "fundamentals_cited_partial",
+            "confidence": "low",
+            "cites": [
+              "data_quality_score=1.0",
+              "research_verdict=nan"
+            ],
+            "unknown": false
+          },
+          "B2": {
+            "answer": "technicals_cited",
+            "confidence": "low",
+            "cites": [
+              "timing_signal=accumulate"
+            ],
+            "unknown": false
+          },
+          "B3": {
+            "answer": "sector_context_cited",
+            "confidence": "low",
+            "cites": [
+              "sector=Consumer Defensive",
+              "market=sp500"
+            ],
+            "unknown": false
+          },
+          "B4": {
+            "answer": "cue_whitelist_proposes",
+            "confidence": "low",
+            "cites": [
+              "cue_source_id=owner-strategy-book-v0",
+              "cue_whitelist_id=mft-short-whitelist-v0",
+              "clear_note=column=decline_rejected_shadow",
+              "signal=buy",
+              "adjusted_signal=buy"
+            ],
+            "unknown": false
+          },
+          "B5": {
+            "answer": "moderate_conviction",
+            "confidence": "medium",
+            "cites": [
+              "conviction_score=0.456",
+              "research_verdict=nan"
+            ],
+            "unknown": false
+          },
+          "B6": {
+            "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+            "confidence": "medium",
+            "cites": [
+              "hold_policy_trading_days=63",
+              "exit_family=hold_trading_days_or_identity_break",
+              "sizing=fixed_stake_v0"
+            ],
+            "unknown": false
+          }
+        },
+        "sell": {
+          "S1": {
+            "answer": "exit_reason_cited",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "entry_cue_source_id=owner-strategy-book-v0",
+              "entry_clear_note=column=decline_rejected_shadow"
+            ],
+            "unknown": false
+          },
+          "S2": {
+            "answer": "path_cited_at_exit",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=-0.28",
+              "hold_trading_days=1"
+            ],
+            "unknown": false
+          },
+          "S3": {
+            "answer": "exit_path_cited",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=-0.28",
+              "path_sign=negative",
+              "same_calendar_day=False"
+            ],
+            "unknown": false
+          },
+          "S4": {
+            "answer": "registered_lab_exit_rule_fires",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "rules_role=scaffold_propose"
+            ],
+            "unknown": false
+          },
+          "S5": {
+            "answer": "exit_confidence_from_rule_and_same_day_policy",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "same_day_soft_bias=False",
+              "same_day_hard_ban=False"
+            ],
+            "unknown": false
+          },
+          "S6": {
+            "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+            "confidence": "medium",
+            "cites": [
+              "sizing=fixed_stake_v0",
+              "observe_only=true",
+              "package_l=false",
+              "hold_trading_days=1"
+            ],
+            "unknown": false
+          }
+        },
+        "rule_candidates": [
+          {
+            "rule_id": "owner-strategy-book-v0",
+            "role": "scaffold_propose",
+            "cue_whitelist_id": "mft-short-whitelist-v0",
+            "clear_note": "column=decline_rejected_shadow"
+          }
+        ],
+        "llm_stance": "agree",
+        "misfit_evidence": null,
+        "fill_status": "filled",
+        "fill_source": "deterministic_n228_v0",
+        "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+        "cells_cited": [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5",
+          "B6",
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ],
+        "cells_unknown": [],
+        "point_in_time": "exit_session",
+        "counts_as_evidence": true,
+        "evidence_status": "scored"
+      },
+      "provenance_missing": false,
+      "evidence_status": "scored",
+      "actioned": false,
+      "opinion_llm": false,
+      "influences_live": false,
+      "observe_only": true,
+      "status": "closed"
+    },
+    {
+      "review_id": "ftse350:CKN.L:decline_rejected_shadow:2026-11-10",
+      "episode_id": "ftse350:CKN.L:decline_rejected_shadow:2026-11-10",
+      "review_fingerprint": "236e02033a88795c8287",
+      "episode_key": "strategy_book:decline_rejected_shadow|CKN.L|2026-11-11|2026-11-12",
+      "source": "strategy_book",
+      "book": "strategy_book",
+      "book_id": "owner-strategy-book-v0",
+      "book_tag": "Strategy book",
+      "column": "decline_rejected_shadow",
+      "column_role": "shadow",
+      "attention": "companion",
+      "market": "ftse350",
+      "ticker": "CKN.L",
+      "currency": "GBP",
+      "signal_session": "2026-11-10",
+      "fill_session": "2026-11-11",
+      "exit_session": "2026-11-12",
+      "exit_reason": "thesis_break",
+      "exit_fill": 4646.0,
+      "fair_cost_return": 0.007141673931996555,
+      "fair_cost_return_pct": 0.71,
+      "matched_excess": 0.013700051365709457,
+      "matched_excess_pct": 1.37,
+      "recovery_label": false,
+      "launched": false,
+      "memo_verdict": "neutral",
+      "memo_rationale": null,
+      "snapshot": {
+        "signal_session": "2026-11-10",
+        "screen_run_date": "2026-11-08",
+        "gate_as_of": "2026-11-09",
+        "market": "ftse350",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "research_verdict": "neutral",
+        "research_confidence": 0.7,
+        "sector": "Industrials",
+        "conviction_score": 0.25208024999999995,
+        "data_quality_score": 1.0,
+        "name": "Clarkson PLC",
+        "timing_signal": "neutral",
+        "timing_score": 0.625,
+        "action_note": "Buy — neutral timing | FCF basis mismatch: filing £57M | screen TTM £102.7M | FCF definition divergence",
+        "models_passed": 8.0,
+        "weighted_model_score": 0.5353727272727272,
+        "research_as_of": "2026-11-01T08:38:36.467562+00:00",
+        "fcf_basis_overlay": true,
+        "media_cyclical_thin_fcf_overlay": false,
+        "advertising_revenue_share": NaN,
+        "dividend_sustainability_overlay": false,
+        "statutory_fcf_moat_leverage_overlay": false,
+        "interim_dividend_cut_flagged": false,
+        "interim_dividend_cut_pct": null,
+        "interim_quality_overlay": false,
+        "earnings_basis_overlay": false,
+        "interim_eps_decline_pct": null,
+        "adjusted_eps_growth_pct": null,
+        "yahoo_normalized_income_growth_pct": -0.2187216673865205,
+        "signal_trend": "stable",
+        "weeks_at_signal": 2,
+        "passed_families": "cheapness,quality,garp,risk",
+        "price_vs_sma200_pct": -0.032135442776026396,
+        "core_order": "limit",
+        "core_limit": 4524.3,
+        "core_allocation_pct": 0.6,
+        "tactical_limit": 4341.5,
+        "tactical_allocation_pct": 0.4,
+        "tactical_stop_loss": 4078.27,
+        "tactical_take_profit": 5077.92,
+        "trade_plan_summary": "Trade plan: core 60% limit £4524.30; tactical 40% limit £4341.50; tactical stop £4078.27, target £5077.92.",
+        "atr_14": 189.4054,
+        "volume_ratio_20": 1.347,
+        "operating_cashflow": 64400000.0,
+        "operating_cashflow_gross": null,
+        "fcf_dividend_coverage_gross": null,
+        "fcf_dividend_coverage_net": 1.7272727272727273,
+        "fcf_definition_divergence": true,
+        "fcf_divergence_flagged": true,
+        "fcf_dividend_coverage": {
+          "statutory_ocf_minus_capex": {
+            "label": "Statutory OCF−CapEx",
+            "ratio": 1.7272727272727273
+          },
+          "management_cash_generated_minus_capex": {
+            "label": "Management cash-generated−CapEx",
+            "ratio": null
+          }
+        },
+        "research_prompts": [
+          "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 1.73×."
+        ],
+        "fcf_three_way_conviction_overlay": false,
+        "profit_to_cash_current_pct": NaN,
+        "profit_to_cash_prior_pct": NaN,
+        "profit_to_cash_yoy_decline_pp": NaN,
+        "sector_basis": "own_market",
+        "region": null,
+        "earnings_breadth_sources": null,
+        "sector_inputs": null,
+        "decline_checks": {
+          "dividend": {
+            "evaluable": true,
+            "fired": false,
+            "strength": "soft"
+          },
+          "eps_annual": {
+            "evaluable": false,
+            "fired": false,
+            "why": "annual_eps_missing_or_stale"
+          },
+          "eps_interim": {
+            "change_pct": 0.497,
+            "citation": "the prior year, and underlying basic earnings per share rising to 147.6p from 98.6p. The company maintained a robust balance sheet with £154.6 million in free cash",
+            "evaluable": true,
+            "fired": false,
+            "interim_eps_decline_pct": -0.497,
+            "label": "underlying basic earnings per share",
+            "latest": 147.6,
+            "period_end": "2026-06-30",
+            "prior": 98.6,
+            "prior_period_end": "2025-06-30",
+            "published_at": "2026-08-03",
+            "source": "filing_interim_financials.json:c6e0ba3753369a22",
+            "strength": "soft"
+          },
+          "fcf": {
+            "evaluable": true,
+            "fired": false,
+            "label": "Free Cash Flow",
+            "latest": 57000000.0,
+            "latest_year": 2025,
+            "prior": 107400000.0,
+            "strength": "soft"
+          },
+          "interim_revenue": {
+            "change_pct": 0.3885,
+            "citation": "f the year. Results Total revenue in the first half was £413.5m (2025: £297.8m) with underlying administrative expenses* of £333.8m (2025: £246.6m). Underlyin",
+            "currency": "GBP",
+            "evaluable": true,
+            "fired": false,
+            "label": "Total revenue",
+            "latest": 413.5,
+            "period_end": "2026-06-30",
+            "prior": 297.8,
+            "prior_period_end": "2025-06-30",
+            "published_at": "2026-08-03",
+            "source": "filing_interim_financials.json:c6e0ba3753369a22",
+            "strength": "hard",
+            "unit": "millions"
+          },
+          "operating_margin": {
+            "change_pp": -0.0306,
+            "evaluable": true,
+            "fired": true,
+            "label": "Operating Income / Total Revenue",
+            "latest_margin": 0.122,
+            "latest_year": 2025,
+            "prior_margin": 0.1526,
+            "strength": "hard"
+          },
+          "profit_warning": {
+            "evaluable": true,
+            "fired": false,
+            "lookback_days": 180,
+            "scanned_items": 16,
+            "strength": "soft"
+          },
+          "revenue": {
+            "change_pct": -0.0454,
+            "evaluable": true,
+            "fired": false,
+            "label": "Total Revenue",
+            "latest_year": 2025,
+            "prior_change_pct": 0.0344,
+            "strength": "hard"
+          }
+        },
+        "soft_checks": [],
+        "revenue_change_pct": -0.0454,
+        "memo_age_days": 9.33,
+        "memo_by_signal_job": false,
+        "vol_60": 0.016197219111251035,
+        "close_vs_sma200": -0.0705557391024566,
+        "fall_from_high_252": -0.19921526012741086,
+        "return_126": -0.08645786099682584,
+        "range_pos_126": 0.1825964866980287,
+        "return_20": -0.17132075471698116,
+        "rsi_14": 23.01300840108648,
+        "inputs_not_after_signal": true
+      },
+      "decision_log": [
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "close": 4588.0,
+          "entry_fill": 4588.0,
+          "action": "fill",
+          "launched": false,
+          "floor": null,
+          "download_as_of": "2026-11-12"
+        },
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "close": 4588.0,
+          "entry_fill": 4588.0,
+          "action": "thesis_break",
+          "launched": false,
+          "floor": null,
+          "highest_checkpoint": null,
+          "recovery": false,
+          "reasons": [
+            "declining"
+          ]
+        }
+      ],
+      "reviews": [],
+      "floor_history": [],
+      "cited_inputs": [
+        {
+          "path": "docs/data/charts/CKN.L.json",
+          "sha256": "092759388403fc62da67b10db485f871b2a9553bb85f322cd2dc6d9f696005fc"
+        },
+        {
+          "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
+          "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+        },
+        {
+          "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
+          "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+        },
+        {
+          "path": "docs/data/history/run_20261110_005303.json.gz",
+          "sha256": "3eb1d3a09c07f0dfef85b57f0bfe60d48793a866a633c5b325ee07c91ea3ddd3"
+        },
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "inputs": [
+            {
+              "path": "docs/data/charts/CKN.L.json",
+              "sha256": "092759388403fc62da67b10db485f871b2a9553bb85f322cd2dc6d9f696005fc"
+            },
+            {
+              "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
+              "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+            },
+            {
+              "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
+              "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+            },
+            {
+              "path": "docs/data/history/run_20261110_005303.json.gz",
+              "sha256": "3eb1d3a09c07f0dfef85b57f0bfe60d48793a866a633c5b325ee07c91ea3ddd3"
+            }
+          ],
+          "action": "thesis_break"
+        }
+      ],
+      "pit_gate_log": [
+        {
+          "kind": "session",
+          "as_of": "2026-11-10",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "neutral",
+          "exit_reason": null
+        },
+        {
+          "kind": "entry",
+          "as_of": "2026-11-10",
+          "column": "decline_rejected_shadow",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-11",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "neutral",
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-12",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "neutral",
+          "exit_reason": null
+        },
+        {
+          "kind": "exit",
+          "as_of": "2026-11-12",
+          "column": "decline_rejected_shadow",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": "thesis_break"
+        }
+      ],
+      "pit_gate_log_count": 5,
+      "hindsight": [],
+      "same_day": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": [],
+        "same_calendar_day": false,
+        "soft_bias": false,
+        "major_error_reverse": false,
+        "exception": null
+      },
+      "attribution": {
+        "label": "gate_miss",
+        "because": "gate_rejected_shadow_column",
+        "cites": [
+          "column=decline_rejected_shadow",
+          "column_role=shadow",
+          "exit_reason=thesis_break",
+          "fair_cost_return=0.007141673931996555",
+          "matched_excess=0.013700051365709457"
+        ],
+        "counts_as_evidence": true
+      },
+      "levers": [
+        {
+          "id": "stock_choice",
+          "definition": "Accepted vs skipped PIT cues; fair-cost forward %",
+          "not": "cue-book path %; live NAV",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "no",
+          "status": "scored",
+          "value": 0.71,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=0.007141673931996555"
+          ],
+          "hindsight": [],
+          "because": "shadow_return_inside_band"
+        },
+        {
+          "id": "buy_timing",
+          "definition": "vs immediate-on-cue; fair-cost delta",
+          "not": "watermark brackets (N217)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=0.007141673931996555",
+            "entry_window_sessions=10"
+          ],
+          "hindsight": [],
+          "because": "no_point_in_time_buy_on_signal_or_primary_close",
+          "outside_window": [],
+          "entry_window_sessions": 10
+        },
+        {
+          "id": "buy_strategy",
+          "definition": "Single-shot vs scale-in within fixed stake",
+          "not": "DCA / cash drag (later twins)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "sizing=fixed_stake_single_shot",
+            "stake=100.0"
+          ],
+          "hindsight": [],
+          "because": "no_scale_in_counterfactual_on_the_episode"
+        },
+        {
+          "id": "sell_timing",
+          "definition": "vs registered hold counterfactuals; default bias against same-calendar-day exit",
+          "not": "N200 leave-tier as this lab's skill; same-day without error evidence",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=thesis_break",
+            "fair_cost_return=0.007141673931996555",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "no_paired_close_on_or_before_this_exit"
+        },
+        {
+          "id": "sell_strategy",
+          "definition": "Rule-family by epoch; fair-cost; same-day exit allowed only as major_error_reverse with durable cites",
+          "not": "Hard live veto; Package L; silent same-day churn",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "rule_fired",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=thesis_break",
+            "registered_family_hit=True",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "registered_family_fired_without_a_paired_counterfactual"
+        }
+      ],
+      "judgment_in_the_round": {
+        "rubric_id": "judgment_in_the_round_v0",
+        "influences_live": false,
+        "observe_only": true,
+        "rules_role": "scaffold_propose",
+        "buy": {
+          "B1": {
+            "answer": "screen_families_include_cheapness",
+            "confidence": "medium",
+            "cites": [
+              "passed_families=cheapness,quality,garp,risk",
+              "models_passed=8.0",
+              "weighted_model_score=0.5353727272727272",
+              "research_verdict=neutral",
+              "fcf_basis_overlay=True",
+              "earnings_basis_overlay=False",
+              "data_quality_score=1.0"
+            ],
+            "unknown": false
+          },
+          "B2": {
+            "answer": "timing_neutral_cited",
+            "confidence": "low",
+            "cites": [
+              "timing_signal=neutral",
+              "timing_score=0.625",
+              "price_vs_sma200_pct=-0.032135442776026396",
+              "volume_ratio_20=1.347",
+              "signal_trend=stable"
+            ],
+            "unknown": false
+          },
+          "B3": {
+            "answer": "sector_context_cited",
+            "confidence": "low",
+            "cites": [
+              "sector=Industrials",
+              "weeks_at_signal=2",
+              "market=ftse350"
+            ],
+            "unknown": false
+          },
+          "B4": {
+            "answer": "cue_whitelist_proposes",
+            "confidence": "low",
+            "cites": [
+              "cue_source_id=owner-strategy-book-v0",
+              "cue_whitelist_id=mft-short-whitelist-v0",
+              "clear_note=column=decline_rejected_shadow",
+              "signal=buy",
+              "adjusted_signal=hold"
+            ],
+            "unknown": false
+          },
+          "B5": {
+            "answer": "low_or_partial_conviction",
+            "confidence": "low",
+            "cites": [
+              "conviction_score=0.25208024999999995",
+              "research_confidence=0.7",
+              "research_verdict=neutral"
+            ],
+            "unknown": false
+          },
+          "B6": {
+            "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+            "confidence": "medium",
+            "cites": [
+              "hold_policy_trading_days=63",
+              "exit_family=hold_trading_days_or_identity_break",
+              "sizing=fixed_stake_v0",
+              "trade_plan_summary=Trade plan: core 60% limit £4524.30; tactical 40% limit £4341.50; tactical stop £4078.27, target £5077.92.",
+              "tactical_stop_loss=4078.27",
+              "tactical_take_profit=5077.92"
+            ],
+            "unknown": false
+          }
+        },
+        "sell": {
+          "S1": {
+            "answer": "exit_reason_cited",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "entry_cue_source_id=owner-strategy-book-v0",
+              "entry_clear_note=column=decline_rejected_shadow"
+            ],
+            "unknown": false
+          },
+          "S2": {
+            "answer": "path_cited_at_exit",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=0.71",
+              "hold_trading_days=1"
+            ],
+            "unknown": false
+          },
+          "S3": {
+            "answer": "exit_path_cited",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=0.71",
+              "path_sign=positive",
+              "same_calendar_day=False"
+            ],
+            "unknown": false
+          },
+          "S4": {
+            "answer": "registered_lab_exit_rule_fires",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "rules_role=scaffold_propose"
+            ],
+            "unknown": false
+          },
+          "S5": {
+            "answer": "exit_confidence_from_rule_and_same_day_policy",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "same_day_soft_bias=False",
+              "same_day_hard_ban=False"
+            ],
+            "unknown": false
+          },
+          "S6": {
+            "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+            "confidence": "medium",
+            "cites": [
+              "sizing=fixed_stake_v0",
+              "observe_only=true",
+              "package_l=false",
+              "hold_trading_days=1"
+            ],
+            "unknown": false
+          }
+        },
+        "rule_candidates": [
+          {
+            "rule_id": "owner-strategy-book-v0",
+            "role": "scaffold_propose",
+            "cue_whitelist_id": "mft-short-whitelist-v0",
+            "clear_note": "column=decline_rejected_shadow"
+          }
+        ],
+        "llm_stance": "agree",
+        "misfit_evidence": null,
+        "fill_status": "filled",
+        "fill_source": "deterministic_n228_v0",
+        "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+        "cells_cited": [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5",
+          "B6",
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ],
+        "cells_unknown": [],
+        "point_in_time": "exit_session",
+        "counts_as_evidence": true,
+        "evidence_status": "scored"
+      },
+      "provenance_missing": false,
+      "evidence_status": "scored",
+      "actioned": false,
+      "opinion_llm": false,
+      "influences_live": false,
+      "observe_only": true,
+      "status": "closed"
+    }
+  ],
+  "rows": [
+    {
+      "review_id": "sp500:ADM:decline_rejected_shadow:2026-11-10",
+      "episode_id": "sp500:ADM:decline_rejected_shadow:2026-11-10",
+      "review_fingerprint": "3bca39f2086c8323168c",
+      "episode_key": "strategy_book:decline_rejected_shadow|ADM|2026-11-11|2026-11-12",
+      "source": "strategy_book",
+      "book": "strategy_book",
+      "book_id": "owner-strategy-book-v0",
+      "book_tag": "Strategy book",
+      "column": "decline_rejected_shadow",
+      "column_role": "shadow",
+      "attention": "companion",
+      "market": "sp500",
+      "ticker": "ADM",
+      "currency": "USD",
+      "signal_session": "2026-11-10",
+      "fill_session": "2026-11-11",
+      "exit_session": "2026-11-12",
+      "exit_reason": "thesis_break",
+      "exit_fill": 70.97,
+      "fair_cost_return": -0.0027949802594472964,
+      "fair_cost_return_pct": -0.28,
+      "matched_excess": 0.010813534505446856,
+      "matched_excess_pct": 1.08,
+      "recovery_label": false,
+      "launched": false,
+      "memo_verdict": "accumulate",
+      "memo_rationale": null,
+      "snapshot": {
+        "signal_session": "2026-11-10",
+        "screen_run_date": "2026-11-09",
+        "gate_as_of": "2026-11-09",
+        "market": "sp500",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "research_verdict": "nan",
+        "research_confidence": null,
+        "sector": "Consumer Defensive",
+        "conviction_score": 0.456,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector_basis": "own_market",
+        "region": null,
+        "earnings_breadth_sources": null,
+        "sector_inputs": null,
+        "decline_checks": {
+          "dividend": {
+            "evaluable": false,
+            "fired": false,
+            "why": "dividend_flag_not_on_screen_row"
+          },
+          "eps_annual": {
+            "evaluable": true,
+            "fired": true,
+            "label": "Diluted EPS",
+            "latest": 2.23,
+            "latest_year": 2025,
+            "prior": 3.65,
+            "strength": "soft"
+          },
+          "eps_interim": {
+            "change_pct": -0.1774,
+            "citation": "429.2m £521.0m -18% Earnings per share from continuing operations 109.0p 132.5p -18% Interim dividend per share 70.5p 115.0p -39% Share buyback 3 £45.0m - nm 4 Total Shareholder distributions 1 £258",
+            "evaluable": true,
+            "fired": true,
+            "interim_eps_decline_pct": 0.1774,
+            "label": "Earnings per share",
+            "latest": 109.0,
+            "period_end": "2026-06-30",
+            "prior": 132.5,
+            "prior_period_end": "2025-06-30",
+            "published_at": "2026-08-06",
+            "source": "filing_interim_financials.json:21f75a22fc847b02",
+            "strength": "soft"
+          },
+          "fcf": {
+            "evaluable": true,
+            "fired": false,
+            "label": "Free Cash Flow",
+            "latest": 4204000000.0,
+            "latest_year": 2025,
+            "prior": 1227000000.0,
+            "strength": "soft"
+          },
+          "interim_revenue": {
+            "change_pct": 0.0032,
+            "citation": "5% 57% -12pts Group turnover 1 £3.11bn £3.10bn -% Insurance revenue £2.44bn £2.47bn -1% Group risks 1 12.03m 11.42m +5% UK insurance risks 1 9.73m 9.30m +5% European insurance risks 1 2.01",
+            "currency": "GBP",
+            "evaluable": true,
+            "fired": false,
+            "label": "turnover",
+            "latest": 3.11,
+            "period_end": "2026-06-30",
+            "prior": 3.1,
+            "prior_period_end": "2025-06-30",
+            "published_at": "2026-08-06",
+            "source": "filing_interim_financials.json:21f75a22fc847b02",
+            "strength": "hard",
+            "unit": "billions"
+          },
+          "operating_margin": {
+            "change_pp": -0.0065,
+            "evaluable": true,
+            "fired": false,
+            "label": "Operating Income / Total Revenue",
+            "latest_margin": 0.0177,
+            "latest_year": 2025,
+            "prior_margin": 0.0242,
+            "strength": "hard"
+          },
+          "profit_warning": {
+            "evaluable": true,
+            "fired": false,
+            "lookback_days": 180,
+            "scanned_items": 29,
+            "strength": "soft"
+          },
+          "revenue": {
+            "change_pct": -0.0615,
+            "evaluable": true,
+            "fired": true,
+            "label": "Total Revenue",
+            "latest_year": 2025,
+            "prior_change_pct": -0.0895,
+            "strength": "hard"
+          }
+        },
+        "soft_checks": [],
+        "revenue_change_pct": -0.0615,
+        "memo_age_days": 1.43,
+        "memo_by_signal_job": false,
+        "vol_60": 0.017710251455019397,
+        "close_vs_sma200": -0.08940875954609717,
+        "fall_from_high_252": -0.21915492957746485,
+        "return_126": -0.13048933500627358,
+        "range_pos_126": 0.0,
+        "return_20": -0.1670673076923077,
+        "rsi_14": 22.034731233874325,
+        "inputs_not_after_signal": true
+      },
+      "decision_log": [
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "close": 70.92,
+          "entry_fill": 70.92,
+          "action": "fill",
+          "launched": false,
+          "floor": null,
+          "download_as_of": "2026-11-12"
+        },
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "close": 70.92,
+          "entry_fill": 70.92,
+          "action": "thesis_break",
+          "launched": false,
+          "floor": null,
+          "highest_checkpoint": null,
+          "recovery": false,
+          "reasons": [
+            "declining"
+          ]
+        }
+      ],
+      "reviews": [],
+      "floor_history": [],
+      "cited_inputs": [
+        {
+          "path": "docs/data/charts/ADM.json",
+          "sha256": "bcaa2b5e89799b7f5718285d7b6664dd8f5ce31a739d0222a87f3efa4ff66c80"
+        },
+        {
+          "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
+          "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+        },
+        {
+          "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
+          "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+        },
+        {
+          "path": "docs/data/library/markets/sp500/screen/history/run_20261111_180727.json.gz",
+          "sha256": "7367721508e22ea1fc473ff66a092f03ab20db577f295921d34b0540e0db3d8d"
+        },
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "inputs": [
+            {
+              "path": "docs/data/charts/ADM.json",
+              "sha256": "bcaa2b5e89799b7f5718285d7b6664dd8f5ce31a739d0222a87f3efa4ff66c80"
+            },
+            {
+              "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
+              "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+            },
+            {
+              "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
+              "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+            },
+            {
+              "path": "docs/data/library/markets/sp500/screen/history/run_20261111_180727.json.gz",
+              "sha256": "7367721508e22ea1fc473ff66a092f03ab20db577f295921d34b0540e0db3d8d"
+            }
+          ],
+          "action": "thesis_break"
+        }
+      ],
+      "pit_gate_log": [
+        {
+          "kind": "session",
+          "as_of": "2026-11-10",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "entry",
+          "as_of": "2026-11-10",
+          "column": "decline_rejected_shadow",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-11",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-12",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "exit",
+          "as_of": "2026-11-12",
+          "column": "decline_rejected_shadow",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": "thesis_break"
+        }
+      ],
+      "pit_gate_log_count": 5,
+      "hindsight": [],
+      "same_day": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": [],
+        "same_calendar_day": false,
+        "soft_bias": false,
+        "major_error_reverse": false,
+        "exception": null
+      },
+      "attribution": {
+        "label": "gate_miss",
+        "because": "gate_rejected_shadow_column",
+        "cites": [
+          "column=decline_rejected_shadow",
+          "column_role=shadow",
+          "exit_reason=thesis_break",
+          "fair_cost_return=-0.0027949802594472964",
+          "matched_excess=0.010813534505446856"
+        ],
+        "counts_as_evidence": true
+      },
+      "levers": [
+        {
+          "id": "stock_choice",
+          "definition": "Accepted vs skipped PIT cues; fair-cost forward %",
+          "not": "cue-book path %; live NAV",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "no",
+          "status": "scored",
+          "value": -0.28,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=-0.0027949802594472964"
+          ],
+          "hindsight": [],
+          "because": "shadow_return_inside_band"
+        },
+        {
+          "id": "buy_timing",
+          "definition": "vs immediate-on-cue; fair-cost delta",
+          "not": "watermark brackets (N217)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=-0.0027949802594472964",
+            "entry_window_sessions=10"
+          ],
+          "hindsight": [],
+          "because": "no_point_in_time_buy_on_signal_or_primary_close",
+          "outside_window": [],
+          "entry_window_sessions": 10
+        },
+        {
+          "id": "buy_strategy",
+          "definition": "Single-shot vs scale-in within fixed stake",
+          "not": "DCA / cash drag (later twins)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "sizing=fixed_stake_single_shot",
+            "stake=100.0"
+          ],
+          "hindsight": [],
+          "because": "no_scale_in_counterfactual_on_the_episode"
+        },
+        {
+          "id": "sell_timing",
+          "definition": "vs registered hold counterfactuals; default bias against same-calendar-day exit",
+          "not": "N200 leave-tier as this lab's skill; same-day without error evidence",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=thesis_break",
+            "fair_cost_return=-0.0027949802594472964",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "no_paired_close_on_or_before_this_exit"
+        },
+        {
+          "id": "sell_strategy",
+          "definition": "Rule-family by epoch; fair-cost; same-day exit allowed only as major_error_reverse with durable cites",
+          "not": "Hard live veto; Package L; silent same-day churn",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "rule_fired",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=thesis_break",
+            "registered_family_hit=True",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "registered_family_fired_without_a_paired_counterfactual"
+        }
+      ],
+      "judgment_in_the_round": {
+        "rubric_id": "judgment_in_the_round_v0",
+        "influences_live": false,
+        "observe_only": true,
+        "rules_role": "scaffold_propose",
+        "buy": {
+          "B1": {
+            "answer": "fundamentals_cited_partial",
+            "confidence": "low",
+            "cites": [
+              "data_quality_score=1.0",
+              "research_verdict=nan"
+            ],
+            "unknown": false
+          },
+          "B2": {
+            "answer": "technicals_cited",
+            "confidence": "low",
+            "cites": [
+              "timing_signal=accumulate"
+            ],
+            "unknown": false
+          },
+          "B3": {
+            "answer": "sector_context_cited",
+            "confidence": "low",
+            "cites": [
+              "sector=Consumer Defensive",
+              "market=sp500"
+            ],
+            "unknown": false
+          },
+          "B4": {
+            "answer": "cue_whitelist_proposes",
+            "confidence": "low",
+            "cites": [
+              "cue_source_id=owner-strategy-book-v0",
+              "cue_whitelist_id=mft-short-whitelist-v0",
+              "clear_note=column=decline_rejected_shadow",
+              "signal=buy",
+              "adjusted_signal=buy"
+            ],
+            "unknown": false
+          },
+          "B5": {
+            "answer": "moderate_conviction",
+            "confidence": "medium",
+            "cites": [
+              "conviction_score=0.456",
+              "research_verdict=nan"
+            ],
+            "unknown": false
+          },
+          "B6": {
+            "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+            "confidence": "medium",
+            "cites": [
+              "hold_policy_trading_days=63",
+              "exit_family=hold_trading_days_or_identity_break",
+              "sizing=fixed_stake_v0"
+            ],
+            "unknown": false
+          }
+        },
+        "sell": {
+          "S1": {
+            "answer": "exit_reason_cited",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "entry_cue_source_id=owner-strategy-book-v0",
+              "entry_clear_note=column=decline_rejected_shadow"
+            ],
+            "unknown": false
+          },
+          "S2": {
+            "answer": "path_cited_at_exit",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=-0.28",
+              "hold_trading_days=1"
+            ],
+            "unknown": false
+          },
+          "S3": {
+            "answer": "exit_path_cited",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=-0.28",
+              "path_sign=negative",
+              "same_calendar_day=False"
+            ],
+            "unknown": false
+          },
+          "S4": {
+            "answer": "registered_lab_exit_rule_fires",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "rules_role=scaffold_propose"
+            ],
+            "unknown": false
+          },
+          "S5": {
+            "answer": "exit_confidence_from_rule_and_same_day_policy",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "same_day_soft_bias=False",
+              "same_day_hard_ban=False"
+            ],
+            "unknown": false
+          },
+          "S6": {
+            "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+            "confidence": "medium",
+            "cites": [
+              "sizing=fixed_stake_v0",
+              "observe_only=true",
+              "package_l=false",
+              "hold_trading_days=1"
+            ],
+            "unknown": false
+          }
+        },
+        "rule_candidates": [
+          {
+            "rule_id": "owner-strategy-book-v0",
+            "role": "scaffold_propose",
+            "cue_whitelist_id": "mft-short-whitelist-v0",
+            "clear_note": "column=decline_rejected_shadow"
+          }
+        ],
+        "llm_stance": "agree",
+        "misfit_evidence": null,
+        "fill_status": "filled",
+        "fill_source": "deterministic_n228_v0",
+        "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+        "cells_cited": [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5",
+          "B6",
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ],
+        "cells_unknown": [],
+        "point_in_time": "exit_session",
+        "counts_as_evidence": true,
+        "evidence_status": "scored"
+      },
+      "provenance_missing": false,
+      "evidence_status": "scored",
+      "actioned": false,
+      "opinion_llm": false,
+      "influences_live": false,
+      "observe_only": true,
+      "status": "closed"
+    },
+    {
+      "review_id": "ftse350:CKN.L:decline_rejected_shadow:2026-11-10",
+      "episode_id": "ftse350:CKN.L:decline_rejected_shadow:2026-11-10",
+      "review_fingerprint": "236e02033a88795c8287",
+      "episode_key": "strategy_book:decline_rejected_shadow|CKN.L|2026-11-11|2026-11-12",
+      "source": "strategy_book",
+      "book": "strategy_book",
+      "book_id": "owner-strategy-book-v0",
+      "book_tag": "Strategy book",
+      "column": "decline_rejected_shadow",
+      "column_role": "shadow",
+      "attention": "companion",
+      "market": "ftse350",
+      "ticker": "CKN.L",
+      "currency": "GBP",
+      "signal_session": "2026-11-10",
+      "fill_session": "2026-11-11",
+      "exit_session": "2026-11-12",
+      "exit_reason": "thesis_break",
+      "exit_fill": 4646.0,
+      "fair_cost_return": 0.007141673931996555,
+      "fair_cost_return_pct": 0.71,
+      "matched_excess": 0.013700051365709457,
+      "matched_excess_pct": 1.37,
+      "recovery_label": false,
+      "launched": false,
+      "memo_verdict": "neutral",
+      "memo_rationale": null,
+      "snapshot": {
+        "signal_session": "2026-11-10",
+        "screen_run_date": "2026-11-08",
+        "gate_as_of": "2026-11-09",
+        "market": "ftse350",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "research_verdict": "neutral",
+        "research_confidence": 0.7,
+        "sector": "Industrials",
+        "conviction_score": 0.25208024999999995,
+        "data_quality_score": 1.0,
+        "name": "Clarkson PLC",
+        "timing_signal": "neutral",
+        "timing_score": 0.625,
+        "action_note": "Buy — neutral timing | FCF basis mismatch: filing £57M | screen TTM £102.7M | FCF definition divergence",
+        "models_passed": 8.0,
+        "weighted_model_score": 0.5353727272727272,
+        "research_as_of": "2026-11-01T08:38:36.467562+00:00",
+        "fcf_basis_overlay": true,
+        "media_cyclical_thin_fcf_overlay": false,
+        "advertising_revenue_share": NaN,
+        "dividend_sustainability_overlay": false,
+        "statutory_fcf_moat_leverage_overlay": false,
+        "interim_dividend_cut_flagged": false,
+        "interim_dividend_cut_pct": null,
+        "interim_quality_overlay": false,
+        "earnings_basis_overlay": false,
+        "interim_eps_decline_pct": null,
+        "adjusted_eps_growth_pct": null,
+        "yahoo_normalized_income_growth_pct": -0.2187216673865205,
+        "signal_trend": "stable",
+        "weeks_at_signal": 2,
+        "passed_families": "cheapness,quality,garp,risk",
+        "price_vs_sma200_pct": -0.032135442776026396,
+        "core_order": "limit",
+        "core_limit": 4524.3,
+        "core_allocation_pct": 0.6,
+        "tactical_limit": 4341.5,
+        "tactical_allocation_pct": 0.4,
+        "tactical_stop_loss": 4078.27,
+        "tactical_take_profit": 5077.92,
+        "trade_plan_summary": "Trade plan: core 60% limit £4524.30; tactical 40% limit £4341.50; tactical stop £4078.27, target £5077.92.",
+        "atr_14": 189.4054,
+        "volume_ratio_20": 1.347,
+        "operating_cashflow": 64400000.0,
+        "operating_cashflow_gross": null,
+        "fcf_dividend_coverage_gross": null,
+        "fcf_dividend_coverage_net": 1.7272727272727273,
+        "fcf_definition_divergence": true,
+        "fcf_divergence_flagged": true,
+        "fcf_dividend_coverage": {
+          "statutory_ocf_minus_capex": {
+            "label": "Statutory OCF−CapEx",
+            "ratio": 1.7272727272727273
+          },
+          "management_cash_generated_minus_capex": {
+            "label": "Management cash-generated−CapEx",
+            "ratio": null
+          }
+        },
+        "research_prompts": [
+          "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 1.73×."
+        ],
+        "fcf_three_way_conviction_overlay": false,
+        "profit_to_cash_current_pct": NaN,
+        "profit_to_cash_prior_pct": NaN,
+        "profit_to_cash_yoy_decline_pp": NaN,
+        "sector_basis": "own_market",
+        "region": null,
+        "earnings_breadth_sources": null,
+        "sector_inputs": null,
+        "decline_checks": {
+          "dividend": {
+            "evaluable": true,
+            "fired": false,
+            "strength": "soft"
+          },
+          "eps_annual": {
+            "evaluable": false,
+            "fired": false,
+            "why": "annual_eps_missing_or_stale"
+          },
+          "eps_interim": {
+            "change_pct": 0.497,
+            "citation": "the prior year, and underlying basic earnings per share rising to 147.6p from 98.6p. The company maintained a robust balance sheet with £154.6 million in free cash",
+            "evaluable": true,
+            "fired": false,
+            "interim_eps_decline_pct": -0.497,
+            "label": "underlying basic earnings per share",
+            "latest": 147.6,
+            "period_end": "2026-06-30",
+            "prior": 98.6,
+            "prior_period_end": "2025-06-30",
+            "published_at": "2026-08-03",
+            "source": "filing_interim_financials.json:c6e0ba3753369a22",
+            "strength": "soft"
+          },
+          "fcf": {
+            "evaluable": true,
+            "fired": false,
+            "label": "Free Cash Flow",
+            "latest": 57000000.0,
+            "latest_year": 2025,
+            "prior": 107400000.0,
+            "strength": "soft"
+          },
+          "interim_revenue": {
+            "change_pct": 0.3885,
+            "citation": "f the year. Results Total revenue in the first half was £413.5m (2025: £297.8m) with underlying administrative expenses* of £333.8m (2025: £246.6m). Underlyin",
+            "currency": "GBP",
+            "evaluable": true,
+            "fired": false,
+            "label": "Total revenue",
+            "latest": 413.5,
+            "period_end": "2026-06-30",
+            "prior": 297.8,
+            "prior_period_end": "2025-06-30",
+            "published_at": "2026-08-03",
+            "source": "filing_interim_financials.json:c6e0ba3753369a22",
+            "strength": "hard",
+            "unit": "millions"
+          },
+          "operating_margin": {
+            "change_pp": -0.0306,
+            "evaluable": true,
+            "fired": true,
+            "label": "Operating Income / Total Revenue",
+            "latest_margin": 0.122,
+            "latest_year": 2025,
+            "prior_margin": 0.1526,
+            "strength": "hard"
+          },
+          "profit_warning": {
+            "evaluable": true,
+            "fired": false,
+            "lookback_days": 180,
+            "scanned_items": 16,
+            "strength": "soft"
+          },
+          "revenue": {
+            "change_pct": -0.0454,
+            "evaluable": true,
+            "fired": false,
+            "label": "Total Revenue",
+            "latest_year": 2025,
+            "prior_change_pct": 0.0344,
+            "strength": "hard"
+          }
+        },
+        "soft_checks": [],
+        "revenue_change_pct": -0.0454,
+        "memo_age_days": 9.33,
+        "memo_by_signal_job": false,
+        "vol_60": 0.016197219111251035,
+        "close_vs_sma200": -0.0705557391024566,
+        "fall_from_high_252": -0.19921526012741086,
+        "return_126": -0.08645786099682584,
+        "range_pos_126": 0.1825964866980287,
+        "return_20": -0.17132075471698116,
+        "rsi_14": 23.01300840108648,
+        "inputs_not_after_signal": true
+      },
+      "decision_log": [
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "close": 4588.0,
+          "entry_fill": 4588.0,
+          "action": "fill",
+          "launched": false,
+          "floor": null,
+          "download_as_of": "2026-11-12"
+        },
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "close": 4588.0,
+          "entry_fill": 4588.0,
+          "action": "thesis_break",
+          "launched": false,
+          "floor": null,
+          "highest_checkpoint": null,
+          "recovery": false,
+          "reasons": [
+            "declining"
+          ]
+        }
+      ],
+      "reviews": [],
+      "floor_history": [],
+      "cited_inputs": [
+        {
+          "path": "docs/data/charts/CKN.L.json",
+          "sha256": "092759388403fc62da67b10db485f871b2a9553bb85f322cd2dc6d9f696005fc"
+        },
+        {
+          "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
+          "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+        },
+        {
+          "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
+          "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+        },
+        {
+          "path": "docs/data/history/run_20261110_005303.json.gz",
+          "sha256": "3eb1d3a09c07f0dfef85b57f0bfe60d48793a866a633c5b325ee07c91ea3ddd3"
+        },
+        {
+          "session": "2026-11-11",
+          "index": 0,
+          "inputs": [
+            {
+              "path": "docs/data/charts/CKN.L.json",
+              "sha256": "092759388403fc62da67b10db485f871b2a9553bb85f322cd2dc6d9f696005fc"
+            },
+            {
+              "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
+              "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+            },
+            {
+              "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
+              "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+            },
+            {
+              "path": "docs/data/history/run_20261110_005303.json.gz",
+              "sha256": "3eb1d3a09c07f0dfef85b57f0bfe60d48793a866a633c5b325ee07c91ea3ddd3"
+            }
+          ],
+          "action": "thesis_break"
+        }
+      ],
+      "pit_gate_log": [
+        {
+          "kind": "session",
+          "as_of": "2026-11-10",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "neutral",
+          "exit_reason": null
+        },
+        {
+          "kind": "entry",
+          "as_of": "2026-11-10",
+          "column": "decline_rejected_shadow",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-11",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "neutral",
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-12",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "neutral",
+          "exit_reason": null
+        },
+        {
+          "kind": "exit",
+          "as_of": "2026-11-12",
+          "column": "decline_rejected_shadow",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": "thesis_break"
+        }
+      ],
+      "pit_gate_log_count": 5,
+      "hindsight": [],
+      "same_day": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": [],
+        "same_calendar_day": false,
+        "soft_bias": false,
+        "major_error_reverse": false,
+        "exception": null
+      },
+      "attribution": {
+        "label": "gate_miss",
+        "because": "gate_rejected_shadow_column",
+        "cites": [
+          "column=decline_rejected_shadow",
+          "column_role=shadow",
+          "exit_reason=thesis_break",
+          "fair_cost_return=0.007141673931996555",
+          "matched_excess=0.013700051365709457"
+        ],
+        "counts_as_evidence": true
+      },
+      "levers": [
+        {
+          "id": "stock_choice",
+          "definition": "Accepted vs skipped PIT cues; fair-cost forward %",
+          "not": "cue-book path %; live NAV",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "no",
+          "status": "scored",
+          "value": 0.71,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=0.007141673931996555"
+          ],
+          "hindsight": [],
+          "because": "shadow_return_inside_band"
+        },
+        {
+          "id": "buy_timing",
+          "definition": "vs immediate-on-cue; fair-cost delta",
+          "not": "watermark brackets (N217)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=0.007141673931996555",
+            "entry_window_sessions=10"
+          ],
+          "hindsight": [],
+          "because": "no_point_in_time_buy_on_signal_or_primary_close",
+          "outside_window": [],
+          "entry_window_sessions": 10
+        },
+        {
+          "id": "buy_strategy",
+          "definition": "Single-shot vs scale-in within fixed stake",
+          "not": "DCA / cash drag (later twins)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "sizing=fixed_stake_single_shot",
+            "stake=100.0"
+          ],
+          "hindsight": [],
+          "because": "no_scale_in_counterfactual_on_the_episode"
+        },
+        {
+          "id": "sell_timing",
+          "definition": "vs registered hold counterfactuals; default bias against same-calendar-day exit",
+          "not": "N200 leave-tier as this lab's skill; same-day without error evidence",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=thesis_break",
+            "fair_cost_return=0.007141673931996555",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "no_paired_close_on_or_before_this_exit"
+        },
+        {
+          "id": "sell_strategy",
+          "definition": "Rule-family by epoch; fair-cost; same-day exit allowed only as major_error_reverse with durable cites",
+          "not": "Hard live veto; Package L; silent same-day churn",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "rule_fired",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=thesis_break",
+            "registered_family_hit=True",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "registered_family_fired_without_a_paired_counterfactual"
+        }
+      ],
+      "judgment_in_the_round": {
+        "rubric_id": "judgment_in_the_round_v0",
+        "influences_live": false,
+        "observe_only": true,
+        "rules_role": "scaffold_propose",
+        "buy": {
+          "B1": {
+            "answer": "screen_families_include_cheapness",
+            "confidence": "medium",
+            "cites": [
+              "passed_families=cheapness,quality,garp,risk",
+              "models_passed=8.0",
+              "weighted_model_score=0.5353727272727272",
+              "research_verdict=neutral",
+              "fcf_basis_overlay=True",
+              "earnings_basis_overlay=False",
+              "data_quality_score=1.0"
+            ],
+            "unknown": false
+          },
+          "B2": {
+            "answer": "timing_neutral_cited",
+            "confidence": "low",
+            "cites": [
+              "timing_signal=neutral",
+              "timing_score=0.625",
+              "price_vs_sma200_pct=-0.032135442776026396",
+              "volume_ratio_20=1.347",
+              "signal_trend=stable"
+            ],
+            "unknown": false
+          },
+          "B3": {
+            "answer": "sector_context_cited",
+            "confidence": "low",
+            "cites": [
+              "sector=Industrials",
+              "weeks_at_signal=2",
+              "market=ftse350"
+            ],
+            "unknown": false
+          },
+          "B4": {
+            "answer": "cue_whitelist_proposes",
+            "confidence": "low",
+            "cites": [
+              "cue_source_id=owner-strategy-book-v0",
+              "cue_whitelist_id=mft-short-whitelist-v0",
+              "clear_note=column=decline_rejected_shadow",
+              "signal=buy",
+              "adjusted_signal=hold"
+            ],
+            "unknown": false
+          },
+          "B5": {
+            "answer": "low_or_partial_conviction",
+            "confidence": "low",
+            "cites": [
+              "conviction_score=0.25208024999999995",
+              "research_confidence=0.7",
+              "research_verdict=neutral"
+            ],
+            "unknown": false
+          },
+          "B6": {
+            "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+            "confidence": "medium",
+            "cites": [
+              "hold_policy_trading_days=63",
+              "exit_family=hold_trading_days_or_identity_break",
+              "sizing=fixed_stake_v0",
+              "trade_plan_summary=Trade plan: core 60% limit £4524.30; tactical 40% limit £4341.50; tactical stop £4078.27, target £5077.92.",
+              "tactical_stop_loss=4078.27",
+              "tactical_take_profit=5077.92"
+            ],
+            "unknown": false
+          }
+        },
+        "sell": {
+          "S1": {
+            "answer": "exit_reason_cited",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "entry_cue_source_id=owner-strategy-book-v0",
+              "entry_clear_note=column=decline_rejected_shadow"
+            ],
+            "unknown": false
+          },
+          "S2": {
+            "answer": "path_cited_at_exit",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=0.71",
+              "hold_trading_days=1"
+            ],
+            "unknown": false
+          },
+          "S3": {
+            "answer": "exit_path_cited",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=0.71",
+              "path_sign=positive",
+              "same_calendar_day=False"
+            ],
+            "unknown": false
+          },
+          "S4": {
+            "answer": "registered_lab_exit_rule_fires",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "rules_role=scaffold_propose"
+            ],
+            "unknown": false
+          },
+          "S5": {
+            "answer": "exit_confidence_from_rule_and_same_day_policy",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=thesis_break",
+              "same_day_soft_bias=False",
+              "same_day_hard_ban=False"
+            ],
+            "unknown": false
+          },
+          "S6": {
+            "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+            "confidence": "medium",
+            "cites": [
+              "sizing=fixed_stake_v0",
+              "observe_only=true",
+              "package_l=false",
+              "hold_trading_days=1"
+            ],
+            "unknown": false
+          }
+        },
+        "rule_candidates": [
+          {
+            "rule_id": "owner-strategy-book-v0",
+            "role": "scaffold_propose",
+            "cue_whitelist_id": "mft-short-whitelist-v0",
+            "clear_note": "column=decline_rejected_shadow"
+          }
+        ],
+        "llm_stance": "agree",
+        "misfit_evidence": null,
+        "fill_status": "filled",
+        "fill_source": "deterministic_n228_v0",
+        "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+        "cells_cited": [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5",
+          "B6",
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ],
+        "cells_unknown": [],
+        "point_in_time": "exit_session",
+        "counts_as_evidence": true,
+        "evidence_status": "scored"
+      },
+      "provenance_missing": false,
+      "evidence_status": "scored",
+      "actioned": false,
+      "opinion_llm": false,
+      "influences_live": false,
+      "observe_only": true,
+      "status": "closed"
+    }
+  ],
   "missing_reviews": [],
   "observe_path": "docs/data/strategy_book_observe.json",
   "gate_log_path": "docs/data/strategy_book_gate_log.jsonl"
