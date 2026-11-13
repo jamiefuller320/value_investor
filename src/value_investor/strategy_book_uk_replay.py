@@ -904,7 +904,12 @@ def assemble_specs(
             continue
         general = (record.get("fundamentals") or {}).get("General") or {}
         name = record.get("name") or general.get("Name")
-        ch_key = record.get("ch_key") or tape.match_ch_key(str(name or ""))
+        ch_key = record.get("ch_key") or tape.match_ch_record(
+            ch_store,
+            symbol=symbol,
+            name=str(name or "") or None,
+            last_bar=bars[-1]["date"] if bars else None,
+        )
         prepared.append(
             {
                 "symbol": symbol,
