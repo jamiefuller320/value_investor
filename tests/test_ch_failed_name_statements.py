@@ -13,6 +13,7 @@ from value_investor.ch_failed_name_statements import (
     _token_text,
     apply_value_gate,
     combined_check_a,
+    lost_decimal_integer,
     merge_ocr_readings,
     ops_findings_from_ch_failed_name_statements,
     parse_amount,
@@ -20,6 +21,7 @@ from value_investor.ch_failed_name_statements import (
     plausibility_flags,
     repair_glued_thousands,
     repair_spaced_decimals,
+    second_reading_disagrees,
     statements_from_2013,
     years_with_eps,
 )
@@ -814,6 +816,109 @@ def test_false_decimal_and_lost_intangible_decimal_are_left_absent() -> None:
     assert stored[1]["fields"]["capital_expenditure"]["value"] is None
     assert stored[1]["fields"]["capital_expenditure"]["absent_reason"] == "row_decimal"
     assert counts["by_check"]["row_decimal"] == 2
+
+
+def test_dropped_decimal_beside_a_real_one_is_left_absent() -> None:
+    from decimal import Decimal
+
+    # William Hill 2013 comparative, and Britvic 2018. The point was dropped
+    # on one column of a line that still has a decimal on the other.
+    assert lost_decimal_integer(
+        Decimal("2417"), "Net cash from operating activities 28 294.3 2417"
+    )
+    assert lost_decimal_integer(
+        Decimal("2068"), "Net cash flows from operating activities 2068 198.0"
+    )
+    assert not lost_decimal_integer(
+        Decimal("198"), "Net cash flows from operating activities 2068 198.0"
+    )
+    assert not lost_decimal_integer(
+        Decimal("20833"), "Net cash flows from operating activities 20,833 17,075"
+    )
+    stored = [
+        {
+            "fiscal_year": 2013,
+            "fields": {
+                "net_cash_from_operating_activities": {
+                    "value": "294.3",
+                    "scale": None,
+                    "citation": {"line": "Net cash from operating activities 28 294.3 2417"},
+                }
+            },
+            "comparative": {
+                "fiscal_year": 2012,
+                "fields": {
+                    "net_cash_from_operating_activities": {
+                        "value": "2417",
+                        "scale": None,
+                        "citation": {"line": "Net cash from operating activities 28 294.3 2417"},
+                    }
+                },
+            },
+        }
+    ]
+    counts = apply_value_gate(stored)
+    assert stored[0]["fields"]["net_cash_from_operating_activities"]["value"] == "294.3"
+    comparative = stored[0]["comparative"]["fields"]["net_cash_from_operating_activities"]
+    assert comparative["value"] is None
+    assert comparative["absent_reason"] == "row_decimal"
+    assert comparative["nulled_from"] == "2417"
+    assert counts["by_check"]["row_decimal"] == 1
+
+
+def test_second_reading_rejects_a_lost_point_and_a_changed_digit() -> None:
+    from decimal import Decimal
+
+    # Britvic 2013. The stored line glued the point; the second read shows it.
+    assert second_reading_disagrees(
+        Decimal("1323"),
+        "Net cash flows from operating activities 1418 1323",
+        "Net cash flows from operating activities 141.8 132.3",
+        comparative=True,
+    )
+    # A changed digit is not this check. ``1,064`` beside ``82.6`` keeps its comma.
+    assert not second_reading_disagrees(
+        Decimal("374.3"),
+        "Net cash flow from operating activities 23 339.0 374.3",
+        "Net cash flow from operating activities 23 339.0 374.9",
+        comparative=True,
+    )
+    assert not lost_decimal_integer(Decimal("1064"), "Revenue 5 82.6 1,064")
+    # HomeServe 2013 primary. 99.2 was stored as 992.
+    assert second_reading_disagrees(
+        Decimal("992"),
+        "Net cash inflow from operating activities 33 992 777",
+        "Net cash inflow from operating activities 33 99.2 77.7",
+        comparative=False,
+    )
+    # The same number with a trailing zero, and a shorter second read, stay.
+    assert not second_reading_disagrees(
+        Decimal("198"),
+        "Net cash flows from operating activities 206.8 198.0",
+        "Net cash flows from operating activities 206.8 198.0",
+        comparative=True,
+    )
+    assert not second_reading_disagrees(
+        Decimal("61354"),
+        "Net cash inflow from operating activities 33 61,354 60,516",
+        "Net cash inflow from operating activities 33 61,354 60,51",
+        comparative=False,
+    )
+    # A one-digit comparative that the second read shows as a decimal does not
+    # pull the matching primary off the row.
+    # Britvic 2012 comparative. ``125.0`` is not the integer 1,250.
+    assert second_reading_disagrees(
+        Decimal("1250"),
+        "Net cash flows from operating activities 1323 1250",
+        "Net cash flows from operating activities 132.3 125.0",
+        comparative=True,
+    )
+    assert not second_reading_disagrees(
+        Decimal("-0.8"),
+        "Purchase of property, plant and equipment 2 (0.8) (09)",
+        "Purchase of property, plant and equipment 12 (0.8) (0.9)",
+        comparative=False,
+    )
 
 
 def test_trailing_zero_in_the_citation_is_the_same_number() -> None:
