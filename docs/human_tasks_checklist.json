@@ -645,7 +645,7 @@
         {
           "id": "adhoc-strategy-uk-replay-reveal",
           "title": "Run the UK/Europe replay and stamp the reveal",
-          "summary": "Plan step 3.3. The registration was sealed on 2026-11-12 (owner accepted the defaults). Dispatch the strategy-book-uk-replay workflow with phase=fetch on or after 2026-11-19, then phase=development. After the development aggregates are committed, read them and give the second stamp (stamp-reveal) that authorises the single holdout reveal (target 2026-12-03). The stamp changes no sealed number. Last EODHD call day is 2026-12-10.",
+          "summary": "Plan step 3.3. The registration was sealed on 2026-11-12 (owner accepted the defaults). The fetch completed on 2026-11-13; dispatch the strategy-book-uk-replay workflow with phase=development. The encrypted cache is evicted after 7 days unused: if neither development nor reveal is dispatched for 6 days, re-dispatch phase=fetch (no EODHD calls once complete) to keep it. After the development aggregates are committed, read them and give the second stamp (stamp-reveal) that authorises the single holdout reveal (target 2026-12-03). The stamp changes no sealed number. Last EODHD call day is 2026-12-10.",
           "automated": false,
           "doc_path": "docs/ops/strategy-book-uk-replay-registration-draft.md",
           "doc_anchor": "owner-sign-off"
