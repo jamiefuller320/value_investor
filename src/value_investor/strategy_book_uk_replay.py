@@ -906,6 +906,19 @@ class _Bars:
         return None
 
 
+def _release_prices(records: Sequence[dict[str, Any]]) -> None:
+    """Drop price columns once the specs hold them. Dates stay for the probe flags.
+
+    ``records`` are develop's own slim copies; a caller's ``_Bars`` is not touched.
+    """
+    for record in records:
+        bars = record.get("bars")
+        if isinstance(bars, _Bars):
+            dates_only = _Bars([])
+            dates_only.dates = bars.dates
+            record["bars"] = dates_only
+
+
 def _share_rows(block: Any) -> list[dict[str, Any]]:
     field = str(tape._const("SHARES_DATE_FIELD"))
     rows = block.values() if isinstance(block, Mapping) else (block or ())
@@ -1476,17 +1489,20 @@ def _paint_sector(
         sessions = spec.sessions or []
         own = verdicts[spec.ticker]
         segments = array("i", [own.segment(day) for day in sessions])
-        decisions = [missing if not label else table.get(day, empty) for day in sessions]
+
+        def _decision(day: date, table: Mapping[date, Any] = table, label: str = label) -> Any:
+            return missing if not label else table.get(day, empty)
+
         spec.gates = GateTape(
             [_day_before(day) for day in sessions],
             array("b", [labels[own.verdicts[index]["verdict"]] for index in segments]),
-            array("b", [labels[decision["verdict"]] for decision in decisions]),
+            array("b", [labels[_decision(day)["verdict"]] for day in sessions]),
             _GATE_LABELS,
             _gate_detail(
                 own,
                 segments,
-                lambda index, decisions=decisions, label=label: (
-                    decisions[index]["sector_basis"],
+                lambda index, sessions=sessions, decide=_decision, label=label: (
+                    decide(sessions[index])["sector_basis"],
                     label or None,
                 ),
             ),
@@ -2090,6 +2106,7 @@ def develop(
         ch_store=ch_store if ch_store is not None else _load_ch(repo_root),
         score=score,
     )
+    _release_prices(records)
     if score:
         apply_sector_frame(assembled["specs"], assembled["prepared"])
     results = walk_variants(
@@ -2165,6 +2182,7 @@ def reveal(
         ch_store=_load_ch(repo_root),
         score=score,
     )
+    _release_prices(records)
     if score:
         apply_sector_frame(assembled["specs"], assembled["prepared"])
     results = walk_variants(
