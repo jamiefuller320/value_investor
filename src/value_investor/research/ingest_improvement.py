@@ -1432,15 +1432,25 @@ def _execute_ingest_improvement_pass(
             if refetch_before_sources:
                 _apply_body_refetch_bundle(_run_improvement_primary_body_refetch(**refetch_kwargs))
 
-            source_meta = ingest_research_sources(
-                ticker=target.ticker,
-                company_name=target.name,
-                screening_snapshot=report.to_dict(),
-                sources_dir=sources_dir,
-                since=None,
-                market=market,
-                deepen_history=True,
-            )
+            source_meta: dict[str, Any] = {}
+            try:
+                source_meta = ingest_research_sources(
+                    ticker=target.ticker,
+                    company_name=target.name,
+                    screening_snapshot=report.to_dict(),
+                    sources_dir=sources_dir,
+                    since=None,
+                    market=market,
+                    deepen_history=True,
+                )
+            except Exception as exc:  # noqa: BLE001 — Yahoo/outage must not drop refetch stats
+                message = f"{target.ticker}: source ingest ({exc})"
+                logger.warning(
+                    "Research source ingest failed for %s (continuing ingest improvement): %s",
+                    target.ticker,
+                    exc,
+                )
+                summary.errors.append(message)
             if not body_refetch_completed:
                 refetch_kwargs["inventory"] = inspect_local_sources(sources_dir)
                 refetch_kwargs["before"] = int(
