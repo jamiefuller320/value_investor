@@ -15,12 +15,16 @@ Constants live in ``REGISTRATION_CONSTANTS`` and nowhere else.
 from __future__ import annotations
 
 import argparse
+import copy
 import dataclasses
 import hashlib
 import json
+import math
 import os
 import tempfile
 import time
+from array import array
+from bisect import bisect_left, bisect_right
 from collections import Counter
 from collections.abc import Callable, Mapping, Sequence
 from datetime import UTC, date, datetime, timedelta
@@ -846,17 +850,179 @@ def _bars(rows: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
     return out
 
 
+_DAYS: dict[date, date] = {}
+_DAY_BEFORE: dict[date, date] = {}
+_GENERAL_KEYS = (
+    "Name",
+    "name",
+    "Sector",
+    "sector",
+    "GicSector",
+    "Industry",
+    "industry",
+    "Type",
+    "type",
+    "CurrencyCode",
+    "ISIN",
+)
+_SMA_RESET_EVERY = 200
+_SMA_TIE_TOLERANCE = 1e-7
+
+
+def _day(day: date) -> date:
+    """One ``date`` object per calendar day across every name."""
+    return _DAYS.setdefault(day, day)
+
+
+def _day_before(day: date) -> date:
+    found = _DAY_BEFORE.get(day)
+    if found is None:
+        found = _DAY_BEFORE[day] = _day(day - timedelta(days=1))
+    return found
+
+
+class _Bars:
+    """``_bars`` rows as columns. A missing high or low is NaN."""
+
+    __slots__ = ("adjusted", "close", "dates", "high", "highs_ok", "low", "lows_ok")
+
+    def __init__(self, rows: Sequence[Mapping[str, Any]]) -> None:
+        self.dates = [_day(row["date"]) for row in rows]
+        self.close = array("d", [row["close"] for row in rows])
+        self.adjusted = array("d", [row["adjusted"] for row in rows])
+        self.highs_ok = all(row["high"] is not None for row in rows)
+        self.lows_ok = all(row["low"] is not None for row in rows)
+        self.high = array("d", [math.nan if row["high"] is None else row["high"] for row in rows])
+        self.low = array("d", [math.nan if row["low"] is None else row["low"] for row in rows])
+
+    def __len__(self) -> int:
+        return len(self.dates)
+
+    def close_on(self, day: date) -> float | None:
+        """Raw close of the first bar dated ``day``."""
+        position = bisect_left(self.dates, day)
+        if position < len(self.dates) and self.dates[position] == day:
+            return self.close[position]
+        return None
+
+
+def _share_rows(block: Any) -> list[dict[str, Any]]:
+    field = str(tape._const("SHARES_DATE_FIELD"))
+    rows = block.values() if isinstance(block, Mapping) else (block or ())
+    return [
+        {field: row.get(field), "shares": row.get("shares")}
+        for row in rows
+        if isinstance(row, Mapping)
+    ]
+
+
+def _slim_record(record: Mapping[str, Any]) -> dict[str, Any]:
+    """Keep what develop and reveal read; drop raw prices and statement JSON.
+
+    Statements are parsed once here, not once per session.
+    """
+    if record.get("slim"):
+        return dict(record)
+    fundamentals = record.get("fundamentals") or {}
+    general = fundamentals.get("General") or {}
+    shares = fundamentals.get("outstandingShares") or {}
+    return {
+        "slim": True,
+        "symbol": record.get("symbol"),
+        "market": record.get("market"),
+        "name": record.get("name"),
+        "currency": record.get("currency"),
+        "general_type": record.get("general_type"),
+        "sector": record.get("sector"),
+        "isin": record.get("isin"),
+        "delisted": bool(record.get("delisted")),
+        "ch_key": record.get("ch_key"),
+        "ch_filings": record.get("ch_filings"),
+        "general": {key: general[key] for key in _GENERAL_KEYS if key in general},
+        "eodhd_annual": tape.eodhd_annual_statements(fundamentals),
+        "quarterly": tape.eodhd_quarterly(fundamentals),
+        "interim": tape.interim_eps_rows(fundamentals),
+        "shares_annual": _share_rows(shares.get("annual")),
+        "shares_quarterly": _share_rows(shares.get("quarterly")),
+        "bars": _Bars(_bars(record.get("eod") or [])),
+        "dividends": record.get("dividends") or [],
+        "splits": record.get("splits") or [],
+    }
+
+
+class _VerdictTape:
+    """``decline_verdict`` per session, computed once per run of identical inputs.
+
+    The verdict reads the session only through which rows are visible: a row
+    enters at ``visible_from`` and leaves when stale (annual) or too old
+    (quarterly, interim EPS). Between those days the verdict cannot change.
+    """
+
+    def __init__(
+        self,
+        annual: Sequence[Mapping[str, Any]],
+        quarterly: Sequence[Mapping[str, Any]],
+        interim: Sequence[Mapping[str, Any]],
+    ) -> None:
+        self.annual = annual
+        self.quarterly = quarterly
+        self.interim = interim
+        points: set[date] = set()
+        stale = timedelta(days=int(tape._const("STALE_FILING_DAYS")) + 1)
+        aged = timedelta(days=int(tape._const("INTERIM_MAX_AGE_DAYS")) + 1)
+        for rows, gone in ((annual, stale), (quarterly, aged), (interim, aged)):
+            for row in rows:
+                visible = row.get("visible_from")
+                period_end = row.get("period_end")
+                if visible is None or period_end is None:
+                    continue
+                points.add(visible)
+                points.add(period_end + gone)
+        self.points = sorted(points)
+        self.verdicts: dict[int, dict[str, Any]] = {}
+
+    def segment(self, session: date) -> int:
+        index = bisect_right(self.points, session)
+        if index not in self.verdicts:
+            self.verdicts[index] = tape.decline_verdict(
+                self.annual, self.quarterly, self.interim, session
+            )
+        return index
+
+
+def _gate_detail(
+    tape_rows: _VerdictTape,
+    segments: Sequence[int],
+    basis: Callable[[int], tuple[str | None, str | None]],
+) -> Callable[[int], dict[str, Any]]:
+    seen: dict[int, dict[str, Any]] = {}
+
+    def _detail(index: int) -> dict[str, Any]:
+        if index not in seen:
+            verdict = tape_rows.verdicts[segments[index]]
+            sector_basis, sector_name = basis(index)
+            seen[index] = {
+                "checks": copy.deepcopy(verdict["checks"]),
+                "soft_checks": list(verdict["soft"]),
+                "sector_basis": sector_basis,
+                "sector_name": sector_name,
+            }
+        return seen[index]
+
+    return _detail
+
+
 def _resolved_fx(
     eurgbp: Mapping[date, float] | None,
     usdgbp: Mapping[date, float] | None,
     cache: Path | None,
-) -> tuple[dict[date, float], dict[date, float]]:
+) -> tuple[tape.FxSeries, tape.FxSeries]:
     """Prefer an explicit series. A fetch cache supplies the pair files."""
     loaded_eur: dict[date, float] = {}
     loaded_usd: dict[date, float] = {}
     if cache is not None:
         loaded_eur, loaded_usd = _fx_from_cache(cache)
-    return dict(eurgbp if eurgbp is not None else loaded_eur), dict(
+    return tape.FxSeries(eurgbp if eurgbp is not None else loaded_eur), tape.FxSeries(
         usdgbp if usdgbp is not None else loaded_usd
     )
 
@@ -893,40 +1059,53 @@ def assemble_specs(
     ch_store: Mapping[str, Any] | None = None,
     score: bool = True,
 ) -> dict[str, Any]:
-    """Build walker ``NameSpec`` rows from parsed EODHD records. Nothing is written."""
+    """Build walker ``NameSpec`` rows from parsed EODHD records. Nothing is written.
+
+    ``prepared`` in the result carries each name's resolved Companies House key
+    and merged statements for ``apply_sector_frame`` and the probe flags.
+    """
     ch_store = ch_store if ch_store is not None else {"names": []}
+    eurgbp = eurgbp if isinstance(eurgbp, tape.FxSeries) else tape.FxSeries(eurgbp)
+    usdgbp = usdgbp if isinstance(usdgbp, tape.FxSeries) else tape.FxSeries(usdgbp)
     prepared = []
     for record in records:
-        symbol = str(record.get("symbol") or "")
-        market = str(record.get("market") or "")
-        bars = _bars(record.get("eod") or [])
-        if not symbol or not market or not bars:
+        slim = _slim_record(record)
+        symbol = str(slim.get("symbol") or "")
+        market = str(slim.get("market") or "")
+        bars: _Bars = slim["bars"]
+        if not symbol or not market or not len(bars):
             continue
-        general = (record.get("fundamentals") or {}).get("General") or {}
-        name = record.get("name") or general.get("Name")
-        ch_key = record.get("ch_key") or tape.match_ch_record(
+        general = slim["general"]
+        name = slim.get("name") or general.get("Name")
+        ch_key = slim.get("ch_key") or tape.match_ch_record(
             ch_store,
             symbol=symbol,
             name=str(name or "") or None,
-            last_bar=bars[-1]["date"] if bars else None,
+            last_bar=bars.dates[-1],
         )
+        ch_filings = slim.get("ch_filings") or tape.ch_filings_for_key(ch_store, ch_key or "")
         prepared.append(
             {
                 "symbol": symbol,
                 "market": market,
-                "currency": record.get("currency") or general.get("CurrencyCode"),
-                "general_type": record.get("general_type") or general.get("Type"),
-                "sector": record.get("sector") or general.get("Sector") or general.get("GicSector"),
+                "currency": slim.get("currency") or general.get("CurrencyCode"),
+                "general_type": slim.get("general_type") or general.get("Type"),
+                "sector": slim.get("sector") or general.get("Sector") or general.get("GicSector"),
                 "name": name,
-                "delisted": bool(record.get("delisted")),
+                "delisted": bool(slim.get("delisted")),
                 "ch_key": ch_key,
-                "isin": record.get("isin") or general.get("ISIN"),
+                "isin": slim.get("isin") or general.get("ISIN"),
                 "bars": bars,
-                "fundamentals": record.get("fundamentals") or {},
-                "dividends": record.get("dividends") or [],
-                "splits": record.get("splits") or [],
-                "ch_filings": record.get("ch_filings")
-                or tape.ch_filings_for_key(ch_store, ch_key or ""),
+                "annual": tape.merge_statement_years(
+                    slim["eodhd_annual"], tape.ch_statements(ch_filings)
+                ),
+                "quarterly": slim["quarterly"],
+                "interim": slim["interim"],
+                "shares_annual": slim["shares_annual"],
+                "shares_quarterly": slim["shares_quarterly"],
+                "dividends": slim["dividends"],
+                "splits": slim["splits"],
+                "ch_filings": ch_filings,
                 "fund_or_trust": tape.fund_or_trust(symbol, general),
             }
         )
@@ -937,7 +1116,7 @@ def assemble_specs(
     bias_rows: list[dict[str, Any]] = []
     counters = Counter()
     for market, rows in by_market.items():
-        sessions = sorted({bar["date"] for row in rows for bar in row["bars"]})
+        sessions = sorted({day for row in rows for day in row["bars"].dates})
         ends = [
             day
             for day in tape.month_end_dates(sessions)
@@ -958,22 +1137,18 @@ def assemble_specs(
         for day in ends:
             cap_rows = []
             for row in rows:
-                last = row["bars"][-1]["date"]
+                last = row["bars"].dates[-1]
                 if not tape.listed_on(day, delisted=row["delisted"], last_bar=last):
                     continue
-                close_row = next((bar for bar in row["bars"] if bar["date"] == day), None)
-                shares = tape.select_shares(
-                    ((row["fundamentals"].get("outstandingShares") or {}).get("annual")),
-                    ((row["fundamentals"].get("outstandingShares") or {}).get("quarterly")),
-                    day,
-                )
+                close = row["bars"].close_on(day)
+                shares = tape.select_shares(row["shares_annual"], row["shares_quarterly"], day)
                 scaled, unparsed = (None, False)
                 if shares is not None:
                     scaled, unparsed = tape.scale_shares(
                         shares["shares"], shares["date"], row["splits"], day
                     )
                 cap = tape.cap_in_rank_currency(
-                    None if close_row is None else close_row["close"],
+                    close,
                     row["currency"],
                     scaled,
                     rank_currency=rank_currency,
@@ -1002,11 +1177,7 @@ def assemble_specs(
             for row in rows:
                 if row["symbol"] not in members:
                     continue
-                annual = tape.merge_statement_years(
-                    tape.eodhd_annual_statements(row["fundamentals"]),
-                    tape.ch_statements(row["ch_filings"]),
-                )
-                verdict = tape.decline_verdict(annual, [], [], day)
+                verdict = tape.decline_verdict(row["annual"], [], [], day)
                 if not verdict["revenue_evaluable"]:
                     missing_revenue += 1
             bias_rows.append(
@@ -1022,10 +1193,7 @@ def assemble_specs(
                 }
             )
         month_sets[market] = sets
-    last_session = max(bar["date"] for row in prepared for bar in row["bars"])
-    spans = {
-        market: tape.membership_spans(sets, last_session) for market, sets in month_sets.items()
-    }
+    last_session = max(row["bars"].dates[-1] for row in prepared)
     issuers = {row["symbol"]: tape.issuer_key(row["symbol"], row.get("isin")) for row in prepared}
     overlap = 0
     # Drop cross-market names session by session, then rebuild spans from the kept sets.
@@ -1049,6 +1217,8 @@ def assemble_specs(
     ranked_symbols = {
         symbol for market_spans in spans.values() for symbol, rows in market_spans.items() if rows
     }
+    for row in prepared:
+        del row["bars"]
     return {
         "specs": specs,
         "haircuts": haircuts,
@@ -1057,6 +1227,7 @@ def assemble_specs(
         "counts": dict(counters),
         "markets": sorted({row["market"] for row in prepared}),
         "ranked_symbols": ranked_symbols,
+        "prepared": prepared,
     }
 
 
@@ -1080,14 +1251,10 @@ def _panel_rows(
         for day, members in sets:
             for symbol in sorted(members):
                 row = by_symbol[symbol]
-                close_row = next((bar for bar in row["bars"] if bar["date"] == day), None)
-                if close_row is None:
+                close = row["bars"].close_on(day)
+                if close is None:
                     continue
-                shares = tape.select_shares(
-                    ((row["fundamentals"].get("outstandingShares") or {}).get("annual")),
-                    ((row["fundamentals"].get("outstandingShares") or {}).get("quarterly")),
-                    day,
-                )
+                shares = tape.select_shares(row["shares_annual"], row["shares_quarterly"], day)
                 scaled = None
                 if shares is not None:
                     scaled, unparsed = tape.scale_shares(
@@ -1096,7 +1263,7 @@ def _panel_rows(
                     if unparsed:
                         scaled = None
                 cap = tape.cap_in_rank_currency(
-                    close_row["close"],
+                    close,
                     row["currency"],
                     scaled,
                     rank_currency=str(meta["rank_currency"]),
@@ -1104,10 +1271,7 @@ def _panel_rows(
                     eurgbp=eurgbp,
                     usdgbp=usdgbp,
                 )
-                annual = tape.merge_statement_years(
-                    tape.eodhd_annual_statements(row["fundamentals"]),
-                    tape.ch_statements(row["ch_filings"]),
-                )
+                annual = row["annual"]
                 visible = [
                     item
                     for item in annual
@@ -1126,8 +1290,8 @@ def _panel_rows(
                     latest,
                     prior,
                     market_cap=cap.get("cap"),
-                    raw_close=close_row["close"],
-                    dividend=tape.dividend_yield(row["dividends"], day, close_row["close"]),
+                    raw_close=close,
+                    dividend=tape.dividend_yield(row["dividends"], day, close),
                     sector=row.get("sector"),
                     shares_fallback=scaled,
                 )
@@ -1180,8 +1344,8 @@ def _specs_from(
     for row in prepared:
         symbol = row["symbol"]
         market = row["market"]
-        bars = row["bars"]
-        sessions = [bar["date"] for bar in bars]
+        bars: _Bars = row["bars"]
+        sessions = bars.dates
         screens = []
         for signal in by_symbol_signals.get(symbol, []):
             screens.append(
@@ -1205,13 +1369,9 @@ def _specs_from(
             market=market,
             ticker=symbol,
             sessions=sessions,
-            closes=[bar["adjusted"] for bar in bars],
-            highs=[bar["high"] for bar in bars]
-            if all(bar["high"] is not None for bar in bars)
-            else None,
-            lows=[bar["low"] for bar in bars]
-            if all(bar["low"] is not None for bar in bars)
-            else None,
+            closes=bars.adjusted.tolist(),
+            highs=bars.high.tolist() if bars.highs_ok else None,
+            lows=bars.low.tolist() if bars.lows_ok else None,
             screens=screens,
             gates=gates,
             universe=list(spans.get(market, {}).get(symbol) or []),
@@ -1232,49 +1392,28 @@ def _specs_from(
 
 
 def _gate_tape(row: Mapping[str, Any], sessions: list[date]) -> GateTape:
-    annual = tape.merge_statement_years(
-        tape.eodhd_annual_statements(row["fundamentals"]),
-        tape.ch_statements(row["ch_filings"]),
-    )
-    quarterly = tape.eodhd_quarterly(row["fundamentals"])
-    interim = tape.interim_eps_rows(row["fundamentals"])
+    verdicts = _VerdictTape(row["annual"], row["quarterly"], row["interim"])
     sector_name = row.get("sector")
-    codes_decline = []
-    codes_sector = []
-    details = []
+    # Price breadth is filled by ``sector_frame`` when several names share a sector.
+    # A name walked alone keeps the price side uncovered, so the table says
+    # insufficient_data unless the label itself is missing.
+    decision = tape.sector_decision(
+        price_coverage=False,
+        price_trigger=False,
+        decline_coverage=False,
+        decline_breadth=None,
+        sector_missing=not sector_name,
+    )
     labels = {label: index for index, label in enumerate(_GATE_LABELS)}
-    for session in sessions:
-        verdict = tape.decline_verdict(annual, quarterly, interim, session)
-        decision = tape.sector_decision(
-            price_coverage=False,
-            price_trigger=False,
-            decline_coverage=False,
-            decline_breadth=None,
-            sector_missing=not sector_name,
-        )
-        # Price breadth is filled by ``sector_frame`` when several names share a sector.
-        # A name walked alone keeps the price side uncovered, so the table says
-        # insufficient_data unless the label itself is missing.
-        codes_decline.append(labels[verdict["verdict"]])
-        codes_sector.append(labels[decision["verdict"]])
-        details.append(
-            {
-                "checks": verdict["checks"],
-                "soft_checks": list(verdict["soft"]),
-                "sector_basis": decision["sector_basis"],
-                "sector_name": sector_name,
-            }
-        )
-
-    def _detail(index: int) -> dict[str, Any]:
-        return details[index]
-
+    segments = array("i", [verdicts.segment(session) for session in sessions])
+    codes_decline = array("b", [labels[verdicts.verdicts[index]["verdict"]] for index in segments])
+    codes_sector = array("b", [labels[decision["verdict"]]]) * len(sessions)
     return GateTape(
-        [day - timedelta(days=1) for day in sessions],
+        [_day_before(day) for day in sessions],
         codes_decline,
         codes_sector,
         _GATE_LABELS,
-        _detail,
+        _gate_detail(verdicts, segments, lambda _index: (decision["sector_basis"], sector_name)),
     )
 
 
@@ -1282,129 +1421,146 @@ def apply_sector_frame(specs: list[NameSpec], prepared: Sequence[Mapping[str, An
     """Replace single-name sector labels with the market's price and decline breadth.
 
     ``assemble_specs`` leaves the price side uncovered. This pass is the section
-    3.3 table once every name in the market is known.
+    3.3 table once every name in the market is known. ``prepared`` is
+    ``assemble_specs(...)["prepared"]``.
     """
     by_ticker = {row["symbol"]: row for row in prepared}
     markets: dict[str, list[NameSpec]] = {}
     for spec in specs:
         markets.setdefault(spec.market, []).append(spec)
     for _market, group in markets.items():
-        calendar = sorted({day for spec in group for day in (spec.sessions or [])})
-        if not calendar:
+        if not any(spec.sessions for spec in group):
             continue
-        _paint_sector(group, by_ticker, calendar)
+        _paint_sector(group, by_ticker)
 
 
 def _paint_sector(
     group: list[NameSpec],
     by_ticker: Mapping[str, Mapping[str, Any]],
-    calendar: list[date],
 ) -> None:
-    """One decline pass per name, then the shared sector table on those verdicts."""
-    del calendar
+    """One decline pass per name, then the shared sector table on those verdicts.
+
+    The table depends on the sector label and the session, not on the name
+    asking, so it is built once per label.
+    """
     sectors: dict[str, list[str]] = {}
-    decline_by_symbol: dict[str, dict[date, str]] = {}
-    checks_by_symbol: dict[str, dict[date, dict[str, Any]]] = {}
-    soft_by_symbol: dict[str, dict[date, list[str]]] = {}
+    verdicts: dict[str, _VerdictTape] = {}
+    series: dict[str, tuple[list[date], list[float]]] = {}
     for spec in group:
         row = by_ticker.get(spec.ticker) or {}
         label = str(row.get("sector") or "")
         if label:
             sectors.setdefault(label, []).append(spec.ticker)
-        annual = tape.merge_statement_years(
-            tape.eodhd_annual_statements(row.get("fundamentals") or {}),
-            tape.ch_statements(row.get("ch_filings") or []),
+        verdicts[spec.ticker] = _VerdictTape(
+            row.get("annual") or [], row.get("quarterly") or [], row.get("interim") or []
         )
-        quarterly = tape.eodhd_quarterly(row.get("fundamentals") or {})
-        interim = tape.interim_eps_rows(row.get("fundamentals") or {})
-        decline_by_symbol[spec.ticker] = {}
-        checks_by_symbol[spec.ticker] = {}
-        soft_by_symbol[spec.ticker] = {}
-        for day in spec.sessions or []:
-            verdict = tape.decline_verdict(annual, quarterly, interim, day)
-            decline_by_symbol[spec.ticker][day] = verdict["verdict"]
-            checks_by_symbol[spec.ticker][day] = verdict["checks"]
-            soft_by_symbol[spec.ticker][day] = list(verdict["soft"])
-    closes = {
-        spec.ticker: {
-            day: price for day, price in zip(spec.sessions or [], spec.closes or [], strict=False)
-        }
-        for spec in group
-    }
-    ordered = {ticker: sorted(series) for ticker, series in closes.items()}
-    positions = {
-        ticker: {day: index for index, day in enumerate(days)} for ticker, days in ordered.items()
-    }
+        days: list[date] = []
+        values: list[float] = []
+        for day, price in zip(spec.sessions or [], spec.closes or [], strict=False):
+            if days and days[-1] == day:
+                values[-1] = price
+            elif days and day < days[-1]:
+                raise ValueError(f"{spec.ticker} sessions are not sorted")
+            else:
+                days.append(day)
+                values.append(price)
+        series[spec.ticker] = (days, values)
+    tables = {label: _sector_table(peers, series, verdicts) for label, peers in sectors.items()}
+    empty = _sector_decision_from(0, 0, 0, [], 0, 0)
+    missing = {"verdict": "sector_missing", "sector_basis": "sector_missing"}
     labels = {name: position for position, name in enumerate(_GATE_LABELS)}
     for spec in group:
         row = by_ticker.get(spec.ticker) or {}
         label = str(row.get("sector") or "")
-        peers = sectors.get(label, [])
-        decline_codes = []
-        sector_codes = []
-        details = []
-        for day in spec.sessions or []:
-            decision = (
-                {"verdict": "sector_missing", "sector_basis": "sector_missing"}
-                if not label
-                else _sector_on(day, peers, closes, ordered, positions, decline_by_symbol)
-            )
-            decline_codes.append(labels[decline_by_symbol[spec.ticker][day]])
-            sector_codes.append(labels[decision["verdict"]])
-            details.append(
-                {
-                    "checks": checks_by_symbol[spec.ticker][day],
-                    "soft_checks": soft_by_symbol[spec.ticker][day],
-                    "sector_basis": decision["sector_basis"],
-                    "sector_name": label or None,
-                }
-            )
+        table = tables.get(label, {})
+        sessions = spec.sessions or []
+        own = verdicts[spec.ticker]
+        segments = array("i", [own.segment(day) for day in sessions])
+        decisions = [missing if not label else table.get(day, empty) for day in sessions]
         spec.gates = GateTape(
-            [day - timedelta(days=1) for day in (spec.sessions or [])],
-            decline_codes,
-            sector_codes,
+            [_day_before(day) for day in sessions],
+            array("b", [labels[own.verdicts[index]["verdict"]] for index in segments]),
+            array("b", [labels[decision["verdict"]] for decision in decisions]),
             _GATE_LABELS,
-            lambda index, details=details: details[index],
+            _gate_detail(
+                own,
+                segments,
+                lambda index, decisions=decisions, label=label: (
+                    decisions[index]["sector_basis"],
+                    label or None,
+                ),
+            ),
         )
 
 
-def _sector_on(
-    day: date,
+def _sector_table(
     peers: Sequence[str],
-    closes: Mapping[str, Mapping[date, float]],
-    ordered: Mapping[str, Sequence[date]],
-    positions: Mapping[str, Mapping[date, int]],
-    decline_by_symbol: Mapping[str, Mapping[date, str]],
-) -> dict[str, Any]:
-    """Price breadth uses each name's own last 200 adjusted closes, not calendar days."""
-    members = 0
-    below = 0
-    with_sma = 0
-    trend_values: list[float] = []
-    declining = 0
-    with_verdict = 0
+    series: Mapping[str, tuple[list[date], list[float]]],
+    verdicts: Mapping[str, _VerdictTape],
+) -> dict[date, dict[str, Any]]:
+    """Section 3.3 decision for every session any peer has.
+
+    Price breadth uses each name's own last 200 adjusted closes, not calendar days.
+    Trend values are summed in peer order, as one pass over the peers per day would.
+    """
     lookback = int(REGISTRATION_CONSTANTS["RETURN_LOOKBACK_126D"])
     sma = int(REGISTRATION_CONSTANTS["REGIME_SMA_SESSIONS"])
+    # members, with_sma, below, with_verdict, declining, trend values
+    stats: dict[date, list[Any]] = {}
     for ticker in peers:
-        series = closes.get(ticker) or {}
-        if day not in series:
-            continue
-        members += 1
-        days = ordered.get(ticker) or ()
-        position = positions.get(ticker, {}).get(day, -1)
-        if position + 1 >= sma:
-            window = [series[days[index]] for index in range(position - sma + 1, position + 1)]
-            with_sma += 1
-            if series[day] < sum(window) / len(window):
-                below += 1
-        if position >= lookback:
-            base = series.get(days[position - lookback])
-            if base and base > 0:
-                trend_values.append(series[day] / base - 1.0)
-        verdict = (decline_by_symbol.get(ticker) or {}).get(day)
-        if verdict in {"clear", "declining"}:
-            with_verdict += 1
-            declining += int(verdict == "declining")
+        days, values = series.get(ticker) or ([], [])
+        tape_rows = verdicts.get(ticker)
+        running = 0.0
+        for position, day in enumerate(days):
+            row = stats.get(day)
+            if row is None:
+                row = stats[day] = [0, 0, 0, 0, 0, []]
+            row[0] += 1
+            close = values[position]
+            running += close
+            if position >= sma:
+                running -= values[position - sma]
+            if position + 1 >= sma:
+                if (position + 1 - sma) % _SMA_RESET_EVERY == 0:
+                    running = math.fsum(values[position - sma + 1 : position + 1])
+                row[1] += 1
+                if _below_sma(close, running, values, position, sma):
+                    row[2] += 1
+            if position >= lookback:
+                base = values[position - lookback]
+                if base and base > 0:
+                    row[5].append(close / base - 1.0)
+            if tape_rows is not None:
+                verdict = tape_rows.verdicts[tape_rows.segment(day)]["verdict"]
+                if verdict in {"clear", "declining"}:
+                    row[3] += 1
+                    row[4] += int(verdict == "declining")
+    return {
+        day: _sector_decision_from(row[0], row[1], row[2], row[5], row[3], row[4])
+        for day, row in stats.items()
+    }
+
+
+def _below_sma(
+    close: float, running: float, values: Sequence[float], position: int, sma: int
+) -> bool:
+    """``close < sum(window) / len(window)``, exact near a tie."""
+    mean = running / sma
+    scale = max(abs(close), abs(mean), 1e-300)
+    if abs(close - mean) > _SMA_TIE_TOLERANCE * scale:
+        return close < mean
+    window = values[position - sma + 1 : position + 1]
+    return close < sum(window) / len(window)
+
+
+def _sector_decision_from(
+    members: int,
+    with_sma: int,
+    below: int,
+    trend_values: Sequence[float],
+    with_verdict: int,
+    declining: int,
+) -> dict[str, Any]:
     price_covered = tape.coverage_met(with_sma, members) and tape.coverage_met(
         len(trend_values), members
     )
@@ -1850,7 +2006,10 @@ def write_store(payload: Mapping[str, Any], repo_root: Path = REPO_ROOT) -> Path
 
 
 def delete_licensed_cache(cache: Path) -> None:
-    """Remove prices and statements. Call totals already sit in the aggregate store."""
+    """Remove prices and statements. Call totals already sit in the aggregate store.
+
+    Only after the reveal: development leaves them for the holdout walk.
+    """
     _remove_tree(cache / "raw")
     _remove_tree(cache / "fx")
 
@@ -1920,7 +2079,10 @@ def develop(
         calls = summary["calls"]
         eurgbp, usdgbp = _resolved_fx(eurgbp, usdgbp, cache)
     else:
+        records = [_slim_record(record) for record in records]
         eurgbp, usdgbp = _resolved_fx(eurgbp, usdgbp, None)
+    if not records:
+        raise ReplayRefused("No cached EODHD records to walk. Re-run fetch before develop.")
     assembled = assemble_specs(
         records,
         eurgbp=eurgbp,
@@ -1929,7 +2091,7 @@ def develop(
         score=score,
     )
     if score:
-        apply_sector_frame(assembled["specs"], _prepared_view(records))
+        apply_sector_frame(assembled["specs"], assembled["prepared"])
     results = walk_variants(
         assembled["specs"],
         assembled["haircuts"],
@@ -1945,14 +2107,15 @@ def develop(
         markets=assembled["markets"],
         previous=previous,
         probe=_probe_flags(
-            records, results[BASELINE]["episodes"], ranked=assembled["ranked_symbols"]
+            records,
+            results[BASELINE]["episodes"],
+            ranked=assembled["ranked_symbols"],
+            prepared=assembled["prepared"],
         ),
         eurgbp=eurgbp,
         holdout=False,
     )
     write_store(store, repo_root)
-    if cache is not None:
-        delete_licensed_cache(cache)
     return store
 
 
@@ -1991,7 +2154,10 @@ def reveal(
         records = _records_from_cache(cache)
         eurgbp, usdgbp = _resolved_fx(eurgbp, usdgbp, cache)
     else:
+        records = [_slim_record(record) for record in records]
         eurgbp, usdgbp = _resolved_fx(eurgbp, usdgbp, None)
+    if not records:
+        raise RevealRefused("No cached EODHD records to walk. The holdout is not written.")
     assembled = assemble_specs(
         records,
         eurgbp=eurgbp,
@@ -2000,7 +2166,7 @@ def reveal(
         score=score,
     )
     if score:
-        apply_sector_frame(assembled["specs"], _prepared_view(records))
+        apply_sector_frame(assembled["specs"], assembled["prepared"])
     results = walk_variants(
         assembled["specs"],
         assembled["haircuts"],
@@ -2016,7 +2182,10 @@ def reveal(
         markets=assembled["markets"],
         previous=store,
         probe=_probe_flags(
-            records, results[BASELINE]["episodes"], ranked=assembled["ranked_symbols"]
+            records,
+            results[BASELINE]["episodes"],
+            ranked=assembled["ranked_symbols"],
+            prepared=assembled["prepared"],
         ),
         eurgbp=eurgbp,
         holdout=True,
@@ -2035,20 +2204,24 @@ def _attach_delisted(results: dict[str, dict[str, Any]], haircuts: Mapping[str, 
 
 
 def _prepared_view(records: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
-    """The sector pass needs fundamentals on the same objects assemble built.
+    """Sector-pass rows from record-level Companies House filings only.
 
-    ``apply_sector_frame`` looks up ``by_ticker`` rows. Rebuilding them here
-    keeps develop(records=...) from painting an empty sector.
+    ``develop`` and ``reveal`` pass ``assemble_specs(...)["prepared"]`` instead,
+    which also carries filings matched from the Companies House store.
     """
     view = []
     for record in records:
-        general = (record.get("fundamentals") or {}).get("General") or {}
+        slim = _slim_record(record)
+        general = slim["general"]
         view.append(
             {
-                "symbol": record.get("symbol"),
-                "sector": record.get("sector") or general.get("Sector") or general.get("GicSector"),
-                "fundamentals": record.get("fundamentals") or {},
-                "ch_filings": record.get("ch_filings") or [],
+                "symbol": slim.get("symbol"),
+                "sector": slim.get("sector") or general.get("Sector") or general.get("GicSector"),
+                "annual": tape.merge_statement_years(
+                    slim["eodhd_annual"], tape.ch_statements(slim.get("ch_filings") or [])
+                ),
+                "quarterly": slim["quarterly"],
+                "interim": slim["interim"],
             }
         )
     return view
@@ -2059,40 +2232,48 @@ def _probe_flags(
     episodes: Sequence[Mapping[str, Any]],
     *,
     ranked: set[str] | None = None,
+    prepared: Sequence[Mapping[str, Any]] | None = None,
 ) -> dict[str, dict[str, bool]]:
+    """``prepared`` supplies the Companies House key and filings matched from the store."""
     exits = {
         str(row.get("ticker"))
         for row in episodes
         if row.get("column") == "primary" and row.get("exit_reason")
     }
+    resolved = {str(row["symbol"]): row for row in prepared or ()}
+    slims = [_slim_record(record) for record in records]
     out = {}
     for spec in REGISTRATION_CONSTANTS["PROBE_CLASSES"]:
         key = spec["key"]
         matched = [
             row
-            for row in records
-            if row.get("ch_key") == key or tape.match_ch_key(str(row.get("name") or "")) == key
+            for row in slims
+            if (resolved.get(str(row.get("symbol"))) or row).get("ch_key") == key
+            or tape.match_ch_key(str(row.get("name") or "")) == key
         ]
         last = None
         if matched:
-            bars = _bars(matched[0].get("eod") or [])
-            last = bars[-1]["date"] if bars else None
+            bars = matched[0]["bars"]
+            last = bars.dates[-1] if len(bars) else None
         known = date.fromisoformat(spec["known_end"])
+        first = resolved.get(str(matched[0].get("symbol"))) if matched else None
         out[key] = {
             "in_universe": any(str(row.get("symbol")) in (ranked or set()) for row in matched),
             "had_exit": any(str(row.get("symbol")) in exits for row in matched),
-            "statement_every_year": _every_year(matched[0], known) if matched else False,
+            "statement_every_year": _every_year(first or matched[0], known) if matched else False,
             "price_ended_before_known_event": tape.price_ended_before_known_event(last, known),
         }
     return out
 
 
-def _every_year(record: Mapping[str, Any], known_end: date) -> bool:
-    annual = tape.merge_statement_years(
-        tape.eodhd_annual_statements(record.get("fundamentals") or {}),
-        tape.ch_statements(record.get("ch_filings") or []),
-    )
-    years = {int(row["year"]) for row in annual}
+def _every_year(row: Mapping[str, Any], known_end: date) -> bool:
+    """``row`` is a prepared row (merged statements) or a slim record."""
+    annual = row.get("annual")
+    if annual is None:
+        annual = tape.merge_statement_years(
+            row.get("eodhd_annual") or [], tape.ch_statements(row.get("ch_filings") or [])
+        )
+    years = {int(item["year"]) for item in annual}
     return all(year in years for year in range(2013, known_end.year + 1))
 
 
@@ -2136,19 +2317,22 @@ def _records_from_cache(cache: Path) -> list[dict[str, Any]]:
                 return [] if kind != "fundamentals" else {}
             return json.loads(path.read_text(encoding="utf-8"))
 
+        # One symbol's raw JSON at a time: the full cache does not fit in memory.
         records.append(
-            {
-                "symbol": symbol,
-                "market": info.get("market"),
-                "name": info.get("name"),
-                "currency": info.get("currency"),
-                "delisted": info.get("delisted", False),
-                "isin": info.get("isin"),
-                "eod": _read("eod"),
-                "fundamentals": _read("fundamentals") or {},
-                "dividends": _read("dividends") or [],
-                "splits": _read("splits") or [],
-            }
+            _slim_record(
+                {
+                    "symbol": symbol,
+                    "market": info.get("market"),
+                    "name": info.get("name"),
+                    "currency": info.get("currency"),
+                    "delisted": info.get("delisted", False),
+                    "isin": info.get("isin"),
+                    "eod": _read("eod"),
+                    "fundamentals": _read("fundamentals") or {},
+                    "dividends": _read("dividends") or [],
+                    "splits": _read("splits") or [],
+                }
+            )
         )
     return records
 

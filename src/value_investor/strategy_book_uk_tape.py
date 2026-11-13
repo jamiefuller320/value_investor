@@ -10,6 +10,7 @@ Constants are read from ``strategy_book_uk_replay.REGISTRATION_CONSTANTS``.
 from __future__ import annotations
 
 import math
+from bisect import bisect_right
 from collections.abc import Iterable, Mapping, Sequence
 from datetime import date, timedelta
 from typing import Any
@@ -95,7 +96,8 @@ def select_shares(
     best: dict[str, Any] | None = None
     best_key: tuple[int, int] | None = None
     for period, rows in (("annual", annual or ()), ("quarterly", quarterly or ())):
-        for row in rows:
+        # EODHD keys ``outstandingShares`` periods "0", "1", ...: the rows are the values.
+        for row in rows.values() if isinstance(rows, Mapping) else rows:
             if not isinstance(row, Mapping):
                 continue
             formatted = _parse_date(row.get(field))
@@ -135,13 +137,28 @@ def scale_shares(
     return shares * factor, False
 
 
+class FxSeries(dict):
+    """A date -> close map with its days sorted once. Do not mutate after building."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.days = sorted(self)
+
+    def on_or_before(self, session: date) -> date | None:
+        position = bisect_right(self.days, session)
+        return self.days[position - 1] if position else None
+
+
 def _fx_on(series: Mapping[date, float] | None, session: date) -> float | None:
     if not series:
         return None
     found = None
-    for day, _value in series.items():
-        if day <= session and (found is None or day > found):
-            found = day
+    if isinstance(series, FxSeries):
+        found = series.on_or_before(session)
+    else:
+        for day, _value in series.items():
+            if day <= session and (found is None or day > found):
+                found = day
     if found is None:
         return None
     if (session - found).days > int(_const("FX_CARRY_DAYS")):
@@ -764,6 +781,14 @@ def _eps_pair(
     return latest.get("eps"), prior.get("eps"), latest.get("eps_basis"), prior.get("eps_basis")
 
 
+def year_before(day: date) -> date:
+    """Same day a year earlier. 29 February maps to 28 February."""
+    try:
+        return day.replace(year=day.year - 1)
+    except ValueError:
+        return day.replace(year=day.year - 1, day=28)
+
+
 def _interim_revenue(rows: Sequence[Mapping[str, Any]], session: date) -> float | None:
     visible = [
         row
@@ -776,7 +801,7 @@ def _interim_revenue(rows: Sequence[Mapping[str, Any]], session: date) -> float 
     if not visible:
         return None
     latest = max(visible, key=lambda row: row["period_end"])
-    target = latest["period_end"].replace(year=latest["period_end"].year - 1)
+    target = year_before(latest["period_end"])
     window = int(_const("INTERIM_YOY_WINDOW_DAYS"))
     prior = None
     best_gap = None
@@ -806,7 +831,7 @@ def _interim_eps(
     if not visible:
         return False, None
     latest = max(visible, key=lambda row: row["period_end"])
-    target = latest["period_end"].replace(year=latest["period_end"].year - 1)
+    target = year_before(latest["period_end"])
     window = int(_const("INTERIM_YOY_WINDOW_DAYS"))
     prior = None
     best_gap = None

@@ -309,6 +309,76 @@
       "what_changed": "The fetch completed on 2026-11-13 (LSE, XETRA and PA; 77,863 weighted calls), so development runs as soon as the Companies House store (parts 1 and 2) and the EPIC/leaving-date matching are on main, instead of waiting to 2026-11-25. The encrypted Actions cache is evicted after 7 days unused, which waiting would risk.",
       "unchanged": "No constant, window, scoring rule or call budget changed. The Companies House store is frozen at the development commit as sealed. The reveal still needs the owner stamp; the last call day stays 2026-12-10.",
       "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
+    },
+    {
+      "marker_id": "strategy-book-uk-replay-v0-develop-scale-v1",
+      "at": "2026-11-13T13:10:00Z",
+      "kind": "implementation",
+      "rule_change": false,
+      "approved_by": "owner (pending: merging this change approves it)",
+      "new_registration_id": false,
+      "logged_on_registration_id": "strategy-book-uk-replay-v0",
+      "sealed_text": "Section 8 timetable: development walk, then commit the development block.",
+      "what_was_wrong": "Development run 43421476662 (2026-11-13) was killed for memory: the runner held every symbol's raw EODHD price rows and full fundamentals JSON at once, and recomputed the decline verdict and the sector table per name per session.",
+      "fix": "Each cached symbol is parsed and reduced to the fields the walk reads (statements parsed once, prices as columns) before the next is read. The decline verdict is computed once per span of identical visible statements; the sector table once per sector label and session; the FX rate by bisection. A golden test on a synthetic universe shows every gate fact, spec, walk result and store field unchanged against the previous runner.",
+      "unchanged": "No constant, window, scoring rule, universe rule or call budget changed. Outputs are identical to the previous runner on the same inputs.",
+      "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
+    },
+    {
+      "marker_id": "strategy-book-uk-replay-v0-shares-dict-v1",
+      "at": "2026-11-13T13:10:00Z",
+      "kind": "implementation",
+      "rule_change": false,
+      "approved_by": "owner (pending: merging this change approves it)",
+      "new_registration_id": false,
+      "logged_on_registration_id": "strategy-book-uk-replay-v0",
+      "sealed_text": "Shares. Latest outstandingShares row with dateFormatted on or before the session and shares > 0. Quarterly preferred over annual when both qualify.",
+      "what_was_wrong": "EODHD returns outstandingShares.annual and .quarterly as objects keyed \"0\", \"1\", ... . The runner iterated the keys, found no share rows, and every month's cap would have been cap_not_computable, so no name would rank. Found before any development score existed.",
+      "fix": "select_shares reads the values of a keyed object, as the coverage check already did. A list is read as before.",
+      "unchanged": "Same field (dateFormatted), same quarterly-over-annual tie rule, same split scaling.",
+      "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
+    },
+    {
+      "marker_id": "strategy-book-uk-replay-v0-leap-day-v1",
+      "at": "2026-11-13T13:10:00Z",
+      "kind": "implementation",
+      "rule_change": false,
+      "approved_by": "owner (pending: merging this change approves it)",
+      "new_registration_id": false,
+      "logged_on_registration_id": "strategy-book-uk-replay-v0",
+      "sealed_text": "interim_revenue: quarterly totalRevenue vs the quarter within 45 days of one year earlier. Age <= 460 days. (eps_interim the same way.)",
+      "what_was_wrong": "'One year earlier' was computed with date.replace(year - 1), which raises on a 29 February period end (for example a fiscal quarter ending 2020-02-29), so the walk would stop.",
+      "fix": "One year before 29 February is 28 February, as the live operating-decline gate already does. The 45-day window is unchanged.",
+      "unchanged": "Same window, thresholds and age limit.",
+      "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
+    },
+    {
+      "marker_id": "strategy-book-uk-replay-v0-cache-to-reveal-v1",
+      "at": "2026-11-13T13:10:00Z",
+      "kind": "implementation",
+      "rule_change": false,
+      "approved_by": "owner (pending: merging this change approves it)",
+      "new_registration_id": false,
+      "logged_on_registration_id": "strategy-book-uk-replay-v0",
+      "sealed_text": "2026-12-03: owner reveal stamp, then one holdout write. 2026-12-10: last call day. Delete temp files and the cursor cache. Stamp deleted_at.",
+      "what_was_wrong": "develop deleted the raw price and statement files but kept the cursor's done-flags, so the reveal's fetch would make no calls and walk an empty universe.",
+      "fix": "develop keeps the encrypted cache; reveal deletes raw and FX files after the holdout write; confirm-deleted removes the rest and stamps deleted_at. develop and reveal refuse to write when the cache holds no records.",
+      "unchanged": "Deletion by 2026-12-10 as sealed. The cache stays encrypted with the EODHD secret; nothing licensed is committed.",
+      "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
+    },
+    {
+      "marker_id": "strategy-book-uk-replay-v0-ch-sector-probe-v1",
+      "at": "2026-11-13T13:10:00Z",
+      "kind": "implementation",
+      "rule_change": false,
+      "approved_by": "owner (pending: merging this change approves it)",
+      "new_registration_id": false,
+      "logged_on_registration_id": "strategy-book-uk-replay-v0",
+      "sealed_text": "Companies House fallback. Read docs/data/ch_failed_name_statements.json for every name it holds at the development commit. Use a year only when EODHD has no annual income row for that fiscal year.",
+      "what_was_wrong": "The sector decline breadth and the probe-class flags read only filings carried on the record itself, not the store rows that match_ch_record attached, so a store-matched name had Companies House years in its own gate but not in its sector peers' breadth or the probe statement_every_year flag.",
+      "fix": "assemble_specs returns each name's resolved Companies House key and merged statements; the sector pass and the probe flags read those.",
+      "unchanged": "Same matching rule (ch-matching-v1), same one-source-per-year merge.",
+      "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
     }
   ]
 }

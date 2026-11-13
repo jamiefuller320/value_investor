@@ -24,9 +24,16 @@ dir `strategy_book_uk_replay`, or `uk-replay-cache/` on the Actions runner). Bet
 Actions runs the cache is kept only as `uk-replay-cache.tar.enc`, AES-256 encrypted with
 the `EODHD_API_TOKEN` secret: Actions caches in a public repo can be restored by fork-PR
 workflows, which never receive secrets.
-That directory is gitignored. The workflow deletes the raw files after a
-development or reveal walk. The resume cursor keeps symbol done-flags and the
-day's weighted-call count. It is not committed.
+That directory is gitignored. Development keeps the raw files: the reveal
+walks the same cache (its fetch makes no calls once every symbol is done).
+The reveal deletes the raw and FX files after the holdout write, and
+`confirm-deleted` removes the rest by 2026-12-10. `develop` and `reveal` refuse
+to write when the cache holds no records. The resume cursor keeps symbol
+done-flags and the day's weighted-call count. It is not committed.
+
+The Actions cache is evicted after 7 days unused. Each `development` or
+`reveal` dispatch saves it again; if neither runs for 6 days, re-dispatch
+`fetch` (no EODHD calls when complete) to keep it.
 
 ## Seal, then calls
 
@@ -88,6 +95,17 @@ ftse-strategy-book-uk-replay confirm-deleted
 and removes the cache, including the resume cursor. A second `develop` after a
 committed development block is refused. That pass would be an amendment, and
 this runner does not rewrite the block.
+
+## Memory and run time
+
+The full cache is roughly 13.6k symbols. `develop` and `reveal` read one
+symbol's JSON at a time and keep only what the walk reads: parsed statements,
+share rows, dividends, splits and prices as columns
+(`_slim_record` in `src/value_investor/strategy_book_uk_replay.py`). The
+decline verdict is computed once per span of identical visible statements and
+the sector table once per sector label and session. Outputs are pinned to the
+pre-change runner by `tests/test_strategy_book_uk_replay_develop.py`
+(change marker `develop-scale-v1`).
 
 ## Ops monitor
 
