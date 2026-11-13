@@ -204,6 +204,14 @@ _CARRY_RE = re.compile(
     r"attributable|earnings per share|loss per share|weighted average|dividend|per share|net cash",
     re.I,
 )
+_REVENUE_LINE_RE = re.compile(
+    r"^(?:group |total |consolidated |statutory )?(?:revenue|turnover|sales)\b",
+    re.I,
+)
+_REVENUE_REJECT_RE = re.compile(
+    r"\b(adjust\w*|tax|excise|dut(?:y|ies)|lev(?:y|ies)|vat|benefit)\b",
+    re.I,
+)
 _INCOME_HEADING_RE = re.compile(
     r"^\s*(consolidated\s+|group\s+)?"
     r"(income statement|statement of (profit or loss|comprehensive income)|profit and loss account)\b",
@@ -241,6 +249,8 @@ def repair_spaced_decimals(text: str) -> str:
     def repl(match: re.Match[str]) -> str:
         return f"{match.group(1)}.{match.group(2)}"
 
+    # A digit OCR split off inside the parentheses is part of the amount: ``(3 10.1)``.
+    text = re.sub(r"\((\d)\s(\d+\.\d+)\)", r"(\1\2)", text)
     text = re.sub(r"\((\d{1,3})\s(\d{3})\s(\d)\)", r"(\1,\2.\3)", text)
     # Do not treat the fractional digit of ``100.2 148 8`` as the start of a thousands group.
     text = re.sub(r"(?<![\d.])(\d{1,3})\s(\d{3})\s(\d)(?!\d)", r"\1,\2.\3", text)
@@ -256,8 +266,10 @@ def repair_glued_thousands(text: str) -> str:
 
     ``4,0809`` is not a valid thousands grouping; the extra digit is the pence
     of millions (``4,080.9``). ``76,641`` is already valid and is unchanged.
+    A trailing zero (``20,9030``) is not turned into ``.0``: that digit may be
+    a misread, and dropping it would change the digit count.
     """
-    return re.sub(r"(\d{1,3}(?:,\d{3})+)(\d)(?!\d)", r"\1.\2", text)
+    return re.sub(r"(\d{1,3}(?:,\d{3})+)([1-9])(?!\d)", r"\1.\2", text)
 
 
 def _trim_number(text: str) -> str:
@@ -293,6 +305,12 @@ def parse_amount(token: str, *, scale: str | None) -> tuple[str, str | None, str
     negative = raw.startswith("(") and raw.endswith(")")
     inner = raw[1:-1] if negative else raw
     inner = repair_glued_thousands(inner)
+    if "," in inner:
+        head, _, _frac = inner.partition(".")
+        groups = head.split(",")
+        if len(groups) < 2 or any(len(group) != 3 or not group.isdigit() for group in groups[1:]):
+            # ``20,9030`` is not a thousands group. Do not drop the extra digit.
+            return "unresolved", None, unit
     bare = inner.replace(",", "")
     if scale == "millions" and re.fullmatch(r"\d{1,3}\.\d{3}", bare):
         # ``7.235`` is ambiguous (a decimal, or a comma read as a dot). Do not guess.
@@ -312,6 +330,13 @@ def parse_amount(token: str, *, scale: str | None) -> tuple[str, str | None, str
         rendered = _trim_number(("-" if negative else "") + bare)
     except InvalidOperation:
         return "no", None, unit
+    # A repair must not drop or invent a digit. ``(310.1)`` stays -310.1; a
+    # shorter reading such as -10.1 is rejected. Trailing zeros that the
+    # display then strips are still part of the token.
+    source_digits = re.sub(r"\D", "", token)
+    parsed_digits = re.sub(r"\D", "", bare)
+    if source_digits != parsed_digits:
+        return "unresolved", None, unit
     return "ok", rendered, unit
 
 
@@ -356,12 +381,15 @@ class StatementPage:
     page: int
     text: str
     method: str = "fixture"
+    alt_text: str = ""
 
 
 @dataclass
 class _PageParse:
     candidates: dict[str, list[Candidate]] = field(default_factory=dict)
     capex: list[Candidate] = field(default_factory=list)
+    # A purchase line was seen but its amount does not stand on its own.
+    capex_incomplete: bool = False
     rejected: dict[str, str] = field(default_factory=dict)
     currency: str | None = None
     scale: str | None = None
@@ -558,6 +586,14 @@ def _consider(
     if current.kind != "ok" or current.value is None:
         parsed.rejected.setdefault(field_name, "decimal place not recovered")
         return
+    if (
+        field_name == "basic_eps"
+        and "." not in str(current.value)
+        and abs(Decimal(current.value)) >= Decimal("10")
+    ):
+        # ``125`` is not a reading of ``12.5``. Leave it absent rather than guess the point.
+        parsed.rejected.setdefault(field_name, "EPS decimal not recovered")
+        return
     prior_value = None
     if (
         parsed.prior_idx is not None
@@ -594,21 +630,15 @@ def _label_fields(label: str) -> list[tuple[str, int, bool]]:
     """Return (field, priority, money) matches for a statement label."""
     low = label.lower()
     found: list[tuple[str, int, bool]] = []
-    if re.search(r"\brevenue\b", low) and not re.search(
-        r"\b(less|share of|other revenue|from continuing operations only)\b", low
-    ):
+    # The label has to be the revenue line. A sales-tax, excise or adjustment
+    # row is not revenue even when the word sales or revenue appears on it.
+    if _REVENUE_LINE_RE.match(low) and not _REVENUE_REJECT_RE.search(low):
         if re.search(r"\bgroup revenue\b", low):
             found.append(("revenue", 3, True))
-        elif re.search(r"(^|\s)revenue\b", low) and "total revenue" not in low:
-            found.append(("revenue", 2, True))
         elif "total revenue" in low:
             found.append(("revenue", 1, True))
-    if (
-        re.search(r"\bsales\b", low)
-        and not re.search(r"cost of sales|cost of providing|disposal|proceeds", low)
-        and "revenue" not in low
-    ):
-        found.append(("revenue", 2, True))
+        else:
+            found.append(("revenue", 2, True))
     if "operating profit" in low or "operating loss" in low or "operating (loss)" in low:
         blocked = any(
             token in low
@@ -720,6 +750,7 @@ def _parse_page_body(
     page: int,
     current_year: int,
     kinds: set[str],
+    comprehensive_only: bool = False,
 ) -> _PageParse:
     raw_lines = [line.strip() for line in text.splitlines()]
     lines = [line for line in raw_lines if line]
@@ -748,7 +779,22 @@ def _parse_page_body(
     pending = ""
     started = False
     saw_revenue_bridge = False
+    # Profit for the year is read from the income statement. A statement of
+    # comprehensive income repeats "attributable to equity holders" for total
+    # comprehensive income, which is a different number.
+    in_oci = comprehensive_only
+    income_fields = {
+        "revenue",
+        "operating_profit",
+        "profit_attributable_to_owners",
+        "basic_eps",
+        "dividends_per_share",
+    }
     for line in lines:
+        if re.search(r"\bstatement of comprehensive\b", line, re.I):
+            in_oci = True
+            pending = ""
+            continue
         if re.search(r"\b(less|share of)\b.*\brevenue\b", line, re.I):
             saw_revenue_bridge = True
         if re.match(
@@ -759,6 +805,19 @@ def _parse_page_body(
             if started:
                 break
         label, cells, status = _split_amount_row(line, len(years), scale)
+        if (
+            scale == "millions"
+            and parsed.current_idx is not None
+            and parsed.current_idx < len(cells)
+            and cells[parsed.current_idx].kind == "ok"
+            and cells[parsed.current_idx].value is not None
+            and row_decimal_conflict(Decimal(cells[parsed.current_idx].value), _prepare_line(line))
+        ):
+            # ``64.7`` beside ``785`` and ``1,005``, or ``(41)`` beside ``(1.2)``.
+            cells[parsed.current_idx] = AmountCell(
+                "unresolved", None, cells[parsed.current_idx].unit
+            )
+            status = "unresolved"
         if status == "column count" and label:
             for field_name, _priority, _money in _label_fields(label):
                 parsed.rejected.setdefault(
@@ -788,12 +847,18 @@ def _parse_page_body(
             and cells[parsed.current_idx].kind == "ok"
         )
         if not current_ok:
+            if label and "cash" in kinds and (_is_capex_ppe(label) or _is_capex_intangible(label)):
+                # Do not publish property, plant and equipment alone when the
+                # intangibles line was on the page and could not be read.
+                parsed.capex_incomplete = True
             if status == "unresolved":
                 for field_name, _priority, _money in _label_fields(label):
                     parsed.rejected.setdefault(field_name, "decimal place not recovered")
             continue
         matched = False
         for field_name, priority, money in _label_fields(label):
+            if in_oci and field_name in income_fields:
+                continue
             if field_name in {
                 "revenue",
                 "operating_profit",
@@ -1095,10 +1160,15 @@ def parse_statement_pages(
     best_income = -1
     for page, kinds in income_pages:
         body_kinds = set(kinds)
-        if "income_maybe" in body_kinds:
+        comprehensive_only = "income" not in kinds and "income_maybe" in kinds
+        if "income_maybe" in body_kinds and not comprehensive_only:
             body_kinds.add("income")
         parsed = _parse_page_body(
-            page.text, page=page.page, current_year=current_year, kinds=body_kinds
+            page.text,
+            page=page.page,
+            current_year=current_year,
+            kinds=body_kinds,
+            comprehensive_only=comprehensive_only,
         )
         ranked = score(
             parsed, ("revenue", "operating_profit", "profit_attributable_to_owners", "basic_eps")
@@ -1192,6 +1262,7 @@ def parse_statement_pages(
         fields["weighted_average_basic_shares"] = _filled_field(
             shares, transaction_id=transaction_id, source="primary", scale=None, currency=None
         )
+    _reject_eps_if_earnings_disagree(fields)
 
     cash_choice = _best_candidate(pool(cash_parsed, name="net_cash_from_operating_activities"))
     if cash_choice is None:
@@ -1210,12 +1281,17 @@ def parse_statement_pages(
             currency=currency,
         )
 
-    fields["capital_expenditure"] = _capex_field(
-        (cash_parsed.capex if cash_parsed else []),
-        transaction_id=transaction_id,
-        scale=scale,
-        currency=currency,
-    )
+    if cash_parsed and cash_parsed.capex_incomplete:
+        fields["capital_expenditure"] = _empty_field(
+            "a purchase line was read but its amount did not agree with the row"
+        )
+    else:
+        fields["capital_expenditure"] = _capex_field(
+            (cash_parsed.capex if cash_parsed else []),
+            transaction_id=transaction_id,
+            scale=scale,
+            currency=currency,
+        )
     div_cands = pool(income_parsed, *note_parsed, name="dividends_per_share")
     fields["dividends_per_share"] = _dividend_field(div_cands, rejected, transaction_id)
 
@@ -1485,6 +1561,825 @@ def combined_check_a(
     }
 
 
+QC_EPS_JUMP = "eps_jump"
+QC_EPS_EARNINGS = "eps_inconsistent_with_earnings"
+QC_REVENUE_PROFIT = "revenue_below_operating_profit"
+QC_UNIT_SLIP = "pence_pound_unit_slip"
+
+
+def _decimal_field(
+    fields: dict[str, Any] | None, name: str
+) -> tuple[Decimal, dict[str, Any]] | None:
+    row = (fields or {}).get(name) or {}
+    raw = row.get("value")
+    if raw in (None, ""):
+        return None
+    try:
+        return Decimal(str(raw)), row
+    except InvalidOperation:
+        return None
+
+
+def years_with_field(filings: list[dict[str, Any]], field_name: str) -> list[dict[str, Any]]:
+    """One row per fiscal year. A primary value wins over a comparative."""
+    primary: dict[int, dict[str, Any]] = {}
+    comparative: dict[int, dict[str, Any]] = {}
+    for filing in filings:
+        year = filing.get("fiscal_year")
+        if year is None:
+            continue
+        parsed = _decimal_field(filing.get("fields"), field_name)
+        if parsed is not None:
+            _value, row = parsed
+            primary[int(year)] = {
+                "year": int(year),
+                "source": "primary",
+                "value": row.get("value"),
+                "unit": row.get("unit"),
+                "scale": row.get("scale"),
+                "currency": row.get("currency"),
+            }
+        comp = filing.get("comparative") or {}
+        comp_year = comp.get("fiscal_year")
+        if comp_year is None:
+            continue
+        comp_parsed = _decimal_field(comp.get("fields"), field_name)
+        if comp_parsed is not None:
+            _value, row = comp_parsed
+            comparative[int(comp_year)] = {
+                "year": int(comp_year),
+                "source": "comparative",
+                "value": row.get("value"),
+                "unit": row.get("unit"),
+                "scale": row.get("scale"),
+                "currency": row.get("currency"),
+            }
+    rows = []
+    for year in sorted(set(primary) | set(comparative)):
+        rows.append(primary[year] if year in primary else comparative[year])
+    return rows
+
+
+def _to_absolute(value: Decimal, scale: str | None) -> Decimal:
+    if scale == "millions":
+        return value * Decimal("1000000")
+    if scale == "thousands":
+        return value * Decimal("1000")
+    return value
+
+
+def _share_count(value: Decimal, scale: str | None) -> Decimal:
+    if scale == "millions":
+        return value * Decimal("1000000")
+    if scale in (None, "") and abs(value) < Decimal("100000"):
+        return value * Decimal("1000000")
+    return value
+
+
+def _expected_eps(
+    profit: Decimal,
+    profit_scale: str | None,
+    shares: Decimal,
+    share_scale: str | None,
+    unit: str | None,
+) -> Decimal | None:
+    count = _share_count(shares, share_scale)
+    if count == 0:
+        return None
+    pounds = _to_absolute(profit, profit_scale) / count
+    if unit == "pence":
+        return pounds * Decimal("100")
+    return pounds
+
+
+def _eps_gaps(
+    eps: Decimal,
+    profit: Decimal,
+    profit_scale: str | None,
+    shares: Decimal,
+    share_scale: str | None,
+    unit: str | None,
+) -> list[Decimal]:
+    """Gaps against profit/shares. An unset unit is tried as pence and as pounds."""
+    units = [unit] if unit else ["pence", "pounds"]
+    gaps: list[Decimal] = []
+    for candidate in units:
+        expected = _expected_eps(profit, profit_scale, shares, share_scale, candidate)
+        if expected is None:
+            continue
+        gaps.append(abs(eps - expected) / max(abs(expected), Decimal("0.01")))
+    return gaps
+
+
+def _reject_eps_if_earnings_disagree(fields: dict[str, Any]) -> None:
+    """Drop basic EPS when it is not profit attributable divided by the share count.
+
+    No replacement is written. A missing share count leaves the EPS alone; the
+    cross-year magnitude check is the value gate's job.
+    """
+    eps = _decimal_field(fields, "basic_eps")
+    profit = _decimal_field(fields, "profit_attributable_to_owners")
+    shares = _decimal_field(fields, "weighted_average_basic_shares")
+    if not (eps and profit and shares):
+        return
+    gaps = _eps_gaps(
+        eps[0],
+        profit[0],
+        profit[1].get("scale"),
+        shares[0],
+        shares[1].get("scale"),
+        eps[1].get("unit"),
+    )
+    if gaps and min(gaps) > Decimal("0.15"):
+        fields["basic_eps"] = _empty_field(
+            "basic EPS does not match profit attributable divided by weighted shares"
+        )
+
+
+def plausibility_flags(filings: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Flag suspicious figures. Values are kept; nothing is dropped.
+
+    Checks: EPS magnitude jumps above 10x between adjacent years; EPS more than
+    20% away from profit attributable divided by weighted shares when all three
+    exist; revenue below operating profit; pence/pound unit slips.
+    """
+    flags: list[dict[str, Any]] = []
+    eps_rows = [
+        row for row in years_with_field(filings, "basic_eps") if row.get("value") not in (None, "")
+    ]
+    for prev, curr in zip(eps_rows, eps_rows[1:], strict=False):
+        if int(curr["year"]) - int(prev["year"]) != 1:
+            continue
+        try:
+            left = abs(Decimal(str(prev["value"])))
+            right = abs(Decimal(str(curr["value"])))
+        except InvalidOperation:
+            continue
+        small = min(left, right)
+        large = max(left, right)
+        if large > Decimal("10") * max(small, Decimal("0.005")) and large >= Decimal("0.05"):
+            flags.append(
+                {
+                    "code": QC_EPS_JUMP,
+                    "years": [prev["year"], curr["year"]],
+                    "detail": f"basic EPS {prev['value']} then {curr['value']}",
+                }
+            )
+        if prev.get("unit") != curr.get("unit") and small > 0:
+            ratio = large / small
+            if Decimal("50") <= ratio <= Decimal("200"):
+                flags.append(
+                    {
+                        "code": QC_UNIT_SLIP,
+                        "years": [prev["year"], curr["year"]],
+                        "detail": (
+                            f"unit changed {prev.get('unit')} to {curr.get('unit')} "
+                            f"with a {ratio:.0f}x raw jump"
+                        ),
+                    }
+                )
+    by_year_filings: dict[int, dict[str, Any]] = {}
+    for filing in filings:
+        year = filing.get("fiscal_year")
+        if year is not None:
+            by_year_filings[int(year)] = filing
+    for row in eps_rows:
+        filing = by_year_filings.get(int(row["year"]))
+        fields = (filing or {}).get("fields") if row["source"] == "primary" else None
+        if row["source"] != "primary":
+            comp = (filing or {}).get("comparative") or {}
+            if comp.get("fiscal_year") == row["year"]:
+                fields = comp.get("fields")
+            else:
+                fields = None
+                for other in filings:
+                    comp = other.get("comparative") or {}
+                    if comp.get("fiscal_year") == row["year"]:
+                        fields = comp.get("fields")
+                        break
+        if not fields:
+            continue
+        profit = _decimal_field(fields, "profit_attributable_to_owners")
+        shares = _decimal_field(fields, "weighted_average_basic_shares")
+        eps = _decimal_field(fields, "basic_eps")
+        if not (profit and shares and eps):
+            continue
+        unit = eps[1].get("unit") or row.get("unit") or "pounds"
+        expected = _expected_eps(
+            profit[0], profit[1].get("scale"), shares[0], shares[1].get("scale"), unit
+        )
+        if expected is None:
+            continue
+        gap = abs(eps[0] - expected) / max(abs(expected), Decimal("0.01"))
+        if gap > Decimal("0.2"):
+            flags.append(
+                {
+                    "code": QC_EPS_EARNINGS,
+                    "years": [row["year"]],
+                    "detail": (
+                        f"basic EPS {eps[0]} vs profit/shares {expected.quantize(Decimal('0.01'))} "
+                        f"({unit})"
+                    ),
+                }
+            )
+            other_unit = "pounds" if unit == "pence" else "pence"
+            other = _expected_eps(
+                profit[0],
+                profit[1].get("scale"),
+                shares[0],
+                shares[1].get("scale"),
+                other_unit,
+            )
+            if other is not None:
+                other_gap = abs(eps[0] - other) / max(abs(other), Decimal("0.01"))
+                if other_gap <= Decimal("0.2"):
+                    flags.append(
+                        {
+                            "code": QC_UNIT_SLIP,
+                            "years": [row["year"]],
+                            "detail": f"EPS matches {other_unit}, stored unit is {unit}",
+                        }
+                    )
+        if unit == "pounds" and abs(eps[0]) >= Decimal("20"):
+            flags.append(
+                {
+                    "code": QC_UNIT_SLIP,
+                    "years": [row["year"]],
+                    "detail": f"EPS {eps[0]} stored as pounds",
+                }
+            )
+        if unit == "pence" and abs(eps[0]) >= Decimal("5000"):
+            flags.append(
+                {
+                    "code": QC_UNIT_SLIP,
+                    "years": [row["year"]],
+                    "detail": f"EPS {eps[0]} stored as pence",
+                }
+            )
+    for filing in filings:
+        year = filing.get("fiscal_year")
+        fields = filing.get("fields") or {}
+        revenue = _decimal_field(fields, "revenue")
+        operating = _decimal_field(fields, "operating_profit")
+        if not (revenue and operating and year is not None):
+            continue
+        revenue_abs = _to_absolute(revenue[0], revenue[1].get("scale"))
+        operating_abs = _to_absolute(operating[0], operating[1].get("scale"))
+        if revenue_abs < operating_abs:
+            flags.append(
+                {
+                    "code": QC_REVENUE_PROFIT,
+                    "years": [int(year)],
+                    "detail": f"revenue {revenue[0]} below operating profit {operating[0]}",
+                }
+            )
+    return flags
+
+
+_FINANCIAL_NAME_RE = re.compile(
+    r"bank|insurance|assurance|asset management|investment trust|\breit\b|"
+    r"\blife\b|annuity|building society",
+    re.I,
+)
+_JUMP_EXPLAINED_RE = re.compile(
+    r"exceptional|discontinued|disposal|impairment|restat|demerger",
+    re.I,
+)
+_GATED_FIELDS = {
+    "revenue",
+    "operating_profit",
+    "profit_attributable_to_owners",
+    "basic_eps",
+    "weighted_average_basic_shares",
+    "net_cash_from_operating_activities",
+    "capital_expenditure",
+    "dividends_per_share",
+}
+GATE_DIGIT_COUNT = "digit_count"
+GATE_SIGN = "sign"
+GATE_EPS_DECIMAL = "eps_decimal"
+GATE_EPS_EARNINGS = "eps_versus_earnings"
+GATE_OPERATING_PROFIT = "operating_profit_above_revenue"
+GATE_SCALE_JUMP = "scale_jump"
+GATE_ROW_DECIMAL = "row_decimal"
+_GATE_REASONS = {
+    GATE_DIGIT_COUNT,
+    GATE_SIGN,
+    GATE_EPS_DECIMAL,
+    GATE_EPS_EARNINGS,
+    GATE_OPERATING_PROFIT,
+    GATE_SCALE_JUMP,
+    GATE_ROW_DECIMAL,
+}
+_ROW_AMOUNT_RE = re.compile(r"[(\[{]?-?\d[\d,]*(?:\.\d+)?[)\]}]?")
+
+
+def _valid_thousands(head: str) -> bool:
+    groups = head.split(",")
+    return (
+        len(groups) >= 2
+        and groups[0].isdigit()
+        and 1 <= len(groups[0]) <= 3
+        and all(len(group) == 3 and group.isdigit() for group in groups[1:])
+    )
+
+
+def _classify_row_amounts(line: str) -> list[tuple[Decimal, str]]:
+    """Amounts on a citation line as (absolute value, decimal|integer|invalid)."""
+    text = line.replace("{", "(").replace("}", ")").replace("[", "(").replace("]", ")")
+    found: list[tuple[Decimal, str]] = []
+    for match in _ROW_AMOUNT_RE.finditer(text):
+        token = match.group().strip("()[]{}")
+        if token.startswith("-"):
+            token = token[1:]
+        if not token or not token[0].isdigit():
+            continue
+        if "." in token:
+            head, _, frac = token.partition(".")
+            if not frac.isdigit() or ("," in head and not _valid_thousands(head)):
+                kind = "invalid"
+            else:
+                kind = "decimal"
+        elif "," in token:
+            kind = "integer" if _valid_thousands(token) else "invalid"
+        else:
+            kind = "integer"
+        bare = token.replace(",", "")
+        try:
+            found.append((abs(Decimal(bare)), kind))
+        except InvalidOperation:
+            continue
+    return found
+
+
+def row_decimal_conflict(value: Decimal, line: str) -> bool:
+    """True when the decimal on this value disagrees with the other amounts on its line.
+
+    ``64.7`` beside ``785 1,005 1,093 1,058`` is the digits of 647 with a point
+    inserted. ``(41)`` beside ``(1.2)`` is ``(4.1)`` with the point dropped.
+    Neither is rewritten; the caller leaves the value absent.
+    """
+    amounts = _classify_row_amounts(line)
+    magnitude = abs(value)
+    integral = value == value.to_integral_value()
+    if integral and Decimal("10") <= magnitude <= Decimal("99"):
+        for sibling, kind in amounts:
+            if kind != "decimal" or not (Decimal("0") < sibling < Decimal("100")):
+                continue
+            repaired = magnitude / Decimal("10")
+            if magnitude / sibling > Decimal("5") and max(repaired, sibling) / min(
+                repaired, sibling
+            ) <= Decimal("5"):
+                return True
+        return False
+    if integral:
+        return False
+    integers = [item for item, kind in amounts if kind == "integer" and item >= Decimal("100")]
+    if len(integers) < 2 or max(integers) / min(integers) > Decimal("5"):
+        return False
+    median = sorted(integers)[len(integers) // 2]
+    if median <= 0 or magnitude <= 0:
+        return False
+    if max(median, magnitude) / min(median, magnitude) <= Decimal("5"):
+        return False
+    stripped = Decimal(re.sub(r"\D", "", format(magnitude, "f")))
+    if stripped <= 0:
+        return False
+    return max(median, stripped) / min(median, stripped) <= Decimal("5")
+
+
+def is_financial_name(name: str) -> bool:
+    return bool(_FINANCIAL_NAME_RE.search(name or ""))
+
+
+def _citation_line(row: dict[str, Any]) -> str:
+    citation = row.get("citation") or {}
+    return str(citation.get("line") or "")
+
+
+def _citation_tokens(line: str) -> list[tuple[str, str]]:
+    """Number tokens as (digits, raw) after thousands commas are removed."""
+    text = line.replace("{", "(").replace("}", ")").replace("[", "(").replace("]", ")")
+    text = re.sub(r"(?<=\d),(?=\d)", "", text)
+    found: list[tuple[str, str]] = []
+    for match in re.finditer(r"\(?-?\d+(?:\.\d+)?\)?", text):
+        token = match.group()
+        found.append((re.sub(r"\D", "", token), token))
+    for match in re.finditer(r"\(?-?\d+\s\d(?!\d)\)?", text):
+        token = match.group()
+        found.append((re.sub(r"\D", "", token), token))
+    return found
+
+
+def _token_is_negative(token: str) -> bool:
+    return token.startswith("(") or token.startswith("-") or token.endswith(")")
+
+
+def _significant_digits(token: str) -> str:
+    """Digits with a trailing fractional zero removed. ``124.0`` and ``124`` agree."""
+    body = token.strip().replace(",", "")
+    body = body.strip("()[]{}")
+    if body.startswith("-"):
+        body = body[1:]
+    if re.fullmatch(r"\d+\s\d", body):
+        # ``1,764 1`` is ``1764.1`` once the thousands comma has been removed.
+        body = body.replace(" ", ".")
+    if "." in body:
+        head, _, frac = body.partition(".")
+        if head.isdigit() and frac.isdigit():
+            return head + frac.rstrip("0")
+    return re.sub(r"\D", "", body)
+
+
+def citation_supports(value: Decimal, line: str) -> tuple[bool, bool, bool]:
+    """Return (digits match a token, sign matches, a matching token has a decimal)."""
+    want = _significant_digits(format(abs(value), "f"))
+    matches = [
+        token for digits, token in _citation_tokens(line) if _significant_digits(token) == want
+    ]
+    if not matches:
+        return False, False, False
+    if value < 0:
+        sign_ok = any(_token_is_negative(token) for token in matches)
+    elif value > 0:
+        sign_ok = any(not _token_is_negative(token) for token in matches)
+    else:
+        sign_ok = True
+    has_decimal = any("." in token for token in matches)
+    return True, sign_ok, has_decimal
+
+
+def _restore_if_citation_supports(row: dict[str, Any]) -> None:
+    """Put back a value an earlier digit check rejected only because ``.0`` was trimmed."""
+    if row.get("value") not in (None, "") or row.get("absent_reason") != GATE_DIGIT_COUNT:
+        return
+    prior = row.get("nulled_from")
+    if prior in (None, ""):
+        return
+    try:
+        value = Decimal(str(prior))
+    except InvalidOperation:
+        return
+    digits_ok, sign_ok, _has_decimal = citation_supports(value, _citation_line(row))
+    if not (digits_ok and sign_ok):
+        return
+    row["value"] = str(prior)
+    row["absent_reason"] = None
+    row.pop("nulled_from", None)
+
+
+def _null_value(row: dict[str, Any], reason: str, counts: dict[str, int]) -> None:
+    if row.get("value") in (None, ""):
+        return
+    row["nulled_from"] = row.get("value")
+    row["value"] = None
+    row["absent_reason"] = reason
+    counts[reason] = counts.get(reason, 0) + 1
+
+
+def _field_rows(filings: list[dict[str, Any]], name: str) -> list[tuple[int, dict[str, Any]]]:
+    """Primary wins over a comparative for the same year."""
+    found: dict[int, dict[str, Any]] = {}
+    for filing in filings:
+        year = filing.get("fiscal_year")
+        row = (filing.get("fields") or {}).get(name)
+        if year is not None and isinstance(row, dict) and row.get("value") not in (None, ""):
+            found[int(year)] = row
+        comp = filing.get("comparative") or {}
+        comp_year = comp.get("fiscal_year")
+        comp_row = (comp.get("fields") or {}).get(name)
+        if (
+            comp_year is not None
+            and int(comp_year) not in found
+            and isinstance(comp_row, dict)
+            and comp_row.get("value") not in (None, "")
+        ):
+            found[int(comp_year)] = comp_row
+    return [(year, found[year]) for year in sorted(found)]
+
+
+def apply_value_gate(filings: list[dict[str, Any]], *, financial: bool = False) -> dict[str, Any]:
+    """Null stored values that fail a check. Nothing is replaced with a guess.
+
+    The seven hand-verified filings are not passed through here. Counts are the
+    values nulled by this call.
+    """
+    counts: dict[str, int] = {}
+    live: list[tuple[str, int, dict[str, Any]]] = []
+    for filing in filings:
+        blocks = [("primary", filing.get("fiscal_year"), filing.get("fields") or {})]
+        comp = filing.get("comparative") or {}
+        if comp:
+            blocks.append(("comparative", comp.get("fiscal_year"), comp.get("fields") or {}))
+        for _source, year, fields in blocks:
+            if not isinstance(fields, dict):
+                continue
+            for name, row in fields.items():
+                if name not in _GATED_FIELDS:
+                    continue
+                if isinstance(row, dict):
+                    _restore_if_citation_supports(row)
+                if isinstance(row, dict) and row.get("value") not in (None, ""):
+                    live.append((str(name), int(year) if year is not None else -1, row))
+
+    for name, _year, row in live:
+        if name == "capital_expenditure" and row.get("components"):
+            line = _citation_line(row)
+            components_ok = True
+            for component in row.get("components") or []:
+                try:
+                    component_value = Decimal(str(component.get("value")))
+                except InvalidOperation:
+                    components_ok = False
+                    break
+                if not citation_supports(component_value, line)[0]:
+                    components_ok = False
+                    break
+            if not components_ok:
+                _null_value(row, GATE_DIGIT_COUNT, counts)
+                continue
+            if row.get("scale") == "millions" and any(
+                row_decimal_conflict(Decimal(str(component.get("value"))), line)
+                for component in row.get("components") or []
+                if component.get("value") not in (None, "")
+            ):
+                _null_value(row, GATE_ROW_DECIMAL, counts)
+            continue
+        try:
+            value = Decimal(str(row.get("value")))
+        except InvalidOperation:
+            _null_value(row, GATE_DIGIT_COUNT, counts)
+            continue
+        digits_ok, sign_ok, has_decimal = citation_supports(value, _citation_line(row))
+        if not digits_ok:
+            _null_value(row, GATE_DIGIT_COUNT, counts)
+            continue
+        if not sign_ok:
+            _null_value(row, GATE_SIGN, counts)
+            continue
+        if (
+            row.get("scale") == "millions"
+            and name not in {"basic_eps", "weighted_average_basic_shares", "dividends_per_share"}
+            and row_decimal_conflict(value, _citation_line(row))
+        ):
+            _null_value(row, GATE_ROW_DECIMAL, counts)
+            continue
+        if (
+            name == "basic_eps"
+            and "." not in str(row.get("value"))
+            and abs(value) >= Decimal("10")
+            and not has_decimal
+        ):
+            _null_value(row, GATE_EPS_DECIMAL, counts)
+
+    if not financial:
+        for filing in filings:
+            fields = filing.get("fields") or {}
+            revenue = _decimal_field(fields, "revenue")
+            operating = _decimal_field(fields, "operating_profit")
+            if not (revenue and operating):
+                continue
+            if revenue[0] <= 0:
+                continue
+            revenue_abs = _to_absolute(revenue[0], revenue[1].get("scale"))
+            operating_abs = abs(_to_absolute(operating[0], operating[1].get("scale")))
+            if operating_abs > revenue_abs:
+                _null_value(operating[1], GATE_OPERATING_PROFIT, counts)
+
+    for filing in filings:
+        blocks = [filing.get("fields") or {}]
+        comp = filing.get("comparative") or {}
+        if comp.get("fields"):
+            blocks.append(comp["fields"])
+        for fields in blocks:
+            eps = _decimal_field(fields, "basic_eps")
+            profit = _decimal_field(fields, "profit_attributable_to_owners")
+            shares = _decimal_field(fields, "weighted_average_basic_shares")
+            if not (eps and profit and shares):
+                continue
+            gaps = _eps_gaps(
+                eps[0],
+                profit[0],
+                profit[1].get("scale"),
+                shares[0],
+                shares[1].get("scale"),
+                eps[1].get("unit"),
+            )
+            if gaps and min(gaps) > Decimal("0.15"):
+                _null_value(eps[1], GATE_EPS_EARNINGS, counts)
+
+    for name in (
+        "revenue",
+        "operating_profit",
+        "profit_attributable_to_owners",
+        "basic_eps",
+        "net_cash_from_operating_activities",
+        "capital_expenditure",
+    ):
+        rows = _field_rows(filings, name)
+        snapshot = []
+        for year, row in rows:
+            try:
+                snapshot.append(
+                    (
+                        year,
+                        row,
+                        Decimal(str(row["value"])),
+                        row.get("scale"),
+                        row.get("unit"),
+                    )
+                )
+            except InvalidOperation:
+                continue
+        for prev, curr in zip(snapshot, snapshot[1:], strict=False):
+            prev_year, prev, left_raw, left_scale, left_unit = prev
+            year, row, right_raw, right_scale, right_unit = curr
+            if year - prev_year != 1:
+                continue
+            try:
+                left = abs(_comparable(left_raw, left_scale, left_unit))
+                right = abs(_comparable(right_raw, right_scale, right_unit))
+            except InvalidOperation:
+                continue
+            if left <= Decimal("0.01") or right <= Decimal("0.01"):
+                continue
+            raw_left = abs(left_raw)
+            raw_right = abs(right_raw)
+            if raw_left <= Decimal("0.01") or raw_right <= Decimal("0.01"):
+                continue
+            raw_ratio = max(raw_left, raw_right) / min(raw_left, raw_right)
+            scaled_ratio = max(left, right) / min(left, right)
+            later_line = _citation_line(row)
+            # The two columns of one printed line are not an unexplained jump.
+            same_line = bool(later_line) and later_line == _citation_line(prev)
+            if (
+                raw_ratio <= Decimal("5")
+                and scaled_ratio > Decimal("5")
+                and left_scale != right_scale
+            ):
+                # The figures agree and the scale label does not. Drop the blank label.
+                if not right_scale and left_scale:
+                    _null_value(row, GATE_SCALE_JUMP, counts)
+                elif not left_scale and right_scale:
+                    _null_value(prev, GATE_SCALE_JUMP, counts)
+                elif not same_line:
+                    _null_value(row, GATE_SCALE_JUMP, counts)
+                continue
+            if same_line or scaled_ratio <= Decimal("5"):
+                continue
+            if _JUMP_EXPLAINED_RE.search(later_line):
+                continue
+            _null_value(row, GATE_SCALE_JUMP, counts)
+
+    # Count values that are absent because a gate check failed, including ones
+    # nulled on an earlier pass and left absent.
+    standing: dict[str, int] = {}
+    for filing in filings:
+        blocks = [filing.get("fields") or {}]
+        comp = filing.get("comparative") or {}
+        if comp.get("fields"):
+            blocks.append(comp["fields"])
+        for fields in blocks:
+            if not isinstance(fields, dict):
+                continue
+            for name, row in fields.items():
+                if name not in _GATED_FIELDS or not isinstance(row, dict):
+                    continue
+                reason = row.get("absent_reason")
+                if (
+                    row.get("value") in (None, "")
+                    and row.get("nulled_from") not in (None, "")
+                    and reason in _GATE_REASONS
+                ):
+                    standing[reason] = standing.get(reason, 0) + 1
+    return {"total": sum(standing.values()), "by_check": standing}
+
+
+def merge_ocr_readings(primary: dict[str, Any], secondary: dict[str, Any]) -> dict[str, Any]:
+    """Fill gaps from a second reading. Keep the longer digit string when one truncates the other.
+
+    Readings that disagree and neither is a truncated form of the other are
+    dropped. Nothing is invented.
+    """
+
+    def digits(value: object) -> str:
+        return re.sub(r"\D", "", str(value or ""))
+
+    def take(block_a: dict[str, Any] | None, block_b: dict[str, Any] | None) -> None:
+        if not isinstance(block_a, dict) or not isinstance(block_b, dict):
+            return
+        for name in _GATED_FIELDS:
+            left = block_a.get(name)
+            right = block_b.get(name)
+            if not isinstance(left, dict) or not isinstance(right, dict):
+                continue
+            av, bv = left.get("value"), right.get("value")
+            if av in (None, "") and bv not in (None, ""):
+                block_a[name] = right
+            elif av not in (None, "") and bv not in (None, "") and str(av) != str(bv):
+                da, db = digits(av), digits(bv)
+                if da and db and da != db and (da.endswith(db) or db.endswith(da)):
+                    block_a[name] = left if len(da) >= len(db) else right
+                else:
+                    block_a[name] = _empty_field(
+                        "rendered page and fax image disagree; value left absent"
+                    )
+
+    take(primary.get("fields"), secondary.get("fields"))
+    comp_a = primary.get("comparative") or {}
+    comp_b = secondary.get("comparative") or {}
+    if comp_a and comp_b and comp_a.get("fiscal_year") == comp_b.get("fiscal_year"):
+        take(comp_a.get("fields"), comp_b.get("fields"))
+    elif not comp_a and comp_b:
+        primary["comparative"] = comp_b
+    return primary
+
+
+def _comparable(value: Decimal, scale: str | None, unit: str | None) -> Decimal:
+    number = _to_absolute(value, scale)
+    if unit == "pence":
+        return number / Decimal("100")
+    return number
+
+
+def leaver_year_coverage(
+    filings: list[dict[str, Any]],
+    *,
+    first_year: int,
+    leaving_year: int,
+) -> dict[str, Any]:
+    """Years present, and whether every expected year has an EPS.
+
+    Expected years run from max(2012, first year in the FTSE 350 window) through
+    the leaving year. A missing year stays missing: nothing is carried forward.
+    """
+    start = max(2012, int(first_year))
+    expected = list(range(start, int(leaving_year) + 1))
+
+    def present(field_name: str) -> list[int]:
+        return [int(row["year"]) for row in years_with_field(filings, field_name)]
+
+    eps_years = present("basic_eps")
+    revenue_years = present("revenue")
+    cash_years = present("net_cash_from_operating_activities")
+    capex_years = present("capital_expenditure")
+    cash_and_capex = sorted(set(cash_years) & set(capex_years))
+    return {
+        "expected_years": expected,
+        "years_with_eps": eps_years,
+        "years_with_revenue": revenue_years,
+        "years_with_operating_cash_flow": cash_years,
+        "years_with_capex": capex_years,
+        "years_with_operating_cash_flow_and_capex": cash_and_capex,
+        "statements_every_year": bool(expected) and all(year in eps_years for year in expected),
+    }
+
+
+def summarise_leaver_coverage(name_rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Stable summary the replay bias counter can read."""
+    leavers = [row for row in name_rows if row.get("reason_class")]
+    summary: dict[str, Any] = {
+        "names": len(leavers),
+        "ch_applicable": 0,
+        "ch_not_applicable": 0,
+        "unresolved": 0,
+        "with_any_statement": 0,
+        "every_year": 0,
+        "by_reason_class": {},
+    }
+    for reason in ("takeover", "failure", "other"):
+        summary["by_reason_class"][reason] = {
+            "names": 0,
+            "ch_applicable": 0,
+            "with_any_statement": 0,
+            "every_year": 0,
+        }
+    for row in leavers:
+        reason = str(row.get("reason_class") or "other")
+        bucket = summary["by_reason_class"].setdefault(
+            reason,
+            {"names": 0, "ch_applicable": 0, "with_any_statement": 0, "every_year": 0},
+        )
+        bucket["names"] += 1
+        if row.get("ch_applicable") is False:
+            summary["ch_not_applicable"] += 1
+            continue
+        if row.get("company_number_status") == "unresolved" or row.get("ch_applicable") is not True:
+            summary["unresolved"] += 1
+            continue
+        summary["ch_applicable"] += 1
+        bucket["ch_applicable"] += 1
+        coverage = row.get("leaver_coverage") or {}
+        any_statement = bool(coverage.get("years_with_eps") or coverage.get("years_with_revenue"))
+        if any_statement:
+            summary["with_any_statement"] += 1
+            bucket["with_any_statement"] += 1
+        if coverage.get("statements_every_year") is True:
+            summary["every_year"] += 1
+            bucket["every_year"] += 1
+    return summary
+
+
 def ops_findings_from_ch_failed_name_statements(
     payload: dict[str, Any] | None,
 ) -> list[dict[str, Any]]:
@@ -1499,8 +2394,16 @@ def ops_findings_from_ch_failed_name_statements(
     generated = str(payload.get("generated_at") or "")[:10]
     summary = (
         f"Combined check A names with statements from 2013: {count} of {total} "
-        f"(bar {bar}). Generated {generated or 'unknown'}. Observe-only. See {RUNBOOK}."
+        f"(bar {bar}). Generated {generated or 'unknown'}."
     )
+    leaver = payload.get("leaver_coverage") or {}
+    if leaver:
+        summary += (
+            f" Leaver statements every expected year: {leaver.get('every_year')} of "
+            f"{leaver.get('ch_applicable')} Companies House-applicable leavers "
+            f"({leaver.get('with_any_statement')} with any statement year)."
+        )
+    summary += f" Observe-only. See {RUNBOOK}."
     return [
         {
             "severity": "info",
@@ -1629,18 +2532,20 @@ def _token_text(chars: list[_Char]) -> str:
     return "".join(out)
 
 
-def _page_image(doc: Any, index: int) -> Any:
+def _page_image(doc: Any, index: int, *, zoom: float = 2.2, prefer_embedded: bool = True) -> Any:
     from PIL import Image
 
     page = doc[index]
     images = page.get_images()
     text = (page.get_text("text") or "").strip()
-    if len(images) == 1 and len(text) < 40:
+    # The raw fax is higher resolution but Tesseract drops digits inside
+    # parentheses on it. Statement pages are rendered instead.
+    if prefer_embedded and len(images) == 1 and len(text) < 40:
         xref = images[0][0]
         info = doc.extract_image(xref)
         image = Image.open(__import__("io").BytesIO(info["image"]))
         return image.convert("L")
-    matrix = __import__("pymupdf").Matrix(2.2, 2.2)
+    matrix = __import__("pymupdf").Matrix(zoom, zoom)
     pix = page.get_pixmap(matrix=matrix, alpha=False)
     if pix.n == 1:
         return Image.frombytes("L", (pix.width, pix.height), pix.samples)
@@ -1778,11 +2683,37 @@ def _load_json(path: Path) -> Any | None:
         return None
 
 
+def _fast_statement_pages(headers: list[str]) -> list[int]:
+    """Income, cash flow, and one EPS note. Not every page that mentions them."""
+    chosen: list[int] = []
+    seen_income = seen_cash = seen_eps = False
+    income_at = None
+    for index, header in enumerate(headers):
+        kinds = _heading_kinds(str(header))
+        if "income" in kinds and not seen_income:
+            chosen.extend([index, index + 1])
+            seen_income = True
+            income_at = index
+        elif "cash" in kinds and not seen_cash:
+            chosen.extend([index, index + 1])
+            seen_cash = True
+        elif "eps_note" in kinds and seen_income and not seen_eps:
+            chosen.append(index)
+            seen_eps = True
+        if seen_income and seen_cash and seen_eps:
+            break
+        if seen_income and seen_cash and income_at is not None and index > income_at + 25:
+            break
+    return chosen
+
+
 def extract_statement_pages(
     pdf_path: Path,
     *,
     transaction_id: str,
     cache_dir: Path,
+    zoom: float = 2.2,
+    page_zoom: float | None = None,
 ) -> list[StatementPage]:
     """Text layer when present, otherwise OCR the statement and note pages."""
     import pymupdf
@@ -1813,27 +2744,91 @@ def extract_statement_pages(
                 )
             ]
         cache = _cache_dir(cache_dir, transaction_id)
-        header_path = cache_dir / "ocr-headers" / transaction_id / "headers.json"
+        statement_zoom = zoom if page_zoom is None else page_zoom
+        # Leaver statement pages are rendered at their own zoom. The 1.6 cache
+        # dropped digits inside parentheses, so it is not reused.
+        if statement_zoom == zoom:
+            page_cache = cache
+        else:
+            page_cache = cache_dir / f"ocr-v{CACHE_VERSION}-z{statement_zoom:.1f}" / transaction_id
+            page_cache.mkdir(parents=True, exist_ok=True)
+        header_label = "ocr-headers" if zoom == 2.2 else f"ocr-headers-z{zoom:.1f}"
+        header_path = cache_dir / header_label / transaction_id / "headers.json"
         header_path.parent.mkdir(parents=True, exist_ok=True)
         legacy_headers = cache_dir / "ocr-v1" / transaction_id / "headers.json"
         if not header_path.exists() and legacy_headers.exists():
             header_path.write_text(legacy_headers.read_text(encoding="utf-8"), encoding="utf-8")
         headers = _load_json(header_path)
-        if not isinstance(headers, list) or len(headers) != doc.page_count:
-            headers = []
-            for index in range(doc.page_count):
-                image = _page_image(doc, index)
-                lines = _ocr_image_lines(image, header_only=True)
-                headers.append("\n".join(lines))
-                if (index + 1) % 25 == 0:
-                    logger.info("headers %s %s/%s", transaction_id, index + 1, doc.page_count)
-            header_path.write_text(json.dumps(headers), encoding="utf-8")
-        chosen: list[int] = []
-        for index, header in enumerate(headers):
-            if _heading_kinds(str(header)):
-                chosen.append(index)
-                if index + 1 < doc.page_count:
-                    chosen.append(index + 1)
+        if not (isinstance(headers, list) and len(headers) == doc.page_count):
+            alt_headers = _load_json(cache_dir / "ocr-headers" / transaction_id / "headers.json")
+            if isinstance(alt_headers, list) and len(alt_headers) == doc.page_count:
+                headers = alt_headers
+        fast = zoom != 2.2
+        if fast and isinstance(headers, list) and len(headers) == doc.page_count:
+            chosen = _fast_statement_pages(headers)
+        elif fast:
+            chosen = []
+            seen_income = seen_cash = seen_eps = False
+            income_at = None
+            scanned: list[str] = []
+            limit = min(doc.page_count, 100)
+            for index in range(limit):
+                image = _page_image(doc, index, zoom=zoom)
+                header = "\n".join(_ocr_image_lines(image, header_only=True))
+                scanned.append(header)
+                kinds = _heading_kinds(header)
+                if "income" in kinds and not seen_income:
+                    chosen.extend([index, index + 1])
+                    seen_income = True
+                    income_at = index
+                elif "cash" in kinds and not seen_cash:
+                    chosen.extend([index, index + 1])
+                    seen_cash = True
+                elif "eps_note" in kinds and seen_income and not seen_eps:
+                    chosen.append(index)
+                    seen_eps = True
+                if seen_income and seen_cash and seen_eps:
+                    break
+                if seen_income and seen_cash and income_at is not None and index > income_at + 25:
+                    break
+            if not seen_income and doc.page_count > limit:
+                for index in range(max(limit, doc.page_count - 40), doc.page_count):
+                    image = _page_image(doc, index, zoom=zoom)
+                    header = "\n".join(_ocr_image_lines(image, header_only=True))
+                    kinds = _heading_kinds(header)
+                    if "income" in kinds and not seen_income:
+                        chosen.extend([index, index + 1])
+                        seen_income = True
+                    elif "cash" in kinds and not seen_cash:
+                        chosen.extend([index, index + 1])
+                        seen_cash = True
+                    elif "eps_note" in kinds and seen_income and not seen_eps:
+                        chosen.append(index)
+                        seen_eps = True
+                    if seen_income and seen_cash and seen_eps:
+                        break
+            logger.info(
+                "headers %s fast %s/%s",
+                transaction_id,
+                len(scanned),
+                doc.page_count,
+            )
+        else:
+            if not isinstance(headers, list) or len(headers) != doc.page_count:
+                headers = []
+                for index in range(doc.page_count):
+                    image = _page_image(doc, index, zoom=zoom)
+                    lines = _ocr_image_lines(image, header_only=True)
+                    headers.append("\n".join(lines))
+                    if (index + 1) % 25 == 0:
+                        logger.info("headers %s %s/%s", transaction_id, index + 1, doc.page_count)
+                header_path.write_text(json.dumps(headers), encoding="utf-8")
+            chosen = []
+            for index, header in enumerate(headers):
+                if _heading_kinds(str(header)):
+                    chosen.append(index)
+                    if index + 1 < doc.page_count:
+                        chosen.append(index + 1)
         # Keep order, drop duplicates.
         seen: set[int] = set()
         ordered = []
@@ -1843,22 +2838,40 @@ def extract_statement_pages(
                 ordered.append(index)
         pages: list[StatementPage] = []
         for index in ordered:
-            page_path = cache / f"p{index + 1}.json"
+            page_path = page_cache / f"p{index + 1}.json"
             cached = _load_json(page_path)
+            alt_lines: list[str] = []
             if isinstance(cached, dict) and isinstance(cached.get("lines"), list):
                 text = "\n".join(str(line) for line in cached["lines"])
                 method = str(cached.get("method") or "ocr")
+                if isinstance(cached.get("alt_lines"), list):
+                    alt_lines = [str(line) for line in cached["alt_lines"]]
             else:
-                image = _page_image(doc, index)
+                image = _page_image(doc, index, zoom=statement_zoom, prefer_embedded=False)
                 lines = _ocr_image_lines(image, header_only=False)
                 text = "\n".join(lines)
                 method = "ocr"
-                page_path.write_text(
-                    json.dumps({"method": method, "lines": lines}),
-                    encoding="utf-8",
-                )
+                cached = {"method": method, "lines": lines}
+                page_path.write_text(json.dumps(cached), encoding="utf-8")
                 logger.info("ocr %s page %s (%s lines)", transaction_id, index + 1, len(lines))
-            pages.append(StatementPage(page=index + 1, text=text, method=method))
+            if statement_zoom != zoom and not alt_lines and isinstance(cached, dict):
+                rendered = _page_image(doc, index, zoom=statement_zoom, prefer_embedded=False)
+                fax = _page_image(doc, index, zoom=statement_zoom, prefer_embedded=True)
+                if fax.size != rendered.size:
+                    alt_lines = _ocr_image_lines(fax, header_only=False)
+                    cached["alt_lines"] = alt_lines
+                    page_path.write_text(json.dumps(cached), encoding="utf-8")
+                    logger.info(
+                        "ocr fax %s page %s (%s lines)", transaction_id, index + 1, len(alt_lines)
+                    )
+            pages.append(
+                StatementPage(
+                    page=index + 1,
+                    text=text,
+                    method=method,
+                    alt_text="\n".join(alt_lines),
+                )
+            )
         return pages
     finally:
         doc.close()
@@ -2070,12 +3083,58 @@ def main(argv: list[str] | None = None) -> int:
         default=Path("docs/data/eodhd_coverage_check.json"),
         help="EODHD coverage report used only for its booleans and years.",
     )
+    parser.add_argument(
+        "--leavers",
+        action="store_true",
+        help="Extract FTSE 350 delisting leavers as well as the seven verified names.",
+    )
+    parser.add_argument(
+        "--leaver-list",
+        type=Path,
+        default=Path("docs/data/ftse350_leavers_2013_2025.json"),
+    )
+    parser.add_argument(
+        "--allow-ocr",
+        action="store_true",
+        help="OCR image-only leaver filings. One Tesseract process. Headers at zoom 1.6, statement pages at 2.2.",
+    )
+    parser.add_argument(
+        "--limit", type=int, default=None, help="Stop after this many pending leavers."
+    )
+    parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Re-extract --only keys even when they are already complete.",
+    )
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     api_key = companies_house_api_key()
     if not api_key:
         print("COMPANIES_HOUSE_API_KEY is not set", file=sys.stderr)
         return 2
+    if args.leavers:
+        from value_investor.ch_leaver_statements import run_leaver_extraction
+
+        payload = run_leaver_extraction(
+            leaver_path=args.leaver_list,
+            out_path=args.out,
+            api_key=api_key,
+            cache_dir=args.cache_dir,
+            allow_ocr=args.allow_ocr,
+            only=set(args.only) if args.only else None,
+            limit=args.limit,
+            eodhd_path=args.eodhd,
+            refresh=set(args.only) if args.refresh and args.only else None,
+        )
+        coverage = payload.get("leaver_coverage") or {}
+        logger.info(
+            "wrote %s leavers every_year=%s applicable=%s pending=%s",
+            args.out,
+            coverage.get("every_year"),
+            coverage.get("ch_applicable"),
+            (payload.get("leaver_cursor") or {}).get("pending_count"),
+        )
+        return 0
     payload = run_extraction(
         api_key=api_key,
         cache_dir=args.cache_dir,

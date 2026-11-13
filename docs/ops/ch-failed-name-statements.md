@@ -160,3 +160,186 @@ daily ops-monitor read is the scheduled trigger.
 - warn **Companies House failed-name statements store unreadable** when the JSON cannot be read
 
 `auto_fixable=false`. The finding does not rememo, ingest, or edit a book.
+When the store has `leaver_coverage`, the same info summary adds how many
+Companies House-applicable FTSE 350 delisting leavers have an EPS in every
+expected year.
+
+## FTSE 350 delisting leavers
+
+The same store now also covers companies that left the FTSE 350 between
+2013-01-01 and 2025-09-30 because they delisted (takeover, failure, or a move
+of listing). The list is `docs/data/ftse350_leavers_2013_2025.json`, built from
+the FTSE Russell historic addition and deletion logs (October 2026 PDFs). A
+quarterly deletion with an empty note is a demotion or promotion: the company
+stayed listed, so it is not on this list. Carillion, Thomas Cook, Debenhams and
+Sirius Minerals left the index that way and stayed in the original seven.
+Patisserie Holdings was never in the FTSE 350 change log.
+
+The seven hand-verified names are not extracted again. Their filings stay as
+they were. GKN and Sky are also leavers; their coverage is computed from those
+filings. Every other leaver is resolved to a UK plc company number (current or
+previous name contains PLC, every token of the listed name matches, and an AA
+filing falls in 2012..the leaving year). A Jersey, Guernsey, Isle of Man or
+other overseas issuer is `ch_applicable=false`. Two equally close plc matches
+stay `unresolved`. Nothing is guessed.
+
+Extraction prefers iXBRL (`method=ixbrl`, citation is the tag name and the raw
+figure, page is null). If the filing has no iXBRL revenue or EPS, the PDF text
+layer is read with the same statement parser as the seven names. Image-only
+PDFs are OCR'd one page-set at a time. Header scans use zoom 1.6. The
+statement pages themselves use zoom 2.2, because zoom 1.6 dropped digits inside
+parentheses. Three parallel Tesseract processes stalled on this host, so OCR
+stays at one process. Names are read in this order: failures, then applicable
+listing-moves (`other`), then takeovers by leaving date. Failures are first
+because a survivorship check is most exposed to them. Only fiscal years
+2012 through the leaving year are kept. A group filing whose period-end year is
+the leaving year is kept even when the period end is after the delisting day.
+A non-group filing made up after the delisting day is the post-takeover
+subsidiary and is skipped. A missing year is absent. PDFs stay in `/tmp/ch-pdfs`.
+
+The run is resumable. A name with `extraction_status` of `complete`,
+`preserved`, `not_applicable` or `unresolved` is skipped. `needs_ocr` is retried
+when `--allow-ocr` is set. The store is rewritten after each name.
+`leaver_cursor.pending_keys` lists what is left.
+
+```bash
+PYTHONPATH=$PWD/src python3 -m value_investor.ch_failed_name_statements \
+  --leavers \
+  --leaver-list docs/data/ftse350_leavers_2013_2025.json \
+  --out docs/data/ch_failed_name_statements.json \
+  --cache-dir /tmp/ch-pdfs
+```
+
+Add `--allow-ocr` for image-only filings. `--limit N` stops after N pending names.
+
+### Coverage fields
+
+These names are stable. The replay bias counter reads them from each leaver
+and from `leaver_coverage` on the store.
+
+Per name, `leaver_coverage`:
+
+| Field | Meaning |
+|-------|---------|
+| `expected_years` | From max(2012, first year in the FTSE 350 window) through the leaving year, inclusive. |
+| `years_with_eps` | Fiscal years with a basic EPS. A primary value wins over a comparative. |
+| `years_with_revenue` | Fiscal years with revenue. |
+| `years_with_operating_cash_flow` | Fiscal years with net cash from operating activities. |
+| `years_with_capex` | Fiscal years with capital expenditure. |
+| `years_with_operating_cash_flow_and_capex` | Years that have both. |
+| `statements_every_year` | True when every expected year has a basic EPS. A missing final year stays false. |
+
+`leaver_coverage` on the store counts leavers by `reason_class` (`takeover`,
+`failure`, `other`): `names`, `ch_applicable`, `with_any_statement` (any EPS or
+revenue year), and `every_year`. `ch_not_applicable` and `unresolved` are
+store-level counts. A name that moved listing (`other`) may still have EODHD
+statements; it is included because the listing move took it out of the FTSE 350.
+
+### Plausibility flags
+
+Flags are stored on the name as `plausibility_flags` and do not drop the value.
+
+| Code | Rule |
+|------|------|
+| `eps_jump` | Absolute basic EPS changes by more than 10x between adjacent years. |
+| `eps_inconsistent_with_earnings` | EPS differs by more than 20% from profit attributable divided by weighted shares, when all three exist. |
+| `revenue_below_operating_profit` | Revenue is below operating profit after scale. |
+| `pence_pound_unit_slip` | The EPS unit is pounds where the earnings identity fits pence (or the reverse), or the unit changes between years with a 50x–200x raw jump, or the stored EPS is at least 20 pounds or 5000 pence. |
+
+### Value gate
+
+`plausibility_flags` only mark a row. A second gate, `apply_value_gate`, sets the
+stored value to null when a check fails. It does not write a replacement. The
+seven hand-verified filings are not gated. Each other name records
+`values_nulled.by_check`.
+
+| Check | What is nulled |
+|-------|----------------|
+| `digit_count` | The citation line has no token with the same digits as the stored value. A glued `20,9030` is not read as 20,903.0. A trailing `.0` (`124.0` and `124`) is the same number. |
+| `sign` | The value's sign disagrees with the parenthesis or minus on that token. |
+| `eps_decimal` | Basic EPS is an integer of 10 or more and the citation token has no decimal point. `125` is not kept in place of `12.5`. |
+| `eps_versus_earnings` | EPS is more than 15% away from profit attributable divided by weighted shares, as pence and as pounds when the unit is blank. |
+| `operating_profit_above_revenue` | For a non-financial name, the absolute operating profit exceeds revenue. |
+| `scale_jump` | Adjacent years differ by more than 5x after scale, and the citation does not mention an exceptional item, disposal, impairment, restatement or demerger. A missing scale next to a stated scale, with the same raw magnitude, nulls the blank scale. The two columns of one printed line are not treated as a jump. |
+| `row_decimal` | On a millions row, a one-decimal value sits more than 5x away from two or more integer columns while the same digits without the point sit with those columns (`64.7` beside `785`, `1,005`). Or a two-digit integer sits beside a decimal sibling that only agrees once a point is put back (`(41)` beside `(1.2)`). The value is left null. A purchase total is left null when one of its lines fails, so property, plant and equipment is not stored as the whole of capital expenditure. |
+
+Revenue is taken only from a line whose label is revenue, turnover or sales.
+An adjustment, tax, excise or duty line is not revenue. Profit attributable is
+taken from the income statement. A statement of comprehensive income is ignored
+for that field.
+
+### Hand check of leaver years
+
+Seed `random.Random(20261112)` over `(key, year, field)` rows that have a
+citation page, drawn from names whose extraction had finished. Ten draws.
+The Carillion and Patisserie rows above are a separate check.
+
+| Name | Year | Field | PDF page | PDF | Stored | Result |
+|------|------|-------|----------|-----|--------|--------|
+| Essar Energy | 2012 | Basic EPS | 76 | (53.0) US cents | -53 | Match on the statutory loss. Unit not stored. |
+| Perform Group | 2013 | Profit attributable | 86 | 4,035 £'000 | 4035 thousands | Match |
+| TUI Travel | 2012 | Profit attributable | 82 | 138 £m | 138 millions | Match |
+| Essar Energy | 2014 | Profit attributable | 3 | (310.1) $m | -10.1 millions | Miss. OCR read (310.1) as (10.1). |
+| Essar Energy | 2012 | Revenue | 76 | 21,956.7 $m | 20903 millions | Miss. The stored line is the sales-tax adjustment 20,903.0, not revenue. |
+| Invensys | 2012 | Operating cash flow | 88 | 27 £m | 27 | Match. Cash generated from operations (76) was not used. |
+| Perform Group | 2014 | Revenue | 15 | 249,998 £'000 | 249998 thousands | Match |
+| TUI Travel | 2012 | Basic EPS | 82 | 12.5p | 125 | Miss. The decimal point was dropped. |
+| Invensys | 2014 | Profit attributable | 17 | 2,464 is total comprehensive income attributable to equity holders, not profit for the year | 2464 millions | Miss. The line is on the statement of comprehensive income. |
+| Invensys | 2012 | Revenue | 83 | 2,539 £m | 2539 | Match |
+
+Six of the ten stored values match the cited line. The four misses are a dropped decimal, a neighbouring adjustment row, a misread parenthesis, and the comprehensive-income attribution. Those four were re-read or left absent by the gate above. They are not in the later sample.
+
+Seed `random.Random(20261113)`, 20 rows, drawn only from values that still had a number after the gate (481 candidates). Compared with the PDF page named in the citation.
+
+| Name | Year | Field | PDF | Stored | Result |
+|------|------|-------|-----|--------|--------|
+| Pace | 2012 | Revenue | 2,403.4 £m | 2403.4 millions | Match |
+| Essar Energy | 2014 | Basic EPS | (23.8) US cents | -23.8 | Match |
+| Sophos | 2018 | Capital expenditure | (10.0) + (11.1) $m | -21.1 millions | Match |
+| Synergy Health | 2013 | Operating cash flow | 86,806 £'000 | 86806 thousands | Match |
+| Worldpay | 2016 | Operating profit | 276.5 £m | 276.5 millions | Match |
+| Asia Dragon Trust | 2017 | Operating cash flow | 6,490 £'000 | 6490 thousands | Match |
+| Dairy Crest | 2012 | Basic EPS | (12.8)p | -42.8 | Miss. OCR read the 1 as a 4. Value then set to null. |
+| Asia Dragon Trust | 2015 | Operating cash flow | 8,205 £'000 | 8205 thousands | Match |
+| Invensys | 2012 | Operating cash flow | 65 £m | 65 | Match |
+| Fenner | 2015 | Profit attributable | (10.5) £m | -10.5 millions | Match |
+| TUI Travel | 2011 | Revenue | 14,687 £m | 14687 | Match |
+| Fidessa | 2011 | Basic EPS | 82.2p | 82.2 | Match |
+| Synergy Health | 2012 | Operating cash flow | 69,383 £'000 | 69383 thousands | Match |
+| Domino Printing Sciences | 2014 | Operating cash flow | 52,401 £'000 | 52401 thousands | Match |
+| Perform Group | 2014 | Operating profit | 11,998 £'000 | 11998 thousands | Match |
+| Booker | 2017 | Operating cash flow | 195.7 £m on that line | 195.7 millions | Match |
+| Perform Group | 2013 | Revenue | 208,135 £'000 | 208135 thousands | Match |
+| Fidessa | 2013 | Operating cash flow | 67,966 £'000 | 67966 thousands | Match |
+| Spirit Pub | 2013 | Operating cash flow | 121.5 £m | 121.5 millions | Match |
+| Fidessa | 2017 | Profit attributable | 35,683 £'000 | 35683 thousands | Match |
+
+Nineteen matched. One did not. That is inside the bar of one miss in twenty, so the sample was not redrawn. The Dairy Crest figure is now null: the page prints (12.8) and the OCR token was (42.8). Nothing was substituted.
+
+### Coverage so far
+
+The leaver list has 155 names: 143 takeover, 4 failure, 8 other. Companies House resolution: 124 UK plcs, 16 not applicable (overseas issuer), 15 unresolved. No number was guessed. GKN is 04191106 and Sky is 02247735, the same numbers as the hand-verified filings.
+
+`leaver_coverage` after the OCR window (one Tesseract process, about four hours, a commit every ten names). "With any statement year" means a year with revenue or basic EPS. "Every year" means every expected year has basic EPS.
+
+| Reason | Names | CH applicable | With any statement year | Every year |
+|--------|------:|-------------:|------------------------:|-----------:|
+| Takeover | 143 | 117 | 34 | 1 |
+| Failure | 4 | 4 | 1 | 0 |
+| Other | 8 | 3 | 1 | 0 |
+| Total | 155 | 124 | 36 | 1 |
+
+The one failure with a revenue year is NMC Health (2015, 2017, 2018). Asia Dragon Trust and Perpetual Income & Growth have operating-cash years and no revenue or EPS, so they stay in the "no statement year" column. Finablr has no filled statement line. 52 takeover names are still on `leaver_cursor.pending_keys`, starting at SDL.
+
+The gate left 58 values null on 26 names, and the hand check left one more null: `scale_jump` 47, `digit_count` 6, `sign` 3, `row_decimal` 2, `hand_check` 1. Per-name totals are `values_nulled`. Cited OCR lines are about 80 KB of the store. The rest is the filing records, including empty fields for years not yet read. Page text is not stored, only the page number, method and statement kind.
+
+Image OCR is resumable. One Tesseract process scans headers at zoom 1.6 (at most the first 100 pages and the last 40) and OCRs the income page, the cash-flow page and one EPS note at zoom 2.2. A name already finished is skipped unless `--refresh --only <key>` is set.
+
+```bash
+PYTHONPATH=$PWD/src python3 -m value_investor.ch_failed_name_statements \
+  --leavers --allow-ocr \
+  --out docs/data/ch_failed_name_statements.json \
+  --cache-dir /tmp/ch-pdfs
+```
+
+`statements_every_year` is true only when every expected year has a basic EPS. A missing year stays missing. The committed store is the cursor after the four-hour window, not a finished coverage rate. Resume with the command above; it skips names that are already complete.
