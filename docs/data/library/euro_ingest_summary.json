@@ -1,19 +1,10 @@
 {
-  "run_at": "2026-11-13T13:21:57.164124+00:00",
+  "run_at": "2026-11-13T15:47:17.651221+00:00",
   "market_id": "euro_depth",
   "targets": [
-    "ESSITY-B.ST",
     "SHELL.AS"
   ],
   "target_details": [
-    {
-      "ticker": "ESSITY-B.ST",
-      "priority_score": 16.8632,
-      "filings_total": 24,
-      "filings_with_body": 23,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
-    },
     {
       "ticker": "SHELL.AS",
       "priority_score": 15.3209,
@@ -24,68 +15,6 @@
     }
   ],
   "results": [
-    {
-      "ticker": "ESSITY-B.ST",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 24,
-        "filings_with_body": 23,
-        "indexed_without_body": 1
-      },
-      "after": {
-        "filings_total": 24,
-        "filings_with_body": 23,
-        "indexed_without_body": 1
-      },
-      "improved": false,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 24,
-        "annual": 9,
-        "interim": 5,
-        "trading_update": 6,
-        "other": 4,
-        "with_body": 23,
-        "period_coverage": {
-          "annual": {
-            "total": 9,
-            "with_body": 8
-          },
-          "interim": {
-            "total": 5,
-            "with_body": 5
-          },
-          "trading_update": {
-            "total": 6,
-            "with_body": 6
-          },
-          "other": {
-            "total": 4,
-            "with_body": 4
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 23,
-        "with_body_after": 23,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 1,
-          "note": "merge_ir_allowlist_filings"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    },
     {
       "ticker": "SHELL.AS",
       "reason": "indexed_without_body",
@@ -165,7 +94,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-13T13:19:05.344901+00:00",
+    "snapshot_at": "2026-11-13T15:45:06.971531+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 41,
     "unmeasured_buy_tier": 0,
@@ -205,21 +134,20 @@
       "APAM.AS",
       "BAS.DE",
       "DQ7A.IR",
+      "ESSITY-B.ST",
       "EVN.VI",
       "UCB.BR",
       "WIE.VI"
     ],
-    "parked_count": 7,
+    "parked_count": 8,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
-      "ESSITY-B.ST"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-13T13:21:51.371492+00:00",
+    "snapshot_at": "2026-11-13T15:47:17.587925+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 41,
     "unmeasured_buy_tier": 0,
@@ -290,8 +218,8 @@
       "unknown_host": 2.0,
       "strong_buy": 1.0
     },
-    "forced_by_critical_path": true,
-    "max_runtime_seconds": 675.0,
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
     "prefer_tickers": [
       "ACKB.BR",
       "BAS.DE",
@@ -304,7 +232,7 @@
     ],
     "runtime_cutoff": false
   },
-  "maintenance_mode": false,
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
     "skipped": true,
@@ -313,7 +241,7 @@
   },
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-11-13T13:19:07.403037+00:00",
+    "assessed_at": "2026-11-13T15:45:09.642647+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -376,9 +304,9 @@
       "thin_need_bodies": 3
     }
   },
-  "used_seconds": 161.932811646,
-  "budget_seconds": 2700.0,
-  "leftover_seconds": 2538.067188354,
+  "used_seconds": 125.17392438200005,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3474.826075618,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -386,7 +314,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-11-13T13:21:51.384925+00:00",
+    "updated_at": "2026-11-13T15:47:17.607656+00:00",
     "exhausted": true,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
@@ -539,46 +467,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 67,
-    "candidate_count": 56,
-    "skipped_resolved_tickers": [
-      "ACKB.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "DQ7A.IR",
-      "EVN.VI",
-      "UCB.BR",
-      "WIE.VI",
-      "ESSITY-B.ST",
-      "LMT",
-      "APTV",
-      "DFS.L",
-      "MER.L",
-      "TPT.L",
-      "FOXT.L",
-      "ULTP.L",
-      "APTD.L",
-      "SU.TO",
-      "NTR.TO",
-      "GIB-A.TO",
-      "MFC.TO",
-      "BAS.DE",
-      "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "HNR1.DE",
-      "PST.MI",
-      "APAM.AS",
-      "0285.HK",
-      "0857.HK",
-      "0288.HK",
-      "0883.HK",
-      "2331.HK",
-      "EVN.VI",
-      "WIE.VI"
-    ],
-    "wait_behind_task_id": ""
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261113-04"
   }
 }
