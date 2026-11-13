@@ -287,13 +287,53 @@ The Carillion and Patisserie rows above are a separate check.
 | Invensys | 2014 | Profit attributable | 17 | 2,464 is total comprehensive income attributable to equity holders, not profit for the year | 2464 millions | Miss. The line is on the statement of comprehensive income. |
 | Invensys | 2012 | Revenue | 83 | 2,539 £m | 2539 | Match |
 
-Six of the ten stored values match the cited line. The four misses are a dropped decimal, a neighbouring adjustment row, a misread parenthesis, and the comprehensive-income attribution. Values were not dropped. Automatic plausibility flags on the nine newly finished names were 0 across 64 filled fields: the decimal drop had no unit, so the pence/pound check did not fire.
+Six of the ten stored values match the cited line. The four misses are a dropped decimal, a neighbouring adjustment row, a misread parenthesis, and the comprehensive-income attribution. Those four were re-read or left absent by the gate above. They are not in the later sample.
+
+Seed `random.Random(20261113)`, 20 rows, drawn only from values that still had a number after the gate (481 candidates). Compared with the PDF page named in the citation.
+
+| Name | Year | Field | PDF | Stored | Result |
+|------|------|-------|-----|--------|--------|
+| Pace | 2012 | Revenue | 2,403.4 £m | 2403.4 millions | Match |
+| Essar Energy | 2014 | Basic EPS | (23.8) US cents | -23.8 | Match |
+| Sophos | 2018 | Capital expenditure | (10.0) + (11.1) $m | -21.1 millions | Match |
+| Synergy Health | 2013 | Operating cash flow | 86,806 £'000 | 86806 thousands | Match |
+| Worldpay | 2016 | Operating profit | 276.5 £m | 276.5 millions | Match |
+| Asia Dragon Trust | 2017 | Operating cash flow | 6,490 £'000 | 6490 thousands | Match |
+| Dairy Crest | 2012 | Basic EPS | (12.8)p | -42.8 | Miss. OCR read the 1 as a 4. Value then set to null. |
+| Asia Dragon Trust | 2015 | Operating cash flow | 8,205 £'000 | 8205 thousands | Match |
+| Invensys | 2012 | Operating cash flow | 65 £m | 65 | Match |
+| Fenner | 2015 | Profit attributable | (10.5) £m | -10.5 millions | Match |
+| TUI Travel | 2011 | Revenue | 14,687 £m | 14687 | Match |
+| Fidessa | 2011 | Basic EPS | 82.2p | 82.2 | Match |
+| Synergy Health | 2012 | Operating cash flow | 69,383 £'000 | 69383 thousands | Match |
+| Domino Printing Sciences | 2014 | Operating cash flow | 52,401 £'000 | 52401 thousands | Match |
+| Perform Group | 2014 | Operating profit | 11,998 £'000 | 11998 thousands | Match |
+| Booker | 2017 | Operating cash flow | 195.7 £m on that line | 195.7 millions | Match |
+| Perform Group | 2013 | Revenue | 208,135 £'000 | 208135 thousands | Match |
+| Fidessa | 2013 | Operating cash flow | 67,966 £'000 | 67966 thousands | Match |
+| Spirit Pub | 2013 | Operating cash flow | 121.5 £m | 121.5 millions | Match |
+| Fidessa | 2017 | Profit attributable | 35,683 £'000 | 35683 thousands | Match |
+
+Nineteen matched. One did not. That is inside the bar of one miss in twenty, so the sample was not redrawn. The Dairy Crest figure is now null: the page prints (12.8) and the OCR token was (42.8). Nothing was substituted.
 
 ### Coverage so far
 
 The leaver list has 155 names: 143 takeover, 4 failure, 8 other. Companies House resolution: 124 UK plcs, 16 not applicable (overseas issuer), 15 unresolved. No number was guessed. GKN is 04191106 and Sky is 02247735, the same numbers as the hand-verified filings.
 
-The no-OCR pass found no iXBRL on these annual-report filings (the document is `application/pdf` only) and no text layer. Image OCR is resumable. `leaver_cursor.pending_keys` is the rest, in failure / other / takeover order. One Tesseract process scans headers at zoom 1.6 (at most the first 100 pages and the last 40) and OCRs the income page, the cash-flow page and one EPS note at zoom 2.2. A name already finished is skipped unless `--refresh --only <key>` is set. Re-running the six stored names that were not in the first hand check, plus the four names that hand check failed, uses that flag:
+`leaver_coverage` after the OCR window (one Tesseract process, about four hours, a commit every ten names). "With any statement year" means a year with revenue or basic EPS. "Every year" means every expected year has basic EPS.
+
+| Reason | Names | CH applicable | With any statement year | Every year |
+|--------|------:|-------------:|------------------------:|-----------:|
+| Takeover | 143 | 117 | 34 | 1 |
+| Failure | 4 | 4 | 1 | 0 |
+| Other | 8 | 3 | 1 | 0 |
+| Total | 155 | 124 | 36 | 1 |
+
+The one failure with a revenue year is NMC Health (2015, 2017, 2018). Asia Dragon Trust and Perpetual Income & Growth have operating-cash years and no revenue or EPS, so they stay in the "no statement year" column. Finablr has no filled statement line. 52 takeover names are still on `leaver_cursor.pending_keys`, starting at SDL.
+
+The gate left 58 values null on 26 names, and the hand check left one more null: `scale_jump` 47, `digit_count` 6, `sign` 3, `row_decimal` 2, `hand_check` 1. Per-name totals are `values_nulled`. Cited OCR lines are about 80 KB of the store. The rest is the filing records, including empty fields for years not yet read. Page text is not stored, only the page number, method and statement kind.
+
+Image OCR is resumable. One Tesseract process scans headers at zoom 1.6 (at most the first 100 pages and the last 40) and OCRs the income page, the cash-flow page and one EPS note at zoom 2.2. A name already finished is skipped unless `--refresh --only <key>` is set.
 
 ```bash
 PYTHONPATH=$PWD/src python3 -m value_investor.ch_failed_name_statements \
@@ -302,4 +342,4 @@ PYTHONPATH=$PWD/src python3 -m value_investor.ch_failed_name_statements \
   --cache-dir /tmp/ch-pdfs
 ```
 
-`statements_every_year` is true only when every expected year has a basic EPS. A missing year stays missing. The store field `leaver_coverage` is the summary by `reason_class`. Re-read it after the OCR run; the committed store is a partial cursor, not a finished coverage rate.
+`statements_every_year` is true only when every expected year has a basic EPS. A missing year stays missing. The committed store is the cursor after the four-hour window, not a finished coverage rate. Resume with the command above; it skips names that are already complete.
