@@ -823,9 +823,7 @@ def test_dropped_decimal_beside_a_real_one_is_left_absent() -> None:
 
     # William Hill 2013 comparative, and Britvic 2018. The point was dropped
     # on one column of a line that still has a decimal on the other.
-    assert lost_decimal_integer(
-        Decimal("2417"), "Net cash from operating activities 28 294.3 2417"
-    )
+    assert lost_decimal_integer(Decimal("2417"), "Net cash from operating activities 28 294.3 2417")
     assert lost_decimal_integer(
         Decimal("2068"), "Net cash flows from operating activities 2068 198.0"
     )

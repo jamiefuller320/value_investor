@@ -2226,10 +2226,7 @@ def apply_value_gate(filings: list[dict[str, Any]], *, financial: bool = False) 
             _null_value(row, GATE_SIGN, counts)
             continue
         if name in _MONEY_FIELDS and (
-            (
-                row.get("scale") == "millions"
-                and row_decimal_conflict(value, _citation_line(row))
-            )
+            (row.get("scale") == "millions" and row_decimal_conflict(value, _citation_line(row)))
             or lost_decimal_integer(value, _citation_line(row))
         ):
             _null_value(row, GATE_ROW_DECIMAL, counts)
@@ -2798,9 +2795,7 @@ def confirm_second_reading(
             image = _page_image(doc, page_number - 1, zoom=3.0, prefer_embedded=False)
         finally:
             doc.close()
-            page_lines[key] = _ocr_image_lines(
-                image, header_only=False, force_gap_repair=True
-            )
+            page_lines[key] = _ocr_image_lines(image, header_only=False, force_gap_repair=True)
         return page_lines[key]
 
     for name in names:
