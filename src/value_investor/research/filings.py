@@ -521,12 +521,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.repsol.com/content/dam/repsol-corporate/en_gb/accionistas-e-inversores/resultados/2026/2t/periodic-public-information-2q26.pdf",
     ],
     # ibex35 IWB blocker — eng-20261113-05: LOG.MC awaiting_periodic_report; ESEF packs
-    # period=other — logista.com/content/dam statutory consolidated annual + H1/Q3 interim PDFs.
+    # period=other — logista.com/content/dam FY26 consolidated annual + H1 interim PDFs.
     "LOG.MC": [
         "https://www.logista.com/content/dam/documents/logista-corporate/economic-financial-information/financial-reports/en/Consolidated%20Report%20-%20Logista%20(English%20Version)%20FY26.pdf",
-        "https://www.logista.com/content/dam/documents/logista-corporate/economic-financial-information/financial-reports/en/3.%20Consolidated%20Report%20-%20Logista%20%20FY25.pdf",
         "https://www.logista.com/content/dam/documents/logista-corporate/economic-financial-information/results-presentations/en/2026/Results%20Announcement%20H126.pdf",
-        "https://www.logista.com/content/dam/documents/logista-corporate/economic-financial-information/results-presentations/en/2026/Results%20Announcement%20Q3-2026%20VF.pdf",
     ],
     "MUV2.DE": [
         "https://www.munichre.com/content/dam/munichre/mrwebsiteslaunches/2025-annual-report/MunichRe-Group-Annual-Report-2025-en.pdf/_jcr_content/renditions/original./MunichRe-Group-Annual-Report-2025-en.pdf",
