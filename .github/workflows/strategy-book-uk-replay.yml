@@ -6,12 +6,13 @@ on:
   workflow_dispatch:
     inputs:
       phase:
-        description: fetch, development, or reveal
+        description: fetch, development, development-amendment, or reveal
         required: true
         type: choice
         options:
           - fetch
           - development
+          - development-amendment
           - reveal
 
 permissions:
@@ -85,11 +86,12 @@ jobs:
           PHASE: ${{ inputs.phase }}
         run: |
           set -euo pipefail
-          phase="$PHASE"
-          if [ "$phase" = "development" ]; then
-            phase=develop
-          fi
-          ftse-strategy-book-uk-replay "$phase" --cache "$UK_REPLAY_CACHE"
+          case "$PHASE" in
+            development) set -- develop ;;
+            development-amendment) set -- develop --amend ;;
+            *) set -- "$PHASE" ;;
+          esac
+          ftse-strategy-book-uk-replay "$@" --cache "$UK_REPLAY_CACHE"
 
       - name: Encrypt resume cache
         if: always() && steps.secrets.outputs.ready == 'true'

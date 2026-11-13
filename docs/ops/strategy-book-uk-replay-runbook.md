@@ -92,9 +92,20 @@ ftse-strategy-book-uk-replay confirm-deleted
 ```
 
 `plan` does not call EODHD. `confirm-deleted` stamps `licensed_data.deleted_at`
-and removes the cache, including the resume cursor. A second `develop` after a
-committed development block is refused. That pass would be an amendment, and
-this runner does not rewrite the block.
+and removes the cache, including the resume cursor. A second plain `develop`
+after a committed development block is refused.
+
+## Amendments before the reveal
+
+Section 9: a bug fix is an amendment on the same registration id, and
+development is recomputed before the reveal. The fix lands with a change marker
+in `docs/data/strategy_book_uk_replay_registration.json` that has
+`recompute_development: true`. Then dispatch the workflow with phase
+`development-amendment` (`ftse-strategy-book-uk-replay develop --amend`). It
+refuses after the reveal, without a committed development block, or when every
+such marker is already logged. The store's `amendments` list keeps each
+marker, the time, and the superseded block's `computed_at`, sha256 and primary
+medians. While a marker is unlogged the ops-monitor finding warns.
 
 ## Memory and run time
 

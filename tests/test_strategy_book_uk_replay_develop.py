@@ -14,15 +14,22 @@ from _uk_replay_synthetic import _business_days, run_pipeline, synthetic_records
 from value_investor import strategy_book_uk_replay as uk
 from value_investor import strategy_book_uk_tape as tape
 
-# Digests of the pre-refactor runner (origin/main at development-date-v1) on
-# ``synthetic_records(shares_as_list=True)``. The old runner read shares only
-# from a list, so this fixture is the one it could rank.
-GOLDEN = {
+# Digests on ``synthetic_records(shares_as_list=True)``. The first set is the
+# pre-refactor runner (develop-scale-v1 matched it exactly). Marker
+# prior-year-visible-v1 changed the outputs on purpose; GOLDEN is after it.
+PRE_REFACTOR = {
     "assembled_meta": "bbc88349f8b21d9d67d2525c3b1fc4cf3bb2db8179179a57660bcc75108ea2c6",
     "specs_before_sector": "9029fc9d88bb241c642dd9f665a60d72d28106b5b8ccccff8a23b5bb710cc432",
     "specs_after_sector": "187be0e92168c1b99f56dbea3dd361268fb38080acb62405554839a0bfc29791",
     "results": "49f300c403076552dd5db4d9405f4cff4f7f603e0790ca9946ca228b7f8ffe76",
     "store": "ba85faec06f2e0860500041b860b729cabb33c06d750a5d53d4e3579af1b476a",
+}
+GOLDEN = {
+    "assembled_meta": "91654bc4d002f0fd3cbc60eaa182ccbbb6de95a5e539c444cb2a1c9a65d36e7f",
+    "specs_before_sector": "130e51b55577ae54926ac58da71915946a4be86ea1f8ce365cbec5ba322c7b98",
+    "specs_after_sector": "ec91afbc985da85ea0601f0214d6ee3a6fe47505c1ed9488082501cbd0a7e0e8",
+    "results": "9d86a4523efb7a2b413b38a3297bbae3268480fe7878c5e65dd6f3eb413da0f3",
+    "store": "4f61f0d2d6a7f83be7c6f08618050ea65e93f3cb101c94d5c22c1f837adb76e4",
 }
 
 
@@ -31,9 +38,10 @@ def _repo(tmp_path: Path) -> Path:
     return tmp_path
 
 
-def test_develop_outputs_match_pre_refactor_runner(tmp_path: Path) -> None:
+def test_develop_outputs_are_pinned(tmp_path: Path) -> None:
     out = run_pipeline(synthetic_records(shares_as_list=True), _repo(tmp_path))
     assert out == GOLDEN
+    assert all(out[key] != PRE_REFACTOR[key] for key in out)
 
 
 def test_dict_keyed_outstanding_shares_rank_like_a_list(tmp_path: Path) -> None:
@@ -242,3 +250,94 @@ def test_develop_refuses_an_empty_cache(tmp_path: Path, monkeypatch) -> None:
     with pytest.raises(uk.ReplayRefused, match="Re-run fetch"):
         uk.develop(repo_root=repo, client=object(), cache=cache)
     assert not (repo / uk.STORE_PATH).exists()
+
+
+def _annual(year: int, revenue: float) -> dict:
+    end = date(year, 12, 31)
+    return {
+        "year": year,
+        "period_end": end,
+        "visible_from": tape.first_visible_session(period_end=end, filing_date=None, annual=True),
+        "source": "primary",
+        "total_revenue": revenue,
+        "operating_income": revenue * 0.1,
+        "ebit": revenue * 0.1,
+        "eps": revenue / 100,
+        "eps_basis": "vendor_eps",
+    }
+
+
+def test_prior_year_needs_to_be_visible_not_fresh() -> None:
+    annual = [_annual(2014, 100.0), _annual(2015, 90.0)]
+    session = annual[1]["visible_from"] + timedelta(days=10)
+    assert tape.is_stale(session, annual[0]["period_end"])
+    verdict = tape.decline_verdict(annual, [], [], session)
+    assert verdict["revenue_evaluable"]
+    assert verdict["checks"]["revenue"]["change_pct"] == pytest.approx(-0.1)
+    assert "revenue_decline" in verdict["checks"]["hard_reasons"]
+    stale_latest = annual[1]["period_end"] + timedelta(days=457)
+    assert not tape.decline_verdict(annual, [], [], stale_latest)["revenue_evaluable"]
+
+
+def test_year_earlier_quarter_needs_to_be_visible_not_young() -> None:
+    quarterly = [
+        {"period_end": date(2014, 3, 31), "visible_from": date(2014, 7, 1), "total_revenue": 100.0},
+        {"period_end": date(2015, 3, 31), "visible_from": date(2015, 7, 1), "total_revenue": 90.0},
+    ]
+    session = date(2015, 7, 10)
+    assert (session - quarterly[0]["period_end"]).days > 460
+    verdict = tape.decline_verdict([], quarterly, [], session)
+    assert verdict["checks"]["interim_revenue"]["change_pct"] == pytest.approx(-0.1)
+    old = date(2016, 7, 10)
+    assert (
+        tape.decline_verdict([], quarterly, [], old)["checks"]["interim_revenue"]["change_pct"]
+        is None
+    )
+
+
+def _marker(repo: Path, marker_id: str, recompute: bool) -> None:
+    path = repo / uk.REGISTRATION_PATH
+    payload = json.loads(path.read_text()) if path.exists() else {"change_markers": []}
+    payload["change_markers"].append({"marker_id": marker_id, "recompute_development": recompute})
+    path.write_text(json.dumps(payload))
+
+
+def test_amend_recomputes_development_once_per_marker(tmp_path: Path) -> None:
+    repo = _repo(tmp_path)
+    records = synthetic_records(lse_names=4, xetra_names=0, shares_as_list=True)
+    fx = {day: 0.85 for day in _business_days(date(2011, 1, 3), date(2017, 1, 31))}
+    run = dict(records=records, eurgbp=fx, usdgbp=fx, ch_store={"names": []}, score=False)
+    _marker(repo, "m-old", recompute=False)
+    first = uk.develop(repo_root=repo, **run)
+    with pytest.raises(uk.ReplayRefused, match="amendment"):
+        uk.develop(repo_root=repo, **run)
+    with pytest.raises(uk.ReplayRefused, match="No unlogged change marker"):
+        uk.develop(repo_root=repo, amend=True, **run)
+    _marker(repo, "m-fix", recompute=True)
+    amended = uk.develop(repo_root=repo, amend=True, **run)
+    (row,) = amended["amendments"]
+    assert row["marker_ids"] == ["m-fix"]
+    superseded = row["superseded_development"]
+    assert superseded["computed_at"] == first["development"]["computed_at"]
+    assert len(superseded["sha256"]) == 64
+    with pytest.raises(uk.ReplayRefused, match="No unlogged change marker"):
+        uk.develop(repo_root=repo, amend=True, **run)
+
+
+def test_amend_needs_a_committed_development(tmp_path: Path) -> None:
+    repo = _repo(tmp_path)
+    _marker(repo, "m-fix", recompute=True)
+    with pytest.raises(uk.ReplayRefused, match="No committed development"):
+        uk.develop(repo_root=repo, records=[], amend=True)
+
+
+def test_ops_finding_warns_while_development_is_superseded(tmp_path: Path) -> None:
+    repo = _repo(tmp_path)
+    (repo / uk.STORE_PATH).write_text(
+        json.dumps({"phase": "development", "development": {"computed_at": "x"}})
+    )
+    _marker(repo, "m-old", recompute=False)
+    assert uk.findings(repo)[0]["severity"] == "info"
+    _marker(repo, "m-fix", recompute=True)
+    row = uk.findings(repo)[0]
+    assert row["severity"] == "warn" and "development-amendment" in row["summary"]

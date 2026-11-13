@@ -1285,18 +1285,18 @@ def _panel_rows(
                     usdgbp=usdgbp,
                 )
                 annual = row["annual"]
-                visible = [
+                filed = [
                     item
                     for item in annual
-                    if item.get("visible_from") is not None
-                    and item["visible_from"] <= day
-                    and not tape.is_stale(day, item.get("period_end"))
+                    if item.get("visible_from") is not None and item["visible_from"] <= day
                 ]
-                latest = max(visible, key=lambda item: item["year"]) if visible else None
+                # Staleness applies to the latest year; the prior year only has to be filed.
+                fresh = [item for item in filed if not tape.is_stale(day, item.get("period_end"))]
+                latest = max(fresh, key=lambda item: item["year"]) if fresh else None
                 prior = None
                 if latest is not None:
                     prior = next(
-                        (item for item in visible if int(item["year"]) == int(latest["year"]) - 1),
+                        (item for item in filed if int(item["year"]) == int(latest["year"]) - 1),
                         None,
                     )
                 fields = tape.panel_row_from_statement(
@@ -2065,14 +2065,28 @@ def develop(
     client: EodhdClient | None = None,
     cache: Path | None = None,
     score: bool = True,
+    amend: bool = False,
 ) -> dict[str, Any]:
-    """Walk development signal sessions and commit that block. Holdout stays null."""
+    """Walk development signal sessions and commit that block. Holdout stays null.
+
+    ``amend`` recomputes a committed development block before the reveal. It
+    needs a registration change marker with ``recompute_development`` true that
+    the store has not logged yet; the superseded block's summary is logged with it.
+    """
     previous = _read_store(repo_root)
     if previous and previous.get("reveal"):
         raise ReplayRefused("The holdout is already revealed. Development is not rewritten.")
-    if previous and previous.get("development") and not previous.get("reveal"):
+    pending: list[str] = []
+    if amend:
+        if not previous or not previous.get("development"):
+            raise ReplayRefused("No committed development block to amend. Run develop.")
+        pending = pending_amendments(repo_root, previous)
+        if not pending:
+            raise ReplayRefused("No unlogged change marker asks for development to be recomputed.")
+    elif previous and previous.get("development"):
         raise ReplayRefused(
-            "Development is already committed. A second pass is an amendment, not a silent rewrite."
+            "Development is already committed. A second pass is an amendment "
+            "(develop --amend with a logged change marker), not a silent rewrite."
         )
     if records is None:
         require_sealed(repo_root)
@@ -2132,8 +2146,43 @@ def develop(
         eurgbp=eurgbp,
         holdout=False,
     )
+    if amend and previous:
+        store["amendments"] = list(previous.get("amendments") or []) + [
+            _amendment_row(pending, previous["development"])
+        ]
     write_store(store, repo_root)
     return store
+
+
+def pending_amendments(repo_root: Path, store: Mapping[str, Any]) -> list[str]:
+    """Change markers that ask for a development recompute and are not logged yet."""
+    logged = {
+        marker for row in store.get("amendments") or [] for marker in (row.get("marker_ids") or [])
+    }
+    markers = load_registration(repo_root).get("change_markers") or []
+    return [
+        str(row["marker_id"])
+        for row in markers
+        if row.get("recompute_development") and row.get("marker_id") not in logged
+    ]
+
+
+def _amendment_row(marker_ids: Sequence[str], superseded: Mapping[str, Any]) -> dict[str, Any]:
+    primary = superseded.get("primary") or {}
+    return {
+        "marker_ids": list(marker_ids),
+        "at": _now(),
+        "phase": "development",
+        "superseded_development": {
+            "computed_at": superseded.get("computed_at"),
+            "sha256": _sha256_bytes(
+                json.dumps(superseded, sort_keys=True, separators=(",", ":")).encode("utf-8")
+            ),
+            "mature": primary.get("mature"),
+            "fair_cost_median": primary.get("fair_cost_median"),
+            "matched_excess_median": primary.get("matched_excess_median"),
+        },
+    }
 
 
 def reveal(
@@ -2396,17 +2445,25 @@ def findings(repo_root: Path = REPO_ROOT) -> list[dict[str, Any]]:
         ((payload.get("holdout") or {}).get("verdicts") or {}) if payload.get("holdout") else {}
     )
     verdict = verdicts.get("primary") or "not_revealed"
-    return [
-        {
-            "severity": "info",
-            "title": TITLE,
-            "summary": (
-                f"Phase {phase}. Verdict {verdict}. "
-                f"Markets {', '.join(payload.get('markets_scored') or []) or 'none'}. "
-                f"See {RUNBOOK_PATH}."
-            ),
-        }
-    ]
+    summary = (
+        f"Phase {phase}. Verdict {verdict}. "
+        f"Markets {', '.join(payload.get('markets_scored') or []) or 'none'}. "
+        f"See {RUNBOOK_PATH}."
+    )
+    severity = "info"
+    if payload.get("development") and not payload.get("reveal"):
+        try:
+            pending = pending_amendments(repo_root, payload)
+        except (OSError, ValueError, ReplayRefused):
+            pending = []
+        if pending:
+            severity = "warn"
+            summary = (
+                f"Development is superseded by {', '.join(pending)}: dispatch the workflow "
+                f"with phase development-amendment before reading it or stamping the reveal. "
+                + summary
+            )
+    return [{"severity": severity, "title": TITLE, "summary": summary}]
 
 
 def fetch_plan() -> dict[str, Any]:
@@ -2446,6 +2503,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     dev_p = sub.add_parser("develop", help="Development walk. Commits aggregates only.")
     dev_p.add_argument("--cache", type=Path)
+    dev_p.add_argument(
+        "--amend",
+        action="store_true",
+        help="Recompute committed development for an unlogged recompute_development marker.",
+    )
     rev_p = sub.add_parser("reveal", help="The single holdout write.")
     rev_p.add_argument("--cache", type=Path)
     sub.add_parser("status", help="Print the aggregate store status.")
@@ -2504,7 +2566,7 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 0
         if args.command == "develop":
-            develop(repo_root=args.repo, client=client, cache=args.cache)
+            develop(repo_root=args.repo, client=client, cache=args.cache, amend=args.amend)
             return 0
         reveal(repo_root=args.repo, client=client, cache=args.cache)
         return 0
