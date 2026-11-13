@@ -19,6 +19,7 @@ from value_investor.research.ingest_improvement import (
     IngestImprovementTarget,
     _filing_coverage,
     _has_outstanding_ingest_gap,
+    _intensive_refetch_before_source_ingest,
     _is_low_penetration_pack,
     _planned_sources_for_ticker,
     map_suggestion_to_source_ids,
@@ -1248,6 +1249,114 @@ def test_ingest_improvement_installs_fetch_cashflow_fallback():
     from value_investor import fetch as fetch_mod
 
     assert getattr(fetch_mod.fetch_company_metrics, "_cashflow_fallback_installed", False)
+
+
+def test_intensive_refetch_before_source_ingest_only_for_pins():
+    assert _intensive_refetch_before_source_ingest(
+        intensive_gap_closure=True,
+        require_outstanding_gaps=True,
+        pin_tickers=["ITV.L"],
+    )
+    assert not _intensive_refetch_before_source_ingest(
+        intensive_gap_closure=False,
+        require_outstanding_gaps=False,
+        pin_tickers=None,
+    )
+
+
+@patch("value_investor.research.ingest_improvement.fetch_filings_ir_allowlist", return_value=[])
+@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
+@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
+@patch("value_investor.research.ingest_improvement.ingest_research_sources")
+@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+@patch("value_investor.research.ingest_improvement.refetch_uk_primary_filing_bodies")
+def test_intensive_pin_refetches_before_slow_source_ingest(
+    mock_primary_refetch,
+    mock_bootstrap,
+    mock_sanitize,
+    mock_ingest_sources,
+    mock_alternate,
+    mock_deepen,
+    mock_ir_allowlist,
+    tmp_path: Path,
+):
+    """eng-20261113-02: gap-closure pins must refetch before CH/news deepen exhausts budget."""
+    import time
+
+    output_dir = tmp_path / "output"
+    sources = output_dir / "research" / "ITV.L" / "sources" / "filings"
+    sources.mkdir(parents=True)
+    (sources / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 2, "with_body": 1, "trading_update": 1},
+                "filings": [
+                    {
+                        "id": "7eca999143e33602",
+                        "source": "investegate_direct",
+                        "headline": "ITV plc Q3 Trading Update",
+                        "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-q3-trading-update-/9868646",
+                        "period": "trading_update",
+                        "has_body": False,
+                    },
+                    {
+                        "id": "29bdb56d3cedb539",
+                        "source": "investegate_direct",
+                        "headline": "ITV plc Full Year Results 2025",
+                        "has_body": True,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    call_order: list[str] = []
+
+    def _slow_ingest(**kwargs):  # noqa: ARG001
+        call_order.append("ingest_sources")
+        time.sleep(0.05)
+        return {"filings_summary": {"with_body": 1, "total": 2}}
+
+    def _refetch(*args, **kwargs):  # noqa: ARG001
+        call_order.append("primary_refetch")
+        return {
+            "companies_house": {"attempted": 0, "fetched": 0},
+            "rns": {
+                "investegate": {"attempted": 1, "fetched": 1, "with_body_after": 2},
+                "ticker_rns": {"attempted": 0, "fetched": 0, "with_body_after": 2},
+                "attempted": 1,
+                "fetched": 1,
+                "with_body_before": 1,
+                "with_body_after": 2,
+            },
+            "residual": {"attempted": 0, "fetched": 0},
+            "attempted": 1,
+            "fetched": 1,
+            "with_body_before": 1,
+            "with_body_after": 2,
+        }
+
+    mock_ingest_sources.side_effect = _slow_ingest
+    mock_primary_refetch.side_effect = _refetch
+    mock_alternate.return_value = {"fetched": 0}
+    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
+
+    summary = run_ingest_improvement_pass(
+        reports=[_report("ITV.L", "ITV plc")],
+        output_dir=output_dir,
+        market="ftse350",
+        max_targets=1,
+        suggestions_path=tmp_path / "missing.json",
+        require_outstanding_gaps=True,
+        pin_tickers=["ITV.L"],
+        intensive_gap_closure=True,
+        discovery_scan=False,
+    )
+
+    assert call_order.index("primary_refetch") < call_order.index("ingest_sources")
+    assert summary.results[0]["investegate_refetch"]["attempted"] == 1
+    assert summary.results[0]["investegate_refetch"]["fetched"] == 1
 
 
 @patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
