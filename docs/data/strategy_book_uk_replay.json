@@ -6,8 +6,16 @@
   "statement_basis": "eodhd_annual",
   "data_quality_basis": "three_fields",
   "sector_label_basis": "eodhd_general_current",
-  "universe_basis": {},
-  "markets_scored": [],
+  "universe_basis": {
+    "cac40": "pa_operating_cap_rank_1_40",
+    "dax": "xetra_operating_cap_rank_1_40",
+    "ftse350": "lse_operating_cap_rank_1_350"
+  },
+  "markets_scored": [
+    "cac40",
+    "dax",
+    "ftse350"
+  ],
   "europe_not_fetched": false,
   "labels": {
     "f9_status": "f9_unverified",
@@ -29,31 +37,2210 @@
       "trend_not_falling"
     ]
   },
-  "phase": "fetch",
-  "status": "complete",
-  "development": null,
+  "phase": "development",
+  "status": "development_committed",
+  "development": {
+    "computed_at": "2026-11-13T15:04:55+00:00",
+    "signal_window": {
+      "first": "2013-01-01",
+      "last": "2018-12-31"
+    },
+    "interval_label": "development_descriptive",
+    "counts": {
+      "episodes": 203,
+      "mature_episodes": 203,
+      "entry_weeks": 90,
+      "by_market": {
+        "ftse350": 161,
+        "dax": 20,
+        "cac40": 22
+      },
+      "by_exit_reason": {
+        "fail_to_launch": 71,
+        "floor_exit": 50,
+        "thesis_break": 39,
+        "review_insufficient_data": 43
+      },
+      "shadows": {
+        "decline_rejected_shadow": 532,
+        "sector_rejected_shadow": 85
+      },
+      "controls": {
+        "buy_on_signal": 518,
+        "leave_tier": 203
+      },
+      "alternative": 240,
+      "hl_basis": {
+        "high_low": 203
+      },
+      "sector_basis": {
+        "price_only": 179,
+        "price_and_decline": 24
+      },
+      "basket_fallback": 0,
+      "f9_unverified": 203,
+      "research_absent": 0,
+      "delisted": 0,
+      "delisted_before_fill": 0
+    },
+    "primary": {
+      "mature": 203,
+      "entry_weeks": 90,
+      "fair_cost_median": 0.03380843410643803,
+      "fair_cost_mean": 0.03665348707484844,
+      "matched_excess_median": 0.004566824609402609,
+      "matched_excess_mean": 0.009655367527593474,
+      "entry_week_standard_error": 0.010758063812670221,
+      "share_above_zero": 0.5566502463054187,
+      "interval": {
+        "coverage": 0.9,
+        "low": -0.0009894233324542132,
+        "high": 0.016975531526877176
+      },
+      "companion": {
+        "statistic": "fair_cost_median",
+        "label": "descriptive_not_a_test",
+        "mature": 203,
+        "interval": {
+          "coverage": 0.9,
+          "low": 0.014273960702835323,
+          "high": 0.043513459094064295
+        }
+      }
+    },
+    "by_market": {
+      "ftse350": {
+        "mature": 161,
+        "fair_cost_median": 0.03097137667101674,
+        "matched_excess_median": 0.003545767756555171,
+        "launch_share": 0.4906832298136646
+      },
+      "dax": {
+        "mature": 20,
+        "fair_cost_median": 0.05361100217227849,
+        "matched_excess_median": 0.006574888876829027,
+        "launch_share": 0.5
+      },
+      "cac40": {
+        "mature": 22,
+        "fair_cost_median": 0.06024196918279451,
+        "matched_excess_median": 0.029732746500231996,
+        "launch_share": 0.45454545454545453
+      }
+    },
+    "paired_exits": {
+      "draft_v0_exit": {
+        "column": "draft_v0_exit",
+        "n": 203,
+        "entry_weeks": 91,
+        "mean_difference": 0.020038537304941394,
+        "median_difference": 0.012441764621559548,
+        "standard_error": 0.00891351299605486,
+        "share_primary_better": 0.5467980295566502,
+        "pairing": "same_entries"
+      },
+      "ladder_no_deadline": {
+        "column": "ladder_no_deadline",
+        "n": 203,
+        "entry_weeks": 91,
+        "mean_difference": -0.0009292729933979936,
+        "median_difference": 0.0,
+        "standard_error": 0.003339890344236095,
+        "share_primary_better": 0.14285714285714285,
+        "pairing": "same_entries"
+      }
+    },
+    "unpaired_columns": {
+      "decline_rejected_shadow": {
+        "column": "decline_rejected_shadow",
+        "count": 532,
+        "entry_weeks": 183,
+        "mean_difference_vs_primary": -0.038035505876636275,
+        "standard_error": 0.012094368757761707,
+        "pairing": "unpaired"
+      },
+      "sector_rejected_shadow": {
+        "column": "sector_rejected_shadow",
+        "count": 85,
+        "entry_weeks": 42,
+        "mean_difference_vs_primary": -0.035791430646404575,
+        "standard_error": 0.01271503572056682,
+        "pairing": "unpaired"
+      },
+      "buy_on_signal": {
+        "column": "buy_on_signal",
+        "count": 518,
+        "entry_weeks": 53,
+        "mean_difference_vs_primary": 0.003051085981117495,
+        "standard_error": 0.016731351428130394,
+        "pairing": "unpaired"
+      },
+      "leave_tier": {
+        "column": "leave_tier",
+        "count": 203,
+        "entry_weeks": 90,
+        "mean_difference_vs_primary": 6.0934208019147595,
+        "standard_error": 3.741334334460854,
+        "pairing": "unpaired"
+      },
+      "alternative": {
+        "column": "alternative",
+        "count": 240,
+        "entry_weeks": 94,
+        "mean_difference_vs_primary": -0.005415128927451315,
+        "standard_error": 0.016978489789816427,
+        "pairing": "unpaired"
+      }
+    },
+    "bench": {
+      "deep_dip": {
+        "kept": 69,
+        "mature": 203,
+        "kept_share": 0.3399014778325123,
+        "mean_difference": 0.007499668238276559,
+        "interval": {
+          "coverage": 0.9,
+          "low": -0.01969872630350226,
+          "high": 0.038083037474726966
+        },
+        "verdict": null
+      },
+      "revenue_growing": {
+        "kept": 167,
+        "mature": 203,
+        "kept_share": 0.8226600985221675,
+        "mean_difference": 0.0017313864201065274,
+        "interval": {
+          "coverage": 0.9,
+          "low": -0.004984692434935341,
+          "high": 0.007313808727020441
+        },
+        "verdict": null
+      },
+      "trend_not_falling": {
+        "kept": 154,
+        "mature": 203,
+        "kept_share": 0.7586206896551724,
+        "mean_difference": -0.009611196016718428,
+        "interval": {
+          "coverage": 0.9,
+          "low": -0.021313819195975754,
+          "high": 0.0006373591186355864
+        },
+        "verdict": null
+      }
+    },
+    "selection": {
+      "features": {
+        "composite_score": {
+          "present": 203,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 41,
+              "median_fair_cost": 0.03097137667101674
+            },
+            {
+              "fifth": 2,
+              "count": 41,
+              "median_fair_cost": 0.043513459094064295
+            },
+            {
+              "fifth": 3,
+              "count": 40,
+              "median_fair_cost": 0.03384987679461011
+            },
+            {
+              "fifth": 4,
+              "count": 41,
+              "median_fair_cost": 0.06582108947112425
+            },
+            {
+              "fifth": 5,
+              "count": 40,
+              "median_fair_cost": 0.012839785049639733
+            }
+          ]
+        },
+        "signal_rank": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "weeks_at_signal": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "conviction_score": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "models_passed": {
+          "present": 203,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 41,
+              "median_fair_cost": 0.006146718170671643
+            },
+            {
+              "fifth": 2,
+              "count": 41,
+              "median_fair_cost": 0.03401367781155013
+            },
+            {
+              "fifth": 3,
+              "count": 40,
+              "median_fair_cost": 0.031819697524013424
+            },
+            {
+              "fifth": 4,
+              "count": 41,
+              "median_fair_cost": 0.043248221359073975
+            },
+            {
+              "fifth": 5,
+              "count": 40,
+              "median_fair_cost": 0.026534770962359625
+            }
+          ]
+        },
+        "data_quality_score": {
+          "present": 203,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 41,
+              "median_fair_cost": 0.025090914181193972
+            },
+            {
+              "fifth": 2,
+              "count": 41,
+              "median_fair_cost": 0.0467936031019472
+            },
+            {
+              "fifth": 3,
+              "count": 40,
+              "median_fair_cost": 0.03624691480406956
+            },
+            {
+              "fifth": 4,
+              "count": 41,
+              "median_fair_cost": 0.03401367781155013
+            },
+            {
+              "fifth": 5,
+              "count": 40,
+              "median_fair_cost": 0.010195139898369569
+            }
+          ]
+        },
+        "fcf_yield": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "ev_ebit": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "earnings_yield_pe": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "roic_proxy": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "profit_margins": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "debt_to_equity": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "revenue_growth": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "earnings_growth": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "market_cap": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "vol_60": {
+          "present": 196,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 40,
+              "median_fair_cost": 0.010791506825507172
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": 0.0489989786524408
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.04288714149842094
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.03701336898395719
+            },
+            {
+              "fifth": 5,
+              "count": 39,
+              "median_fair_cost": 0.023812233650199636
+            }
+          ]
+        },
+        "close_vs_sma200": {
+          "present": 194,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 39,
+              "median_fair_cost": 0.058422698132490965
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": 0.03266801837701011
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.03372894825837009
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.03548046062418193
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.016607082970413304
+            }
+          ]
+        },
+        "fall_from_high_252": {
+          "present": 190,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 38,
+              "median_fair_cost": 0.03489945964340286
+            },
+            {
+              "fifth": 2,
+              "count": 38,
+              "median_fair_cost": 0.026534770962359625
+            },
+            {
+              "fifth": 3,
+              "count": 38,
+              "median_fair_cost": 0.04612360000575739
+            },
+            {
+              "fifth": 4,
+              "count": 38,
+              "median_fair_cost": 0.036200094065158284
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.025293895901152667
+            }
+          ]
+        },
+        "return_126": {
+          "present": 195,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 39,
+              "median_fair_cost": 0.0467936031019472
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": 0.03457924152652853
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.03372894825837009
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.03123218874999207
+            },
+            {
+              "fifth": 5,
+              "count": 39,
+              "median_fair_cost": 0.029257308274519615
+            }
+          ]
+        },
+        "range_pos_126": {
+          "present": 194,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 39,
+              "median_fair_cost": 0.06844857976179824
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": 0.03701336898395719
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.024745532601181456
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.03123218874999207
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.0016775916048473762
+            }
+          ]
+        },
+        "return_20": {
+          "present": 201,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 41,
+              "median_fair_cost": 0.029257308274519615
+            },
+            {
+              "fifth": 2,
+              "count": 40,
+              "median_fair_cost": 0.06309611394370002
+            },
+            {
+              "fifth": 3,
+              "count": 40,
+              "median_fair_cost": 0.029646347137190783
+            },
+            {
+              "fifth": 4,
+              "count": 40,
+              "median_fair_cost": 0.03399237282748697
+            },
+            {
+              "fifth": 5,
+              "count": 40,
+              "median_fair_cost": 0.013807354445405987
+            }
+          ]
+        },
+        "rsi_14": {
+          "present": 203,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 41,
+              "median_fair_cost": 0.03123218874999207
+            },
+            {
+              "fifth": 2,
+              "count": 41,
+              "median_fair_cost": 0.042887195377920025
+            },
+            {
+              "fifth": 3,
+              "count": 40,
+              "median_fair_cost": 0.005609901424054545
+            },
+            {
+              "fifth": 4,
+              "count": 41,
+              "median_fair_cost": 0.03958098788411652
+            },
+            {
+              "fifth": 5,
+              "count": 40,
+              "median_fair_cost": 0.043006173818198996
+            }
+          ]
+        },
+        "memo_age_days": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "ch126_slope_pct_yr": {
+          "present": 195,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 39,
+              "median_fair_cost": 0.06582108947112425
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": 0.03457924152652853
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.03691972750613465
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.023812233650199636
+            },
+            {
+              "fifth": 5,
+              "count": 39,
+              "median_fair_cost": 0.020365888170871763
+            }
+          ]
+        },
+        "ch126_r2": {
+          "present": 195,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 39,
+              "median_fair_cost": 0.022207383969258535
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": 0.03691972750613465
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.0489989786524408
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.051172977054508906
+            },
+            {
+              "fifth": 5,
+              "count": 39,
+              "median_fair_cost": 0.008978521261865439
+            }
+          ]
+        },
+        "ch126_z": {
+          "present": 195,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 39,
+              "median_fair_cost": 0.03691972750613465
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": 0.029257308274519615
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.07030227683842233
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.03958098788411652
+            },
+            {
+              "fifth": 5,
+              "count": 39,
+              "median_fair_cost": 0.010482947106224053
+            }
+          ]
+        },
+        "ch126_lower": {
+          "present": 195,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 39,
+              "median_fair_cost": 0.03401367781155013
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": 0.03312051206269168
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.024742728730970557
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.024745532601181456
+            },
+            {
+              "fifth": 5,
+              "count": 39,
+              "median_fair_cost": 0.07487717419673473
+            }
+          ]
+        },
+        "ch126_upper": {
+          "present": 195,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 39,
+              "median_fair_cost": 0.03401367781155013
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": 0.03312051206269168
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.03266801837701011
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.024745532601181456
+            },
+            {
+              "fifth": 5,
+              "count": 39,
+              "median_fair_cost": 0.07487717419673473
+            }
+          ]
+        },
+        "ch252_slope_pct_yr": {
+          "present": 190,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 38,
+              "median_fair_cost": 0.03528486335344811
+            },
+            {
+              "fifth": 2,
+              "count": 38,
+              "median_fair_cost": 0.05502962374727377
+            },
+            {
+              "fifth": 3,
+              "count": 38,
+              "median_fair_cost": 0.01824368241845059
+            },
+            {
+              "fifth": 4,
+              "count": 38,
+              "median_fair_cost": 0.06680528468808528
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.026534770962359625
+            }
+          ]
+        },
+        "ch252_r2": {
+          "present": 190,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 38,
+              "median_fair_cost": 0.04233502547305774
+            },
+            {
+              "fifth": 2,
+              "count": 38,
+              "median_fair_cost": 0.02255056433922448
+            },
+            {
+              "fifth": 3,
+              "count": 38,
+              "median_fair_cost": 0.04742340879532531
+            },
+            {
+              "fifth": 4,
+              "count": 38,
+              "median_fair_cost": 0.05911168757014513
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.0220890609105357
+            }
+          ]
+        },
+        "ch252_z": {
+          "present": 190,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 38,
+              "median_fair_cost": 0.04625621887325255
+            },
+            {
+              "fifth": 2,
+              "count": 38,
+              "median_fair_cost": 0.036455106343251165
+            },
+            {
+              "fifth": 3,
+              "count": 38,
+              "median_fair_cost": 0.05360062514543956
+            },
+            {
+              "fifth": 4,
+              "count": 38,
+              "median_fair_cost": 0.010791506825507172
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.02414381925719273
+            }
+          ]
+        },
+        "ch252_lower": {
+          "present": 190,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 38,
+              "median_fair_cost": 0.03249252724128344
+            },
+            {
+              "fifth": 2,
+              "count": 38,
+              "median_fair_cost": 0.04021659330009947
+            },
+            {
+              "fifth": 3,
+              "count": 38,
+              "median_fair_cost": 0.02255056433922448
+            },
+            {
+              "fifth": 4,
+              "count": 38,
+              "median_fair_cost": 0.024278883125690546
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.07560059682747461
+            }
+          ]
+        },
+        "ch252_upper": {
+          "present": 190,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 38,
+              "median_fair_cost": 0.030114342472768178
+            },
+            {
+              "fifth": 2,
+              "count": 38,
+              "median_fair_cost": 0.0473432180742866
+            },
+            {
+              "fifth": 3,
+              "count": 38,
+              "median_fair_cost": 0.027987458740481315
+            },
+            {
+              "fifth": 4,
+              "count": 38,
+              "median_fair_cost": 0.029237240429775775
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.07487715772789111
+            }
+          ]
+        },
+        "bb20_pct_b": {
+          "present": 201,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 41,
+              "median_fair_cost": 0.03123218874999207
+            },
+            {
+              "fifth": 2,
+              "count": 40,
+              "median_fair_cost": 0.04852607476542987
+            },
+            {
+              "fifth": 3,
+              "count": 40,
+              "median_fair_cost": 0.03502985107535523
+            },
+            {
+              "fifth": 4,
+              "count": 40,
+              "median_fair_cost": 0.011341747397827288
+            },
+            {
+              "fifth": 5,
+              "count": 40,
+              "median_fair_cost": 0.03888669731403111
+            }
+          ]
+        },
+        "bb20_width_pct": {
+          "present": 201,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 41,
+              "median_fair_cost": 0.03097137667101674
+            },
+            {
+              "fifth": 2,
+              "count": 40,
+              "median_fair_cost": 0.032176350406341876
+            },
+            {
+              "fifth": 3,
+              "count": 40,
+              "median_fair_cost": 0.07418687425453535
+            },
+            {
+              "fifth": 4,
+              "count": 40,
+              "median_fair_cost": 0.0031305143688227827
+            },
+            {
+              "fifth": 5,
+              "count": 40,
+              "median_fair_cost": 0.03391105595899408
+            }
+          ]
+        },
+        "dc20_pos": {
+          "present": 200,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 40,
+              "median_fair_cost": 0.0329057151382603
+            },
+            {
+              "fifth": 2,
+              "count": 40,
+              "median_fair_cost": 0.03724241788254052
+            },
+            {
+              "fifth": 3,
+              "count": 40,
+              "median_fair_cost": 0.034300486343436805
+            },
+            {
+              "fifth": 4,
+              "count": 40,
+              "median_fair_cost": 0.03387131303496011
+            },
+            {
+              "fifth": 5,
+              "count": 40,
+              "median_fair_cost": 0.036966548245045916
+            }
+          ]
+        },
+        "dc55_pos": {
+          "present": 195,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 39,
+              "median_fair_cost": 0.043248221359073975
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": 0.041782909447694534
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.03380843410643803
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.002810268755289839
+            },
+            {
+              "fifth": 5,
+              "count": 39,
+              "median_fair_cost": 0.0824163339280915
+            }
+          ]
+        },
+        "support_dist_pct": {
+          "present": 190,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 38,
+              "median_fair_cost": 0.007562619716268541
+            },
+            {
+              "fifth": 2,
+              "count": 38,
+              "median_fair_cost": 0.06073762694646562
+            },
+            {
+              "fifth": 3,
+              "count": 38,
+              "median_fair_cost": 0.02785705270099365
+            },
+            {
+              "fifth": 4,
+              "count": 38,
+              "median_fair_cost": 0.0329057151382603
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.05502962374727377
+            }
+          ]
+        },
+        "resistance_dist_pct": {
+          "present": 193,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 39,
+              "median_fair_cost": 0.058422698132490965
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": -0.005789813070569634
+            },
+            {
+              "fifth": 3,
+              "count": 38,
+              "median_fair_cost": 0.05183038162526971
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.0489989786524408
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.019857001499895832
+            }
+          ]
+        },
+        "sma50_dist_pct": {
+          "present": 198,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 40,
+              "median_fair_cost": 0.05654277351347786
+            },
+            {
+              "fifth": 2,
+              "count": 40,
+              "median_fair_cost": 0.016862026931523447
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.03958098788411652
+            },
+            {
+              "fifth": 4,
+              "count": 40,
+              "median_fair_cost": 0.027000018502745086
+            },
+            {
+              "fifth": 5,
+              "count": 39,
+              "median_fair_cost": 0.03123218874999207
+            }
+          ]
+        },
+        "sma200_dist_pct": {
+          "present": 194,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 39,
+              "median_fair_cost": 0.058422698132490965
+            },
+            {
+              "fifth": 2,
+              "count": 39,
+              "median_fair_cost": 0.03266801837701011
+            },
+            {
+              "fifth": 3,
+              "count": 39,
+              "median_fair_cost": 0.03372894825837009
+            },
+            {
+              "fifth": 4,
+              "count": 39,
+              "median_fair_cost": 0.03548046062418193
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.016607082970413304
+            }
+          ]
+        },
+        "hi252_dist_pct": {
+          "present": 190,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 38,
+              "median_fair_cost": 0.03489945964340286
+            },
+            {
+              "fifth": 2,
+              "count": 38,
+              "median_fair_cost": 0.026534770962359625
+            },
+            {
+              "fifth": 3,
+              "count": 38,
+              "median_fair_cost": 0.04612360000575739
+            },
+            {
+              "fifth": 4,
+              "count": 38,
+              "median_fair_cost": 0.036200094065158284
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.025293895901152667
+            }
+          ]
+        },
+        "lo252_dist_pct": {
+          "present": 190,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 38,
+              "median_fair_cost": 0.05260815061721908
+            },
+            {
+              "fifth": 2,
+              "count": 38,
+              "median_fair_cost": 0.03825035769512558
+            },
+            {
+              "fifth": 3,
+              "count": 38,
+              "median_fair_cost": 0.01824368241845059
+            },
+            {
+              "fifth": 4,
+              "count": 38,
+              "median_fair_cost": 0.038630949585312054
+            },
+            {
+              "fifth": 5,
+              "count": 38,
+              "median_fair_cost": 0.03118891016860565
+            }
+          ]
+        }
+      },
+      "rank": [
+        {
+          "rank": 1,
+          "feature": "support_dist_pct",
+          "top_minus_bottom": 0.04746700403100523
+        },
+        {
+          "rank": 2,
+          "feature": "ch252_upper",
+          "top_minus_bottom": 0.044762815255122934
+        },
+        {
+          "rank": 3,
+          "feature": "ch252_lower",
+          "top_minus_bottom": 0.04310806958619117
+        },
+        {
+          "rank": 4,
+          "feature": "ch126_lower",
+          "top_minus_bottom": 0.0408634963851846
+        },
+        {
+          "rank": 5,
+          "feature": "ch126_upper",
+          "top_minus_bottom": 0.0408634963851846
+        },
+        {
+          "rank": 6,
+          "feature": "dc55_pos",
+          "top_minus_bottom": 0.039168112569017526
+        },
+        {
+          "rank": 7,
+          "feature": "models_passed",
+          "top_minus_bottom": 0.020388052791687983
+        },
+        {
+          "rank": 8,
+          "feature": "vol_60",
+          "top_minus_bottom": 0.013020726824692463
+        },
+        {
+          "rank": 9,
+          "feature": "rsi_14",
+          "top_minus_bottom": 0.011773985068206927
+        },
+        {
+          "rank": 10,
+          "feature": "bb20_pct_b",
+          "top_minus_bottom": 0.007654508564039042
+        },
+        {
+          "rank": 11,
+          "feature": "dc20_pos",
+          "top_minus_bottom": 0.004060833106785615
+        },
+        {
+          "rank": 12,
+          "feature": "bb20_width_pct",
+          "top_minus_bottom": 0.0029396792879773405
+        },
+        {
+          "rank": 13,
+          "feature": "ch252_slope_pct_yr",
+          "top_minus_bottom": -0.008750092391088485
+        },
+        {
+          "rank": 14,
+          "feature": "fall_from_high_252",
+          "top_minus_bottom": -0.009605563742250193
+        },
+        {
+          "rank": 15,
+          "feature": "hi252_dist_pct",
+          "top_minus_bottom": -0.009605563742250193
+        },
+        {
+          "rank": 16,
+          "feature": "ch126_r2",
+          "top_minus_bottom": -0.013228862707393096
+        },
+        {
+          "rank": 17,
+          "feature": "data_quality_score",
+          "top_minus_bottom": -0.014895774282824403
+        },
+        {
+          "rank": 18,
+          "feature": "return_20",
+          "top_minus_bottom": -0.015449953829113627
+        },
+        {
+          "rank": 19,
+          "feature": "return_126",
+          "top_minus_bottom": -0.017536294827427582
+        },
+        {
+          "rank": 20,
+          "feature": "composite_score",
+          "top_minus_bottom": -0.018131591621377008
+        },
+        {
+          "rank": 21,
+          "feature": "ch252_r2",
+          "top_minus_bottom": -0.020245964562522038
+        },
+        {
+          "rank": 22,
+          "feature": "lo252_dist_pct",
+          "top_minus_bottom": -0.02141924044861343
+        },
+        {
+          "rank": 23,
+          "feature": "ch252_z",
+          "top_minus_bottom": -0.02211239961605982
+        },
+        {
+          "rank": 24,
+          "feature": "sma50_dist_pct",
+          "top_minus_bottom": -0.025310584763485793
+        },
+        {
+          "rank": 25,
+          "feature": "ch126_z",
+          "top_minus_bottom": -0.026436780399910594
+        },
+        {
+          "rank": 26,
+          "feature": "resistance_dist_pct",
+          "top_minus_bottom": -0.03856569663259513
+        },
+        {
+          "rank": 27,
+          "feature": "close_vs_sma200",
+          "top_minus_bottom": -0.04181561516207766
+        },
+        {
+          "rank": 28,
+          "feature": "sma200_dist_pct",
+          "top_minus_bottom": -0.04181561516207766
+        },
+        {
+          "rank": 29,
+          "feature": "ch126_slope_pct_yr",
+          "top_minus_bottom": -0.04545520130025249
+        },
+        {
+          "rank": 30,
+          "feature": "range_pos_126",
+          "top_minus_bottom": -0.06677098815695087
+        }
+      ]
+    },
+    "channels": {
+      "by_band_bucket": {
+        "None": {
+          "mature": 8,
+          "fair_cost_median": -0.0004390211799127309,
+          "matched_excess_median": -0.03079251397445156,
+          "launch_share": 0.75
+        },
+        "below_lower": {
+          "mature": 95,
+          "fair_cost_median": 0.03401367781155013,
+          "matched_excess_median": 0.011103659717426141,
+          "launch_share": 0.5157894736842106
+        },
+        "lower_half": {
+          "mature": 94,
+          "fair_cost_median": 0.03528486335344811,
+          "matched_excess_median": 0.0025533030101295325,
+          "launch_share": 0.425531914893617
+        },
+        "upper_half": {
+          "mature": 6,
+          "fair_cost_median": 0.054158711355924705,
+          "matched_excess_median": 0.06604310671328745,
+          "launch_share": 0.6666666666666666
+        }
+      },
+      "by_direction": {
+        "None": {
+          "mature": 8,
+          "fair_cost_median": -0.0004390211799127309,
+          "matched_excess_median": -0.03079251397445156,
+          "launch_share": 0.75
+        },
+        "falling": {
+          "mature": 41,
+          "fair_cost_median": 0.058422698132490965,
+          "matched_excess_median": 0.02640884462328312,
+          "launch_share": 0.6341463414634146
+        },
+        "rising": {
+          "mature": 83,
+          "fair_cost_median": 0.029257308274519615,
+          "matched_excess_median": 0.00047807066179174004,
+          "launch_share": 0.43373493975903615
+        },
+        "sideways": {
+          "mature": 71,
+          "fair_cost_median": 0.03457924152652853,
+          "matched_excess_median": 0.011740316062639783,
+          "launch_share": 0.43661971830985913
+        }
+      }
+    },
+    "regime": {
+      "above": {
+        "mature": 132,
+        "fair_cost_median": 0.03391105595899408,
+        "matched_excess_median": 0.003472677680373258,
+        "launch_share": 0.48484848484848486
+      },
+      "below": {
+        "mature": 71,
+        "fair_cost_median": 0.03372894825837009,
+        "matched_excess_median": 0.007088105970203703,
+        "launch_share": 0.49295774647887325
+      },
+      "regime_unknown": {
+        "mature": 0,
+        "fair_cost_median": null,
+        "matched_excess_median": null,
+        "launch_share": null
+      }
+    },
+    "tails": {
+      "count": 203,
+      "p5_fair_cost": -0.13072248307318213
+    },
+    "launch": {
+      "mature": 203,
+      "launched": 99,
+      "launch_share": 0.4876847290640394,
+      "median_sessions_to_launch": 24.0
+    },
+    "floor_exits": {
+      "count": 50,
+      "median_fair_cost": 0.05890896622886905,
+      "checkpoints": {
+        "0.1": 28,
+        "0.15": 12,
+        "0.3": 2,
+        "0.2": 6,
+        "0.25": 2
+      }
+    },
+    "fail_to_launch": {
+      "count": 71,
+      "median_fair_cost": -0.0358081033571293,
+      "share_below_fill": 0.6197183098591549
+    },
+    "thesis_breaks": {
+      "count": 39,
+      "by_reason": {
+        "declining": 29,
+        "headwind": 12
+      },
+      "median_fair_cost": 0.008409534092819252,
+      "launched": 6
+    },
+    "review_and_time_cap": {
+      "review_insufficient_data": {
+        "count": 43,
+        "median_fair_cost": 0.1362514150583814
+      },
+      "time_cap": {
+        "count": 0,
+        "median_fair_cost": null
+      },
+      "review_cap": {
+        "count": 0,
+        "median_fair_cost": null
+      }
+    },
+    "recovery_label": {
+      "count": 48,
+      "launch_share": 0.10416666666666667,
+      "median_fair_cost": -0.07787341360454281
+    },
+    "stress": {
+      "count": 203,
+      "median_fair_cost": -0.02069156589356197
+    },
+    "capital": {
+      "episodes": 203,
+      "capital_days_return": 0.181007739590169,
+      "recovery_hold_capital_share": 0.2733937616635564,
+      "slot_book": {
+        "trades_taken": 170,
+        "trades_skipped": 33,
+        "annualised_return": 0.04870710416672641,
+        "max_drawdown": -0.031604750368772416,
+        "random_order_median": 0.05013727847005689,
+        "random_orders": 15,
+        "seed": 20261104
+      }
+    },
+    "flags": {
+      "single_market_dependence": false
+    }
+  },
   "holdout": null,
   "reveal": null,
   "delisting_sensitivity": {
-    "development": null,
+    "development": {
+      "haircut_non_merger": null,
+      "signal_window": {
+        "first": "2013-01-01",
+        "last": "2018-12-31"
+      },
+      "primary": {
+        "mature": 203,
+        "fair_cost_median": 0.03380843410643803,
+        "matched_excess_median": 0.006047935812782811,
+        "interval": {
+          "coverage": 0.9,
+          "low": -0.0005025215754985712,
+          "high": 0.016975531526877176
+        }
+      },
+      "verdict": "inconclusive"
+    },
     "holdout": null
   },
   "regime_cuts": {},
   "bias": {
-    "universe_months": 0,
+    "universe_months": 60154,
     "revenue_not_evaluable_share": {
-      "still_listed": null,
-      "later_delisted": null,
+      "still_listed": 0.8934131736526946,
+      "later_delisted": 0.8018774365638465,
       "list_unknown": null
     },
-    "mean_cap_not_computable_share": null,
-    "mean_excluded_fund_or_trust": null,
-    "overlap_excluded": 0
+    "mean_cap_not_computable_share": 0.5117395511066172,
+    "mean_excluded_fund_or_trust": 39.51497005988024,
+    "overlap_excluded": 2250
   },
-  "probe": {},
-  "month_series": [],
+  "probe": {
+    "aggreko": {
+      "in_universe": true,
+      "had_exit": true,
+      "statement_every_year": false,
+      "price_ended_before_known_event": false
+    },
+    "carillion": {
+      "in_universe": false,
+      "had_exit": false,
+      "statement_every_year": false,
+      "price_ended_before_known_event": false
+    },
+    "debenhams": {
+      "in_universe": false,
+      "had_exit": false,
+      "statement_every_year": false,
+      "price_ended_before_known_event": false
+    },
+    "gkn": {
+      "in_universe": false,
+      "had_exit": false,
+      "statement_every_year": true,
+      "price_ended_before_known_event": false
+    },
+    "intu": {
+      "in_universe": false,
+      "had_exit": false,
+      "statement_every_year": false,
+      "price_ended_before_known_event": false
+    },
+    "morrison": {
+      "in_universe": true,
+      "had_exit": false,
+      "statement_every_year": true,
+      "price_ended_before_known_event": false
+    },
+    "patisserie_holdings": {
+      "in_universe": false,
+      "had_exit": false,
+      "statement_every_year": false,
+      "price_ended_before_known_event": true
+    },
+    "sirius": {
+      "in_universe": false,
+      "had_exit": false,
+      "statement_every_year": true,
+      "price_ended_before_known_event": false
+    },
+    "sky": {
+      "in_universe": false,
+      "had_exit": false,
+      "statement_every_year": true,
+      "price_ended_before_known_event": false
+    },
+    "thomas_cook": {
+      "in_universe": false,
+      "had_exit": false,
+      "statement_every_year": false,
+      "price_ended_before_known_event": false
+    },
+    "wirecard": {
+      "in_universe": false,
+      "had_exit": false,
+      "statement_every_year": false,
+      "price_ended_before_known_event": false
+    }
+  },
+  "month_series": [
+    {
+      "month": "2013-01",
+      "episodes": 0
+    },
+    {
+      "month": "2013-02",
+      "episodes": 9,
+      "fair_cost_median": 0.014273960702835323,
+      "matched_excess_median": -0.006182827400972878
+    },
+    {
+      "month": "2013-03",
+      "episodes": 4
+    },
+    {
+      "month": "2013-04",
+      "episodes": 0
+    },
+    {
+      "month": "2013-05",
+      "episodes": 2
+    },
+    {
+      "month": "2013-06",
+      "episodes": 1
+    },
+    {
+      "month": "2013-07",
+      "episodes": 0
+    },
+    {
+      "month": "2013-08",
+      "episodes": 4
+    },
+    {
+      "month": "2013-09",
+      "episodes": 1
+    },
+    {
+      "month": "2013-10",
+      "episodes": 0
+    },
+    {
+      "month": "2013-11",
+      "episodes": 2
+    },
+    {
+      "month": "2013-12",
+      "episodes": 0
+    },
+    {
+      "month": "2014-01",
+      "episodes": 18,
+      "fair_cost_median": 0.034074239500596015,
+      "matched_excess_median": 0.024211360860377406
+    },
+    {
+      "month": "2014-02",
+      "episodes": 14,
+      "fair_cost_median": 0.06921375449511263,
+      "matched_excess_median": 0.004325724316714224
+    },
+    {
+      "month": "2014-03",
+      "episodes": 6,
+      "fair_cost_median": 0.0721954095118717,
+      "matched_excess_median": 0.03330834787031485
+    },
+    {
+      "month": "2014-04",
+      "episodes": 4
+    },
+    {
+      "month": "2014-05",
+      "episodes": 1
+    },
+    {
+      "month": "2014-06",
+      "episodes": 2
+    },
+    {
+      "month": "2014-07",
+      "episodes": 0
+    },
+    {
+      "month": "2014-08",
+      "episodes": 1
+    },
+    {
+      "month": "2014-09",
+      "episodes": 0
+    },
+    {
+      "month": "2014-10",
+      "episodes": 3
+    },
+    {
+      "month": "2014-11",
+      "episodes": 0
+    },
+    {
+      "month": "2014-12",
+      "episodes": 0
+    },
+    {
+      "month": "2015-01",
+      "episodes": 2
+    },
+    {
+      "month": "2015-02",
+      "episodes": 0
+    },
+    {
+      "month": "2015-03",
+      "episodes": 0
+    },
+    {
+      "month": "2015-04",
+      "episodes": 3
+    },
+    {
+      "month": "2015-05",
+      "episodes": 1
+    },
+    {
+      "month": "2015-06",
+      "episodes": 0
+    },
+    {
+      "month": "2015-07",
+      "episodes": 1
+    },
+    {
+      "month": "2015-08",
+      "episodes": 4
+    },
+    {
+      "month": "2015-09",
+      "episodes": 0
+    },
+    {
+      "month": "2015-10",
+      "episodes": 0
+    },
+    {
+      "month": "2015-11",
+      "episodes": 0
+    },
+    {
+      "month": "2015-12",
+      "episodes": 1
+    },
+    {
+      "month": "2016-01",
+      "episodes": 22,
+      "fair_cost_median": 0.0005033292357895548,
+      "matched_excess_median": -0.005262329981095236
+    },
+    {
+      "month": "2016-02",
+      "episodes": 0
+    },
+    {
+      "month": "2016-03",
+      "episodes": 1
+    },
+    {
+      "month": "2016-04",
+      "episodes": 4
+    },
+    {
+      "month": "2016-05",
+      "episodes": 2
+    },
+    {
+      "month": "2016-06",
+      "episodes": 4
+    },
+    {
+      "month": "2016-07",
+      "episodes": 4
+    },
+    {
+      "month": "2016-08",
+      "episodes": 0
+    },
+    {
+      "month": "2016-09",
+      "episodes": 0
+    },
+    {
+      "month": "2016-10",
+      "episodes": 1
+    },
+    {
+      "month": "2016-11",
+      "episodes": 0
+    },
+    {
+      "month": "2016-12",
+      "episodes": 0
+    },
+    {
+      "month": "2017-01",
+      "episodes": 0
+    },
+    {
+      "month": "2017-02",
+      "episodes": 7,
+      "fair_cost_median": 0.20316488936283666,
+      "matched_excess_median": 0.16043289033714367
+    },
+    {
+      "month": "2017-03",
+      "episodes": 11,
+      "fair_cost_median": -0.0358081033571293,
+      "matched_excess_median": -0.0938564988834541
+    },
+    {
+      "month": "2017-04",
+      "episodes": 1
+    },
+    {
+      "month": "2017-05",
+      "episodes": 0
+    },
+    {
+      "month": "2017-06",
+      "episodes": 6,
+      "fair_cost_median": -0.07696342595768607,
+      "matched_excess_median": -0.10282702631689536
+    },
+    {
+      "month": "2017-07",
+      "episodes": 2
+    },
+    {
+      "month": "2017-08",
+      "episodes": 2
+    },
+    {
+      "month": "2017-09",
+      "episodes": 2
+    },
+    {
+      "month": "2017-10",
+      "episodes": 0
+    },
+    {
+      "month": "2017-11",
+      "episodes": 2
+    },
+    {
+      "month": "2017-12",
+      "episodes": 0
+    },
+    {
+      "month": "2018-01",
+      "episodes": 1
+    },
+    {
+      "month": "2018-02",
+      "episodes": 34,
+      "fair_cost_median": 0.03775592885303231,
+      "matched_excess_median": 0.00934875110917951
+    },
+    {
+      "month": "2018-03",
+      "episodes": 6,
+      "fair_cost_median": -0.009022280957812209,
+      "matched_excess_median": -0.0365225664427007
+    },
+    {
+      "month": "2018-04",
+      "episodes": 0
+    },
+    {
+      "month": "2018-05",
+      "episodes": 2
+    },
+    {
+      "month": "2018-06",
+      "episodes": 1
+    },
+    {
+      "month": "2018-07",
+      "episodes": 1
+    },
+    {
+      "month": "2018-08",
+      "episodes": 1
+    },
+    {
+      "month": "2018-09",
+      "episodes": 0
+    },
+    {
+      "month": "2018-10",
+      "episodes": 0
+    },
+    {
+      "month": "2018-11",
+      "episodes": 2
+    },
+    {
+      "month": "2018-12",
+      "episodes": 0
+    }
+  ],
   "licensed_data": {
-    "first_used_at": null,
+    "first_used_at": "2026-11-13T15:04:55+00:00",
     "deleted_at": null
   },
   "calls": [
