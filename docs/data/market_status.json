@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-13T16:43:50.250329+00:00",
+  "generated_at": "2026-11-13T18:10:52.702221+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -75,7 +75,7 @@
       "1": "dax",
       "2": "sp500"
     },
-    "equal_support_generated_at": "2026-11-13T15:17:00.009840+00:00"
+    "equal_support_generated_at": "2026-11-13T16:45:19.690298+00:00"
   },
   "markets": [
     {
@@ -317,9 +317,9 @@
           },
           {
             "date": "2026-09-28",
-            "held": 1009.44,
-            "nav": 1074.59,
-            "held_stock": 1009.44,
+            "held": 1009.45,
+            "nav": 1074.6,
+            "held_stock": 1009.45,
             "cash": 65.15,
             "positions": 63,
             "contributed_capital": null,
@@ -373,9 +373,9 @@
           },
           {
             "date": "2026-10-02",
-            "held": 990.73,
-            "nav": 1055.07,
-            "held_stock": 990.73,
+            "held": 990.74,
+            "nav": 1055.08,
+            "held_stock": 990.74,
             "cash": 64.34,
             "positions": 63,
             "contributed_capital": null,
@@ -387,9 +387,9 @@
           },
           {
             "date": "2026-10-05",
-            "held": 985.89,
-            "nav": 1001.29,
-            "held_stock": 985.89,
+            "held": 985.9,
+            "nav": 1001.3,
+            "held_stock": 985.9,
             "cash": 15.4,
             "positions": 63,
             "contributed_capital": null,
@@ -788,6 +788,20 @@
               "buy_tier_level_dca_market": 2028.65
             },
             "market": 1020.79
+          },
+          {
+            "date": "2026-11-13",
+            "held": 1012.97,
+            "nav": 1012.97,
+            "held_stock": 1012.97,
+            "cash": 0.0,
+            "positions": 63,
+            "contributed_capital": null,
+            "branches": {
+              "buy_tier_level_dca": 1993.02,
+              "buy_tier_level_dca_market": 2028.65
+            },
+            "market": 1020.79
           }
         ],
         "series": [
@@ -847,16 +861,16 @@
               "monthly_deposit": 500.0,
               "kind": "deposit_matched_index"
             },
-            "point_count": 36
+            "point_count": 37
           }
         ],
         "last": {
-          "date": "2026-11-12",
-          "held": 1014.97,
+          "date": "2026-11-13",
+          "held": 1012.97,
           "market": 1020.79,
-          "nav": 1014.97,
+          "nav": 1012.97,
           "positions": 63,
-          "excess_pct": -0.005701
+          "excess_pct": -0.007661
         }
       },
       "learning_depth": null,
@@ -1870,7 +1884,7 @@
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
-        "parked_count": 5,
+        "parked_count": 4,
         "zero_body_tickers": [],
         "thin_body_tickers": [
           "DTE.DE",
@@ -1882,7 +1896,6 @@
         "unmeasured_tickers": [],
         "parked_tickers": [
           "BAS.DE",
-          "BNR.DE",
           "DTE.DE",
           "DTG.DE",
           "HNR1.DE"
@@ -2830,13 +2843,10 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 6,
-        "targets": 19,
-        "improved": 15,
+        "run_count": 5,
+        "targets": 16,
+        "improved": 12,
         "improved_tickers": [
-          "TROW",
-          "DG",
-          "IVZ",
           "GPN",
           "NRG",
           "VST",
@@ -2845,7 +2855,10 @@
           "ZBH",
           "AMCR",
           "HST",
-          "TGT"
+          "TGT",
+          "NWSA",
+          "DOV",
+          "KHC"
         ],
         "last_run_at": "2026-11-12T22:29:45.933052+00:00",
         "runtime_cutoff_runs": 0,
@@ -2854,7 +2867,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 8,
+          "indexed_without_body": 7,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -2868,7 +2881,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 0,
+          "indexed_without_body": 1,
           "filing_gaps": 0
         },
         "remaining": {
