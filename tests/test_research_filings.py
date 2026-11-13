@@ -10116,6 +10116,23 @@ def test_fetch_filings_ir_allowlist_ibex35_rep_mc_builtins(tmp_path: Path):
     assert sum(1 for row in rows if row["period"] == "interim") == 2
 
 
+def test_fetch_filings_ir_allowlist_ibex35_log_mc_builtins(tmp_path: Path):
+    """Regression: LOG.MC awaiting_periodic_report — logista.com FY26/FY25 consolidated + H1/Q3 interim PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("LOG.MC", path=allowlist_path)
+    assert len(rows) == 4
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all("logista.com/content/dam/documents/logista-corporate" in url for url in urls)
+    assert any("Consolidated%20Report" in url and "FY26" in url for url in urls)
+    assert any("Consolidated%20Report" in url and "FY25" in url for url in urls)
+    assert any("H126.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+    assert sum(1 for row in rows if row["period"] == "interim") == 2
+
+
 def test_load_ir_url_allowlist_canonicalizes_dte_de_dead_urls(tmp_path: Path):
     """Dead blob/publications URLs in research_ir_urls.json map to live FY2025 annual report PDF."""
     dead_pdf = (
@@ -14468,6 +14485,23 @@ def test_parked_source_hunter_rep_mc_ibex35_has_fetchable_ir():
     body = fetch_filing_body(annual[0]["url"])
     assert body
     assert len(body) >= 50000
+
+
+def test_parked_source_hunter_log_mc_ibex35_has_fetchable_ir():
+    """eng-20261113-05: LOG.MC has live logista.com FY26 consolidated + H1 interim statutory PDFs."""
+    assert "LOG.MC" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("LOG.MC")
+    assert len(rows) == 4
+    annual = [row for row in rows if row["period"] == "annual"]
+    assert len(annual) == 2
+    body = fetch_filing_body(annual[0]["url"])
+    assert body
+    assert len(body) >= 50000
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(interim) == 2
+    body = fetch_filing_body(interim[0]["url"])
+    assert body
+    assert len(body) >= 30000
 
 
 def test_fetch_filings_ir_allowlist_ftse_smallcap_boot_l_builtins(tmp_path: Path):
