@@ -1,6 +1,6 @@
 # Pollen Street Group Limited (POLN.L) — Research memo
 
-_Version 2 · Updated 2026-10-30T23:31:28.155284+00:00 · Mode: structured_verdict_update_
+_Version 1 · Updated 2026-11-13T11:59:10.882414+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,13 +8,6 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: FY25/H1 filings still support the buy screen on cheapness and yield, but conviction stays capped while the Sep strategic review is unresolved and FCF/yield basis overlays persist.
-RiskTags: regulatory, leverage, key_person, liquidity, cyclical, competitive
-
-## Weekly updates
-
-### 2026-10-30T23:31:28.155284+00:00
-No new RNS on the September strategic review or trading; the Takeover Code offer period continues with routine Form 8.3/8.5 disclosures.
-28 October director/PDMR shareholding is the only substantive company notice since the last refresh.
-The quant buy screen is unchanged (6/22 passes; filing vs screen TTM FCF/yield overlay still applies).
+Confidence: 0.68
+Rationale: FY25 and H1 2026 filings support cheapness and progressive dividends, but the Sep 2026 offer-period strategic review and unresolved FCF/earnings basis gaps vs the screen justify capping conviction below the raw buy signal.
+RiskTags: regulatory, leverage, governance, other
