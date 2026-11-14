@@ -667,6 +667,14 @@
           "doc_anchor": "before-you-start"
         },
         {
+          "id": "adhoc-strategy-exit-lab-round-2",
+          "title": "Run exit lab round 2 on the US data before it is deleted",
+          "summary": "Run before deleting the Sharadar files (by 2026-12-09). On the machine that holds ~/sharadar, ~/hsr-build and ~/hsr-mid-build: ftse-strategy-book-rehearsal exit-lab --round 2 (runbook section 6c), then commit docs/data/strategy_book_exit_lab_round2.json on a branch and open a PR. It scores the leave-tier hold per capital-day and two recovery-leg variants on development signals only (2000-2012). Exploratory, not evidence; it seals nothing and is input to the strategy book version review (L687, L688). It refuses once deleted_at is stamped, so it must run before the deletion step of adhoc-strategy-us-pit-rehearsal.",
+          "automated": false,
+          "doc_path": "docs/ops/strategy-book-us-rehearsal-runbook.md",
+          "doc_anchor": "6c-exit-lab-round-2-exploratory-before-deletion"
+        },
+        {
           "id": "adhoc-observe-instrument-freeze",
           "title": "Decide which observe instruments to freeze",
           "summary": "When strategy-book step 2.3 starts, decide which existing observe instruments to freeze under the single-track decision. Candidates: N201, N206, the parallel timing lenses (L652) and the super book's unbuilt spawn and cull work (N223, N226, N227). Frozen books keep their history; the super book's lab book stays as an outside reference.",
