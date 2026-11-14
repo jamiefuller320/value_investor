@@ -4289,12 +4289,38 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Fill shares_in_issue and retry weighted-average shares on stored filings only.",
     )
+    parser.add_argument(
+        "--backfill-capital-shares",
+        action="store_true",
+        help="Fill null shares_in_issue from CH statement-of-capital forms only.",
+    )
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     api_key = companies_house_api_key()
     if not api_key:
         print("COMPANIES_HOUSE_API_KEY is not set", file=sys.stderr)
         return 2
+    if args.backfill_capital_shares:
+        from value_investor.ch_share_reextract import run_capital_share_backfill
+
+        payload = run_capital_share_backfill(
+            leaver_path=args.leaver_list,
+            out_path=args.out,
+            api_key=api_key,
+            cache_dir=args.cache_dir,
+            allow_ocr=args.allow_ocr,
+            only=set(args.only) if args.only else None,
+            limit=args.limit,
+            eodhd_path=args.eodhd,
+        )
+        share = payload.get("share_coverage") or {}
+        logger.info(
+            "wrote %s capital backfill names=%s filings=%s",
+            args.out,
+            share.get("names_with_any_shares_in_issue"),
+            share.get("filings_with_shares_in_issue"),
+        )
+        return 0
     if args.reextract_shares:
         from value_investor.ch_share_reextract import run_share_reextraction
 

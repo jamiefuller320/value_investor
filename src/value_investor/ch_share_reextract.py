@@ -37,6 +37,7 @@ from value_investor.ch_leaver_statements import (
     parse_ixbrl_html,
 )
 from value_investor.ch_statement_of_capital import (
+    fetch_capital_document_body,
     list_capital_filings,
     parse_capital_statement_html,
     pick_capital_filing_after_period,
@@ -170,25 +171,52 @@ def _shares_from_capital_form(
     *,
     company_number: str,
     api_key: str,
+    cache_dir: Path,
+    allow_ocr: bool,
 ) -> bool:
     period_end = str(filing.get("fiscal_year_end") or "")
     if not company_number or len(period_end) < 10:
         return False
     cap_rows = list_capital_filings(company_number, api_key)
-    picked = pick_capital_filing_after_period(cap_rows, period_end)
+    picked = pick_capital_filing_after_period(
+        cap_rows,
+        period_end,
+        accounts_filing_date=str(filing.get("filing_date") or ""),
+    )
     if picked is None:
         return False
+    tx = str(picked.get("transaction_id") or "")
+    body: str | None = None
+    method = "ch_capital_form"
     try:
         html = fetch_ixbrl_html(picked["document_metadata_url"], api_key=api_key)
+        if html:
+            body = html
+            method = "ixbrl"
     except Exception as exc:  # noqa: BLE001
-        logger.info("capital statement fetch failed %s %s: %s", company_number, period_end, exc)
-        return False
-    if not html:
+        logger.info("capital ixbrl fetch failed %s %s: %s", company_number, period_end, exc)
+    if not body:
+        try:
+            fetched, fetch_method = fetch_capital_document_body(
+                picked["document_metadata_url"],
+                api_key=api_key,
+                cache_dir=cache_dir,
+                cache_key=f"cap_{company_number}",
+                transaction_id=tx,
+                allow_ocr=allow_ocr,
+            )
+            body = fetched
+            method = fetch_method if fetch_method != "missing" else method
+        except Exception as exc:  # noqa: BLE001
+            logger.info("capital statement fetch failed %s %s: %s", company_number, period_end, exc)
+            return False
+    if not body:
         return False
     row = parse_capital_statement_html(
-        html,
-        transaction_id=str(picked.get("transaction_id") or ""),
+        body,
+        transaction_id=tx,
         filing_date=str(picked.get("filing_date") or ""),
+        method=method,
     )
     if row is None or row.get("value") in (None, ""):
         return False
@@ -287,7 +315,13 @@ def refresh_filing_share_fields(
     if isinstance(row, dict):
         apply_shares_precision_to_row(row, page_texts=pages, ftse_member=True)
     if (filing.get("fields") or {}).get("shares_in_issue", {}).get("value") in (None, ""):
-        if not _shares_from_capital_form(filing, company_number=company_number, api_key=api_key):
+        if not _shares_from_capital_form(
+            filing,
+            company_number=company_number,
+            api_key=api_key,
+            cache_dir=cache_dir,
+            allow_ocr=allow_ocr,
+        ):
             absent = (filing.get("fields") or {}).get("shares_in_issue") or {}
             if absent.get("value") in (None, "") and not absent.get("absent_reason"):
                 absent["absent_reason"] = ABSENT_SHARES_CH_CAPITAL
@@ -399,3 +433,60 @@ def run_share_reextraction(
         "pending_count": 0,
     }
     return payload
+
+
+def run_capital_share_backfill(
+    *,
+    leaver_path: Path,
+    out_path: Path,
+    api_key: str,
+    cache_dir: Path,
+    allow_ocr: bool,
+    only: set[str] | None = None,
+    limit: int | None = None,
+    eodhd_path: Path | None = None,
+) -> dict[str, Any]:
+    """Fill null ``shares_in_issue`` from CS01 / AR01 / SH01 only (no accounts OCR)."""
+    listing = json.loads(leaver_path.read_text(encoding="utf-8"))
+    records = list(listing.get("names") or [])
+    records_by_key = {row["key"]: row for row in records}
+    payload = json.loads(out_path.read_text(encoding="utf-8"))
+    done = {str(row.get("key")): row for row in payload.get("names") or [] if row.get("key")}
+    pending_rows = [
+        row
+        for row in done.values()
+        if _share_reextract_applicable(row) and (not only or str(row.get("key")) in only)
+    ]
+    pending_rows.sort(key=lambda row: share_reextract_rank(row, records_by_key))
+    if limit is not None:
+        pending_rows = pending_rows[:limit]
+    eodhd_payload = load_eodhd_report(eodhd_path or Path("docs/data/eodhd_coverage_check.json"))
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    total = len(pending_rows)
+    logger.info("capital share backfill pending %s (ocr=%s)", total, allow_ocr)
+    for index, row in enumerate(pending_rows, start=1):
+        key = str(row.get("key"))
+        work = copy.deepcopy(row)
+        record = records_by_key.get(key) or {}
+        company_number = str(work.get("company_number") or record.get("company_number") or "")
+        if not company_number:
+            continue
+        touched = 0
+        for filing in work.get("filings") or []:
+            shares = (filing.get("fields") or {}).get("shares_in_issue") or {}
+            if shares.get("value") not in (None, ""):
+                continue
+            if _shares_from_capital_form(
+                filing,
+                company_number=company_number,
+                api_key=api_key,
+                cache_dir=cache_dir,
+                allow_ocr=allow_ocr,
+            ):
+                touched += 1
+        if touched:
+            apply_shares_precision_to_filings(work.get("filings") or [], ftse_member=True)
+        logger.info("capital backfill %s/%s %s filled=%s", index, total, key, touched)
+        done[key] = work
+        write_store(assemble_store(done, records, eodhd_payload=eodhd_payload), out_path)
+    return assemble_store(done, records, eodhd_payload=eodhd_payload)
