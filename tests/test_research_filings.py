@@ -9395,11 +9395,11 @@ def test_fetch_filings_ir_allowlist_sti_c6l_si_builtins_eng_20261114_02(tmp_path
     rows = fetch_filings_ir_allowlist("C6L.SI", path=allowlist_path)
     assert len(rows) == 3
     assert all(row["source"] == "ir_allowlist" for row in rows)
-    assert sum(1 for row in rows if row["period"] == "annual") == 2
-    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 2
     urls = [row["url"] for row in rows]
-    assert any("SIA%20AR%202024_25" in url for url in urls)
-    assert any("Annual%20Report%20FY2023-24" in url for url in urls)
+    assert any("FS-fy2526" in url for url in urls)
+    assert any("nr-q2fy2627" in url for url in urls)
     assert any("slide-q2fy2526" in url for url in urls)
     assert all("links.sgx.com" in url for url in urls)
 
@@ -9431,7 +9431,7 @@ def test_parked_source_hunter_c6l_si_sti_has_fetchable_ir():
     assert len(rows) == 3
     urls = [row["url"] for row in rows]
     assert all("links.sgx.com" in url for url in urls)
-    annual_url = next(url for url in urls if "SIA%20AR%202024_25" in url)
+    annual_url = next(url for url in urls if "FS-fy2526" in url)
     body = _live_fetch_filing_body(annual_url)
     if not body:
         pytest.skip("SGX PDF body fetch unavailable (network) — retry later")
@@ -9439,13 +9439,19 @@ def test_parked_source_hunter_c6l_si_sti_has_fetchable_ir():
     assert "singapore airlines" in body.lower()
 
 
-def test_ir_allowlist_period_classifies_c6l_si_sia_ar_and_q2fy_slide_slugs():
-    """eng-20261114-02: C6L.SI SGX FileOpen slugs must map annual/interim (not other/fy false-positive)."""
+def test_ir_allowlist_period_classifies_c6l_si_fs_and_q2fy_slugs():
+    """eng-20261114-02: C6L.SI SGX FileOpen slugs must map annual/interim (not fy false-positive)."""
     assert (
         _ir_allowlist_period_from_url(
-            "https://links.sgx.com/FileOpen/SIA%20AR%202024_25.ashx?App=Announcement&FileID=849758"
+            "https://links.sgx.com/FileOpen/FS-fy2526.ashx?App=Announcement&FileID=888804"
         )
         == "annual"
+    )
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/FileOpen/nr-q2fy2627.ashx?App=Announcement&FileID=911002"
+        )
+        == "interim"
     )
     assert (
         _ir_allowlist_period_from_url(
