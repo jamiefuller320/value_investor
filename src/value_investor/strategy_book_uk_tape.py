@@ -417,14 +417,6 @@ def _statement_from_fields(
             1.0,
         )
         shares *= scale
-    if shares in (None, 0):
-        shares_issue = _ch_amount(fields.get("shares_in_issue"), money=False)
-        if shares_issue is not None:
-            scale = _SCALE.get(
-                str((fields.get("shares_in_issue") or {}).get("scale") or "").lower(),
-                1.0,
-            )
-            shares = shares_issue * scale
     eps = _ch_amount(fields.get("basic_eps"), money=False)
     ocf = _ch_amount(fields.get("net_cash_from_operating_activities"), money=True)
     capex = _ch_amount(fields.get("capital_expenditure"), money=True)

@@ -9,7 +9,9 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.ch_failed_name_statements import (
+    ABSENT_SHARES_NOTE_ONLY,
     DEFAULT_STORE_PATH,
+    CH_NAME_BY_KEY,
     ensure_pdf,
     extract_eps_note_pages,
     extract_share_capital_pages,
@@ -27,7 +29,6 @@ from value_investor.ch_leaver_statements import (
     PRESERVED_KEYS,
     annotate_name,
     assemble_store,
-    extraction_rank,
     fetch_ixbrl_html,
     filing_in_leaver_window,
     parse_ixbrl_html,
@@ -65,13 +66,60 @@ def share_reextract_rank(row: dict[str, Any], records_by_key: dict[str, dict[str
 
 logger = logging.getLogger(__name__)
 
+PRIORITY_SHARE_KEYS = frozenset(
+    {
+        "carillion",
+        "thomas_cook",
+        "debenhams",
+        "patisserie_holdings",
+        "sirius",
+    }
+)
+
+_PRESERVED_FAILURE_KEYS = PRIORITY_SHARE_KEYS
+
+
+def share_reextract_rank(row: dict[str, Any], records_by_key: dict[str, dict[str, Any]]) -> tuple:
+    key = str(row.get("key") or "")
+    record = records_by_key.get(key) or {}
+    reason = record.get("reason_class")
+    if key in _PRESERVED_FAILURE_KEYS or key in CH_NAME_BY_KEY:
+        reason = "failure"
+    elif key in PRESERVED_KEYS:
+        reason = reason or "takeover"
+    if reason == "failure":
+        group = 0
+    elif reason == "other" and record.get("ch_applicable") is True:
+        group = 1
+    elif reason == "takeover":
+        group = 2
+    else:
+        group = 3
+    leaving = str(record.get("leaving_date") or "9999-99-99")
+    return (group, leaving, key)
+
 
 def _share_reextract_applicable(row: dict[str, Any]) -> bool:
     status = str(row.get("extraction_status") or "")
     if status in {"not_applicable", "unresolved", "error"}:
         return False
-    # Preserved and complete leavers; retry needs_ocr when OCR is allowed by the caller.
     return status in {"complete", "preserved", "needs_ocr"}
+
+
+def _share_fields_touched(row: dict[str, Any]) -> bool:
+    filings = row.get("filings") or []
+    if not filings:
+        return False
+    return all(isinstance((f.get("fields") or {}).get("shares_in_issue"), dict) for f in filings)
+
+
+def _load_completed_keys(payload: dict[str, Any], done: dict[str, dict[str, Any]]) -> set[str]:
+    found = set((payload.get("share_reextract_cursor") or {}).get("completed_keys") or [])
+    if not found:
+        for key, row in done.items():
+            if _share_fields_touched(row):
+                found.add(str(key))
+    return found
 
 
 def _ixbrl_share_supplement(
@@ -106,6 +154,39 @@ def _ixbrl_share_supplement(
     return supplement
 
 
+def _supplement_from_pdf(
+    pdf: Path,
+    *,
+    transaction_id: str,
+    cache_dir: Path,
+    made_up: str,
+    filing_date: str,
+    wide: bool,
+) -> dict[str, Any]:
+    share_pages = extract_share_capital_pages(
+        pdf,
+        transaction_id=transaction_id,
+        cache_dir=cache_dir,
+        zoom=LEAVER_OCR_ZOOM,
+        page_zoom=LEAVER_PAGE_ZOOM,
+        wide=wide,
+    )
+    stmt_pages = extract_eps_note_pages(
+        pdf,
+        transaction_id=transaction_id,
+        cache_dir=cache_dir,
+        zoom=LEAVER_OCR_ZOOM,
+        page_zoom=LEAVER_PAGE_ZOOM,
+    )
+    by_page = {page.page: page for page in share_pages + stmt_pages}
+    return parse_share_supplement(
+        list(by_page.values()),
+        fiscal_year_end=made_up,
+        filing_date=filing_date,
+        transaction_id=transaction_id,
+    )
+
+
 def refresh_filing_share_fields(
     filing: dict[str, Any],
     meta: dict[str, Any],
@@ -119,6 +200,7 @@ def refresh_filing_share_fields(
     transaction_id = str(meta.get("transaction_id") or filing.get("transaction_id") or "")
     made_up = str(meta.get("made_up_date") or filing.get("fiscal_year_end") or "")
     filing_date = str(meta.get("filing_date") or filing.get("filing_date") or "")
+    wide_first = key in PRIORITY_SHARE_KEYS
     html = None
     try:
         html = fetch_ixbrl_html(meta["document_metadata_url"], api_key=api_key)
@@ -141,30 +223,40 @@ def refresh_filing_share_fields(
             api_key=api_key,
         )
         if pdf is None:
+            filing.setdefault("fields", {})["shares_in_issue"] = {
+                "value": None,
+                "scale": None,
+                "currency": None,
+                "unit": None,
+                "source": "primary",
+                "absent_reason": "no PDF for this filing",
+                "citation": None,
+            }
             return
-        share_pages = extract_share_capital_pages(
+        supplement = _supplement_from_pdf(
             pdf,
             transaction_id=transaction_id,
             cache_dir=cache_dir,
-            zoom=LEAVER_OCR_ZOOM,
-            page_zoom=LEAVER_PAGE_ZOOM,
-        )
-        stmt_pages = extract_eps_note_pages(
-            pdf,
-            transaction_id=transaction_id,
-            cache_dir=cache_dir,
-            zoom=LEAVER_OCR_ZOOM,
-            page_zoom=LEAVER_PAGE_ZOOM,
-        )
-        by_page = {page.page: page for page in share_pages + stmt_pages}
-        pages = list(by_page.values())
-        supplement = parse_share_supplement(
-            pages,
-            fiscal_year_end=made_up,
+            made_up=made_up,
             filing_date=filing_date,
-            transaction_id=transaction_id,
+            wide=wide_first,
         )
-    merge_share_supplement(filing, supplement)
+        shares_row = (supplement.get("primary") or {}).get("shares_in_issue") or {}
+        absent = shares_row.get("absent_reason")
+        if (
+            shares_row.get("value") in (None, "")
+            and not wide_first
+            and absent in (ABSENT_SHARES_NOTE_ONLY, "ordinary shares in issue not found in the share-capital note")
+        ):
+            supplement = _supplement_from_pdf(
+                pdf,
+                transaction_id=transaction_id,
+                cache_dir=cache_dir,
+                made_up=made_up,
+                filing_date=filing_date,
+                wide=True,
+            )
+    merge_share_supplement(filing, supplement, refresh=True)
 
 
 def run_share_reextraction(
@@ -182,25 +274,33 @@ def run_share_reextraction(
     records = list(listing.get("names") or [])
     records_by_key = {row["key"]: row for row in records}
     done: dict[str, dict[str, Any]] = {}
+    payload_from_disk: dict[str, Any] = {}
     if out_path.is_file():
-        current = json.loads(out_path.read_text(encoding="utf-8"))
-        done = {str(row.get("key")): row for row in current.get("names") or [] if row.get("key")}
+        payload_from_disk = json.loads(out_path.read_text(encoding="utf-8"))
+        done = {
+            str(row.get("key")): row for row in payload_from_disk.get("names") or [] if row.get("key")
+        }
     original = load_store(DEFAULT_STORE_PATH)
     for row in original.get("names") or []:
         key = str(row.get("key") or "")
         if key in PRESERVED_KEYS and key not in done:
             done[key] = row
+    completed_keys = _load_completed_keys(payload_from_disk, done)
+    completed_keys -= PRIORITY_SHARE_KEYS
     pending_rows = [
         row
         for row in done.values()
-        if _share_reextract_applicable(row) and (not only or str(row.get("key")) in only)
+        if _share_reextract_applicable(row)
+        and (not only or str(row.get("key")) in only)
+        and str(row.get("key")) not in completed_keys
     ]
     pending_rows.sort(key=lambda row: share_reextract_rank(row, records_by_key))
     if limit is not None:
         pending_rows = pending_rows[:limit]
     eodhd_payload = load_eodhd_report(eodhd_path or Path("docs/data/eodhd_coverage_check.json"))
     cache_dir.mkdir(parents=True, exist_ok=True)
-    logger.info("share re-extraction pending %s (ocr=%s)", len(pending_rows), allow_ocr)
+    total = len(pending_rows)
+    logger.info("share re-extraction pending %s (ocr=%s, resume skip %s)", total, allow_ocr, len(completed_keys))
     write_store(assemble_store(done, records, eodhd_payload=eodhd_payload), out_path)
     for index, row in enumerate(pending_rows, start=1):
         key = str(row.get("key"))
@@ -219,7 +319,7 @@ def run_share_reextraction(
                 meta for meta in metas if filing_in_leaver_window(meta, str(record["leaving_date"]))
             ]
         by_tx = {str(meta.get("transaction_id")): meta for meta in metas}
-        logger.info("shares %s/%s %s", index, len(pending_rows), key)
+        logger.info("shares %s/%s %s", index, total, key)
         for filing in work.get("filings") or []:
             meta = by_tx.get(str(filing.get("transaction_id")))
             if meta is None:
@@ -241,6 +341,16 @@ def run_share_reextraction(
         else:
             done[key] = annotate_name(work, record or None)
             done[key]["extraction_status"] = work.get("extraction_status") or "complete"
+        completed_keys.add(key)
         payload = assemble_store(done, records, eodhd_payload=eodhd_payload)
+        payload["share_reextract_cursor"] = {
+            "completed_keys": sorted(completed_keys),
+            "pending_count": total - index,
+        }
         write_store(payload, out_path)
-    return assemble_store(done, records, eodhd_payload=eodhd_payload)
+    payload = assemble_store(done, records, eodhd_payload=eodhd_payload)
+    payload["share_reextract_cursor"] = {
+        "completed_keys": sorted(completed_keys),
+        "pending_count": 0,
+    }
+    return payload

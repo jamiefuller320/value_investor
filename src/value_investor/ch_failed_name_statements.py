@@ -232,6 +232,14 @@ _SHARE_CAPITAL_HINT_RE = re.compile(
     r"\b(share capital|called up share capital|allotted,? called up and fully paid)\b",
     re.I,
 )
+_WIDE_SHARE_SCAN_RE = re.compile(
+    r"called up share capital|allotted|ordinary shares of|number of shares",
+    re.I,
+)
+ABSENT_SHARES_NO_PDF = "no PDF for this filing"
+ABSENT_SHARES_NO_KEYWORD = "no share-capital keywords in the filing after a full-PDF scan"
+ABSENT_SHARES_KEYWORD_UNREADABLE = "share-capital lines found but ordinary share count not readable"
+ABSENT_SHARES_NOTE_ONLY = "share-capital note heading without a readable ordinary share count"
 _SHARE_EVENT_RE = re.compile(
     r"placing|rights issue|consolidation|share split|sub-division|subdivision|"
     r"scheme of arrangement|bonus issue|capital reduction",
@@ -1296,27 +1304,43 @@ def _parse_shares_in_issue_body(
     return parsed
 
 
+def _page_has_share_capital_content(text: str) -> bool:
+    return bool(
+        "share_capital" in _heading_kinds(text)
+        or _SHARE_CAPITAL_HINT_RE.search(text)
+        or _WIDE_SHARE_SCAN_RE.search(text)
+    )
+
+
 def _shares_in_issue_field(
     pages: list[StatementPage],
     *,
     current_year: int,
     transaction_id: str,
     source: str,
+    full_pdf_scan: bool,
 ) -> dict[str, Any]:
     best: Candidate | None = None
+    saw_keywords = False
     for page in pages:
-        kinds = _heading_kinds(page.text)
-        if "share_capital" not in kinds and not _SHARE_CAPITAL_HINT_RE.search(page.text):
+        if not _page_has_share_capital_content(page.text):
             continue
+        if _WIDE_SHARE_SCAN_RE.search(page.text) or _SHARE_CAPITAL_HINT_RE.search(page.text):
+            saw_keywords = True
         parsed = _parse_shares_in_issue_body(page.text, page=page.page, current_year=current_year)
         cand = _best_candidate(parsed.candidates.get("shares_in_issue") or [])
         if cand and (best is None or cand.priority > best.priority):
             best = cand
     if best is None:
-        return _empty_field(
-            "ordinary shares in issue not found in the share-capital note",
-            source=source,
-        )
+        if not pages:
+            reason = ABSENT_SHARES_NO_KEYWORD if full_pdf_scan else ABSENT_SHARES_NOTE_ONLY
+        elif full_pdf_scan and not saw_keywords:
+            reason = ABSENT_SHARES_NO_KEYWORD
+        elif saw_keywords:
+            reason = ABSENT_SHARES_KEYWORD_UNREADABLE
+        else:
+            reason = ABSENT_SHARES_NOTE_ONLY
+        return _empty_field(reason, source=source)
     return _filled_field(
         best,
         transaction_id=transaction_id,
@@ -1365,16 +1389,14 @@ def parse_share_supplement(
 ) -> dict[str, Any]:
     """Shares-in-issue and a weighted-average retry. Statement pages only."""
     current_year = int(fiscal_year_end[:4])
-    share_pages = [
-        page
-        for page in pages
-        if "share_capital" in _heading_kinds(page.text) or _SHARE_CAPITAL_HINT_RE.search(page.text)
-    ]
+    full_pdf_scan = any(_WIDE_SHARE_SCAN_RE.search(page.text) for page in pages) or len(pages) > 10
+    relevant = [page for page in pages if _page_has_share_capital_content(page.text)] or pages
     primary_shares = _shares_in_issue_field(
-        share_pages or pages,
+        relevant,
         current_year=current_year,
         transaction_id=transaction_id,
         source="primary",
+        full_pdf_scan=full_pdf_scan,
     )
     wa = _weighted_average_retry(
         pages,
@@ -1385,7 +1407,7 @@ def parse_share_supplement(
     comparative: dict[str, Any] | None = None
     best_prior: Candidate | None = None
     prior_year: int | None = None
-    for page in share_pages or pages:
+    for page in relevant:
         parsed = _parse_shares_in_issue_body(page.text, page=page.page, current_year=current_year)
         for cand in parsed.candidates.get("shares_in_issue") or []:
             if cand.prior is None:
@@ -1413,6 +1435,8 @@ def parse_share_supplement(
 def merge_share_supplement(
     filing: dict[str, Any],
     supplement: dict[str, Any],
+    *,
+    refresh: bool = False,
 ) -> None:
     """Fill share fields on ``filing`` without changing other stored values."""
     primary = supplement.get("primary") or {}
@@ -1420,6 +1444,9 @@ def merge_share_supplement(
     for name in ("shares_in_issue", "weighted_average_basic_shares"):
         row = primary.get(name)
         if not isinstance(row, dict):
+            continue
+        if refresh and name == "shares_in_issue":
+            fields[name] = row
             continue
         if row.get("value") not in (None, ""):
             fields[name] = row
@@ -3412,6 +3439,30 @@ def _fast_share_capital_pages(headers: list[str]) -> list[int]:
     return chosen[:8]
 
 
+def _share_page_indices_from_headers(headers: list[str], *, wide: bool, max_pages: int) -> list[int]:
+    chosen: list[int] = []
+    for index, header in enumerate(headers):
+        text = str(header)
+        hit = (
+            "share_capital" in _heading_kinds(text)
+            or _SHARE_CAPITAL_HINT_RE.search(text)
+            or (wide and _WIDE_SHARE_SCAN_RE.search(text))
+        )
+        if hit:
+            chosen.extend([index, index + 1])
+        if len(chosen) >= max_pages:
+            break
+    return chosen[:max_pages]
+
+
+def _share_text_from_page_cache(page_cache: Path, index: int) -> str | None:
+    for name in (f"share-p{index + 1}.json", f"p{index + 1}.json"):
+        cached = _load_json(page_cache / name)
+        if isinstance(cached, dict) and isinstance(cached.get("lines"), list):
+            return "\n".join(str(line) for line in cached["lines"])
+    return None
+
+
 def extract_share_capital_pages(
     pdf_path: Path,
     *,
@@ -3420,10 +3471,12 @@ def extract_share_capital_pages(
     zoom: float = 1.6,
     page_zoom: float = 2.2,
     max_pages: int = 8,
+    wide: bool = False,
 ) -> list[StatementPage]:
-    """Share-capital note pages only (no income or cash statement OCR)."""
+    """Share-capital pages; ``wide`` searches the whole filing for share-count keywords."""
     import pymupdf
 
+    cap = 24 if wide else max_pages
     doc = pymupdf.open(pdf_path)
     try:
         sample = [i for i in (0, doc.page_count // 2) if i < doc.page_count]
@@ -3432,10 +3485,15 @@ def extract_share_capital_pages(
             pages: list[StatementPage] = []
             for index in range(doc.page_count):
                 text = doc[index].get_text("text") or ""
-                if _SHARE_CAPITAL_HINT_RE.search(text) or _ORDINARY_SHARES_COUNT_RE.search(text):
-                    pages.append(StatementPage(page=index + 1, text=text, method="pymupdf"))
-                    if len(pages) >= max_pages:
-                        break
+                if not (
+                    _SHARE_CAPITAL_HINT_RE.search(text)
+                    or _ORDINARY_SHARES_COUNT_RE.search(text)
+                    or (wide and _WIDE_SHARE_SCAN_RE.search(text))
+                ):
+                    continue
+                pages.append(StatementPage(page=index + 1, text=text, method="pymupdf"))
+                if len(pages) >= cap:
+                    break
             return pages
         if not _ocr_enabled():
             return []
@@ -3445,33 +3503,65 @@ def extract_share_capital_pages(
         headers = _load_json(header_path)
         chosen: list[int] = []
         if isinstance(headers, list) and len(headers) == doc.page_count:
-            chosen = _fast_share_capital_pages(headers)
-        if not chosen:
-            limit = min(doc.page_count, 120)
-            for index in range(limit):
-                image = _page_image(doc, index, zoom=zoom)
-                header = "\n".join(_ocr_image_lines(image, header_only=True))
-                if "share_capital" in _heading_kinds(header) or _SHARE_CAPITAL_HINT_RE.search(header):
+            chosen = _share_page_indices_from_headers(headers, wide=wide, max_pages=cap)
+        if wide and isinstance(headers, list):
+            for index, header in enumerate(headers):
+                if index in chosen:
+                    continue
+                body = _share_text_from_page_cache(page_cache, index)
+                if body and _WIDE_SHARE_SCAN_RE.search(body):
                     chosen.extend([index, index + 1])
-                if len(chosen) >= max_pages:
+                if len(chosen) >= cap:
                     break
+        if not chosen:
+            limit = doc.page_count if wide else min(doc.page_count, 120)
+            for index in range(limit):
+                if isinstance(headers, list) and index < len(headers):
+                    header = str(headers[index])
+                else:
+                    image = _page_image(doc, index, zoom=zoom)
+                    header = "\n".join(_ocr_image_lines(image, header_only=True))
+                    if isinstance(headers, list):
+                        while len(headers) <= index:
+                            headers.append("")
+                        headers[index] = header
+                if (
+                    "share_capital" in _heading_kinds(header)
+                    or _SHARE_CAPITAL_HINT_RE.search(header)
+                    or (wide and _WIDE_SHARE_SCAN_RE.search(header))
+                ):
+                    chosen.extend([index, index + 1])
+                if len(chosen) >= cap:
+                    break
+            if isinstance(headers, list) and len(headers) == doc.page_count:
+                header_path.parent.mkdir(parents=True, exist_ok=True)
+                header_path.write_text(json.dumps(headers), encoding="utf-8")
         seen: set[int] = set()
         ordered: list[int] = []
         for index in chosen:
             if index not in seen and index < doc.page_count:
                 seen.add(index)
                 ordered.append(index)
+        if wide and len(ordered) < cap:
+            for index in range(doc.page_count):
+                if index in seen:
+                    continue
+                body = _share_text_from_page_cache(page_cache, index)
+                if body and _WIDE_SHARE_SCAN_RE.search(body):
+                    ordered.append(index)
+                    seen.add(index)
+                if len(ordered) >= cap:
+                    break
         pages: list[StatementPage] = []
-        for index in ordered[:max_pages]:
-            page_path = page_cache / f"share-p{index + 1}.json"
-            cached = _load_json(page_path)
-            if isinstance(cached, dict) and isinstance(cached.get("lines"), list):
-                text = "\n".join(str(line) for line in cached["lines"])
-            else:
+        for index in ordered[:cap]:
+            text = _share_text_from_page_cache(page_cache, index)
+            if text is None:
                 image = _page_image(doc, index, zoom=page_zoom, prefer_embedded=False)
                 lines = _ocr_image_lines(image, header_only=False)
                 text = "\n".join(lines)
-                page_path.write_text(json.dumps({"lines": lines}), encoding="utf-8")
+                (page_cache / f"share-p{index + 1}.json").write_text(
+                    json.dumps({"lines": lines}), encoding="utf-8"
+                )
             pages.append(StatementPage(page=index + 1, text=text, method="ocr"))
         return pages
     finally:
