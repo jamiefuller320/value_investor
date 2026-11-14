@@ -2,11 +2,11 @@
   "ticker": "C6L.SI",
   "company_name": "Singapore Airlines Limited",
   "market": "sti",
-  "built_at": "2026-11-13T22:28:10.640410+00:00",
+  "built_at": "2026-11-14T16:49:03.067710+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
-      "filings_bodies": false,
+      "filings_bodies": true,
       "yahoo_financials": true,
       "yahoo_quarterly_cashflow": false,
       "yahoo_quarterly_income": true,
@@ -18,27 +18,26 @@
       "alternate_news": true
     },
     "thin": [
-      "filings_bodies",
       "yahoo_quarterly_cashflow",
       "screen_run_manifest"
     ],
-    "filings_body_files": 0,
-    "filings_indexed_bodies": 0,
+    "filings_body_files": 3,
+    "filings_indexed_bodies": 3,
     "filings_summary": {
-      "total": 5,
-      "annual": 1,
-      "interim": 0,
+      "total": 9,
+      "annual": 3,
+      "interim": 2,
       "trading_update": 0,
       "other": 4,
-      "with_body": 0,
+      "with_body": 3,
       "period_coverage": {
         "annual": {
-          "total": 1,
-          "with_body": 0
+          "total": 3,
+          "with_body": 1
         },
         "interim": {
-          "total": 0,
-          "with_body": 0
+          "total": 2,
+          "with_body": 2
         },
         "trading_update": {
           "total": 0,
@@ -52,12 +51,12 @@
     },
     "period_coverage": {
       "annual": {
-        "total": 1,
-        "with_body": 0
+        "total": 3,
+        "with_body": 1
       },
       "interim": {
-        "total": 0,
-        "with_body": 0
+        "total": 2,
+        "with_body": 2
       },
       "trading_update": {
         "total": 0,
@@ -68,7 +67,7 @@
         "with_body": 0
       }
     },
-    "news_article_count": 37,
+    "news_article_count": 42,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
@@ -83,16 +82,44 @@
     ]
   },
   "body_refetch": {
-    "attempted": 5,
+    "attempted": 6,
     "fetched": 0,
-    "with_body_before": 0,
-    "with_body_after": 0,
+    "with_body_before": 3,
+    "with_body_after": 3,
     "note": "refetch_missing_filing_bodies"
   },
   "ch_refetch": {},
   "investegate_refetch": {},
   "ticker_rns_refetch": {},
-  "ir_refetch": {},
+  "ir_refetch": {
+    "attempted": 0,
+    "fetched": 0,
+    "failed": 0,
+    "with_body_before": 3,
+    "with_body_after": 3,
+    "investegate_fallbacks": 0,
+    "skipped_unfetchable": 0,
+    "retry_cleared": 0,
+    "deadline_hit": false,
+    "merge": {
+      "added": 0,
+      "total_allowlist": 3,
+      "note": "merge_ir_allowlist_filings"
+    },
+    "shared_body_propagated": 0,
+    "ir_metadata_reconciled": 0,
+    "note": "refetch_ir_presentation_sources",
+    "mandatory": true,
+    "allowlist_count": 3,
+    "ir_presentation_metrics": {
+      "bridge_count": 0,
+      "segment_split_count": 0,
+      "lease_maturity_count": 0,
+      "dividend_policy_count": 1,
+      "management_fcf_definition_count": 0,
+      "mandatory": true
+    }
+  },
   "screen_run_manifest": {
     "attached": false,
     "reason": "not_ftse350"
@@ -101,7 +128,7 @@
     "bridge_count": 0,
     "segment_split_count": 0,
     "lease_maturity_count": 0,
-    "mandatory": false,
+    "mandatory": true,
     "path": "docs/data/library/markets/sti/screen/research/C6L.SI/sources/ir_presentation_metrics.json"
   },
   "filing_interim_financials": {
@@ -116,28 +143,9 @@
     "latest_secured_workload_to_revenue_ratio": null,
     "path": "docs/data/library/markets/sti/screen/research/C6L.SI/sources/ch_annual_year_in_numbers.json"
   },
-  "alternate_news_added": 2,
+  "alternate_news_added": 3,
   "alternate_news_path": "docs/data/library/markets/sti/screen/research/C6L.SI/sources/alternate_news.json",
-  "planned_alternate_sources": [
-    {
-      "id": "exchange_filings_full",
-      "label": "HKEX / SGX announcement full-text re-pull",
-      "why": ".HK names index HKEXnews results announcements and annual/interim reports with PDF bodies (full statements incl. cash flow); .SI names are still Google News headline-only",
-      "score": "3"
-    },
-    {
-      "id": "sec_exhibits",
-      "label": "SEC 20-F / 6-K for dual-listed ADRs",
-      "why": "US filings may hold richer English disclosures",
-      "score": "3"
-    },
-    {
-      "id": "company_ir_presentation",
-      "label": "Company IR / annual report PDF",
-      "why": "Primary statements beyond Yahoo summaries",
-      "score": "3"
-    }
-  ],
+  "planned_alternate_sources": [],
   "evidence_ladder": [
     "filings_bodies",
     "filings_index",

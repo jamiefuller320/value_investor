@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-13T22:28:24.611169+00:00",
+  "run_at": "2026-11-14T16:51:24.551054+00:00",
   "market_id": "sti",
   "targets": [
     "C6L.SI"
@@ -7,8 +7,8 @@
   "target_details": [
     {
       "ticker": "C6L.SI",
-      "priority_score": 8.3167,
-      "filings_total": 4,
+      "priority_score": 8.38,
+      "filings_total": 1,
       "filings_with_body": 0,
       "indexed_without_body": 1,
       "reason": "zero_body"
@@ -19,32 +19,32 @@
       "ticker": "C6L.SI",
       "reason": "zero_body",
       "before": {
-        "filings_total": 4,
+        "filings_total": 1,
         "filings_with_body": 0,
         "indexed_without_body": 1
       },
       "after": {
-        "filings_total": 1,
-        "filings_with_body": 0,
+        "filings_total": 4,
+        "filings_with_body": 3,
         "indexed_without_body": 1
       },
       "improved": false,
       "regime": "asia_filings",
       "filings_summary": {
-        "total": 5,
-        "annual": 1,
-        "interim": 0,
+        "total": 9,
+        "annual": 3,
+        "interim": 2,
         "trading_update": 0,
         "other": 4,
-        "with_body": 0,
+        "with_body": 3,
         "period_coverage": {
           "annual": {
-            "total": 1,
-            "with_body": 0
+            "total": 3,
+            "with_body": 1
           },
           "interim": {
-            "total": 0,
-            "with_body": 0
+            "total": 2,
+            "with_body": 2
           },
           "trading_update": {
             "total": 0,
@@ -62,15 +62,16 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 0,
-        "with_body_after": 0,
+        "with_body_before": 3,
+        "with_body_after": 3,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
+        "retry_cleared": 0,
         "deadline_hit": false,
         "merge": {
           "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
+          "total_allowlist": 3,
+          "note": "merge_ir_allowlist_filings"
         },
         "shared_body_propagated": 0,
         "ir_metadata_reconciled": 0,
@@ -83,7 +84,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-13T22:27:59.966366+00:00",
+    "snapshot_at": "2026-11-14T16:48:06.014100+00:00",
     "market_id": "sti",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
@@ -127,22 +128,20 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-13T22:28:17.439124+00:00",
+    "snapshot_at": "2026-11-14T16:49:16.746406+00:00",
     "market_id": "sti",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 1,
+    "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 8,
-    "bodies_min": 4,
-    "bodies_median": 7,
+    "bodies_min": 3,
+    "bodies_median": 6.5,
     "bodies_max": 14,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
-    "zero_body_tickers": [
-      "C6L.SI"
-    ],
+    "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
       "U14.SI",
@@ -157,32 +156,70 @@
       "C6L.SI": 1
     },
     "parked_tickers": [
+      "C6L.SI",
       "ME8U.SI",
       "N2IU.SI",
       "U14.SI"
     ],
-    "parked_count": 3,
+    "parked_count": 4,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
-      "C6L.SI"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
   "maintenance_mode": false,
-  "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parity_handoff": {
+    "skipped": true,
+    "reason": "not_focus_market",
+    "market_id": "sti"
+  },
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "sti",
+    "to_market": "us_adr_asia",
+    "stream_markets_after": [
+      "us_adr_asia"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "sti",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "C6L.SI",
+        "ME8U.SI",
+        "N2IU.SI",
+        "U14.SI"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "us_adr_asia",
+      "forced": true,
+      "prior_screen_at": "2026-11-13T06:53:26.029457+00:00",
+      "prior_age_days": 1,
+      "run_at": "2026-11-14T16:51:15.591583+00:00",
+      "shortlist_count": 6,
+      "ticker_count": 24
+    },
+    "at": "2026-11-14T16:49:35.082176+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "sti",
-    "assessed_at": "2026-11-13T22:28:00.393660+00:00",
+    "assessed_at": "2026-11-14T16:48:06.646145+00:00",
     "unmeasured": [],
     "zero_body": [
       "C6L.SI"
@@ -203,7 +240,7 @@
       {
         "ticker": "C6L.SI",
         "indexed_without_body": 1,
-        "filings_total": 4,
+        "filings_total": 1,
         "filings_with_body": 0
       },
       {
@@ -235,21 +272,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 16.591541913,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2083.408458087,
+  "used_seconds": 69.441888208,
+  "budget_seconds": 175.0,
+  "leftover_seconds": 105.558111792,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "C6L.SI"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sti",
-    "updated_at": "2026-11-13T22:28:17.447612+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 7,
+    "updated_at": "2026-11-14T16:49:16.761430+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 8,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -287,6 +322,18 @@
         "indexed_without_body": 1,
         "thin": false,
         "source_surface": "asia_filings+ir_allowlist_direct"
+      },
+      {
+        "ticker": "C6L.SI",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-14T16:49:16.761430+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 4,
+        "filings_with_body": 3,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "asia_filings+ir_allowlist_direct"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -294,6 +341,7 @@
     "straggler_zero_runs": 2,
     "had_complete_targets": true,
     "leftover_tickers": [
+      "C6L.SI",
       "ME8U.SI",
       "N2IU.SI",
       "U14.SI"
@@ -303,15 +351,41 @@
     "path": "docs/data/library/markets/sti/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "sti"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "sti",
+    "ingest_exhausted_markets": [
+      "aex",
+      "aim",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 69,
-    "candidate_count": 56,
+    "tried_count": 70,
+    "candidate_count": 57,
     "skipped_resolved_tickers": [
       "ACKB.BR",
       "APAM.AS",
@@ -331,7 +405,6 @@
       "DFS.L",
       "SU.TO",
       "NTR.TO",
-      "GIB-A.TO",
       "MFC.TO",
       "BAS.DE",
       "PDD",
