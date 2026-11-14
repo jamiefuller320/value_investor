@@ -20,6 +20,7 @@ from value_investor.ch_failed_name_statements import (
     parse_share_supplement,
     write_store,
 )
+from value_investor.ch_failed_name_statements import CH_NAME_BY_KEY
 from value_investor.ch_leaver_statements import (
     LEAVER_OCR_ZOOM,
     LEAVER_PAGE_ZOOM,
@@ -31,6 +32,36 @@ from value_investor.ch_leaver_statements import (
     filing_in_leaver_window,
     parse_ixbrl_html,
 )
+
+_PRESERVED_FAILURE_KEYS = {
+    "carillion",
+    "thomas_cook",
+    "debenhams",
+    "patisserie_holdings",
+    "sirius",
+}
+
+
+def share_reextract_rank(row: dict[str, Any], records_by_key: dict[str, dict[str, Any]]) -> tuple:
+    key = str(row.get("key") or "")
+    record = records_by_key.get(key) or {}
+    reason = record.get("reason_class")
+    if key in _PRESERVED_FAILURE_KEYS or (
+        key in CH_NAME_BY_KEY and reason not in ("takeover", "other")
+    ):
+        reason = "failure"
+    elif key in PRESERVED_KEYS:
+        reason = reason or "takeover"
+    if reason == "failure":
+        group = 0
+    elif reason == "other" and record.get("ch_applicable") is True:
+        group = 1
+    elif reason == "takeover":
+        group = 2
+    else:
+        group = 3
+    leaving = str(record.get("leaving_date") or "9999-99-99")
+    return (group, leaving, key)
 
 logger = logging.getLogger(__name__)
 
@@ -164,16 +195,7 @@ def run_share_reextraction(
         for row in done.values()
         if _share_reextract_applicable(row) and (not only or str(row.get("key")) in only)
     ]
-    pending_rows.sort(
-        key=lambda row: extraction_rank(
-            records_by_key.get(str(row.get("key")))
-            or {
-                "reason_class": "takeover",
-                "leaving_date": "9999-99-99",
-                "key": row.get("key"),
-            }
-        )
-    )
+    pending_rows.sort(key=lambda row: share_reextract_rank(row, records_by_key))
     if limit is not None:
         pending_rows = pending_rows[:limit]
     eodhd_payload = load_eodhd_report(eodhd_path or Path("docs/data/eodhd_coverage_check.json"))
