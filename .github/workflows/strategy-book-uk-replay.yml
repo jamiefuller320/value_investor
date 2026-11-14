@@ -14,6 +14,14 @@ on:
           - development
           - development-amendment
           - reveal
+      registration:
+        description: v0 (sealed 2026-11-12) or v1 (Companies House shares for the cap; refuses until sealed)
+        required: true
+        default: v0
+        type: choice
+        options:
+          - v0
+          - v1
 
 permissions:
   contents: write
@@ -84,6 +92,7 @@ jobs:
           UK_REPLAY_CACHE: ${{ runner.temp }}/uk-replay-cache
           UK_REPLAY_MAX_MINUTES: "320"
           PHASE: ${{ inputs.phase }}
+          REGISTRATION: ${{ inputs.registration }}
         run: |
           set -euo pipefail
           case "$PHASE" in
@@ -91,7 +100,7 @@ jobs:
             development-amendment) set -- develop --amend ;;
             *) set -- "$PHASE" ;;
           esac
-          ftse-strategy-book-uk-replay "$@" --cache "$UK_REPLAY_CACHE"
+          ftse-strategy-book-uk-replay --registration "$REGISTRATION" "$@" --cache "$UK_REPLAY_CACHE"
 
       - name: Encrypt resume cache
         if: always() && steps.secrets.outputs.ready == 'true'
@@ -122,7 +131,7 @@ jobs:
       - name: Commit aggregate store
         if: steps.secrets.outputs.ready == 'true'
         env:
-          GHA_COMMIT_OWNED: docs/data/strategy_book_uk_replay.json
+          GHA_COMMIT_OWNED: docs/data/strategy_book_uk_replay.json docs/data/strategy_book_uk_replay_v1.json
           COMMIT_MESSAGE: "chore: strategy-book UK replay aggregates [skip ci]"
           GHA_COMMIT_LABEL: "strategy-book UK replay"
         run: bash scripts/gha_commit_artifacts.sh

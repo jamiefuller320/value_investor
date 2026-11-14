@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-14T02:44:02.249078+00:00",
+  "generated_at": "2026-11-14T07:51:35.883161+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,10 +8,10 @@
   "checklist_updated_at": "2026-11-12",
   "counts": {
     "new_info": 7,
-    "unacked": 18,
+    "unacked": 19,
     "acked": 35,
     "automated": 20,
-    "human": 60
+    "human": 61
   },
   "tasks": [
     {
@@ -29,11 +29,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "3 attention-parked eng tasks",
-        "updated_at": "2026-11-14T02:42:06.710438+00:00",
+        "updated_at": "2026-11-14T07:51:30.509450+00:00",
         "fingerprint": "e69a5e997553968d",
         "bullets": [
           "Parked tasks: 4 (attention ~3)",
-          "Queue-clearing pause active: False — evaluated 2026-11-14T02:42:06.710438+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-11-14T07:51:30.509450+00:00",
           "Traffic pause active: False",
           "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
           "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
@@ -73,7 +73,7 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary not scored",
-        "updated_at": "2026-11-14T02:40:57.207217+00:00",
+        "updated_at": "2026-11-14T07:50:18.738761+00:00",
         "fingerprint": "94066622535964a2",
         "bullets": [
           "ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -114,7 +114,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-11-13T22:37:46.991940+00:00",
+        "updated_at": "2026-11-14T07:41:07.586822+00:00",
         "fingerprint": "f7e994b3c6ee65f2",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=34",
@@ -156,7 +156,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-11-13T22:36:24.863578+00:00",
+        "updated_at": "2026-11-14T07:39:53.143114+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -548,7 +548,7 @@
     {
       "id": "adhoc-strategy-uk-replay-reveal",
       "title": "Run the UK/Europe replay and stamp the reveal",
-      "summary": "Plan step 3.3. The registration was sealed on 2026-11-12 (owner accepted the defaults). The fetch completed on 2026-11-13; development was committed the same day but is superseded by change marker prior-year-visible-v1: after that fix merges, dispatch the strategy-book-uk-replay workflow with phase=development-amendment, and read the amended block, not the first one. The encrypted cache is evicted after 7 days unused: if neither development nor reveal is dispatched for 6 days, re-dispatch phase=fetch (no EODHD calls once complete) to keep it. After the development aggregates are committed, read them and give the second stamp (stamp-reveal) that authorises the single holdout reveal (target 2026-12-03). The stamp changes no sealed number. Last EODHD call day is 2026-12-10.",
+      "summary": "Plan step 3.3. The registration was sealed on 2026-11-12 (owner accepted the defaults). The fetch completed on 2026-11-13; development was committed the same day but is superseded by change marker prior-year-visible-v1: after that fix merges, dispatch the strategy-book-uk-replay workflow with phase=development-amendment, and read the amended block, not the first one. The encrypted cache is evicted after 7 days unused: if neither development nor reveal is dispatched for 6 days, re-dispatch phase=fetch (no EODHD calls once complete) to keep it. Do not give the v0 reveal stamp while the v1 draft (Companies House shares for the cap, N273) is pending: once v1 is sealed, the reveal happens under v1 and v0 is never revealed. Otherwise, after the development aggregates are committed, read them and give the second stamp (stamp-reveal) that authorises the single holdout reveal (target 2026-12-03). The stamp changes no sealed number. Last EODHD call day is 2026-12-10.",
       "automated": false,
       "cadence": "ad_hoc",
       "section_id": "ad_hoc",
@@ -562,6 +562,37 @@
         "headline": "See runbook for analysis inputs",
         "updated_at": null,
         "fingerprint": "e53063ecc8be295f",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-strategy-uk-replay-v1-seal",
+      "title": "Seal the UK replay v1 registration (Companies House shares for the cap)",
+      "summary": "Deferred idea N273. v1 is v0 with one rule changed: a FTSE 350 leaver with no EODHD share count takes its share count from the Companies House store, so failures such as Carillion, Thomas Cook and Debenhams can be ranked (Intu is not in the store; question 5). Seal only when the share fields are merged with a hand check of at least 18 of 20 and coverage is published. Accept or change the section 6 defaults, then development is walked under v1 and the reveal (target 2026-12-03) happens under v1. Last EODHD call day is 2026-12-10.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/strategy-book-uk-replay-v1-registration-draft.md",
+      "doc_anchor": "2-pre-seal-conditions",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/strategy-book-uk-replay-v1-registration-draft.md#2-pre-seal-conditions",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "bdc71a42c830e7cc",
         "bullets": [],
         "source_keys": []
       },
