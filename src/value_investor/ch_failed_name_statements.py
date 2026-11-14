@@ -1253,6 +1253,17 @@ def _parse_shares_in_issue_body(
         current = cells[current_idx]
         if current.kind != "ok" or current.value is None:
             continue
+        try:
+            magnitude = abs(Decimal(str(current.value)))
+        except InvalidOperation:
+            continue
+        if (
+            share_scale == "units"
+            and magnitude < Decimal("10000")
+            and "," not in str(current.value)
+            and "million" not in line.lower()
+        ):
+            continue
         if score < 2 and "ordinary" not in label.lower():
             continue
         if parsed.shares_in_millions and _share_scale(label) == "units":
