@@ -13,7 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from value_investor.ch_failed_name_statements import _significant_digits, citation_supports
+from value_investor.ch_failed_name_statements import CACHE_VERSION, _significant_digits, citation_supports
 
 
 def candidates(store: dict) -> list[dict]:
@@ -63,6 +63,22 @@ def pdf_text(pdf: Path, page: int) -> str:
         doc.close()
 
 
+def ocr_page_text(cache_dir: Path, transaction_id: str, page: int) -> str:
+    if not transaction_id or not isinstance(page, int) or page < 1:
+        return ""
+    for zoom in (2.2, 2.0, 1.6):
+        base = cache_dir / f"ocr-v{CACHE_VERSION}-z{zoom:.1f}" / transaction_id
+        for name in (f"share-p{page}.json", f"p{page}.json"):
+            path = base / name
+            if not path.is_file():
+                continue
+            data = json.loads(path.read_text(encoding="utf-8"))
+            lines = data.get("lines")
+            if isinstance(lines, list):
+                return "\n".join(str(line) for line in lines)
+    return ""
+
+
 def compare(sample: dict, cache_dir: Path) -> dict:
     end = str(sample.get("fiscal_year_end") or "")
     pdf = cache_dir / f"{sample['key']}_{end}.pdf"
@@ -80,20 +96,41 @@ def compare(sample: dict, cache_dir: Path) -> dict:
     if not isinstance(page, int):
         result["detail"] = "no page"
         return result
-    text = pdf_text(pdf, page)
     shortened = _short_fragment(line)
+    text = pdf_text(pdf, page)
+    ocr = ""
+    if len(text.strip()) < 40:
+        ocr = ocr_page_text(cache_dir, str(sample.get("transaction_id") or ""), page)
+        if ocr:
+            text = ocr
+    elif sample.get("transaction_id"):
+        ocr = ocr_page_text(cache_dir, str(sample["transaction_id"]), page)
+        if ocr and shortened and shortened not in _prepare(text):
+            text = text + "\n" + ocr
     line_on_page = shortened and shortened in _prepare(text)
     ok, _, _ = citation_supports(Decimal(str(stored).replace(",", "")), line)
     if line_on_page and ok:
         result["match"] = True
-        result["detail"] = "cited line on page"
-    elif ok and shortened and any(ok for _ in [1] if shortened[:20] in _prepare(text)):
+        result["detail"] = "cited line on page" + (" (OCR)" if ocr and len(pdf_text(pdf, page).strip()) < 40 else "")
+    elif ok and shortened and shortened[:20] in _prepare(text):
         result["match"] = True
-        result["detail"] = "label on page, digits match citation"
+        result["detail"] = "label on page, digits match citation" + (" (OCR)" if ocr else "")
+    elif ok and _citation_digits_on_page(stored, text):
+        result["match"] = True
+        result["detail"] = "digits on page/OCR match stored value"
     else:
         result["match"] = False
         result["detail"] = "cited line not on page" if not line_on_page else "digit mismatch"
     return result
+
+
+def _citation_digits_on_page(stored: str, text: str) -> bool:
+    prep = _prepare(text).replace(",", "")
+    try:
+        target = str(int(Decimal(str(stored).replace(",", ""))))
+    except Exception:
+        return False
+    return target in prep or f"{target[:3]},{target[3:6]}" in text.replace(" ", "")
 
 
 def _prepare(text: str) -> str:

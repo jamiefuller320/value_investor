@@ -3476,7 +3476,7 @@ def extract_share_capital_pages(
     """Share-capital pages; ``wide`` searches the whole filing for share-count keywords."""
     import pymupdf
 
-    cap = 24 if wide else max_pages
+    cap = min(64, max_pages * 8) if wide else max_pages
     doc = pymupdf.open(pdf_path)
     try:
         sample = [i for i in (0, doc.page_count // 2) if i < doc.page_count]
@@ -3492,7 +3492,9 @@ def extract_share_capital_pages(
                 ):
                     continue
                 pages.append(StatementPage(page=index + 1, text=text, method="pymupdf"))
-                if len(pages) >= cap:
+                if not wide and len(pages) >= max_pages:
+                    break
+                if wide and len(pages) >= cap:
                     break
             return pages
         if not _ocr_enabled():
