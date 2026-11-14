@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-13T16:40:34.998542+00:00",
+  "run_at": "2026-11-14T16:34:34.692541+00:00",
   "market_id": "ftse_smallcap",
   "targets": [],
   "target_details": [],
@@ -9,13 +9,13 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-13T16:40:29.985618+00:00",
+    "snapshot_at": "2026-11-14T16:34:16.993060+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 9,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 41,
+    "indexed_without_body": 43,
     "bodies_min": 52,
     "bodies_median": 62,
     "bodies_max": 102,
@@ -33,7 +33,7 @@
       "TPT.L"
     ],
     "indexed_without_body_by_ticker": {
-      "DFS.L": 5,
+      "DFS.L": 7,
       "ULTP.L": 8,
       "MER.L": 6,
       "APTD.L": 8,
@@ -56,7 +56,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-13T16:40:34.968676+00:00",
+    "snapshot_at": "2026-11-14T16:34:28.414291+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 9,
     "unmeasured_buy_tier": 0,
@@ -127,8 +127,8 @@
       "FOXT.L",
       "APTD.L",
       "ULTP.L",
-      "MER.L",
       "DFS.L",
+      "MER.L",
       "TPT.L"
     ],
     "runtime_cutoff": false
@@ -142,7 +142,7 @@
   },
   "critical_path": {
     "market_id": "ftse_smallcap",
-    "assessed_at": "2026-11-13T16:40:31.220268+00:00",
+    "assessed_at": "2026-11-14T16:34:17.852455+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -165,16 +165,16 @@
         "filings_with_body": 52
       },
       {
+        "ticker": "DFS.L",
+        "indexed_without_body": 7,
+        "filings_total": 76,
+        "filings_with_body": 69
+      },
+      {
         "ticker": "MER.L",
         "indexed_without_body": 6,
         "filings_total": 68,
         "filings_with_body": 62
-      },
-      {
-        "ticker": "DFS.L",
-        "indexed_without_body": 5,
-        "filings_total": 74,
-        "filings_with_body": 69
       },
       {
         "ticker": "TPT.L",
@@ -191,25 +191,25 @@
       "FOXT.L",
       "APTD.L",
       "ULTP.L",
-      "MER.L",
       "DFS.L",
+      "MER.L",
       "TPT.L"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (6 tickers, top: FOXT.L(9), APTD.L(8), ULTP.L(8), MER.L(6), DFS.L(5))"
+      "Prefer indexed-without-body body refetch (6 tickers, top: FOXT.L(9), APTD.L(8), ULTP.L(8), DFS.L(7), MER.L(6))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 6,
-      "indexed_without_body_rows": 41,
+      "indexed_without_body_rows": 43,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 2.532419403999995,
+  "used_seconds": 9.760246109999997,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3597.467580596,
+  "leftover_seconds": 3590.23975389,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -217,9 +217,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_smallcap",
-    "updated_at": "2026-11-13T16:40:34.975456+00:00",
+    "updated_at": "2026-11-14T16:34:28.418887+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 28,
+    "complete_zero_improve_runs": 29,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -344,7 +344,46 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261113-04"
+    "reason": "no parked leftover tickers remaining for hunter",
+    "tried_count": 70,
+    "candidate_count": 56,
+    "skipped_resolved_tickers": [
+      "ACKB.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "DQ7A.IR",
+      "EVN.VI",
+      "UCB.BR",
+      "WIE.VI",
+      "ESSITY-B.ST",
+      "LMT",
+      "APTV",
+      "MER.L",
+      "TPT.L",
+      "FOXT.L",
+      "ULTP.L",
+      "APTD.L",
+      "DFS.L",
+      "SU.TO",
+      "NTR.TO",
+      "MFC.TO",
+      "BAS.DE",
+      "PDD",
+      "BAS.DE",
+      "DTE.DE",
+      "DTG.DE",
+      "HNR1.DE",
+      "HEN3.DE",
+      "PST.MI",
+      "APAM.AS",
+      "0285.HK",
+      "0857.HK",
+      "0288.HK",
+      "0883.HK",
+      "2331.HK",
+      "EVN.VI",
+      "WIE.VI"
+    ],
+    "wait_behind_task_id": ""
   }
 }
