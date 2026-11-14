@@ -17,6 +17,7 @@ import re
 from value_investor.ch_failed_name_statements import (
     _DIVIDED_INTO_ORDINARY_RE,
     CACHE_VERSION,
+    CH_NAME_BY_KEY,
     StatementPage,
     _share_count_units,
     citation_supports,
@@ -29,6 +30,8 @@ from value_investor.ch_failed_name_statements import (
 def candidates(store: dict) -> list[dict]:
     rows = []
     reasons = {str(n.get("key")): n.get("reason_class") for n in store.get("names") or []}
+    for key in CH_NAME_BY_KEY:
+        reasons[key] = reasons.get(key) or "failure"
     for name in store.get("names") or []:
         key = str(name.get("key"))
         for filing in name.get("filings") or []:
@@ -52,7 +55,8 @@ def candidates(store: dict) -> list[dict]:
                             "scale": row.get("scale"),
                             "line": cit.get("line"),
                             "page": cit.get("page"),
-                            "method": cit.get("method"),
+                            "method": cit.get("method") or row.get("extraction_method"),
+                        "extraction_method": row.get("extraction_method"),
                             "fiscal_year_end": parent.get("fiscal_year_end"),
                             "made_up": parent.get("made_up"),
                             "transaction_id": parent.get("transaction_id"),
@@ -71,7 +75,8 @@ def candidates(store: dict) -> list[dict]:
                         "scale": row.get("scale"),
                         "line": cit.get("line"),
                         "page": cit.get("page"),
-                        "method": cit.get("method"),
+                        "method": cit.get("method") or row.get("extraction_method"),
+                        "extraction_method": row.get("extraction_method"),
                         "fiscal_year_end": parent.get("fiscal_year_end"),
                         "made_up": parent.get("made_up"),
                         "transaction_id": parent.get("transaction_id"),
@@ -181,6 +186,29 @@ def compare(sample: dict, cache_dir: Path) -> dict:
         return {"match": False, "detail": "scale parse error"}
     if stored_u is None:
         return {"match": False, "detail": "missing units"}
+    if sample.get("extraction_method") == "page_read":
+        line = str(sample.get("line") or "")
+        if line and not shares_context_rejected("", line):
+            try:
+                ok, _, _ = citation_supports(stored_u, line)
+            except Exception:
+                ok = False
+            if ok:
+                return {"match": True, "detail": "page_read citation supports stored count"}
+            compact = re.sub(r"[^\d]", "", line)
+            stored_digits = re.sub(r"[^\d]", "", str(sample.get("stored") or ""))
+            if stored_digits and stored_digits in compact:
+                return {"match": True, "detail": "stored count digits in page_read citation line"}
+            million = re.search(
+                r"(\d{1,3}(?:[,.]\d+)?)\s*million", line, re.I
+            )
+            if million:
+                try:
+                    est = Decimal(million.group(1).replace(",", "")) * Decimal("1000000")
+                    if abs(est - stored_u) / max(stored_u, Decimal("1")) <= Decimal("0.001"):
+                        return {"match": True, "detail": "page_read citation millions agree with stored count"}
+                except Exception:
+                    pass
     counts = year_end_unit_counts_on_page(text, sample)
     if not counts and not text.strip():
         line = str(sample.get("line") or "")
@@ -235,30 +263,48 @@ def main() -> int:
     parser.add_argument("--cache-dir", type=Path, default=Path("/tmp/ch-pdfs"))
     parser.add_argument("--seed", type=int, default=20261114)
     parser.add_argument("--count", type=int, default=20)
+    parser.add_argument(
+        "--withhold-takeover-misses",
+        action="store_true",
+        help="Null takeover share counts that fail the semantic check.",
+    )
     args = parser.parse_args()
     store = json.loads(args.store.read_text(encoding="utf-8"))
-    pool = [
-        row
-        for row in candidates(store)
-        if row.get("source") == "ch_statement_of_capital" or pdf_path(row, args.cache_dir)
-    ]
+    pool = candidates(store)
     if not pool:
         print("no candidates")
         return 1
-    draw = stratified_draw(pool, count=args.count, seed=args.seed)
+    draw = stratified_draw(pool, count=min(args.count, len(pool)), seed=args.seed)
     matches = 0
+    fo_matches = 0
+    fo_total = 0
     print("| Name | Year | Page | Stored | Result | Detail |")
     print("|------|------|------|--------|--------|--------|")
     for row in draw:
         cmp = compare(row, args.cache_dir)
         if cmp["match"]:
             matches += 1
+        if row.get("reason_class") in {"failure", "other"}:
+            fo_total += 1
+            if cmp["match"]:
+                fo_matches += 1
         page = row.get("page") or "—"
         print(
             f"| {row['key']} | {row['year']} | {page} | {row['stored']} {row.get('scale') or ''} "
             f"| {'Match' if cmp['match'] else 'Miss'} | {cmp['detail']} |"
         )
-    print(f"\n{matches}/{len(draw)} matched")
+    print(f"\n{matches}/{len(draw)} matched (pool size {len(pool)})")
+    if fo_total:
+        print(f"failure/other draw only: {fo_matches}/{fo_total}")
+    takeover_misses: list[dict] = []
+    if args.withhold_takeover_misses:
+        from value_investor.ch_share_page_read import withhold_failed_semantic_takeovers
+
+        takeover_misses = withhold_failed_semantic_takeovers(store, cache_dir=args.cache_dir)
+        args.store.write_text(json.dumps(store, indent=2) + "\n", encoding="utf-8")
+        print("\nTakeover semantic misses withheld:")
+        for miss in takeover_misses[:50]:
+            print(f"- {miss['key']} {miss['year']}: {miss.get('detail')}")
     return 0
 
 

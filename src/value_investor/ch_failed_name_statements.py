@@ -1333,6 +1333,11 @@ def apply_shares_precision_to_row(
     """Context, nominal cross-check, and FTSE plausibility on one ``shares_in_issue`` row."""
     if not isinstance(row, dict) or row.get("value") in (None, ""):
         return
+    if str(row.get("extraction_method") or "") == "page_read":
+        units = _share_count_units(row.get("value"), row.get("scale"))
+        if units is not None and units > Decimal("500000000000"):
+            _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+        return
     if str(row.get("source") or "") == "ch_statement_of_capital":
         units = _share_count_units(row["value"], row.get("scale"))
         if ftse_member and units is not None:
@@ -4296,12 +4301,36 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Fill null shares_in_issue from CH statement-of-capital forms only.",
     )
+    parser.add_argument(
+        "--page-read-shares",
+        action="store_true",
+        help="High-res share-capital note page read for failure/other leavers (and CH failure names).",
+    )
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     api_key = companies_house_api_key()
     if not api_key:
         print("COMPANIES_HOUSE_API_KEY is not set", file=sys.stderr)
         return 2
+    if args.page_read_shares:
+        from value_investor.ch_share_page_read import run_page_read_backfill
+
+        payload = run_page_read_backfill(
+            leaver_path=args.leaver_list,
+            out_path=args.out,
+            api_key=api_key,
+            cache_dir=args.cache_dir,
+            eodhd_path=args.eodhd,
+            only=set(args.only) if args.only else None,
+        )
+        share = payload.get("share_coverage") or {}
+        logger.info(
+            "wrote %s page-read names=%s filings=%s",
+            args.out,
+            share.get("names_with_any_shares_in_issue"),
+            share.get("filings_with_shares_in_issue"),
+        )
+        return 0
     if args.backfill_capital_shares:
         from value_investor.ch_share_reextract import run_capital_share_backfill
 

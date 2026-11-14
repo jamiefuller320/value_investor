@@ -1268,6 +1268,23 @@ def test_shares_context_rejects_known_false_lines() -> None:
     assert shares_context_rejected("", "Shares allotted on 1 January 2020: 5,000,000 ordinary shares")
 
 
+def test_shares_earnings_cross_check_pass() -> None:
+    from value_investor.ch_share_page_read import shares_earnings_cross_check
+
+    filing = {
+        "fields": {
+            "profit_attributable_to_owners": {
+                "value": "100",
+                "scale": "millions",
+                "currency": "GBP",
+            },
+            "basic_eps": {"value": "10", "unit": "pence"},
+        }
+    }
+    cross = shares_earnings_cross_check(filing, "1000000000", "units")
+    assert cross["status"] == "pass"
+
+
 def test_shares_nominal_cross_check_carillion() -> None:
     text = """
     22 Share capital
