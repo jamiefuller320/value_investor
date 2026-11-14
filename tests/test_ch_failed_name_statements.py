@@ -23,7 +23,10 @@ from value_investor.ch_failed_name_statements import (
     plausibility_flags,
     repair_glued_thousands,
     repair_spaced_decimals,
+    repair_spaced_share_digit_groups,
     second_reading_disagrees,
+    shares_context_rejected,
+    shares_nominal_cross_check,
     statements_from_2013,
     years_with_eps,
 )
@@ -1143,6 +1146,7 @@ SHARE_CAPITAL = """
 Number £'000
 Allotted, called up and fully paid
 Ordinary shares of 5p each 500,671 498,102
+Called up share capital 25,033.55 24,905.10
 """
 
 
@@ -1247,3 +1251,46 @@ def test_merge_share_supplement_leaves_other_fields() -> None:
     merge_share_supplement(filing, supplement)
     assert filing["fields"]["revenue"]["value"] == "1000"
     assert filing["fields"]["shares_in_issue"]["value"] == "430084862"
+
+
+def test_repair_spaced_share_digit_groups() -> None:
+    line = "aggregate purchase authority of 42 914 639 Ordinary Shares"
+    assert "42914639" in repair_spaced_share_digit_groups(line)
+
+
+def test_shares_context_rejects_known_false_lines() -> None:
+    assert shares_context_rejected(
+        "",
+        "the aggregate of 42,914,639 Ordinary Shares representing approximately",
+    )
+    assert shares_context_rejected("", "The employee share trust holds 1,068,301 ordinary shares")
+    assert shares_context_rejected("", "Weighted average number of ordinary shares (thousands) 1,340")
+    assert shares_context_rejected("", "Shares allotted on 1 January 2020: 5,000,000 ordinary shares")
+
+
+def test_shares_nominal_cross_check_carillion() -> None:
+    text = """
+    22 Share capital
+    Called up share capital 215,127,314
+    Ordinary shares of 50p each 430,254,629 428,000,000
+    """
+    cross = shares_nominal_cross_check([text], "430254629", "units")
+    assert cross["status"] == "pass"
+
+
+def test_parse_rejects_buyback_authority_line() -> None:
+    text = """
+    Share capital
+    The aggregate of 42,914,639 Ordinary Shares representing approximately 3.2% of issued share capital
+    Allotted, called up and fully paid
+    Ordinary shares of 10p each 1,497,000,000
+    """
+    supplement = parse_share_supplement(
+        [StatementPage(page=1, text=text, method="fixture")],
+        fiscal_year_end="2013-12-31",
+        filing_date="2014-04-01",
+        transaction_id="tx-tc",
+    )
+    row = supplement["primary"]["shares_in_issue"]
+    assert row["value"] == "1497000000"
+    assert row["scale"] == "units"

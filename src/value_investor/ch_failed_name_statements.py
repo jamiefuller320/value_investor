@@ -240,6 +240,45 @@ ABSENT_SHARES_NO_PDF = "no PDF for this filing"
 ABSENT_SHARES_NO_KEYWORD = "no share-capital keywords in the filing after a full-PDF scan"
 ABSENT_SHARES_KEYWORD_UNREADABLE = "share-capital lines found but ordinary share count not readable"
 ABSENT_SHARES_NOTE_ONLY = "share-capital note heading without a readable ordinary share count"
+ABSENT_SHARES_WRONG_CONTEXT = "share count line is not year-end issued ordinary shares"
+ABSENT_SHARES_NOMINAL_FAIL = "nominal share-capital cross-check failed"
+ABSENT_SHARES_IMPLAUSIBLE_SMALL = "implausibly small for FTSE 350 member"
+ABSENT_SHARES_CH_CAPITAL = "no readable statement of capital within 90 days after year end"
+FTSE350_MIN_ORDINARY_SHARES = Decimal("10000000")
+_SHARES_REJECT_CONTEXT_RE = re.compile(
+    r"buy\s*back|buyback|purchase\s+authority|repurchase\s+authority|"
+    r"aggregate\s+of\b.*\brepresenting\b|"
+    r"employee\s+share\s+trust|employee\s+trust|esop|"
+    r"\bholds\s+\d|\bheld\s+by\s+the\s+trust\b|"
+    r"directors?'?\s+(?:interests?|holdings?)|family\s+trust|"
+    r"disposal\s+of\s+interests?|"
+    r"\bpurchased\b|\bawards?\b|\boptions?\b|nil[- ]cost|"
+    r"weighted\s+average|earnings\s+per\s+share|\beps\b|"
+    r"share\s+awards|performance\s+shares|"
+    r"allotment\s+of\s+shares|shares\s+allotted\s+during|"
+    r"allotment\s+announcement|allotted\s+on\b|"
+    r"nominal\s+value\s+per\s+share|"
+    r"\bat\s+\d{1,2}\s+(?:january|january|february|march|april|may|june|july|august|september|october|november|december)\b",
+    re.I,
+)
+_SHARES_ACCEPT_CONTEXT_RE = re.compile(
+    r"allotted,?\s+called\s+up\s+and\s+fully\s+paid|"
+    r"issued\s+and\s+fully\s+paid|"
+    r"in\s+issue\s+at\s+(?:the\s+)?(?:year|period|balance\s+sheet)|"
+    r"called\s+up\s+share\s+capital|"
+    r"number\s+of\s+shares|"
+    r"ordinary\s+shares\s+of\s+\d+(?:\.\d+)?\s*p?\b",
+    re.I,
+)
+_NOMINAL_PER_SHARE_RE = re.compile(
+    r"ordinary\s+shares?\s+of\s+(?:£\s*)?(\d+(?:\.\d+)?)\s*p(?:\s+each)?|"
+    r"ordinary\s+shares?\s+of\s+(?:£\s*)?(\d+(?:\.\d+)?)\s*each",
+    re.I,
+)
+_CALLED_UP_CAPITAL_RE = re.compile(
+    r"called\s+up\s+share\s+capital[^0-9\n]{0,80}([\d,]+(?:\.\d+)?)",
+    re.I,
+)
 _SHARE_EVENT_RE = re.compile(
     r"placing|rights issue|consolidation|share split|sub-division|subdivision|"
     r"scheme of arrangement|bonus issue|capital reduction",
@@ -247,6 +286,10 @@ _SHARE_EVENT_RE = re.compile(
 )
 _ORDINARY_SHARES_COUNT_RE = re.compile(
     r"(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)\s*(?:m(?:illion)?\s+)?ordinary shares\b",
+    re.I,
+)
+_DIVIDED_INTO_ORDINARY_RE = re.compile(
+    r"(?:divided\s+into|comprising)\s+([\d,\s]+)\s+ordinary shares",
     re.I,
 )
 _PARENT_RE = re.compile(
@@ -1176,6 +1219,176 @@ def _shares_in_issue_line_score(label: str) -> int:
     return score
 
 
+def repair_spaced_share_digit_groups(line: str) -> str:
+    """Join OCR-split share counts such as ``42 914 639 ordinary shares``."""
+    if not re.search(r"ordinary\s+share", line, re.I):
+        return line
+
+    def repl(match: re.Match[str]) -> str:
+        chunk = match.group(1)
+        if "," in chunk:
+            return chunk
+        return chunk.replace(" ", "")
+
+    return re.sub(r"\b(\d{1,3}(?:\s\d{3}){2,})\b", repl, line)
+
+
+def shares_context_rejected(label: str, line: str) -> bool:
+    combined = f"{label} {line}"
+    if _SHARES_REJECT_CONTEXT_RE.search(combined):
+        return True
+    low = combined.lower()
+    if "treasury" in low and "excluding" not in low:
+        return True
+    if (
+        re.search(r"\b\d{4}\b", line)
+        and re.search(r"\b(20\d{2})\b.*\bshares?\b", line)
+        and not _SHARES_ACCEPT_CONTEXT_RE.search(combined)
+    ):
+        return True
+    return False
+
+
+def shares_context_accepted(label: str, line: str, page_text: str) -> bool:
+    combined = f"{label} {line}"
+    if shares_context_rejected(label, line):
+        return False
+    if _SHARES_ACCEPT_CONTEXT_RE.search(combined):
+        return True
+    head = "\n".join(page_text.splitlines()[:20])
+    if _SHARE_CAPITAL_HINT_RE.search(head) and _shares_in_issue_line_score(label) >= 2:
+        return True
+    if _shares_in_issue_line_score(label) >= 3 and "ordinary" in combined.lower():
+        return True
+    return False
+
+
+def _share_count_units(value: object, scale: str | None) -> Decimal | None:
+    try:
+        raw = Decimal(str(value).replace(",", ""))
+    except InvalidOperation:
+        return None
+    if scale == "millions":
+        return raw * Decimal("1000000")
+    if scale == "thousands":
+        return raw * Decimal("1000")
+    return raw
+
+
+def shares_nominal_cross_check(
+    page_texts: list[str], value: object, scale: str | None
+) -> dict[str, Any]:
+    """Compare share count to called-up capital / nominal when both are printed."""
+    merged = "\n".join(page_texts)
+    count_units = _share_count_units(value, scale)
+    if count_units is None:
+        return {"status": "unavailable"}
+    nominal: Decimal | None = None
+    for match in _NOMINAL_PER_SHARE_RE.finditer(merged):
+        try:
+            pence = Decimal(match.group(1))
+        except (InvalidOperation, TypeError):
+            continue
+        nominal = pence / Decimal("100")
+        break
+    capital: Decimal | None = None
+    cap_match = _CALLED_UP_CAPITAL_RE.search(merged)
+    if cap_match:
+        try:
+            capital = Decimal(cap_match.group(1).replace(",", ""))
+        except InvalidOperation:
+            capital = None
+    if capital is None or nominal is None or nominal <= 0:
+        return {"status": "unavailable"}
+    implied = capital / nominal
+    if implied <= 0:
+        return {"status": "unavailable"}
+    rel = abs(count_units - implied) / implied
+    status = "pass" if rel <= Decimal("0.01") else "fail"
+    return {
+        "status": status,
+        "called_up_capital_gbp": str(capital),
+        "nominal_gbp": str(nominal),
+        "implied_count": str(int(implied)),
+        "stored_count": str(int(count_units)),
+        "relative_error": str(rel.quantize(Decimal("0.0001"))),
+    }
+
+
+def _withhold_shares_row(row: dict[str, Any], reason: str) -> None:
+    if row.get("value") in (None, ""):
+        row["absent_reason"] = reason
+        return
+    row["nulled_from"] = row.get("value")
+    row["value"] = None
+    row["absent_reason"] = reason
+
+
+def apply_shares_precision_to_row(
+    row: dict[str, Any],
+    *,
+    page_texts: list[str] | None = None,
+    ftse_member: bool = True,
+) -> None:
+    """Context, nominal cross-check, and FTSE plausibility on one ``shares_in_issue`` row."""
+    if not isinstance(row, dict) or row.get("value") in (None, ""):
+        return
+    if str(row.get("source") or "") == "ch_statement_of_capital":
+        if ftse_member:
+            units = _share_count_units(row["value"], row.get("scale"))
+            if units is not None and units < FTSE350_MIN_ORDINARY_SHARES:
+                _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+        return
+    citation = row.get("citation") or {}
+    line = str(citation.get("line") or "")
+    if citation.get("method") == "ixbrl":
+        row.setdefault("cross_check", {"status": "unavailable"})
+        units = _share_count_units(row["value"], row.get("scale"))
+        if ftse_member and units is not None and units < FTSE350_MIN_ORDINARY_SHARES:
+            _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+        return
+    label = re.split(r"\d", line, maxsplit=1)[0].strip()
+    page_blob = "\n".join(page_texts or [])
+    if line and not shares_context_accepted(label, line, page_blob):
+        _withhold_shares_row(row, ABSENT_SHARES_WRONG_CONTEXT)
+        return
+    if page_texts:
+        cross = shares_nominal_cross_check(page_texts, row["value"], row.get("scale"))
+        row["cross_check"] = cross
+        if cross.get("status") == "fail":
+            _withhold_shares_row(row, ABSENT_SHARES_NOMINAL_FAIL)
+            return
+    else:
+        row.setdefault("cross_check", {"status": "unavailable"})
+    units = _share_count_units(row.get("value"), row.get("scale"))
+    cross_status = (row.get("cross_check") or {}).get("status")
+    if (
+        ftse_member
+        and units is not None
+        and units < FTSE350_MIN_ORDINARY_SHARES
+        and cross_status != "pass"
+    ):
+        _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+    if units is not None and units > Decimal("500000000000"):
+        _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+
+
+def apply_shares_precision_to_filings(
+    filings: list[dict[str, Any]],
+    *,
+    ftse_member: bool = True,
+) -> None:
+    for filing in filings:
+        blocks = [(filing.get("fields") or {})]
+        comp = filing.get("comparative") or {}
+        if comp.get("fields"):
+            blocks.append(comp["fields"])
+        for fields in blocks:
+            row = fields.get("shares_in_issue")
+            if isinstance(row, dict):
+                apply_shares_precision_to_row(row, ftse_member=ftse_member)
+
+
 def _parse_shares_in_issue_body(
     text: str,
     *,
@@ -1209,9 +1422,34 @@ def _parse_shares_in_issue_body(
     ):
         parsed.shares_in_millions = True
     pending = ""
-    for line in lines:
+    for raw_line in lines:
+        line = repair_spaced_share_digit_groups(raw_line)
+        divided = _DIVIDED_INTO_ORDINARY_RE.search(line)
+        if divided and not shares_context_rejected("", line):
+            raw = re.sub(r"[\s,]", "", divided.group(1))
+            if raw.isdigit():
+                parsed.candidates.setdefault("shares_in_issue", []).append(
+                    Candidate(
+                        field="shares_in_issue",
+                        priority=4,
+                        label=line,
+                        line=line,
+                        page=page,
+                        current=raw,
+                        prior=None,
+                        unit=None,
+                        money=False,
+                        share_scale="units",
+                        share_basis="in_issue",
+                    )
+                )
+                continue
         prose = _ORDINARY_SHARES_COUNT_RE.search(line)
         if prose and _shares_in_issue_line_score(line) >= 0:
+            if shares_context_rejected("", line) or not shares_context_accepted(
+                "", line, "\n".join(lines)
+            ):
+                continue
             raw = prose.group(1).replace(",", "")
             if re.search(r"million ordinary shares", line, re.I) or (
                 "million" in line.lower() and parsed.shares_in_millions
@@ -1239,8 +1477,8 @@ def _parse_shares_in_issue_body(
                 )
             )
             continue
-        row_text = re.sub(r"\b\d+(?:\.\d+)?p\b", "", line, flags=re.I)
-        row_text = re.sub(r"\beach\b", "", row_text, flags=re.I)
+        row_text = re.sub(r"\b\d+(?:\.\d+)?p\s+each\b", "", line, flags=re.I)
+        row_text = re.sub(r"\b\d+(?:\.\d+)?p\b", "", row_text, flags=re.I)
         label, cells, status = _split_amount_row(row_text, len(years) if years else 1, amount_scale)
         if label is None:
             if _CARRY_RE.search(line):
@@ -1251,6 +1489,10 @@ def _parse_shares_in_issue_body(
         pending = ""
         score = _shares_in_issue_line_score(label)
         if score < 0:
+            continue
+        if shares_context_rejected(label, line) or not shares_context_accepted(
+            label, line, "\n".join(lines)
+        ):
             continue
         if score == 0 and not re.search(r"allotted|called up|fully paid", label, re.I):
             continue
@@ -1341,7 +1583,7 @@ def _shares_in_issue_field(
         else:
             reason = ABSENT_SHARES_NOTE_ONLY
         return _empty_field(reason, source=source)
-    return _filled_field(
+    row = _filled_field(
         best,
         transaction_id=transaction_id,
         source=source,
@@ -1349,6 +1591,17 @@ def _shares_in_issue_field(
         currency=None,
         basis=best.share_basis,
     )
+    page_texts = [page.text for page in pages if page.page == best.page]
+    cross = shares_nominal_cross_check(
+        page_texts or [p.text for p in pages], row["value"], row.get("scale")
+    )
+    row["cross_check"] = cross
+    if cross.get("status") == "fail":
+        return _empty_field(ABSENT_SHARES_NOMINAL_FAIL, source=source)
+    units = _share_count_units(row["value"], row.get("scale"))
+    if units is not None and units < FTSE350_MIN_ORDINARY_SHARES and cross.get("status") != "pass":
+        return _empty_field(ABSENT_SHARES_IMPLAUSIBLE_SMALL, source=source)
+    return row
 
 
 def _weighted_average_retry(
@@ -2257,6 +2510,9 @@ GATE_ROW_DECIMAL = "row_decimal"
 GATE_SECOND_READING = "second_reading"
 GATE_SHARES_JUMP = "shares_jump"
 GATE_SHARES_VS_WEIGHTED = "shares_vs_weighted_average"
+GATE_SHARES_CONTEXT = "shares_wrong_context"
+GATE_SHARES_NOMINAL = "shares_nominal_cross_check"
+GATE_SHARES_IMPLAUSIBLE = "implausibly_small_ftse350"
 _GATE_REASONS = {
     GATE_DIGIT_COUNT,
     GATE_SIGN,
@@ -2268,6 +2524,12 @@ _GATE_REASONS = {
     GATE_SECOND_READING,
     GATE_SHARES_JUMP,
     GATE_SHARES_VS_WEIGHTED,
+    GATE_SHARES_CONTEXT,
+    GATE_SHARES_NOMINAL,
+    GATE_SHARES_IMPLAUSIBLE,
+    ABSENT_SHARES_WRONG_CONTEXT,
+    ABSENT_SHARES_NOMINAL_FAIL,
+    ABSENT_SHARES_IMPLAUSIBLE_SMALL,
 }
 _MONEY_FIELDS = {
     "revenue",
@@ -2791,6 +3053,20 @@ def apply_value_gate(filings: list[dict[str, Any]], *, financial: bool = False) 
                 continue
             if max(in_issue, weighted) / min(in_issue, weighted) > Decimal("2"):
                 _null_value(issue[1], GATE_SHARES_VS_WEIGHTED, counts)
+
+    for filing in filings:
+        blocks = [(filing.get("fields") or {})]
+        comp = filing.get("comparative") or {}
+        if comp.get("fields"):
+            blocks.append(comp["fields"])
+        for fields in blocks:
+            row = fields.get("shares_in_issue")
+            if isinstance(row, dict) and row.get("value") not in (None, ""):
+                prior = row.get("value")
+                apply_shares_precision_to_row(row, ftse_member=True)
+                if prior not in (None, "") and row.get("value") in (None, ""):
+                    reason = str(row.get("absent_reason") or GATE_SHARES_CONTEXT)
+                    counts[reason] = counts.get(reason, 0) + 1
 
     # Count values that are absent because a gate check failed, including ones
     # nulled on an earlier pass and left absent.
