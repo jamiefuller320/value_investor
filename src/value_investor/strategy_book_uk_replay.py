@@ -15,6 +15,7 @@ Constants live in ``REGISTRATION_CONSTANTS`` and nowhere else.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import copy
 import dataclasses
 import hashlib
@@ -26,7 +27,7 @@ import time
 from array import array
 from bisect import bisect_left, bisect_right
 from collections import Counter
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Iterator, Mapping, Sequence
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -229,6 +230,65 @@ RUNBOOK_PATH = "docs/ops/strategy-book-uk-replay-runbook.md"
 TITLE = "Strategy-book UK replay"
 TITLE_FAILED = "Strategy-book UK replay store unreadable"
 CACHE_ENV = "UK_REPLAY_CACHE"
+
+# v1 (docs/ops/strategy-book-uk-replay-v1-registration-draft.md) is v0 with the
+# Companies House share-count fallback for the cap. Every other constant is v0's.
+_V1_CONSTANTS: dict[str, Any] = {
+    **copy.deepcopy(REGISTRATION_CONSTANTS),
+    "registration_id": "strategy-book-uk-replay-v1",
+    "supersedes_registration_id": "strategy-book-uk-replay-v0",
+    "CH_SHARES_FALLBACK": True,
+    "CH_SHARES_FIELDS": ["shares_in_issue", "weighted_average_basic_shares"],
+    "CH_SHARES_STALE_DAYS": 456,
+    "CH_SHARES_LAG_DAYS": 2,
+    "NAMED_FAILURES": ["carillion", "thomas_cook", "debenhams", "intu"],
+    "NAMED_FAILURE_MONTHS": 12,
+}
+REGISTRATIONS: dict[str, dict[str, Any]] = {
+    "v0": {
+        "constants": REGISTRATION_CONSTANTS,
+        "registration_path": REGISTRATION_PATH,
+        "store_path": STORE_PATH,
+        "document_path": DOCUMENT_PATH,
+        "title": TITLE,
+        "title_failed": TITLE_FAILED,
+    },
+    "v1": {
+        "constants": _V1_CONSTANTS,
+        "registration_path": Path("docs/data/strategy_book_uk_replay_v1_registration.json"),
+        "store_path": Path("docs/data/strategy_book_uk_replay_v1.json"),
+        "document_path": Path("docs/ops/strategy-book-uk-replay-v1-registration-draft.md"),
+        "title": "Strategy-book UK replay v1",
+        "title_failed": "Strategy-book UK replay v1 store unreadable",
+    },
+}
+ACTIVE_REGISTRATION = "v0"
+
+
+def use_registration(version: str) -> None:
+    """Point the module constants, paths and finding titles at one registration."""
+    global ACTIVE_REGISTRATION, REGISTRATION_CONSTANTS, REGISTRATION_PATH, STORE_PATH
+    global DOCUMENT_PATH, TITLE, TITLE_FAILED
+    entry = REGISTRATIONS[version]
+    ACTIVE_REGISTRATION = version
+    REGISTRATION_CONSTANTS = entry["constants"]
+    REGISTRATION_PATH = entry["registration_path"]
+    STORE_PATH = entry["store_path"]
+    DOCUMENT_PATH = entry["document_path"]
+    TITLE = entry["title"]
+    TITLE_FAILED = entry["title_failed"]
+
+
+@contextlib.contextmanager
+def registration(version: str) -> Iterator[None]:
+    previous = ACTIVE_REGISTRATION
+    use_registration(version)
+    try:
+        yield
+    finally:
+        use_registration(previous)
+
+
 _GATE_LABELS = (
     None,
     "clear",
@@ -1128,6 +1188,10 @@ def assemble_specs(
     month_sets: dict[str, list[tuple[date, set[str]]]] = {}
     bias_rows: list[dict[str, Any]] = []
     counters = Counter()
+    fallback = bool(REGISTRATION_CONSTANTS.get("CH_SHARES_FALLBACK"))
+    development_end = date.fromisoformat(str(REGISTRATION_CONSTANTS["DEVELOPMENT_END"]))
+    cap_sources: dict[str, Counter] = {"development": Counter(), "holdout": Counter()}
+    ch_ranked: dict[str, set[str]] = {"development": set(), "holdout": set()}
     for market, rows in by_market.items():
         sessions = sorted({day for row in rows for day in row["bars"].dates})
         ends = [
@@ -1149,17 +1213,13 @@ def assemble_specs(
         sets = []
         for day in ends:
             cap_rows = []
+            source_by_symbol: dict[str, str | None] = {}
             for row in rows:
                 last = row["bars"].dates[-1]
                 if not tape.listed_on(day, delisted=row["delisted"], last_bar=last):
                     continue
                 close = row["bars"].close_on(day)
-                shares = tape.select_shares(row["shares_annual"], row["shares_quarterly"], day)
-                scaled, unparsed = (None, False)
-                if shares is not None:
-                    scaled, unparsed = tape.scale_shares(
-                        shares["shares"], shares["date"], row["splits"], day
-                    )
+                scaled, unparsed, source = _shares_on(row, day)
                 cap = tape.cap_in_rank_currency(
                     close,
                     row["currency"],
@@ -1171,6 +1231,8 @@ def assemble_specs(
                 )
                 if unparsed:
                     cap = {"cap": None, "reason": "cap_not_computable"}
+                if cap.get("cap") is not None:
+                    source_by_symbol[row["symbol"]] = source
                 cap_rows.append(
                     {
                         "symbol": row["symbol"],
@@ -1186,6 +1248,12 @@ def assemble_specs(
             counters["split_unparsed"] += ranked["split_unparsed"]
             members = set(ranked["members"])
             sets.append((day, members))
+            if fallback:
+                window = "development" if day <= development_end else "holdout"
+                for symbol, source in source_by_symbol.items():
+                    cap_sources[window][str(source)] += 1
+                    if str(source).startswith("ch_") and symbol in members:
+                        ch_ranked[window].add(symbol)
             missing_revenue = 0
             for row in rows:
                 if row["symbol"] not in members:
@@ -1230,9 +1298,23 @@ def assemble_specs(
     ranked_symbols = {
         symbol for market_spans in spans.values() for symbol, rows in market_spans.items() if rows
     }
+    cap_report = None
+    if fallback:
+        cap_report = {
+            window: {
+                "cap_source_counts": dict(sorted(cap_sources[window].items())),
+                "ch_cap_leavers": len(ch_ranked[window]),
+                "named_failures_ranked": _named_failures_ranked(
+                    prepared, month_sets, ch_store, window, development_end
+                ),
+            }
+            for window in ("development", "holdout")
+        }
     for row in prepared:
         del row["bars"]
+    out: dict[str, Any] = {} if cap_report is None else {"cap_report": cap_report}
     return {
+        **out,
         "specs": specs,
         "haircuts": haircuts,
         "bias_rows": bias_rows,
@@ -1242,6 +1324,54 @@ def assemble_specs(
         "ranked_symbols": ranked_symbols,
         "prepared": prepared,
     }
+
+
+def _named_failures_ranked(
+    prepared: Sequence[Mapping[str, Any]],
+    month_sets: Mapping[str, Sequence[tuple[date, set[str]]]],
+    ch_store: Mapping[str, Any],
+    window: str,
+    development_end: date,
+) -> dict[str, Any]:
+    """Per named failure: ranked in any of the last N month-ends before its last EOD date.
+
+    ``not_in_store`` when the Companies House store has no record for the name.
+    Only month-ends inside ``window`` count.
+    """
+    in_store = {str(row.get("key")) for row in ch_store.get("names") or []}
+    months = int(REGISTRATION_CONSTANTS["NAMED_FAILURE_MONTHS"])
+    out: dict[str, Any] = {}
+    for key in REGISTRATION_CONSTANTS["NAMED_FAILURES"]:
+        if key not in in_store:
+            out[key] = "not_in_store"
+            continue
+        ranked = False
+        for row in prepared:
+            if row.get("ch_key") != key:
+                continue
+            last = row["bars"].dates[-1]
+            ends = [
+                (day, members) for day, members in month_sets.get(row["market"], ()) if day <= last
+            ][-months:]
+            ranked = ranked or any(
+                row["symbol"] in members and (day <= development_end) == (window == "development")
+                for day, members in ends
+            )
+        out[key] = ranked
+    return out
+
+
+def _shares_on(row: Mapping[str, Any], day: date) -> tuple[float | None, bool, str | None]:
+    """Split-scaled shares, whether a split was unparsed, and the source (None when absent)."""
+    shares = tape.select_shares(row["shares_annual"], row["shares_quarterly"], day)
+    source = "eodhd" if shares is not None else None
+    if shares is None and REGISTRATION_CONSTANTS.get("CH_SHARES_FALLBACK"):
+        shares = tape.ch_shares_on(row.get("ch_filings"), day)
+        source = shares["source"] if shares is not None else None
+    if shares is None:
+        return None, False, None
+    scaled, unparsed = tape.scale_shares(shares["shares"], shares["date"], row["splits"], day)
+    return scaled, unparsed, source
 
 
 def _panel_rows(
@@ -1267,14 +1397,9 @@ def _panel_rows(
                 close = row["bars"].close_on(day)
                 if close is None:
                     continue
-                shares = tape.select_shares(row["shares_annual"], row["shares_quarterly"], day)
-                scaled = None
-                if shares is not None:
-                    scaled, unparsed = tape.scale_shares(
-                        shares["shares"], shares["date"], row["splits"], day
-                    )
-                    if unparsed:
-                        scaled = None
+                scaled, unparsed, _source = _shares_on(row, day)
+                if unparsed:
+                    scaled = None
                 cap = tape.cap_in_rank_currency(
                     close,
                     row["currency"],
@@ -1829,6 +1954,7 @@ def committed_store(
     probe: Mapping[str, Mapping[str, bool]] | None = None,
     eurgbp: Mapping[date, float] | None = None,
     holdout: bool = False,
+    cap_report: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Aggregates only. The licence scan rejects prices and statement values."""
     constants = REGISTRATION_CONSTANTS
@@ -1911,6 +2037,8 @@ def committed_store(
             scoring=scoring,
             delisted=delisted,
         )
+        if cap_report is not None:
+            block["cap_report"] = dict(cap_report[window_name])
         sens = rehearsal.sensitivity_block(
             results[SENSITIVITY]["episodes"],
             window,
@@ -2145,6 +2273,7 @@ def develop(
         ),
         eurgbp=eurgbp,
         holdout=False,
+        cap_report=assembled.get("cap_report"),
     )
     if amend and previous:
         store["amendments"] = list(previous.get("amendments") or []) + [
@@ -2256,6 +2385,7 @@ def reveal(
         ),
         eurgbp=eurgbp,
         holdout=True,
+        cap_report=assembled.get("cap_report"),
     )
     write_store(updated, repo_root)
     if cache is not None:
@@ -2418,6 +2548,15 @@ def confirm_deleted(repo_root: Path = REPO_ROOT, cache: Path | None = None) -> d
 
 
 def findings(repo_root: Path = REPO_ROOT) -> list[dict[str, Any]]:
+    """One finding per registration whose store exists (v0, then v1)."""
+    rows: list[dict[str, Any]] = []
+    for version in REGISTRATIONS:
+        with registration(version):
+            rows.extend(_store_findings(repo_root))
+    return rows
+
+
+def _store_findings(repo_root: Path) -> list[dict[str, Any]]:
     """Info with phase and verdict. Warn when the store is unreadable. Nothing when absent."""
     path = Path(repo_root) / STORE_PATH
     if not path.exists():
@@ -2487,6 +2626,12 @@ def main(argv: list[str] | None = None) -> int:
         description="UK/Europe strategy-book replay. Refuses EODHD until the registration is sealed.",
     )
     parser.add_argument("--repo", type=Path, default=REPO_ROOT)
+    parser.add_argument(
+        "--registration",
+        choices=sorted(REGISTRATIONS),
+        default="v0",
+        help="Which registration's seal, constants and store to use (default v0).",
+    )
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("plan", help="Print the fetch plan. Does not call EODHD.")
     seal_p = sub.add_parser("seal", help="Stamp the registration. Does not call EODHD.")
@@ -2514,6 +2659,11 @@ def main(argv: list[str] | None = None) -> int:
     del_p = sub.add_parser("confirm-deleted", help="Stamp licensed_data.deleted_at.")
     del_p.add_argument("--cache", type=Path)
     args = parser.parse_args(argv)
+    if args.command == "status":
+        print(json.dumps(findings(args.repo), indent=2))
+        return 0
+    previous_registration = ACTIVE_REGISTRATION
+    use_registration(args.registration)
     try:
         if args.command == "plan":
             print(json.dumps(fetch_plan(), indent=2))
@@ -2525,9 +2675,6 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         if args.command == "stamp-reveal":
             print(json.dumps(stamp_reveal(args.owner, args.repo)["reveal_stamp"], indent=2))
-            return 0
-        if args.command == "status":
-            print(json.dumps(findings(args.repo), indent=2))
             return 0
         if args.command == "confirm-deleted":
             confirm_deleted(args.repo, args.cache)
@@ -2573,6 +2720,8 @@ def main(argv: list[str] | None = None) -> int:
     except ReplayRefused as exc:
         print(redact_token(str(exc), os.environ.get("EODHD_API_TOKEN")), flush=True)
         return 2
+    finally:
+        use_registration(previous_registration)
     return 0
 
 

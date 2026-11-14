@@ -60,9 +60,11 @@ ftse-strategy-book-uk-replay stamp-reveal --owner "<name>"
 ## Workflow
 
 `.github/workflows/strategy-book-uk-replay.yml` is `workflow_dispatch` only.
-Input `phase` is `fetch`, `development`, or `reveal`. Secret
+Input `phase` is `fetch`, `development`, `development-amendment`, or `reveal`;
+input `registration` is `v0` (default) or `v1`. Secret
 `EODHD_API_TOKEN`. A missing secret exits 0 and commits nothing. The job
-commits only `docs/data/strategy_book_uk_replay.json`.
+commits only `docs/data/strategy_book_uk_replay.json` and
+`docs/data/strategy_book_uk_replay_v1.json`.
 
 Soft cap: 90,000 weighted calls in a UTC day (fundamentals weigh 10). The LSE
 plan is 86,818. Hitting the cap writes `status: partial` and a cursor. The
@@ -107,6 +109,37 @@ such marker is already logged. The store's `amendments` list keeps each
 marker, the time, and the superseded block's `computed_at`, sha256 and primary
 medians. While a marker is unlogged the ops-monitor finding warns.
 
+## Registration v1 (Companies House shares for the cap)
+
+[`strategy-book-uk-replay-v1-registration-draft.md`](strategy-book-uk-replay-v1-registration-draft.md)
+is v0 with one rule changed: when EODHD has no share count for a session, a
+name matched to the Companies House store takes `shares_in_issue`, else
+`weighted_average_basic_shares`, from its latest filing visible on that session
+(filing date + 2 days; stale 456 days after the period end). The constants are
+`REGISTRATIONS["v1"]` in `src/value_investor/strategy_book_uk_replay.py`; every
+other number is v0's.
+
+v1 has its own seal file (`docs/data/strategy_book_uk_replay_v1_registration.json`)
+and its own store (`docs/data/strategy_book_uk_replay_v1.json`). The v0 seal
+and store are not touched. The workflow input `registration` (default `v0`)
+picks which one a dispatch uses; the CLI flag is `--registration v1`, before the
+subcommand. Under v1 the runner refuses EODHD until the v1 file is sealed:
+
+```bash
+ftse-strategy-book-uk-replay --registration v1 seal --owner <name>
+ftse-strategy-book-uk-replay --registration v1 develop
+ftse-strategy-book-uk-replay --registration v1 stamp-reveal --owner <name>
+ftse-strategy-book-uk-replay --registration v1 reveal
+```
+
+The resume cursor and the encrypted cache are shared, so a v1 `development`
+dispatch after a complete v0 fetch makes no new EODHD calls. A v0 `reveal`
+deletes the cached raw data, so do not reveal v0 while v1 is pending. Each
+v1 development or holdout block adds `cap_report`: month-name rows by cap
+source, the matched leavers ranked through the fallback, and
+`named_failures_ranked` for Carillion, Thomas Cook, Debenhams and Intu
+(`not_in_store` when the store has no record).
+
 ## Memory and run time
 
 The full cache is roughly 13.6k symbols. `develop` and `reveal` read one
@@ -120,8 +153,10 @@ pre-change runner by `tests/test_strategy_book_uk_replay_develop.py`
 
 ## Ops monitor
 
-`check_strategy_book_uk_replay` in the daily ops-monitor pass. No finding when
-the aggregate store is absent. Info with the phase and verdict when it reads.
+`check_strategy_book_uk_replay` in the daily ops-monitor pass. One finding per
+registration store (titles **Strategy-book UK replay** and **Strategy-book UK
+replay v1**, each with a "store unreadable" warn variant). No finding when
+a store is absent. Info with the phase and verdict when it reads.
 Warn when the JSON is unreadable. `auto_fixable` is false. The check does not
 call EODHD and does not heal the store.
 

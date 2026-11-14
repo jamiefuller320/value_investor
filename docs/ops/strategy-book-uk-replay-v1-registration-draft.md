@@ -31,7 +31,7 @@ v0 section 2 **Shares** stays the first source. The fallback applies only when i
 |---|---|
 | 1. EODHD | As v0: latest `outstandingShares` row with `dateFormatted` on or before the session and `shares` > 0, quarterly preferred, later date wins. |
 | 2. Who can fall back | Only a symbol matched to a Companies House record under the v0 matching rule (same listed company; EPIC and leaving date consistent; marker `ch-matching-v1`). An unmatched symbol stays not computable. |
-| 3. Which filing | The latest filing in that record whose share count is visible on the session: Companies House filing date plus the 2-day lag. A filing with no filing date uses period end + 180 days, then 2 days, as v0 does for statements. |
+| 3. Which filing | The latest filing in that record whose share count is visible on the session: Companies House filing date plus the 2-day lag. A filing with no filing date uses period end + 180 days, then 2 days, as v0 does for statements. The count is the filing's own year; a prior-year comparative column is not used. |
 | 4. Stale | Not used when the filing's period end is more than 456 days before the session (`STALE_FILING_DAYS`). The cap is then not computable for that month. |
 | 5. Which field | `shares_in_issue` from that filing (ordinary shares in issue at the balance-sheet date). If that filing has none, `weighted_average_basic_shares` from the same filing. No other field. A share count is not derived from profit and EPS. An earlier filing is not used in place of a missing field on the latest one. |
 | 6. Splits | As v0: a split dated after the period end and on or before the session scales the count by `new/old`. An unparsed split makes the month not computable. |
@@ -101,5 +101,7 @@ Each default is what the seal accepts if the owner signs unchanged.
 | `CH_SHARES_FIELDS` | `shares_in_issue`, then `weighted_average_basic_shares`, same filing | Proposed |
 | `CH_SHARES_STALE_DAYS` | 456 | Proposed, equals `STALE_FILING_DAYS` |
 | `CH_SHARES_LAG_DAYS` | 2 | Proposed, equals the v0 filing lag |
+| `NAMED_FAILURES` | `carillion`, `thomas_cook`, `debenhams`, `intu` | Proposed, section 4 report only |
+| `NAMED_FAILURE_MONTHS` | 12 | Proposed, section 4 report only |
 
 Every other constant is the v0 appendix value.
