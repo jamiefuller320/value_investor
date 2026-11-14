@@ -173,11 +173,13 @@ def _shares_from_capital_form(
     api_key: str,
     cache_dir: Path,
     allow_ocr: bool,
+    cap_rows: list[dict[str, Any]] | None = None,
 ) -> bool:
     period_end = str(filing.get("fiscal_year_end") or "")
     if not company_number or len(period_end) < 10:
         return False
-    cap_rows = list_capital_filings(company_number, api_key)
+    if cap_rows is None:
+        cap_rows = list_capital_filings(company_number, api_key)
     picked = pick_capital_filing_after_period(
         cap_rows,
         period_end,
@@ -464,6 +466,7 @@ def run_capital_share_backfill(
     cache_dir.mkdir(parents=True, exist_ok=True)
     total = len(pending_rows)
     logger.info("capital share backfill pending %s (ocr=%s)", total, allow_ocr)
+    cap_cache: dict[str, list[dict[str, Any]]] = {}
     for index, row in enumerate(pending_rows, start=1):
         key = str(row.get("key"))
         work = copy.deepcopy(row)
@@ -471,6 +474,9 @@ def run_capital_share_backfill(
         company_number = str(work.get("company_number") or record.get("company_number") or "")
         if not company_number:
             continue
+        if company_number not in cap_cache:
+            cap_cache[company_number] = list_capital_filings(company_number, api_key)
+        cap_rows = cap_cache[company_number]
         touched = 0
         for filing in work.get("filings") or []:
             shares = (filing.get("fields") or {}).get("shares_in_issue") or {}
@@ -482,6 +488,7 @@ def run_capital_share_backfill(
                 api_key=api_key,
                 cache_dir=cache_dir,
                 allow_ocr=allow_ocr,
+                cap_rows=cap_rows,
             ):
                 touched += 1
         if touched:

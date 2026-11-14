@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-14T15:33:44+00:00",
+  "generated_at": "2026-11-14T17:57:33+00:00",
   "learning_question": "Can Companies House annual-report PDFs supply point-in-time annual statements for failed UK names that EODHD lacks, accurately enough to fill check A (at least 7 of 11 failed names with statements from 2013) when combined with EODHD?",
   "observe_only": true,
   "influences_live": false,
@@ -931,7 +931,7 @@
               "citation": {
                 "transaction_id": "MzEyMzcxNDc3OWFkaXF6a2N4",
                 "page": 72,
-                "line": "£215 127 314 divided into 430,254,629 ordinary shares of 50 penceeach _ personally or by proxy) at any general meeting of the Company or upon"
+                "line": "£215127314 divided into 430,254,629 ordinary shares of 50 penceeach _ personally or by proxy) at any general meeting of the Company or upon"
               },
               "basis": "in_issue",
               "cross_check": {
@@ -13643,15 +13643,20 @@
               "scale": "units",
               "currency": null,
               "unit": null,
-              "source": "primary",
-              "absent_reason": "shares_jump",
-              "citation": {
-                "transaction_id": "MzEwNjM3NDc0NGFkaXF6a2N4",
-                "page": 62,
-                "line": "“Ordinary shares of 10p each > > 816 8"
-              },
+              "source": "ch_statement_of_capital",
+              "absent_reason": "implausibly small for FTSE 350 member",
               "basis": "in_issue",
-              "nulled_from": "816.8"
+              "cross_check": {
+                "status": "unavailable"
+              },
+              "citation": {
+                "transaction_id": "MzEwMDI2NjU4MGFkaXF6a2N4",
+                "filing_date": "2014-05-19",
+                "page": null,
+                "line": "statement of capital ordinary shares total 354525",
+                "method": "ocr"
+              },
+              "nulled_from": "354525"
             }
           },
           "comparative": null,
@@ -72750,13 +72755,23 @@
               "note": "not printed as a parsed date on the statement page; Companies House made_up_date used"
             },
             "shares_in_issue": {
-              "value": null,
-              "scale": null,
+              "value": "700000000",
+              "scale": "units",
               "currency": null,
               "unit": null,
-              "source": "primary",
-              "absent_reason": "ordinary shares in issue not found in the share-capital note",
-              "citation": null
+              "source": "ch_statement_of_capital",
+              "absent_reason": null,
+              "basis": "in_issue",
+              "cross_check": {
+                "status": "unavailable"
+              },
+              "citation": {
+                "transaction_id": "MzIzNjgwNzI4NGFkaXF6a2N4",
+                "filing_date": "2019-06-13",
+                "page": null,
+                "line": "statement of capital ordinary shares total 700000000",
+                "method": "ocr"
+              }
             }
           },
           "comparative": null,
@@ -157933,8 +157948,8 @@
     }
   ],
   "share_coverage": {
-    "names_with_any_shares_in_issue": 28,
-    "filings_with_shares_in_issue": 36,
+    "names_with_any_shares_in_issue": 29,
+    "filings_with_shares_in_issue": 37,
     "names_every_expected_year": 1,
     "by_reason_class": {
       "takeover": {
@@ -157942,7 +157957,7 @@
         "names_every_expected_year": 1
       },
       "failure": {
-        "names_with_any_shares_in_issue": 1,
+        "names_with_any_shares_in_issue": 2,
         "names_every_expected_year": 0
       },
       "other": {
@@ -157990,121 +158005,5 @@
       "warehouse_reit"
     ],
     "pending_count": 2
-  },
-  "share_reextract_cursor": {
-    "completed_keys": [
-      "aberdeen_asset_management",
-      "acacia_mining",
-      "aegis",
-      "aggreko",
-      "aldermore",
-      "alent",
-      "alternative_credit_investments",
-      "amec_foster_wheeler",
-      "amlin",
-      "arm_holdings",
-      "asia_dragon_trust",
-      "atkins_ws",
-      "avast",
-      "bca_marketplace",
-      "berendsen",
-      "betfair_group",
-      "bg_group",
-      "bhp_group",
-      "biffa",
-      "booker_group",
-      "brewin_dolphin_holdings",
-      "brit",
-      "britvic",
-      "btg",
-      "cable_wireless_communications",
-      "calisen",
-      "clipper_logistics",
-      "cobham",
-      "contourglobal",
-      "csr",
-      "daejan_holdings",
-      "dairy_crest_group",
-      "darktrace",
-      "darty",
-      "dechra_pharmaceuticals",
-      "dixons_retail",
-      "domino_printing_sciences",
-      "ei_group",
-      "essar_energy",
-      "esure_group",
-      "eurasian_natural_resources",
-      "f_c_asset_management",
-      "fenner",
-      "fidessa_group",
-      "finablr",
-      "friends_life_group",
-      "g4s",
-      "gamesys_group",
-      "gcp_student_living",
-      "greene_king",
-      "hargreaves_lansdown",
-      "hastings_group_holdings",
-      "hellermanntyton_group",
-      "henderson_group",
-      "home_retail_group",
-      "homeserve",
-      "indivior",
-      "inmarsat",
-      "invensys",
-      "jardine_lloyd_thompson_group",
-      "jimmy_choo",
-      "john_laing_group",
-      "just_eat",
-      "kaz_minerals",
-      "ladbrokes_coral_group",
-      "laird",
-      "lxi_reit",
-      "mediclinic_international",
-      "meggitt",
-      "merlin_entertainments",
-      "millennium_copthorne_hotels",
-      "morrison",
-      "network_international_holdings",
-      "nmc_health",
-      "old_mutual",
-      "pace",
-      "perform_group",
-      "perpetual_income_growth_investment_trust",
-      "premier_farnell",
-      "redrow",
-      "renewi",
-      "rexam",
-      "rpc",
-      "rsa_insurance_group",
-      "sabmiller",
-      "sdl",
-      "shaftesbury",
-      "shawbrook_group",
-      "signature_aviation",
-      "smith_ds",
-      "sophos_group",
-      "spirit_pub",
-      "st_modwen_properties",
-      "synergy_health",
-      "talktalk_telecom_group",
-      "telecity_group",
-      "tritax_eurobox_gbp",
-      "tsb_banking_group",
-      "tui_travel",
-      "tyman",
-      "ultra_electronics_holdings",
-      "vectura_group",
-      "vedanta_resources",
-      "virgin_money_holdings",
-      "virgin_money_uk",
-      "vivo_energy",
-      "william_hill",
-      "wincanton",
-      "witan_inv_tst",
-      "worldpay_group",
-      "zpg"
-    ],
-    "pending_count": 0
   }
 }
