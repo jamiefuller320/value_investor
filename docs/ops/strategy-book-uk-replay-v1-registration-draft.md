@@ -19,7 +19,7 @@ v1 is v0 with one rule changed: where EODHD has no share count for a session, a 
 
 v0 section 9 says a change to the universe is a new `registration_id`, not an amendment. The share count decides who is in the FTSE 350 rank, so this is a universe change.
 
-**What was seen before this draft.** The v0 development block was committed on 2026-11-13 (run 43445995250). It is superseded by the v0 marker `prior-year-visible-v1`, and its numbers are public in `docs/data/strategy_book_uk_replay.json`: 203 development episodes, median matched excess +0.46%. The reason for v1 is a coverage diagnostic in that block, not its returns: `mean_cap_not_computable_share` was 0.51, and Carillion, Thomas Cook, Debenhams and Intu have EODHD prices but no EODHD fundamentals or share counts, so they could never be ranked. A survivorship-free tape that cannot rank the failures is not survivorship-free where it matters. The holdout has not been read under any id.
+**What was seen before this draft.** The v0 development block was committed on 2026-11-13 (run 43445995250). It is superseded by the v0 marker `prior-year-visible-v1`, and its numbers are public in `docs/data/strategy_book_uk_replay.json`: 203 development episodes, median matched excess +0.46%. The reason for v1 is a coverage diagnostic in that block, not its returns: `mean_cap_not_computable_share` was 0.51, and Carillion, Thomas Cook, Debenhams and Intu have EODHD prices but no EODHD fundamentals or share counts, so they could never be ranked. A survivorship-free tape that cannot rank the failures is not survivorship-free where it matters. Intu is not in the Companies House store: it left the FTSE 350 by demotion before it failed, so it is not on the delisting-leaver list. v1 cannot rank it unless question 5 adds it. The holdout has not been read under any id.
 
 Most of the 0.51 is small and long-dead LSE symbols outside any plausible top 350. Companies House shares only reach the FTSE 350 leavers in the store, so v1 is expected to close the failure gap, not to bring the 0.51 down by much. Section 4 reports both.
 
@@ -73,7 +73,7 @@ Development and holdout blocks report, per market and pooled, without tickers:
 | `cap_source_counts` | Month-name rows whose cap came from `eodhd`, `ch_shares_in_issue`, or `ch_weighted_shares`. |
 | `mean_cap_not_computable_share` | As v0, under v1's rule. |
 | `ch_cap_leavers` | Matched leavers ranked in at least one month through the Companies House fallback. |
-| `named_failures_ranked` | For Carillion, Thomas Cook, Debenhams and Intu: whether each was in the rank in any of the 12 month-ends before its last EOD date. A yes or no per name; these are public events, so naming them leaks nothing. |
+| `named_failures_ranked` | For Carillion, Thomas Cook, Debenhams and Intu: whether each was in the rank in any of the 12 month-ends before its last EOD date. A yes or no per name, or `not_in_store` for a name with no Companies House record; these are public events, so naming them leaks nothing. |
 
 These are descriptions. They are not tests and do not enter a verdict.
 
@@ -89,6 +89,7 @@ Each default is what the seal accepts if the owner signs unchanged.
 2. **Stale.** Default: 456 days, as statements. Alternative: 730 days, which ranks a name that stopped filing a year earlier (more failures ranked, staler counts).
 3. **Who can fall back.** Default: matched leavers only. There is no other Companies House share source in the repo.
 4. **No reveal by 2026-12-09.** Default: the owner chooses at that point between revealing v0 and revealing nothing (section 3).
+5. **Failures demoted before they failed.** Default: not added; Intu and any other name that left the FTSE 350 by demotion and later failed has no Companies House record and stays not computable when EODHD has no share count. Alternative: add those names to the Companies House store (same extraction and hand check) before the seal, which widens the extraction and moves the seal later.
 
 ## Appendix: constants added or changed
 
