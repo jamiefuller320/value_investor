@@ -645,10 +645,18 @@
         {
           "id": "adhoc-strategy-uk-replay-reveal",
           "title": "Run the UK/Europe replay and stamp the reveal",
-          "summary": "Plan step 3.3. The registration was sealed on 2026-11-12 (owner accepted the defaults). The fetch completed on 2026-11-13; development was committed the same day but is superseded by change marker prior-year-visible-v1: after that fix merges, dispatch the strategy-book-uk-replay workflow with phase=development-amendment, and read the amended block, not the first one. The encrypted cache is evicted after 7 days unused: if neither development nor reveal is dispatched for 6 days, re-dispatch phase=fetch (no EODHD calls once complete) to keep it. After the development aggregates are committed, read them and give the second stamp (stamp-reveal) that authorises the single holdout reveal (target 2026-12-03). The stamp changes no sealed number. Last EODHD call day is 2026-12-10.",
+          "summary": "Plan step 3.3. The registration was sealed on 2026-11-12 (owner accepted the defaults). The fetch completed on 2026-11-13; development was committed the same day but is superseded by change marker prior-year-visible-v1: after that fix merges, dispatch the strategy-book-uk-replay workflow with phase=development-amendment, and read the amended block, not the first one. The encrypted cache is evicted after 7 days unused: if neither development nor reveal is dispatched for 6 days, re-dispatch phase=fetch (no EODHD calls once complete) to keep it. Do not give the v0 reveal stamp while the v1 draft (Companies House shares for the cap, N273) is pending: once v1 is sealed, the reveal happens under v1 and v0 is never revealed. Otherwise, after the development aggregates are committed, read them and give the second stamp (stamp-reveal) that authorises the single holdout reveal (target 2026-12-03). The stamp changes no sealed number. Last EODHD call day is 2026-12-10.",
           "automated": false,
           "doc_path": "docs/ops/strategy-book-uk-replay-registration-draft.md",
           "doc_anchor": "owner-sign-off"
+        },
+        {
+          "id": "adhoc-strategy-uk-replay-v1-seal",
+          "title": "Seal the UK replay v1 registration (Companies House shares for the cap)",
+          "summary": "Deferred idea N273. v1 is v0 with one rule changed: a FTSE 350 leaver with no EODHD share count takes its share count from the Companies House store, so failures such as Carillion, Thomas Cook and Debenhams can be ranked (Intu is not in the store; question 5). Seal only when the share fields are merged with a hand check of at least 18 of 20 and coverage is published. Accept or change the section 6 defaults, then development is walked under v1 and the reveal (target 2026-12-03) happens under v1. Last EODHD call day is 2026-12-10.",
+          "automated": false,
+          "doc_path": "docs/ops/strategy-book-uk-replay-v1-registration-draft.md",
+          "doc_anchor": "2-pre-seal-conditions"
         },
         {
           "id": "adhoc-strategy-us-pit-rehearsal",
