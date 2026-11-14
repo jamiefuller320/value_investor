@@ -66,6 +66,27 @@ REGISTRATION_PATH = Path("docs/data/strategy_book_us_rehearsal_registration.json
 STORE_PATH = Path("docs/data/strategy_book_us_rehearsal.json")
 EXIT_LAB_PATH = Path("docs/data") / lab.LAB_STORE_NAME
 EXIT_LAB_ID = "strategy-book-exit-lab-v0"
+EXIT_LAB_ROUNDS: dict[int, dict[str, Any]] = {
+    1: {
+        "path": EXIT_LAB_PATH,
+        "lab_id": EXIT_LAB_ID,
+        "controls": (),
+        "purpose": (
+            "Choose at most one trend-led exit to seal as the strategy book's exit challenger "
+            "(N259). Development signal sessions only; not evidence for any variant."
+        ),
+    },
+    2: {
+        "path": Path("docs/data/strategy_book_exit_lab_round2.json"),
+        "lab_id": "strategy-book-exit-lab-round-2",
+        "controls": (COLUMN_LEAVE_TIER,),
+        "purpose": (
+            "Score the leave-tier hold per capital-day (its per-episode lead is not capital-"
+            "adjusted) and the recovery leg (L688), beside the leave-tier control. Design input "
+            "for the strategy book version review. Development signal sessions only; not evidence."
+        ),
+    },
+}
 PARENT_SEAL = Path("docs/data") / REGISTRATION_STORE_NAME
 SCRATCH_DIRNAME = "strategy_book_rehearsal"
 DELETION_DAYS = 30
@@ -88,6 +109,7 @@ TITLE_REVEALED = "Strategy-book US rehearsal: confirmation revealed"
 TITLE_DELETION_DUE = "Strategy-book US rehearsal: licensed data deletion due"
 TITLE_FAILED = "Strategy-book US rehearsal store unreadable"
 TITLE_EXIT_LAB = "Strategy-book exit lab: development-window scores committed"
+TITLE_EXIT_LAB_ROUND_2 = "Strategy-book exit lab round 2: development-window scores committed"
 
 
 class RehearsalRefused(RuntimeError):
@@ -1452,13 +1474,19 @@ def exit_lab(
     scratch: Path | None = None,
     repo_root: Path = REPO_ROOT,
     batch_size: int = DEFAULT_BATCH_SIZE,
-    exits: tuple[lab.LabExit, ...] = lab.LAB_EXITS,
+    exits: tuple[lab.LabExit, ...] | None = None,
+    round_number: int = 1,
 ) -> dict[str, Any]:
     """Score the exit-lab variants on development signal sessions only (exploratory).
 
-    Writes ``docs/data/strategy_book_exit_lab.json``. Never reads a confirmation
-    signal session and never writes the rehearsal store.
+    Round 1 writes ``docs/data/strategy_book_exit_lab.json``; round 2 writes
+    ``docs/data/strategy_book_exit_lab_round2.json`` and also boards the leave-tier
+    control. Never reads a confirmation signal session and never writes the
+    rehearsal store.
     """
+    spec = EXIT_LAB_ROUNDS[round_number]
+    exits = tuple(exits) if exits is not None else lab.LAB_ROUNDS[round_number]
+    controls = tuple(spec["controls"])
     scratch_dir = _scratch_dir(scratch, build)
     registration = preflight(repo_root, build, mid_build, sharadar_dir, scratch_dir)
     store = _load_json(Path(repo_root) / STORE_PATH) or {}
@@ -1477,7 +1505,7 @@ def exit_lab(
         batch_size=batch_size,
         cross_options=options,
     )
-    columns = {COLUMN_PRIMARY, *(rule.column for rule in exits)}
+    columns = {COLUMN_PRIMARY, *(rule.column for rule in exits), *controls}
     rows: list[dict[str, Any]] = []
     try:
         warning = memory_warning(source.names_walked, len(source.calendar), batch_size)
@@ -1495,21 +1523,19 @@ def exit_lab(
         tickers = source.tickers
     finally:
         source.remove()
-    boards = lab.lab_boards(rows, exits, window, sbo._slot_book)
+    boards = lab.lab_boards(rows, exits, window, sbo._slot_book, controls=controls)
     committed = (store.get("development") or {}).get("primary") or {}
     whole = boards["whole"]["primary"]
     payload = {
-        "lab_id": EXIT_LAB_ID,
+        "lab_id": spec["lab_id"],
+        "round": round_number,
         "registration_id": registration.get("registration_id"),
         "parent_registration_id": registration.get("parent_registration_id"),
         "observe_only": True,
         "influences_live": False,
         "exploratory": True,
         "evidence": False,
-        "purpose": (
-            "Choose at most one trend-led exit to seal as the strategy book's exit challenger "
-            "(N259). Development signal sessions only; not evidence for any variant."
-        ),
+        "purpose": spec["purpose"],
         "computed_at": _now(),
         "signal_window": {"first": window[0], "last": window[1]},
         "development_reproduced": (
@@ -1517,10 +1543,11 @@ def exit_lab(
             and whole.get("fair_cost_median") == committed.get("fair_cost_median")
         ),
         "variants": [rule.describe() for rule in exits],
+        **({"controls": list(controls)} if controls else {}),
         "boards": suppress_small(boards),
     }
     payload["choice"] = lab.apply_choice_rule(payload["boards"])
-    write_store(Path(repo_root) / EXIT_LAB_PATH, payload, tickers)
+    write_store(Path(repo_root) / spec["path"], payload, tickers)
     return {"store": payload}
 
 
@@ -1529,13 +1556,14 @@ def exit_lab_table(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
     boards = payload.get("boards") or {}
     whole = boards.get("whole") or {}
     out = []
-    for column, board in [
-        (COLUMN_PRIMARY, whole.get("primary") or {}),
-        *((whole.get("variants") or {}).items()),
+    for group, column, board in [
+        ("primary", COLUMN_PRIMARY, whole.get("primary") or {}),
+        *(("variants", c, b) for c, b in (whole.get("variants") or {}).items()),
+        *(("controls", c, b) for c, b in (whole.get("controls") or {}).items()),
     ]:
         paired = board.get("paired") or {}
         halves = [
-            (((boards.get(half) or {}).get("variants") or {}).get(column) or {}).get("paired") or {}
+            (((boards.get(half) or {}).get(group) or {}).get(column) or {}).get("paired") or {}
             for half in ("first_half", "second_half")
         ]
         out.append(
@@ -1622,6 +1650,27 @@ def findings(repo_root: Path = REPO_ROOT, now: datetime | None = None) -> list[d
             }
         )
     lab_store = _load_json(Path(repo_root) / EXIT_LAB_PATH)
+    round_two = _load_json(Path(repo_root) / EXIT_LAB_ROUNDS[2]["path"])
+    if round_two:
+        whole = (round_two.get("boards") or {}).get("whole") or {}
+        base = (whole.get("primary") or {}).get("capital_days_return")
+        leave = ((whole.get("controls") or {}).get(COLUMN_LEAVE_TIER) or {}).get(
+            "capital_days_return"
+        )
+        out.append(
+            {
+                "severity": "info",
+                "title": TITLE_EXIT_LAB_ROUND_2,
+                "summary": (
+                    f"Exit lab round 2 computed {round_two.get('computed_at')} on development "
+                    f"signals ({len(round_two.get('variants') or [])} variants; development "
+                    f"reproduced: {round_two.get('development_reproduced')}; capital-days return "
+                    f"primary {base}, leave-tier control {leave}; choice-rule eligible: "
+                    f"{(round_two.get('choice') or {}).get('eligible')}). Exploratory, not "
+                    "evidence: input to the strategy book version review (L687, L688)."
+                ),
+            }
+        )
     if lab_store:
         out.append(
             {
@@ -1699,6 +1748,13 @@ def main(argv: list[str] | None = None) -> int:
         help="Score trend-led exit variants on development signals only (exploratory)",
     )
     _paths(lab_p)
+    lab_p.add_argument(
+        "--round",
+        type=int,
+        choices=sorted(EXIT_LAB_ROUNDS),
+        default=1,
+        help="1: the trend-led variants; 2: leave-tier hold and recovery variants",
+    )
     sub.add_parser("status", help="Print the store status (reads the committed store only)")
     del_p = sub.add_parser("confirm-deleted", help="Stamp licensed_data.deleted_at after deletion")
     del_p.add_argument("--at", help="Deletion timestamp (default: the screen replay's deleted_at)")
@@ -1726,10 +1782,11 @@ def main(argv: list[str] | None = None) -> int:
                 args.sharadar_dir,
                 scratch=args.scratch,
                 batch_size=args.batch_size,
+                round_number=args.round,
             )
             print(json.dumps(exit_lab_table(lab_out["store"]), indent=2))
             print(json.dumps({"choice": lab_out["store"]["choice"]}, indent=2))
-            print(f"wrote {EXIT_LAB_PATH}", file=sys.stderr)
+            print(f"wrote {EXIT_LAB_ROUNDS[args.round]['path']}", file=sys.stderr)
             return 0
         run = develop if args.command == "develop" else reveal
         kwargs: dict[str, Any] = {"scratch": args.scratch, "batch_size": args.batch_size}

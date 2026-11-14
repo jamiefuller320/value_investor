@@ -41,9 +41,13 @@ EXIT_TRAIL = "trail_exit"
 EXIT_TREND = "trend_break"
 EXIT_CHANNEL_LOW = "channel_low_exit"
 EXIT_NEW_LOW = "new_low_exit"
+EXIT_LEFT_TIER = "left_tier_exit"
+EXIT_STOP = "stop_exit"
 
-UNLAUNCHED_KINDS = ("deadline", "new_low", "none")
-LAUNCHED_KINDS = ("ladder", "trail", "sma", "low")
+UNLAUNCHED_KINDS = ("deadline", "new_low", "none", "tier", "stop")
+LAUNCHED_KINDS = ("ladder", "trail", "sma", "low", "tier", "ladder_tier")
+# Rules that read the screen runs: out of the value set for the confirm count of runs.
+TIER_KINDS = frozenset({"tier", "ladder_tier"})
 
 # The longest close window any variant reads (a new low below the prior 252 closes).
 MAX_LOOKBACK = 253
@@ -59,6 +63,8 @@ class LabExit:
     unlaunched: str
     unlaunched_param: float = 0.0
     unlaunched_buffer: float = 0.0
+    # Sessions after the fill at which an unlaunched trade also ends (0 = no deadline).
+    unlaunched_deadline: int = 0
 
     def __post_init__(self) -> None:
         if self.launched not in LAUNCHED_KINDS:
@@ -70,6 +76,10 @@ class LabExit:
     def column(self) -> str:
         return LAB_PREFIX + self.name
 
+    @property
+    def reads_tier(self) -> bool:
+        return self.launched in TIER_KINDS or self.unlaunched in TIER_KINDS
+
     def describe(self) -> dict[str, Any]:
         return {
             "column": self.column,
@@ -78,6 +88,7 @@ class LabExit:
                 "rule": self.unlaunched,
                 "param": self.unlaunched_param,
                 "buffer": self.unlaunched_buffer,
+                **({"deadline": self.unlaunched_deadline} if self.unlaunched_deadline else {}),
             },
             "time_cap": None,
             "review_spacing": DRAFT_REVIEW_SPACING,
@@ -97,6 +108,18 @@ LAB_EXITS: tuple[LabExit, ...] = (
     LabExit("trail15_none", "trail", 0.15, "none", 0),
 )
 
+# Round 2, fixed before it is first run: the leave-tier hold (sell after the confirm
+# count of screen runs outside the value set) scored per capital-day, and the
+# recovery leg (L688). Every variant keeps the thesis breaks and the 63-session reviews.
+LAB_EXITS_ROUND_2: tuple[LabExit, ...] = (
+    LabExit("tier_tier", "tier", 0.0, "tier", 0),
+    LabExit("tier_deadline63", "tier", 0.0, "deadline", FAIL_TO_LAUNCH_INDEX),
+    LabExit("laddertier_tier", "ladder_tier", 0.0, "tier", 0),
+    LabExit("ladder_stop8_deadline63", "ladder", 0.0, "stop", 0.08, 0.0, FAIL_TO_LAUNCH_INDEX),
+    LabExit("ladder_deadline32", "ladder", 0.0, "deadline", 32),
+)
+LAB_ROUNDS: dict[int, tuple[LabExit, ...]] = {1: LAB_EXITS, 2: LAB_EXITS_ROUND_2}
+
 
 def lab_by_column(exits: Sequence[LabExit]) -> dict[str, LabExit]:
     return {rule.column: rule for rule in exits}
@@ -106,11 +129,21 @@ def is_review_session(index: int) -> bool:
     return index > 0 and index % DRAFT_REVIEW_SPACING == 0
 
 
-def launched_signal(rule: LabExit, *, close: float, peak: float, closes: list[float]) -> str | None:
+def launched_signal(
+    rule: LabExit,
+    *,
+    close: float,
+    peak: float,
+    closes: list[float],
+    left_tier: bool = False,
+) -> str | None:
     """Exit reason for a launched trade, or None. ``closes`` ends at today's close.
 
-    ``ladder`` is handled by the walker's checkpoint floor and returns None here.
+    ``ladder`` (and the floor half of ``ladder_tier``) is handled by the walker's
+    checkpoint floor and returns None here.
     """
+    if rule.launched in TIER_KINDS:
+        return EXIT_LEFT_TIER if left_tier else None
     if rule.launched == "trail":
         return EXIT_TRAIL if close <= peak * (1.0 - rule.launched_param) else None
     if rule.launched == "sma":
@@ -128,9 +161,38 @@ def launched_signal(rule: LabExit, *, close: float, peak: float, closes: list[fl
 
 
 def unlaunched_signal(
-    rule: LabExit, *, index: int, close: float, closes: list[float]
+    rule: LabExit,
+    *,
+    index: int,
+    close: float,
+    closes: list[float],
+    entry_px: float | None = None,
+    left_tier: bool = False,
 ) -> str | None:
     """Exit reason for a trade that has not launched, or None."""
+    reason = _unlaunched_rule(
+        rule, index=index, close=close, closes=closes, entry_px=entry_px, left_tier=left_tier
+    )
+    if reason is None and rule.unlaunched_deadline and index >= rule.unlaunched_deadline:
+        return EXIT_FAIL_TO_LAUNCH
+    return reason
+
+
+def _unlaunched_rule(
+    rule: LabExit,
+    *,
+    index: int,
+    close: float,
+    closes: list[float],
+    entry_px: float | None,
+    left_tier: bool,
+) -> str | None:
+    if rule.unlaunched == "tier":
+        return EXIT_LEFT_TIER if left_tier else None
+    if rule.unlaunched == "stop":
+        if not entry_px:
+            return None
+        return EXIT_STOP if close <= entry_px * (1.0 - rule.unlaunched_param) else None
     if rule.unlaunched == "deadline":
         return EXIT_FAIL_TO_LAUNCH if index >= int(rule.unlaunched_param) else None
     if rule.unlaunched == "new_low":
@@ -291,8 +353,13 @@ def lab_boards(
     exits: Sequence[LabExit],
     window: tuple[str, str],
     slot_book,
+    controls: Sequence[str] = (),
 ) -> dict[str, Any]:
-    """Primary and every variant, over the window and its two calendar halves."""
+    """Primary and every variant, over the window and its two calendar halves.
+
+    ``controls`` are existing paired columns (for example the leave-tier control)
+    boarded the same way; the choice rule does not read them.
+    """
 
     def mature(column: str, first: str, last: str) -> list[dict[str, Any]]:
         return [
@@ -317,6 +384,11 @@ def lab_boards(
                 for rule in exits
             },
         }
+        if controls:
+            block["controls"] = {
+                column: column_board(mature(column, first, last), primary, slot_book)
+                for column in controls
+            }
         out[label] = block
     return out
 

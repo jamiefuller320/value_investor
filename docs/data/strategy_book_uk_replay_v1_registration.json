@@ -1,0 +1,259 @@
+{
+  "registration_id": "strategy-book-uk-replay-v1",
+  "parent_registration_id": "owner-strategy-book-v0",
+  "sealed": false,
+  "status": "draft",
+  "document": "docs/ops/strategy-book-uk-replay-v1-registration-draft.md",
+  "document_sha256": null,
+  "sealed_at": null,
+  "sealed_by": null,
+  "reveal_stamp": null,
+  "observe_only": true,
+  "influences_live": false,
+  "plan_step": "3.3",
+  "constants": {
+    "registration_id": "strategy-book-uk-replay-v1",
+    "parent_registration_id": "owner-strategy-book-v0",
+    "FTSE_RANK_COUNT": 350,
+    "DAX_RANK_COUNT": 40,
+    "CAC_RANK_COUNT": 40,
+    "TAPE_START": "2013-01-01",
+    "DEVELOPMENT_START": "2013-01-01",
+    "DEVELOPMENT_END": "2018-12-31",
+    "HOLDOUT_START": "2019-01-01",
+    "HOLDOUT_END": "2025-09-30",
+    "HOLDOUT_HALF_SPLIT": "2022-01-01",
+    "WARMUP_CALENDAR_DAYS": 420,
+    "EOD_FROM": "2011-11-08",
+    "FILING_LAG_DAYS": 2,
+    "STATEMENT_LAG_DAYS": 180,
+    "INTERIM_STATEMENT_LAG_DAYS": 90,
+    "STALE_FILING_DAYS": 456,
+    "SHARES_DATE_FIELD": "dateFormatted",
+    "REVENUE_DROP_PCT": 0.05,
+    "REVENUE_FLAT_TOLERANCE_PCT": 0.01,
+    "MARGIN_DROP_PP": 0.03,
+    "EPS_ANNUAL_DROP_PCT": 0.2,
+    "EPS_INTERIM_DROP_PCT": 0.1,
+    "INTERIM_REVENUE_DROP_PCT": 0.05,
+    "INTERIM_YOY_WINDOW_DAYS": 45,
+    "INTERIM_MAX_AGE_DAYS": 460,
+    "FCF_SHARP_FALL_PCT": 0.5,
+    "SOFT_SIGNALS_TO_DECLINE": 2,
+    "MIN_MEMBERS_WITH_DATA": 4,
+    "MIN_COVERAGE_SHARE": 0.6,
+    "PRICE_BREADTH_HEADWIND": 0.65,
+    "SECTOR_RETURN_126D_HEADWIND": -0.1,
+    "RETURN_LOOKBACK_126D": 126,
+    "EARNINGS_BREADTH_HEADWIND": 0.5,
+    "RSI_PERIOD": 14,
+    "RSI_LEVEL": 35,
+    "LOW_WINDOW_SESSIONS": 10,
+    "ALT_RSI_LEVEL": 40,
+    "ALT_SMA_WINDOW": 10,
+    "ALT_SMA_DISTANCE": 0.03,
+    "MAX_FILL_GAP_CALENDAR_DAYS": 5,
+    "LAUNCH_RETURN": 0.1,
+    "FAIL_TO_LAUNCH_INDEX": 63,
+    "TIME_CAP_INDEX": 252,
+    "REVIEW_INDEXES": [
+      63,
+      126,
+      189
+    ],
+    "DRAFT_HIGH_WINDOW": 10,
+    "DRAFT_SWING_LIMIT_INDEX": 15,
+    "DRAFT_REVIEW_SPACING": 63,
+    "DRAFT_REVIEW_COUNT": 4,
+    "RECOVERY_DROP": 0.08,
+    "COOLDOWN_SESSIONS": 10,
+    "STAKE_UNITS": 100,
+    "MATURITY_SESSIONS": 63,
+    "THESIS_CONFIRM_OBSERVATIONS": 2,
+    "BASKET_MIN_NAMES": 5,
+    "DEEP_DIP_LOOKBACK": 20,
+    "DEEP_DIP_DROP": 0.08,
+    "REGIME_SMA_SESSIONS": 200,
+    "REGIME_ABOVE_SHARE": 0.5,
+    "REGIME_MIN_NAMES": 5,
+    "CHART_NOT_DAILY_GAP_SHARE": 0.05,
+    "CHART_NOT_DAILY_GAP_DAYS": 5,
+    "DELIST_HAIRCUT_BASELINE": 0.0,
+    "DELIST_HAIRCUT_SENSITIVITY": -0.3,
+    "TRADING_DAYS_TOLERANCE": 10,
+    "FAMILY_ERROR": 0.1,
+    "FAMILY_SIZE": 4,
+    "FAMILY_COVERAGE": 0.975,
+    "RESAMPLE_COUNT": 10000,
+    "TAIL_BAR": -0.2,
+    "DRAWDOWN_MULTIPLE": 1.5,
+    "REGIME_HALF_MIN_MATURE": 12,
+    "SLOT_COUNT": 20,
+    "SLOT_RANDOM_ORDERS": 15,
+    "SLOT_BOOK_RANDOM_SEED": 20261104,
+    "FX_CARRY_DAYS": 5,
+    "SMALL_CELL": 5,
+    "MARKET_COSTS": {
+      "ftse350": {
+        "buy": 0.00525,
+        "sell": 0.00025
+      },
+      "dax": {
+        "buy": 0.00175,
+        "sell": 0.00175
+      },
+      "cac40": {
+        "buy": 0.00175,
+        "sell": 0.00175
+      }
+    },
+    "LEGACY_STRESS_TRADE_COST_PCT": 0.03,
+    "DAILY_CALL_LIMIT": 100000,
+    "DAILY_CALL_BUDGET_SOFT_CAP": 90000,
+    "FUNDAMENTALS_CALL_WEIGHT": 10,
+    "EOD_CALL_WEIGHT": 1,
+    "DIV_CALL_WEIGHT": 1,
+    "SPLIT_CALL_WEIGHT": 1,
+    "LIST_CALL_WEIGHT": 1,
+    "MAX_REQUESTS_PER_SEC": 5,
+    "BUDGET_PROBE_SYMBOLS": 1,
+    "LSE_WEIGHTED_CALLS": 86818,
+    "LSE_ACTIVE_MEASURED": 3794,
+    "LSE_DELISTED_MEASURED": 2884,
+    "EURGBP_SANITY_LOW": 0.7,
+    "EURGBP_SANITY_HIGH": 0.95,
+    "USDGBP_SANITY_LOW": 0.65,
+    "USDGBP_SANITY_HIGH": 0.9,
+    "SUBSCRIPTION_START": "2026-11-12",
+    "SUBSCRIPTION_END": "2026-12-10",
+    "SEAL_TARGET": "2026-11-18",
+    "EUROPE_FETCH_DEADLINE": "2026-11-24",
+    "DEVELOPMENT_COMMIT": "2026-11-25",
+    "REVEAL_TARGET": "2026-12-03",
+    "STRONG_BUY_COMPOSITE": 0.7,
+    "BUY_COMPOSITE": 0.55,
+    "STRONG_BUY_PASS_FRACTION": 0.35,
+    "STRONG_BUY_PASS_FLOOR": 5,
+    "BUY_PASS_FRACTION": 0.22,
+    "BUY_PASS_FLOOR": 3,
+    "HOLD_PASS_RATE": 0.15,
+    "HOLD_COMPOSITE": 0.45,
+    "RISK_VETO_STRONG": 0.55,
+    "RISK_VETO_BUY": 0.35,
+    "MIN_QUALITY_FOR_ANALYSIS": 0.5,
+    "MIN_QUALITY_FOR_BUY": 0.5,
+    "MIN_QUALITY_FOR_STRONG_BUY": 0.65,
+    "CHANNEL_DIRECTION_R2": 0.25,
+    "DIVIDEND_YIELD_LOOKBACK_DAYS": 365,
+    "DEBT_TO_EQUITY_SCALE": 100,
+    "CAP_IMPLAUSIBLE_HIGH_GBP": 500000000000,
+    "CAP_IMPLAUSIBLE_LOW_GBP": 1000000,
+    "EXCHANGES": {
+      "LSE": {
+        "market": "ftse350",
+        "rank_count": 350,
+        "rank_currency": "GBP"
+      },
+      "XETRA": {
+        "market": "dax",
+        "rank_count": 40,
+        "rank_currency": "EUR"
+      },
+      "PA": {
+        "market": "cac40",
+        "rank_count": 40,
+        "rank_currency": "EUR"
+      }
+    },
+    "PROBE_CLASSES": [
+      {
+        "key": "carillion",
+        "known_end": "2018-01-15",
+        "klass": "known_failure"
+      },
+      {
+        "key": "thomas_cook",
+        "known_end": "2019-09-23",
+        "klass": "known_failure"
+      },
+      {
+        "key": "debenhams",
+        "known_end": "2019-04-09",
+        "klass": "known_failure"
+      },
+      {
+        "key": "patisserie_holdings",
+        "known_end": "2019-01-10",
+        "klass": "known_failure"
+      },
+      {
+        "key": "intu",
+        "known_end": "2020-06-26",
+        "klass": "known_failure"
+      },
+      {
+        "key": "wirecard",
+        "known_end": "2020-06-25",
+        "klass": "known_failure"
+      },
+      {
+        "key": "sirius",
+        "known_end": "2020-03-03",
+        "klass": "known_takeover"
+      },
+      {
+        "key": "gkn",
+        "known_end": "2018-03-29",
+        "klass": "known_takeover"
+      },
+      {
+        "key": "sky",
+        "known_end": "2018-09-26",
+        "klass": "known_takeover"
+      },
+      {
+        "key": "aggreko",
+        "known_end": "2021-08-16",
+        "klass": "known_takeover"
+      },
+      {
+        "key": "morrison",
+        "known_end": "2021-10-04",
+        "klass": "known_takeover"
+      }
+    ],
+    "FX_PAIRS": [
+      "EURGBP.FOREX",
+      "USDGBP.FOREX"
+    ],
+    "STATEMENT_BASIS": "eodhd_annual",
+    "UNIVERSE_BASIS": {
+      "ftse350": "lse_operating_cap_rank_1_350",
+      "dax": "xetra_operating_cap_rank_1_40",
+      "cac40": "pa_operating_cap_rank_1_40"
+    },
+    "DATA_QUALITY_BASIS": "three_fields",
+    "SECTOR_LABEL_BASIS": "eodhd_general_current",
+    "F9_STATUS": "f9_unverified",
+    "RESEARCH_VERDICT": "absent",
+    "MEMO_LABEL": "not_applicable",
+    "ADJUSTED_SIGNAL": "absent",
+    "T212_LISTED": "not_applicable",
+    "LATE_SIGNAL": "not_applicable",
+    "supersedes_registration_id": "strategy-book-uk-replay-v0",
+    "CH_SHARES_FALLBACK": true,
+    "CH_SHARES_FIELDS": [
+      "shares_in_issue",
+      "weighted_average_basic_shares"
+    ],
+    "CH_SHARES_STALE_DAYS": 456,
+    "CH_SHARES_LAG_DAYS": 2,
+    "NAMED_FAILURES": [
+      "carillion",
+      "thomas_cook",
+      "debenhams",
+      "intu"
+    ],
+    "NAMED_FAILURE_MONTHS": 12
+  }
+}

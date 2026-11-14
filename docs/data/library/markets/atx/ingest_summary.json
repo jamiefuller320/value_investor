@@ -1,99 +1,23 @@
 {
-  "run_at": "2026-11-13T13:38:01.345334+00:00",
+  "run_at": "2026-11-14T10:40:15.879299+00:00",
   "market_id": "atx",
-  "targets": [
-    "VOE.VI"
-  ],
-  "target_details": [
-    {
-      "ticker": "VOE.VI",
-      "priority_score": 26.9613,
-      "filings_total": 4,
-      "filings_with_body": 2,
-      "indexed_without_body": 2,
-      "reason": "indexed_without_body"
-    }
-  ],
-  "results": [
-    {
-      "ticker": "VOE.VI",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 4,
-        "filings_with_body": 2,
-        "indexed_without_body": 2
-      },
-      "after": {
-        "filings_total": 4,
-        "filings_with_body": 4,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 4,
-        "annual": 1,
-        "interim": 0,
-        "trading_update": 0,
-        "other": 3,
-        "with_body": 4,
-        "period_coverage": {
-          "annual": {
-            "total": 1,
-            "with_body": 1
-          },
-          "interim": {
-            "total": 0,
-            "with_body": 0
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 3,
-            "with_body": 3
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 4,
-        "with_body_after": 4,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 1,
-          "note": "merge_ir_allowlist_filings"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    }
-  ],
-  "improved": [
-    "VOE.VI"
-  ],
+  "targets": [],
+  "target_details": [],
+  "results": [],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-13T13:37:29.113616+00:00",
+    "snapshot_at": "2026-11-14T10:39:56.474761+00:00",
     "market_id": "atx",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 3,
+    "thin_body_buy_tier": 2,
     "indexed_without_body": 2,
     "bodies_min": 2,
-    "bodies_median": 2.5,
+    "bodies_median": 3.5,
     "bodies_max": 4,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -101,8 +25,7 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "WIE.VI",
-      "EVN.VI",
-      "VOE.VI"
+      "EVN.VI"
     ],
     "indexed_without_body_tickers": [
       "WIE.VI",
@@ -117,16 +40,14 @@
       "WIE.VI"
     ],
     "parked_count": 2,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "VOE.VI"
-    ],
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-13T13:37:54.284246+00:00",
+    "snapshot_at": "2026-11-14T10:40:09.956426+00:00",
     "market_id": "atx",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -172,7 +93,7 @@
   "discovery_scan": {
     "scanned": 6,
     "hits": 6,
-    "new_rows_total": 2,
+    "new_rows_total": 0,
     "curiosity_total": 6,
     "errors": 0,
     "prioritization_weights": {
@@ -185,7 +106,6 @@
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
-      "VOE.VI",
       "EVN.VI",
       "WIE.VI"
     ],
@@ -200,7 +120,7 @@
   },
   "critical_path": {
     "market_id": "atx",
-    "assessed_at": "2026-11-13T13:37:29.577456+00:00",
+    "assessed_at": "2026-11-14T10:39:56.791305+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -217,9 +137,7 @@
         "filings_with_body": 2
       }
     ],
-    "thin_need_discovery": [
-      "VOE.VI"
-    ],
+    "thin_need_discovery": [],
     "thin_need_bodies": [
       "WIE.VI",
       "EVN.VI"
@@ -232,7 +150,6 @@
     ],
     "recommended_actions": [
       "Prefer indexed-without-body body refetch (2 tickers, top: EVN.VI(1), WIE.VI(1))",
-      "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
@@ -240,13 +157,13 @@
       "zero_body": 0,
       "indexed_without_body_tickers": 2,
       "indexed_without_body_rows": 2,
-      "thin_need_discovery": 1,
+      "thin_need_discovery": 0,
       "thin_need_bodies": 2
     }
   },
-  "used_seconds": 24.308790216000034,
+  "used_seconds": 12.879355559000032,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3575.691209784,
+  "leftover_seconds": 3587.120644441,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -254,9 +171,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "atx",
-    "updated_at": "2026-11-13T13:37:54.292593+00:00",
+    "updated_at": "2026-11-14T10:40:09.963238+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -330,8 +247,8 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 67,
-    "candidate_count": 56,
+    "tried_count": 70,
+    "candidate_count": 55,
     "skipped_resolved_tickers": [
       "ACKB.BR",
       "APAM.AS",
@@ -343,15 +260,14 @@
       "ESSITY-B.ST",
       "LMT",
       "APTV",
-      "DFS.L",
       "MER.L",
       "TPT.L",
       "FOXT.L",
       "ULTP.L",
       "APTD.L",
+      "DFS.L",
       "SU.TO",
       "NTR.TO",
-      "GIB-A.TO",
       "MFC.TO",
       "BAS.DE",
       "PDD",
@@ -359,6 +275,7 @@
       "DTE.DE",
       "DTG.DE",
       "HNR1.DE",
+      "HEN3.DE",
       "PST.MI",
       "APAM.AS",
       "0285.HK",

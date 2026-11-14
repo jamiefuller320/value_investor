@@ -11,7 +11,12 @@ from test_strategy_book_us_rehearsal import NAMES, licensed, make_repo  # noqa: 
 from value_investor import strategy_book_exit_lab as lab
 from value_investor import strategy_book_us_rehearsal as rehearsal
 from value_investor import strategy_book_us_tape as tape
-from value_investor.strategy_book_rules import COLUMN_PRIMARY, EXIT_FAIL_TO_LAUNCH
+from value_investor.strategy_book_rules import (
+    COLUMN_LEAVE_TIER,
+    COLUMN_PRIMARY,
+    EXIT_FAIL_TO_LAUNCH,
+    EXIT_INELIGIBLE_RUNS,
+)
 
 
 def test_trailing_rule_sells_at_the_drop_from_the_peak():
@@ -200,3 +205,92 @@ def test_choice_rule_needs_both_halves_and_the_excess():
     assert out["failed"]["lab_d"] == ["paired_mean_not_above_zero_second_half"]
     boards["whole"]["variants"].pop("lab_a")
     assert lab.apply_choice_rule(boards)["pick"] is None
+
+
+def test_round_two_rules():
+    tier = lab.LabExit("t", "tier", 0.0, "tier")
+    assert tier.reads_tier
+    assert lab.launched_signal(tier, close=1.0, peak=2.0, closes=[1.0]) is None
+    assert (
+        lab.launched_signal(tier, close=1.0, peak=2.0, closes=[1.0], left_tier=True)
+        == lab.EXIT_LEFT_TIER
+    )
+    assert lab.unlaunched_signal(tier, index=900, close=1.0, closes=[1.0]) is None
+    assert (
+        lab.unlaunched_signal(tier, index=1, close=1.0, closes=[1.0], left_tier=True)
+        == lab.EXIT_LEFT_TIER
+    )
+    floor_and_tier = lab.LabExit("lt", "ladder_tier", 0.0, "tier")
+    assert lab.launched_signal(floor_and_tier, close=50.0, peak=200.0, closes=[50.0]) is None
+    stop = lab.LabExit("s", "ladder", 0.0, "stop", 0.08, 0.0, 63)
+    assert not stop.reads_tier
+    kwargs = {"closes": [100.0], "entry_px": 100.0}
+    assert lab.unlaunched_signal(stop, index=5, close=92.01, **kwargs) is None
+    assert lab.unlaunched_signal(stop, index=5, close=92.0, **kwargs) == lab.EXIT_STOP
+    assert lab.unlaunched_signal(stop, index=63, close=99.0, **kwargs) == EXIT_FAIL_TO_LAUNCH
+    assert stop.describe()["unlaunched"]["deadline"] == 63
+    assert "deadline" not in lab.LAB_EXITS[0].describe()["unlaunched"]
+
+
+def test_round_two_variants_are_fixed_and_new():
+    columns = [rule.column for rule in lab.LAB_EXITS_ROUND_2]
+    assert len(columns) == len(set(columns)) == 5
+    assert not set(columns) & {rule.column for rule in lab.LAB_EXITS}
+    assert all(rule.describe()["time_cap"] is None for rule in lab.LAB_EXITS_ROUND_2)
+    assert lab.LAB_ROUNDS == {1: lab.LAB_EXITS, 2: lab.LAB_EXITS_ROUND_2}
+
+
+def test_round_two_tier_exit_fills_with_the_leave_tier_control(
+    licensed: dict[str, Path],  # noqa: F811
+    tmp_path: Path,
+):
+    plain = _walk(licensed, tmp_path / "a", ())
+    episodes = _walk(licensed, tmp_path / "b", lab.LAB_EXITS_ROUND_2)
+    registered = [e for e in episodes if not e["column"].startswith(lab.LAB_PREFIX)]
+    assert json.dumps(registered, default=str) == json.dumps(plain, default=str)
+    control = {
+        (e["ticker"], e["signal_session"]): e
+        for e in episodes
+        if e["column"] == COLUMN_LEAVE_TIER and e.get("exit_reason") == EXIT_INELIGIBLE_RUNS
+    }
+    tier = [
+        e
+        for e in episodes
+        if e["column"] == "lab_tier_tier" and e.get("exit_reason") == lab.EXIT_LEFT_TIER
+    ]
+    assert tier, "the fixture should produce at least one leave-tier exit"
+    matched = [e for e in tier if (e["ticker"], e["signal_session"]) in control]
+    assert matched
+    for row in matched:
+        assert (
+            row["exit_session"] == control[(row["ticker"], row["signal_session"])]["exit_session"]
+        )
+
+
+def test_exit_lab_round_two_writes_its_own_file_with_the_control(
+    licensed: dict[str, Path],  # noqa: F811
+    tmp_path: Path,
+):
+    repo = make_repo(tmp_path / "repo")
+    paths = (licensed["build"], licensed["mid"], licensed["sharadar"])
+    rehearsal.develop(*paths, repo_root=repo)
+    payload = rehearsal.exit_lab(*paths, repo_root=repo, round_number=2)["store"]
+    assert not (repo / rehearsal.EXIT_LAB_PATH).exists()
+    text = (repo / rehearsal.EXIT_LAB_ROUNDS[2]["path"]).read_text()
+    assert payload["round"] == 2 and payload["controls"] == [COLUMN_LEAVE_TIER]
+    assert payload["development_reproduced"] is True
+    whole = payload["boards"]["whole"]
+    assert set(whole["variants"]) == {rule.column for rule in lab.LAB_EXITS_ROUND_2}
+    control = whole["controls"][COLUMN_LEAVE_TIER]
+    assert control["mature"] == whole["primary"]["mature"]
+    assert control["paired"]["n"] == whole["primary"]["mature"]
+    assert "capital_days_return" in control
+    assert COLUMN_LEAVE_TIER not in payload["choice"]["failed"]
+    for ticker in NAMES:
+        assert ticker not in text
+    table = rehearsal.exit_lab_table(payload)
+    assert [row["column"] for row in table][-1] == COLUMN_LEAVE_TIER
+    assert len(table) == 2 + len(lab.LAB_EXITS_ROUND_2)
+    titles = {row["title"] for row in rehearsal.findings(repo)}
+    assert rehearsal.TITLE_EXIT_LAB_ROUND_2 in titles
+    assert rehearsal.TITLE_EXIT_LAB not in titles

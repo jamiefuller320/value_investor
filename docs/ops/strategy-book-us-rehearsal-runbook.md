@@ -175,6 +175,38 @@ git push -u origin cursor/exit-lab-results-567c
 
 It prints one row per column (capital-days return, the 20-slot book, the medians, holding time, turns per slot-year, and the paired difference against the primary for the whole window and each half), then the choice rule's result: the eligible variants and the pick, if any. It writes `docs/data/strategy_book_exit_lab.json` with aggregates only; the privacy guard runs before the write. Expect a little longer than `develop`, with similar memory; `--batch-size` works the same way. It writes no per-episode files; its temporary `_tapes-*` split is removed at the end, and step 7 removes any left by an interrupted run.
 
+## 6c. Exit lab round 2 (exploratory, before deletion)
+
+Round 2 asks two questions the first round left open, on the same development signal sessions (2000–2012):
+
+- **Is holding while the name stays cheap better per day of capital?** The leave-tier control made about 18 points more per episode than the primary in both windows, but it holds much longer, so that lead is not capital-adjusted.
+- **Does the recovery leg earn its capital?** Recovery-labelled trades rarely launched and held about a third of capital-days (L688).
+
+Like round 1, every variant keeps the section 5 thesis breaks and the 63-session reviews, has no time cap, and is a paired column on the primary's entries. The variants were fixed before the first run (`LAB_EXITS_ROUND_2` in `src/value_investor/strategy_book_exit_lab.py`):
+
+| Column | After launch | Before launch |
+|---|---|---|
+| `lab_tier_tier` | Sell once the name has been outside the value set for the confirm count of screen runs (the leave-tier control's rule) | Same |
+| `lab_tier_deadline63` | Leave-tier rule | The primary's 63-session deadline |
+| `lab_laddertier_tier` | The primary's checkpoint floor, or the leave-tier rule, whichever comes first | Leave-tier rule |
+| `lab_ladder_stop8_deadline63` | The primary's checkpoint ladder | Sell on a close 8% below the fill (the recovery label), else the 63-session deadline |
+| `lab_ladder_deadline32` | The primary's checkpoint ladder | A 32-session deadline (about half the primary's wait) |
+
+The leave-tier control itself (`leave_tier`) is boarded beside them, with its own capital-days return and its pairing against the primary. The round 1 choice rule is reported for each variant, but this round seals nothing: the bench-seal review is closed, and round 2 is input to the strategy book version review at the thickness gate (L687, L688). The 2013–2025 window is spent, so this is not evidence.
+
+```bash
+git checkout main && git pull
+pip install -e .
+ftse-strategy-book-rehearsal exit-lab --round 2 --build ~/hsr-build --mid-build ~/hsr-mid-build \
+  --sharadar-dir ~/sharadar
+git checkout -b cursor/exit-lab-round-2-results-567c
+git add docs/data/strategy_book_exit_lab_round2.json
+git commit -m "Strategy-book exit lab round 2: development-window scores"
+git push -u origin cursor/exit-lab-round-2-results-567c
+```
+
+It writes `docs/data/strategy_book_exit_lab_round2.json` (aggregates only; the privacy guard runs first) and leaves the round 1 file and the rehearsal store untouched. Run time and memory are about the same as round 1. It refuses once `deleted_at` is stamped, so run it before step 7. The ops-monitor info row **Strategy-book exit lab round 2: development-window scores committed** names the capital-days return of the primary and of the leave-tier control.
+
 ## 7. Delete (by 2026-12-09 at the latest)
 
 ```bash

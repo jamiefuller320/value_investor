@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-13T22:46:29.550898+00:00`
+Generated: `2026-11-14T07:51:36.221069+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -25,19 +25,15 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-11-13T07:46:55.247575+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
+- [ok] Ops monitor overall=warn at 2026-11-14T02:32:07.990443+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `human`/human PR #1398 `eng-20261113-05` — Hunt fetchable IR source for parked ibex35 leftover LOG.MC
-- `parked_hunter`/verified PR #1396 `eng-20261113-04` — Hunt fetchable IR source for parked dax leftover BNR.DE
-- `ingest_narrow`/verified PR #1395 `eng-20261113-03` — Close stubborn ingest gaps for ITV.L (chain 2/3: 0/0 bodies, run igc-20261113-02)
-- `ingest_narrow`/verified PR #1394 `eng-20261113-02` — Close stubborn ingest gaps for ITV.L (chain 1/3: 0/0 bodies, run igc-20261113-02)
-- `parked_hunter`/verified PR #1392 `eng-20261113-01` — Hunt fetchable IR source for parked dax leftover MTX.DE
+- `ingest_narrow`/verified PR #1401 `eng-20261114-01` — Close library ingest gaps for euro_depth / DQ7A.IR (chain 1/3: 0/0 improved, run igc-20260912-01)
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 378
@@ -49,6 +45,22 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `validate job failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `ruff_format` — 2×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 13 (open=13, resolved=0)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Sector headwind gate coverage gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Memo model comparison failed — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Strategy-book UK replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Chart highs and lows incomplete — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Strategy-book US rehearsal: licensed data deletion due — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Deferred idea triggers met — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Deferred idea triggers unreadable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**

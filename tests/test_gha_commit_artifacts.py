@@ -220,6 +220,8 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "docs/data/strategy_book_us_rehearsal.json" in email
     assert "docs/data/strategy_book_uk_replay.json" in email
     assert "docs/data/strategy_book_exit_lab.json" in email
+    assert "docs/data/strategy_book_uk_replay_v1.json" in email
+    assert "docs/data/strategy_book_exit_lab_round2.json" in email
     forward = Path(".github/workflows/strategy-book-forward.yml").read_text(encoding="utf-8")
     assert 'cron: "30 21 * * 1-5"' in forward
     assert "timeout-minutes: 90" in forward

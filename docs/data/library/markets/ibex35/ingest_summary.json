@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-13T18:06:02.328763+00:00",
+  "run_at": "2026-11-14T14:35:03.272434+00:00",
   "market_id": "ibex35",
   "targets": [
     "LOG.MC"
@@ -7,7 +7,7 @@
   "target_details": [
     {
       "ticker": "LOG.MC",
-      "priority_score": 3.2166,
+      "priority_score": 3.26,
       "filings_total": 2,
       "filings_with_body": 2,
       "indexed_without_body": 0,
@@ -24,27 +24,27 @@
         "indexed_without_body": 0
       },
       "after": {
-        "filings_total": 2,
-        "filings_with_body": 2,
+        "filings_total": 4,
+        "filings_with_body": 4,
         "indexed_without_body": 0
       },
-      "improved": false,
+      "improved": true,
       "regime": "euro_filings",
       "filings_summary": {
-        "total": 2,
-        "annual": 0,
-        "interim": 0,
+        "total": 4,
+        "annual": 1,
+        "interim": 1,
         "trading_update": 0,
         "other": 2,
-        "with_body": 2,
+        "with_body": 4,
         "period_coverage": {
           "annual": {
-            "total": 0,
-            "with_body": 0
+            "total": 1,
+            "with_body": 1
           },
           "interim": {
-            "total": 0,
-            "with_body": 0
+            "total": 1,
+            "with_body": 1
           },
           "trading_update": {
             "total": 0,
@@ -62,15 +62,16 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 2,
-        "with_body_after": 2,
+        "with_body_before": 4,
+        "with_body_after": 4,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
+        "retry_cleared": 0,
         "deadline_hit": false,
         "merge": {
           "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
+          "total_allowlist": 2,
+          "note": "merge_ir_allowlist_filings"
         },
         "shared_body_propagated": 0,
         "ir_metadata_reconciled": 0,
@@ -78,12 +79,14 @@
       }
     }
   ],
-  "improved": [],
+  "improved": [
+    "LOG.MC"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-13T18:05:41.094390+00:00",
+    "snapshot_at": "2026-11-14T14:33:16.873264+00:00",
     "market_id": "ibex35",
     "buy_tier_count": 3,
     "unmeasured_buy_tier": 0,
@@ -113,34 +116,30 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-13T18:05:56.252131+00:00",
+    "snapshot_at": "2026-11-14T14:33:36.831360+00:00",
     "market_id": "ibex35",
     "buy_tier_count": 3,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 1,
+    "thin_body_buy_tier": 0,
     "indexed_without_body": 0,
-    "bodies_min": 2,
+    "bodies_min": 4,
     "bodies_median": 6,
     "bodies_max": 7,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "LOG.MC"
-    ],
+    "thin_body_tickers": [],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
-    "parked_tickers": [
-      "LOG.MC"
-    ],
-    "parked_count": 1,
+    "parked_tickers": [],
+    "parked_count": 0,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -148,36 +147,67 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 3,
-    "hits": 1,
-    "new_rows_total": 0,
-    "curiosity_total": 1,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "LOG.MC"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "ibex35"
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "ibex35",
+    "to_market": "sti",
+    "stream_markets_after": [
+      "sti"
+    ],
+    "parity_event": {
+      "recorded": true,
+      "first_time": false,
+      "market_id": "ibex35",
+      "ingest_parity_met": true,
+      "filing_health": {
+        "snapshot_at": "2026-11-14T14:33:36.831360+00:00",
+        "market_id": "ibex35",
+        "buy_tier_count": 3,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+        "bodies_min": 4,
+        "bodies_median": 6,
+        "bodies_max": 7,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "unmeasured_tickers": [],
+        "zero_body_tickers": [],
+        "thin_body_tickers": [],
+        "indexed_without_body_tickers": [],
+        "indexed_without_body_by_ticker": {},
+        "parked_tickers": [],
+        "parked_count": 0,
+        "effective_thin_body_buy_tier": 0,
+        "effective_thin_body_tickers": [],
+        "effective_indexed_without_body": 0,
+        "effective_indexed_without_body_tickers": [],
+        "ingest_exhausted": false
+      },
+      "learning_admitted": true,
+      "learning_admitted_changed": false
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "sti",
+      "forced": true,
+      "prior_screen_at": "2026-11-13T06:53:26.029457+00:00",
+      "prior_age_days": 1,
+      "run_at": "2026-11-14T14:34:56.922885+00:00",
+      "shortlist_count": 8,
+      "ticker_count": 30
+    },
+    "at": "2026-11-14T14:33:48.758889+00:00",
+    "ingest_parity_recorded": true
   },
   "critical_path": {
     "market_id": "ibex35",
-    "assessed_at": "2026-11-13T18:05:41.608956+00:00",
+    "assessed_at": "2026-11-14T14:33:17.222679+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -201,9 +231,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 14.129406837999966,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3585.870593162,
+  "used_seconds": 19.262078779000007,
+  "budget_seconds": 87.5,
+  "leftover_seconds": 68.237921221,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -211,79 +241,69 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ibex35",
-    "updated_at": "2026-11-13T18:05:56.256147+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 23,
+    "updated_at": "2026-11-14T14:33:36.836335+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
-    "parked": [
-      {
-        "ticker": "LOG.MC",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-11-13T18:05:56.256147+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
-      }
-    ],
+    "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
-    "leftover_tickers": [
+    "had_complete_targets": false,
+    "leftover_tickers": [],
+    "unparked_leftover": [],
+    "surface_released": [
       "LOG.MC"
     ],
-    "unparked_leftover": [],
-    "surface_released": [],
     "path": "docs/data/library/markets/ibex35/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "ibex35",
-    "ingest_exhausted_markets": [
-      "aex",
-      "aim",
-      "asx200",
-      "atx",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "hang_seng",
-      "ibex35",
-      "iseq20",
-      "nasdaq100",
-      "omxs30",
-      "psi20",
-      "smi",
-      "sp500",
-      "sti",
-      "tsx60",
-      "us_adr_asia"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "true_parity",
+    "market_id": "ibex35"
   },
   "parked_hunter_compile": {
-    "compiled_count": 1,
-    "task_ids": [
-      "eng-20261113-05"
+    "compiled_count": 0,
+    "reason": "no parked leftover tickers remaining for hunter",
+    "tried_count": 70,
+    "candidate_count": 56,
+    "skipped_resolved_tickers": [
+      "ACKB.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "DQ7A.IR",
+      "EVN.VI",
+      "UCB.BR",
+      "WIE.VI",
+      "ESSITY-B.ST",
+      "LMT",
+      "APTV",
+      "MER.L",
+      "TPT.L",
+      "FOXT.L",
+      "ULTP.L",
+      "APTD.L",
+      "DFS.L",
+      "SU.TO",
+      "NTR.TO",
+      "MFC.TO",
+      "BAS.DE",
+      "PDD",
+      "BAS.DE",
+      "DTE.DE",
+      "DTG.DE",
+      "HNR1.DE",
+      "HEN3.DE",
+      "PST.MI",
+      "APAM.AS",
+      "0285.HK",
+      "0857.HK",
+      "0288.HK",
+      "0883.HK",
+      "2331.HK",
+      "EVN.VI",
+      "WIE.VI"
     ],
-    "task_count": 279,
-    "market_id": "ibex35",
-    "hunter_ticker": "LOG.MC",
-    "hunter_tickers": [
-      "LOG.MC"
-    ],
-    "priority_score": 12.0,
-    "wait_behind_task_id": "",
-    "leftover_key_bodies": false
+    "wait_behind_task_id": ""
   }
 }

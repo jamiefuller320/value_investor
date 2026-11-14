@@ -137,6 +137,47 @@ def scale_shares(
     return shares * factor, False
 
 
+def ch_shares_on(
+    filings: Sequence[Mapping[str, Any]] | None,
+    session: date,
+) -> dict[str, Any] | None:
+    """v1 cap fallback: share count from the latest Companies House filing visible on the session.
+
+    Only primary filings. Stale past ``CH_SHARES_STALE_DAYS`` from the period end.
+    The first ``CH_SHARES_FIELDS`` entry with a positive count wins; a missing field
+    on the latest filing is not filled from an earlier one.
+    """
+    lag = timedelta(days=int(_const("CH_SHARES_LAG_DAYS")))
+    best: tuple[date, date] | None = None
+    chosen: Mapping[str, Any] | None = None
+    for filing in filings or ():
+        period_end = _parse_date(filing.get("fiscal_year_end"))
+        if period_end is None:
+            continue
+        filed = _parse_date(filing.get("filing_date"))
+        base = filed or period_end + timedelta(days=int(_const("STATEMENT_LAG_DAYS")))
+        if base + lag > session:
+            continue
+        key = (period_end, base)
+        if best is None or key > best:
+            best, chosen = key, filing
+    if best is None or chosen is None:
+        return None
+    period_end = best[0]
+    if (session - period_end).days > int(_const("CH_SHARES_STALE_DAYS")):
+        return None
+    fields = chosen.get("fields") or {}
+    for name in _const("CH_SHARES_FIELDS"):
+        field = fields.get(name)
+        count = _ch_amount(field, money=False)
+        if count is None:
+            continue
+        count *= _SCALE.get(str((field or {}).get("scale") or "").lower(), 1.0)
+        if count > 0:
+            return {"shares": count, "date": period_end, "source": f"ch_{name}"}
+    return None
+
+
 class FxSeries(dict):
     """A date -> close map with its days sorted once. Do not mutate after building."""
 

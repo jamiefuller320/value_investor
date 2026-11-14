@@ -438,8 +438,9 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://thenavigatorcompany.com/wp-content/uploads/2025/02/Navigator-l-Divulgacao_Resultados_2024.pdf",
     ],
     # euro_depth parked DQ7A.IR — eng-20260910-01: prior allowlist misattributed DCC plc PDF.
-    # eng-20260912-01 / eng-20261111-01: donegaligroup.com https TLS is reset from datacenter ingest;
-    # http serves PDFs; stale unfetchable flags on live http rows must be cleared on refetch.
+    # eng-20260912-01 / eng-20261111-01 / eng-20261114-01: donegaligroup.com https TLS is
+    # reset from datacenter ingest; http serves PDFs; stale unfetchable flags on live http
+    # rows must be cleared on refetch (igc-20260912-01 zero_body / skipped_unfetchable).
     "DQ7A.IR": [
         "http://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
         "http://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
@@ -1169,6 +1170,15 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://links.sgx.com/1.0.0/corporate-announcements/KYC2VFOK44U16ZK6/838991_UOL%20Group%20Limited%20-%20Annual%20Report%202024.pdf",
         "https://links.sgx.com/1.0.0/corporate-announcements/U776Y0C8YROX8M8K/855378_1.%20UOL%201H2025_Final.pdf",
     ],
+    # sti buy-tier leftover — eng-20261114-02: C6L.SI no_key_bodies; asia_filings indexed
+    # Google News / third-party shells. Glossy SGX annual-report PDFs (SIA AR 2024/25,
+    # FY2023/24) do not yield a body on the hunter live-fetch; seed the audited
+    # financial statements, the half-year news release, and the results slides.
+    "C6L.SI": [
+        "https://links.sgx.com/FileOpen/FS-fy2526.ashx?App=Announcement&FileID=888804",
+        "https://links.sgx.com/FileOpen/nr-q2fy2627.ashx?App=Announcement&FileID=911002",
+        "https://links.sgx.com/FileOpen/slide-q2fy2526.ashx?App=Announcement&FileID=867072",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -1521,6 +1531,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     ),
     # sti U14.SI SGX allowlist — UOL slugs and 1H2025 token need issuer match (fy false-positive).
     "U14": ("UOL Group", "UOL Group Limited", "UOL"),
+    # sti C6L.SI SGX allowlist — FS-fy* / nr-q2fy* / slide-q2fy* need issuer match (fy false-positive).
+    "C6L": ("Singapore Airlines", "Singapore Airlines Limited", "SIA"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
     "HM-B": (
@@ -6193,6 +6205,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://links.sgx.com/FileOpen/20241029_2QFY24%20Results_Financial%20Statement.ashx?App=Announcement&FileID=823421": "interim",
     # eng-20261028-05: U14.SI — 1H2025_Final slug has no half-year token (would classify other).
     "https://links.sgx.com/1.0.0/corporate-announcements/U776Y0C8YROX8M8K/855378_1.%20UOL%201H2025_Final.pdf": "interim",
+    # eng-20261114-02: C6L.SI — nr-q2fy2627 / slide-q2fy2526 slugs contain fy (would classify annual).
+    "https://links.sgx.com/FileOpen/nr-q2fy2627.ashx?App=Announcement&FileID=911002": "interim",
+    "https://links.sgx.com/FileOpen/slide-q2fy2526.ashx?App=Announcement&FileID=867072": "interim",
     # eng-20261109-01: IMD.AX — Weblink Appendix 4D slug is numeric-only (would classify other).
     "https://wcsecure.weblink.com.au/pdf/IMD/03059253.pdf": "interim",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
@@ -7093,6 +7108,7 @@ def refetch_ir_allowlist_filing_bodies(
             "with_body_after": after_sync,
             "investegate_fallbacks": 0,
             "skipped_unfetchable": skipped_unfetchable,
+            "retry_cleared": retry_cleared,
             "deadline_hit": False,
             "merge": merge_meta,
             "shared_body_propagated": shared_body_propagated,
@@ -7287,6 +7303,8 @@ def refetch_ir_allowlist_filing_bodies(
         "retry_log": retry_log,
         "investegate_fallbacks": investegate_fallbacks,
         "skipped_unfetchable": skipped_unfetchable,
+        "retry_cleared": retry_cleared,
+        "pre_merge_migrated": pre_merge_migrated,
         "deadline_hit": deadline_hit,
         "merge": merge_meta,
         "mandatory": True,

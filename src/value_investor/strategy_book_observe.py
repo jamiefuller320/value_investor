@@ -1879,7 +1879,7 @@ def _step_lab(
         return EXIT_THESIS
     position.lab_peak = close if position.lab_peak is None else max(position.lab_peak, close)
     gain = close / entry_px - 1.0 if entry_px else 0.0
-    if rule.launched == "ladder":
+    if rule.launched in ("ladder", "ladder_tier"):
         _raise_floor(position, index, session, gain)
         if (
             position.launched
@@ -1905,9 +1905,33 @@ def _step_lab(
         if decision:
             return decision
     _download, _count, closes = name.prices.tail(session, LAB_MAX_LOOKBACK)
+    left = rule.reads_tier and _left_tier_by(position, name, session)
     if position.launched:
-        return launched_signal(rule, close=close, peak=position.lab_peak, closes=closes)
-    return unlaunched_signal(rule, index=index, close=close, closes=closes)
+        return launched_signal(
+            rule, close=close, peak=position.lab_peak, closes=closes, left_tier=left
+        )
+    return unlaunched_signal(
+        rule, index=index, close=close, closes=closes, entry_px=entry_px, left_tier=left
+    )
+
+
+def _left_tier_by(position: _Position, name: _Name, session: date) -> bool:
+    """The leave-tier control's confirmation, read through ``session``'s own run.
+
+    A run dated ``session`` counts, so when the confirming run's date is a session
+    the exit fills on the next bar, the same bar the leave-tier control fills on.
+    """
+    if position.entry_run is None:
+        return False
+    streak = 0
+    for fact in _screens_between(name, position.entry_run, session + timedelta(days=1)):
+        if str(fact.signal or "") in VALUE_SET_SIGNALS:
+            streak = 0
+            continue
+        streak += 1
+        if streak >= THESIS_CONFIRM_OBSERVATIONS:
+            return True
+    return False
 
 
 def _signal_exit(position: _Position, session: date, reason: str, nxt: date | None) -> None:
