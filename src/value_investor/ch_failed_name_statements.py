@@ -1253,6 +1253,12 @@ def _parse_shares_in_issue_body(
         current = cells[current_idx]
         if current.kind != "ok" or current.value is None:
             continue
+        if score < 2 and "ordinary" not in label.lower():
+            continue
+        if parsed.shares_in_millions and _share_scale(label) == "units":
+            share_scale = "millions"
+        else:
+            share_scale = _share_scale(label) or "units"
         try:
             magnitude = abs(Decimal(str(current.value)))
         except InvalidOperation:
@@ -1264,12 +1270,6 @@ def _parse_shares_in_issue_body(
             and "million" not in line.lower()
         ):
             continue
-        if score < 2 and "ordinary" not in label.lower():
-            continue
-        if parsed.shares_in_millions and _share_scale(label) == "units":
-            share_scale = "millions"
-        else:
-            share_scale = _share_scale(label) or "units"
         prior_value = None
         if (
             prior_idx is not None
