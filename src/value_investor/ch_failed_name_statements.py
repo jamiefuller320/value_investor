@@ -1334,10 +1334,12 @@ def apply_shares_precision_to_row(
     if not isinstance(row, dict) or row.get("value") in (None, ""):
         return
     if str(row.get("source") or "") == "ch_statement_of_capital":
-        if ftse_member:
-            units = _share_count_units(row["value"], row.get("scale"))
-            if units is not None and units < FTSE350_MIN_ORDINARY_SHARES:
+        units = _share_count_units(row["value"], row.get("scale"))
+        if ftse_member and units is not None:
+            if units < FTSE350_MIN_ORDINARY_SHARES or units > Decimal("500000000000"):
                 _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+        elif units is not None and units > Decimal("500000000000"):
+            _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
         return
     citation = row.get("citation") or {}
     line = str(citation.get("line") or "")

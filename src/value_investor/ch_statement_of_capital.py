@@ -74,17 +74,24 @@ def list_capital_filings(company_number: str, api_key: str) -> list[dict[str, An
     return rows
 
 
+def _repeated_digit_run(raw: str) -> bool:
+    if len(raw) < 20 or len(raw) % 2:
+        return False
+    half = len(raw) // 2
+    return raw[:half] == raw[half:]
+
+
 def _parse_plain_capital_text(text: str) -> str | None:
     best: tuple[int, str] | None = None
     for match in _ORDINARY_SHARE_TOTAL_RE.finditer(text):
         raw = re.sub(r"[\s,]", "", match.group(1))
-        if not raw.isdigit():
+        if not raw.isdigit() or _repeated_digit_run(raw):
             continue
         try:
             magnitude = int(raw)
         except ValueError:
             continue
-        if magnitude < 100_000:
+        if magnitude < 100_000 or magnitude > 500_000_000_000:
             continue
         if best is None or magnitude > best[0]:
             best = (magnitude, _trim_number(raw))
