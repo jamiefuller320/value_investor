@@ -1,8 +1,9 @@
 {
-  "run_at": "2026-11-14T17:07:17.318356+00:00",
+  "run_at": "2026-11-14T18:58:01.424241+00:00",
   "market_id": "us_adr_asia",
   "targets": [
-    "UMC"
+    "UMC",
+    "JD"
   ],
   "target_details": [
     {
@@ -11,6 +12,14 @@
       "filings_total": 56,
       "filings_with_body": 39,
       "indexed_without_body": 17,
+      "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "JD",
+      "priority_score": 18.025,
+      "filings_total": 37,
+      "filings_with_body": 27,
+      "indexed_without_body": 10,
       "reason": "indexed_without_body"
     }
   ],
@@ -77,6 +86,69 @@
         "ir_metadata_reconciled": 0,
         "note": "no missing IR allowlist bodies"
       }
+    },
+    {
+      "ticker": "JD",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 37,
+        "filings_with_body": 27,
+        "indexed_without_body": 10
+      },
+      "after": {
+        "filings_total": 37,
+        "filings_with_body": 27,
+        "indexed_without_body": 10
+      },
+      "improved": false,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 37,
+        "annual": 2,
+        "interim": 35,
+        "trading_update": 0,
+        "other": 0,
+        "with_body": 27,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 35,
+            "with_body": 25
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 0,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 27,
+        "with_body_after": 27,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "retry_cleared": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
     }
   ],
   "improved": [],
@@ -84,7 +156,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-14T17:06:53.582766+00:00",
+    "snapshot_at": "2026-11-14T18:55:46.974812+00:00",
     "market_id": "us_adr_asia",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -126,7 +198,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-14T17:07:10.098400+00:00",
+    "snapshot_at": "2026-11-14T18:56:15.759794+00:00",
     "market_id": "us_adr_asia",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -154,32 +226,55 @@
       "PDD": 1
     },
     "parked_tickers": [
-      "PDD",
-      "TME"
-    ],
-    "parked_count": 2,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 27,
-    "effective_indexed_without_body_tickers": [
       "JD",
+      "PDD",
+      "TME",
       "UMC"
     ],
-    "ingest_exhausted": false
+    "parked_count": 4,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "us_adr_asia",
+    "to_market": null,
+    "stream_markets_after": [],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "us_adr_asia",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "JD",
+        "PDD",
+        "TME",
+        "UMC"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": null,
+    "at": "2026-11-14T18:56:30.285025+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "us_adr_asia",
-    "assessed_at": "2026-11-14T17:06:53.931583+00:00",
+    "assessed_at": "2026-11-14T18:55:47.323147+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -230,21 +325,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 15.779430681000008,
+  "used_seconds": 28.092596264000008,
   "budget_seconds": 2100.0,
-  "leftover_seconds": 2084.220569319,
+  "leftover_seconds": 2071.907403736,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "UMC"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "us_adr_asia",
-    "updated_at": "2026-11-14T17:07:10.102937+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-11-14T18:56:15.764538+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -270,6 +363,30 @@
         "indexed_without_body": 12,
         "thin": false,
         "source_surface": "sec_edgar"
+      },
+      {
+        "ticker": "JD",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-14T18:56:15.764538+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 37,
+        "filings_with_body": 27,
+        "indexed_without_body": 10,
+        "thin": false,
+        "source_surface": "sec_edgar"
+      },
+      {
+        "ticker": "UMC",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-14T18:56:15.764538+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 56,
+        "filings_with_body": 39,
+        "indexed_without_body": 17,
+        "thin": false,
+        "source_surface": "sec_edgar"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -282,23 +399,46 @@
       "TME",
       "UMC"
     ],
-    "unparked_leftover": [
-      "JD",
-      "UMC"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/us_adr_asia/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "us_adr_asia"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "us_adr_asia",
+    "ingest_exhausted_markets": [
+      "aex",
+      "aim",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 70,
-    "candidate_count": 57,
+    "candidate_count": 59,
     "skipped_resolved_tickers": [
       "ACKB.BR",
       "APAM.AS",
