@@ -1170,6 +1170,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://links.sgx.com/1.0.0/corporate-announcements/KYC2VFOK44U16ZK6/838991_UOL%20Group%20Limited%20-%20Annual%20Report%202024.pdf",
         "https://links.sgx.com/1.0.0/corporate-announcements/U776Y0C8YROX8M8K/855378_1.%20UOL%201H2025_Final.pdf",
     ],
+    # sti buy-tier leftover — eng-20261114-02: C6L.SI no_key_bodies; asia_filings indexed
+    # Google News / third-party shells; seed SGX statutory PDFs (singaporeair.com IR is JS-heavy).
+    "C6L.SI": [
+        "https://links.sgx.com/FileOpen/SIA%20AR%202024_25.ashx?App=Announcement&FileID=849758",
+        "https://links.sgx.com/FileOpen/Annual%20Report%20FY2023-24.ashx?App=Announcement&FileID=808355",
+        "https://links.sgx.com/FileOpen/interimfs-1hfy2425.ashx?App=Announcement&FileID=824517",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -1522,6 +1529,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     ),
     # sti U14.SI SGX allowlist — UOL slugs and 1H2025 token need issuer match (fy false-positive).
     "U14": ("UOL Group", "UOL Group Limited", "UOL"),
+    # sti C6L.SI SGX allowlist — SIA AR* / interimfs-1hfy* slugs need issuer match (fy false-positive).
+    "C6L": ("Singapore Airlines", "Singapore Airlines Limited", "SIA"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
     "HM-B": (
@@ -6194,6 +6203,10 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://links.sgx.com/FileOpen/20241029_2QFY24%20Results_Financial%20Statement.ashx?App=Announcement&FileID=823421": "interim",
     # eng-20261028-05: U14.SI — 1H2025_Final slug has no half-year token (would classify other).
     "https://links.sgx.com/1.0.0/corporate-announcements/U776Y0C8YROX8M8K/855378_1.%20UOL%201H2025_Final.pdf": "interim",
+    # eng-20261114-02: C6L.SI — SIA AR 2024_25 FileOpen slug lacks annual token (would classify other).
+    "https://links.sgx.com/FileOpen/SIA%20AR%202024_25.ashx?App=Announcement&FileID=849758": "annual",
+    # eng-20261114-02: C6L.SI — interimfs-1hfy2425 slug contains fy token (would classify annual).
+    "https://links.sgx.com/FileOpen/interimfs-1hfy2425.ashx?App=Announcement&FileID=824517": "interim",
     # eng-20261109-01: IMD.AX — Weblink Appendix 4D slug is numeric-only (would classify other).
     "https://wcsecure.weblink.com.au/pdf/IMD/03059253.pdf": "interim",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.

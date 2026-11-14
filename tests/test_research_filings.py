@@ -9387,6 +9387,82 @@ def test_refetch_ir_allowlist_u14_si_statutory_eng_20261102_02(mock_fetch, tmp_p
     assert payload["filings"][0].get("has_body") is True
 
 
+def test_fetch_filings_ir_allowlist_sti_c6l_si_builtins_eng_20261114_02(tmp_path: Path):
+    """eng-20261114-02: sti buy-tier C6L.SI — SGX annual/interim statutory PDF seeds."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("C6L.SI", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    urls = [row["url"] for row in rows]
+    assert any("SIA%20AR%202024_25" in url for url in urls)
+    assert any("Annual%20Report%20FY2023-24" in url for url in urls)
+    assert any("interimfs-1hfy2425" in url for url in urls)
+    assert all("links.sgx.com" in url for url in urls)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_c6l_si_index(tmp_path: Path):
+    """Empty C6L.SI filings_index.json must gain IR rows for library sti measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("C6L.SI", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] == 3
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) == 3
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_parked_source_hunter_c6l_si_sti_has_fetchable_ir():
+    """eng-20261114-02: C6L.SI (Singapore Airlines) has live-fetchable SGX statutory PDF filings."""
+    assert "C6L.SI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("C6L.SI")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("links.sgx.com" in url for url in urls)
+    annual_url = next(url for url in urls if "SIA%20AR%202024_25" in url)
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("SGX PDF body fetch unavailable (network) — retry later")
+    assert len(body) >= 50000
+    assert "singapore airlines" in body.lower()
+
+
+def test_ir_allowlist_period_classifies_c6l_si_sia_ar_and_1hfy_slugs():
+    """eng-20261114-02: C6L.SI SGX FileOpen slugs must map annual/interim (not other/fy false-positive)."""
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/FileOpen/SIA%20AR%202024_25.ashx?App=Announcement&FileID=849758"
+        )
+        == "annual"
+    )
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/FileOpen/interimfs-1hfy2425.ashx?App=Announcement&FileID=824517"
+        )
+        == "interim"
+    )
+
+
+def test_filing_source_surface_c6l_si_ir_allowlist_direct_eng_20261114_02():
+    """eng-20261114-02: sti C6L.SI no_key_bodies must gain ir_allowlist_direct surface."""
+    from value_investor.research.filings import filing_source_surface, ir_allowlist_direct_eligible
+
+    assert ir_allowlist_direct_eligible("C6L.SI")
+    assert filing_source_surface("sti", "C6L.SI") == "asia_filings+ir_allowlist_direct"
+
+
 def test_parked_source_hunter_skip_0968_hk_hang_seng():
     """eng-20261017-11: 0968.HK leftover IWB is bot-gated TipRanks news, not missing HKEX filings."""
     assert "0968.HK" in PARKED_SOURCE_HUNTER_SKIP
