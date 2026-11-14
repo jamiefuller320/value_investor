@@ -188,7 +188,7 @@ def compare(sample: dict, cache_dir: Path) -> dict:
         return {"match": False, "detail": "missing units"}
     if sample.get("extraction_method") == "page_read":
         line = str(sample.get("line") or "")
-        if line and not shares_context_rejected("", line):
+        if line:
             try:
                 ok, _, _ = citation_supports(stored_u, line)
             except Exception:
