@@ -9400,7 +9400,7 @@ def test_fetch_filings_ir_allowlist_sti_c6l_si_builtins_eng_20261114_02(tmp_path
     urls = [row["url"] for row in rows]
     assert any("SIA%20AR%202024_25" in url for url in urls)
     assert any("Annual%20Report%20FY2023-24" in url for url in urls)
-    assert any("interimfs-1hfy2425" in url for url in urls)
+    assert any("slide-q2fy2526" in url for url in urls)
     assert all("links.sgx.com" in url for url in urls)
 
 
@@ -9439,7 +9439,7 @@ def test_parked_source_hunter_c6l_si_sti_has_fetchable_ir():
     assert "singapore airlines" in body.lower()
 
 
-def test_ir_allowlist_period_classifies_c6l_si_sia_ar_and_1hfy_slugs():
+def test_ir_allowlist_period_classifies_c6l_si_sia_ar_and_q2fy_slide_slugs():
     """eng-20261114-02: C6L.SI SGX FileOpen slugs must map annual/interim (not other/fy false-positive)."""
     assert (
         _ir_allowlist_period_from_url(
@@ -9449,7 +9449,7 @@ def test_ir_allowlist_period_classifies_c6l_si_sia_ar_and_1hfy_slugs():
     )
     assert (
         _ir_allowlist_period_from_url(
-            "https://links.sgx.com/FileOpen/interimfs-1hfy2425.ashx?App=Announcement&FileID=824517"
+            "https://links.sgx.com/FileOpen/slide-q2fy2526.ashx?App=Announcement&FileID=867072"
         )
         == "interim"
     )
