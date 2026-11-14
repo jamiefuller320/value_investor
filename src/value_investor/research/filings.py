@@ -438,8 +438,9 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://thenavigatorcompany.com/wp-content/uploads/2025/02/Navigator-l-Divulgacao_Resultados_2024.pdf",
     ],
     # euro_depth parked DQ7A.IR — eng-20260910-01: prior allowlist misattributed DCC plc PDF.
-    # eng-20260912-01 / eng-20261111-01: donegaligroup.com https TLS is reset from datacenter ingest;
-    # http serves PDFs; stale unfetchable flags on live http rows must be cleared on refetch.
+    # eng-20260912-01 / eng-20261111-01 / eng-20261114-01: donegaligroup.com https TLS is
+    # reset from datacenter ingest; http serves PDFs; stale unfetchable flags on live http
+    # rows must be cleared on refetch (igc-20260912-01 zero_body / skipped_unfetchable).
     "DQ7A.IR": [
         "http://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
         "http://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
@@ -7093,6 +7094,7 @@ def refetch_ir_allowlist_filing_bodies(
             "with_body_after": after_sync,
             "investegate_fallbacks": 0,
             "skipped_unfetchable": skipped_unfetchable,
+            "retry_cleared": retry_cleared,
             "deadline_hit": False,
             "merge": merge_meta,
             "shared_body_propagated": shared_body_propagated,
@@ -7287,6 +7289,8 @@ def refetch_ir_allowlist_filing_bodies(
         "retry_log": retry_log,
         "investegate_fallbacks": investegate_fallbacks,
         "skipped_unfetchable": skipped_unfetchable,
+        "retry_cleared": retry_cleared,
+        "pre_merge_migrated": pre_merge_migrated,
         "deadline_hit": deadline_hit,
         "merge": merge_meta,
         "mandatory": True,
