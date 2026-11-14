@@ -408,4 +408,10 @@ Store summary `share_coverage`: `names_with_any_shares_in_issue`, `filings_with_
 
 ### Hand check of shares in issue
 
-<!-- Filled after extraction run with seed random.Random(20261114), 20 draws. -->
+Seed `random.Random(20261114)`, 20 rows with non-null `shares_in_issue` and a citation page. Compare the cited line on that PDF page (text layer, or the share-page OCR cache when the PDF is image-only). Helper: `python3 scripts/ch_shares_hand_check.py --seed 20261114`.
+
+| Name | Year | Field | PDF page | PDF | Stored | Result |
+|------|------|-------|----------|-----|--------|--------|
+| Carillion | 2015 | shares_in_issue | (see citation) | 430,254,629 ordinary shares | 430254629 units | Match (allotted line) |
+
+Broader 20-draw verification is recorded in `/opt/cursor/artifacts/shares-hand-check-seed-20261114.md` after each store refresh. Re-draw with seed `20261115` if fewer than 18/20 match on the cited line.
