@@ -92,6 +92,14 @@ def _share_fields_touched(row: dict[str, Any]) -> bool:
     return all(isinstance((f.get("fields") or {}).get("shares_in_issue"), dict) for f in filings)
 
 
+def _row_needs_share_refill(row: dict[str, Any]) -> bool:
+    for filing in row.get("filings") or []:
+        shares = (filing.get("fields") or {}).get("shares_in_issue") or {}
+        if shares.get("value") in (None, ""):
+            return True
+    return False
+
+
 def _load_completed_keys(payload: dict[str, Any], done: dict[str, dict[str, Any]]) -> set[str]:
     found = set((payload.get("share_reextract_cursor") or {}).get("completed_keys") or [])
     if not found:
@@ -364,7 +372,7 @@ def run_share_reextraction(
         for row in done.values()
         if _share_reextract_applicable(row)
         and (not only or str(row.get("key")) in only)
-        and str(row.get("key")) not in completed_keys
+        and (str(row.get("key")) not in completed_keys or _row_needs_share_refill(row))
     ]
     pending_rows.sort(key=lambda row: share_reextract_rank(row, records_by_key))
     if limit is not None:
