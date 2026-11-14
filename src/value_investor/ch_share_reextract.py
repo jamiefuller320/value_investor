@@ -9,9 +9,13 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.ch_failed_name_statements import (
+    ABSENT_SHARES_CH_CAPITAL,
     ABSENT_SHARES_NOTE_ONLY,
     CH_NAME_BY_KEY,
     DEFAULT_STORE_PATH,
+    apply_shares_precision_to_filings,
+    apply_shares_precision_to_row,
+    apply_value_gate,
     ensure_pdf,
     extract_eps_note_pages,
     extract_share_capital_pages,
@@ -31,6 +35,11 @@ from value_investor.ch_leaver_statements import (
     fetch_ixbrl_html,
     filing_in_leaver_window,
     parse_ixbrl_html,
+)
+from value_investor.ch_statement_of_capital import (
+    list_capital_filings,
+    parse_capital_statement_html,
+    pick_capital_filing_after_period,
 )
 
 logger = logging.getLogger(__name__)
@@ -156,11 +165,43 @@ def _supplement_from_pdf(
     )
 
 
+def _shares_from_capital_form(
+    filing: dict[str, Any],
+    *,
+    company_number: str,
+    api_key: str,
+) -> bool:
+    period_end = str(filing.get("fiscal_year_end") or "")
+    if not company_number or len(period_end) < 10:
+        return False
+    cap_rows = list_capital_filings(company_number, api_key)
+    picked = pick_capital_filing_after_period(cap_rows, period_end)
+    if picked is None:
+        return False
+    try:
+        html = fetch_ixbrl_html(picked["document_metadata_url"], api_key=api_key)
+    except Exception as exc:  # noqa: BLE001
+        logger.info("capital statement fetch failed %s %s: %s", company_number, period_end, exc)
+        return False
+    if not html:
+        return False
+    row = parse_capital_statement_html(
+        html,
+        transaction_id=str(picked.get("transaction_id") or ""),
+        filing_date=str(picked.get("filing_date") or ""),
+    )
+    if row is None or row.get("value") in (None, ""):
+        return False
+    filing.setdefault("fields", {})["shares_in_issue"] = row
+    return True
+
+
 def refresh_filing_share_fields(
     filing: dict[str, Any],
     meta: dict[str, Any],
     *,
     key: str,
+    company_number: str,
     api_key: str,
     cache_dir: Path,
     allow_ocr: bool,
@@ -230,6 +271,26 @@ def refresh_filing_share_fields(
                 wide=True,
             )
     merge_share_supplement(filing, supplement, refresh=True)
+    row = (filing.get("fields") or {}).get("shares_in_issue") or {}
+    pages: list[str] = []
+    pdf = cache_dir / f"{key}_{made_up}.pdf"
+    if pdf.is_file():
+        share_pages = extract_share_capital_pages(
+            pdf,
+            transaction_id=transaction_id,
+            cache_dir=cache_dir,
+            zoom=LEAVER_OCR_ZOOM,
+            page_zoom=LEAVER_PAGE_ZOOM,
+            wide=key in PRIORITY_SHARE_KEYS,
+        )
+        pages = [page.text for page in share_pages]
+    if isinstance(row, dict):
+        apply_shares_precision_to_row(row, page_texts=pages, ftse_member=True)
+    if (filing.get("fields") or {}).get("shares_in_issue", {}).get("value") in (None, ""):
+        if not _shares_from_capital_form(filing, company_number=company_number, api_key=api_key):
+            absent = (filing.get("fields") or {}).get("shares_in_issue") or {}
+            if absent.get("value") in (None, "") and not absent.get("absent_reason"):
+                absent["absent_reason"] = ABSENT_SHARES_CH_CAPITAL
 
 
 def run_share_reextraction(
@@ -309,14 +370,18 @@ def run_share_reextraction(
                     filing,
                     meta,
                     key=key,
+                    company_number=str(company_number),
                     api_key=api_key,
                     cache_dir=cache_dir,
                     allow_ocr=allow_ocr,
                 )
             except Exception as exc:  # noqa: BLE001
                 logger.warning("share re-extract %s %s: %s", key, filing.get("fiscal_year"), exc)
+        apply_shares_precision_to_filings(work.get("filings") or [], ftse_member=True)
         preserved = key in PRESERVED_KEYS or work.get("extraction_status") == "preserved"
         if preserved:
+            for filing in work.get("filings") or []:
+                apply_value_gate([filing], financial=False)
             done[key] = work
         else:
             done[key] = annotate_name(work, record or None)

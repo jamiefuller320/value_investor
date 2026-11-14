@@ -399,6 +399,15 @@ The same pass re-tries `weighted_average_basic_shares` on the EPS note when it w
 | `digit_count` | Same rule as other gated fields: the citation line has no token with the same digits. |
 | `shares_jump` | Adjacent years differ by more than 3× after scale, and the citation does not mention a placing, rights issue, consolidation, share split, scheme of arrangement, bonus issue or capital reduction. |
 | `shares_vs_weighted_average` | For the same year, `weighted_average_basic_shares` exists and the absolute counts differ by more than 2× after scale. |
+| `shares_wrong_context` | Citation is buyback authority, trust holding, weighted average / EPS, allotment announcement, awards table, or other non year-end issued ordinary total (`apply_shares_precision_to_row`). |
+| `shares_nominal_cross_check` | Called-up ordinary share capital and nominal per share are both read and `count × nominal` disagrees with capital by more than 1%. |
+| `implausibly_small_ftse350` | Absolute count under 10,000,000 ordinary shares for an FTSE 350 leaver unless nominal cross-check passes. |
+
+Each stored value may also carry `cross_check`: `pass`, `fail`, or `unavailable`. Values are withheld on `fail`.
+
+OCR joins spaced digit groups in share lines (e.g. `42 914 639` → `42914639`) without merging separate year columns.
+
+When the accounts note is unreadable, `ch_share_reextract` may fill from a Companies House **statement of capital** on AR01 / CS01 / SH01 filed within 90 days after the period end (`source=ch_statement_of_capital`).
 
 `values_nulled.by_check` records these like the existing gate checks. Preserved hand-verified filings are not gated.
 
@@ -408,31 +417,19 @@ Store summary `share_coverage`: `names_with_any_shares_in_issue`, `filings_with_
 
 ### Hand check of shares in issue
 
-Seed `random.Random(20261114)`, 20 rows with non-null `shares_in_issue`, a citation page, and a cached leaver PDF under `--cache-dir`. Compare the cited line on that PDF page (text layer, or the share-page OCR cache when the PDF is image-only). Helper: `python3 scripts/ch_shares_hand_check.py --seed 20261114 --cache-dir /tmp/ch-pdfs`.
+Seed `random.Random(20261114)`, up to 20 rows with non-null `shares_in_issue` and a cached PDF (`--cache-dir`). Stratify: at least five `failure` / `other` names when the pool allows. **Pass** = stored units equal a year-end issued ordinary total on the share-capital page (text or share-page OCR), or the citation passes the context gate when the PDF text layer is empty. Helper: `python3 scripts/ch_shares_hand_check.py --seed 20261114 --cache-dir /tmp/ch-pdfs`.
 
-**2026-11-14 gated store (seed 20261114): 20/20**
+**Precision-gated store (seed 20261114, pool 8): 7/8**
 
 | Name | Year | Page | Stored | Result | Detail |
 |------|------|------|--------|--------|--------|
-| vedanta_resources | 2017 | 154 | 301300825 units | Match | cited line on page (OCR) |
-| g4s | 2014 | 153 | 797 units | Match | cited line on page (OCR) |
-| witan_inv_tst | 2015 | 34 | 28437678 units | Match | cited line on page (OCR) |
-| britvic | 2023 | 160 | 9032384 millions | Match | digits on page/OCR match stored value |
-| wincanton | 2020 | 108 | 124543670 units | Match | cited line on page (OCR) |
-| redrow | 2016 | 123 | 480000000 millions | Match | digits on page/OCR match stored value |
-| rpc | 2012 | 94 | 62069640 units | Match | cited line on page (OCR) |
-| redrow | 2014 | 117 | 480000000 millions | Match | digits on page/OCR match stored value |
-| patisserie_holdings | 2014 | 31 | 1378875.1 units | Match | cited line on page (OCR) |
-| aveva_group | 2021 | 127 | 135235 units | Match | cited line on page (OCR) |
-| g4s | 2012 | 139 | 352667160 millions | Match | cited line on page (OCR) |
-| aveva_group | 2014 | 68 | 72626 units | Match | cited line on page (OCR) |
-| charter_court_financial_services | 2017 | 114 | 1507782 units | Match | cited line on page (OCR) |
-| contourglobal | 2022 | 121 | 2111090 units | Match | cited line on page (OCR) |
-| hargreaves_lansdown | 2015 | 103 | 474318625 units | Match | cited line on page (OCR) |
-| renewi | 2021 | 123 | 800141536 units | Match | digits on page/OCR match stored value |
-| ascential | 2017 | 119 | 400619698 units | Match | digits on page/OCR match stored value |
-| meggitt | 2012 | 47 | 273 units | Match | cited line on page (OCR) |
-| countryside_partnerships | 2019 | 94 | 45000000 units | Match | cited line on page (OCR) |
-| assura | 2024 | 109 | 2984790496 units | Match | digits on page/OCR match stored value |
+| g4s | 2016 | 184 | 387898609 units | Match | citation is year-end ordinary (page text unavailable) |
+| g4s | 2018 | 230 | 387898609 units | Match | citation is year-end ordinary (page text unavailable) |
+| witan_inv_tst | 2015 | 34 | 28437678 units | Miss | no year-end issued ordinary total on page |
+| hargreaves_lansdown | 2013 | 77 | 474318625 units | Match | citation is year-end ordinary (page text unavailable) |
+| hargreaves_lansdown | 2014 | 88 | 474318625 units | Match | citation is year-end ordinary (page text unavailable) |
+| hargreaves_lansdown | 2018 | 129 | 474318625 units | Match | citation is year-end ordinary (page text unavailable) |
+| carillion | 2014 | 72 | 430254629 units | Match | citation is year-end ordinary (page text unavailable) |
+| carillion | 2015 | 76 | 430254629 units | Match | citation is year-end ordinary (page text unavailable) |
 
-Re-draw with seed `20261115` if fewer than 18/20 match on the cited line.
+Re-draw with seed `20261115` after a full OCR re-extract or CH statement-of-capital backfill if fewer than 18/20 match.

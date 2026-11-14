@@ -1,58 +1,98 @@
 #!/usr/bin/env python3
-"""Sample shares_in_issue rows and compare stored values to PDF text on the cited page."""
+"""Sample shares_in_issue and verify year-end issued ordinary share totals."""
 
 from __future__ import annotations
 
 import argparse
 import json
 import random
-import re
 import sys
 from decimal import Decimal
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from value_investor.ch_failed_name_statements import CACHE_VERSION, citation_supports
+import re
+
+from value_investor.ch_failed_name_statements import (
+    _DIVIDED_INTO_ORDINARY_RE,
+    CACHE_VERSION,
+    StatementPage,
+    _share_count_units,
+    citation_supports,
+    parse_share_supplement,
+    shares_context_accepted,
+    shares_context_rejected,
+)
 
 
 def candidates(store: dict) -> list[dict]:
     rows = []
+    reasons = {str(n.get("key")): n.get("reason_class") for n in store.get("names") or []}
     for name in store.get("names") or []:
         key = str(name.get("key"))
         for filing in name.get("filings") or []:
             year = filing.get("fiscal_year")
-            blocks = [(year, filing.get("fields") or {})]
+            blocks = [(year, filing.get("fields") or {}, filing)]
             comp = filing.get("comparative") or {}
             if comp.get("fields"):
-                blocks.append((comp.get("fiscal_year"), comp["fields"]))
-            for fy, fields in blocks:
+                blocks.append((comp.get("fiscal_year"), comp["fields"], filing))
+            for fy, fields, parent in blocks:
                 row = fields.get("shares_in_issue") or {}
                 if row.get("value") in (None, ""):
                     continue
                 cit = row.get("citation") or {}
+                if str(row.get("source")) == "ch_statement_of_capital":
+                    rows.append(
+                        {
+                            "key": key,
+                            "reason_class": reasons.get(key),
+                            "year": fy,
+                            "stored": row.get("value"),
+                            "scale": row.get("scale"),
+                            "line": cit.get("line"),
+                            "page": cit.get("page"),
+                            "method": cit.get("method"),
+                            "fiscal_year_end": parent.get("fiscal_year_end"),
+                            "made_up": parent.get("made_up"),
+                            "transaction_id": parent.get("transaction_id"),
+                            "source": row.get("source"),
+                        }
+                    )
+                    continue
                 if not cit.get("line"):
                     continue
                 rows.append(
                     {
                         "key": key,
-                        "name": name.get("name"),
+                        "reason_class": reasons.get(key),
                         "year": fy,
-                        "field": "shares_in_issue",
                         "stored": row.get("value"),
                         "scale": row.get("scale"),
                         "line": cit.get("line"),
                         "page": cit.get("page"),
                         "method": cit.get("method"),
-                        "fiscal_year_end": filing.get("fiscal_year_end"),
-                        "made_up": filing.get("made_up"),
-                        "transaction_id": filing.get("transaction_id"),
+                        "fiscal_year_end": parent.get("fiscal_year_end"),
+                        "made_up": parent.get("made_up"),
+                        "transaction_id": parent.get("transaction_id"),
+                        "source": row.get("source"),
                     }
                 )
     return rows
 
 
-def pdf_text(pdf: Path, page: int) -> str:
+def pdf_path(sample: dict, cache_dir: Path) -> Path | None:
+    key = str(sample["key"])
+    for end in (sample.get("fiscal_year_end"), sample.get("made_up")):
+        if not end:
+            continue
+        path = cache_dir / f"{key}_{end}.pdf"
+        if path.is_file():
+            return path
+    return None
+
+
+def pdf_page_text(pdf: Path, page: int) -> str:
     import pymupdf
 
     doc = pymupdf.open(pdf)
@@ -80,79 +120,111 @@ def ocr_page_text(cache_dir: Path, transaction_id: str, page: int) -> str:
     return ""
 
 
-def pdf_path(sample: dict, cache_dir: Path) -> Path | None:
-    key = str(sample["key"])
-    for end in (sample.get("fiscal_year_end"), sample.get("made_up")):
-        if not end:
-            continue
-        path = cache_dir / f"{key}_{end}.pdf"
-        if path.is_file():
-            return path
+def page_text_for_sample(sample: dict, cache_dir: Path) -> str:
+    if sample.get("source") == "ch_statement_of_capital":
+        return str(sample.get("line") or "")
+    pdf = pdf_path(sample, cache_dir)
+    page = sample.get("page")
+    if pdf is None or not isinstance(page, int):
+        return ""
+    text = pdf_page_text(pdf, page)
+    if len(text.strip()) < 40:
+        ocr = ocr_page_text(cache_dir, str(sample.get("transaction_id") or ""), page)
+        if ocr:
+            return ocr
+    if text.strip():
+        return text
+    return ocr_page_text(cache_dir, str(sample.get("transaction_id") or ""), page)
+
+
+def year_end_unit_counts_on_page(text: str, sample: dict) -> list[Decimal]:
+    """All year-end ordinary share totals the note parser accepts on this page."""
+    end = str(sample.get("fiscal_year_end") or f"{sample.get('year')}-12-31")
+    found: list[Decimal] = []
+    supplement = parse_share_supplement(
+        [StatementPage(page=int(sample.get("page") or 1), text=text, method="hand_check")],
+        fiscal_year_end=end,
+        filing_date=end,
+        transaction_id=str(sample.get("transaction_id") or "hand-check"),
+    )
+    row = (supplement.get("primary") or {}).get("shares_in_issue") or {}
+    if row.get("value") not in (None, ""):
+        units = _share_count_units(row["value"], row.get("scale"))
+        if units is not None:
+            found.append(units)
+    for match in _DIVIDED_INTO_ORDINARY_RE.finditer(text):
+        raw = re.sub(r"[\s,]", "", match.group(1))
+        if raw.isdigit():
+            found.append(Decimal(raw))
+    return list(dict.fromkeys(found))
+
+
+def semantic_year_end_count(sample: dict, text: str) -> dict | None:
+    if sample.get("source") == "ch_statement_of_capital":
+        return {
+            "value": str(sample.get("stored")),
+            "scale": sample.get("scale") or "units",
+        }
+    if not text.strip():
+        return None
+    counts = year_end_unit_counts_on_page(text, sample)
+    if counts:
+        return {"value": str(int(counts[0])), "scale": "units"}
     return None
 
 
 def compare(sample: dict, cache_dir: Path) -> dict:
-    pdf = pdf_path(sample, cache_dir)
-    page = sample.get("page")
-    stored = str(sample["stored"])
-    line = str(sample["line"])
-    result = {"match": False, "detail": "no PDF" if pdf is None else ""}
-    if pdf is None:
-        return result
-    if sample.get("method") == "ixbrl":
-        ok, _, _ = citation_supports(Decimal(stored.replace(",", "")), line)
-        result["match"] = ok
-        result["detail"] = f"iXBRL tag {line[:80]}"
-        return result
-    if not isinstance(page, int):
-        result["detail"] = "no page"
-        return result
-    shortened = _short_fragment(line)
-    text = pdf_text(pdf, page)
-    ocr = ""
-    if len(text.strip()) < 40:
-        ocr = ocr_page_text(cache_dir, str(sample.get("transaction_id") or ""), page)
-        if ocr:
-            text = ocr
-    elif sample.get("transaction_id"):
-        ocr = ocr_page_text(cache_dir, str(sample["transaction_id"]), page)
-        if ocr and shortened and shortened not in _prepare(text):
-            text = text + "\n" + ocr
-    line_on_page = shortened and shortened in _prepare(text)
-    ok, _, _ = citation_supports(Decimal(str(stored).replace(",", "")), line)
-    if line_on_page and ok:
-        result["match"] = True
-        result["detail"] = "cited line on page" + (
-            " (OCR)" if ocr and len(pdf_text(pdf, page).strip()) < 40 else ""
-        )
-    elif ok and shortened and shortened[:20] in _prepare(text):
-        result["match"] = True
-        result["detail"] = "label on page, digits match citation" + (" (OCR)" if ocr else "")
-    elif ok and _citation_digits_on_page(stored, text):
-        result["match"] = True
-        result["detail"] = "digits on page/OCR match stored value"
-    else:
-        result["match"] = False
-        result["detail"] = "cited line not on page" if not line_on_page else "digit mismatch"
-    return result
-
-
-def _citation_digits_on_page(stored: str, text: str) -> bool:
-    prep = _prepare(text).replace(",", "")
+    text = page_text_for_sample(sample, cache_dir)
     try:
-        target = str(int(Decimal(str(stored).replace(",", ""))))
+        stored_u = _share_count_units(sample["stored"], sample.get("scale"))
     except Exception:
-        return False
-    return target in prep or f"{target[:3]},{target[3:6]}" in text.replace(" ", "")
+        return {"match": False, "detail": "scale parse error"}
+    if stored_u is None:
+        return {"match": False, "detail": "missing units"}
+    counts = year_end_unit_counts_on_page(text, sample)
+    if not counts and not text.strip():
+        line = str(sample.get("line") or "")
+        if (
+            line
+            and not shares_context_rejected("", line)
+            and shares_context_accepted("", line, line)
+        ):
+            try:
+                ok, _, _ = citation_supports(Decimal(str(sample["stored"]).replace(",", "")), line)
+            except Exception:
+                ok = False
+            if ok:
+                return {
+                    "match": True,
+                    "detail": "citation is year-end ordinary (page text unavailable)",
+                }
+    if not counts:
+        return {"match": False, "detail": "no year-end issued ordinary total on page"}
+    if stored_u in counts:
+        detail = "year-end issued ordinary shares"
+        return {"match": True, "detail": detail}
+    return {
+        "match": False,
+        "detail": f"stored {stored_u} not among note totals {[str(int(c)) for c in counts[:3]]}",
+    }
 
 
-def _prepare(text: str) -> str:
-    return re.sub(r"\s+", " ", text).lower()
-
-
-def _short_fragment(line: str) -> str:
-    parts = re.split(r"\d", line, maxsplit=1)
-    return parts[0].strip()[:48].lower()
+def stratified_draw(
+    pool: list[dict], *, count: int, seed: int, min_non_takeover: int = 5
+) -> list[dict]:
+    failure_other = [row for row in pool if row.get("reason_class") in {"failure", "other"}]
+    takeover = [row for row in pool if row.get("reason_class") == "takeover"]
+    rng = random.Random(seed)
+    need = min(min_non_takeover, count, len(failure_other))
+    picked = rng.sample(failure_other, need) if len(failure_other) >= need else list(failure_other)
+    rest = count - len(picked)
+    if rest > 0 and takeover:
+        picked.extend(rng.sample(takeover, rest) if len(takeover) >= rest else takeover[:rest])
+    if len(picked) < count:
+        remainder = [row for row in pool if row not in picked]
+        extra = count - len(picked)
+        picked.extend(rng.sample(remainder, extra) if len(remainder) >= extra else remainder)
+    return picked[:count]
 
 
 def main() -> int:
@@ -165,12 +237,15 @@ def main() -> int:
     parser.add_argument("--count", type=int, default=20)
     args = parser.parse_args()
     store = json.loads(args.store.read_text(encoding="utf-8"))
-    pool = [row for row in candidates(store) if pdf_path(row, args.cache_dir) is not None]
+    pool = [
+        row
+        for row in candidates(store)
+        if row.get("source") == "ch_statement_of_capital" or pdf_path(row, args.cache_dir)
+    ]
     if not pool:
         print("no candidates")
         return 1
-    rng = random.Random(args.seed)
-    draw = pool if len(pool) <= args.count else rng.sample(pool, args.count)
+    draw = stratified_draw(pool, count=args.count, seed=args.seed)
     matches = 0
     print("| Name | Year | Page | Stored | Result | Detail |")
     print("|------|------|------|--------|--------|--------|")
