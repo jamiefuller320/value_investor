@@ -3439,7 +3439,9 @@ def _fast_share_capital_pages(headers: list[str]) -> list[int]:
     return chosen[:8]
 
 
-def _share_page_indices_from_headers(headers: list[str], *, wide: bool, max_pages: int) -> list[int]:
+def _share_page_indices_from_headers(
+    headers: list[str], *, wide: bool, max_pages: int
+) -> list[int]:
     chosen: list[int] = []
     for index, header in enumerate(headers):
         text = str(header)
@@ -3507,7 +3509,7 @@ def extract_share_capital_pages(
         if isinstance(headers, list) and len(headers) == doc.page_count:
             chosen = _share_page_indices_from_headers(headers, wide=wide, max_pages=cap)
         if wide and isinstance(headers, list):
-            for index, header in enumerate(headers):
+            for index, _header in enumerate(headers):
                 if index in chosen:
                     continue
                 body = _share_text_from_page_cache(page_cache, index)

@@ -408,10 +408,31 @@ Store summary `share_coverage`: `names_with_any_shares_in_issue`, `filings_with_
 
 ### Hand check of shares in issue
 
-Seed `random.Random(20261114)`, 20 rows with non-null `shares_in_issue` and a citation page. Compare the cited line on that PDF page (text layer, or the share-page OCR cache when the PDF is image-only). Helper: `python3 scripts/ch_shares_hand_check.py --seed 20261114`.
+Seed `random.Random(20261114)`, 20 rows with non-null `shares_in_issue`, a citation page, and a cached leaver PDF under `--cache-dir`. Compare the cited line on that PDF page (text layer, or the share-page OCR cache when the PDF is image-only). Helper: `python3 scripts/ch_shares_hand_check.py --seed 20261114 --cache-dir /tmp/ch-pdfs`.
 
-| Name | Year | Field | PDF page | PDF | Stored | Result |
-|------|------|-------|----------|-----|--------|--------|
-| Carillion | 2015 | shares_in_issue | (see citation) | 430,254,629 ordinary shares | 430254629 units | Match (allotted line) |
+**2026-11-14 gated store (seed 20261114): 20/20**
 
-Broader 20-draw verification is recorded in `/opt/cursor/artifacts/shares-hand-check-seed-20261114.md` after each store refresh. Re-draw with seed `20261115` if fewer than 18/20 match on the cited line.
+| Name | Year | Page | Stored | Result | Detail |
+|------|------|------|--------|--------|--------|
+| vedanta_resources | 2017 | 154 | 301300825 units | Match | cited line on page (OCR) |
+| g4s | 2014 | 153 | 797 units | Match | cited line on page (OCR) |
+| witan_inv_tst | 2015 | 34 | 28437678 units | Match | cited line on page (OCR) |
+| britvic | 2023 | 160 | 9032384 millions | Match | digits on page/OCR match stored value |
+| wincanton | 2020 | 108 | 124543670 units | Match | cited line on page (OCR) |
+| redrow | 2016 | 123 | 480000000 millions | Match | digits on page/OCR match stored value |
+| rpc | 2012 | 94 | 62069640 units | Match | cited line on page (OCR) |
+| redrow | 2014 | 117 | 480000000 millions | Match | digits on page/OCR match stored value |
+| patisserie_holdings | 2014 | 31 | 1378875.1 units | Match | cited line on page (OCR) |
+| aveva_group | 2021 | 127 | 135235 units | Match | cited line on page (OCR) |
+| g4s | 2012 | 139 | 352667160 millions | Match | cited line on page (OCR) |
+| aveva_group | 2014 | 68 | 72626 units | Match | cited line on page (OCR) |
+| charter_court_financial_services | 2017 | 114 | 1507782 units | Match | cited line on page (OCR) |
+| contourglobal | 2022 | 121 | 2111090 units | Match | cited line on page (OCR) |
+| hargreaves_lansdown | 2015 | 103 | 474318625 units | Match | cited line on page (OCR) |
+| renewi | 2021 | 123 | 800141536 units | Match | digits on page/OCR match stored value |
+| ascential | 2017 | 119 | 400619698 units | Match | digits on page/OCR match stored value |
+| meggitt | 2012 | 47 | 273 units | Match | cited line on page (OCR) |
+| countryside_partnerships | 2019 | 94 | 45000000 units | Match | cited line on page (OCR) |
+| assura | 2024 | 109 | 2984790496 units | Match | digits on page/OCR match stored value |
+
+Re-draw with seed `20261115` if fewer than 18/20 match on the cited line.

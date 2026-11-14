@@ -10,8 +10,8 @@ from typing import Any
 
 from value_investor.ch_failed_name_statements import (
     ABSENT_SHARES_NOTE_ONLY,
-    DEFAULT_STORE_PATH,
     CH_NAME_BY_KEY,
+    DEFAULT_STORE_PATH,
     ensure_pdf,
     extract_eps_note_pages,
     extract_share_capital_pages,
@@ -22,7 +22,6 @@ from value_investor.ch_failed_name_statements import (
     parse_share_supplement,
     write_store,
 )
-from value_investor.ch_failed_name_statements import CH_NAME_BY_KEY
 from value_investor.ch_leaver_statements import (
     LEAVER_OCR_ZOOM,
     LEAVER_PAGE_ZOOM,
@@ -33,36 +32,6 @@ from value_investor.ch_leaver_statements import (
     filing_in_leaver_window,
     parse_ixbrl_html,
 )
-
-_PRESERVED_FAILURE_KEYS = {
-    "carillion",
-    "thomas_cook",
-    "debenhams",
-    "patisserie_holdings",
-    "sirius",
-}
-
-
-def share_reextract_rank(row: dict[str, Any], records_by_key: dict[str, dict[str, Any]]) -> tuple:
-    key = str(row.get("key") or "")
-    record = records_by_key.get(key) or {}
-    reason = record.get("reason_class")
-    if key in _PRESERVED_FAILURE_KEYS or (
-        key in CH_NAME_BY_KEY and reason not in ("takeover", "other")
-    ):
-        reason = "failure"
-    elif key in PRESERVED_KEYS:
-        reason = reason or "takeover"
-    if reason == "failure":
-        group = 0
-    elif reason == "other" and record.get("ch_applicable") is True:
-        group = 1
-    elif reason == "takeover":
-        group = 2
-    else:
-        group = 3
-    leaving = str(record.get("leaving_date") or "9999-99-99")
-    return (group, leaving, key)
 
 logger = logging.getLogger(__name__)
 
@@ -246,7 +215,11 @@ def refresh_filing_share_fields(
         if (
             shares_row.get("value") in (None, "")
             and not wide_first
-            and absent in (ABSENT_SHARES_NOTE_ONLY, "ordinary shares in issue not found in the share-capital note")
+            and absent
+            in (
+                ABSENT_SHARES_NOTE_ONLY,
+                "ordinary shares in issue not found in the share-capital note",
+            )
         ):
             supplement = _supplement_from_pdf(
                 pdf,
@@ -278,7 +251,9 @@ def run_share_reextraction(
     if out_path.is_file():
         payload_from_disk = json.loads(out_path.read_text(encoding="utf-8"))
         done = {
-            str(row.get("key")): row for row in payload_from_disk.get("names") or [] if row.get("key")
+            str(row.get("key")): row
+            for row in payload_from_disk.get("names") or []
+            if row.get("key")
         }
     original = load_store(DEFAULT_STORE_PATH)
     for row in original.get("names") or []:
@@ -300,7 +275,12 @@ def run_share_reextraction(
     eodhd_payload = load_eodhd_report(eodhd_path or Path("docs/data/eodhd_coverage_check.json"))
     cache_dir.mkdir(parents=True, exist_ok=True)
     total = len(pending_rows)
-    logger.info("share re-extraction pending %s (ocr=%s, resume skip %s)", total, allow_ocr, len(completed_keys))
+    logger.info(
+        "share re-extraction pending %s (ocr=%s, resume skip %s)",
+        total,
+        allow_ocr,
+        len(completed_keys),
+    )
     write_store(assemble_store(done, records, eodhd_payload=eodhd_payload), out_path)
     for index, row in enumerate(pending_rows, start=1):
         key = str(row.get("key"))

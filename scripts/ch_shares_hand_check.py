@@ -13,7 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from value_investor.ch_failed_name_statements import CACHE_VERSION, _significant_digits, citation_supports
+from value_investor.ch_failed_name_statements import CACHE_VERSION, citation_supports
 
 
 def candidates(store: dict) -> list[dict]:
@@ -45,6 +45,7 @@ def candidates(store: dict) -> list[dict]:
                         "page": cit.get("page"),
                         "method": cit.get("method"),
                         "fiscal_year_end": filing.get("fiscal_year_end"),
+                        "made_up": filing.get("made_up"),
                         "transaction_id": filing.get("transaction_id"),
                     }
                 )
@@ -79,14 +80,24 @@ def ocr_page_text(cache_dir: Path, transaction_id: str, page: int) -> str:
     return ""
 
 
+def pdf_path(sample: dict, cache_dir: Path) -> Path | None:
+    key = str(sample["key"])
+    for end in (sample.get("fiscal_year_end"), sample.get("made_up")):
+        if not end:
+            continue
+        path = cache_dir / f"{key}_{end}.pdf"
+        if path.is_file():
+            return path
+    return None
+
+
 def compare(sample: dict, cache_dir: Path) -> dict:
-    end = str(sample.get("fiscal_year_end") or "")
-    pdf = cache_dir / f"{sample['key']}_{end}.pdf"
+    pdf = pdf_path(sample, cache_dir)
     page = sample.get("page")
     stored = str(sample["stored"])
     line = str(sample["line"])
-    result = {"match": False, "detail": "no PDF" if not pdf.is_file() else ""}
-    if not pdf.is_file():
+    result = {"match": False, "detail": "no PDF" if pdf is None else ""}
+    if pdf is None:
         return result
     if sample.get("method") == "ixbrl":
         ok, _, _ = citation_supports(Decimal(stored.replace(",", "")), line)
@@ -111,7 +122,9 @@ def compare(sample: dict, cache_dir: Path) -> dict:
     ok, _, _ = citation_supports(Decimal(str(stored).replace(",", "")), line)
     if line_on_page and ok:
         result["match"] = True
-        result["detail"] = "cited line on page" + (" (OCR)" if ocr and len(pdf_text(pdf, page).strip()) < 40 else "")
+        result["detail"] = "cited line on page" + (
+            " (OCR)" if ocr and len(pdf_text(pdf, page).strip()) < 40 else ""
+        )
     elif ok and shortened and shortened[:20] in _prepare(text):
         result["match"] = True
         result["detail"] = "label on page, digits match citation" + (" (OCR)" if ocr else "")
@@ -144,13 +157,15 @@ def _short_fragment(line: str) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--store", type=Path, default=Path("docs/data/ch_failed_name_statements.json"))
+    parser.add_argument(
+        "--store", type=Path, default=Path("docs/data/ch_failed_name_statements.json")
+    )
     parser.add_argument("--cache-dir", type=Path, default=Path("/tmp/ch-pdfs"))
     parser.add_argument("--seed", type=int, default=20261114)
     parser.add_argument("--count", type=int, default=20)
     args = parser.parse_args()
     store = json.loads(args.store.read_text(encoding="utf-8"))
-    pool = candidates(store)
+    pool = [row for row in candidates(store) if pdf_path(row, args.cache_dir) is not None]
     if not pool:
         print("no candidates")
         return 1
