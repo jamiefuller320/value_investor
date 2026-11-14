@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "local_date": "2026-11-13",
+  "local_date": "2026-11-14",
   "timezone": "Europe/London",
-  "generated_at": "2026-11-13T07:57:00.147132Z",
+  "generated_at": "2026-11-14T02:44:02.493500Z",
   "refresh_deadline_local": "04:00",
   "stale_for_local_date": false,
   "focus_lines": [
@@ -30,7 +30,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Absolute availability on the serve order — no rememo/ingest spray on a green set; do not steal P1 for N201 or seal D.",
@@ -99,7 +99,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Fat sprint empty — maintenance + spare auto-advance only; no fourth equal sprint; no parallel eng spray from hub ambers.",
@@ -146,7 +146,7 @@
   ],
   "status_report": {
     "schema_version": 1,
-    "local_date": "2026-11-13",
+    "local_date": "2026-11-14",
     "ops_overall": "warn",
     "ops_findings": [
       {
@@ -172,6 +172,12 @@
         "title": "Memo model comparison failed",
         "auto_fixable": false,
         "category": "research"
+      },
+      {
+        "severity": "warn",
+        "title": "Strategy-book UK replay",
+        "auto_fixable": false,
+        "category": "backtest"
       },
       {
         "severity": "warn",
@@ -214,24 +220,18 @@
         "title": "Deferred idea triggers unreadable",
         "auto_fixable": false,
         "category": "observe"
-      },
-      {
-        "severity": "warn",
-        "title": "Parked engineering tasks need manual review",
-        "auto_fixable": false,
-        "category": "engineering"
       }
     ],
-    "scoreboard_headline": "ai_judgment_matched30_fair: total return -0.2% vs FTAL.L +1.1% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+    "scoreboard_headline": "ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
     "primary_track": "ai_judgment_matched30_fair",
     "control_track": "buy_tier_matched30_fair",
     "primary_vs_control": {
       "primary": "ai_judgment_matched30_fair",
       "control": "buy_tier_matched30_fair",
       "start": "2026-10-15T10:03:40.485384+00:00",
-      "primary_total_return": 0.0036,
-      "control_total_return": -0.0103,
-      "difference": 0.0139,
+      "primary_total_return": -0.0012,
+      "control_total_return": -0.0135,
+      "difference": 0.0123,
       "note": "Common window, total return. Positive means the primary's filter added value over the unfiltered buy tier. Not yet tested for significance."
     },
     "engineering_open": [
@@ -246,9 +246,9 @@
         "title": "Workflow fix: library ingest sprint 2 failure"
       },
       {
-        "id": "eng-20261113-01",
-        "status": "parked",
-        "title": "Hunt fetchable IR source for parked dax leftover MTX.DE"
+        "id": "eng-20261114-01",
+        "status": "open",
+        "title": "Close library ingest gaps for euro_depth / DQ7A.IR (chain 1/3: 0/0 improved, run igc-20260912-01)"
       },
       {
         "id": "eng-20261104-01",
@@ -261,7 +261,7 @@
         "title": "Hunt fetchable IR source for parked asx200 leftover SMR.AX"
       }
     ],
-    "queue_health_headline": "Traffic pause — 0 stuck PR(s). project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
+    "queue_health_headline": "Agent lane active.",
     "post_run_clearance": {
       "evaluated_at": "2026-11-10T02:17:45.051625+00:00",
       "trigger": "post_run_review_email",
@@ -269,37 +269,9 @@
       "should_dispatch_engineering": true
     },
     "deferred_triggers": {
-      "met_count": 4,
-      "unmet_count": 29,
+      "met_count": 3,
+      "unmet_count": 30,
       "met": [
-        {
-          "id": "L616",
-          "title": "Observe-only factors for well-timed vs terrible chart outcomes",
-          "status": "open",
-          "first_met_at": "2026-11-08T02:34:53.163330+00:00",
-          "conditions": [
-            {
-              "condition": {
-                "file": "docs/data/decision_input_inventory.json",
-                "path": "summary.names_with_any_gap",
-                "op": "==",
-                "value": 0
-              },
-              "state": "met",
-              "actual": 0
-            },
-            {
-              "condition": {
-                "file": "docs/data/chart_outcome_review.json",
-                "path": "counts.terrible",
-                "op": ">=",
-                "value": 30
-              },
-              "state": "met",
-              "actual": 83
-            }
-          ]
-        },
         {
           "id": "L625",
           "title": "Cold-store skip-already-packed + rotate pilot tickers",
@@ -314,7 +286,7 @@
                 "value": 8
               },
               "state": "met",
-              "actual": 8
+              "actual": 16
             }
           ]
         },
@@ -338,7 +310,7 @@
                 "on_or_after": "2026-12-08"
               },
               "state": "unmet",
-              "actual": "2026-11-13"
+              "actual": "2026-11-14"
             }
           ]
         },
@@ -361,12 +333,12 @@
           ]
         }
       ],
-      "generated_at": "2026-11-13T07:51:14.554234+00:00"
+      "generated_at": "2026-11-14T02:40:57.255696+00:00"
     },
     "focus_relevant": true,
     "post_sell_cue_digest": {
       "present": true,
-      "generated_at": "2026-11-13T07:47:56.903001+00:00",
+      "generated_at": "2026-11-14T02:33:05.086626+00:00",
       "item_count": 6,
       "timing_cue_count": 4,
       "selection_cue_count": 2,
@@ -379,17 +351,17 @@
       {
         "id": "ops",
         "label": "Ops",
-        "value": "overall=warn; warn:New buy-tier not yet usable; warn:Longer holds beat live exit buffer in replay; warn:Sector headwind gate coverage gap; warn:Memo model comparison failed; warn:Two-lot retention beats full exit in replay"
+        "value": "overall=warn; warn:New buy-tier not yet usable; warn:Longer holds beat live exit buffer in replay; warn:Sector headwind gate coverage gap; warn:Memo model comparison failed; warn:Strategy-book UK replay"
       },
       {
         "id": "scoreboard",
         "label": "Scoreboard",
-        "value": "ai_judgment_matched30_fair: total return -0.2% vs FTAL.L +1.1% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73)."
+        "value": "ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73)."
       },
       {
         "id": "eng",
         "label": "Eng queue",
-        "value": "parked:eng-20261018-03, parked:eng-20261112-02, parked:eng-20261113-01"
+        "value": "parked:eng-20261018-03, parked:eng-20261112-02, open:eng-20261114-01"
       },
       {
         "id": "post_run",
@@ -399,7 +371,7 @@
       {
         "id": "defer",
         "label": "Deferred triggers",
-        "value": "met=4"
+        "value": "met=3"
       },
       {
         "id": "focus_relevance",
@@ -544,15 +516,15 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "euro_depth · ingest_deviation (focus/priority-slot head) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
           "stage_label": "warn:dismiss",
           "stage_state": "ready",
           "stage_since": "2026-10-27T10:46:58.731148+00:00",
-          "days_in_stage": 17,
-          "stage_duration": "17 days in stage",
+          "days_in_stage": 18,
+          "stage_duration": "18 days in stage",
           "waiting_for": "operator Accept on observe-safe triage",
           "how_achieved": "Accept park/dismiss triage for today",
           "provenance": [
@@ -588,8 +560,8 @@
         "stage_label": "warn:dismiss",
         "stage_state": "ready",
         "stage_since": "2026-10-27T10:46:58.731148+00:00",
-        "days_in_stage": 17,
-        "stage_duration": "17 days in stage",
+        "days_in_stage": 18,
+        "stage_duration": "18 days in stage",
         "waiting_for": "operator Accept on observe-safe triage",
         "how_achieved": "Accept park/dismiss triage for today",
         "provenance": [
@@ -634,136 +606,11 @@
       }
     },
     {
-      "task_ref": "mwarn:dax:unmeasured_stuck",
-      "source": "market_warning_triage",
-      "work_class": "surface",
-      "task_family": "market-warning-triage",
-      "priority": 7,
-      "title": "Deepen · DAX · unmeasured_stuck",
-      "summary": "1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete) · MTX.DE",
-      "sort_bucket": "market_warn",
-      "closeable": true,
-      "close_action": "daily-focus-ack",
-      "close_payload": {
-        "focus_id": "mwarn:dax:unmeasured_stuck",
-        "decision": "accept",
-        "triage_action": "deepen"
-      },
-      "href": "#overview",
-      "recommendation_id": "rec-c032e5e6b350",
-      "status": {
-        "state": "waiting",
-        "label": "Ready to deepen",
-        "next_steps": [
-          "Review deepen path"
-        ],
-        "waiting_on": [
-          {
-            "kind": "artifact",
-            "ref": "unmeasured_stuck",
-            "detail": "cannot dismiss/park — blocks sprint_ingest_complete"
-          }
-        ],
-        "ready": false,
-        "ready_reason": "observe-safe Accept → deepen",
-        "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
-        "updated_by": "morning_builder",
-        "assessment": {
-          "where_we_are": "dax · unmeasured_stuck (spare sprint) — proposed triage: deepen. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
-          "stage_label": "warn:deepen",
-          "stage_state": "waiting",
-          "stage_since": null,
-          "days_in_stage": null,
-          "stage_duration": "duration unknown",
-          "waiting_for": "cannot dismiss/park — blocks sprint_ingest_complete",
-          "how_achieved": "Review deepen path",
-          "provenance": [
-            "status:waiting_on",
-            "status:next_steps",
-            "observe:where",
-            "observe:stage_label"
-          ],
-          "incomplete_fields": [
-            "stage_duration"
-          ],
-          "observe_only": true
-        }
-      },
-      "closed": false,
-      "triage_action": "deepen",
-      "prefer_discuss": false,
-      "dismissable": false,
-      "parkable": false,
-      "market_warning": {
-        "kind": "admission_warning",
-        "flag_id": "unmeasured_stuck",
-        "market_id": "dax",
-        "is_focus": false,
-        "is_spare": true,
-        "severity": "high",
-        "tickers": "MTX.DE",
-        "cli_hint": null,
-        "deviation_id": null,
-        "first_seen_at": null
-      },
-      "assessment": {
-        "where_we_are": "dax · unmeasured_stuck (spare sprint) — proposed triage: deepen. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
-        "stage_label": "warn:deepen",
-        "stage_state": "waiting",
-        "stage_since": null,
-        "days_in_stage": null,
-        "stage_duration": "duration unknown",
-        "waiting_for": "cannot dismiss/park — blocks sprint_ingest_complete",
-        "how_achieved": "Review deepen path",
-        "provenance": [
-          "status:waiting_on",
-          "status:next_steps",
-          "observe:where",
-          "observe:stage_label"
-        ],
-        "incomplete_fields": [
-          "stage_duration"
-        ],
-        "observe_only": true
-      },
-      "recommendation": {
-        "id": "rec-c032e5e6b350",
-        "task_id": "mwarn:dax:unmeasured_stuck",
-        "summary": "Market warning triage → deepen: DAX / unmeasured_stuck · MTX.DE.",
-        "rationale": "unmeasured_stuck on dax (MTX.DE) blocks sprint_ingest_complete and cannot be dismissed or parked. Spare-stream factory path — leave on spare deepen; do not steal the euro priority slot. Accept observes spare-factory deepen — do not divert euro capacity. IR allowlist is empty for MTX.DE — deepen alone will 0-yield; seed `_BUILTIN_IR_URLS` / issuer PDFs (or fix discovery) before another intensive pin. Do not auto-park unmeasured.",
-        "accept_action": {
-          "kind": "focus-ack",
-          "payload": {
-            "focus_id": "mwarn:dax:unmeasured_stuck",
-            "decision": "accept",
-            "triage_action": "deepen"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-c032e5e6b350` (market warning `mwarn:dax:unmeasured_stuck`):\nProposed action: deepen\nMarket: dax (focus=False spare=True)\nFlag: unmeasured_stuck — 1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)\nRationale: unmeasured_stuck on dax (MTX.DE) blocks sprint_ingest_complete and cannot be dismissed or parked. Spare-stream factory path — leave on spare deepen; do not steal the euro priority slot. Accept observes spare-factory deepen — do not divert euro capacity. IR allowlist is empty for MTX.DE — deepen alone will 0-yield; seed `_BUILTIN_IR_URLS` / issuer PDFs (or fix discovery) before another intensive pin. Do not auto-park unmeasured.\nPolicy: dismissable=False parkable=False\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro priority slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-        "priority": 7,
-        "options": [
-          "Accept — park / observe-ack for today",
-          "Discuss — only if this should become deepen",
-          "Do not ritual-clear badges or starve euro priority slot"
-        ],
-        "triage_action": "deepen",
-        "prefer_discuss": false,
-        "dismissable": false,
-        "parkable": false,
-        "market_id": "dax",
-        "flag_id": "unmeasured_stuck",
-        "cli_hint": null,
-        "work_class": "surface",
-        "task_family": "market-warning-triage"
-      }
-    },
-    {
       "task_ref": "mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve",
       "source": "market_warning_triage",
       "work_class": "surface",
       "task_family": "market-warning-triage",
-      "priority": 8,
+      "priority": 7,
       "title": "Dismiss · hang_seng · ingest_deviation",
       "summary": "0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources. · 0288.HK",
       "sort_bucket": "market_warn",
@@ -792,15 +639,15 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "hang_seng · ingest_deviation (ingest_deviation) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
           "stage_label": "warn:dismiss",
           "stage_state": "ready",
           "stage_since": "2026-10-06T21:33:21.615298+00:00",
-          "days_in_stage": 38,
-          "stage_duration": "38 days in stage",
+          "days_in_stage": 39,
+          "stage_duration": "39 days in stage",
           "waiting_for": "operator Accept on observe-safe triage",
           "how_achieved": "Accept park/dismiss triage for today",
           "provenance": [
@@ -836,8 +683,8 @@
         "stage_label": "warn:dismiss",
         "stage_state": "ready",
         "stage_since": "2026-10-06T21:33:21.615298+00:00",
-        "days_in_stage": 38,
-        "stage_duration": "38 days in stage",
+        "days_in_stage": 39,
+        "stage_duration": "39 days in stage",
         "waiting_for": "operator Accept on observe-safe triage",
         "how_achieved": "Accept park/dismiss triage for today",
         "provenance": [
@@ -864,7 +711,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-af120866b150` (market warning `mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve`):\nProposed action: dismiss\nMarket: hang_seng (focus=False spare=False)\nFlag: ingest_deviation — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources.\nRationale: Signal triage says dismiss — parked_leftover. Do not intensive-pin or divert the euro priority slot. Observe-safe Accept records the triage; run `ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve` manually (Phase B may automate dismiss later).\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — observe-ack dismiss triage (run CLI if shown; Phase B may automate)\n2) Discuss — if signal triage looks wrong\n3) Do not intensive-pin from this row alone\nCLI hint: ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve\nContext: docs/data/market_status.json + Daily hub market warning triage",
-        "priority": 8,
+        "priority": 7,
         "options": [
           "Accept — observe-ack dismiss triage (run CLI if shown; Phase B may automate)",
           "Discuss — if signal triage looks wrong",
@@ -886,7 +733,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "weekday-engineering-parked-backlog-clear",
-      "priority": 13,
+      "priority": 12,
       "title": "Clear engineering parked backlog when dispatch pauses",
       "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
       "sort_bucket": "new_info",
@@ -895,10 +742,10 @@
       "close_payload": {
         "task_id": "weekday-engineering-parked-backlog-clear",
         "decision": "ack_observe",
-        "finding_fingerprint": "b19c9517d47ef0b3"
+        "finding_fingerprint": "e69a5e997553968d"
       },
       "href": "#automation/human",
-      "recommendation_id": "rec-3ad16608e177",
+      "recommendation_id": "rec-6aee092ed5bf",
       "status": {
         "state": "ready",
         "label": "Proposed",
@@ -915,7 +762,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: 3 attention-parked eng tasks",
@@ -943,17 +790,16 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "3 attention-parked eng tasks",
-          "updated_at": "2026-11-13T07:53:35.062805+00:00",
-          "fingerprint": "b19c9517d47ef0b3",
+          "updated_at": "2026-11-14T02:42:06.710438+00:00",
+          "fingerprint": "e69a5e997553968d",
           "bullets": [
-            "Parked tasks: 5 (attention ~3)",
-            "Queue-clearing pause active: False — evaluated 2026-11-13T07:53:35.062805+00:00",
-            "Traffic pause active: True",
+            "Parked tasks: 4 (attention ~3)",
+            "Queue-clearing pause active: False — evaluated 2026-11-14T02:42:06.710438+00:00",
+            "Traffic pause active: False",
             "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
             "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
             "eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX",
-            "eng-20261112-02: Workflow fix: library ingest sprint 2 failure",
-            "eng-20261113-01: Hunt fetchable IR source for parked dax leftover MTX.DE"
+            "eng-20261112-02: Workflow fix: library ingest sprint 2 failure"
           ],
           "source_keys": [
             "engineering_tasks"
@@ -976,17 +822,16 @@
       "closed": false,
       "review_detail": {
         "headline": "3 attention-parked eng tasks",
-        "updated_at": "2026-11-13T07:53:35.062805+00:00",
-        "fingerprint": "b19c9517d47ef0b3",
+        "updated_at": "2026-11-14T02:42:06.710438+00:00",
+        "fingerprint": "e69a5e997553968d",
         "bullets": [
-          "Parked tasks: 5 (attention ~3)",
-          "Queue-clearing pause active: False — evaluated 2026-11-13T07:53:35.062805+00:00",
-          "Traffic pause active: True",
+          "Parked tasks: 4 (attention ~3)",
+          "Queue-clearing pause active: False — evaluated 2026-11-14T02:42:06.710438+00:00",
+          "Traffic pause active: False",
           "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
           "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
           "eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX",
-          "eng-20261112-02: Workflow fix: library ingest sprint 2 failure",
-          "eng-20261113-01: Hunt fetchable IR source for parked dax leftover MTX.DE"
+          "eng-20261112-02: Workflow fix: library ingest sprint 2 failure"
         ],
         "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
         "cadence": "weekday",
@@ -1016,20 +861,20 @@
         "observe_only": true
       },
       "recommendation": {
-        "id": "rec-3ad16608e177",
+        "id": "rec-6aee092ed5bf",
         "task_id": "human:weekday-engineering-parked-backlog-clear",
         "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 5 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-13T07:53:35.062805+00:00; Traffic pause active: True; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 4 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-14T02:42:06.710438+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
             "task_id": "weekday-engineering-parked-backlog-clear",
             "decision": "ack_observe",
-            "finding_fingerprint": "b19c9517d47ef0b3"
+            "finding_fingerprint": "e69a5e997553968d"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-3ad16608e177` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 5 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-13T07:53:35.062805+00:00; Traffic pause active: True; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 5 (attention ~3)\n- Queue-clearing pause active: False — evaluated 2026-11-13T07:53:35.062805+00:00\n- Traffic pause active: True\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-3ad16608e177` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 13,
+        "discuss_prompt": "Discuss daily recommendation `rec-6aee092ed5bf` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 4 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-14T02:42:06.710438+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 4 (attention ~3)\n- Queue-clearing pause active: False — evaluated 2026-11-14T02:42:06.710438+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-6aee092ed5bf` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "priority": 12,
         "options": [
           {
             "id": "accept",
@@ -1039,7 +884,7 @@
               "payload": {
                 "task_id": "weekday-engineering-parked-backlog-clear",
                 "decision": "ack_observe",
-                "finding_fingerprint": "b19c9517d47ef0b3"
+                "finding_fingerprint": "e69a5e997553968d"
               }
             }
           },
@@ -1051,7 +896,7 @@
               "payload": {
                 "task_id": "weekday-engineering-parked-backlog-clear",
                 "decision": "defer",
-                "finding_fingerprint": "b19c9517d47ef0b3"
+                "finding_fingerprint": "e69a5e997553968d"
               }
             }
           },
@@ -1081,7 +926,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-assessment-scoreboard",
-      "priority": 14,
+      "priority": 13,
       "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
       "summary": "Read docs/data/assessment_scoreboard.json (Analysis → Observe model switcher defaults to Strand A · live): continuity primary ai_judgment_fair (B3 evidentiary-demoted — not adoption/filter-skill truth; see policy_changes.evidentiary_demotion_ai_judgment_fair_v1) vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also matched-30 shadow twins (NAV only vs each other), frozen hold5/graduated final records, knob_calibration_priors readiness (Acknowledge-and-stop when confidence low and score_gap <0.005), buy_cross_archive_review (observe-only), policy_changes, and nest sunday-ai-path-scoreboard as a subsection. Judgment evidence primary is N210 fair-cost episode % (shadow until volume gates). While that demotion stamp is present and primary_track is still ai_judgment_fair, the ops warn Primary book trails its control is not a Push card; the outstanding gap is Later (crown only after shadow volume gates). Approve a promotion only when fair-cost evidence clears gates; do not enlarge the live 3-name book mid-flight; do not back-label its NAV. Calibrated/exclusion/Suite A frozen. N200/N201/N210 are sealed observe-only alone scoreboards — never a second live capital path and never a promote gate from trailing alone (F8).",
       "sort_bucket": "new_info",
@@ -1110,7 +955,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Assessment scoreboard · primary not scored",
@@ -1138,15 +983,15 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Assessment scoreboard · primary not scored",
-          "updated_at": "2026-11-13T07:51:14.506970+00:00",
+          "updated_at": "2026-11-14T02:40:57.207217+00:00",
           "fingerprint": "94066622535964a2",
           "bullets": [
-            "ai_judgment_matched30_fair: total return -0.2% vs FTAL.L +1.1% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-            "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.0948",
-            "vs control buy_tier_matched30_fair: difference 0.0139 (common window, not significance)",
+            "ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+            "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1036",
+            "vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance)",
             "AI gate binds: False (N189 while it never binds)",
             "twin ai_judgment_matched30_fair: difference -0.0158 over 10 days",
-            "twin buy_tier_matched30_fair: difference -0.0328 over 18 days",
+            "twin buy_tier_matched30_fair: difference -0.0331 over 19 days",
             "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15), stop_ai_judgment_fair_3name_v1 (2026-10-31)"
           ],
           "source_keys": [
@@ -1167,15 +1012,15 @@
       "closed": false,
       "review_detail": {
         "headline": "Assessment scoreboard · primary not scored",
-        "updated_at": "2026-11-13T07:51:14.506970+00:00",
+        "updated_at": "2026-11-14T02:40:57.207217+00:00",
         "fingerprint": "94066622535964a2",
         "bullets": [
-          "ai_judgment_matched30_fair: total return -0.2% vs FTAL.L +1.1% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-          "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.0948",
-          "vs control buy_tier_matched30_fair: difference 0.0139 (common window, not significance)",
+          "ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1036",
+          "vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance)",
           "AI gate binds: False (N189 while it never binds)",
           "twin ai_judgment_matched30_fair: difference -0.0158 over 10 days",
-          "twin buy_tier_matched30_fair: difference -0.0328 over 18 days",
+          "twin buy_tier_matched30_fair: difference -0.0331 over 19 days",
           "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15), stop_ai_judgment_fair_3name_v1 (2026-10-31)"
         ],
         "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard",
@@ -1209,7 +1054,7 @@
         "id": "rec-7932628f93a3",
         "task_id": "human:sunday-assessment-scoreboard",
         "summary": "Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -0.2% vs FTAL.L +1.1% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.0948; vs control buy_tier_matched30_fair: difference 0.0139 (common window, not significance); AI gate binds: False (N189 while it never binds)",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1036; vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance); AI gate binds: False (N189 while it never binds)",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
@@ -1218,8 +1063,8 @@
             "finding_fingerprint": "94066622535964a2"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-7932628f93a3` (human task `sunday-assessment-scoreboard`):\nTitle: Read the assessment scoreboard (primary vs control; promotion gate)\nSummary: Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -0.2% vs FTAL.L +1.1% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.0948; vs control buy_tier_matched30_fair: difference 0.0139 (common window, not significance); AI gate binds: False (N189 while it never binds)\nReview detail:\n- ai_judgment_matched30_fair: total return -0.2% vs FTAL.L +1.1% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).\n- Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.0948\n- vs control buy_tier_matched30_fair: difference 0.0139 (common window, not significance)\n- AI gate binds: False (N189 while it never binds)\n- twin ai_judgment_matched30_fair: difference -0.0158 over 10 days\n- twin buy_tier_matched30_fair: difference -0.0328 over 18 days\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Approve gate (observe-only)\n3) Defer / rewrite runbook expectation\n4) Open runbook\n5) Discuss in Project chat\nSay: discuss daily recommendation `rec-7932628f93a3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 14,
+        "discuss_prompt": "Discuss daily recommendation `rec-7932628f93a3` (human task `sunday-assessment-scoreboard`):\nTitle: Read the assessment scoreboard (primary vs control; promotion gate)\nSummary: Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1036; vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance); AI gate binds: False (N189 while it never binds)\nReview detail:\n- ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).\n- Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1036\n- vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance)\n- AI gate binds: False (N189 while it never binds)\n- twin ai_judgment_matched30_fair: difference -0.0158 over 10 days\n- twin buy_tier_matched30_fair: difference -0.0331 over 19 days\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Approve gate (observe-only)\n3) Defer / rewrite runbook expectation\n4) Open runbook\n5) Discuss in Project chat\nSay: discuss daily recommendation `rec-7932628f93a3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "priority": 13,
         "options": [
           {
             "id": "accept",
@@ -1283,7 +1128,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-shard-epoch0-watch",
-      "priority": 15,
+      "priority": 14,
       "title": "Watch shard epoch-0 and near-miss before forking AI",
       "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
       "sort_bucket": "new_info",
@@ -1292,10 +1137,10 @@
       "close_payload": {
         "task_id": "sunday-shard-epoch0-watch",
         "decision": "ack_observe",
-        "finding_fingerprint": "af5f29a93bfbc497"
+        "finding_fingerprint": "f7e994b3c6ee65f2"
       },
       "href": "#automation/human",
-      "recommendation_id": "rec-077cafae9560",
+      "recommendation_id": "rec-b791c7c74f7a",
       "status": {
         "state": "ready",
         "label": "Proposed",
@@ -1312,7 +1157,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Admitted shard epoch-0 watch · 22",
@@ -1340,17 +1185,17 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Admitted shard epoch-0 watch · 22",
-          "updated_at": "2026-11-13T07:26:03.210737+00:00",
-          "fingerprint": "af5f29a93bfbc497",
+          "updated_at": "2026-11-13T22:37:46.991940+00:00",
+          "fingerprint": "f7e994b3c6ee65f2",
           "bullets": [
             "euro_depth: phase=3 ai=False knob=False holdings=34",
-            "dax: phase=1 ai=False knob=False holdings=7",
+            "nasdaq100: phase=1 ai=False knob=False holdings=35",
             "sp500: phase=1 ai=False knob=False holdings=120",
-            "aex: phase=0 ai=False knob=False holdings=8",
-            "aim: phase=0 ai=False knob=False holdings=14",
-            "atx: phase=0 ai=False knob=False holdings=5",
+            "aex: phase=0 ai=False knob=False holdings=5",
+            "aim: phase=0 ai=False knob=False holdings=15",
+            "atx: phase=0 ai=False knob=False holdings=4",
             "bel20: phase=0 ai=False knob=False holdings=2",
-            "cac40: phase=1 ai=False knob=False holdings=11"
+            "cac40: phase=1 ai=False knob=False holdings=12"
           ],
           "source_keys": [
             "market_status"
@@ -1370,17 +1215,17 @@
       "closed": false,
       "review_detail": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-11-13T07:26:03.210737+00:00",
-        "fingerprint": "af5f29a93bfbc497",
+        "updated_at": "2026-11-13T22:37:46.991940+00:00",
+        "fingerprint": "f7e994b3c6ee65f2",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=34",
-          "dax: phase=1 ai=False knob=False holdings=7",
+          "nasdaq100: phase=1 ai=False knob=False holdings=35",
           "sp500: phase=1 ai=False knob=False holdings=120",
-          "aex: phase=0 ai=False knob=False holdings=8",
-          "aim: phase=0 ai=False knob=False holdings=14",
-          "atx: phase=0 ai=False knob=False holdings=5",
+          "aex: phase=0 ai=False knob=False holdings=5",
+          "aim: phase=0 ai=False knob=False holdings=15",
+          "atx: phase=0 ai=False knob=False holdings=4",
           "bel20: phase=0 ai=False knob=False holdings=2",
-          "cac40: phase=1 ai=False knob=False holdings=11"
+          "cac40: phase=1 ai=False knob=False holdings=12"
         ],
         "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
         "cadence": "sunday",
@@ -1410,20 +1255,20 @@
         "observe_only": true
       },
       "recommendation": {
-        "id": "rec-077cafae9560",
+        "id": "rec-b791c7c74f7a",
         "task_id": "human:sunday-shard-epoch0-watch",
         "summary": "Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 22 detail: euro_depth: phase=3 ai=False knob=False holdings=34; dax: phase=1 ai=False knob=False holdings=7; sp500: phase=1 ai=False knob=False holdings=120; aex: phase=0 ai=False knob=False holdings=8",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 22 detail: euro_depth: phase=3 ai=False knob=False holdings=34; nasdaq100: phase=1 ai=False knob=False holdings=35; sp500: phase=1 ai=False knob=False holdings=120; aex: phase=0 ai=False knob=False holdings=5",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
             "task_id": "sunday-shard-epoch0-watch",
             "decision": "ack_observe",
-            "finding_fingerprint": "af5f29a93bfbc497"
+            "finding_fingerprint": "f7e994b3c6ee65f2"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-077cafae9560` (human task `sunday-shard-epoch0-watch`):\nTitle: Watch shard epoch-0 and near-miss before forking AI\nSummary: Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 22 detail: euro_depth: phase=3 ai=False knob=False holdings=34; dax: phase=1 ai=False knob=False holdings=7; sp500: phase=1 ai=False knob=False holdings=120; aex: phase=0 ai=False knob=False holdings=8\nReview detail:\n- euro_depth: phase=3 ai=False knob=False holdings=34\n- dax: phase=1 ai=False knob=False holdings=7\n- sp500: phase=1 ai=False knob=False holdings=120\n- aex: phase=0 ai=False knob=False holdings=8\n- aim: phase=0 ai=False knob=False holdings=14\n- atx: phase=0 ai=False knob=False holdings=5\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-077cafae9560` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 15,
+        "discuss_prompt": "Discuss daily recommendation `rec-b791c7c74f7a` (human task `sunday-shard-epoch0-watch`):\nTitle: Watch shard epoch-0 and near-miss before forking AI\nSummary: Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 22 detail: euro_depth: phase=3 ai=False knob=False holdings=34; nasdaq100: phase=1 ai=False knob=False holdings=35; sp500: phase=1 ai=False knob=False holdings=120; aex: phase=0 ai=False knob=False holdings=5\nReview detail:\n- euro_depth: phase=3 ai=False knob=False holdings=34\n- nasdaq100: phase=1 ai=False knob=False holdings=35\n- sp500: phase=1 ai=False knob=False holdings=120\n- aex: phase=0 ai=False knob=False holdings=5\n- aim: phase=0 ai=False knob=False holdings=15\n- atx: phase=0 ai=False knob=False holdings=4\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-b791c7c74f7a` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "priority": 14,
         "options": [
           {
             "id": "accept",
@@ -1433,7 +1278,7 @@
               "payload": {
                 "task_id": "sunday-shard-epoch0-watch",
                 "decision": "ack_observe",
-                "finding_fingerprint": "af5f29a93bfbc497"
+                "finding_fingerprint": "f7e994b3c6ee65f2"
               }
             }
           },
@@ -1445,7 +1290,7 @@
               "payload": {
                 "task_id": "sunday-shard-epoch0-watch",
                 "decision": "defer",
-                "finding_fingerprint": "af5f29a93bfbc497"
+                "finding_fingerprint": "f7e994b3c6ee65f2"
               }
             }
           },
@@ -1475,7 +1320,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-review-ingest-deviations",
-      "priority": 16,
+      "priority": 15,
       "title": "Review open ingest deviations and reprocess if needed",
       "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
       "sort_bucket": "new_info",
@@ -1504,7 +1349,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Ingest deviations · 2 open",
@@ -1532,7 +1377,7 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Ingest deviations · 2 open",
-          "updated_at": "2026-11-13T07:25:07.663709+00:00",
+          "updated_at": "2026-11-13T22:36:24.863578+00:00",
           "fingerprint": "6dda3808006c2a3a",
           "bullets": [
             "Open deviations: 2",
@@ -1557,7 +1402,7 @@
       "closed": false,
       "review_detail": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-11-13T07:25:07.663709+00:00",
+        "updated_at": "2026-11-13T22:36:24.863578+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -1605,7 +1450,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-eeeb1a3259f8` (human task `adhoc-review-ingest-deviations`):\nTitle: Review open ingest deviations and reprocess if needed\nSummary: Review new analysis on “Review open ingest deviations and reprocess if needed”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Ingest deviations · 2 open detail: Open deviations: 2; WIE.VI: blocker_no_improve — WIE.VI hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.; 0288.HK: blocker_no_improve — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources.\nReview detail:\n- Open deviations: 2\n- WIE.VI: blocker_no_improve — WIE.VI hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.\n- 0288.HK: blocker_no_improve — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources.\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-eeeb1a3259f8` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 16,
+        "priority": 15,
         "options": [
           {
             "id": "accept",
@@ -1657,7 +1502,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "monthly-pr-fix-common-issues",
-      "priority": 17,
+      "priority": 16,
       "title": "Review common PR check / merge fix-request reasons",
       "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
       "sort_bucket": "new_info",
@@ -1666,10 +1511,10 @@
       "close_payload": {
         "task_id": "monthly-pr-fix-common-issues",
         "decision": "ack_observe",
-        "finding_fingerprint": "9599b0bac64d6f59"
+        "finding_fingerprint": "86d5c87876355031"
       },
       "href": "#automation/human",
-      "recommendation_id": "rec-b072dfb431e8",
+      "recommendation_id": "rec-ece09776fdea",
       "status": {
         "state": "ready",
         "label": "Proposed",
@@ -1686,7 +1531,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: PR fix common issues",
@@ -1714,10 +1559,10 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "PR fix common issues",
-          "updated_at": "2026-11-13T02:51:24.477310+00:00",
-          "fingerprint": "9599b0bac64d6f59",
+          "updated_at": "2026-11-13T09:33:51.582212+00:00",
+          "fingerprint": "86d5c87876355031",
           "bullets": [
-            "Occasions logged: 374",
+            "Occasions logged: 378",
             "PR mergeable=CONFLICTING against main: 7",
             "validate failed: 7",
             "validate check failed: 6",
@@ -1743,10 +1588,10 @@
       "closed": false,
       "review_detail": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-11-13T02:51:24.477310+00:00",
-        "fingerprint": "9599b0bac64d6f59",
+        "updated_at": "2026-11-13T09:33:51.582212+00:00",
+        "fingerprint": "86d5c87876355031",
         "bullets": [
-          "Occasions logged: 374",
+          "Occasions logged: 378",
           "PR mergeable=CONFLICTING against main: 7",
           "validate failed: 7",
           "validate check failed: 6",
@@ -1782,20 +1627,20 @@
         "observe_only": true
       },
       "recommendation": {
-        "id": "rec-b072dfb431e8",
+        "id": "rec-ece09776fdea",
         "task_id": "human:monthly-pr-fix-common-issues",
         "summary": "Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 374; PR mergeable=CONFLICTING against main: 7; validate failed: 7; validate check failed: 6",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 378; PR mergeable=CONFLICTING against main: 7; validate failed: 7; validate check failed: 6",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
             "task_id": "monthly-pr-fix-common-issues",
             "decision": "ack_observe",
-            "finding_fingerprint": "9599b0bac64d6f59"
+            "finding_fingerprint": "86d5c87876355031"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-b072dfb431e8` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 374; PR mergeable=CONFLICTING against main: 7; validate failed: 7; validate check failed: 6\nReview detail:\n- Occasions logged: 374\n- PR mergeable=CONFLICTING against main: 7\n- validate failed: 7\n- validate check failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-b072dfb431e8` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 17,
+        "discuss_prompt": "Discuss daily recommendation `rec-ece09776fdea` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 378; PR mergeable=CONFLICTING against main: 7; validate failed: 7; validate check failed: 6\nReview detail:\n- Occasions logged: 378\n- PR mergeable=CONFLICTING against main: 7\n- validate failed: 7\n- validate check failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-ece09776fdea` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "priority": 16,
         "options": [
           {
             "id": "accept",
@@ -1805,7 +1650,7 @@
               "payload": {
                 "task_id": "monthly-pr-fix-common-issues",
                 "decision": "ack_observe",
-                "finding_fingerprint": "9599b0bac64d6f59"
+                "finding_fingerprint": "86d5c87876355031"
               }
             }
           },
@@ -1817,7 +1662,7 @@
               "payload": {
                 "task_id": "monthly-pr-fix-common-issues",
                 "decision": "defer",
-                "finding_fingerprint": "9599b0bac64d6f59"
+                "finding_fingerprint": "86d5c87876355031"
               }
             }
           },
@@ -1847,7 +1692,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-analysis-tasks",
-      "priority": 18,
+      "priority": 17,
       "title": "Triage analysis_tasks experiments",
       "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim — do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
       "sort_bucket": "new_info",
@@ -1876,7 +1721,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Triage queue · 12 open",
@@ -1983,7 +1828,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-9743fa943980` (human task `sunday-analysis-tasks`):\nTitle: Triage analysis_tasks experiments\nSummary: Review new analysis on “Triage analysis_tasks experiments”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Triage queue · 12 open detail: Open/proposed: 12 / 12; ana-20260728-04: Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.; ana-20260921-01: Exclusion-universe step u3 (conviction ≥ 0.25, cumulative_exclusion_alpha +0.00261) replay on ai_judgment candidate pool vs baseline — expected learning value: quantify whether priors improve filtered; ana-20260921-02: Offline family-weight stress test for quality/dividend failures on avoid cohort (pattern AAL.L / AML.L opinion-flip triggers) — expected learning value: test whether tightening quality+dividend gates\nReview detail:\n- Open/proposed: 12 / 12\n- ana-20260728-04: Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.\n- ana-20260921-01: Exclusion-universe step u3 (conviction ≥ 0.25, cumulative_exclusion_alpha +0.00261) replay on ai_judgment candidate pool vs baseline — expected learning value: quantify whether priors improve filtered\n- ana-20260921-02: Offline family-weight stress test for quality/dividend failures on avoid cohort (pattern AAL.L / AML.L opinion-flip triggers) — expected learning value: test whether tightening quality+dividend gates\n- ana-20260921-03: Conviction/timing delay model for transition_key hold→buy and realization_lag (1w hit 0.406 vs within_4w_rate 0.9448) — expected learning value: separate assessment lag from signal direction for overl\n- ana-20260921-04: Hold-vs-swap probability strand using exit_timing_near_miss (hold_closed 202, swap_closed 209, ready_for_probability_analysis true) — expected learning value: estimate whether early swap beats hold re\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-9743fa943980` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 18,
+        "priority": 17,
         "options": [
           {
             "id": "accept",
@@ -2035,7 +1880,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-triage-plr-director-tasks",
-      "priority": 19,
+      "priority": 18,
       "title": "Triage paper-learning and learning-director tasks",
       "summary": "These queues have no promote CLI. Remaining: watch u4 (ldr-20260823-02) and exit-shadow (ana-20260728-04); leave L111 replay as continue. Buffered-hold and IMB.L audits are done. Do not reopen duplicate human-ack wrappers. Prefer the engineering queue for the two scoring tasks.",
       "sort_bucket": "new_info",
@@ -2064,7 +1909,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Triage queue · 3 open",
@@ -2167,7 +2012,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-139b8f02a16a` (human task `sunday-triage-plr-director-tasks`):\nTitle: Triage paper-learning and learning-director tasks\nSummary: Review new analysis on “Triage paper-learning and learning-director tasks”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Triage queue · 3 open detail: Open/proposed: 3 / 3; plr-20261108-01: Run `ftse-rebalance-log buffered-hold` on `buy_tier_level` and `buy_tier_level_dca` with `--exit-confirm-variants 1,2` and `--lookback-days 28` (paper root `output/paper_automation`) — expected learni; plr-20261108-02: Re-run buffered-hold on `ai_judgment_matched30_fair` and `buy_tier_matched30_fair` with `--lookback-days 28` and variants 1,2 only — expected learning value: test whether the 7d panel’s primary `trade; plr-20261108-03: Cross-read active-book `exit_shadow` open cohorts (`buy_tier_matched30_fair` `open_count` 23 vs `closed_count` 0; primary `open_count` 9) with churn `full_exits_in_window` (3 primary, 6 control) under\nReview detail:\n- Open/proposed: 3 / 3\n- plr-20261108-01: Run `ftse-rebalance-log buffered-hold` on `buy_tier_level` and `buy_tier_level_dca` with `--exit-confirm-variants 1,2` and `--lookback-days 28` (paper root `output/paper_automation`) — expected learni\n- plr-20261108-02: Re-run buffered-hold on `ai_judgment_matched30_fair` and `buy_tier_matched30_fair` with `--lookback-days 28` and variants 1,2 only — expected learning value: test whether the 7d panel’s primary `trade\n- plr-20261108-03: Cross-read active-book `exit_shadow` open cohorts (`buy_tier_matched30_fair` `open_count` 23 vs `closed_count` 0; primary `open_count` 9) with churn `full_exits_in_window` (3 primary, 6 control) under\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-139b8f02a16a` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 19,
+        "priority": 18,
         "options": [
           {
             "id": "accept",
@@ -2219,7 +2064,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-cue-consumer-mft-start-gate",
-      "priority": 20,
+      "priority": 19,
       "title": "Confirm freeze of cue-consumer MFT Q8B non-mechanical autopsy cohort",
       "summary": "Q8B checkpoint open_autopsy_cohort_2026_q4 is complete (frozen/actioned/remaining cleared 2026-10-28); evolutionary_shadows_eligible=true and the lab paper episode walker runs on daily refresh when eligible. Keep this task as reference if a future named cohort is proposed/frozen. Still observe-only; no Package L; no strand-A promote; walker fills are lab paper only (no sealed spawn).",
       "sort_bucket": "unacked",
@@ -2248,7 +2093,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2337,7 +2182,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-f259e5c83b3f` (human task `adhoc-cue-consumer-mft-start-gate`):\nTitle: Confirm freeze of cue-consumer MFT Q8B non-mechanical autopsy cohort\nSummary: Open human gate “Confirm freeze of cue-consumer MFT Q8B non-mechanical autopsy cohort” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-f259e5c83b3f` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 20,
+        "priority": 19,
         "options": [
           {
             "id": "accept",
@@ -2389,7 +2234,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-dashboard-v2-cutover",
-      "priority": 21,
+      "priority": 20,
       "title": "Decide the dashboard v2 cutover",
       "summary": "When v2's Today, Candidates, Book and Proof tabs have run on the forward book for four weeks and every ledger row marked for v2 is ported, decide whether v2 becomes the root page (the old page moves to docs/legacy/), and decide the Trusts tab and the browser sandbox at the same time.",
       "sort_bucket": "unacked",
@@ -2418,7 +2263,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2507,7 +2352,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-e03219062ffb` (human task `adhoc-dashboard-v2-cutover`):\nTitle: Decide the dashboard v2 cutover\nSummary: Open human gate “Decide the dashboard v2 cutover” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-e03219062ffb` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 21,
+        "priority": 20,
         "options": [
           {
             "id": "accept",
@@ -2559,7 +2404,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-eodhd-coverage-trial",
-      "priority": 22,
+      "priority": 21,
       "title": "Run the one-month EODHD coverage trial for step 3.3",
       "summary": "Subscribe to EODHD ALL-IN-ONE for one month, add GitHub secret EODHD_API_TOKEN, dispatch eodhd-coverage-check.yml, read the verdict in docs/data/eodhd_coverage_check.json, then cancel the subscription and remove the secret if the check fails or you are not proceeding to a UK/Europe replay.",
       "sort_bucket": "unacked",
@@ -2588,7 +2433,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2677,7 +2522,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-c912cd379915` (human task `adhoc-eodhd-coverage-trial`):\nTitle: Run the one-month EODHD coverage trial for step 3.3\nSummary: Open human gate “Run the one-month EODHD coverage trial for step 3.3” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-c912cd379915` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 22,
+        "priority": 21,
         "options": [
           {
             "id": "accept",
@@ -2729,7 +2574,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-memo-model-comparison-blind-review",
-      "priority": 23,
+      "priority": 22,
       "title": "Rate the memo model comparison calibration sample",
       "summary": "Rule v2 (owner, 2026-11-10): an LLM judge (gpt-5.6-luna) scores every pair blind in both orders; you rate only a calibration sample of at least 4 names, so the judge can be checked against you. When ops shows 'Memo model comparison ready for owner calibration', read docs/data/memo_model_comparison/review.md (sample only, memos labelled A/B). Copy ratings_template.json to ratings.json and rate each memo 1-5 on evidence, thesis break and verdict justified, plus a preferred memo (A, B or tie). Commit ratings.json to main without opening blind_key.json, results.json, judge_results.json, calibration.json, judgements/, judge_status.json or the status.json cost fields, then run gh workflow run memo-model-comparison.yml -f action=decide. Your picks decide whether the judge is trusted, and govern any pair where the two verdicts differ on blocking entry. A switch needs owner approval, an operational_switches row on the registration and its own memo-model PR; otherwise composer-2.5 stays.",
       "sort_bucket": "unacked",
@@ -2758,7 +2603,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2847,7 +2692,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-a91a4ed68492` (human task `adhoc-memo-model-comparison-blind-review`):\nTitle: Rate the memo model comparison calibration sample\nSummary: Open human gate “Rate the memo model comparison calibration sample” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-a91a4ed68492` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 23,
+        "priority": 22,
         "options": [
           {
             "id": "accept",
@@ -2899,7 +2744,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-observe-instrument-freeze",
-      "priority": 24,
+      "priority": 23,
       "title": "Decide which observe instruments to freeze",
       "summary": "When strategy-book step 2.3 starts, decide which existing observe instruments to freeze under the single-track decision. Candidates: N201, N206, the parallel timing lenses (L652) and the super book's unbuilt spawn and cull work (N223, N226, N227). Frozen books keep their history; the super book's lab book stays as an outside reference.",
       "sort_bucket": "unacked",
@@ -2928,7 +2773,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3017,7 +2862,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-f15768a5fac3` (human task `adhoc-observe-instrument-freeze`):\nTitle: Decide which observe instruments to freeze\nSummary: Open human gate “Decide which observe instruments to freeze” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-f15768a5fac3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 24,
+        "priority": 23,
         "options": [
           {
             "id": "accept",
@@ -3069,7 +2914,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-strategy-book-memo-spend",
-      "priority": 25,
+      "priority": 24,
       "title": "Flip strategy-book forward go-live after the Phase 1 gate review",
       "summary": "DONE 2026-11-11 (owner): forward_live true, forward_start 2026-11-10, logged in operational_switches. The Phase 1 gate review is done (accepted with one adjustment, 2026-11-10), and #1346, #1347, #1349 and #1350 have merged. On the go-live date, set forward_live true and forward_start to that date (YYYY-MM-DD) on docs/data/strategy_book_registration.json in the same commit (owner, 2026-11-10: forward_start will equal the go-live date; recorded in phase1_gate_decision.forward_start_alignment). Phase 1 governs go-live, not the signature. Until forward_live is true the forward job dry-runs and writes no scored store. Memo spend is already on: the owner set spend_enabled true on 2026-11-10 (logged in operational_switches), independent of forward_live; its review is monthly-strategy-book-memo-spend-review. Neither job flips its own flag.",
       "sort_bucket": "unacked",
@@ -3098,7 +2943,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3187,7 +3032,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-f86f35648b86` (human task `adhoc-strategy-book-memo-spend`):\nTitle: Flip strategy-book forward go-live after the Phase 1 gate review\nSummary: Open human gate “Flip strategy-book forward go-live after the Phase 1 gate review” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-f86f35648b86` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 25,
+        "priority": 24,
         "options": [
           {
             "id": "accept",
@@ -3239,7 +3084,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-strategy-book-step-5-5-decision",
-      "priority": 26,
+      "priority": 25,
       "title": "Decide on step 5.5 when every proof bar is met",
       "summary": "The proof board was signed off on 2026-11-11 (step 3.2 done). When forward.all_bars_met in docs/data/strategy_book_proof_board.json turns true (N13 and N14 revisit triggers fire), read the forward block and decide whether to start plan step 5.5 (small live capital), after steps 5.2 to 5.4. The flag does not open live capital, change the book, or make the decision. The archive replay block in the same file is survivorship-biased and is not the proof.",
       "sort_bucket": "unacked",
@@ -3268,7 +3113,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3357,7 +3202,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-042387c65b9b` (human task `adhoc-strategy-book-step-5-5-decision`):\nTitle: Decide on step 5.5 when every proof bar is met\nSummary: Open human gate “Decide on step 5.5 when every proof bar is met” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-042387c65b9b` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 26,
+        "priority": 25,
         "options": [
           {
             "id": "accept",
@@ -3409,7 +3254,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-strategy-phase-gate",
-      "priority": 27,
+      "priority": 26,
       "title": "Sign strategy reorientation phase gates",
       "summary": "At the end of each phase of the strategy reorientation plan, review the evidence the supervising agent presents and sign, adjust once (logged), or reject. Phase 1: DONE 2026-11-10, accepted with one adjustment (owner). Both gates kept as they are; the one adjustment, now spent, makes funds and investment trusts insufficient_data in the decline gate, logged as change marker owner-strategy-book-v0-fund-insufficient-data-v1. Record in docs/ops/phase1-gate-review-pack.md (owner decision section). It governs only forward_live, which is a separate step (adhoc-strategy-book-memo-spend). Phase 2: sign the strategy-book registration (docs/ops/strategy-book-registration.md) before scoring, confirming or adjusting once the step 3.2 live proof numbers (docs/ops/strategy-reorientation-plan.md) that the seal copies, then the sample-thickness gate before it becomes the primary learning track. Later phases: new proof standard, demo-to-live execution steps, small live capital. Gates bind books only after sign-off; nothing auto-promotes.",
       "sort_bucket": "unacked",
@@ -3438,7 +3283,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3527,7 +3372,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-74fb09dd8f94` (human task `adhoc-strategy-phase-gate`):\nTitle: Sign strategy reorientation phase gates\nSummary: Open human gate “Sign strategy reorientation phase gates” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-74fb09dd8f94` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 27,
+        "priority": 26,
         "options": [
           {
             "id": "accept",
@@ -3579,9 +3424,9 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-strategy-uk-replay-reveal",
-      "priority": 28,
+      "priority": 27,
       "title": "Run the UK/Europe replay and stamp the reveal",
-      "summary": "Plan step 3.3. The registration was sealed on 2026-11-12 (owner accepted the defaults). Dispatch the strategy-book-uk-replay workflow with phase=fetch on or after 2026-11-19, then phase=development. After the development aggregates are committed, read them and give the second stamp (stamp-reveal) that authorises the single holdout reveal (target 2026-12-03). The stamp changes no sealed number. Last EODHD call day is 2026-12-10.",
+      "summary": "Plan step 3.3. The registration was sealed on 2026-11-12 (owner accepted the defaults). The fetch completed on 2026-11-13; development was committed the same day but is superseded by change marker prior-year-visible-v1: after that fix merges, dispatch the strategy-book-uk-replay workflow with phase=development-amendment, and read the amended block, not the first one. The encrypted cache is evicted after 7 days unused: if neither development nor reveal is dispatched for 6 days, re-dispatch phase=fetch (no EODHD calls once complete) to keep it. After the development aggregates are committed, read them and give the second stamp (stamp-reveal) that authorises the single holdout reveal (target 2026-12-03). The stamp changes no sealed number. Last EODHD call day is 2026-12-10.",
       "sort_bucket": "unacked",
       "closeable": true,
       "close_action": "human-task-ack",
@@ -3608,7 +3453,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3697,7 +3542,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-66cc17b94749` (human task `adhoc-strategy-uk-replay-reveal`):\nTitle: Run the UK/Europe replay and stamp the reveal\nSummary: Open human gate “Run the UK/Europe replay and stamp the reveal” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-66cc17b94749` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 28,
+        "priority": 27,
         "options": [
           {
             "id": "accept",
@@ -3749,7 +3594,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-strategy-us-pit-rehearsal",
-      "priority": 29,
+      "priority": 28,
       "title": "Download the Sharadar bundle before 2026-11-09, run the strategy-book US rehearsal, and confirm deletion",
       "summary": "Plan step 2.5. Access already held ends 2026-11-09. Before that date, bulk-download every sharadar.com direct Bundle table (years=full) to ~/sharadar: fundamentals, stocks, tickers, actions, sp500, daily, metrics, events, descriptions, funds, insiders, holdings, holdings_ticker, holdings_investor. Key in a local environment variable only. Personal-use licence. After the download, and inside the 30-day deletion window if access has already ended: build both screen panels and the hsr-v2 and hsr-mid-v2 baseline signal caches without revealing those holdouts, run development, review it, reveal the rehearsal confirmation once, then the delisting sensitivity. Commit aggregate stores only. Do not reveal hsr-v2, hsr-mid-v2, hrs-v2, or hms-v2. Delete raw and derived files within 30 days of 2026-11-09 (by 2026-12-09 if that is the cancel date), then ftse-historical-replay confirm-deleted, and stamp the rehearsal store with ftse-strategy-book-rehearsal confirm-deleted. Copy-paste commands for each step (develop, review, reveal, delete, confirm) are in the runbook; the rules stay in registration section 8. Scoring waits on the strategy-book signature; the download does not.",
       "sort_bucket": "unacked",
@@ -3778,7 +3623,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3867,7 +3712,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-3b5aba0cae67` (human task `adhoc-strategy-us-pit-rehearsal`):\nTitle: Download the Sharadar bundle before 2026-11-09, run the strategy-book US rehearsal, and confirm deletion\nSummary: Open human gate “Download the Sharadar bundle before 2026-11-09, run the strategy-book US rehearsal, and confirm deletion” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-3b5aba0cae67` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 29,
+        "priority": 28,
         "options": [
           {
             "id": "accept",
@@ -3919,7 +3764,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-strategy-version-review",
-      "priority": 30,
+      "priority": 29,
       "title": "Strategy book version review",
       "summary": "At the strategy book's thickness gate, then at most every 26 weeks: read the supervising agent's evidence pack (overall and per-market boards, both controls, the challenger bench, the selection board, the gate-rejected shadows, the US rehearsal, strategy-book reviews and five-lever scores in docs/data/strategy_book_review_queue.json (docs/ops/strategy-book-reviews.md; primary closes are the attention list, other columns are queued beside them), deferred ideas tagged strategy-version-review). Promote at most one bench challenger that has met its bar (2.5 standard errors on 48 counted mature episodes, same sign in both halves) into a new registration_id, or none; retire bench challengers that failed; seal any new bench challengers (at most four at once) before their scores are read. Do not tune the book between reviews.",
       "sort_bucket": "unacked",
@@ -3948,7 +3793,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4037,7 +3882,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-46d45bc5652f` (human task `adhoc-strategy-version-review`):\nTitle: Strategy book version review\nSummary: Open human gate “Strategy book version review” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-46d45bc5652f` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 30,
+        "priority": 29,
         "options": [
           {
             "id": "accept",
@@ -4089,7 +3934,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-t212-catalogue-secrets",
-      "priority": 31,
+      "priority": 30,
       "title": "Add Trading 212 API secrets for the catalogue refresh",
       "summary": "Add TRADING212_API_KEY and TRADING212_API_SECRET (live-environment read key) as GitHub Actions repository secrets so the scheduled catalogue refresh can run. Read-only instrument endpoints only; no order permissions are needed.",
       "sort_bucket": "unacked",
@@ -4118,7 +3963,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4207,7 +4052,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-8fb907bd53bb` (human task `adhoc-t212-catalogue-secrets`):\nTitle: Add Trading 212 API secrets for the catalogue refresh\nSummary: Open human gate “Add Trading 212 API secrets for the catalogue refresh” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-8fb907bd53bb` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 31,
+        "priority": 30,
         "options": [
           {
             "id": "accept",
@@ -4259,7 +4104,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-t212-demo-mirror-secrets",
-      "priority": 32,
+      "priority": 31,
       "title": "Create a Trading 212 practice-account API key and add the demo secrets",
       "summary": "Create an API key on a Trading 212 PRACTICE account (not the live catalogue key) with orders and portfolio scopes, and add GitHub Actions secrets TRADING212_DEMO_API_KEY and TRADING212_DEMO_API_SECRET. The strategy-book forward job then places primary limit orders on the demo host only. Until the secrets exist the job plans rows and sends nothing.",
       "sort_bucket": "unacked",
@@ -4288,7 +4133,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4377,7 +4222,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-f8f963d6e6fd` (human task `adhoc-t212-demo-mirror-secrets`):\nTitle: Create a Trading 212 practice-account API key and add the demo secrets\nSummary: Open human gate “Create a Trading 212 practice-account API key and add the demo secrets” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-f8f963d6e6fd` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 32,
+        "priority": 31,
         "options": [
           {
             "id": "accept",
@@ -4429,7 +4274,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "monthly-calibrate-token-usage",
-      "priority": 33,
+      "priority": 32,
       "title": "Calibrate token-usage warning",
       "summary": "After 2–3 weeks of measuring, compare week raw cost in docs/data/agent_usage_weekly.json with the Cursor usage page each plan cycle and set budget.token_usage_weekly_warning_raw_usd. Leave it null until then. The estimated-USD weekly_ops_cap_usd gate stays in force.",
       "sort_bucket": "unacked",
@@ -4458,7 +4303,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4547,7 +4392,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-d0f17ab71af9` (human task `monthly-calibrate-token-usage`):\nTitle: Calibrate token-usage warning\nSummary: Open human gate “Calibrate token-usage warning” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-d0f17ab71af9` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 33,
+        "priority": 32,
         "options": [
           {
             "id": "accept",
@@ -4599,7 +4444,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "monthly-strategy-book-memo-spend-review",
-      "priority": 34,
+      "priority": 33,
       "title": "Review strategy-book memo spend vs use (every 4 weeks)",
       "summary": "Every 4 weeks from the 2026-11-10 switch-on (first review 2026-12-08; the date is in operational_switches on docs/data/strategy_book_registration.json): read the ops-monitor finding 'Strategy book memo spend this week' and the weekly requested / budget-skip / spend counts in docs/data/strategy_book_memo_job.json against budget.strategy_book_memo_raise ($40 a week, 100 memos). Decide keep, lower, or raise the raise; if memos go unused, economise. Whether a memo fed an entry decision is not tracked yet, so judge use from signals filled vs memo_not_ready once forward_live is on. Set the next review date when you log the decision. Do not turn spend into rememo of thin memos without new filing bodies (N138 stays).",
       "sort_bucket": "unacked",
@@ -4628,7 +4473,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4717,7 +4562,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-d6fe559773d6` (human task `monthly-strategy-book-memo-spend-review`):\nTitle: Review strategy-book memo spend vs use (every 4 weeks)\nSummary: Open human gate “Review strategy-book memo spend vs use (every 4 weeks)” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-d6fe559773d6` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 34,
+        "priority": 33,
         "options": [
           {
             "id": "accept",
@@ -4769,7 +4614,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-entry-blind-reviews",
-      "priority": 35,
+      "priority": 34,
       "title": "Work entry-blind review queue (lab/interesting buys; PIT only)",
       "summary": "Sunday nest beside post-sale reviews (Package M v0): open Lifecycle → Entry blind (docs/data/entry_blind_review_queue.json). Critique recent lab / interesting buys with PIT chart through buy day + buy decision reasons only — no post-fill path / realized % / exit chrome. Accept/Comment/Duplicate; actioned clear from active; history in entry_blind_review_labels.json. influences_live=false — never knobs/fills. Ops finding Entry-blind review queue (observe). Nest neighbor: sunday-entry-revisit-reviews. Exit stages + missed-opp stay parked.",
       "sort_bucket": "unacked",
@@ -4798,7 +4643,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4887,7 +4732,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-68a344bc34ed` (human task `sunday-entry-blind-reviews`):\nTitle: Work entry-blind review queue (lab/interesting buys; PIT only)\nSummary: Open human gate “Work entry-blind review queue (lab/interesting buys; PIT only)” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-68a344bc34ed` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 35,
+        "priority": 34,
         "options": [
           {
             "id": "accept",
@@ -4939,7 +4784,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-entry-revisit-reviews",
-      "priority": 36,
+      "priority": 35,
       "title": "Work entry-revisit queue (fixed buy+28d after entry_blind)",
       "summary": "Sunday nest beside entry-blind (Package M): open Lifecycle → Entry +28d (docs/data/entry_revisit_review_queue.json). Only cards with entry_blind Accept/Comment and asof ≥ buy_day+28. Frozen blind summary + path through +28d (still_open / already_exited). Accept/Comment/Duplicate; never rewrite blind labels; influences_live=false — never knobs/fills / never Package L. Ops finding Entry-revisit review queue (observe).",
       "sort_bucket": "unacked",
@@ -4968,7 +4813,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5057,7 +4902,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-8346b15e22a7` (human task `sunday-entry-revisit-reviews`):\nTitle: Work entry-revisit queue (fixed buy+28d after entry_blind)\nSummary: Open human gate “Work entry-revisit queue (fixed buy+28d after entry_blind)” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-8346b15e22a7` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 36,
+        "priority": 35,
         "options": [
           {
             "id": "accept",
@@ -5109,7 +4954,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-post-sale-reviews",
-      "priority": 37,
+      "priority": 36,
       "title": "Work post-sale review queue (sealed + control; Accept/Comment alignment)",
       "summary": "Sunday nest beside post-sell cues (Package M): open Lifecycle → Post-sale reviews (docs/data/post_sale_review_queue.json). Coverage = all sealed books (N200/N201/N206/N210+) + FTSE control buy_tier_level (tagged). Verify dual-horizon charts (episode + wider TF). Accept = framing matches; Comment = missed pattern (spawns factory reply stub — respond to reply tags too). Actioned items clear from active queue; durable history in post_sale_review_labels.json. influences_live=false — never knobs/fills / never Package L auto-tune. Ops finding Post-sale review queue (observe); warn on pending replies / unreplied Comments. Nest neighbor: sunday-entry-blind-reviews.",
       "sort_bucket": "unacked",
@@ -5138,7 +4983,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5227,7 +5072,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-fde3f5d91071` (human task `sunday-post-sale-reviews`):\nTitle: Work post-sale review queue (sealed + control; Accept/Comment alignment)\nSummary: Open human gate “Work post-sale review queue (sealed + control; Accept/Comment alignment)” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-fde3f5d91071` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 37,
+        "priority": 36,
         "options": [
           {
             "id": "accept",
@@ -5279,7 +5124,7 @@
       "source": "daily_push",
       "work_class": "ops_gate",
       "task_family": "daily-push",
-      "priority": 38,
+      "priority": 37,
       "title": "Act on met deferred triggers",
       "summary": "ops finding (warn): Deferred idea triggers met",
       "sort_bucket": "push",
@@ -5308,7 +5153,7 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "ops finding (warn): Deferred idea triggers met",
@@ -5381,7 +5226,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-42a241cb3eb3` (push `push:7d0d60c2d699`):\nAct on met deferred triggers\nWhy now: ops finding (warn): Deferred idea triggers met\nCite: ops_finding Deferred idea triggers met\nPush is execution — do not invent a new strand from chat alone.",
-        "priority": 38,
+        "priority": 37,
         "options": [
           {
             "id": "accept",
@@ -5415,7 +5260,7 @@
       "source": "daily_push",
       "work_class": "ops_gate",
       "task_family": "daily-push",
-      "priority": 39,
+      "priority": 38,
       "title": "Clear engineering parked backlog when pause still fires",
       "summary": "ops finding (warn): Parked engineering tasks need manual review",
       "sort_bucket": "push",
@@ -5444,7 +5289,7 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "ops finding (warn): Parked engineering tasks need manual review",
@@ -5517,7 +5362,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-bad3b31b1bcc` (push `push:e99c1bad3ee9`):\nClear engineering parked backlog when pause still fires\nWhy now: ops finding (warn): Parked engineering tasks need manual review\nCite: ops_finding Parked engineering tasks need manual review\nPush is execution — do not invent a new strand from chat alone.",
-        "priority": 39,
+        "priority": 38,
         "options": [
           {
             "id": "accept",
@@ -5551,7 +5396,7 @@
       "source": "daily_explore",
       "work_class": "surface",
       "task_family": "daily-explore",
-      "priority": 40,
+      "priority": 39,
       "title": "Explore · N200 (strand-b-plain-value-tech-timing-v0) entry lever win; exit lever lose (population ≠ FTSE control closed sells)",
       "summary": "Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite — Falsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply",
       "sort_bucket": "explore",
@@ -5581,7 +5426,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite — Falsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply",
@@ -5650,7 +5495,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-a3d3266888ef` (explore `explore:post_sell:n200_entry_exit_levers`):\nClaim: N200 (strand-b-plain-value-tech-timing-v0) entry lever win; exit lever lose (population ≠ FTSE control closed sells)\nWhy: Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite\nFalsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply\nLabeled not-today — park via ftse-defer add/fragment; never eng-dispatch.",
-        "priority": 40,
+        "priority": 39,
         "options": [
           {
             "id": "accept",
@@ -5685,7 +5530,7 @@
       "source": "daily_explore",
       "work_class": "surface",
       "task_family": "daily-explore",
-      "priority": 41,
+      "priority": 40,
       "title": "Explore · FTSE exit-timing readiness: 0/3 tracks ready (control/DCA/AI-judgment)",
       "summary": "Live hold/swap probability stays parked until closed cohorts mature — Falsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)",
       "sort_bucket": "explore",
@@ -5715,7 +5560,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-11-13T07:57:00.147132Z",
+        "updated_at": "2026-11-14T02:44:02.493500Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Live hold/swap probability stays parked until closed cohorts mature — Falsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)",
@@ -5784,7 +5629,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-7dd5a2adbdb1` (explore `explore:post_sell:exit_timing_ready_ftse`):\nClaim: FTSE exit-timing readiness: 0/3 tracks ready (control/DCA/AI-judgment)\nWhy: Live hold/swap probability stays parked until closed cohorts mature\nFalsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)\nLabeled not-today — park via ftse-defer add/fragment; never eng-dispatch.",
-        "priority": 41,
+        "priority": 40,
         "options": [
           {
             "id": "accept",
@@ -5815,7 +5660,7 @@
       }
     }
   ],
-  "open_task_count": 32,
+  "open_task_count": 31,
   "recommendations": [
     {
       "id": "rec-201a8ae3e5a3",
@@ -5848,36 +5693,6 @@
       "task_family": "market-warning-triage"
     },
     {
-      "id": "rec-c032e5e6b350",
-      "task_id": "mwarn:dax:unmeasured_stuck",
-      "summary": "Market warning triage → deepen: DAX / unmeasured_stuck · MTX.DE.",
-      "rationale": "unmeasured_stuck on dax (MTX.DE) blocks sprint_ingest_complete and cannot be dismissed or parked. Spare-stream factory path — leave on spare deepen; do not steal the euro priority slot. Accept observes spare-factory deepen — do not divert euro capacity. IR allowlist is empty for MTX.DE — deepen alone will 0-yield; seed `_BUILTIN_IR_URLS` / issuer PDFs (or fix discovery) before another intensive pin. Do not auto-park unmeasured.",
-      "accept_action": {
-        "kind": "focus-ack",
-        "payload": {
-          "focus_id": "mwarn:dax:unmeasured_stuck",
-          "decision": "accept",
-          "triage_action": "deepen"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-c032e5e6b350` (market warning `mwarn:dax:unmeasured_stuck`):\nProposed action: deepen\nMarket: dax (focus=False spare=True)\nFlag: unmeasured_stuck — 1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)\nRationale: unmeasured_stuck on dax (MTX.DE) blocks sprint_ingest_complete and cannot be dismissed or parked. Spare-stream factory path — leave on spare deepen; do not steal the euro priority slot. Accept observes spare-factory deepen — do not divert euro capacity. IR allowlist is empty for MTX.DE — deepen alone will 0-yield; seed `_BUILTIN_IR_URLS` / issuer PDFs (or fix discovery) before another intensive pin. Do not auto-park unmeasured.\nPolicy: dismissable=False parkable=False\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro priority slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-      "priority": 7,
-      "options": [
-        "Accept — park / observe-ack for today",
-        "Discuss — only if this should become deepen",
-        "Do not ritual-clear badges or starve euro priority slot"
-      ],
-      "triage_action": "deepen",
-      "prefer_discuss": false,
-      "dismissable": false,
-      "parkable": false,
-      "market_id": "dax",
-      "flag_id": "unmeasured_stuck",
-      "cli_hint": null,
-      "work_class": "surface",
-      "task_family": "market-warning-triage"
-    },
-    {
       "id": "rec-af120866b150",
       "task_id": "mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve",
       "summary": "Market warning triage → dismiss: hang_seng / ingest_deviation · 0288.HK.",
@@ -5891,7 +5706,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-af120866b150` (market warning `mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve`):\nProposed action: dismiss\nMarket: hang_seng (focus=False spare=False)\nFlag: ingest_deviation — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources.\nRationale: Signal triage says dismiss — parked_leftover. Do not intensive-pin or divert the euro priority slot. Observe-safe Accept records the triage; run `ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve` manually (Phase B may automate dismiss later).\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — observe-ack dismiss triage (run CLI if shown; Phase B may automate)\n2) Discuss — if signal triage looks wrong\n3) Do not intensive-pin from this row alone\nCLI hint: ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve\nContext: docs/data/market_status.json + Daily hub market warning triage",
-      "priority": 8,
+      "priority": 7,
       "options": [
         "Accept — observe-ack dismiss triage (run CLI if shown; Phase B may automate)",
         "Discuss — if signal triage looks wrong",
@@ -5908,20 +5723,20 @@
       "task_family": "market-warning-triage"
     },
     {
-      "id": "rec-3ad16608e177",
+      "id": "rec-6aee092ed5bf",
       "task_id": "human:weekday-engineering-parked-backlog-clear",
       "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 5 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-13T07:53:35.062805+00:00; Traffic pause active: True; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 4 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-14T02:42:06.710438+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
           "task_id": "weekday-engineering-parked-backlog-clear",
           "decision": "ack_observe",
-          "finding_fingerprint": "b19c9517d47ef0b3"
+          "finding_fingerprint": "e69a5e997553968d"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-3ad16608e177` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 5 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-13T07:53:35.062805+00:00; Traffic pause active: True; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 5 (attention ~3)\n- Queue-clearing pause active: False — evaluated 2026-11-13T07:53:35.062805+00:00\n- Traffic pause active: True\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-3ad16608e177` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 13,
+      "discuss_prompt": "Discuss daily recommendation `rec-6aee092ed5bf` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 4 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-14T02:42:06.710438+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 4 (attention ~3)\n- Queue-clearing pause active: False — evaluated 2026-11-14T02:42:06.710438+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-6aee092ed5bf` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "priority": 12,
       "options": [
         {
           "id": "accept",
@@ -5931,7 +5746,7 @@
             "payload": {
               "task_id": "weekday-engineering-parked-backlog-clear",
               "decision": "ack_observe",
-              "finding_fingerprint": "b19c9517d47ef0b3"
+              "finding_fingerprint": "e69a5e997553968d"
             }
           }
         },
@@ -5943,7 +5758,7 @@
             "payload": {
               "task_id": "weekday-engineering-parked-backlog-clear",
               "decision": "defer",
-              "finding_fingerprint": "b19c9517d47ef0b3"
+              "finding_fingerprint": "e69a5e997553968d"
             }
           }
         },
@@ -5971,7 +5786,7 @@
       "id": "rec-7932628f93a3",
       "task_id": "human:sunday-assessment-scoreboard",
       "summary": "Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -0.2% vs FTAL.L +1.1% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.0948; vs control buy_tier_matched30_fair: difference 0.0139 (common window, not significance); AI gate binds: False (N189 while it never binds)",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1036; vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance); AI gate binds: False (N189 while it never binds)",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
@@ -5980,8 +5795,8 @@
           "finding_fingerprint": "94066622535964a2"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-7932628f93a3` (human task `sunday-assessment-scoreboard`):\nTitle: Read the assessment scoreboard (primary vs control; promotion gate)\nSummary: Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -0.2% vs FTAL.L +1.1% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.0948; vs control buy_tier_matched30_fair: difference 0.0139 (common window, not significance); AI gate binds: False (N189 while it never binds)\nReview detail:\n- ai_judgment_matched30_fair: total return -0.2% vs FTAL.L +1.1% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).\n- Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.0948\n- vs control buy_tier_matched30_fair: difference 0.0139 (common window, not significance)\n- AI gate binds: False (N189 while it never binds)\n- twin ai_judgment_matched30_fair: difference -0.0158 over 10 days\n- twin buy_tier_matched30_fair: difference -0.0328 over 18 days\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Approve gate (observe-only)\n3) Defer / rewrite runbook expectation\n4) Open runbook\n5) Discuss in Project chat\nSay: discuss daily recommendation `rec-7932628f93a3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 14,
+      "discuss_prompt": "Discuss daily recommendation `rec-7932628f93a3` (human task `sunday-assessment-scoreboard`):\nTitle: Read the assessment scoreboard (primary vs control; promotion gate)\nSummary: Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1036; vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance); AI gate binds: False (N189 while it never binds)\nReview detail:\n- ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).\n- Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1036\n- vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance)\n- AI gate binds: False (N189 while it never binds)\n- twin ai_judgment_matched30_fair: difference -0.0158 over 10 days\n- twin buy_tier_matched30_fair: difference -0.0331 over 19 days\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Approve gate (observe-only)\n3) Defer / rewrite runbook expectation\n4) Open runbook\n5) Discuss in Project chat\nSay: discuss daily recommendation `rec-7932628f93a3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "priority": 13,
       "options": [
         {
           "id": "accept",
@@ -6040,20 +5855,20 @@
       ]
     },
     {
-      "id": "rec-077cafae9560",
+      "id": "rec-b791c7c74f7a",
       "task_id": "human:sunday-shard-epoch0-watch",
       "summary": "Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 22 detail: euro_depth: phase=3 ai=False knob=False holdings=34; dax: phase=1 ai=False knob=False holdings=7; sp500: phase=1 ai=False knob=False holdings=120; aex: phase=0 ai=False knob=False holdings=8",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 22 detail: euro_depth: phase=3 ai=False knob=False holdings=34; nasdaq100: phase=1 ai=False knob=False holdings=35; sp500: phase=1 ai=False knob=False holdings=120; aex: phase=0 ai=False knob=False holdings=5",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
           "task_id": "sunday-shard-epoch0-watch",
           "decision": "ack_observe",
-          "finding_fingerprint": "af5f29a93bfbc497"
+          "finding_fingerprint": "f7e994b3c6ee65f2"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-077cafae9560` (human task `sunday-shard-epoch0-watch`):\nTitle: Watch shard epoch-0 and near-miss before forking AI\nSummary: Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 22 detail: euro_depth: phase=3 ai=False knob=False holdings=34; dax: phase=1 ai=False knob=False holdings=7; sp500: phase=1 ai=False knob=False holdings=120; aex: phase=0 ai=False knob=False holdings=8\nReview detail:\n- euro_depth: phase=3 ai=False knob=False holdings=34\n- dax: phase=1 ai=False knob=False holdings=7\n- sp500: phase=1 ai=False knob=False holdings=120\n- aex: phase=0 ai=False knob=False holdings=8\n- aim: phase=0 ai=False knob=False holdings=14\n- atx: phase=0 ai=False knob=False holdings=5\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-077cafae9560` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 15,
+      "discuss_prompt": "Discuss daily recommendation `rec-b791c7c74f7a` (human task `sunday-shard-epoch0-watch`):\nTitle: Watch shard epoch-0 and near-miss before forking AI\nSummary: Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 22 detail: euro_depth: phase=3 ai=False knob=False holdings=34; nasdaq100: phase=1 ai=False knob=False holdings=35; sp500: phase=1 ai=False knob=False holdings=120; aex: phase=0 ai=False knob=False holdings=5\nReview detail:\n- euro_depth: phase=3 ai=False knob=False holdings=34\n- nasdaq100: phase=1 ai=False knob=False holdings=35\n- sp500: phase=1 ai=False knob=False holdings=120\n- aex: phase=0 ai=False knob=False holdings=5\n- aim: phase=0 ai=False knob=False holdings=15\n- atx: phase=0 ai=False knob=False holdings=4\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-b791c7c74f7a` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "priority": 14,
       "options": [
         {
           "id": "accept",
@@ -6063,7 +5878,7 @@
             "payload": {
               "task_id": "sunday-shard-epoch0-watch",
               "decision": "ack_observe",
-              "finding_fingerprint": "af5f29a93bfbc497"
+              "finding_fingerprint": "f7e994b3c6ee65f2"
             }
           }
         },
@@ -6075,7 +5890,7 @@
             "payload": {
               "task_id": "sunday-shard-epoch0-watch",
               "decision": "defer",
-              "finding_fingerprint": "af5f29a93bfbc497"
+              "finding_fingerprint": "f7e994b3c6ee65f2"
             }
           }
         },
@@ -6113,7 +5928,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-eeeb1a3259f8` (human task `adhoc-review-ingest-deviations`):\nTitle: Review open ingest deviations and reprocess if needed\nSummary: Review new analysis on “Review open ingest deviations and reprocess if needed”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Ingest deviations · 2 open detail: Open deviations: 2; WIE.VI: blocker_no_improve — WIE.VI hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.; 0288.HK: blocker_no_improve — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources.\nReview detail:\n- Open deviations: 2\n- WIE.VI: blocker_no_improve — WIE.VI hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.\n- 0288.HK: blocker_no_improve — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources.\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-eeeb1a3259f8` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 16,
+      "priority": 15,
       "options": [
         {
           "id": "accept",
@@ -6160,20 +5975,20 @@
       ]
     },
     {
-      "id": "rec-b072dfb431e8",
+      "id": "rec-ece09776fdea",
       "task_id": "human:monthly-pr-fix-common-issues",
       "summary": "Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 374; PR mergeable=CONFLICTING against main: 7; validate failed: 7; validate check failed: 6",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 378; PR mergeable=CONFLICTING against main: 7; validate failed: 7; validate check failed: 6",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
           "task_id": "monthly-pr-fix-common-issues",
           "decision": "ack_observe",
-          "finding_fingerprint": "9599b0bac64d6f59"
+          "finding_fingerprint": "86d5c87876355031"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-b072dfb431e8` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 374; PR mergeable=CONFLICTING against main: 7; validate failed: 7; validate check failed: 6\nReview detail:\n- Occasions logged: 374\n- PR mergeable=CONFLICTING against main: 7\n- validate failed: 7\n- validate check failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-b072dfb431e8` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 17,
+      "discuss_prompt": "Discuss daily recommendation `rec-ece09776fdea` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 378; PR mergeable=CONFLICTING against main: 7; validate failed: 7; validate check failed: 6\nReview detail:\n- Occasions logged: 378\n- PR mergeable=CONFLICTING against main: 7\n- validate failed: 7\n- validate check failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-ece09776fdea` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "priority": 16,
       "options": [
         {
           "id": "accept",
@@ -6183,7 +5998,7 @@
             "payload": {
               "task_id": "monthly-pr-fix-common-issues",
               "decision": "ack_observe",
-              "finding_fingerprint": "9599b0bac64d6f59"
+              "finding_fingerprint": "86d5c87876355031"
             }
           }
         },
@@ -6195,7 +6010,7 @@
             "payload": {
               "task_id": "monthly-pr-fix-common-issues",
               "decision": "defer",
-              "finding_fingerprint": "9599b0bac64d6f59"
+              "finding_fingerprint": "86d5c87876355031"
             }
           }
         },
@@ -6233,7 +6048,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-9743fa943980` (human task `sunday-analysis-tasks`):\nTitle: Triage analysis_tasks experiments\nSummary: Review new analysis on “Triage analysis_tasks experiments”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Triage queue · 12 open detail: Open/proposed: 12 / 12; ana-20260728-04: Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.; ana-20260921-01: Exclusion-universe step u3 (conviction ≥ 0.25, cumulative_exclusion_alpha +0.00261) replay on ai_judgment candidate pool vs baseline — expected learning value: quantify whether priors improve filtered; ana-20260921-02: Offline family-weight stress test for quality/dividend failures on avoid cohort (pattern AAL.L / AML.L opinion-flip triggers) — expected learning value: test whether tightening quality+dividend gates\nReview detail:\n- Open/proposed: 12 / 12\n- ana-20260728-04: Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.\n- ana-20260921-01: Exclusion-universe step u3 (conviction ≥ 0.25, cumulative_exclusion_alpha +0.00261) replay on ai_judgment candidate pool vs baseline — expected learning value: quantify whether priors improve filtered\n- ana-20260921-02: Offline family-weight stress test for quality/dividend failures on avoid cohort (pattern AAL.L / AML.L opinion-flip triggers) — expected learning value: test whether tightening quality+dividend gates\n- ana-20260921-03: Conviction/timing delay model for transition_key hold→buy and realization_lag (1w hit 0.406 vs within_4w_rate 0.9448) — expected learning value: separate assessment lag from signal direction for overl\n- ana-20260921-04: Hold-vs-swap probability strand using exit_timing_near_miss (hold_closed 202, swap_closed 209, ready_for_probability_analysis true) — expected learning value: estimate whether early swap beats hold re\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-9743fa943980` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 18,
+      "priority": 17,
       "options": [
         {
           "id": "accept",
@@ -6293,7 +6108,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-139b8f02a16a` (human task `sunday-triage-plr-director-tasks`):\nTitle: Triage paper-learning and learning-director tasks\nSummary: Review new analysis on “Triage paper-learning and learning-director tasks”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Triage queue · 3 open detail: Open/proposed: 3 / 3; plr-20261108-01: Run `ftse-rebalance-log buffered-hold` on `buy_tier_level` and `buy_tier_level_dca` with `--exit-confirm-variants 1,2` and `--lookback-days 28` (paper root `output/paper_automation`) — expected learni; plr-20261108-02: Re-run buffered-hold on `ai_judgment_matched30_fair` and `buy_tier_matched30_fair` with `--lookback-days 28` and variants 1,2 only — expected learning value: test whether the 7d panel’s primary `trade; plr-20261108-03: Cross-read active-book `exit_shadow` open cohorts (`buy_tier_matched30_fair` `open_count` 23 vs `closed_count` 0; primary `open_count` 9) with churn `full_exits_in_window` (3 primary, 6 control) under\nReview detail:\n- Open/proposed: 3 / 3\n- plr-20261108-01: Run `ftse-rebalance-log buffered-hold` on `buy_tier_level` and `buy_tier_level_dca` with `--exit-confirm-variants 1,2` and `--lookback-days 28` (paper root `output/paper_automation`) — expected learni\n- plr-20261108-02: Re-run buffered-hold on `ai_judgment_matched30_fair` and `buy_tier_matched30_fair` with `--lookback-days 28` and variants 1,2 only — expected learning value: test whether the 7d panel’s primary `trade\n- plr-20261108-03: Cross-read active-book `exit_shadow` open cohorts (`buy_tier_matched30_fair` `open_count` 23 vs `closed_count` 0; primary `open_count` 9) with churn `full_exits_in_window` (3 primary, 6 control) under\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-139b8f02a16a` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 19,
+      "priority": 18,
       "options": [
         {
           "id": "accept",
@@ -6353,7 +6168,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-f259e5c83b3f` (human task `adhoc-cue-consumer-mft-start-gate`):\nTitle: Confirm freeze of cue-consumer MFT Q8B non-mechanical autopsy cohort\nSummary: Open human gate “Confirm freeze of cue-consumer MFT Q8B non-mechanical autopsy cohort” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-f259e5c83b3f` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 20,
+      "priority": 19,
       "options": [
         {
           "id": "accept",
@@ -6413,7 +6228,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-e03219062ffb` (human task `adhoc-dashboard-v2-cutover`):\nTitle: Decide the dashboard v2 cutover\nSummary: Open human gate “Decide the dashboard v2 cutover” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-e03219062ffb` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 21,
+      "priority": 20,
       "options": [
         {
           "id": "accept",
@@ -6473,7 +6288,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-c912cd379915` (human task `adhoc-eodhd-coverage-trial`):\nTitle: Run the one-month EODHD coverage trial for step 3.3\nSummary: Open human gate “Run the one-month EODHD coverage trial for step 3.3” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-c912cd379915` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 22,
+      "priority": 21,
       "options": [
         {
           "id": "accept",
@@ -6533,7 +6348,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-a91a4ed68492` (human task `adhoc-memo-model-comparison-blind-review`):\nTitle: Rate the memo model comparison calibration sample\nSummary: Open human gate “Rate the memo model comparison calibration sample” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-a91a4ed68492` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 23,
+      "priority": 22,
       "options": [
         {
           "id": "accept",
@@ -6593,7 +6408,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-f15768a5fac3` (human task `adhoc-observe-instrument-freeze`):\nTitle: Decide which observe instruments to freeze\nSummary: Open human gate “Decide which observe instruments to freeze” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-f15768a5fac3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 24,
+      "priority": 23,
       "options": [
         {
           "id": "accept",
@@ -6653,7 +6468,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-f86f35648b86` (human task `adhoc-strategy-book-memo-spend`):\nTitle: Flip strategy-book forward go-live after the Phase 1 gate review\nSummary: Open human gate “Flip strategy-book forward go-live after the Phase 1 gate review” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-f86f35648b86` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 25,
+      "priority": 24,
       "options": [
         {
           "id": "accept",
@@ -6713,7 +6528,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-042387c65b9b` (human task `adhoc-strategy-book-step-5-5-decision`):\nTitle: Decide on step 5.5 when every proof bar is met\nSummary: Open human gate “Decide on step 5.5 when every proof bar is met” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-042387c65b9b` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 26,
+      "priority": 25,
       "options": [
         {
           "id": "accept",
@@ -6773,7 +6588,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-74fb09dd8f94` (human task `adhoc-strategy-phase-gate`):\nTitle: Sign strategy reorientation phase gates\nSummary: Open human gate “Sign strategy reorientation phase gates” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-74fb09dd8f94` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 27,
+      "priority": 26,
       "options": [
         {
           "id": "accept",
@@ -6833,7 +6648,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-66cc17b94749` (human task `adhoc-strategy-uk-replay-reveal`):\nTitle: Run the UK/Europe replay and stamp the reveal\nSummary: Open human gate “Run the UK/Europe replay and stamp the reveal” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-66cc17b94749` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 28,
+      "priority": 27,
       "options": [
         {
           "id": "accept",
@@ -6893,7 +6708,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-3b5aba0cae67` (human task `adhoc-strategy-us-pit-rehearsal`):\nTitle: Download the Sharadar bundle before 2026-11-09, run the strategy-book US rehearsal, and confirm deletion\nSummary: Open human gate “Download the Sharadar bundle before 2026-11-09, run the strategy-book US rehearsal, and confirm deletion” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-3b5aba0cae67` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 29,
+      "priority": 28,
       "options": [
         {
           "id": "accept",
@@ -6953,7 +6768,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-46d45bc5652f` (human task `adhoc-strategy-version-review`):\nTitle: Strategy book version review\nSummary: Open human gate “Strategy book version review” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-46d45bc5652f` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 30,
+      "priority": 29,
       "options": [
         {
           "id": "accept",
@@ -7013,7 +6828,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-8fb907bd53bb` (human task `adhoc-t212-catalogue-secrets`):\nTitle: Add Trading 212 API secrets for the catalogue refresh\nSummary: Open human gate “Add Trading 212 API secrets for the catalogue refresh” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-8fb907bd53bb` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 31,
+      "priority": 30,
       "options": [
         {
           "id": "accept",
@@ -7073,7 +6888,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-f8f963d6e6fd` (human task `adhoc-t212-demo-mirror-secrets`):\nTitle: Create a Trading 212 practice-account API key and add the demo secrets\nSummary: Open human gate “Create a Trading 212 practice-account API key and add the demo secrets” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-f8f963d6e6fd` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 32,
+      "priority": 31,
       "options": [
         {
           "id": "accept",
@@ -7133,7 +6948,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-d0f17ab71af9` (human task `monthly-calibrate-token-usage`):\nTitle: Calibrate token-usage warning\nSummary: Open human gate “Calibrate token-usage warning” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-d0f17ab71af9` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 33,
+      "priority": 32,
       "options": [
         {
           "id": "accept",
@@ -7193,7 +7008,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-d6fe559773d6` (human task `monthly-strategy-book-memo-spend-review`):\nTitle: Review strategy-book memo spend vs use (every 4 weeks)\nSummary: Open human gate “Review strategy-book memo spend vs use (every 4 weeks)” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-d6fe559773d6` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 34,
+      "priority": 33,
       "options": [
         {
           "id": "accept",
@@ -7253,7 +7068,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-68a344bc34ed` (human task `sunday-entry-blind-reviews`):\nTitle: Work entry-blind review queue (lab/interesting buys; PIT only)\nSummary: Open human gate “Work entry-blind review queue (lab/interesting buys; PIT only)” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-68a344bc34ed` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 35,
+      "priority": 34,
       "options": [
         {
           "id": "accept",
@@ -7313,7 +7128,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-8346b15e22a7` (human task `sunday-entry-revisit-reviews`):\nTitle: Work entry-revisit queue (fixed buy+28d after entry_blind)\nSummary: Open human gate “Work entry-revisit queue (fixed buy+28d after entry_blind)” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-8346b15e22a7` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 36,
+      "priority": 35,
       "options": [
         {
           "id": "accept",
@@ -7373,7 +7188,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-fde3f5d91071` (human task `sunday-post-sale-reviews`):\nTitle: Work post-sale review queue (sealed + control; Accept/Comment alignment)\nSummary: Open human gate “Work post-sale review queue (sealed + control; Accept/Comment alignment)” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-fde3f5d91071` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 37,
+      "priority": 36,
       "options": [
         {
           "id": "accept",
@@ -7433,7 +7248,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-42a241cb3eb3` (push `push:7d0d60c2d699`):\nAct on met deferred triggers\nWhy now: ops finding (warn): Deferred idea triggers met\nCite: ops_finding Deferred idea triggers met\nPush is execution — do not invent a new strand from chat alone.",
-      "priority": 38,
+      "priority": 37,
       "options": [
         {
           "id": "accept",
@@ -7475,7 +7290,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-bad3b31b1bcc` (push `push:e99c1bad3ee9`):\nClear engineering parked backlog when pause still fires\nWhy now: ops finding (warn): Parked engineering tasks need manual review\nCite: ops_finding Parked engineering tasks need manual review\nPush is execution — do not invent a new strand from chat alone.",
-      "priority": 39,
+      "priority": 38,
       "options": [
         {
           "id": "accept",
@@ -7517,7 +7332,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-a3d3266888ef` (explore `explore:post_sell:n200_entry_exit_levers`):\nClaim: N200 (strand-b-plain-value-tech-timing-v0) entry lever win; exit lever lose (population ≠ FTSE control closed sells)\nWhy: Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite\nFalsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply\nLabeled not-today — park via ftse-defer add/fragment; never eng-dispatch.",
-      "priority": 40,
+      "priority": 39,
       "options": [
         {
           "id": "accept",
@@ -7560,7 +7375,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-7dd5a2adbdb1` (explore `explore:post_sell:exit_timing_ready_ftse`):\nClaim: FTSE exit-timing readiness: 0/3 tracks ready (control/DCA/AI-judgment)\nWhy: Live hold/swap probability stays parked until closed cohorts mature\nFalsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)\nLabeled not-today — park via ftse-defer add/fragment; never eng-dispatch.",
-      "priority": 41,
+      "priority": 40,
       "options": [
         {
           "id": "accept",
@@ -7593,7 +7408,7 @@
   "closed_today": [],
   "counts": {
     "focus": 0,
-    "market_warnings": 3,
+    "market_warnings": 2,
     "gha_failures": 0,
     "human_new_info": 7,
     "human_unacked": 18,
@@ -7605,7 +7420,7 @@
   },
   "project_sync": {
     "notes_fingerprint": null,
-    "synced_at": "2026-11-13T07:57:00.147132Z",
+    "synced_at": "2026-11-14T02:44:02.493500Z",
     "method": "morning_builder_reads_committed_export_or_manual"
   },
   "illumination_hints": {
@@ -7613,7 +7428,7 @@
       "attention": true,
       "new_info": true,
       "reasons": [
-        "open_tasks=32"
+        "open_tasks=31"
       ]
     },
     "automation.human": {

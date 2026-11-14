@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-11-13T18:06:02.312210+00:00",
+  "compiled_at": "2026-11-14T02:43:59.761948+00:00",
   "run_at": null,
-  "task_count": 279,
+  "task_count": 280,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -4267,6 +4267,175 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20261114-01",
+      "area": "ingest",
+      "title": "Close library ingest gaps for euro_depth / DQ7A.IR (chain 1/3: 0/0 improved, run igc-20260912-01)",
+      "summary": "Ingest gap-closure run igc-20260912-01 (chain root igc-20260912-01, round 1) targeted DQ7A.IR with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20260912-01",
+        "trial_id": "igc-20260912-01",
+        "chain_root_id": "igc-20260912-01",
+        "chain_round": 1,
+        "tickers": [
+          "DQ7A.IR"
+        ],
+        "ticker": "DQ7A.IR",
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "DQ7A.IR"
+          ],
+          "market_id": "euro_depth",
+          "universe": "library",
+          "critical_path_blocker": "zero_body"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "DQ7A.IR"
+          ],
+          "market_id": "euro_depth",
+          "universe": "library",
+          "critical_path_blocker": "zero_body"
+        },
+        "compile_reason": "gaps_remain_without_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for DQ7A.IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261112-01",
+      "area": "ingest",
+      "title": "Close library ingest gaps for euro_depth / DQ7A.IR (chain 2/3: 0/0 improved, run igc-20260911-02)",
+      "summary": "Ingest gap-closure run igc-20260911-02 (chain root igc-20260911-02, round 2) targeted DQ7A.IR with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20260911-02",
+        "trial_id": "igc-20260911-02",
+        "chain_root_id": "igc-20260911-02",
+        "chain_round": 2,
+        "tickers": [
+          "DQ7A.IR"
+        ],
+        "ticker": "DQ7A.IR",
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "DQ7A.IR"
+          ],
+          "market_id": "euro_depth",
+          "universe": "library",
+          "critical_path_blocker": "zero_body"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "DQ7A.IR"
+          ],
+          "market_id": "euro_depth",
+          "universe": "library",
+          "critical_path_blocker": "zero_body"
+        },
+        "compile_reason": "gaps_remain_without_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for DQ7A.IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "cancelled",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_at": "2026-11-12T02:51:11.271019+00:00",
+      "parked_policy": "duplicate",
+      "duplicate_of": "eng-20261111-01",
+      "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261111-01",
+      "cancelled_at": "2026-11-12T03:17:31.862476+00:00",
+      "cancelled_policy": "superseded_gap_closure"
+    },
+    {
       "id": "eng-20261113-03",
       "area": "ingest",
       "title": "Close stubborn ingest gaps for ITV.L (chain 2/3: 0/0 bodies, run igc-20261113-02)",
@@ -4523,94 +4692,6 @@
       "duplicate_of": "eng-20261010-02",
       "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261010-02",
       "cancelled_at": "2026-10-23T08:18:26.756856+00:00",
-      "cancelled_policy": "superseded_gap_closure"
-    },
-    {
-      "id": "eng-20261112-01",
-      "area": "ingest",
-      "title": "Close library ingest gaps for euro_depth / DQ7A.IR (chain 2/3: 0/0 improved, run igc-20260911-02)",
-      "summary": "Ingest gap-closure run igc-20260911-02 (chain root igc-20260911-02, round 2) targeted DQ7A.IR with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
-      "priority": "high",
-      "priority_score": 88.0,
-      "source": "ingest_gap_closure",
-      "evidence": {
-        "gap_closure_run_id": "igc-20260911-02",
-        "trial_id": "igc-20260911-02",
-        "chain_root_id": "igc-20260911-02",
-        "chain_round": 2,
-        "tickers": [
-          "DQ7A.IR"
-        ],
-        "ticker": "DQ7A.IR",
-        "market_id": "euro_depth",
-        "library_market": "euro_depth",
-        "universe": "library",
-        "rerun_ingest_gap_closure": true,
-        "rerun_ingest_trial": true,
-        "rerun_library_ingest_loop": true,
-        "refetch_attempted": 0,
-        "refetch_fetched": 0,
-        "gap_closure_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "DQ7A.IR"
-          ],
-          "market_id": "euro_depth",
-          "universe": "library",
-          "critical_path_blocker": "zero_body"
-        },
-        "trial_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "DQ7A.IR"
-          ],
-          "market_id": "euro_depth",
-          "universe": "library",
-          "critical_path_blocker": "zero_body"
-        },
-        "compile_reason": "gaps_remain_without_refetch"
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for DQ7A.IR",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "cancelled",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "duplicate",
-      "parked_at": "2026-11-12T02:51:11.271019+00:00",
-      "duplicate_of": "eng-20261111-01",
-      "cancelled_at": "2026-11-12T03:17:31.862476+00:00",
-      "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261111-01",
       "cancelled_policy": "superseded_gap_closure"
     },
     {
@@ -18077,7 +18158,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-11-13T22:46:29.550898+00:00",
+    "evaluated_at": "2026-11-14T02:42:07.079046+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -18138,7 +18219,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 3,
-    "evaluated_at": "2026-11-14T00:08:25.576904+00:00",
+    "evaluated_at": "2026-11-14T02:42:06.710438+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -18152,10 +18233,10 @@
     "cooldown_hours": 12.0
   },
   "workflow_failure_compiled": true,
-  "micro_compile_source": "parked_source_hunter",
-  "source_gap_closure_run_id": "igc-20261113-02",
-  "source_trial_id": "igc-20261113-02",
-  "source_chain_root_id": "igc-20261113-02",
+  "micro_compile_source": "ingest_gap_closure",
+  "source_gap_closure_run_id": "igc-20260912-01",
+  "source_trial_id": "igc-20260912-01",
+  "source_chain_root_id": "igc-20260912-01",
   "library_market_id": "ibex35",
   "hunter_ticker": "LOG.MC",
   "ingest_health_before": {

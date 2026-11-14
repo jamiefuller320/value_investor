@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-13T07:48:19.044893+00:00",
+  "generated_at": "2026-11-14T02:38:01.873504+00:00",
   "source": "strategy_book",
   "book": "strategy_book",
   "book_id": "owner-strategy-book-v0",
@@ -20,7 +20,7 @@
   },
   "learning_question": "For every closed strategy-book episode: what happened (entry, path, exit reason versus the registered rule), was the outcome attributable to entry timing, the exit rule, a thesis break, a gate miss or market drift, and which of the five levers would have helped?",
   "observe_status": "ok",
-  "scoring_date": "2026-11-13",
+  "scoring_date": "2026-11-14",
   "influences_live": false,
   "observe_only": true,
   "opinion_llm": false,
@@ -40,18 +40,444 @@
     "fail_closed": "Missing data is insufficient_data. A provenance miss is not evidence."
   },
   "counts": {
-    "episodes": 94,
-    "closed": 2,
+    "episodes": 101,
+    "closed": 3,
     "primary": 0,
-    "companion": 2,
+    "companion": 3,
     "active": 0,
-    "open_skipped": 92,
+    "open_skipped": 98,
     "provenance_missing": 0,
     "missing": 0,
     "missing_older_than_lag": 0
   },
   "active": [],
   "companion": [
+    {
+      "review_id": "sp500:EXPD:buy_on_signal:2026-11-09",
+      "episode_id": "sp500:EXPD:buy_on_signal:2026-11-09",
+      "review_fingerprint": "ef534ca8de6333dd985f",
+      "episode_key": "strategy_book:buy_on_signal|EXPD|2026-11-10|2026-11-13",
+      "source": "strategy_book",
+      "book": "strategy_book",
+      "book_id": "owner-strategy-book-v0",
+      "book_tag": "Strategy book",
+      "column": "buy_on_signal",
+      "column_role": "control",
+      "attention": "companion",
+      "market": "sp500",
+      "ticker": "EXPD",
+      "currency": "USD",
+      "signal_session": "2026-11-09",
+      "fill_session": "2026-11-10",
+      "exit_session": "2026-11-13",
+      "exit_reason": "ineligible_runs",
+      "exit_fill": 194.8,
+      "fair_cost_return": 0.026152730059728457,
+      "fair_cost_return_pct": 2.62,
+      "matched_excess": 0.02717665348598684,
+      "matched_excess_pct": 2.72,
+      "recovery_label": false,
+      "launched": false,
+      "memo_verdict": "accumulate",
+      "memo_rationale": null,
+      "snapshot": {
+        "signal_session": "2026-11-09",
+        "screen_run_date": "2026-11-08",
+        "gate_as_of": null,
+        "market": "sp500",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "research_verdict": "accumulate",
+        "research_confidence": null,
+        "sector": null,
+        "conviction_score": 0.4845,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "memo_age_days": 2.35,
+        "memo_by_signal_job": false,
+        "vol_60": 0.013764838503186352,
+        "close_vs_sma200": 0.13156747371697453,
+        "fall_from_high_252": -0.088202760544414,
+        "return_126": 0.2252164921804316,
+        "range_pos_126": 0.7141192464556225,
+        "return_20": -0.019750788480430104,
+        "rsi_14": 43.7682675101975,
+        "inputs_not_after_signal": true
+      },
+      "decision_log": [
+        {
+          "session": "2026-11-10",
+          "index": 0,
+          "close": 189.19,
+          "entry_fill": 189.19,
+          "action": "fill",
+          "launched": false,
+          "floor": null,
+          "download_as_of": "2026-11-13"
+        }
+      ],
+      "reviews": [],
+      "floor_history": [],
+      "cited_inputs": [
+        {
+          "path": "docs/data/charts/EXPD.json",
+          "sha256": "48a5ffe0ab903f828438bb4d12bc56ec06dbab29c81c48c77654821e82124b25"
+        },
+        {
+          "path": "docs/data/gate_history/operating_decline/2026-11-12.json.gz",
+          "sha256": "75ce4166f6a9db8a7aff86e06f0482cbf8b6f1b6093ff54d2537b1ac7309d61b"
+        },
+        {
+          "path": "docs/data/gate_history/sector_headwind/2026-11-12.json.gz",
+          "sha256": "67d65e88aa797520a9040ba45636d478041ade0c9c9355d048e9697ce8bb9855"
+        },
+        {
+          "path": "docs/data/library/markets/sp500/screen/history/run_20261112_065331.json.gz",
+          "sha256": "90095be45362dc593662b0be2ef9ca731a858a583d32019ed4c7addb40f3f735"
+        }
+      ],
+      "pit_gate_log": [
+        {
+          "kind": "entry",
+          "as_of": "2026-11-09",
+          "column": "buy_on_signal",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-10",
+          "column": null,
+          "decline": "clear",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-11",
+          "column": null,
+          "decline": "clear",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-12",
+          "column": null,
+          "decline": "clear",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-13",
+          "column": null,
+          "decline": "clear",
+          "sector": "sound",
+          "signal": "hold",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "exit",
+          "as_of": "2026-11-13",
+          "column": "buy_on_signal",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": "ineligible_runs"
+        }
+      ],
+      "pit_gate_log_count": 6,
+      "hindsight": [],
+      "same_day": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": [],
+        "same_calendar_day": false,
+        "soft_bias": false,
+        "major_error_reverse": false,
+        "exception": null
+      },
+      "attribution": {
+        "label": "exit_rule",
+        "because": "registered_exit_family_fired",
+        "cites": [
+          "column=buy_on_signal",
+          "column_role=control",
+          "exit_reason=ineligible_runs",
+          "fair_cost_return=0.026152730059728457",
+          "matched_excess=0.02717665348598684"
+        ],
+        "counts_as_evidence": true
+      },
+      "levers": [
+        {
+          "id": "stock_choice",
+          "definition": "Accepted vs skipped PIT cues; fair-cost forward %",
+          "not": "cue-book path %; live NAV",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=0.026152730059728457"
+          ],
+          "hindsight": [],
+          "because": "no_skipped_cue_counterfactual_on_this_row"
+        },
+        {
+          "id": "buy_timing",
+          "definition": "vs immediate-on-cue; fair-cost delta",
+          "not": "watermark brackets (N217)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=0.026152730059728457",
+            "entry_window_sessions=10"
+          ],
+          "hindsight": [],
+          "because": "no_point_in_time_buy_on_signal_or_primary_close",
+          "outside_window": [],
+          "entry_window_sessions": 10
+        },
+        {
+          "id": "buy_strategy",
+          "definition": "Single-shot vs scale-in within fixed stake",
+          "not": "DCA / cash drag (later twins)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "sizing=fixed_stake_single_shot",
+            "stake=100.0"
+          ],
+          "hindsight": [],
+          "because": "no_scale_in_counterfactual_on_the_episode"
+        },
+        {
+          "id": "sell_timing",
+          "definition": "vs registered hold counterfactuals; default bias against same-calendar-day exit",
+          "not": "N200 leave-tier as this lab's skill; same-day without error evidence",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=ineligible_runs",
+            "fair_cost_return=0.026152730059728457",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "no_paired_close_on_or_before_this_exit"
+        },
+        {
+          "id": "sell_strategy",
+          "definition": "Rule-family by epoch; fair-cost; same-day exit allowed only as major_error_reverse with durable cites",
+          "not": "Hard live veto; Package L; silent same-day churn",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "rule_fired",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=ineligible_runs",
+            "registered_family_hit=True",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "registered_family_fired_without_a_paired_counterfactual"
+        }
+      ],
+      "judgment_in_the_round": {
+        "rubric_id": "judgment_in_the_round_v0",
+        "influences_live": false,
+        "observe_only": true,
+        "rules_role": "scaffold_propose",
+        "buy": {
+          "B1": {
+            "answer": "fundamentals_cited_partial",
+            "confidence": "low",
+            "cites": [
+              "research_verdict=accumulate",
+              "data_quality_score=1.0"
+            ],
+            "unknown": false
+          },
+          "B2": {
+            "answer": "timing_neutral_cited",
+            "confidence": "low",
+            "cites": [
+              "timing_signal=neutral"
+            ],
+            "unknown": false
+          },
+          "B3": {
+            "answer": "sector_context_cited",
+            "confidence": "low",
+            "cites": [
+              "market=sp500"
+            ],
+            "unknown": false
+          },
+          "B4": {
+            "answer": "cue_whitelist_proposes",
+            "confidence": "low",
+            "cites": [
+              "cue_source_id=owner-strategy-book-v0",
+              "cue_whitelist_id=mft-short-whitelist-v0",
+              "clear_note=column=buy_on_signal",
+              "signal=buy",
+              "adjusted_signal=buy"
+            ],
+            "unknown": false
+          },
+          "B5": {
+            "answer": "moderate_conviction",
+            "confidence": "medium",
+            "cites": [
+              "conviction_score=0.4845",
+              "research_verdict=accumulate"
+            ],
+            "unknown": false
+          },
+          "B6": {
+            "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+            "confidence": "medium",
+            "cites": [
+              "hold_policy_trading_days=63",
+              "exit_family=hold_trading_days_or_identity_break",
+              "sizing=fixed_stake_v0"
+            ],
+            "unknown": false
+          }
+        },
+        "sell": {
+          "S1": {
+            "answer": "exit_reason_cited",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=ineligible_runs",
+              "entry_cue_source_id=owner-strategy-book-v0",
+              "entry_clear_note=column=buy_on_signal"
+            ],
+            "unknown": false
+          },
+          "S2": {
+            "answer": "path_cited_at_exit",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=2.62",
+              "hold_trading_days=3"
+            ],
+            "unknown": false
+          },
+          "S3": {
+            "answer": "exit_path_cited",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=2.62",
+              "path_sign=positive",
+              "same_calendar_day=False"
+            ],
+            "unknown": false
+          },
+          "S4": {
+            "answer": "registered_lab_exit_rule_fires",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=ineligible_runs",
+              "rules_role=scaffold_propose"
+            ],
+            "unknown": false
+          },
+          "S5": {
+            "answer": "exit_confidence_from_rule_and_same_day_policy",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=ineligible_runs",
+              "same_day_soft_bias=False",
+              "same_day_hard_ban=False"
+            ],
+            "unknown": false
+          },
+          "S6": {
+            "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+            "confidence": "medium",
+            "cites": [
+              "sizing=fixed_stake_v0",
+              "observe_only=true",
+              "package_l=false",
+              "hold_trading_days=3"
+            ],
+            "unknown": false
+          }
+        },
+        "rule_candidates": [
+          {
+            "rule_id": "owner-strategy-book-v0",
+            "role": "scaffold_propose",
+            "cue_whitelist_id": "mft-short-whitelist-v0",
+            "clear_note": "column=buy_on_signal"
+          }
+        ],
+        "llm_stance": "agree",
+        "misfit_evidence": null,
+        "fill_status": "filled",
+        "fill_source": "deterministic_n228_v0",
+        "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+        "cells_cited": [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5",
+          "B6",
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ],
+        "cells_unknown": [],
+        "point_in_time": "exit_session",
+        "counts_as_evidence": true,
+        "evidence_status": "scored"
+      },
+      "provenance_missing": false,
+      "evidence_status": "scored",
+      "actioned": false,
+      "opinion_llm": false,
+      "influences_live": false,
+      "observe_only": true,
+      "status": "closed"
+    },
     {
       "review_id": "sp500:ADM:decline_rejected_shadow:2026-11-10",
       "episode_id": "sp500:ADM:decline_rejected_shadow:2026-11-10",
@@ -74,8 +500,8 @@
       "exit_fill": 70.97,
       "fair_cost_return": -0.0027949802594472964,
       "fair_cost_return_pct": -0.28,
-      "matched_excess": 0.010813534505446856,
-      "matched_excess_pct": 1.08,
+      "matched_excess": 0.010641835290255672,
+      "matched_excess_pct": 1.06,
       "recovery_label": false,
       "launched": false,
       "memo_verdict": "accumulate",
@@ -201,7 +627,7 @@
           "action": "fill",
           "launched": false,
           "floor": null,
-          "download_as_of": "2026-11-12"
+          "download_as_of": "2026-11-13"
         },
         {
           "session": "2026-11-11",
@@ -223,19 +649,19 @@
       "cited_inputs": [
         {
           "path": "docs/data/charts/ADM.json",
-          "sha256": "bcaa2b5e89799b7f5718285d7b6664dd8f5ce31a739d0222a87f3efa4ff66c80"
+          "sha256": "cba88ddd8763aa215d9480a1473c60444c137cf5f94bfb4d75cf4fbd114dad5b"
         },
         {
-          "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
-          "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+          "path": "docs/data/gate_history/operating_decline/2026-11-12.json.gz",
+          "sha256": "75ce4166f6a9db8a7aff86e06f0482cbf8b6f1b6093ff54d2537b1ac7309d61b"
         },
         {
-          "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
-          "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+          "path": "docs/data/gate_history/sector_headwind/2026-11-12.json.gz",
+          "sha256": "67d65e88aa797520a9040ba45636d478041ade0c9c9355d048e9697ce8bb9855"
         },
         {
-          "path": "docs/data/library/markets/sp500/screen/history/run_20261111_180727.json.gz",
-          "sha256": "7367721508e22ea1fc473ff66a092f03ab20db577f295921d34b0540e0db3d8d"
+          "path": "docs/data/library/markets/sp500/screen/history/run_20261112_065331.json.gz",
+          "sha256": "90095be45362dc593662b0be2ef9ca731a858a583d32019ed4c7addb40f3f735"
         },
         {
           "session": "2026-11-11",
@@ -243,19 +669,19 @@
           "inputs": [
             {
               "path": "docs/data/charts/ADM.json",
-              "sha256": "bcaa2b5e89799b7f5718285d7b6664dd8f5ce31a739d0222a87f3efa4ff66c80"
+              "sha256": "cba88ddd8763aa215d9480a1473c60444c137cf5f94bfb4d75cf4fbd114dad5b"
             },
             {
-              "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
-              "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+              "path": "docs/data/gate_history/operating_decline/2026-11-12.json.gz",
+              "sha256": "75ce4166f6a9db8a7aff86e06f0482cbf8b6f1b6093ff54d2537b1ac7309d61b"
             },
             {
-              "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
-              "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+              "path": "docs/data/gate_history/sector_headwind/2026-11-12.json.gz",
+              "sha256": "67d65e88aa797520a9040ba45636d478041ade0c9c9355d048e9697ce8bb9855"
             },
             {
-              "path": "docs/data/library/markets/sp500/screen/history/run_20261111_180727.json.gz",
-              "sha256": "7367721508e22ea1fc473ff66a092f03ab20db577f295921d34b0540e0db3d8d"
+              "path": "docs/data/library/markets/sp500/screen/history/run_20261112_065331.json.gz",
+              "sha256": "90095be45362dc593662b0be2ef9ca731a858a583d32019ed4c7addb40f3f735"
             }
           ],
           "action": "thesis_break"
@@ -319,7 +745,20 @@
         }
       ],
       "pit_gate_log_count": 5,
-      "hindsight": [],
+      "hindsight": [
+        {
+          "kind": "session",
+          "as_of": "2026-11-13",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null,
+          "withheld": "after_exit"
+        }
+      ],
       "same_day": {
         "same_day_round_trip": false,
         "same_day_assessment": "not_applicable",
@@ -339,7 +778,7 @@
           "column_role=shadow",
           "exit_reason=thesis_break",
           "fair_cost_return=-0.0027949802594472964",
-          "matched_excess=0.010813534505446856"
+          "matched_excess=0.010641835290255672"
         ],
         "counts_as_evidence": true
       },
@@ -793,7 +1232,7 @@
           "action": "fill",
           "launched": false,
           "floor": null,
-          "download_as_of": "2026-11-12"
+          "download_as_of": "2026-11-13"
         },
         {
           "session": "2026-11-11",
@@ -815,15 +1254,15 @@
       "cited_inputs": [
         {
           "path": "docs/data/charts/CKN.L.json",
-          "sha256": "092759388403fc62da67b10db485f871b2a9553bb85f322cd2dc6d9f696005fc"
+          "sha256": "aa8fa10b38f4dc094d66b6c67827d0bcdbeee9294ee03757dd05efb482382152"
         },
         {
-          "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
-          "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+          "path": "docs/data/gate_history/operating_decline/2026-11-12.json.gz",
+          "sha256": "75ce4166f6a9db8a7aff86e06f0482cbf8b6f1b6093ff54d2537b1ac7309d61b"
         },
         {
-          "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
-          "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+          "path": "docs/data/gate_history/sector_headwind/2026-11-12.json.gz",
+          "sha256": "67d65e88aa797520a9040ba45636d478041ade0c9c9355d048e9697ce8bb9855"
         },
         {
           "path": "docs/data/history/run_20261110_005303.json.gz",
@@ -835,15 +1274,15 @@
           "inputs": [
             {
               "path": "docs/data/charts/CKN.L.json",
-              "sha256": "092759388403fc62da67b10db485f871b2a9553bb85f322cd2dc6d9f696005fc"
+              "sha256": "aa8fa10b38f4dc094d66b6c67827d0bcdbeee9294ee03757dd05efb482382152"
             },
             {
-              "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
-              "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+              "path": "docs/data/gate_history/operating_decline/2026-11-12.json.gz",
+              "sha256": "75ce4166f6a9db8a7aff86e06f0482cbf8b6f1b6093ff54d2537b1ac7309d61b"
             },
             {
-              "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
-              "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+              "path": "docs/data/gate_history/sector_headwind/2026-11-12.json.gz",
+              "sha256": "67d65e88aa797520a9040ba45636d478041ade0c9c9355d048e9697ce8bb9855"
             },
             {
               "path": "docs/data/history/run_20261110_005303.json.gz",
@@ -911,7 +1350,20 @@
         }
       ],
       "pit_gate_log_count": 5,
-      "hindsight": [],
+      "hindsight": [
+        {
+          "kind": "session",
+          "as_of": "2026-11-13",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "neutral",
+          "exit_reason": null,
+          "withheld": "after_exit"
+        }
+      ],
       "same_day": {
         "same_day_round_trip": false,
         "same_day_assessment": "not_applicable",
@@ -1202,6 +1654,432 @@
   ],
   "rows": [
     {
+      "review_id": "sp500:EXPD:buy_on_signal:2026-11-09",
+      "episode_id": "sp500:EXPD:buy_on_signal:2026-11-09",
+      "review_fingerprint": "ef534ca8de6333dd985f",
+      "episode_key": "strategy_book:buy_on_signal|EXPD|2026-11-10|2026-11-13",
+      "source": "strategy_book",
+      "book": "strategy_book",
+      "book_id": "owner-strategy-book-v0",
+      "book_tag": "Strategy book",
+      "column": "buy_on_signal",
+      "column_role": "control",
+      "attention": "companion",
+      "market": "sp500",
+      "ticker": "EXPD",
+      "currency": "USD",
+      "signal_session": "2026-11-09",
+      "fill_session": "2026-11-10",
+      "exit_session": "2026-11-13",
+      "exit_reason": "ineligible_runs",
+      "exit_fill": 194.8,
+      "fair_cost_return": 0.026152730059728457,
+      "fair_cost_return_pct": 2.62,
+      "matched_excess": 0.02717665348598684,
+      "matched_excess_pct": 2.72,
+      "recovery_label": false,
+      "launched": false,
+      "memo_verdict": "accumulate",
+      "memo_rationale": null,
+      "snapshot": {
+        "signal_session": "2026-11-09",
+        "screen_run_date": "2026-11-08",
+        "gate_as_of": null,
+        "market": "sp500",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "research_verdict": "accumulate",
+        "research_confidence": null,
+        "sector": null,
+        "conviction_score": 0.4845,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "memo_age_days": 2.35,
+        "memo_by_signal_job": false,
+        "vol_60": 0.013764838503186352,
+        "close_vs_sma200": 0.13156747371697453,
+        "fall_from_high_252": -0.088202760544414,
+        "return_126": 0.2252164921804316,
+        "range_pos_126": 0.7141192464556225,
+        "return_20": -0.019750788480430104,
+        "rsi_14": 43.7682675101975,
+        "inputs_not_after_signal": true
+      },
+      "decision_log": [
+        {
+          "session": "2026-11-10",
+          "index": 0,
+          "close": 189.19,
+          "entry_fill": 189.19,
+          "action": "fill",
+          "launched": false,
+          "floor": null,
+          "download_as_of": "2026-11-13"
+        }
+      ],
+      "reviews": [],
+      "floor_history": [],
+      "cited_inputs": [
+        {
+          "path": "docs/data/charts/EXPD.json",
+          "sha256": "48a5ffe0ab903f828438bb4d12bc56ec06dbab29c81c48c77654821e82124b25"
+        },
+        {
+          "path": "docs/data/gate_history/operating_decline/2026-11-12.json.gz",
+          "sha256": "75ce4166f6a9db8a7aff86e06f0482cbf8b6f1b6093ff54d2537b1ac7309d61b"
+        },
+        {
+          "path": "docs/data/gate_history/sector_headwind/2026-11-12.json.gz",
+          "sha256": "67d65e88aa797520a9040ba45636d478041ade0c9c9355d048e9697ce8bb9855"
+        },
+        {
+          "path": "docs/data/library/markets/sp500/screen/history/run_20261112_065331.json.gz",
+          "sha256": "90095be45362dc593662b0be2ef9ca731a858a583d32019ed4c7addb40f3f735"
+        }
+      ],
+      "pit_gate_log": [
+        {
+          "kind": "entry",
+          "as_of": "2026-11-09",
+          "column": "buy_on_signal",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-10",
+          "column": null,
+          "decline": "clear",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-11",
+          "column": null,
+          "decline": "clear",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-12",
+          "column": null,
+          "decline": "clear",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "session",
+          "as_of": "2026-11-13",
+          "column": null,
+          "decline": "clear",
+          "sector": "sound",
+          "signal": "hold",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null
+        },
+        {
+          "kind": "exit",
+          "as_of": "2026-11-13",
+          "column": "buy_on_signal",
+          "decline": null,
+          "sector": null,
+          "signal": null,
+          "f9": null,
+          "memo_verdict": null,
+          "exit_reason": "ineligible_runs"
+        }
+      ],
+      "pit_gate_log_count": 6,
+      "hindsight": [],
+      "same_day": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": [],
+        "same_calendar_day": false,
+        "soft_bias": false,
+        "major_error_reverse": false,
+        "exception": null
+      },
+      "attribution": {
+        "label": "exit_rule",
+        "because": "registered_exit_family_fired",
+        "cites": [
+          "column=buy_on_signal",
+          "column_role=control",
+          "exit_reason=ineligible_runs",
+          "fair_cost_return=0.026152730059728457",
+          "matched_excess=0.02717665348598684"
+        ],
+        "counts_as_evidence": true
+      },
+      "levers": [
+        {
+          "id": "stock_choice",
+          "definition": "Accepted vs skipped PIT cues; fair-cost forward %",
+          "not": "cue-book path %; live NAV",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=0.026152730059728457"
+          ],
+          "hindsight": [],
+          "because": "no_skipped_cue_counterfactual_on_this_row"
+        },
+        {
+          "id": "buy_timing",
+          "definition": "vs immediate-on-cue; fair-cost delta",
+          "not": "watermark brackets (N217)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "fair_cost_return=0.026152730059728457",
+            "entry_window_sessions=10"
+          ],
+          "hindsight": [],
+          "because": "no_point_in_time_buy_on_signal_or_primary_close",
+          "outside_window": [],
+          "entry_window_sessions": 10
+        },
+        {
+          "id": "buy_strategy",
+          "definition": "Single-shot vs scale-in within fixed stake",
+          "not": "DCA / cash drag (later twins)",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "sizing=fixed_stake_single_shot",
+            "stake=100.0"
+          ],
+          "hindsight": [],
+          "because": "no_scale_in_counterfactual_on_the_episode"
+        },
+        {
+          "id": "sell_timing",
+          "definition": "vs registered hold counterfactuals; default bias against same-calendar-day exit",
+          "not": "N200 leave-tier as this lab's skill; same-day without error evidence",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "insufficient_data",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=ineligible_runs",
+            "fair_cost_return=0.026152730059728457",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "no_paired_close_on_or_before_this_exit"
+        },
+        {
+          "id": "sell_strategy",
+          "definition": "Rule-family by epoch; fair-cost; same-day exit allowed only as major_error_reverse with durable cites",
+          "not": "Hard live veto; Package L; silent same-day churn",
+          "metric_spec_id": "mft-fair-cost-5lever-v0",
+          "would_have_helped": "insufficient_data",
+          "status": "rule_fired",
+          "value": null,
+          "unit": "fair_cost_episode_pct",
+          "cites": [
+            "exit_reason=ineligible_runs",
+            "registered_family_hit=True",
+            "same_day_assessment=not_applicable"
+          ],
+          "hindsight": [],
+          "because": "registered_family_fired_without_a_paired_counterfactual"
+        }
+      ],
+      "judgment_in_the_round": {
+        "rubric_id": "judgment_in_the_round_v0",
+        "influences_live": false,
+        "observe_only": true,
+        "rules_role": "scaffold_propose",
+        "buy": {
+          "B1": {
+            "answer": "fundamentals_cited_partial",
+            "confidence": "low",
+            "cites": [
+              "research_verdict=accumulate",
+              "data_quality_score=1.0"
+            ],
+            "unknown": false
+          },
+          "B2": {
+            "answer": "timing_neutral_cited",
+            "confidence": "low",
+            "cites": [
+              "timing_signal=neutral"
+            ],
+            "unknown": false
+          },
+          "B3": {
+            "answer": "sector_context_cited",
+            "confidence": "low",
+            "cites": [
+              "market=sp500"
+            ],
+            "unknown": false
+          },
+          "B4": {
+            "answer": "cue_whitelist_proposes",
+            "confidence": "low",
+            "cites": [
+              "cue_source_id=owner-strategy-book-v0",
+              "cue_whitelist_id=mft-short-whitelist-v0",
+              "clear_note=column=buy_on_signal",
+              "signal=buy",
+              "adjusted_signal=buy"
+            ],
+            "unknown": false
+          },
+          "B5": {
+            "answer": "moderate_conviction",
+            "confidence": "medium",
+            "cites": [
+              "conviction_score=0.4845",
+              "research_verdict=accumulate"
+            ],
+            "unknown": false
+          },
+          "B6": {
+            "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+            "confidence": "medium",
+            "cites": [
+              "hold_policy_trading_days=63",
+              "exit_family=hold_trading_days_or_identity_break",
+              "sizing=fixed_stake_v0"
+            ],
+            "unknown": false
+          }
+        },
+        "sell": {
+          "S1": {
+            "answer": "exit_reason_cited",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=ineligible_runs",
+              "entry_cue_source_id=owner-strategy-book-v0",
+              "entry_clear_note=column=buy_on_signal"
+            ],
+            "unknown": false
+          },
+          "S2": {
+            "answer": "path_cited_at_exit",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=2.62",
+              "hold_trading_days=3"
+            ],
+            "unknown": false
+          },
+          "S3": {
+            "answer": "exit_path_cited",
+            "confidence": "low",
+            "cites": [
+              "fair_cost_return_pct=2.62",
+              "path_sign=positive",
+              "same_calendar_day=False"
+            ],
+            "unknown": false
+          },
+          "S4": {
+            "answer": "registered_lab_exit_rule_fires",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=ineligible_runs",
+              "rules_role=scaffold_propose"
+            ],
+            "unknown": false
+          },
+          "S5": {
+            "answer": "exit_confidence_from_rule_and_same_day_policy",
+            "confidence": "medium",
+            "cites": [
+              "exit_reason=ineligible_runs",
+              "same_day_soft_bias=False",
+              "same_day_hard_ban=False"
+            ],
+            "unknown": false
+          },
+          "S6": {
+            "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+            "confidence": "medium",
+            "cites": [
+              "sizing=fixed_stake_v0",
+              "observe_only=true",
+              "package_l=false",
+              "hold_trading_days=3"
+            ],
+            "unknown": false
+          }
+        },
+        "rule_candidates": [
+          {
+            "rule_id": "owner-strategy-book-v0",
+            "role": "scaffold_propose",
+            "cue_whitelist_id": "mft-short-whitelist-v0",
+            "clear_note": "column=buy_on_signal"
+          }
+        ],
+        "llm_stance": "agree",
+        "misfit_evidence": null,
+        "fill_status": "filled",
+        "fill_source": "deterministic_n228_v0",
+        "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+        "cells_cited": [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5",
+          "B6",
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ],
+        "cells_unknown": [],
+        "point_in_time": "exit_session",
+        "counts_as_evidence": true,
+        "evidence_status": "scored"
+      },
+      "provenance_missing": false,
+      "evidence_status": "scored",
+      "actioned": false,
+      "opinion_llm": false,
+      "influences_live": false,
+      "observe_only": true,
+      "status": "closed"
+    },
+    {
       "review_id": "sp500:ADM:decline_rejected_shadow:2026-11-10",
       "episode_id": "sp500:ADM:decline_rejected_shadow:2026-11-10",
       "review_fingerprint": "3bca39f2086c8323168c",
@@ -1223,8 +2101,8 @@
       "exit_fill": 70.97,
       "fair_cost_return": -0.0027949802594472964,
       "fair_cost_return_pct": -0.28,
-      "matched_excess": 0.010813534505446856,
-      "matched_excess_pct": 1.08,
+      "matched_excess": 0.010641835290255672,
+      "matched_excess_pct": 1.06,
       "recovery_label": false,
       "launched": false,
       "memo_verdict": "accumulate",
@@ -1350,7 +2228,7 @@
           "action": "fill",
           "launched": false,
           "floor": null,
-          "download_as_of": "2026-11-12"
+          "download_as_of": "2026-11-13"
         },
         {
           "session": "2026-11-11",
@@ -1372,19 +2250,19 @@
       "cited_inputs": [
         {
           "path": "docs/data/charts/ADM.json",
-          "sha256": "bcaa2b5e89799b7f5718285d7b6664dd8f5ce31a739d0222a87f3efa4ff66c80"
+          "sha256": "cba88ddd8763aa215d9480a1473c60444c137cf5f94bfb4d75cf4fbd114dad5b"
         },
         {
-          "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
-          "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+          "path": "docs/data/gate_history/operating_decline/2026-11-12.json.gz",
+          "sha256": "75ce4166f6a9db8a7aff86e06f0482cbf8b6f1b6093ff54d2537b1ac7309d61b"
         },
         {
-          "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
-          "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+          "path": "docs/data/gate_history/sector_headwind/2026-11-12.json.gz",
+          "sha256": "67d65e88aa797520a9040ba45636d478041ade0c9c9355d048e9697ce8bb9855"
         },
         {
-          "path": "docs/data/library/markets/sp500/screen/history/run_20261111_180727.json.gz",
-          "sha256": "7367721508e22ea1fc473ff66a092f03ab20db577f295921d34b0540e0db3d8d"
+          "path": "docs/data/library/markets/sp500/screen/history/run_20261112_065331.json.gz",
+          "sha256": "90095be45362dc593662b0be2ef9ca731a858a583d32019ed4c7addb40f3f735"
         },
         {
           "session": "2026-11-11",
@@ -1392,19 +2270,19 @@
           "inputs": [
             {
               "path": "docs/data/charts/ADM.json",
-              "sha256": "bcaa2b5e89799b7f5718285d7b6664dd8f5ce31a739d0222a87f3efa4ff66c80"
+              "sha256": "cba88ddd8763aa215d9480a1473c60444c137cf5f94bfb4d75cf4fbd114dad5b"
             },
             {
-              "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
-              "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+              "path": "docs/data/gate_history/operating_decline/2026-11-12.json.gz",
+              "sha256": "75ce4166f6a9db8a7aff86e06f0482cbf8b6f1b6093ff54d2537b1ac7309d61b"
             },
             {
-              "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
-              "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+              "path": "docs/data/gate_history/sector_headwind/2026-11-12.json.gz",
+              "sha256": "67d65e88aa797520a9040ba45636d478041ade0c9c9355d048e9697ce8bb9855"
             },
             {
-              "path": "docs/data/library/markets/sp500/screen/history/run_20261111_180727.json.gz",
-              "sha256": "7367721508e22ea1fc473ff66a092f03ab20db577f295921d34b0540e0db3d8d"
+              "path": "docs/data/library/markets/sp500/screen/history/run_20261112_065331.json.gz",
+              "sha256": "90095be45362dc593662b0be2ef9ca731a858a583d32019ed4c7addb40f3f735"
             }
           ],
           "action": "thesis_break"
@@ -1468,7 +2346,20 @@
         }
       ],
       "pit_gate_log_count": 5,
-      "hindsight": [],
+      "hindsight": [
+        {
+          "kind": "session",
+          "as_of": "2026-11-13",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "accumulate",
+          "exit_reason": null,
+          "withheld": "after_exit"
+        }
+      ],
       "same_day": {
         "same_day_round_trip": false,
         "same_day_assessment": "not_applicable",
@@ -1488,7 +2379,7 @@
           "column_role=shadow",
           "exit_reason=thesis_break",
           "fair_cost_return=-0.0027949802594472964",
-          "matched_excess=0.010813534505446856"
+          "matched_excess=0.010641835290255672"
         ],
         "counts_as_evidence": true
       },
@@ -1942,7 +2833,7 @@
           "action": "fill",
           "launched": false,
           "floor": null,
-          "download_as_of": "2026-11-12"
+          "download_as_of": "2026-11-13"
         },
         {
           "session": "2026-11-11",
@@ -1964,15 +2855,15 @@
       "cited_inputs": [
         {
           "path": "docs/data/charts/CKN.L.json",
-          "sha256": "092759388403fc62da67b10db485f871b2a9553bb85f322cd2dc6d9f696005fc"
+          "sha256": "aa8fa10b38f4dc094d66b6c67827d0bcdbeee9294ee03757dd05efb482382152"
         },
         {
-          "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
-          "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+          "path": "docs/data/gate_history/operating_decline/2026-11-12.json.gz",
+          "sha256": "75ce4166f6a9db8a7aff86e06f0482cbf8b6f1b6093ff54d2537b1ac7309d61b"
         },
         {
-          "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
-          "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+          "path": "docs/data/gate_history/sector_headwind/2026-11-12.json.gz",
+          "sha256": "67d65e88aa797520a9040ba45636d478041ade0c9c9355d048e9697ce8bb9855"
         },
         {
           "path": "docs/data/history/run_20261110_005303.json.gz",
@@ -1984,15 +2875,15 @@
           "inputs": [
             {
               "path": "docs/data/charts/CKN.L.json",
-              "sha256": "092759388403fc62da67b10db485f871b2a9553bb85f322cd2dc6d9f696005fc"
+              "sha256": "aa8fa10b38f4dc094d66b6c67827d0bcdbeee9294ee03757dd05efb482382152"
             },
             {
-              "path": "docs/data/gate_history/operating_decline/2026-11-11.json.gz",
-              "sha256": "2b11502ede71bc08675cfd013561150a70d66e3dd32ef3d9a847f087d32735c1"
+              "path": "docs/data/gate_history/operating_decline/2026-11-12.json.gz",
+              "sha256": "75ce4166f6a9db8a7aff86e06f0482cbf8b6f1b6093ff54d2537b1ac7309d61b"
             },
             {
-              "path": "docs/data/gate_history/sector_headwind/2026-11-11.json.gz",
-              "sha256": "550e049c59993008cf8eb9db18ee13597b565072a41a026bcbb11714fe296e8d"
+              "path": "docs/data/gate_history/sector_headwind/2026-11-12.json.gz",
+              "sha256": "67d65e88aa797520a9040ba45636d478041ade0c9c9355d048e9697ce8bb9855"
             },
             {
               "path": "docs/data/history/run_20261110_005303.json.gz",
@@ -2060,7 +2951,20 @@
         }
       ],
       "pit_gate_log_count": 5,
-      "hindsight": [],
+      "hindsight": [
+        {
+          "kind": "session",
+          "as_of": "2026-11-13",
+          "column": null,
+          "decline": "declining",
+          "sector": "sound",
+          "signal": "buy",
+          "f9": "pass",
+          "memo_verdict": "neutral",
+          "exit_reason": null,
+          "withheld": "after_exit"
+        }
+      ],
       "same_day": {
         "same_day_round_trip": false,
         "same_day_assessment": "not_applicable",
