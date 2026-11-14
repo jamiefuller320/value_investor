@@ -15819,9 +15819,58 @@ def test_refetch_ir_allowlist_retries_dq7a_ir_http_unfetchable_donegal(tmp_path:
     assert result["attempted"] == 2
     assert result["fetched"] >= 1
     assert result["skipped_unfetchable"] == 0
+    assert int(result.get("retry_cleared") or 0) == 2
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert all(row.get("has_body") for row in saved["filings"])
     assert all(row.get("unfetchable") is not True for row in saved["filings"])
+
+
+@patch("value_investor.research.filings.fetch_filing_body")
+def test_refetch_euro_filings_primary_bodies_dq7a_ir_zero_body_gap(mock_fetch, tmp_path: Path):
+    """eng-20261114-01: euro primary ingest retries stuck unfetchable Donegal IR (igc-20260912-01)."""
+    from value_investor.research.filings import (
+        _BUILTIN_IR_URLS,
+        refetch_euro_filings_primary_bodies,
+    )
+
+    mock_fetch.return_value = (
+        "Donegal Investment Group plc consolidated revenue operating profit cash flow " * 30
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    filings: list[dict] = []
+    for url in _BUILTIN_IR_URLS["DQ7A.IR"]:
+        digest = __import__("hashlib").sha256(url.encode("utf-8")).hexdigest()[:16]
+        filings.append(
+            {
+                "id": f"ir_{digest}",
+                "source": "ir_allowlist",
+                "headline": f"IR allowlist document — {url.rsplit('/', 1)[-1]}",
+                "url": url,
+                "period": "annual",
+                "has_body": False,
+                "unfetchable": True,
+                "unfetchable_reason": "ir_allowlist_fetch_failed",
+            }
+        )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": filings, "summary": {"with_body": 0, "total": len(filings)}}),
+        encoding="utf-8",
+    )
+    result = refetch_euro_filings_primary_bodies(
+        filings_dir,
+        ticker="DQ7A.IR",
+        company_name="Donegal Investment Group plc",
+        max_bodies=5,
+    )
+    ir = result.get("ir_allowlist") or {}
+    assert int(ir.get("retry_cleared") or 0) == 2
+    assert result["with_body_after"] >= 1
+    assert result["fetched"] >= 1
+    assert int(ir.get("skipped_unfetchable") or 0) == 0
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert all(not row.get("unfetchable") for row in payload.get("filings") or [])
+    assert int(payload["summary"]["with_body"]) >= 1
 
 
 def test_fetch_filings_ir_allowlist_euro_depth_eg7_ir_builtins(tmp_path: Path):
