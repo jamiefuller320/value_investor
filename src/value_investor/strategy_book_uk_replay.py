@@ -242,7 +242,7 @@ _V1_CONSTANTS: dict[str, Any] = {
     "supersedes_registration_id": "strategy-book-uk-replay-v0",
     "CH_SHARES_FALLBACK": True,
     "CH_SHARES_FIELDS": ["shares_in_issue", "weighted_average_basic_shares"],
-    "CH_SHARES_STALE_DAYS": 456,
+    "CH_SHARES_STALE_DAYS": 550,
     "CH_SHARES_LAG_DAYS": 2,
     "NAMED_FAILURES": ["carillion", "thomas_cook", "debenhams", "intu"],
     "NAMED_FAILURE_MONTHS": 12,

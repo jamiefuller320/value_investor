@@ -48,10 +48,10 @@ def test_ch_shares_on_reads_the_latest_visible_filing(v1) -> None:
     assert later["date"] == date(2013, 12, 31)
 
 
-def test_ch_shares_on_is_stale_after_456_days(v1) -> None:
+def test_ch_shares_on_is_stale_after_550_days(v1) -> None:
     filings = [_filing(2012, "2013-03-01", shares_in_issue=_shares("400000000"))]
-    assert tape.ch_shares_on(filings, date(2012, 12, 31) + timedelta(days=456)) is not None
-    assert tape.ch_shares_on(filings, date(2012, 12, 31) + timedelta(days=457)) is None
+    assert tape.ch_shares_on(filings, date(2012, 12, 31) + timedelta(days=550)) is not None
+    assert tape.ch_shares_on(filings, date(2012, 12, 31) + timedelta(days=551)) is None
 
 
 def test_ch_shares_on_falls_back_to_weighted_shares_on_the_same_filing_only(v1) -> None:
@@ -164,7 +164,8 @@ def test_v1_constants_only_add_the_fallback() -> None:
     }
     changed = {key for key in v0 if v0[key] != v1[key]}
     assert changed == {"registration_id"}
-    assert v1["CH_SHARES_STALE_DAYS"] == v0["STALE_FILING_DAYS"]
+    assert v1["CH_SHARES_STALE_DAYS"] == 550
+    assert v0["STALE_FILING_DAYS"] == 456
     assert v1["CH_SHARES_LAG_DAYS"] == v0["FILING_LAG_DAYS"]
 
 
