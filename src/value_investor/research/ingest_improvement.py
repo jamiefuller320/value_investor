@@ -1565,7 +1565,6 @@ def _execute_ingest_improvement_pass(
                     "ticker_rns_refetch": ticker_rns_refetch,
                     "indexed_refetch": indexed_refetch,
                     "residual_refetch": residual_refetch,
-                    "euro_primary": euro_primary,
                     "ir_refetch": ir_refetch,
                     "ir_presentation_metrics": ir_presentation_metrics,
                     "screen_run_manifest": screen_run_manifest,
