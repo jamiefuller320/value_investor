@@ -90,6 +90,7 @@ Each default is what the seal accepts if the owner signs unchanged.
 3. **Who can fall back.** Default: matched leavers only. There is no other Companies House share source in the repo.
 4. **No reveal by 2026-12-09.** Default: the owner chooses at that point between revealing v0 and revealing nothing (section 3).
 5. **Failures demoted before they failed.** Default: not added; Intu and any other name that left the FTSE 350 by demotion and later failed has no Companies House record and stays not computable when EODHD has no share count. Alternative: add those names to the Companies House store (same extraction and hand check) before the seal, which widens the extraction and moves the seal later.
+6. **Uneven coverage by leaving kind.** The share counts for the five failures named in the store (Carillion, Thomas Cook, Debenhams, Patisserie, Sirius) were read page by page from the share-capital note for every year in their last two years before leaving, so each can be ranked through to its exit. Takeover leavers were not read that way: 24 of 143 have any share count. v1 therefore ranks failures more completely than takeovers, and takeovers tend to end in a gain, so v1 development and holdout results lean low. Default: accept, and read v1 knowing the lean is against the strategy. Alternative: page-read the takeover leavers too before the seal, which is about 140 names and moves the seal later.
 
 ## Appendix: constants added or changed
 

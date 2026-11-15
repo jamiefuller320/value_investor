@@ -15,13 +15,18 @@ from value_investor.ch_failed_name_statements import (
     combined_check_a,
     lost_decimal_integer,
     merge_ocr_readings,
+    merge_share_supplement,
     ops_findings_from_ch_failed_name_statements,
     parse_amount,
+    parse_share_supplement,
     parse_statement_pages,
     plausibility_flags,
     repair_glued_thousands,
     repair_spaced_decimals,
+    repair_spaced_share_digit_groups,
     second_reading_disagrees,
+    shares_context_rejected,
+    shares_nominal_cross_check,
     statements_from_2013,
     years_with_eps,
 )
@@ -1133,3 +1138,182 @@ def test_extraction_order_is_failure_then_other_then_takeover() -> None:
         records, {"early_takeover": {"extraction_status": "complete"}}, refresh={"early_takeover"}
     )
     assert "early_takeover" in [row["key"] for row in again]
+
+
+SHARE_CAPITAL = """
+18 Share capital
+2018 2017
+Number £'000
+Allotted, called up and fully paid
+Ordinary shares of 5p each 500,671 498,102
+Called up share capital 25,033.55 24,905.10
+"""
+
+
+def test_parses_ordinary_shares_in_issue_with_thousands() -> None:
+    supplement = parse_share_supplement(
+        [StatementPage(page=42, text=SHARE_CAPITAL, method="fixture")],
+        fiscal_year_end="2018-12-31",
+        filing_date="2019-03-01",
+        transaction_id="tx-shares",
+    )
+    primary = supplement["primary"]["shares_in_issue"]
+    assert primary["value"] == "500671"
+    assert primary["scale"] == "units"
+    assert primary["basis"] == "in_issue"
+    comp = supplement["comparative"]["fields"]["shares_in_issue"]
+    assert comp["value"] == "498102"
+
+
+def test_parses_prose_ordinary_shares_millions() -> None:
+    text = """
+9 Share capital
+Allotted, called up and fully paid: 430.1 million ordinary shares of 10p each
+"""
+    supplement = parse_share_supplement(
+        [StatementPage(page=9, text=text, method="fixture")],
+        fiscal_year_end="2016-12-31",
+        filing_date="2017-04-01",
+        transaction_id="tx",
+    )
+    row = supplement["primary"]["shares_in_issue"]
+    assert row["value"] == "430.1"
+    assert row["scale"] == "millions"
+
+
+def test_shares_gate_nulls_jump_and_weighted_average_mismatch() -> None:
+    filings = [
+        {
+            "fiscal_year": 2012,
+            "fields": {
+                "shares_in_issue": {
+                    "value": "100",
+                    "scale": "millions",
+                    "citation": {"line": "Ordinary shares 100", "page": 1},
+                }
+            },
+        },
+        {
+            "fiscal_year": 2013,
+            "fields": {
+                "shares_in_issue": {
+                    "value": "400",
+                    "scale": "millions",
+                    "citation": {"line": "Ordinary shares 400", "page": 1},
+                },
+            },
+        },
+    ]
+    apply_value_gate(filings, financial=False)
+    assert filings[1]["fields"]["shares_in_issue"]["absent_reason"] == "shares_jump"
+    gate_only = [
+        {
+            "fiscal_year": 2013,
+            "fields": {
+                "shares_in_issue": {
+                    "value": "200",
+                    "scale": "millions",
+                    "citation": {"line": "Ordinary shares 200", "page": 1},
+                },
+                "weighted_average_basic_shares": {
+                    "value": "50",
+                    "scale": "millions",
+                    "citation": {"line": "Basic 50", "page": 2},
+                },
+            },
+        }
+    ]
+    counts = apply_value_gate(gate_only, financial=False)
+    assert (
+        gate_only[0]["fields"]["shares_in_issue"]["absent_reason"] == "shares_vs_weighted_average"
+    )
+    assert counts["by_check"].get("shares_vs_weighted_average", 0) == 1
+
+
+def test_merge_share_supplement_leaves_other_fields() -> None:
+    filing = {
+        "fiscal_year": 2014,
+        "fields": {
+            "revenue": {"value": "1000", "scale": "millions", "citation": {"line": "Revenue 1000"}},
+            "shares_in_issue": {"value": None, "absent_reason": "missing"},
+        },
+    }
+    supplement = {
+        "primary": {
+            "shares_in_issue": {
+                "value": "430084862",
+                "scale": "units",
+                "basis": "in_issue",
+                "citation": {"line": "430,084,862 ordinary shares", "page": 10},
+            },
+            "weighted_average_basic_shares": None,
+        },
+        "comparative": None,
+    }
+    merge_share_supplement(filing, supplement)
+    assert filing["fields"]["revenue"]["value"] == "1000"
+    assert filing["fields"]["shares_in_issue"]["value"] == "430084862"
+
+
+def test_repair_spaced_share_digit_groups() -> None:
+    line = "aggregate purchase authority of 42 914 639 Ordinary Shares"
+    assert "42914639" in repair_spaced_share_digit_groups(line)
+
+
+def test_shares_context_rejects_known_false_lines() -> None:
+    assert shares_context_rejected(
+        "",
+        "the aggregate of 42,914,639 Ordinary Shares representing approximately",
+    )
+    assert shares_context_rejected("", "The employee share trust holds 1,068,301 ordinary shares")
+    assert shares_context_rejected(
+        "", "Weighted average number of ordinary shares (thousands) 1,340"
+    )
+    assert shares_context_rejected(
+        "", "Shares allotted on 1 January 2020: 5,000,000 ordinary shares"
+    )
+
+
+def test_shares_earnings_cross_check_pass() -> None:
+    from value_investor.ch_share_page_read import shares_earnings_cross_check
+
+    filing = {
+        "fields": {
+            "profit_attributable_to_owners": {
+                "value": "100",
+                "scale": "millions",
+                "currency": "GBP",
+            },
+            "basic_eps": {"value": "10", "unit": "pence"},
+        }
+    }
+    cross = shares_earnings_cross_check(filing, "1000000000", "units")
+    assert cross["status"] == "pass"
+
+
+def test_shares_nominal_cross_check_carillion() -> None:
+    text = """
+    22 Share capital
+    Called up share capital 215,127,314
+    Ordinary shares of 50p each 430,254,629 428,000,000
+    """
+    cross = shares_nominal_cross_check([text], "430254629", "units")
+    assert cross["status"] == "pass"
+
+
+def test_parse_rejects_buyback_authority_line() -> None:
+    text = """
+    Share capital
+    The aggregate of 42,914,639 Ordinary Shares representing approximately 3.2% of issued share capital
+    Allotted, called up and fully paid
+    Ordinary shares of 10p each 1,497,000,000
+    """
+    supplement = parse_share_supplement(
+        [StatementPage(page=1, text=text, method="fixture")],
+        fiscal_year_end="2013-12-31",
+        filing_date="2014-04-01",
+        transaction_id="tx-tc",
+    )
+    row = supplement["primary"]["shares_in_issue"]
+    assert row["value"] == "1497000000"
+    assert row["scale"] == "units"
