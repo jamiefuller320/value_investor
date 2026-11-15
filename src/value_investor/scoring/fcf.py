@@ -3267,6 +3267,21 @@ def overlay_free_cashflow_from_bundle(
     return primary
 
 
+def fcf_bundle_for_sector_overlay_registry(
+    snapshot: dict[str, Any],
+    fcf_bundle: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Merge export-time bundle with persisted snapshot ``fcf`` for overlay harmonisation."""
+    merged: dict[str, Any] = dict(fcf_bundle) if fcf_bundle else {}
+    snapshot_fcf = snapshot.get("fcf")
+    if isinstance(snapshot_fcf, dict):
+        for key, value in snapshot_fcf.items():
+            if value is None or (isinstance(value, float) and pd.isna(value)):
+                continue
+            merged[key] = value
+    return merged
+
+
 def harmonize_snapshot_fcf_for_sector_overlay_registry(
     snapshot: dict[str, Any],
     *,
@@ -3278,10 +3293,11 @@ def harmonize_snapshot_fcf_for_sector_overlay_registry(
     if preserved_screen_ttm is None:
         preserved_screen_ttm = screen_ttm_from_row(prior_series)
 
+    resolved_bundle = fcf_bundle_for_sector_overlay_registry(snapshot, fcf_bundle) or None
     updated = surface_primary_fcf_on_overlay_record(
         snapshot,
         row=prior_series,
-        fcf_bundle=fcf_bundle,
+        fcf_bundle=resolved_bundle,
     )
     bundle = updated.get("fcf") if isinstance(updated.get("fcf"), dict) else {}
     screen_ttm = _float_or_none(bundle.get("screen_ttm"))
