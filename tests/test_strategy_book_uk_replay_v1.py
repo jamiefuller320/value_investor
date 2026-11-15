@@ -203,3 +203,86 @@ def test_findings_cover_each_store(tmp_path: Path) -> None:
     (tmp_path / uk.REGISTRATIONS["v0"]["store_path"]).write_text("{", encoding="utf-8")
     titles = [row["title"] for row in uk.findings(tmp_path)]
     assert titles == ["Strategy-book UK replay store unreadable", "Strategy-book UK replay v1"]
+
+
+def _coverage_case() -> tuple[list[dict], dict]:
+    records, store, _fx = _carillion_case()
+    filings = store["names"][0]["filings"]
+    filings[2]["fields"] = {}
+    takeover = dict(records[1], symbol="ZZT.LSE", name="Takeover Target plc", delisted=True)
+    last = date(2016, 3, 31)
+    takeover["eod"] = [row for row in takeover["eod"] if row["date"] <= last.isoformat()]
+    records[1] = takeover
+    store["names"].append(
+        {
+            "key": "takeover_target",
+            "epic": "ZZT",
+            "reason_class": "takeover",
+            "leaving_date": (last + timedelta(days=3)).isoformat(),
+            "filings": [],
+        }
+    )
+    store["names"].append(
+        {
+            "key": "no_symbol",
+            "epic": "ZZN",
+            "reason_class": "takeover",
+            "leaving_date": "2016-01-04",
+        }
+    )
+    return records, store
+
+
+def test_share_coverage_counts_months_without_an_eodhd_share_count() -> None:
+    records, store = _coverage_case()
+    payload = uk.share_coverage(records, store)
+    rows = {row["key"]: row for row in payload["names"]}
+    carillion = rows["carillion"]
+    assert carillion["matched"] is True
+    assert carillion["months"] == 24
+    assert carillion["eodhd_months"] == 0
+    assert carillion["neither_months"] > 0
+    assert carillion["ch_only_months"] + carillion["neither_months"] == 24
+    assert carillion["filings_to_read"] == ["2013-12-31"]
+    target = rows["takeover_target"]
+    assert target["eodhd_months"] == target["months"] == 24
+    assert rows["no_symbol"] == {
+        "key": "no_symbol",
+        "reason_class": "takeover",
+        "matched": False,
+        "symbols_matched": 0,
+    }
+    assert payload["by_reason_class"]["named_failure"] == {
+        "names": 1,
+        "matched": 1,
+        "gap_remaining": 1,
+        "filings_to_read": 1,
+    }
+    assert payload["by_reason_class"]["takeover"] == {
+        "names": 2,
+        "matched": 1,
+        "eodhd_every_month": 1,
+        "not_matched": 1,
+    }
+    assert payload["scored"] is False
+    uk.assert_store_has_no_licensed_numbers(payload)
+    assert uk.ACTIVE_REGISTRATION == "v0"
+
+
+def test_share_coverage_cli_reads_the_cache_and_never_fetches(tmp_path: Path, monkeypatch) -> None:
+    records, store = _coverage_case()
+    monkeypatch.setattr(uk, "_records_from_cache", lambda cache: records)
+    monkeypatch.setattr(uk, "_load_ch", lambda repo: store)
+    monkeypatch.delenv("EODHD_API_TOKEN", raising=False)
+    assert (
+        uk.main(["--repo", str(tmp_path), "share-coverage", "--cache", str(tmp_path / "none")]) == 2
+    )
+    (tmp_path / "cache/raw").mkdir(parents=True)
+    assert (
+        uk.main(["--repo", str(tmp_path), "share-coverage", "--cache", str(tmp_path / "cache")])
+        == 0
+    )
+    written = json.loads((tmp_path / uk.SHARE_COVERAGE_PATH).read_text("utf-8"))
+    assert written["by_reason_class"]["takeover"]["eodhd_every_month"] == 1
+    titles = [row["title"] for row in uk.findings(tmp_path)]
+    assert uk.TITLE_SHARE_COVERAGE in titles
