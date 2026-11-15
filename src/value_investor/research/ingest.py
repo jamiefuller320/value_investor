@@ -1622,34 +1622,28 @@ def ingest_research_sources(
                 "tsx_announcements",
             }:
                 from value_investor.library_ingest_budget import deadline_reached
-                from value_investor.research.filings import (
-                    refetch_ir_allowlist_filing_bodies,
-                    refetch_residual_filing_bodies,
-                )
+                from value_investor.research.filings import refetch_euro_filings_primary_bodies
 
                 summary = filings_meta.get("filings_summary") or {}
                 ir_refetch: dict[str, Any] = {}
                 residual_refetch: dict[str, Any] = {}
+                euro_primary: dict[str, Any] = {}
                 if not deadline_reached(deadline_monotonic):
-                    ir_refetch = refetch_ir_allowlist_filing_bodies(
-                        sources_dir / "filings",
-                        ticker=ticker,
-                        company_name=company_name,
-                        max_bodies=12,
-                        deadline_monotonic=deadline_monotonic,
-                    )
-                if not deadline_reached(deadline_monotonic):
-                    residual_refetch = refetch_residual_filing_bodies(
+                    euro_primary = refetch_euro_filings_primary_bodies(
                         sources_dir / "filings",
                         ticker=ticker,
                         company_name=company_name,
                         max_bodies=12,
                     )
+                    residual_refetch = dict(euro_primary.get("residual") or {})
+                    ir_refetch = dict(euro_primary.get("ir_allowlist") or {})
+                filings_meta["euro_primary_refetch"] = euro_primary
                 filings_meta["ir_refetch"] = ir_refetch
                 filings_meta["residual_refetch"] = residual_refetch
                 merge_added = int((ir_refetch.get("merge") or {}).get("added") or 0)
                 if (
-                    int(ir_refetch.get("fetched") or 0)
+                    int(euro_primary.get("fetched") or 0)
+                    or int(ir_refetch.get("fetched") or 0)
                     or int(residual_refetch.get("fetched") or 0)
                     or merge_added > 0
                 ):
@@ -1826,6 +1820,7 @@ def ingest_research_sources(
         "filings_summary": filings_meta.get("filings_summary") or {},
         "filings_sources": filings_meta.get("filings_sources") or [],
         "filings_regime": filings_meta.get("filings_regime"),
+        "euro_primary_refetch": filings_meta.get("euro_primary_refetch") or {},
         "ir_refetch": filings_meta.get("ir_refetch") or {},
         "ir_presentation_metrics": filings_meta.get("ir_presentation_metrics") or {},
         "macro_context_path": str(written_macro) if written_macro else None,
