@@ -9469,6 +9469,76 @@ def test_filing_source_surface_c6l_si_ir_allowlist_direct_eng_20261114_02():
     assert filing_source_surface("sti", "C6L.SI") == "asia_filings+ir_allowlist_direct"
 
 
+def test_fetch_filings_ir_allowlist_sti_g13_si_builtins_eng_20261115_03(tmp_path: Path):
+    """eng-20261115-03: sti buy-tier leftover G13.SI — SGX annual/interim statutory PDF seeds."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("G13.SI", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    urls = [row["url"] for row in rows]
+    assert any("Annual%20Report%202025" in url for url in urls)
+    assert any("Annual%20Report%202024" in url for url in urls)
+    assert any("1H2025%20SGX%20Results%20Announcement.pdf" in url for url in urls)
+    assert all("links.sgx.com" in url for url in urls)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_g13_si_index(tmp_path: Path):
+    """Empty G13.SI filings_index.json must gain IR rows for library sti measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("G13.SI", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] == 3
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) == 3
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_parked_source_hunter_g13_si_sti_has_fetchable_ir():
+    """eng-20261115-03: G13.SI (Genting Singapore) has live-fetchable SGX statutory PDF filings."""
+    assert "G13.SI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("G13.SI")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("links.sgx.com" in url for url in urls)
+    annual_url = next(url for url in urls if "Annual%20Report%202025" in url)
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("SGX PDF body fetch unavailable (network) — retry later")
+    assert len(body) >= 50000
+    assert "genting singapore" in body.lower()
+
+
+def test_ir_allowlist_period_classifies_g13_si_1h2025_results_slug():
+    """eng-20261115-03: GENS 1H2025 SGX slug must map to interim (not other)."""
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/1.0.0/corporate-announcements/ICQRGNBFANVDT4A4/854607_GENS%201H2025%20SGX%20Results%20Announcement.pdf"
+        )
+        == "interim"
+    )
+
+
+def test_filing_source_surface_g13_si_ir_allowlist_direct_eng_20261115_03():
+    """eng-20261115-03: sti G13.SI no_key_bodies must gain ir_allowlist_direct surface."""
+    from value_investor.research.filings import filing_source_surface, ir_allowlist_direct_eligible
+
+    assert ir_allowlist_direct_eligible("G13.SI")
+    assert filing_source_surface("sti", "G13.SI") == "asia_filings+ir_allowlist_direct"
+
+
 def test_parked_source_hunter_skip_0968_hk_hang_seng():
     """eng-20261017-11: 0968.HK leftover IWB is bot-gated TipRanks news, not missing HKEX filings."""
     assert "0968.HK" in PARKED_SOURCE_HUNTER_SKIP

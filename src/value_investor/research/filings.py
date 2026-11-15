@@ -1185,6 +1185,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://links.sgx.com/FileOpen/nr-q2fy2627.ashx?App=Announcement&FileID=911002",
         "https://links.sgx.com/FileOpen/slide-q2fy2526.ashx?App=Announcement&FileID=867072",
     ],
+    # sti buy-tier leftover — eng-20261115-03: G13.SI no_key_bodies; asia_filings indexed
+    # Smart Investor dividend listicles only; seed SGX statutory PDFs (listedcompany.com
+    # mirrors exist but prefer links.sgx.com).
+    "G13.SI": [
+        "https://links.sgx.com/FileOpen/Annual%20Report%202025.ashx?App=Announcement&FileID=880160",
+        "https://links.sgx.com/FileOpen/Annual%20Report%202024.ashx?App=Announcement&FileID=837141",
+        "https://links.sgx.com/1.0.0/corporate-announcements/ICQRGNBFANVDT4A4/854607_GENS%201H2025%20SGX%20Results%20Announcement.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -1541,6 +1549,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "U14": ("UOL Group", "UOL Group Limited", "UOL"),
     # sti C6L.SI SGX allowlist — FS-fy* / nr-q2fy* / slide-q2fy* need issuer match (fy false-positive).
     "C6L": ("Singapore Airlines", "Singapore Airlines Limited", "SIA"),
+    # sti G13.SI SGX allowlist — GENS / FileOpen Annual Report* slugs need issuer match.
+    "G13": ("Genting Singapore", "Genting Singapore Limited", "GENS"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
     "HM-B": (
@@ -6222,6 +6232,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # eng-20261114-02: C6L.SI — nr-q2fy2627 / slide-q2fy2526 slugs contain fy (would classify annual).
     "https://links.sgx.com/FileOpen/nr-q2fy2627.ashx?App=Announcement&FileID=911002": "interim",
     "https://links.sgx.com/FileOpen/slide-q2fy2526.ashx?App=Announcement&FileID=867072": "interim",
+    # eng-20261115-03: G13.SI — 1H2025 Results Announcement slug has no half-year token.
+    "https://links.sgx.com/1.0.0/corporate-announcements/ICQRGNBFANVDT4A4/854607_GENS%201H2025%20SGX%20Results%20Announcement.pdf": "interim",
     # eng-20261109-01: IMD.AX — Weblink Appendix 4D slug is numeric-only (would classify other).
     "https://wcsecure.weblink.com.au/pdf/IMD/03059253.pdf": "interim",
     # eng-20261115-02: NHC.AX — opaque ASX Appendix 4E hash slug (would classify other).
