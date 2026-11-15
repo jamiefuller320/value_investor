@@ -90,7 +90,12 @@ Each default is what the seal accepts if the owner signs unchanged.
 3. **Who can fall back.** Default: matched leavers only. There is no other Companies House share source in the repo.
 4. **No reveal by 2026-12-09.** Default: the owner chooses at that point between revealing v0 and revealing nothing (section 3).
 5. **Failures demoted before they failed.** Default: not added; Intu and any other name that left the FTSE 350 by demotion and later failed has no Companies House record and stays not computable when EODHD has no share count. Alternative: add those names to the Companies House store (same extraction and hand check) before the seal, which widens the extraction and moves the seal later.
-6. **Uneven coverage by leaving kind.** The share counts for the five failures named in the store (Carillion, Thomas Cook, Debenhams, Patisserie, Sirius) were read page by page from the share-capital note for every year in their last two years before leaving, so each can be ranked through to its exit. Takeover leavers were not read that way: 24 of 143 have any share count. v1 therefore ranks failures more completely than takeovers, and takeovers tend to end in a gain, so v1 development and holdout results lean low. Default: accept, and read v1 knowing the lean is against the strategy. Alternative: page-read the takeover leavers too before the seal, which is about 140 names and moves the seal later.
+6. **Coverage that remains uneven.** The `share-coverage` count on the cached tape (2026-11-15, before the takeover reading) showed that EODHD has no share count at all for 42 of the 93 takeover leavers it matches, and for 51 it has one every month. The five named failures and NMC Health are covered either way. Those 42 takeovers and NMC Health were then page-read in the same way as the failures: 93 filings, 92 values and 1 withheld. Of the 42, 36 now have a Companies House count for most of their last 24 months. Three limits remain:
+   - Six leavers have no UK accounts in the store, so nothing can be read for them: Shire, UBM, Entertainment One, John Laing Infrastructure Fund, Calisen and Finablr.
+   - Some months fall between one count going stale and the next accounts being filed.
+   - 50 takeover leavers match no cached EODHD symbol and have no prices, which v0 shares.
+
+   The remaining lean is small against the strategy: unranked takeovers would mostly have ended in a gain. Default: accept, and read v1 with these limits. A fresh `share-coverage` dispatch after the store merges gives the exact counts and is published with the seal.
 
 ## Appendix: constants added or changed
 
