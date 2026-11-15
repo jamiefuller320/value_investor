@@ -115,7 +115,7 @@ medians. While a marker is unlogged the ops-monitor finding warns.
 is v0 with one rule changed: when EODHD has no share count for a session, a
 name matched to the Companies House store takes `shares_in_issue`, else
 `weighted_average_basic_shares`, from its latest filing visible on that session
-(filing date + 2 days; stale 456 days after the period end). The constants are
+(filing date + 2 days; stale 550 days after the period end). The constants are
 `REGISTRATIONS["v1"]` in `src/value_investor/strategy_book_uk_replay.py`; every
 other number is v0's.
 

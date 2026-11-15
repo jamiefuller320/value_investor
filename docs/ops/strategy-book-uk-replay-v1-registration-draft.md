@@ -32,7 +32,7 @@ v0 section 2 **Shares** stays the first source. The fallback applies only when i
 | 1. EODHD | As v0: latest `outstandingShares` row with `dateFormatted` on or before the session and `shares` > 0, quarterly preferred, later date wins. |
 | 2. Who can fall back | Only a symbol matched to a Companies House record under the v0 matching rule (same listed company; EPIC and leaving date consistent; marker `ch-matching-v1`). An unmatched symbol stays not computable. |
 | 3. Which filing | The latest filing in that record whose share count is visible on the session: Companies House filing date plus the 2-day lag. A filing with no filing date uses period end + 180 days, then 2 days, as v0 does for statements. The count is the filing's own year; a prior-year comparative column is not used. |
-| 4. Stale | Not used when the filing's period end is more than 456 days before the session (`STALE_FILING_DAYS`). The cap is then not computable for that month. |
+| 4. Stale | Not used when the filing's period end is more than 550 days before the session (`CH_SHARES_STALE_DAYS`). The cap is then not computable for that month. |
 | 5. Which field | `shares_in_issue` from that filing (ordinary shares in issue at the balance-sheet date). If that filing has none, `weighted_average_basic_shares` from the same filing. No other field. A share count is not derived from profit and EPS. An earlier filing is not used in place of a missing field on the latest one. |
 | 6. Splits | As v0: a split dated after the period end and on or before the session scales the count by `new/old`. An unparsed split makes the month not computable. |
 | 7. Everything after | Pence, FX, the plausibility band, the month-end carry, and the tie break are v0's. |
@@ -86,7 +86,7 @@ v0 section 9 applies to v1. The one pre-score adjustment is available on the v1 
 Each default is what the seal accepts if the owner signs unchanged.
 
 1. **Second field.** Default: weighted-average basic shares from the same filing when shares in issue is absent. Alternative: shares in issue only.
-2. **Stale.** Default: 456 days, as statements. Alternative: 730 days, which ranks a name that stopped filing a year earlier (more failures ranked, staler counts).
+2. **Stale.** Default: 550 days. UK listed companies may file accounts up to six months after the next year end, about 18 months after the period end. A 456-day limit, as statements use, dropped the count for a few months every year while the next accounts were due, which left about 128 takeover months uncovered after the page reading. 550 days covers the filing deadline plus a margin, so on-time filers keep a count and a company that misses the deadline still drops out. The cost is a count up to about three months older in those months, which misstates the cap only after a share issue or buyback. Alternatives: 456 days, as statements (fresher counts, a gap every year); 730 days, which ranks a name that stopped filing a year earlier (about one more month covered, and stale counts in exactly the run-up to failure when share counts move most). The gain counts only in months when the statements are also fresh under their own 456 days.
 3. **Who can fall back.** Default: matched leavers only. There is no other Companies House share source in the repo.
 4. **No reveal by 2026-12-09.** Default: the owner chooses at that point between revealing v0 and revealing nothing (section 3).
 5. **Failures demoted before they failed.** Default: not added; Intu and any other name that left the FTSE 350 by demotion and later failed has no Companies House record and stays not computable when EODHD has no share count. Alternative: add those names to the Companies House store (same extraction and hand check) before the seal, which widens the extraction and moves the seal later.
@@ -105,7 +105,7 @@ Each default is what the seal accepts if the owner signs unchanged.
 | `supersedes_registration_id` | `strategy-book-uk-replay-v0` | New |
 | `CH_SHARES_FALLBACK` | true | Proposed |
 | `CH_SHARES_FIELDS` | `shares_in_issue`, then `weighted_average_basic_shares`, same filing | Proposed |
-| `CH_SHARES_STALE_DAYS` | 456 | Proposed, equals `STALE_FILING_DAYS` |
+| `CH_SHARES_STALE_DAYS` | 550 | Proposed; the 18-month filing deadline plus a margin (statements keep 456) |
 | `CH_SHARES_LAG_DAYS` | 2 | Proposed, equals the v0 filing lag |
 | `NAMED_FAILURES` | `carillion`, `thomas_cook`, `debenhams`, `intu` | Proposed, section 4 report only |
 | `NAMED_FAILURE_MONTHS` | 12 | Proposed, section 4 report only |
