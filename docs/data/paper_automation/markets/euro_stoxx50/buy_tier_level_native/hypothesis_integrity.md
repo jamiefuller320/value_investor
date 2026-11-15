@@ -1,75 +1,73 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-13T07:35:30.218519+00:00
+Track: `buy_tier_level_native` · updated 2026-11-15T07:07:08.395904+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 9 (11% count, 11% NAV)
+- Losers: **0** / 9 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `tolerate_intact_losers`
+- Balancing hint: `maintain`
 
 ## Holding reviews
 
-### ENI.MI — intact / hold_tolerate (-5.9%)
-- price drawdown alone does not invalidate value thesis
+### ENI.MI — intact / hold_tolerate (-4.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 78%
+- conviction 79%
 
-### DTE.DE — intact / hold_tolerate (-0.2%)
+### DTE.DE — intact / hold_tolerate (+0.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 77%
+- conviction 76%
 
-### MUV2.DE — intact / hold_tolerate (+0.5%)
-- still buy
+### MUV2.DE — weakening / watch_review (+1.5%)
+- left buy tier (hold)
+- conviction 22% below intact floor
 - research accumulate
 - cheapness family still passes
-- data_quality 0.90
-- conviction 57%
 
-### TTE.PA — intact / hold_tolerate (+2.4%)
+### TTE.PA — intact / hold_tolerate (+4.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 86%
 
-### MC.PA — intact / hold_tolerate (+4.7%)
+### MC.PA — intact / hold_tolerate (+4.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 51%
+- conviction 53%
 
-### DG.PA — intact / hold_tolerate (+5.0%)
+### DG.PA — intact / hold_tolerate (+5.2%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 93%
 
-### DHL.DE — intact / hold_tolerate (+5.8%)
+### DHL.DE — intact / hold_tolerate (+6.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 62%
 
-### AD.AS — intact / hold_tolerate (+9.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 86%
-
-### SGO.PA — intact / hold_tolerate (+11.6%)
+### SGO.PA — intact / hold_tolerate (+10.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
+
+### AD.AS — intact / hold_tolerate (+11.3%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 86%

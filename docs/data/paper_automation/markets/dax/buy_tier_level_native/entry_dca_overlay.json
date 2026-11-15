@@ -1219,6 +1219,10 @@
         {
           "as_of": "2026-11-13T07:36:04.318355+00:00",
           "price": 67.72
+        },
+        {
+          "as_of": "2026-11-15T07:07:37.233320+00:00",
+          "price": 67.48
         }
       ]
     },
@@ -1390,7 +1394,7 @@
       "track_id": "buy_tier_level_native",
       "ticker": "MTX.DE",
       "started_at": "2026-11-12T07:39:19.847115+00:00",
-      "status": "open",
+      "status": "closed",
       "lifecycle_stage": "starter",
       "entry_kind": "first_entry",
       "entry_price": 358.2,
@@ -1409,8 +1413,149 @@
         {
           "as_of": "2026-11-13T07:36:04.318355+00:00",
           "price": 357.4
+        },
+        {
+          "as_of": "2026-11-15T07:07:37.233320+00:00",
+          "price": 351.6
         }
-      ]
+      ],
+      "cadence_scores": [
+        {
+          "id": "lump_sum",
+          "label": "100% at decision",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 1,
+          "avg_fill": 358.2,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -2.07,
+          "peak_deployed_return": -0.0184,
+          "end_value": 110.18,
+          "end_value_delta": 0.0,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-12T07:39:19.847115+00:00",
+              "price": 358.2
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_2x_weekly",
+          "label": "50/50 over 1 week",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 358.2,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 56.12,
+          "peak_loss_gbp": -1.03,
+          "peak_deployed_return": -0.0184,
+          "end_value": 111.22,
+          "end_value_delta": 1.03,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-12T07:39:19.847115+00:00",
+              "price": 358.2
+            }
+          ],
+          "de_risk_gbp": 1.04
+        },
+        {
+          "id": "dca_4x_weekly",
+          "label": "25% weekly \u00d7 4",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 4,
+          "avg_fill": 358.2,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 84.19,
+          "peak_loss_gbp": -0.52,
+          "peak_deployed_return": -0.0184,
+          "end_value": 111.73,
+          "end_value_delta": 1.55,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-12T07:39:19.847115+00:00",
+              "price": 358.2
+            }
+          ],
+          "de_risk_gbp": 1.55
+        },
+        {
+          "id": "dca_2x_biweekly",
+          "label": "50/50 over 2 weeks",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 358.2,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 56.12,
+          "peak_loss_gbp": -1.03,
+          "peak_deployed_return": -0.0184,
+          "end_value": 111.22,
+          "end_value_delta": 1.03,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-12T07:39:19.847115+00:00",
+              "price": 358.2
+            }
+          ],
+          "de_risk_gbp": 1.04
+        },
+        {
+          "id": "dca_5x_weekday",
+          "label": "20% over 5 weekday marks",
+          "scored": true,
+          "tranches_filled": 4,
+          "tranches_target": 5,
+          "avg_fill": 354.6727,
+          "fill_advantage_pct": 0.0098,
+          "extra_cost": 0.02,
+          "leftover_cash": 22.45,
+          "peak_loss_gbp": -0.78,
+          "peak_deployed_return": -0.0116,
+          "end_value": 111.46,
+          "end_value_delta": 1.27,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-12T07:39:19.847115+00:00",
+              "price": 358.2
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-11-13T07:36:04.318355+00:00",
+              "price": 357.4
+            },
+            {
+              "tranche": 3,
+              "as_of": "2026-11-15T07:07:37.233320+00:00",
+              "price": 351.6
+            },
+            {
+              "tranche": 4,
+              "as_of": "2026-11-15T07:07:37.233320+00:00",
+              "price": 351.6
+            }
+          ],
+          "de_risk_gbp": 1.29
+        }
+      ],
+      "winning_cadence": "dca_4x_weekly",
+      "winning_end_value_delta": 1.55,
+      "any_de_risk": true,
+      "closed_at": "2026-11-15T07:07:37.233320+00:00",
+      "close_reason": "sold_before_window"
     },
     {
       "id": "buy_tier_level_native:BNR.DE:2026-11-12T07:39:19.847115+00:00",
@@ -1436,6 +1581,10 @@
         {
           "as_of": "2026-11-13T07:36:04.318355+00:00",
           "price": 57.44
+        },
+        {
+          "as_of": "2026-11-15T07:07:37.233320+00:00",
+          "price": 59.42
         }
       ]
     }

@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "updated_at": "2026-11-13T07:36:04.330204+00:00",
-  "as_of": "2026-11-13T07:36:04.318355+00:00",
+  "updated_at": "2026-11-15T07:07:37.241680+00:00",
+  "as_of": "2026-11-15T07:07:37.233320+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,19 +16,19 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 7,
+  "holding_count": 5,
   "underwater_count": 1,
   "thesis_status_counts": {
-    "intact": 3,
-    "weakening": 4,
-    "broken": 0,
+    "intact": 1,
+    "weakening": 3,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 7,
+    "holding_count": 5,
     "loser_count": 1,
-    "loser_share": 0.1429,
-    "loser_nav_share": 0.1408,
+    "loser_share": 0.2,
+    "loser_nav_share": 0.1395,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
@@ -43,19 +43,51 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
-      "quality": 0.0,
-      "dividend": 0.3333,
-      "garp": 0.6667,
-      "risk": 0.0
+      "cheapness": 0.25,
+      "quality": 0.25,
+      "dividend": 0.25,
+      "garp": 1.0,
+      "risk": 0.5
     },
     "selection_feedback_flags": [
-      "quality fails more often among losers (100% vs 0%)"
+      "quality fails more often among losers (100% vs 25%)"
     ],
     "balancing_hint": "maintain",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
+    {
+      "ticker": "BNR.DE",
+      "name": "BNR.DE",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 59.42,
+      "avg_cost": 59.42,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
     {
       "ticker": "VOW3.DE",
       "name": "Volkswagen AG",
@@ -63,12 +95,12 @@
       "recommended_action": "watch_review",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0513,
-      "mark": 67.72,
+      "unrealized_pct": -0.0547,
+      "mark": 67.48,
       "avg_cost": 71.3814,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.323,
+      "conviction_score": 0.3212,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -98,57 +130,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "BNR.DE",
-      "name": "Brenntag SE",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0333,
-      "mark": 57.44,
-      "avg_cost": 59.42,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4184,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 42%"
-      ],
-      "weaken_reasons": [
-        "research verdict caution"
-      ],
-      "broken_reasons": []
-    },
-    {
       "ticker": "FME.DE",
       "name": "Fresenius Medical Care AG",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0258,
-      "mark": 39.56,
-      "avg_cost": 40.6074,
+      "unrealized_pct": -0.0084,
+      "mark": 40.11,
+      "avg_cost": 40.4488,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5695,
+      "conviction_score": 0.561,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -169,92 +162,11 @@
         "still strong_buy",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 57%"
+        "conviction 56%"
       ],
       "weaken_reasons": [
         "research verdict caution"
       ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "MTX.DE",
-      "name": "MTU Aero Engines AG",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0022,
-      "mark": 357.4,
-      "avg_cost": 358.2,
-      "signal": "hold",
-      "timing_signal": "neutral",
-      "conviction_score": 0.2328,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "left buy tier (hold)",
-        "conviction 23% below intact floor",
-        "research accumulate",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "left buy tier (hold)",
-        "conviction 23% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "MUV2.DE",
-      "name": "M\u00fcnchener R\u00fcckversicherungs-Gesellschaft Aktiengesellschaft in M\u00fcnchen",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0201,
-      "mark": 585.8,
-      "avg_cost": 574.2389,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6243,
-      "data_quality_score": 0.9,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 62%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 62%"
-      ],
-      "weaken_reasons": [],
       "broken_reasons": []
     },
     {
@@ -264,9 +176,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0378,
-      "mark": 60.54,
-      "avg_cost": 58.3372,
+      "unrealized_pct": 0.0215,
+      "mark": 60.9,
+      "avg_cost": 59.6178,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.7075,
@@ -299,44 +211,44 @@
       "broken_reasons": []
     },
     {
-      "ticker": "HEI.DE",
-      "name": "Heidelberg Materials AG",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "ticker": "MUV2.DE",
+      "name": "M\u00fcnchener R\u00fcckversicherungs-Gesellschaft Aktiengesellschaft in M\u00fcnchen",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.1593,
-      "mark": 179.4,
-      "avg_cost": 154.7472,
-      "signal": "buy",
-      "timing_signal": "wait",
-      "conviction_score": 0.4437,
-      "data_quality_score": 1.0,
+      "unrealized_pct": 0.0295,
+      "mark": 591.2,
+      "avg_cost": 574.2389,
+      "signal": "hold",
+      "timing_signal": "neutral",
+      "conviction_score": 0.2784,
+      "data_quality_score": 0.85,
       "passed_families": [
         "cheapness",
         "quality",
-        "risk"
+        "dividend"
       ],
       "failed_families": [
-        "dividend",
-        "garp"
+        "garp",
+        "risk"
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "still buy",
+        "left buy tier (hold)",
+        "conviction 28% below intact floor",
         "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 44%"
+        "cheapness family still passes"
       ],
       "intact_reasons": [
-        "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 44%"
+        "data_quality 0.85"
       ],
-      "weaken_reasons": [],
+      "weaken_reasons": [
+        "left buy tier (hold)",
+        "conviction 28% below intact floor"
+      ],
       "broken_reasons": []
     }
   ],
