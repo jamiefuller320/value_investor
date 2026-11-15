@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-14T07:51:35.883161+00:00",
+  "generated_at": "2026-11-15T02:36:01.942874+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-11-12",
   "counts": {
-    "new_info": 7,
-    "unacked": 19,
-    "acked": 35,
+    "new_info": 6,
+    "unacked": 20,
+    "acked": 36,
     "automated": 20,
-    "human": 61
+    "human": 62
   },
   "tasks": [
     {
@@ -29,11 +29,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "3 attention-parked eng tasks",
-        "updated_at": "2026-11-14T07:51:30.509450+00:00",
+        "updated_at": "2026-11-15T02:35:00.803200+00:00",
         "fingerprint": "e69a5e997553968d",
         "bullets": [
           "Parked tasks: 4 (attention ~3)",
-          "Queue-clearing pause active: False — evaluated 2026-11-14T07:51:30.509450+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-11-15T02:35:00.803200+00:00",
           "Traffic pause active: False",
           "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
           "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
@@ -73,7 +73,7 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary not scored",
-        "updated_at": "2026-11-14T07:50:18.738761+00:00",
+        "updated_at": "2026-11-15T02:34:38.809370+00:00",
         "fingerprint": "94066622535964a2",
         "bullets": [
           "ai_judgment_matched30_fair: total return -0.6% vs FTAL.L +1.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -100,48 +100,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "sunday-shard-epoch0-watch",
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "what-enter-learning-means",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-11-14T07:41:07.586822+00:00",
-        "fingerprint": "f7e994b3c6ee65f2",
-        "bullets": [
-          "euro_depth: phase=3 ai=False knob=False holdings=34",
-          "nasdaq100: phase=1 ai=False knob=False holdings=35",
-          "sp500: phase=1 ai=False knob=False holdings=120",
-          "aex: phase=0 ai=False knob=False holdings=5",
-          "aim: phase=0 ai=False knob=False holdings=15",
-          "atx: phase=0 ai=False knob=False holdings=4",
-          "bel20: phase=0 ai=False knob=False holdings=2",
-          "cac40: phase=1 ai=False knob=False holdings=12"
-        ],
-        "source_keys": [
-          "market_status"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-21T22:54:00.304576+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "445acb0f9a3f9032"
-      },
-      "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "adhoc-review-ingest-deviations",
       "title": "Review open ingest deviations and reprocess if needed",
       "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
@@ -156,7 +114,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-11-14T07:39:53.143114+00:00",
+        "updated_at": "2026-11-14T21:01:45.527367+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -515,6 +473,37 @@
       "ack_sufficient": false
     },
     {
+      "id": "adhoc-strategy-exit-lab-round-2",
+      "title": "Run exit lab round 2 on the US data before it is deleted",
+      "summary": "Run before deleting the Sharadar files (by 2026-12-09). On the machine that holds ~/sharadar, ~/hsr-build and ~/hsr-mid-build: ftse-strategy-book-rehearsal exit-lab --round 2 (runbook section 6c), then commit docs/data/strategy_book_exit_lab_round2.json on a branch and open a PR. It scores the leave-tier hold per capital-day and two recovery-leg variants on development signals only (2000-2012). Exploratory, not evidence; it seals nothing and is input to the strategy book version review (L687, L688). It refuses once deleted_at is stamped, so it must run before the deletion step of adhoc-strategy-us-pit-rehearsal.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/strategy-book-us-rehearsal-runbook.md",
+      "doc_anchor": "6c-exit-lab-round-2-exploratory-before-deletion",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/strategy-book-us-rehearsal-runbook.md#6c-exit-lab-round-2-exploratory-before-deletion",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "9d8e3304c2bfe56a",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
       "id": "adhoc-strategy-phase-gate",
       "title": "Sign strategy reorientation phase gates",
       "summary": "At the end of each phase of the strategy reorientation plan, review the evidence the supervising agent presents and sign, adjust once (logged), or reject. Phase 1: DONE 2026-11-10, accepted with one adjustment (owner). Both gates kept as they are; the one adjustment, now spent, makes funds and investment trusts insufficient_data in the decline gate, logged as change marker owner-strategy-book-v0-fund-insufficient-data-v1. Record in docs/ops/phase1-gate-review-pack.md (owner decision section). It governs only forward_live, which is a separate step (adhoc-strategy-book-memo-spend). Phase 2: sign the strategy-book registration (docs/ops/strategy-book-registration.md) before scoring, confirming or adjusting once the step 3.2 live proof numbers (docs/ops/strategy-reorientation-plan.md) that the seal copies, then the sample-thickness gate before it becomes the primary learning track. Later phases: new proof standard, demo-to-live execution steps, small live capital. Gates bind books only after sign-off; nothing auto-promotes.",
@@ -579,7 +568,7 @@
     {
       "id": "adhoc-strategy-uk-replay-v1-seal",
       "title": "Seal the UK replay v1 registration (Companies House shares for the cap)",
-      "summary": "Deferred idea N273. v1 is v0 with one rule changed: a FTSE 350 leaver with no EODHD share count takes its share count from the Companies House store, so failures such as Carillion, Thomas Cook and Debenhams can be ranked (Intu is not in the store; question 5). Seal only when the share fields are merged with a hand check of at least 18 of 20 and coverage is published. Accept or change the section 6 defaults, then development is walked under v1 and the reveal (target 2026-12-03) happens under v1. Last EODHD call day is 2026-12-10.",
+      "summary": "Deferred idea N273. v1 is v0 with one rule changed: a FTSE 350 leaver with no EODHD share count takes its share count from the Companies House store, so failures such as Carillion, Thomas Cook and Debenhams can be ranked (Intu is not in the store; question 5). Seal only when the share fields are merged with a hand check of at least 18 of 20 and coverage is published. Accept or change the section 6 defaults and run `ftse-strategy-book-uk-replay --registration v1 seal --owner <name>`, then dispatch the strategy-book-uk-replay workflow with registration=v1, phase=development (no new EODHD calls while the cache is alive) and the reveal (target 2026-12-03) happens under v1. Last EODHD call day is 2026-12-10.",
       "automated": false,
       "cadence": "ad_hoc",
       "section_id": "ad_hoc",
@@ -1059,6 +1048,48 @@
         "acked_at": "2026-11-06T17:20:54.897628+00:00",
         "decision": "approve",
         "finding_fingerprint": "d7471cdba754fd7b"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Admitted shard epoch-0 watch · 22",
+        "updated_at": "2026-11-14T21:03:02.440163+00:00",
+        "fingerprint": "445acb0f9a3f9032",
+        "bullets": [
+          "euro_depth: phase=3 ai=False knob=False holdings=34",
+          "aex: phase=0 ai=False knob=False holdings=5",
+          "aim: phase=0 ai=False knob=False holdings=15",
+          "atx: phase=0 ai=False knob=False holdings=4",
+          "bel20: phase=0 ai=False knob=False holdings=2",
+          "cac40: phase=1 ai=False knob=False holdings=12",
+          "dax: phase=1 ai=False knob=False holdings=7",
+          "euro_stoxx50: phase=1 ai=False knob=False holdings=9"
+        ],
+        "source_keys": [
+          "market_status"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-10-21T22:54:00.304576+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "445acb0f9a3f9032"
       },
       "sort_bucket": "acked",
       "auto_ackable": false,
