@@ -403,10 +403,13 @@ def enforce_fcf_basis_in_snapshot(
 
     updated = enforce_uk_contractor_overlays_in_snapshot(updated, output_dir=output_dir)
 
+    from value_investor.scoring.fcf import fcf_bundle_for_sector_overlay_registry
+
+    registry_bundle = fcf_bundle_for_sector_overlay_registry(updated, fcf_export)
     return enforce_sector_cyclical_overlay_registry_in_snapshot(
         updated,
         model_results=model_results,
-        fcf_bundle=fcf_export,
+        fcf_bundle=registry_bundle or None,
     )
 
 

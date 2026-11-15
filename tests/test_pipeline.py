@@ -2589,6 +2589,35 @@ def test_scan_so_what_skips_paf_style_supportive_fcf_prose(tmp_path: Path):
     assert not any(f.kind == "fcf_note_without_overlay" for f in findings)
 
 
+def test_harmonize_sector_overlay_prefers_snapshot_fcf_over_stale_bundle():
+    """eng-20261115-05: registry harmonisation must not drop post-enforcement fcf fields."""
+    from value_investor.scoring.fcf import harmonize_snapshot_fcf_for_sector_overlay_registry
+
+    snapshot = {
+        "ticker": "SRP.L",
+        "free_cashflow": 361_200_000.0,
+        "free_cashflow_screen_ttm": 361_200_000.0,
+        "fcf": {
+            "filing_aligned": 413_500_000.0,
+            "screen_ttm": 361_200_000.0,
+            "company_adjusted": 380_000_000.0,
+            "bridge_resolved": True,
+            "policy_fcf": 380_000_000.0,
+            "policy_basis": "company_adjusted",
+            "filing_screen_mismatch": True,
+            "primary_fcf": 380_000_000.0,
+            "primary_fcf_basis": "company_adjusted",
+        },
+    }
+    stale_bundle = {"screen_ttm": 361_200_000.0}
+    harmonized = harmonize_snapshot_fcf_for_sector_overlay_registry(
+        snapshot,
+        fcf_bundle=stale_bundle,
+    )
+    assert harmonized["primary_fcf"] == pytest.approx(380_000_000.0)
+    assert harmonized["primary_fcf_basis"] == "company_adjusted"
+
+
 def test_guard_screening_snapshot_export_surfaces_primary_fcf_basis(monkeypatch):
     """Export guard must stamp one auditable primary FCF basis on the overlay record."""
     from value_investor.scoring import screening_export_guard

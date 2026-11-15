@@ -389,12 +389,16 @@ def guard_screening_snapshot_export(
     if isinstance(fcf_out, dict):
         merged["fcf"] = finalize_fcf_basis_bundle(fcf_out)
     merged = enforce_neutral_watchlist_dividend_caution_in_snapshot(merged)
-    from value_investor.scoring.fcf import enforce_sector_cyclical_overlay_registry_in_snapshot
+    from value_investor.scoring.fcf import (
+        enforce_sector_cyclical_overlay_registry_in_snapshot,
+        fcf_bundle_for_sector_overlay_registry,
+    )
 
+    export_bundle = fcf_bundle_for_sector_overlay_registry(merged, fcf_bundle)
     return enforce_sector_cyclical_overlay_registry_in_snapshot(
         merged,
         model_results=model_results,
-        fcf_bundle=fcf_bundle if fcf_bundle else None,
+        fcf_bundle=export_bundle or None,
     )
 
 
