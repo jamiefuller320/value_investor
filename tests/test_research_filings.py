@@ -1406,6 +1406,69 @@ def test_eng_20261107_03_fetch_backfills_ocf_from_ifrs_yahoo_cash_flow_rows(
     assert stored["cashflow_metrics"]["operating_cashflow"] == pytest.approx(309_000_000.0)
 
 
+def test_eng_20261115_04_ingest_supplement_fills_ocf_from_ifrs_annual_rows(
+    tmp_path: Path, monkeypatch
+):
+    """Regression (eng-20261115-04): ingest path reads IFRS Yahoo rows already on financials_annual."""
+    from value_investor.fetch import CompanyMetrics
+    from value_investor.research.ingest import (
+        supplement_company_metrics_cashflow as ingest_supplement,
+    )
+
+    monkeypatch.chdir(tmp_path)
+    sources = tmp_path / "output" / "research" / "BLND.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "BLND.L",
+        "cash_flow": {
+            "2025": {
+                "Free Cash Flow": 12_000_000.0,
+                "Cash Flowsfromusedin Operating Activities Direct": 309_000_000.0,
+            },
+        },
+        "cashflow_metrics": {},
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    metrics = CompanyMetrics(ticker="BLND.L", operating_cashflow=None, free_cashflow=None)
+    filled = ingest_supplement(metrics, output_dir=Path("output"), allow_live_fetch=False)
+    assert filled == ["operating_cashflow", "free_cashflow"]
+    assert metrics.operating_cashflow == pytest.approx(309_000_000.0)
+    assert metrics.free_cashflow == pytest.approx(12_000_000.0)
+    assert metrics.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
+
+
+def test_eng_20261115_04_ingest_supplement_uses_cashflow_metrics_without_cash_flow_block(
+    tmp_path: Path, monkeypatch
+):
+    """Regression (eng-20261115-04): cached cashflow_metrics alone must not trigger a live Yahoo refetch."""
+    from value_investor.fetch import CompanyMetrics
+    from value_investor.research.ingest import (
+        supplement_company_metrics_cashflow as ingest_supplement,
+    )
+
+    monkeypatch.chdir(tmp_path)
+    sources = tmp_path / "output" / "research" / "MEGP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "MEGP.L",
+        "cashflow_metrics": {
+            "operating_cashflow": 90_762_000.0,
+            "free_cashflow": 25_153_000.0,
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    metrics = CompanyMetrics(ticker="MEGP.L", operating_cashflow=None, free_cashflow=None)
+    with patch(
+        "value_investor.research.ingest.fetch_annual_financials",
+        side_effect=AssertionError("live Yahoo fetch should not run"),
+    ):
+        filled = ingest_supplement(metrics, output_dir=Path("output"), allow_live_fetch=True)
+    assert filled == ["operating_cashflow", "free_cashflow"]
+    assert metrics.operating_cashflow == pytest.approx(90_762_000.0)
+
+
 def test_fetch_annual_financials_includes_cashflow_metrics(monkeypatch):
     cashflow_df = pd.DataFrame(
         {"2024": [90_800_000.0, 55_000_000.0]},
