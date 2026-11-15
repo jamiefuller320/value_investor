@@ -2,7 +2,7 @@
   "market_id": "euro_depth",
   "focus_market": "euro_depth",
   "mode": "exhausted",
-  "reason": "Ingest avenues exhausted — parked 8 leftover thin/IWB name(s) (ACKB.BR, APAM.AS, BAS.DE, DQ7A.IR, ESSITY-B.ST, EVN.VI, UCB.BR, WIE.VI); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
+  "reason": "Ingest avenues exhausted — parked 7 leftover thin/IWB name(s) (ACKB.BR, APAM.AS, BAS.DE, DQ7A.IR, ESSITY-B.ST, EVN.VI, UCB.BR); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
   "ingest_parity_met": false,
   "ingest_exhausted": true,
   "ingest_sprint_complete": true,
@@ -13,8 +13,7 @@
     "DQ7A.IR",
     "ESSITY-B.ST",
     "EVN.VI",
-    "UCB.BR",
-    "WIE.VI"
+    "UCB.BR"
   ],
   "phase3_ready": false,
   "current_phase": 3,
@@ -23,7 +22,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-11-15T19:35:11.543624+00:00",
+    "snapshot_at": "2026-11-15T19:39:09.656055+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 39,
     "unmeasured_buy_tier": 0,
@@ -62,10 +61,9 @@
       "DQ7A.IR",
       "ESSITY-B.ST",
       "EVN.VI",
-      "UCB.BR",
-      "WIE.VI"
+      "UCB.BR"
     ],
-    "parked_count": 8,
+    "parked_count": 7,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -87,7 +85,7 @@
   "should_run_sprint_ingest": false,
   "should_run_maintenance_ingest": true,
   "should_run_ingest": false,
-  "evaluated_at": "2026-11-15T19:35:11.559735+00:00",
+  "evaluated_at": "2026-11-15T19:39:09.669429+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -137,93 +135,78 @@
     "us_adr_asia"
   ],
   "parallel_sprint_markets": [
-    "hang_seng"
+    "tsx60"
   ],
   "parallel_sprint_status": [
     {
-      "market_id": "hang_seng",
+      "market_id": "tsx60",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=26)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=2, indexed_without_body=86)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
       "parked_tickers": [
-        "0285.HK",
-        "0288.HK",
-        "0857.HK",
-        "0883.HK",
-        "0941.HK",
-        "0968.HK",
-        "1109.HK",
-        "2331.HK",
-        "9961.HK"
+        "CTC-A.TO",
+        "CVE.TO",
+        "MFC.TO",
+        "NTR.TO",
+        "SU.TO"
       ],
       "phase3_ready": false,
-      "current_phase": 0,
+      "current_phase": 1,
       "next_phase": 1,
       "phase_blockers": [
-        "no benchmark configured for hang_seng"
+        "tsx60 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-15T19:35:46.206431+00:00",
-        "market_id": "hang_seng",
-        "buy_tier_count": 24,
+        "snapshot_at": "2026-11-15T19:39:36.770969+00:00",
+        "market_id": "tsx60",
+        "buy_tier_count": 17,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 1,
-        "indexed_without_body": 26,
-        "bodies_min": 2,
-        "bodies_median": 11.5,
-        "bodies_max": 19,
+        "thin_body_buy_tier": 2,
+        "indexed_without_body": 86,
+        "bodies_min": 12,
+        "bodies_median": 33,
+        "bodies_max": 107,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [
-          "1109.HK"
+          "CTC-A.TO",
+          "MFC.TO"
         ],
         "indexed_without_body_tickers": [
-          "0285.HK",
-          "0883.HK",
-          "1109.HK",
-          "0288.HK",
-          "0857.HK",
-          "2020.HK",
-          "2331.HK",
-          "0941.HK",
-          "0968.HK",
-          "9961.HK"
+          "CVE.TO",
+          "GIB-A.TO",
+          "CTC-A.TO",
+          "SU.TO",
+          "NTR.TO",
+          "MFC.TO"
         ],
         "indexed_without_body_by_ticker": {
-          "0285.HK": 2,
-          "0883.HK": 1,
-          "1109.HK": 9,
-          "0288.HK": 4,
-          "0857.HK": 4,
-          "2020.HK": 1,
-          "2331.HK": 1,
-          "0941.HK": 1,
-          "0968.HK": 1,
-          "9961.HK": 2
+          "CVE.TO": 4,
+          "GIB-A.TO": 1,
+          "CTC-A.TO": 21,
+          "SU.TO": 20,
+          "NTR.TO": 10,
+          "MFC.TO": 30
         },
         "parked_tickers": [
-          "0285.HK",
-          "0288.HK",
-          "0857.HK",
-          "0883.HK",
-          "0941.HK",
-          "0968.HK",
-          "1109.HK",
-          "2331.HK",
-          "9961.HK"
+          "CTC-A.TO",
+          "CVE.TO",
+          "MFC.TO",
+          "NTR.TO",
+          "SU.TO"
         ],
-        "parked_count": 9,
+        "parked_count": 5,
         "effective_thin_body_buy_tier": 0,
         "effective_thin_body_tickers": [],
         "effective_indexed_without_body": 1,
         "effective_indexed_without_body_tickers": [
-          "2020.HK"
+          "GIB-A.TO"
         ],
         "ingest_exhausted": false
       },
@@ -242,7 +225,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-15T19:35:46.207345+00:00",
+      "evaluated_at": "2026-11-15T19:39:36.771815+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -273,7 +256,7 @@
         "ftse_smallcap not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-15T19:35:47.407105+00:00",
+        "snapshot_at": "2026-11-15T19:39:37.744508+00:00",
         "market_id": "ftse_smallcap",
         "buy_tier_count": 10,
         "unmeasured_buy_tier": 0,
@@ -338,12 +321,12 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-15T19:35:47.407626+00:00",
+      "evaluated_at": "2026-11-15T19:39:37.745103+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
-    "hang_seng",
+    "tsx60",
     "ftse_smallcap"
   ],
   "market_queue": [
@@ -398,7 +381,7 @@
     }
   },
   "scheduler_stream_1_markets": [
-    "hang_seng"
+    "tsx60"
   ],
   "scheduler_stream_2_markets": [
     "ftse_smallcap"

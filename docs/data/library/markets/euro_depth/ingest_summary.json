@@ -1,10 +1,19 @@
 {
-  "run_at": "2026-11-14T14:31:49.829384+00:00",
+  "run_at": "2026-11-15T19:36:16.187941+00:00",
   "market_id": "euro_depth",
   "targets": [
+    "MIO.IR",
     "SHELL.AS"
   ],
   "target_details": [
+    {
+      "ticker": "MIO.IR",
+      "priority_score": 23.6286,
+      "filings_total": 28,
+      "filings_with_body": 27,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    },
     {
       "ticker": "SHELL.AS",
       "priority_score": 15.3209,
@@ -15,6 +24,69 @@
     }
   ],
   "results": [
+    {
+      "ticker": "MIO.IR",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 28,
+        "filings_with_body": 27,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 28,
+        "filings_with_body": 28,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 28,
+        "annual": 3,
+        "interim": 3,
+        "trading_update": 0,
+        "other": 22,
+        "with_body": 28,
+        "period_coverage": {
+          "annual": {
+            "total": 3,
+            "with_body": 3
+          },
+          "interim": {
+            "total": 3,
+            "with_body": 3
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 21,
+            "with_body": 21
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 28,
+        "with_body_after": 28,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "retry_cleared": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    },
     {
       "ticker": "SHELL.AS",
       "reason": "indexed_without_body",
@@ -90,19 +162,20 @@
     }
   ],
   "improved": [
+    "MIO.IR",
     "SHELL.AS"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-14T14:27:49.967250+00:00",
+    "snapshot_at": "2026-11-15T19:32:37.868355+00:00",
     "market_id": "euro_depth",
-    "buy_tier_count": 41,
+    "buy_tier_count": 39,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 7,
-    "indexed_without_body": 4,
+    "thin_body_buy_tier": 6,
+    "indexed_without_body": 3,
     "bodies_min": 1,
     "bodies_median": 5,
     "bodies_max": 145,
@@ -113,7 +186,6 @@
     "thin_body_tickers": [
       "EVN.VI",
       "ACKB.BR",
-      "WIE.VI",
       "BAS.DE",
       "UCB.BR",
       "APAM.AS",
@@ -121,13 +193,11 @@
     ],
     "indexed_without_body_tickers": [
       "EVN.VI",
-      "WIE.VI",
       "ESSITY-B.ST",
       "UCB.BR"
     ],
     "indexed_without_body_by_ticker": {
       "EVN.VI": 1,
-      "WIE.VI": 1,
       "ESSITY-B.ST": 1,
       "UCB.BR": 1
     },
@@ -149,13 +219,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-14T14:31:44.011109+00:00",
+    "snapshot_at": "2026-11-15T19:36:10.287055+00:00",
     "market_id": "euro_depth",
-    "buy_tier_count": 41,
+    "buy_tier_count": 39,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 7,
-    "indexed_without_body": 4,
+    "thin_body_buy_tier": 6,
+    "indexed_without_body": 3,
     "bodies_min": 1,
     "bodies_median": 5,
     "bodies_max": 145,
@@ -166,7 +236,6 @@
     "thin_body_tickers": [
       "EVN.VI",
       "ACKB.BR",
-      "WIE.VI",
       "BAS.DE",
       "UCB.BR",
       "APAM.AS",
@@ -174,13 +243,11 @@
     ],
     "indexed_without_body_tickers": [
       "EVN.VI",
-      "WIE.VI",
       "ESSITY-B.ST",
       "UCB.BR"
     ],
     "indexed_without_body_by_ticker": {
       "EVN.VI": 1,
-      "WIE.VI": 1,
       "ESSITY-B.ST": 1,
       "UCB.BR": 1
     },
@@ -191,10 +258,9 @@
       "DQ7A.IR",
       "ESSITY-B.ST",
       "EVN.VI",
-      "UCB.BR",
-      "WIE.VI"
+      "UCB.BR"
     ],
-    "parked_count": 8,
+    "parked_count": 7,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -208,10 +274,10 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 41,
-    "hits": 35,
-    "new_rows_total": 0,
-    "curiosity_total": 38,
+    "scanned": 39,
+    "hits": 33,
+    "new_rows_total": 1,
+    "curiosity_total": 35,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -229,8 +295,7 @@
       "APAM.AS",
       "DQ7A.IR",
       "ESSITY-B.ST",
-      "EVN.VI",
-      "WIE.VI"
+      "EVN.VI"
     ],
     "runtime_cutoff": false
   },
@@ -243,7 +308,7 @@
   },
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-11-14T14:27:52.586443+00:00",
+    "assessed_at": "2026-11-15T19:32:40.568820+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -264,12 +329,6 @@
         "indexed_without_body": 1,
         "filings_total": 2,
         "filings_with_body": 1
-      },
-      {
-        "ticker": "WIE.VI",
-        "indexed_without_body": 1,
-        "filings_total": 3,
-        "filings_with_body": 2
       }
     ],
     "thin_need_discovery": [
@@ -281,7 +340,6 @@
     ],
     "thin_need_bodies": [
       "EVN.VI",
-      "WIE.VI",
       "UCB.BR"
     ],
     "primary_blocker": "indexed_without_body",
@@ -289,26 +347,25 @@
     "auto_pin_tickers": [
       "ESSITY-B.ST",
       "EVN.VI",
-      "UCB.BR",
-      "WIE.VI"
+      "UCB.BR"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (4 tickers, top: ESSITY-B.ST(1), EVN.VI(1), UCB.BR(1), WIE.VI(1))",
+      "Prefer indexed-without-body body refetch (3 tickers, top: ESSITY-B.ST(1), EVN.VI(1), UCB.BR(1))",
       "Discovery/IR seed for 5 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 4,
-      "indexed_without_body_rows": 4,
+      "indexed_without_body_tickers": 3,
+      "indexed_without_body_rows": 3,
       "thin_need_discovery": 5,
-      "thin_need_bodies": 3
+      "thin_need_bodies": 2
     }
   },
-  "used_seconds": 228.837982729,
+  "used_seconds": 206.720590659,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3371.162017271,
+  "leftover_seconds": 3393.279409341,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -316,7 +373,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-11-14T14:31:44.030071+00:00",
+    "updated_at": "2026-11-15T19:36:10.306859+00:00",
     "exhausted": true,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
@@ -394,18 +451,6 @@
         "source_surface": "euro_filings+ir_allowlist_direct"
       },
       {
-        "ticker": "WIE.VI",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-11-11T07:33:17.049446+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 3,
-        "filings_with_body": 2,
-        "indexed_without_body": 1,
-        "thin": true,
-        "source_surface": "euro_filings+ir_allowlist_direct"
-      },
-      {
         "ticker": "ESSITY-B.ST",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
@@ -429,8 +474,7 @@
       "DQ7A.IR",
       "ESSITY-B.ST",
       "EVN.VI",
-      "UCB.BR",
-      "WIE.VI"
+      "UCB.BR"
     ],
     "unparked_leftover": [],
     "surface_released": [],
@@ -470,7 +514,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 70,
+    "tried_count": 71,
     "candidate_count": 56,
     "skipped_resolved_tickers": [
       "ACKB.BR",
@@ -479,10 +523,10 @@
       "DQ7A.IR",
       "EVN.VI",
       "UCB.BR",
-      "WIE.VI",
       "ESSITY-B.ST",
       "LMT",
       "APTV",
+      "BXP",
       "MER.L",
       "TPT.L",
       "FOXT.L",
@@ -497,7 +541,6 @@
       "BAS.DE",
       "DTE.DE",
       "DTG.DE",
-      "HNR1.DE",
       "HEN3.DE",
       "PST.MI",
       "APAM.AS",
@@ -506,8 +549,7 @@
       "0288.HK",
       "0883.HK",
       "2331.HK",
-      "EVN.VI",
-      "WIE.VI"
+      "EVN.VI"
     ],
     "wait_behind_task_id": ""
   }
