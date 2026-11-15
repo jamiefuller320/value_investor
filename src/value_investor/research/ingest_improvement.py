@@ -20,6 +20,7 @@ from value_investor.ingest_backlog import (
 )
 from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
+    install_fetch_cashflow_fallback,
     memo_quality_body_fields,
     period_body_coverage,
     refetch_euro_filings_primary_bodies,
@@ -38,7 +39,7 @@ from value_investor.research.gap_fill_sources import (
     inspect_local_sources,
     suggest_alternate_sources,
 )
-from value_investor.research.ingest import ingest_research_sources, install_fetch_cashflow_fallback
+from value_investor.research.ingest import ingest_research_sources
 from value_investor.research.ingest_bootstrap import (
     BOOTSTRAP_SEED_CAP,
     bootstrap_buy_tier_research,

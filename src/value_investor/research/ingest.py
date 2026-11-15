@@ -534,7 +534,10 @@ def _resolve_cached_annual_financials(
             continue
         if not isinstance(payload, dict):
             continue
-        merged = _financials_with_merged_cashflow_metrics(payload)
+        from value_investor.research.filings import _financials_with_merged_yahoo_cashflow
+
+        merge_sources = resolved.parent if resolved.name == "financials_annual.json" else None
+        merged = _financials_with_merged_yahoo_cashflow(payload, sources_dir=merge_sources)
         score = _cashflow_backfill_score(merged)
         if score > best_score:
             best_score = score
@@ -568,14 +571,16 @@ def supplement_company_metrics_cashflow(
     if not resolved_ticker:
         return []
 
-    payload = financials
-    if payload is None:
-        payload = _resolve_cached_annual_financials(
-            str(resolved_ticker),
-            output_dir=output_dir,
-            sources_dir=sources_dir,
-        )
-    if allow_live_fetch and (payload is None or not (payload.get("cash_flow") or {})):
+    from value_investor.research.filings import _pick_financials_for_cashflow_backfill
+
+    payload = _pick_financials_for_cashflow_backfill(
+        metrics,
+        financials=financials,
+        ticker=str(resolved_ticker),
+        output_dir=output_dir,
+        sources_dir=sources_dir,
+    )
+    if allow_live_fetch and (payload is None or _cashflow_backfill_score(payload) == 0):
         payload = fetch_annual_financials(str(resolved_ticker))
     if isinstance(payload, dict):
         payload = _financials_with_merged_cashflow_metrics(payload)
@@ -606,38 +611,12 @@ def supplement_company_metrics_cashflow(
 
 
 def install_fetch_cashflow_fallback() -> None:
-    """Patch ``fetch_company_metrics`` to backfill cash-flow fields from Yahoo annual statements."""
-    from value_investor import fetch as fetch_mod
+    """Patch ``fetch_company_metrics`` to backfill cash-flow fields from cached annual statements."""
+    from value_investor.research.filings import (
+        install_fetch_cashflow_fallback as filings_install,
+    )
 
-    if getattr(fetch_mod.fetch_company_metrics, "_cashflow_fallback_installed", False):
-        return
-
-    original = fetch_mod.fetch_company_metrics
-
-    def fetch_company_metrics_with_cashflow_fallback(
-        ticker: str,
-        name: str | None = None,
-        sector: str | None = None,
-        *,
-        market: str | None = None,
-    ):
-        metrics = original(ticker, name=name, sector=sector, market=market)
-        try:
-            resolved = (metrics.ticker or ticker or "").strip().upper()
-            output_dir = Path("output")
-            supplement_company_metrics_cashflow(
-                metrics,
-                ticker=resolved,
-                output_dir=output_dir,
-                sources_dir=output_dir / "research" / resolved / "sources",
-                allow_live_fetch=False,
-            )
-        except Exception as exc:  # noqa: BLE001 — screening should continue
-            logger.debug("Cash-flow fallback failed for %s: %s", ticker, exc)
-        return metrics
-
-    fetch_company_metrics_with_cashflow_fallback._cashflow_fallback_installed = True  # type: ignore[attr-defined]
-    fetch_mod.fetch_company_metrics = fetch_company_metrics_with_cashflow_fallback
+    filings_install()
 
 
 def summarize_yahoo_quarterly_for_snapshot(financials: dict[str, Any]) -> dict[str, Any]:

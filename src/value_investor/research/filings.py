@@ -13076,20 +13076,12 @@ def supplement_company_metrics_cashflow(
 ) -> list[str]:
     """Backfill ``CompanyMetrics`` cash-flow fields from cached ``financials_annual.json``."""
     from value_investor.research.ingest import (
-        supplement_company_metrics_cashflow as _supplement,
+        supplement_company_metrics_cashflow as _ingest_supplement,
     )
 
-    payload = _pick_financials_for_cashflow_backfill(
+    return _ingest_supplement(
         metrics,
         financials=financials,
-        ticker=ticker,
-        output_dir=output_dir,
-        sources_dir=sources_dir,
-    )
-
-    return _supplement(
-        metrics,
-        financials=payload,
         ticker=ticker,
         output_dir=output_dir,
         sources_dir=sources_dir,
