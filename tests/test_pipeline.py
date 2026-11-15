@@ -1213,6 +1213,62 @@ def test_enforce_fcf_basis_in_snapshot_applies_uk_contractor_ch_backlog_overlay(
     assert enforced["adjusted_signal"] == "buy"
 
 
+def test_uk_contractor_overlay_retriggered_after_primary_fcf_harmonization():
+    """eng-20261115-07: harmonised screen TTM must re-trigger UK contractor revenue/FCF warning."""
+    from value_investor.scoring.uk_contractor_overlay import (
+        enrich_signals_with_uk_contractor_detection,
+        refresh_uk_contractor_overlays_after_primary_fcf,
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "COST.L",
+                "name": "Costain Group PLC",
+                "sector": "Industrials",
+                "uk_contractor": True,
+                "public_capex_exposure_detected": True,
+                "filing_mix_notes_confirmed": False,
+                "revenue_growth_filing_pct": -0.16,
+                "free_cashflow": 35.0e6,
+                "free_cashflow_prev": 40.0e6,
+            }
+        ]
+    )
+    early = enrich_signals_with_uk_contractor_detection(signals)
+    assert not bool(early.iloc[0]["uk_contractor_revenue_fcf_warning"])
+
+    harmonized = early.copy()
+    harmonized["free_cashflow_screen_ttm"] = 63.1e6
+    refreshed = refresh_uk_contractor_overlays_after_primary_fcf(harmonized)
+    assert bool(refreshed.iloc[0]["uk_contractor_revenue_fcf_warning"]) is True
+
+
+def test_enforce_fcf_basis_in_snapshot_backfills_uk_contractor_taxonomy():
+    """eng-20261115-07: stale export without uk_contractor flag still caps public-capex contractors."""
+    snapshot = {
+        "ticker": "COST.L",
+        "name": "Costain Group PLC",
+        "sector": "Industrials",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "passed_families": "cheapness,quality,dividend,garp,risk",
+        "public_capex_exposure_detected": True,
+        "filing_mix_notes_confirmed": False,
+        "revenue_growth_filing_pct": -0.16,
+        "free_cashflow": 63.1e6,
+        "free_cashflow_prev": 40.0e6,
+        "cyclical_exposure_overlay": False,
+        "cash_conversion_overlay": False,
+    }
+    enforced = enforce_fcf_basis_in_snapshot(snapshot)
+    assert enforced["uk_contractor"] is True
+    assert enforced["uk_contractor_revenue_fcf_warning"] is True
+    assert enforced["cyclical_exposure_overlay"] is True
+    assert enforced["cash_conversion_overlay"] is True
+    assert enforced["adjusted_signal"] == "buy"
+
+
 def test_enrich_signals_with_healthcare_overlay_caps_adjusted_signal():
     signals = pd.DataFrame(
         [
