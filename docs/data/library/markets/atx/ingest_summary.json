@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-14T10:40:15.879299+00:00",
+  "run_at": "2026-11-15T16:34:35.050154+00:00",
   "market_id": "atx",
   "targets": [],
   "target_details": [],
@@ -9,13 +9,13 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-14T10:39:56.474761+00:00",
+    "snapshot_at": "2026-11-15T16:34:16.605037+00:00",
     "market_id": "atx",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 2,
-    "indexed_without_body": 2,
+    "thin_body_buy_tier": 1,
+    "indexed_without_body": 1,
     "bodies_min": 2,
     "bodies_median": 3.5,
     "bodies_max": 4,
@@ -24,15 +24,12 @@
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [
-      "WIE.VI",
       "EVN.VI"
     ],
     "indexed_without_body_tickers": [
-      "WIE.VI",
       "EVN.VI"
     ],
     "indexed_without_body_by_ticker": {
-      "WIE.VI": 1,
       "EVN.VI": 1
     },
     "parked_tickers": [
@@ -47,13 +44,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-14T10:40:09.956426+00:00",
+    "snapshot_at": "2026-11-15T16:34:30.667054+00:00",
     "market_id": "atx",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 2,
-    "indexed_without_body": 2,
+    "thin_body_buy_tier": 1,
+    "indexed_without_body": 1,
     "bodies_min": 2,
     "bodies_median": 3.5,
     "bodies_max": 4,
@@ -62,22 +59,18 @@
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [
-      "WIE.VI",
       "EVN.VI"
     ],
     "indexed_without_body_tickers": [
-      "WIE.VI",
       "EVN.VI"
     ],
     "indexed_without_body_by_ticker": {
-      "WIE.VI": 1,
       "EVN.VI": 1
     },
     "parked_tickers": [
-      "EVN.VI",
-      "WIE.VI"
+      "EVN.VI"
     ],
-    "parked_count": 2,
+    "parked_count": 1,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -106,8 +99,7 @@
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
-      "EVN.VI",
-      "WIE.VI"
+      "EVN.VI"
     ],
     "runtime_cutoff": false
   },
@@ -120,7 +112,7 @@
   },
   "critical_path": {
     "market_id": "atx",
-    "assessed_at": "2026-11-14T10:39:56.791305+00:00",
+    "assessed_at": "2026-11-15T16:34:16.799869+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -129,41 +121,33 @@
         "indexed_without_body": 1,
         "filings_total": 3,
         "filings_with_body": 2
-      },
-      {
-        "ticker": "WIE.VI",
-        "indexed_without_body": 1,
-        "filings_total": 3,
-        "filings_with_body": 2
       }
     ],
     "thin_need_discovery": [],
     "thin_need_bodies": [
-      "WIE.VI",
       "EVN.VI"
     ],
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
     "auto_pin_tickers": [
-      "EVN.VI",
-      "WIE.VI"
+      "EVN.VI"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (2 tickers, top: EVN.VI(1), WIE.VI(1))",
+      "Prefer indexed-without-body body refetch (1 tickers, top: EVN.VI(1))",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 2,
-      "indexed_without_body_rows": 2,
+      "indexed_without_body_tickers": 1,
+      "indexed_without_body_rows": 1,
       "thin_need_discovery": 0,
-      "thin_need_bodies": 2
+      "thin_need_bodies": 1
     }
   },
-  "used_seconds": 12.879355559000032,
+  "used_seconds": 13.67037766,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3587.120644441,
+  "leftover_seconds": 3586.32962234,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -171,25 +155,13 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "atx",
-    "updated_at": "2026-11-14T10:40:09.963238+00:00",
+    "updated_at": "2026-11-15T16:34:30.672110+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
         "ticker": "EVN.VI",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-27T19:09:10.510035+00:00",
-        "park_via": "straggler_soft_park",
-        "filings_total": 3,
-        "filings_with_body": 2,
-        "indexed_without_body": 1,
-        "thin": true,
-        "source_surface": "euro_filings+ir_allowlist_direct"
-      },
-      {
-        "ticker": "WIE.VI",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
         "parked_at": "2026-10-27T19:09:10.510035+00:00",
@@ -206,8 +178,7 @@
     "straggler_zero_runs": 2,
     "had_complete_targets": false,
     "leftover_tickers": [
-      "EVN.VI",
-      "WIE.VI"
+      "EVN.VI"
     ],
     "unparked_leftover": [],
     "surface_released": [],
@@ -248,7 +219,7 @@
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 70,
-    "candidate_count": 55,
+    "candidate_count": 58,
     "skipped_resolved_tickers": [
       "ACKB.BR",
       "APAM.AS",
@@ -260,6 +231,7 @@
       "ESSITY-B.ST",
       "LMT",
       "APTV",
+      "BXP",
       "MER.L",
       "TPT.L",
       "FOXT.L",
@@ -283,8 +255,7 @@
       "0288.HK",
       "0883.HK",
       "2331.HK",
-      "EVN.VI",
-      "WIE.VI"
+      "EVN.VI"
     ],
     "wait_behind_task_id": ""
   }
