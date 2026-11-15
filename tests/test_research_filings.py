@@ -12459,6 +12459,46 @@ def test_fetch_filings_ir_allowlist_imd_ax_asx200_builtin(tmp_path: Path):
     assert "IMD.AX" not in PARKED_SOURCE_HUNTER_SKIP
 
 
+def test_fetch_filings_ir_allowlist_nhc_ax_asx200_builtin(tmp_path: Path):
+    """eng-20261115-02: NHC.AX buy-tier no_key_bodies — seed FY26 Appendix 4E + 1H26 4D statutory PDFs."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("NHC.AX", path=allowlist_path)
+    periods = {row["period"] for row in rows}
+    urls = {row["url"] for row in rows}
+    assert len(rows) == 2
+    assert periods == {"annual", "interim"}
+    assert any("07434xc906mx0p.pdf" in url for url in urls)
+    assert any("Appendix-4D-and-Half-Year-Financial-Report-2026.pdf" in url for url in urls)
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert "NHC.AX" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_parked_source_hunter_nhc_ax_asx200_has_fetchable_ir():
+    """eng-20261115-02: NHC.AX leftover — ASX / newhopegroup statutory PDFs live-fetch with issuer text."""
+    from value_investor.research.filings import _ESEF_ENTITY_SEARCH_ALIASES
+
+    assert "NHC.AX" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("NHC.AX")
+    assert len(rows) == 2
+    annual = next(row for row in rows if row["period"] == "annual")
+    interim = next(row for row in rows if row["period"] == "interim")
+    aliases = _ESEF_ENTITY_SEARCH_ALIASES.get("NHC") or ()
+    assert any("New Hope" in a for a in aliases)
+    annual_body = _live_fetch_filing_body(annual["url"])
+    if not annual_body:
+        pytest.skip("NHC FY26 Appendix 4E PDF fetch unavailable (network) — retry later")
+    assert len(annual_body) >= 50000
+    assert "new hope" in annual_body.lower()
+    interim_body = _live_fetch_filing_body(interim["url"])
+    if not interim_body:
+        pytest.skip("NHC 1H26 Appendix 4D PDF fetch unavailable (network) — retry later")
+    assert len(interim_body) >= 50000
+    assert "appendix 4d" in interim_body.lower()
+    assert "new hope" in interim_body.lower()
+
+
 def test_parked_source_hunter_imd_ax_asx200_has_fetchable_ir():
     """eng-20261109-01: IMD.AX leftover — imdex.com / Weblink statutory PDFs live-fetch with issuer text."""
     assert "IMD.AX" not in PARKED_SOURCE_HUNTER_SKIP
