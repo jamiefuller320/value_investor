@@ -1360,6 +1360,50 @@ def test_enrich_signals_with_cash_conversion_overlay_after_healthcare():
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
 
 
+def test_healthcare_overlay_retriggered_after_primary_fcf_harmonization():
+    """eng-20261115-06: harmonised negative screen TTM must cap healthcare strong buys."""
+    from value_investor.scoring.healthcare_overlay import (
+        refresh_healthcare_overlays_after_primary_fcf,
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "name": "Pharma Co",
+                "sector": "Healthcare",
+                "signal": "strong_buy",
+                "free_cashflow": 200.0,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 3 / 9,
+                "reasons": "['F-Score=3/9']",
+                "failed_criteria": "['F-Score 3/9 below 7']",
+            },
+        ]
+    )
+
+    early = enrich_signals_with_healthcare_overlay(signals, model_results)
+    assert not bool(early.iloc[0]["healthcare_overlay"])
+
+    harmonized = early.copy()
+    harmonized["free_cashflow_screen_ttm"] = -40.0
+    harmonized["free_cashflow"] = 380.0
+    harmonized["primary_fcf"] = 380.0
+
+    refreshed = refresh_healthcare_overlays_after_primary_fcf(harmonized, model_results)
+    assert bool(refreshed.iloc[0]["healthcare_overlay"]) is True
+    assert refreshed.iloc[0]["adjusted_signal"] == "buy"
+
+
 def test_enrich_signals_with_healthcare_overlay_uses_trailing_fcf():
     """Cap on negative screen TTM even when canonical free_cashflow on the row is positive."""
     signals = pd.DataFrame(
