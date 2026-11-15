@@ -1,56 +1,50 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-15T07:49:50.993049+00:00",
-  "overall": "blocked",
-  "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
+  "generated_at": "2026-11-15T11:52:37.854511+00:00",
+  "overall": "active",
+  "headline": "Merge lane active; agent lane active.",
   "merge_lane": {
     "state": "running",
     "idle": false,
     "running": true,
     "blocked": false,
     "pr_open_count": 1,
-    "open_engineering_prs": [
-      {
-        "number": 1408,
-        "branch": "cursor/eng-20261115-01-1de3",
-        "draft": false
-      }
-    ],
-    "in_flight_pr": 1408,
-    "detail": "Open engineering PR(s) #1408 — merge fires on CI success."
+    "open_engineering_prs": [],
+    "in_flight_pr": null,
+    "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
   },
   "agent_lane": {
-    "state": "blocked",
+    "state": "running",
     "idle": false,
-    "running": false,
-    "blocked": true,
-    "should_dispatch": false,
+    "running": true,
+    "blocked": false,
+    "should_dispatch": true,
     "pause_active": false,
     "traffic_pause_active": false,
     "attention_parked_count": 3,
-    "open_count": 0,
+    "open_count": 6,
     "pr_open_count": 1,
-    "dispatch_eligible_count": 0,
+    "dispatch_eligible_count": 6,
     "blocked_task_count": 0,
-    "next_task_id": null,
-    "reason": "no open engineering tasks in queue",
-    "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
+    "next_task_id": "eng-20261115-02",
+    "reason": "queue ready — dispatch next open task",
+    "detail": "queue ready — dispatch next open task"
   },
   "queue_clearing": {
     "pause_active": false,
     "attention_parked_count": 3,
-    "evaluated_at": "2026-11-15T07:49:45.015358+00:00"
+    "evaluated_at": "2026-11-15T02:38:15.104679+00:00"
   },
   "traffic_control": {
     "pause_active": false,
     "stuck_pr_count": 0,
     "pause_reasons": [],
-    "evaluated_at": "2026-11-15T07:49:46.313832+00:00"
+    "evaluated_at": "2026-11-15T02:35:01.600935+00:00"
   },
   "ops_monitor": {
-    "run_at": "2026-11-15T07:46:45.172922+00:00",
+    "run_at": "2026-11-15T02:31:55.576289+00:00",
     "overall": "warn",
-    "should_dispatch_engineering": false
+    "should_dispatch_engineering": true
   },
   "merges_today": [],
   "verified_merges_today_count": 0,
@@ -264,16 +258,16 @@
   "library_stall_parks": [],
   "observe_utilization": {
     "schema_version": 1,
-    "generated_at": "2026-11-15T07:49:48.404150+00:00",
+    "generated_at": "2026-11-15T11:52:37.750292+00:00",
     "observe_only": true,
     "headline": "Observe utilization quiet (P1 path looks green-enough).",
     "surface_freshness": "fresh",
-    "ops_run_at": "2026-11-15T07:46:45.172922+00:00",
+    "ops_run_at": "2026-11-15T02:31:55.576289+00:00",
     "warn_instrument_count": 0,
     "trajectory_summary": {
       "improving": 0,
-      "worsening": 1,
-      "flat": 7,
+      "worsening": 0,
+      "flat": 8,
       "unknown": 0,
       "history_points": 28,
       "note": "Deltas vs prior dashboard cycle (warn/gap counts; lower is better). Raw instrument stores commit with ops-monitor (L460)."
@@ -289,13 +283,12 @@
         "finding_summary": null,
         "metrics": {
           "warn_not_usable": 0,
-          "open_not_usable": 16,
-          "cohort_count": 181,
-          "usable_in_window": 165,
+          "open_not_usable": 14,
+          "cohort_count": 174,
+          "usable_in_window": 160,
           "market_count": 23,
           "blocking_stage_counts": {
-            "no_accumulate_verdict": 14,
-            "no_key_bodies": 2
+            "no_accumulate_verdict": 14
           },
           "sibling_home_open_count": 0,
           "true_no_memo_open_count": 0,
@@ -306,7 +299,7 @@
               "blocking_stage": "no_accumulate_verdict",
               "has_memo": true,
               "memo_home_market": "ftse350",
-              "hours_since_flip": 511.78
+              "hours_since_flip": 506.53
             },
             {
               "ticker": "FOUR.L",
@@ -314,7 +307,7 @@
               "blocking_stage": "no_accumulate_verdict",
               "has_memo": true,
               "memo_home_market": "ftse350",
-              "hours_since_flip": 511.78
+              "hours_since_flip": 506.53
             },
             {
               "ticker": "VLX.L",
@@ -322,7 +315,7 @@
               "blocking_stage": "no_accumulate_verdict",
               "has_memo": true,
               "memo_home_market": "ftse350",
-              "hours_since_flip": 511.78
+              "hours_since_flip": 506.53
             },
             {
               "ticker": "HFD.L",
@@ -330,7 +323,7 @@
               "blocking_stage": "no_accumulate_verdict",
               "has_memo": true,
               "memo_home_market": "ftse350",
-              "hours_since_flip": 391.78
+              "hours_since_flip": 386.53
             },
             {
               "ticker": "JMAT.L",
@@ -338,7 +331,7 @@
               "blocking_stage": "no_accumulate_verdict",
               "has_memo": true,
               "memo_home_market": "ftse350",
-              "hours_since_flip": 391.78
+              "hours_since_flip": 386.53
             },
             {
               "ticker": "KIE.L",
@@ -346,7 +339,7 @@
               "blocking_stage": "no_accumulate_verdict",
               "has_memo": true,
               "memo_home_market": "ftse350",
-              "hours_since_flip": 391.78
+              "hours_since_flip": 386.53
             },
             {
               "ticker": "RNK.L",
@@ -354,7 +347,7 @@
               "blocking_stage": "no_accumulate_verdict",
               "has_memo": true,
               "memo_home_market": "ftse350",
-              "hours_since_flip": 391.78
+              "hours_since_flip": 386.53
             },
             {
               "ticker": "BT-A.L",
@@ -362,7 +355,7 @@
               "blocking_stage": "no_accumulate_verdict",
               "has_memo": true,
               "memo_home_market": "ftse350",
-              "hours_since_flip": 199.78
+              "hours_since_flip": 194.53
             }
           ]
         },
@@ -372,9 +365,9 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 0.1h ago.",
-          "as_of": "2026-11-15T07:46:47.124062+00:00",
-          "age_hours": 0.05,
+          "detail": "Last refresh 9.3h ago.",
+          "as_of": "2026-11-15T02:31:57.502577+00:00",
+          "age_hours": 9.34,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -414,9 +407,9 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 0.0h ago.",
-          "as_of": "2026-11-15T07:47:07.954531+00:00",
-          "age_hours": 0.04,
+          "detail": "Last refresh 9.3h ago.",
+          "as_of": "2026-11-15T02:32:15.759325+00:00",
+          "age_hours": 9.34,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -437,10 +430,10 @@
         "severity": "ok",
         "finding_summary": null,
         "metrics": {
-          "miss_rate": 0.3705,
+          "miss_rate": 0.3761,
           "enter_body_miss_count": 176,
-          "cohort_count": 475,
-          "open_still_missing_bodies": 14,
+          "cohort_count": 468,
+          "open_still_missing_bodies": 12,
           "by_market": {
             "ftse350": {
               "cohort_count": 72,
@@ -450,15 +443,15 @@
             },
             "sp500": {
               "cohort_count": 148,
-              "enter_body_miss_count": 57,
+              "enter_body_miss_count": 58,
               "open_still_missing_bodies": 0,
-              "miss_rate": 0.3851
+              "miss_rate": 0.3919
             },
             "asx200": {
-              "cohort_count": 32,
+              "cohort_count": 31,
               "enter_body_miss_count": 14,
-              "open_still_missing_bodies": 2,
-              "miss_rate": 0.4375
+              "open_still_missing_bodies": 1,
+              "miss_rate": 0.4516
             },
             "euro_depth": {
               "cohort_count": 42,
@@ -467,16 +460,16 @@
               "miss_rate": 0.3333
             },
             "ftse_smallcap": {
-              "cohort_count": 9,
+              "cohort_count": 8,
               "enter_body_miss_count": 4,
               "open_still_missing_bodies": 1,
-              "miss_rate": 0.4444
+              "miss_rate": 0.5
             },
             "tsx60": {
-              "cohort_count": 14,
+              "cohort_count": 12,
               "enter_body_miss_count": 7,
               "open_still_missing_bodies": 1,
-              "miss_rate": 0.5
+              "miss_rate": 0.5833
             },
             "euro_stoxx50": {
               "cohort_count": 10,
@@ -498,9 +491,9 @@
             },
             "dax": {
               "cohort_count": 6,
-              "enter_body_miss_count": 2,
+              "enter_body_miss_count": 3,
               "open_still_missing_bodies": 1,
-              "miss_rate": 0.3333
+              "miss_rate": 0.5
             },
             "aim": {
               "cohort_count": 13,
@@ -533,10 +526,10 @@
               "miss_rate": 0.3333
             },
             "sti": {
-              "cohort_count": 7,
-              "enter_body_miss_count": 5,
-              "open_still_missing_bodies": 2,
-              "miss_rate": 0.7143
+              "cohort_count": 6,
+              "enter_body_miss_count": 4,
+              "open_still_missing_bodies": 1,
+              "miss_rate": 0.6667
             },
             "psi20": {
               "cohort_count": 3,
@@ -545,16 +538,16 @@
               "miss_rate": 0.3333
             },
             "ibex35": {
-              "cohort_count": 6,
-              "enter_body_miss_count": 2,
+              "cohort_count": 5,
+              "enter_body_miss_count": 1,
               "open_still_missing_bodies": 0,
-              "miss_rate": 0.3333
+              "miss_rate": 0.2
             },
             "ftse_mib": {
-              "cohort_count": 8,
+              "cohort_count": 7,
               "enter_body_miss_count": 4,
               "open_still_missing_bodies": 0,
-              "miss_rate": 0.5
+              "miss_rate": 0.5714
             },
             "atx": {
               "cohort_count": 3,
@@ -583,21 +576,21 @@
           }
         },
         "primary_metric": "open_still_missing_bodies",
-        "primary_value": 14,
+        "primary_value": 12,
         "primary_label": "Open flips still missing key bodies (archive-miss proxy)",
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 0.0h ago.",
-          "as_of": "2026-11-15T07:47:08.437184+00:00",
-          "age_hours": 0.04,
+          "detail": "Last refresh 9.3h ago.",
+          "as_of": "2026-11-15T02:32:16.155472+00:00",
+          "age_hours": 9.34,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
         "trajectory": {
-          "delta": 2,
-          "direction": "worsening",
-          "label": "Worse since last cycle",
+          "delta": 0,
+          "direction": "flat",
+          "label": "Unchanged vs last cycle",
           "prior_value": 12,
           "prior_at": "2026-11-15T02:36:00.106388+00:00"
         }
@@ -624,9 +617,9 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 0.0h ago.",
-          "as_of": "2026-11-15T07:47:08.657293+00:00",
-          "age_hours": 0.04,
+          "detail": "Last refresh 9.3h ago.",
+          "as_of": "2026-11-15T02:32:16.292202+00:00",
+          "age_hours": 9.34,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -648,7 +641,7 @@
         "finding_summary": null,
         "metrics": {
           "market_count": 23,
-          "open_count": 1290,
+          "open_count": 1266,
           "closed_count": 0,
           "first_episode_closed_count": 0,
           "source_records_missing_market_id": 0,
@@ -660,9 +653,9 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 0.0h ago.",
-          "as_of": "2026-11-15T07:47:08.659934+00:00",
-          "age_hours": 0.04,
+          "detail": "Last refresh 9.3h ago.",
+          "as_of": "2026-11-15T02:32:16.294552+00:00",
+          "age_hours": 9.34,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -735,9 +728,9 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 0.0h ago.",
-          "as_of": "2026-11-15T07:47:22.467843+00:00",
-          "age_hours": 0.04,
+          "detail": "Last refresh 9.3h ago.",
+          "as_of": "2026-11-15T02:32:51.643477+00:00",
+          "age_hours": 9.33,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -776,9 +769,9 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 0.0h ago.",
-          "as_of": "2026-11-15T07:47:22.707269+00:00",
-          "age_hours": 0.04,
+          "detail": "Last refresh 9.3h ago.",
+          "as_of": "2026-11-15T02:32:51.844283+00:00",
+          "age_hours": 9.33,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -881,9 +874,9 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 0.0h ago.",
-          "as_of": "2026-11-15T07:47:22.467843+00:00",
-          "age_hours": 0.04,
+          "detail": "Last refresh 9.3h ago.",
+          "as_of": "2026-11-15T02:32:51.643477+00:00",
+          "age_hours": 9.33,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2050,7 +2043,7 @@
         }
       },
       {
-        "at": "2026-11-15T07:49:48.404150+00:00",
+        "at": "2026-11-15T11:52:37.750292+00:00",
         "buy_tier_flip_lag": {
           "primary_value": 0,
           "warn_active": false,
@@ -2062,7 +2055,7 @@
           "freshness_state": "fresh"
         },
         "universe_filing_archive_miss_rate": {
-          "primary_value": 14,
+          "primary_value": 12,
           "warn_active": false,
           "freshness_state": "fresh"
         },
@@ -2096,7 +2089,7 @@
   },
   "lifecycle_maturity_trajectory": {
     "schema_version": 1,
-    "generated_at": "2026-11-15T07:49:48.415225+00:00",
+    "generated_at": "2026-11-15T11:52:37.771547+00:00",
     "observe_only": true,
     "instrument_id": "lifecycle_maturity_trajectory",
     "separation": {
@@ -2112,7 +2105,7 @@
     },
     "headline": "Focus EU depth composite (STOXX50 + periphery) still early-lifecycle-heavy (88% just_bought+growth) — expected for young books; not a heal cue.",
     "surface_freshness": "fresh",
-    "ops_run_at": "2026-11-15T07:46:45.172922+00:00",
+    "ops_run_at": "2026-11-15T02:31:55.576289+00:00",
     "board_generated_at": "2026-11-15T02:34:37.491383+00:00",
     "board_path": "docs/data/lifecycle_board.json",
     "market_count": 23,
@@ -2208,10 +2201,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2220,7 +2213,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 41.27,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -2311,10 +2304,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2323,7 +2316,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 88.24,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -2414,10 +2407,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2426,7 +2419,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -2517,10 +2510,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2529,7 +2522,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -2620,10 +2613,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2632,7 +2625,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -2723,10 +2716,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2735,7 +2728,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -2826,10 +2819,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2838,7 +2831,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -2929,10 +2922,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2941,7 +2934,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 91.67,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -3032,10 +3025,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3044,7 +3037,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 85.71,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -3135,10 +3128,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3147,7 +3140,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 88.89,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -3238,10 +3231,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3250,7 +3243,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -3341,10 +3334,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3353,7 +3346,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -3444,10 +3437,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3456,7 +3449,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -3547,10 +3540,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3559,7 +3552,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -3650,10 +3643,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3662,7 +3655,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -3753,10 +3746,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3765,7 +3758,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -3856,10 +3849,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3868,7 +3861,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 91.67,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -3959,10 +3952,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3971,7 +3964,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -4062,10 +4055,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -4074,7 +4067,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -4165,10 +4158,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -4177,7 +4170,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 96.67,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -4268,10 +4261,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -4280,7 +4273,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -4371,10 +4364,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -4383,7 +4376,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 91.67,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -4474,10 +4467,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 5.2h ago.",
+          "detail": "Board last refresh 9.3h ago.",
           "as_of": "2026-11-15T02:34:37.491383+00:00",
-          "store_as_of": "2026-11-15T07:49:48.415225+00:00",
-          "age_hours": 5.25,
+          "store_as_of": "2026-11-15T11:52:37.771547+00:00",
+          "age_hours": 9.3,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -4486,7 +4479,7 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 100.0,
-          "prior_at": "2026-11-14T02:40:55.236250+00:00"
+          "prior_at": "2026-11-15T02:34:37.706842+00:00"
         },
         "uw_growth_trajectory": {
           "delta": 0,
@@ -4496,216 +4489,6 @@
       }
     ],
     "history": [
-      {
-        "at": "2026-10-26T02:34:50.873506+00:00",
-        "ftse350": {
-          "primary_value": 41.27,
-          "early_share": 0.4127,
-          "uw_rate_growth": 0.7,
-          "uw_rate_held": 0.5556,
-          "median_days_held": 48.0,
-          "held_count": 63,
-          "freshness_state": "fresh"
-        },
-        "euro_depth": {
-          "primary_value": 97.37,
-          "early_share": 0.9737,
-          "uw_rate_growth": 0.4667,
-          "uw_rate_held": 0.4211,
-          "median_days_held": 42.0,
-          "held_count": 38,
-          "freshness_state": "fresh"
-        },
-        "aex": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.0,
-          "uw_rate_held": 0.1667,
-          "median_days_held": 16.5,
-          "held_count": 6,
-          "freshness_state": "fresh"
-        },
-        "aim": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.6923,
-          "uw_rate_held": 0.6667,
-          "median_days_held": 31.0,
-          "held_count": 15,
-          "freshness_state": "fresh"
-        },
-        "asx200": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.6111,
-          "uw_rate_held": 0.5357,
-          "median_days_held": 39.5,
-          "held_count": 28,
-          "freshness_state": "fresh"
-        },
-        "atx": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.5,
-          "uw_rate_held": 0.5,
-          "median_days_held": 21.0,
-          "held_count": 2,
-          "freshness_state": "fresh"
-        },
-        "bel20": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.5,
-          "uw_rate_held": 0.5,
-          "median_days_held": 25.0,
-          "held_count": 2,
-          "freshness_state": "fresh"
-        },
-        "cac40": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.5,
-          "uw_rate_held": 0.4286,
-          "median_days_held": 18.0,
-          "held_count": 14,
-          "freshness_state": "fresh"
-        },
-        "dax": {
-          "primary_value": 50.0,
-          "early_share": 0.5,
-          "uw_rate_growth": 0.0,
-          "uw_rate_held": 0.5,
-          "median_days_held": 17.5,
-          "held_count": 2,
-          "freshness_state": "fresh"
-        },
-        "euro_stoxx50": {
-          "primary_value": 92.31,
-          "early_share": 0.9231,
-          "uw_rate_growth": 0.2222,
-          "uw_rate_held": 0.1667,
-          "median_days_held": 18.0,
-          "held_count": 13,
-          "freshness_state": "fresh"
-        },
-        "ftse_mib": {
-          "primary_value": 75.0,
-          "early_share": 0.75,
-          "uw_rate_growth": 0.0,
-          "uw_rate_held": 0.0,
-          "median_days_held": 24.0,
-          "held_count": 4,
-          "freshness_state": "fresh"
-        },
-        "ftse_smallcap": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": null,
-          "uw_rate_held": 0.25,
-          "median_days_held": 2.0,
-          "held_count": 4,
-          "freshness_state": "fresh"
-        },
-        "hang_seng": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.75,
-          "uw_rate_held": 0.7647,
-          "median_days_held": 18.0,
-          "held_count": 17,
-          "freshness_state": "fresh"
-        },
-        "ibex35": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.2,
-          "uw_rate_held": 0.2,
-          "median_days_held": 20.0,
-          "held_count": 5,
-          "freshness_state": "fresh"
-        },
-        "iseq20": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.0,
-          "uw_rate_held": 0.3333,
-          "median_days_held": 20.0,
-          "held_count": 3,
-          "freshness_state": "fresh"
-        },
-        "nasdaq100": {
-          "primary_value": 94.44,
-          "early_share": 0.9444,
-          "uw_rate_growth": 0.4074,
-          "uw_rate_held": 0.4167,
-          "median_days_held": 38.0,
-          "held_count": 36,
-          "freshness_state": "fresh"
-        },
-        "omxs30": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.5,
-          "uw_rate_held": 0.4167,
-          "median_days_held": 18.0,
-          "held_count": 12,
-          "freshness_state": "fresh"
-        },
-        "psi20": {
-          "primary_value": 50.0,
-          "early_share": 0.5,
-          "uw_rate_growth": 0.0,
-          "uw_rate_held": 0.0,
-          "median_days_held": 12.0,
-          "held_count": 2,
-          "freshness_state": "fresh"
-        },
-        "smi": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.0,
-          "uw_rate_held": 0.0,
-          "median_days_held": 20.0,
-          "held_count": 4,
-          "freshness_state": "fresh"
-        },
-        "sp500": {
-          "primary_value": 97.5,
-          "early_share": 0.975,
-          "uw_rate_growth": 0.55,
-          "uw_rate_held": 0.4933,
-          "median_days_held": 35.0,
-          "held_count": 120,
-          "freshness_state": "fresh"
-        },
-        "sti": {
-          "primary_value": 100.0,
-          "early_share": 1.0,
-          "uw_rate_growth": 0.0,
-          "uw_rate_held": 0.0,
-          "median_days_held": 23.0,
-          "held_count": 3,
-          "freshness_state": "fresh"
-        },
-        "tsx60": {
-          "primary_value": 85.71,
-          "early_share": 0.8571,
-          "uw_rate_growth": 0.3,
-          "uw_rate_held": 0.3571,
-          "median_days_held": 45.0,
-          "held_count": 14,
-          "freshness_state": "fresh"
-        },
-        "us_adr_asia": {
-          "primary_value": 66.67,
-          "early_share": 0.6667,
-          "uw_rate_growth": 0.0,
-          "uw_rate_held": 0.0,
-          "median_days_held": 23.0,
-          "held_count": 3,
-          "freshness_state": "fresh"
-        }
-      },
       {
         "at": "2026-10-27T02:35:02.219426+00:00",
         "ftse350": {
@@ -10375,12 +10158,222 @@
           "held_count": 1,
           "freshness_state": "fresh"
         }
+      },
+      {
+        "at": "2026-11-15T11:52:37.771547+00:00",
+        "ftse350": {
+          "primary_value": 41.27,
+          "early_share": 0.4127,
+          "uw_rate_growth": 0.48,
+          "uw_rate_held": 0.3968,
+          "median_days_held": 68.0,
+          "held_count": 63,
+          "freshness_state": "fresh"
+        },
+        "euro_depth": {
+          "primary_value": 88.24,
+          "early_share": 0.8824,
+          "uw_rate_growth": 0.2308,
+          "uw_rate_held": 0.2353,
+          "median_days_held": 52.5,
+          "held_count": 34,
+          "freshness_state": "fresh"
+        },
+        "aex": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.0,
+          "uw_rate_held": 0.0,
+          "median_days_held": 27.0,
+          "held_count": 5,
+          "freshness_state": "fresh"
+        },
+        "aim": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.8462,
+          "uw_rate_held": 0.7333,
+          "median_days_held": 51.0,
+          "held_count": 15,
+          "freshness_state": "fresh"
+        },
+        "asx200": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.5217,
+          "uw_rate_held": 0.4667,
+          "median_days_held": 49.0,
+          "held_count": 30,
+          "freshness_state": "fresh"
+        },
+        "atx": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.5,
+          "uw_rate_held": 0.5,
+          "median_days_held": 10.5,
+          "held_count": 4,
+          "freshness_state": "fresh"
+        },
+        "bel20": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.5,
+          "uw_rate_held": 0.5,
+          "median_days_held": 45.0,
+          "held_count": 2,
+          "freshness_state": "fresh"
+        },
+        "cac40": {
+          "primary_value": 91.67,
+          "early_share": 0.9167,
+          "uw_rate_growth": 0.1,
+          "uw_rate_held": 0.0833,
+          "median_days_held": 38.0,
+          "held_count": 12,
+          "freshness_state": "fresh"
+        },
+        "dax": {
+          "primary_value": 85.71,
+          "early_share": 0.8571,
+          "uw_rate_growth": 0.5,
+          "uw_rate_held": 0.5714,
+          "median_days_held": 3.0,
+          "held_count": 7,
+          "freshness_state": "fresh"
+        },
+        "euro_stoxx50": {
+          "primary_value": 88.89,
+          "early_share": 0.8889,
+          "uw_rate_growth": 0.2857,
+          "uw_rate_held": 0.2222,
+          "median_days_held": 38.0,
+          "held_count": 9,
+          "freshness_state": "fresh"
+        },
+        "ftse_mib": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.25,
+          "uw_rate_held": 0.1667,
+          "median_days_held": 19.0,
+          "held_count": 6,
+          "freshness_state": "fresh"
+        },
+        "ftse_smallcap": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 1.0,
+          "uw_rate_held": 0.3333,
+          "median_days_held": 4.0,
+          "held_count": 3,
+          "freshness_state": "fresh"
+        },
+        "hang_seng": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.4,
+          "uw_rate_held": 0.2857,
+          "median_days_held": 37.0,
+          "held_count": 14,
+          "freshness_state": "fresh"
+        },
+        "ibex35": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.0,
+          "uw_rate_held": 0.0,
+          "median_days_held": 7.0,
+          "held_count": 3,
+          "freshness_state": "fresh"
+        },
+        "iseq20": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.0,
+          "uw_rate_held": 0.3333,
+          "median_days_held": 40.0,
+          "held_count": 3,
+          "freshness_state": "fresh"
+        },
+        "nasdaq100": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.5357,
+          "uw_rate_held": 0.4571,
+          "median_days_held": 58.0,
+          "held_count": 35,
+          "freshness_state": "fresh"
+        },
+        "omxs30": {
+          "primary_value": 91.67,
+          "early_share": 0.9167,
+          "uw_rate_growth": 0.1,
+          "uw_rate_held": 0.0833,
+          "median_days_held": 38.0,
+          "held_count": 12,
+          "freshness_state": "fresh"
+        },
+        "psi20": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 1.0,
+          "uw_rate_held": 1.0,
+          "median_days_held": 16.0,
+          "held_count": 1,
+          "freshness_state": "fresh"
+        },
+        "smi": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.0,
+          "uw_rate_held": 0.2,
+          "median_days_held": 40.0,
+          "held_count": 5,
+          "freshness_state": "fresh"
+        },
+        "sp500": {
+          "primary_value": 96.67,
+          "early_share": 0.9667,
+          "uw_rate_growth": 0.575,
+          "uw_rate_held": 0.4878,
+          "median_days_held": 15.0,
+          "held_count": 120,
+          "freshness_state": "fresh"
+        },
+        "sti": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 1.0,
+          "uw_rate_held": 0.6,
+          "median_days_held": 11.0,
+          "held_count": 5,
+          "freshness_state": "fresh"
+        },
+        "tsx60": {
+          "primary_value": 91.67,
+          "early_share": 0.9167,
+          "uw_rate_growth": 0.5,
+          "uw_rate_held": 0.5,
+          "median_days_held": 65.0,
+          "held_count": 12,
+          "freshness_state": "fresh"
+        },
+        "us_adr_asia": {
+          "primary_value": 100.0,
+          "early_share": 1.0,
+          "uw_rate_growth": 0.0,
+          "uw_rate_held": 0.0,
+          "median_days_held": 43.0,
+          "held_count": 1,
+          "freshness_state": "fresh"
+        }
       }
     ]
   },
   "n200_pipeline_health": {
     "schema_version": 2,
-    "generated_at": "2026-11-15T07:49:48.429534+00:00",
+    "generated_at": "2026-11-15T11:52:37.791425+00:00",
     "observe_only": true,
     "influences_live": false,
     "not_alpha_signal": true,
@@ -10390,7 +10383,7 @@
     "headline": "N200 pipeline functioning — phase 8.143/5.0 entries/week (floor met); volume gate met (114 ep / 14 wk); entry lever win, exit lever lose.",
     "disclaimer": "Phase floor, sample-thickness volume gate, and per-lever scoreboards measure factory mechanism / lever quality — not alpha or capital readiness (F8). Alone-path interestingness is separate Push/checklist heat. Lever wins are independent of path P&L. Observe-only.",
     "store_present": true,
-    "store_generated_at": "2026-11-15T07:47:36.030573+00:00",
+    "store_generated_at": "2026-11-15T02:33:03.075657+00:00",
     "phase": {
       "entries_per_week": 8.143,
       "floor": 5.0,
@@ -10437,9 +10430,9 @@
     "freshness": {
       "state": "fresh",
       "label": "Fresh",
-      "detail": "Last refresh 0.0h ago.",
-      "as_of": "2026-11-15T07:47:36.030573+00:00",
-      "age_hours": 0.04,
+      "detail": "Last refresh 9.3h ago.",
+      "as_of": "2026-11-15T02:33:03.075657+00:00",
+      "age_hours": 9.33,
       "store_lag_hours": null,
       "stale_after_hours": 30.0
     },
@@ -10447,14 +10440,14 @@
       "functioning": true,
       "ops_check_ok": true,
       "ops_finding_present": true,
-      "ops_run_at": "2026-11-15T07:46:45.172922+00:00",
-      "detail": "Observe refresh path looks alive. Ops finding: N200 tech-timing observe refreshed Last refresh 0.0h ago. Entry lever win; exit lever lose (fair costs; independent of path P&L)."
+      "ops_run_at": "2026-11-15T02:31:55.576289+00:00",
+      "detail": "Observe refresh path looks alive. Ops finding: N200 tech-timing observe refreshed Last refresh 9.3h ago. Entry lever win; exit lever lose (fair costs; independent of path P&L)."
     },
     "ops_doc": "docs/ops/n200-tech-timing-observe.md"
   },
   "n201_pipeline_health": {
     "schema_version": 1,
-    "generated_at": "2026-11-15T07:49:48.430236+00:00",
+    "generated_at": "2026-11-15T11:52:37.792405+00:00",
     "observe_only": true,
     "influences_live": false,
     "not_alpha_signal": true,
@@ -10463,19 +10456,19 @@
     "launch_queue_waiter": true,
     "registration_id": "strand-c-short-horizon-value-mom-v0",
     "deferred_id": "N201",
-    "headline": "N201 pipeline functioning — phase 10.176/8.0 entries/week; volume met (173 ep / 17 wk); smooth_ret_cohort_median=0.035652.",
+    "headline": "N201 pipeline functioning — phase 10.812/8.0 entries/week; volume met (173 ep / 16 wk); smooth_ret_cohort_median=0.035652.",
     "disclaimer": "Phase floor and sample-thickness volume gate measure factory mechanism throughput — not alpha or capital readiness (F8). Alone-path interestingness is separate Push/checklist heat. Fixed-stake episode % is independent of fund NAV. Observe-only.",
     "store_present": true,
-    "store_generated_at": "2026-11-15T07:48:57.369044+00:00",
+    "store_generated_at": "2026-11-15T02:34:17.210057+00:00",
     "phase": {
-      "entries_per_week": 10.176,
+      "entries_per_week": 10.812,
       "floor": 8.0,
       "floor_met": true
     },
     "volume_gate": {
       "met": true,
       "episodes": 173,
-      "weeks": 17,
+      "weeks": 16,
       "min_episodes": 48,
       "min_weeks": 8,
       "role": "sample_thickness_pipeline_badge"
@@ -10503,9 +10496,9 @@
     "freshness": {
       "state": "fresh",
       "label": "Fresh",
-      "detail": "Last refresh 0.0h ago.",
-      "as_of": "2026-11-15T07:48:57.369044+00:00",
-      "age_hours": 0.01,
+      "detail": "Last refresh 9.3h ago.",
+      "as_of": "2026-11-15T02:34:17.210057+00:00",
+      "age_hours": 9.31,
       "store_lag_hours": null,
       "stale_after_hours": 30.0
     },
@@ -10513,14 +10506,14 @@
       "functioning": true,
       "ops_check_ok": true,
       "ops_finding_present": true,
-      "ops_run_at": "2026-11-15T07:46:45.172922+00:00",
-      "detail": "Ops finding: N201 value-mom observe refreshed Last refresh 0.0h ago."
+      "ops_run_at": "2026-11-15T02:31:55.576289+00:00",
+      "detail": "Ops finding: N201 value-mom observe refreshed Last refresh 9.3h ago."
     },
     "ops_doc": "docs/ops/n201-value-mom-observe.md"
   },
   "n210_pipeline_health": {
     "schema_version": 1,
-    "generated_at": "2026-11-15T07:49:48.431164+00:00",
+    "generated_at": "2026-11-15T11:52:37.793775+00:00",
     "observe_only": true,
     "influences_live": false,
     "not_alpha_signal": true,
@@ -10534,7 +10527,7 @@
     "headline": "N210 pipeline functioning — phase 0.5/8.0 entries/week; volume not met (7 ep / 14 wk; open=1); smooth_ret_cohort_median=0.026937.",
     "disclaimer": "Phase floor and sample-thickness volume gate measure factory mechanism throughput — not alpha or capital readiness (F8). Alone-path interestingness is separate Push/checklist heat. Fixed-stake episode % is independent of fund NAV. Open episodes with 0 completed is honest thin-marks state while the walker runs. Observe-only; never assessment primary crown; matched-30 pots untouched.",
     "store_present": true,
-    "store_generated_at": "2026-11-15T07:48:57.626238+00:00",
+    "store_generated_at": "2026-11-15T02:34:17.406335+00:00",
     "pipeline_status": "episode_walker_active",
     "stub_gone": true,
     "walker_active": true,
@@ -10584,9 +10577,9 @@
     "freshness": {
       "state": "fresh",
       "label": "Fresh",
-      "detail": "Last refresh 0.0h ago.",
-      "as_of": "2026-11-15T07:48:57.626238+00:00",
-      "age_hours": 0.01,
+      "detail": "Last refresh 9.3h ago.",
+      "as_of": "2026-11-15T02:34:17.406335+00:00",
+      "age_hours": 9.31,
       "store_lag_hours": null,
       "stale_after_hours": 30.0
     },
@@ -10594,14 +10587,14 @@
       "functioning": true,
       "ops_check_ok": true,
       "ops_finding_present": true,
-      "ops_run_at": "2026-11-15T07:46:45.172922+00:00",
-      "detail": "Ops finding: N210 AI-judgment observe refreshed Last refresh 0.0h ago."
+      "ops_run_at": "2026-11-15T02:31:55.576289+00:00",
+      "detail": "Ops finding: N210 AI-judgment observe refreshed Last refresh 9.3h ago."
     },
     "ops_doc": "docs/ops/n210-ai-judgment-observe.md"
   },
   "n206_pipeline_health": {
     "schema_version": 1,
-    "generated_at": "2026-11-15T07:49:48.431440+00:00",
+    "generated_at": "2026-11-15T11:52:37.794201+00:00",
     "observe_only": true,
     "influences_live": false,
     "not_alpha_signal": true,
@@ -10613,19 +10606,19 @@
     "data_deepen_requested": false,
     "registration_id": "strand-d-plain-ey-identity-v0",
     "deferred_id": "N206",
-    "headline": "N206 pipeline functioning — phase 16.706/8.0 entries/week; volume met (284 ep / 17 wk); smooth_ret_cohort_median=0.012703.",
+    "headline": "N206 pipeline functioning — phase 17.75/8.0 entries/week; volume met (284 ep / 16 wk); smooth_ret_cohort_median=0.012703.",
     "disclaimer": "Phase floor and sample-thickness volume gate measure factory mechanism throughput — not alpha or capital readiness (F8). Alone-path interestingness is separate Push/checklist heat. Fixed-stake episode % is independent of fund NAV. Alone-first (O3). Observe-only; influences_live is false. Not an assessment primary.",
     "store_present": true,
-    "store_generated_at": "2026-11-15T07:49:09.478408+00:00",
+    "store_generated_at": "2026-11-15T02:34:26.781948+00:00",
     "phase": {
-      "entries_per_week": 16.706,
+      "entries_per_week": 17.75,
       "floor": 8.0,
       "floor_met": true
     },
     "volume_gate": {
       "met": true,
       "episodes": 284,
-      "weeks": 17,
+      "weeks": 16,
       "min_episodes": 48,
       "min_weeks": 8,
       "role": "sample_thickness_pipeline_badge"
@@ -10653,9 +10646,9 @@
     "freshness": {
       "state": "fresh",
       "label": "Fresh",
-      "detail": "Last refresh 0.0h ago.",
-      "as_of": "2026-11-15T07:49:09.478408+00:00",
-      "age_hours": 0.01,
+      "detail": "Last refresh 9.3h ago.",
+      "as_of": "2026-11-15T02:34:26.781948+00:00",
+      "age_hours": 9.3,
       "store_lag_hours": null,
       "stale_after_hours": 30.0
     },
@@ -10663,14 +10656,14 @@
       "functioning": true,
       "ops_check_ok": true,
       "ops_finding_present": true,
-      "ops_run_at": "2026-11-15T07:46:45.172922+00:00",
-      "detail": "Ops finding: N206 plain-EY observe refreshed Last refresh 0.0h ago."
+      "ops_run_at": "2026-11-15T02:31:55.576289+00:00",
+      "detail": "Ops finding: N206 plain-EY observe refreshed Last refresh 9.3h ago."
     },
     "ops_doc": "docs/ops/n206-plain-ey-observe.md"
   },
   "ingest_occupancy": {
     "schema_version": 1,
-    "generated_at": "2026-11-15T07:49:51.007289+00:00",
+    "generated_at": "2026-11-15T11:52:37.889226+00:00",
     "focus_market": "euro_depth",
     "dispatch_mode": "exhausted",
     "should_run_sprint_ingest": false,
@@ -10682,7 +10675,7 @@
     "cold_store_focus_pressure_reasons": [],
     "dispatch_evaluated_at": "2026-11-15T07:11:33.060336+00:00",
     "spare_should_run_parallel_ingest": true,
-    "eng_open_count": 0,
+    "eng_open_count": 6,
     "auto_fixable": false,
     "note": "Priority slot is occupied only while head_needs_fat_slot is true. Badge/bit mismatch is observe-only."
   }

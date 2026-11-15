@@ -1,6 +1,6 @@
 # Hollywood Bowl Group plc (BOWL.L) — Research memo
 
-_Version 5 · Updated 2026-10-30T23:00:43.056517+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-15T10:11:29.012397+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: The Oct FY26 trading RNS still supports the buy screen on revenue and net cash; thin news since then leaves cyclical, leverage and accounting risks open until December results.
+Rationale: Oct FY26 trading still supports the buy screen; the 4 Nov notice only fixes the 2 Dec results date, leaving leverage and FCF-definition risks open until accounts land.
 RiskTags: cyclical, competitive, leverage, governance, accounting, other
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Press and broker notes on resilience and the share move follow the trading state
 No new RNS or trading updates since the 7 Oct FY26 trading statement already reflected in the memo.  
 12 Oct holdings notice only in filings; one secondary Kalkine piece on the year-end trading update, not new company disclosure.  
 December full-year results are still the next material checkpoint; screen and thesis unchanged.
+
+### 2026-11-15T10:11:29.012397+00:00
+4 Nov RNS sets full-year results for 2 December 2026; no trading update or accounts since the 7 Oct FY26 trading statement.
+4 and 10 Nov holdings notices only among new filings; two Kalkine pieces are secondary commentary, not company disclosure.
+Thesis unchanged pending December results; cyclical and FCF-definition risks remain open.

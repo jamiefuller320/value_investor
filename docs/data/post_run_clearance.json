@@ -2,20 +2,46 @@
   "schema_version": 1,
   "last_run": {
     "schema_version": 1,
-    "trigger": "analysis_review_follow_up",
-    "evaluated_at": "2026-11-15T10:38:07.805500+00:00",
-    "review_source": "latest.json",
-    "fingerprint": "d2a4854898f76016e054",
-    "skipped": true,
-    "skip_reason": "clearance already ran for fingerprint+trigger (analysis_review_follow_up)",
-    "applied": false,
+    "trigger": "post_run_review_email",
+    "evaluated_at": "2026-11-15T12:05:45.491544+00:00",
+    "review_source": "output/post_run_review.md",
+    "fingerprint": "8ae93f6e0d3d75536852",
+    "skipped": false,
+    "skip_reason": null,
+    "applied": true,
     "lanes": {
       "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
     },
-    "should_dispatch_engineering": false,
+    "should_dispatch_engineering": true,
     "lane_c_recommended": false,
     "actions": [],
-    "last_duplicate_of": "d2a4854898f76016e054"
+    "queue_before": {
+      "open_count": 6,
+      "pr_open_count": 1
+    },
+    "compile_cap_audit": {
+      "candidate_count": 7,
+      "truncated_count": 0,
+      "post_run_plan_beyond_cap": [
+        "FCF basis enforcement: single filing-aligned TTM FCF source wired into dividend-yield, FCF-yield, and cover overlays with screen-vs-filing divergence flags",
+        "Sector taxonomy overrides (plantation/agriculture, UK contractor public capex) + conditional overlay caps (healthcare negative FCF + low Piotroski)"
+      ]
+    },
+    "plan_alignment": {
+      "unlinked_plan_titles": [
+        "Unified RNS body pipeline (Investegate/LSE direct URL + PDF extract, reject Google News wrappers)",
+        "Companies House filed-accounts PDF fetch + OCR for group accounts when RNS bodies are empty"
+      ],
+      "terminal_only_titles": []
+    },
+    "compile_cap_drain_skipped": "priority engineering queue not empty",
+    "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+    "queue_after": {
+      "open_count": 6,
+      "pr_open_count": 1
+    },
+    "tasks_added_estimate": 0,
+    "dispatch_reason": "queue ready — dispatch next open task"
   },
   "runs": [
     {
@@ -735,20 +761,46 @@
     },
     {
       "schema_version": 1,
-      "trigger": "analysis_review_follow_up",
-      "evaluated_at": "2026-11-15T10:38:07.805500+00:00",
-      "review_source": "latest.json",
-      "fingerprint": "d2a4854898f76016e054",
-      "skipped": true,
-      "skip_reason": "clearance already ran for fingerprint+trigger (analysis_review_follow_up)",
-      "applied": false,
+      "trigger": "post_run_review_email",
+      "evaluated_at": "2026-11-15T12:05:45.491544+00:00",
+      "review_source": "output/post_run_review.md",
+      "fingerprint": "8ae93f6e0d3d75536852",
+      "skipped": false,
+      "skip_reason": null,
+      "applied": true,
       "lanes": {
         "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
       },
-      "should_dispatch_engineering": false,
+      "should_dispatch_engineering": true,
       "lane_c_recommended": false,
       "actions": [],
-      "last_duplicate_of": "d2a4854898f76016e054"
+      "queue_before": {
+        "open_count": 6,
+        "pr_open_count": 1
+      },
+      "compile_cap_audit": {
+        "candidate_count": 7,
+        "truncated_count": 0,
+        "post_run_plan_beyond_cap": [
+          "FCF basis enforcement: single filing-aligned TTM FCF source wired into dividend-yield, FCF-yield, and cover overlays with screen-vs-filing divergence flags",
+          "Sector taxonomy overrides (plantation/agriculture, UK contractor public capex) + conditional overlay caps (healthcare negative FCF + low Piotroski)"
+        ]
+      },
+      "plan_alignment": {
+        "unlinked_plan_titles": [
+          "Unified RNS body pipeline (Investegate/LSE direct URL + PDF extract, reject Google News wrappers)",
+          "Companies House filed-accounts PDF fetch + OCR for group accounts when RNS bodies are empty"
+        ],
+        "terminal_only_titles": []
+      },
+      "compile_cap_drain_skipped": "priority engineering queue not empty",
+      "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+      "queue_after": {
+        "open_count": 6,
+        "pr_open_count": 1
+      },
+      "tasks_added_estimate": 0,
+      "dispatch_reason": "queue ready — dispatch next open task"
     }
   ]
 }

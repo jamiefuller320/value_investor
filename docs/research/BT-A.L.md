@@ -1,6 +1,6 @@
 # BT Group plc (BT-A.L) — Research memo
 
-_Version 5 · Updated 2026-10-28T11:41:02.123094+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-15T09:48:11.379105+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: high
-Confidence: 0.67
-Rationale: Indexed TalkTalk RNS clarifies cash and regulatory overhang but adds noise; FY26 filings still support the buy screen while debt, pension and Ofcom risks stay open.
+Confidence: 0.68
+Rationale: H1 syndicated coverage modestly confirms the buy screen via revenue recovery and cash-flow guidance, but TalkTalk regulation, debt, pension and valuation commentary keep conviction capped.
 RiskTags: regulatory, pension, leverage, competitive, governance
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Leverage, pension, Ofcom and Bharti/ownership risks are unchanged.
 Since 7 Oct, the TalkTalk/PlatformX RNS is indexed (~£400m FY27 cash impact; regulatory review pending; FY27 outlook reconfirmed excluding the deal).
 Syndicated coverage adds CMA/TalkTalk and Openreach/Ofcom pricing commentary—no further filing bodies in the batch.
 Persistent buy screen (21 weeks) and FY26 filing thesis are unchanged; leverage, pension and regulatory risks remain elevated.
+
+### 2026-11-15T09:48:11.379105+00:00
+Since 28 Oct, indexed news is syndicated H1 coverage only—revenue up ~1% to ~£8.75bn, higher interim earnings and dividend, cash-flow targets reaffirmed; no new RNS or filing bodies in the batch.  
+TalkTalk awaits regulatory review; competitive broadband ARPU pressure and delayed Starlink launch appear only in commentary.  
+Persistent buy screen and FY26 filing thesis are broadly unchanged; leverage, pension and Ofcom risks stay elevated.

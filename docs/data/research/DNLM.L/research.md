@@ -1,6 +1,6 @@
 # Dunelm Group plc (DNLM.L) — Research memo
 
-_Version 5 · Updated 2026-10-30T22:57:56.212444+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-15T10:09:09.755028+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: Q1 RNS modestly supports the buy screen (+1.1% sales, FY27 adjusted PBT guide unchanged), but LFL -0.8%, expected H1 PBT below prior year and restructuring spend still cap conviction.
+Rationale: No new operational disclosure since 15 Oct Q1; thin news and routine AGM leave the buy case as before—modest sales/margin support, but LFL -0.8% and expected H1 PBT decline still cap conviction.
 RiskTags: cyclical, competitive, key_person, leverage, governance
 
 ## Weekly updates
@@ -32,3 +32,8 @@ FY27 broadly flat adjusted PBT and the restructuring narrative are unchanged.
 15 Oct Q1 trading RNS: sales +1.1% to £433m (soft weather start, stronger exit); LFL -0.8%; gross margin +10bps; FY27 adjusted PBT guide unchanged, H1 PBT expected below prior year.  
 Since 15 Oct, no further material RNS—press is Q1 reaction, analyst views, and UK fiscal commentary.  
 Restructuring and cyclical risks unchanged.
+
+### 2026-11-15T10:09:09.755028+00:00
+Since 30 Oct there is no new trading or results RNS; updates are routine only (2 Nov voting rights, 4/13 Nov PDMR notices, 10 Nov AGM with all resolutions passed).
+Headlines are valuation and YTD price commentary (partial rebound after a ~19% fall); they do not change the Q1 trading or FY27 outlook in the memo.
+FY27 broadly flat adjusted PBT, H1 PBT below prior year, and restructuring/cyclical risks are unchanged.

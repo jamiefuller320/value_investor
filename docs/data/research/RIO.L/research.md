@@ -1,6 +1,6 @@
 # Rio Tinto Group (RIO.L) — Research memo
 
-_Version 5 · Updated 2026-10-28T11:01:20.787587+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-15T09:30:41.690587+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.73
-Rationale: Research supports phased accumulation on a new strong-buy screen and cheapness, but is neutral on thin, non-RNS news and unchanged statutory FCF cover limits versus the full strong-buy case.
+Confidence: 0.72
+Rationale: Buy screen still 11/22 but relabelled from strong buy (deteriorating); thin press on Resolution Copper capex only—no RNS—so cheapness holds while statutory 0.73× FCF cover and quality fails cap conviction.
 RiskTags: cyclical, regulatory, governance, pension, leverage, other
 
 ## Weekly updates
@@ -32,4 +32,9 @@ Buy screen still persistent (8/22, 11w, stable, RSI ~46); filing view unchanged 
 ### 2026-10-28T11:01:20.787587+00:00
 Screen is now **strong buy** (11/22, two weeks, stable, RSI ~33) versus the prior long-running buy label from 25 Oct.  
 Secondary press flags ~$1.9bn Queensland bauxite spend and a proposed CEO target pay increase; no RNS, trading statement, or revised 2026 guidance in the batch.  
+Filing view unchanged: statutory 0.73× FCF dividend cover and FCF-yield / earnings-quality screen fails.
+
+### 2026-11-15T09:30:41.690587+00:00
+Screen relabelled **buy** (11/22, 1w, new, deteriorating, RSI ~41) from the prior **strong buy** (28 Oct); model pass count unchanged.  
+Batch news is secondary only—$144m Resolution Copper spend and copper-demand commentary; no RNS, trading statement, or revised 2026 guidance.  
 Filing view unchanged: statutory 0.73× FCF dividend cover and FCF-yield / earnings-quality screen fails.

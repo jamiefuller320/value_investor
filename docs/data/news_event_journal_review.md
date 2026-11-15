@@ -1,55 +1,55 @@
 # News event journal (observe-only)
 
-- Generated: `2026-11-15T10:37:52.569143+00:00`
+- Generated: `2026-11-08T10:36:49.835979+00:00`
 - Source pool: `buy_boundary`
 - Mode: `rolling`
 - Extractor: `headline-rules-v1.1`
-- Cohort tickers: **145** (with news: **100**)
-- Articles walked: **2415**
-- Issuer rejects: **44**
-- Events kept: **316**
-- Later filings available: **312**
-- Filing-confirmed: **270**
-- Seek richer source (insufficient facts): **119**
+- Cohort tickers: **126** (with news: **81**)
+- Articles walked: **9269**
+- Issuer rejects: **131**
+- Events kept: **240**
+- Later filings available: **237**
+- Filing-confirmed: **202**
+- Seek richer source (insufficient facts): **78**
 
 ## Rule confirmation (later filings, not live scores)
 
 | type | events | later filings | confirmed | rate | seek richer | status |
 |---|---:|---:|---:|---:|---:|---|
-| `leadership` | 59 | 59 | 39 | 66% | 0 | promising |
-| `m_and_a` | 218 | 214 | 204 | 95% | 108 | promising |
-| `contract` | 13 | 13 | 6 | 46% | 7 | promising |
-| `strategy` | 26 | 26 | 21 | 81% | 4 | promising |
+| `leadership` | 44 | 44 | 26 | 59% | 0 | promising |
+| `m_and_a` | 165 | 162 | 155 | 96% | 69 | promising |
+| `contract` | 11 | 11 | 4 | 36% | 7 | weak |
+| `strategy` | 20 | 20 | 17 | 85% | 2 | promising |
 
 ## Recent events
 
 | date | ticker | type | confirm | evidence | claim |
 |---|---|---|---|---|---|
+| 2026-10-15 | `BT-A.L` | `m_and_a` | pending | seek | FTSE 100 Stock BT Group (LSE:BT.A) Acquisition Announcement: What It Means - Kalkine Media |
+| 2026-10-15 | `EZJ.L` | `m_and_a` | body_match | sufficient | Apollo's Takeover of EasyJet Heads for Q1 Close Amid Opposition From European Labor Unions |
+| 2026-10-15 | `EZJ.L` | `m_and_a` | body_match | sufficient | Pilots fear for jobs after £5.7bn easyJet takeover |
+| 2026-10-17 | `KGF.L` | `leadership` | unconfirmed | sufficient | Is CEO Succession Altering The Investment Case For Kingfisher (LSE:KGF)? |
+| 2026-10-20 | `HOC.L` | `m_and_a` | body_match | sufficient | Sika acquires Azpects in UK before October 23 results for Sika stock - ad-hoc-news.de |
 | 2026-10-21 | `KGF.L` | `leadership` | unconfirmed | sufficient | FTSE 100 Kingfisher (LSE:KGF) Names a New Chief Executive - Kalkine Media |
 | 2026-10-22 | `SCT.L` | `m_and_a` | body_match | seek | Why Did Softcat (LSE:SCT) Stock Slip After Strong Full-Year Results And A US Acquisition? - Kalkine Media |
 | 2026-10-22 | `IGG.L` | `strategy` | unconfirmed | sufficient | IG Group Eyes U.S. Growth, Prediction Markets and Underdog Deal in New Strategy |
-| 2026-10-27 | `GAMA.L` | `m_and_a` | body_match | seek | What Is Next For Gamma Communications (LSE:GAMA) Stock As The Epiris Takeover Moves Toward Completion? - Kalkine Media |
-| 2026-10-29 | `GAMA.L` | `m_and_a` | unconfirmed | seek | Takeover Buzz Builds Around Gamma Communications (LSE:GAMA) - Kalkine Media |
 | 2026-10-30 | `HFD.L` | `leadership` | unconfirmed | sufficient | Halfords Group PLC: Directorate change - TradingView |
-| 2026-10-31 | `VTY.L` | `leadership` | unconfirmed | sufficient | Vistry Group (LSE:VTY) Names A New CFO, Is The Stock Still Cheap? |
 | 2026-11-03 | `SHEL.L` | `m_and_a` | unconfirmed | seek | Abu Dhabi’s XRG to acquire Shell’s stake in Australian LNG project |
 | 2026-11-03 | `SHEL.L` | `m_and_a` | body_match | sufficient | Shell to divest North West Shelf stake to XRG for $1.5bn |
 | 2026-11-04 | `ITV.L` | `m_and_a` | pending | seek | UK government announces public interest investigation into Sky deal to takeover ITV's media arm - Audacy |
-| 2026-11-12 | `ATYM.L` | `m_and_a` | pending | sufficient | Atalaya completes $139m acquisition of Tharsis Mining in Spain |
-| 2026-11-13 | `BARC.L` | `m_and_a` | body_match | seek | Barclays Capital Securities Reports 2.80% Long Stake in DCC Energy Amid Energy Capital Partners and KKR Takeover Bid - Kalkine Media |
 
 ## Insufficient evidence (seek richer source later)
 
 | date | ticker | type | missing | claim |
 |---|---|---|---|---|
+| 2026-09-28 | `GEN.L` | `m_and_a` | size | Gen Digital CEO addresses GoDaddy acquisition rumors - Yahoo Finance UK |
+| 2026-09-29 | `VSVS.L` | `m_and_a` | size | Vesuvius Shares Rise 23% After Company Confirms RHI Magnesita Takeover Proposal - Yahoo Finance UK |
+| 2026-10-05 | `VSVS.L` | `m_and_a` | size | Will Vesuvius (LSE:VSVS) Shares Keep Climbing After the RHI Magnesita Takeover Proposal This Week? - Kalkine Media |
+| 2026-10-09 | `BT-A.L` | `m_and_a` | size, likelihood | BT Group (LSE:BT.A): What Does Its Acquisition Of TalkTalk Mean For UK Broadband Competition This Week? - Kalkine Media |
 | 2026-10-15 | `BT-A.L` | `m_and_a` | size, likelihood | FTSE 100 Stock BT Group (LSE:BT.A) Acquisition Announcement: What It Means - Kalkine Media |
-| 2026-10-19 | `GAMA.L` | `m_and_a` | size | Mid-Cap Stock Gamma Communications (LSE:GAMA) Takeover Offer Period Rolls On: What It Means - Kalkine Media |
 | 2026-10-22 | `SCT.L` | `m_and_a` | size | Why Did Softcat (LSE:SCT) Stock Slip After Strong Full-Year Results And A US Acquisition? - Kalkine Media |
-| 2026-10-27 | `GAMA.L` | `m_and_a` | size | What Is Next For Gamma Communications (LSE:GAMA) Stock As The Epiris Takeover Moves Toward Completion? - Kalkine Media |
-| 2026-10-29 | `GAMA.L` | `m_and_a` | size, likelihood | Takeover Buzz Builds Around Gamma Communications (LSE:GAMA) - Kalkine Media |
 | 2026-11-03 | `SHEL.L` | `m_and_a` | likelihood | Abu Dhabi’s XRG to acquire Shell’s stake in Australian LNG project |
 | 2026-11-04 | `ITV.L` | `m_and_a` | size, likelihood | UK government announces public interest investigation into Sky deal to takeover ITV's media arm - Audacy |
-| 2026-11-13 | `BARC.L` | `m_and_a` | size | Barclays Capital Securities Reports 2.80% Long Stake in DCC Energy Amid Energy Capital Partners and KKR Takeover Bid - Kalkine Media |
 
 ## Coverage notes
 

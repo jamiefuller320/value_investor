@@ -1,10 +1,10 @@
 # Filing event unknowns (observe-only, no extra calls)
 
-- Generated: `2026-11-15T10:37:52.730912+00:00`
-- Filings walked: **9102**
-- Routine dropped: **7676**
-- Known event class: **181**
-- Leftover candidates: **1245**
+- Generated: `2026-11-08T10:36:50.019983+00:00`
+- Filings walked: **7083**
+- Routine dropped: **5949**
+- Known event class: **147**
+- Leftover candidates: **987**
 
 ## Recurring leftover phrases
 
@@ -13,39 +13,40 @@ These are taxonomy holes — not live scores.
 
 | n tickers | n headlines | phrase |
 |---:|---:|---|
-| 10 | 11 | `appointment joint` |
-| 10 | 10 | `non-executive director` |
-| 9 | 9 | `joint corporate` |
-| 8 | 10 | `capital markets` |
-| 8 | 10 | `publication prospectus` |
-| 8 | 8 | `appointment joint corporate` |
-| 8 | 8 | `board committee` |
-| 8 | 8 | `corporate broker` |
-| 7 | 11 | `report payments` |
-| 7 | 10 | `payments governments` |
-| 7 | 10 | `report payments governments` |
-| 7 | 9 | `additional listing` |
-| 7 | 9 | `capital markets event` |
-| 7 | 9 | `markets event` |
-| 7 | 7 | `joint corporate broker` |
-| 6 | 11 | `repurchase programme` |
-| 6 | 11 | `share repurchase` |
-| 6 | 11 | `share repurchase programme` |
+| 8 | 8 | `joint corporate` |
+| 7 | 7 | `appointment joint` |
+| 7 | 7 | `appointment joint corporate` |
+| 7 | 7 | `corporate broker` |
+| 6 | 9 | `payments governments` |
 | 6 | 9 | `quarter results` |
-| 6 | 8 | `annual results` |
+| 6 | 9 | `report payments` |
+| 6 | 9 | `report payments governments` |
+| 6 | 8 | `additional listing` |
+| 6 | 8 | `capital markets` |
+| 6 | 8 | `dividend declaration` |
+| 6 | 6 | `board committee` |
+| 6 | 6 | `joint corporate broker` |
+| 6 | 6 | `non-executive director` |
+| 5 | 10 | `repurchase programme` |
+| 5 | 10 | `share repurchase` |
+| 5 | 10 | `share repurchase programme` |
+| 5 | 7 | `annual results` |
+| 5 | 7 | `capital markets event` |
+| 5 | 7 | `markets event` |
 
 ## Sample leftover headlines
 
 | ticker | period | headline |
 |---|---|---|
+| `ABDN.L` | other | Proposed Secondary Placing in Standard Life plc |
 | `ABDN.L` | other | Result of Secondary Placing in Standard Life plc |
 | `ABDN.L` | other | Major Shareholding |
-| `ABDN.L` | interim | Proposed Secondary Placing in Standard Life plc |
 | `ABF.L` | annual | Annual Results Announcement |
-| `ABF.L` | annual | Outcome of its review of Group structure |
 | `ABF.L` | other | Dividend Declaration |
+| `ABF.L` | other | Outcome of its review of Group structure |
 | `AEP.L` | other | Proposed IPO of PT AEP Nusantara Plantations Tbk - Investegate |
 | `AEP.L` | other | Share Split |
+| `ALFA.L` | annual | Items impacting CBA's financial reporting - Investegate |
 | `ALFA.L` | other | Appointment of Independent Non-Executive Director |
 | `ALFA.L` | other | Retirement of Director |
 | `ALFA.L` | other | Leadership Team Change |
@@ -55,11 +56,11 @@ These are taxonomy holes — not live scores.
 | `ATYM.L` | interim | Q2 and H1 2025 Financial Results |
 | `ATYM.L` | interim | Notice of Q3 and YTD 2025 Financial Results |
 | `ATYM.L` | interim | Q3 and YTD 2025 Financial Results |
+| `ATYM.L` | annual | Grant of Conditional Share Awards |
 | `ATYM.L` | interim | Q1 2026 Financial Results |
 | `ATYM.L` | interim | Notice of Q2 and H1 2026 Financial Results |
 | `ATYM.L` | interim | Q2 and H1 2026 Financial Results |
 | `ATYM.L` | interim | Notice of Q3 and YTD 2026 Financial Results |
-| `ATYM.L` | interim | Q3 and YTD 2026 Financial Results |
 | `ATYM.L` | other | Statement Regarding Shareholder Consultation |
 | `ATYM.L` | other | Retail Offer by RetailBook |
 | `ATYM.L` | other | Proposed Fundraise to Accelerate Copper Project |
@@ -68,7 +69,6 @@ These are taxonomy holes — not live scores.
 | `ATYM.L` | other | Results of placing in Atalaya Mining Copper, S.A. |
 | `ATYM.L` | other | Investment in Lara Exploration Ltd. |
 | `ATYM.L` | other | TR-1 |
-| `ATYM.L` | other | Grant of Conditional Share Awards |
 | `ATYM.L` | other | AGM 2026 – Voting Results |
 | `ATYM.L` | other | Secondary placing in Atalaya Mining Copper SA |
 | `ATYM.L` | other | Results secondary placing Atalaya Mining Copper SA |
@@ -87,15 +87,6 @@ These are taxonomy holes — not live scores.
 | `ATYM.L` | other | Proposed placing in Atalaya Mining Copper, S.A. |
 | `ATYM.L` | other | Result of Secondary Placing |
 | `ATYM.L` | other | Notice for Holders of Physical Share Certificates |
-| `BAG.L` | trading_update | Capital Markets Event |
-| `BAG.L` | other | Appointment of Non-Executive Director |
-| `BAG.L` | annual | Launch of IRN-BRU 'ZERO' |
-| `BAG.L` | interim | Launch of IRN-BRU Summer Campaign |
-| `BAG.L` | other | Appointment of New Chair |
-| `BARC.L` | other | IrishForm38.5BIRISHRESIDENTIALPROPERTIESREITPLC |
-| `BARC.L` | other | Irish Form 38.5 B DCC ENERGY PLC |
-| `BARC.L` | other | IrishForm38.5BIRISHRESIDENTIALPROPERTIESREITPLC |
-| `BARC.L` | other | Irish Form 38.5 B DCC ENERGY PLC |
 | `BARC.L` | other | IrishForm38.5BIRISHRESIDENTIALPROPERTIESREITPLC |
 | `BARC.L` | other | Irish Form 38.5 B DCC ENERGY PLC |
 | `BARC.L` | other | Irish Form 38.5 B DCC ENERGY PLC |
@@ -118,6 +109,15 @@ These are taxonomy holes — not live scores.
 | `BARC.L` | other | Form8.5EPT/NonRICABPAYMENTSHOLDINGSPLC Replacement |
 | `BARC.L` | other | IrishForm38.5BIRISHRESIDENTIALPROPERTIESREITPLC |
 | `BARC.L` | other | Form 38.5 B DCC ENERGY PLC |
+| `BARC.L` | other | IrishForm38.5BIRISHRESIDENTIALPROPERTIESREITPLC |
+| `BARC.L` | other | Irish Form 38.5 B DCC ENERGY PLC |
+| `BARC.L` | other | Form8.3ADVANCEDMEDICALSOLUTIONSGROUPPL Replacement |
+| `BARC.L` | other | Form8.3ASHTEADTECHNOLOGYHOLDINGSPLC Replacement |
+| `BARC.L` | other | Irish Form 38.5 B DCC ENERGY PLC |
+| `BARC.L` | other | IrishForm38.5BIRISHRESIDENTIALPROPERTIESREITPLC |
+| `BARC.L` | other | Form8.5EPT/NonRIPOLLENSTREETGROUPLIMIT Replacement |
+| `BARC.L` | other | IrishForm38.5BIRISHRESIDENTIALPROPERTIESREITPLC |
+| `BARC.L` | other | Irish Form 38.5 B DCC ENERGY PLC |
 
 ## Notes
 

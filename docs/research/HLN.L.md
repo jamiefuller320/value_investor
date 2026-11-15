@@ -1,6 +1,6 @@
 # Haleon plc (HLN.L) — Research memo
 
-_Version 5 · Updated 2026-10-30T23:24:37.485532+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-15T11:51:32.441167+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.67
-Rationale: Q3 RNS confirms softer organic growth and trimmed FY revenue guidance, reinforcing the screen hold; sustained profit/cash targets and £500m buyback keep a measured accumulate overlay.
+Confidence: 0.65
+Rationale: No new trading RNS since Q3; routine buyback filings continue while press downgrades echo the known guidance cut—research is neutral on screen hold and keeps a measured accumulate overlay.
 RiskTags: cyclical, competitive, governance, leverage, accounting, regulatory, other
 
 ## Weekly updates
@@ -32,3 +32,8 @@ GSK completing its exit and August bond refinancing remain in commentary; H1 fil
 29 Oct Q3 trading RNS: organic revenue +2.6%, FY organic growth guidance now ~2.5%; Centrum OTC China import pause and soft North America cold/flu noted.  
 Further £500m share buyback launched with high-single-digit adjusted operating profit guidance unchanged; sharp share price reaction on the day.  
 Quantitative screen still hold (3/22, ROE/FCF-basis gaps); filing-backed FCF and returns story holds despite slower top-line momentum.
+
+### 2026-11-15T11:51:32.441167+00:00
+Since 30 Oct, disclosures are routine only (2 Nov total voting rights, buyback transactions on 2 and 9 Nov, director PDMR); no trading update or results RNS.  
+Press-led items cite a Jefferies downgrade to hold, lower fair-value estimates and weaker recent returns—none corroborated in new filings beyond the 29 Oct Q3 story.  
+Quantitative screen remains hold (3/22, ROE and FCF-basis gaps); filing-backed growth and cash-return narrative is unchanged.

@@ -1,6 +1,6 @@
 # Genuit Group plc (GEN.L) — Research memo
 
-_Version 12 · Updated 2026-11-10T01:16:28.025357+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-15T08:36:39.574693+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.62
-Rationale: No new RNS since the Oct guide; quant FCF, yield and leverage support the screen, but Heating softness and the guided profit shortfall still weaken full alignment with strong buy.
+Rationale: No new RNS since Oct; quant FCF, yield and leverage support the screen, but Heating softness and the guided profit shortfall still weaken full alignment with strong buy.
 RiskTags: cyclical, competitive, leverage, accounting, other
 
 ## Weekly updates
@@ -68,3 +68,8 @@ The Oct ~£84m underlying profit guide on soft Heating is unchanged—no new com
 No trading or results RNS since the 20 Oct trading update; the 10 Nov news batch is only unrelated Form 4 and options-ticker noise.
 Screen remains **strong buy** (8/22, ~78% composite, ~44% conviction, 7w stable); P/B ~1.0; RSI ~47, price still slightly below the 200-day MA.
 The Oct ~£84m underlying profit guide on soft Heating is unchanged.
+
+### 2026-11-15T08:36:39.574693+00:00
+No trading or results RNS since the 20 Oct trading update; only routine TR-1 “Holding(s) in Company” (3 Nov) in the filings pull.
+The 15 Nov news batch is Gen Z, options-ticker and “Next Gen” ETF noise only—nothing on Genuit.
+Screen stays **strong buy** (9/22, ~77% composite, ~43% conviction, 8w stable); P/B ~1.0; RSI ~45, price still slightly below the 200-day MA—the Oct ~£84m underlying profit guide is unchanged.

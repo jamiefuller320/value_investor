@@ -1,6 +1,6 @@
 # RHI Magnesita N.V. (RHIM.L) — Research memo
 
-_Version 5 · Updated 2026-10-30T23:12:51.782059+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-15T10:17:39.937810+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,8 +9,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.58
-Rationale: Neutral on hold: filing cheapness/yield intact and Vesuvius talks advanced (PUSU to 24 Nov), but no firm offer terms, FCF basis mismatch persists, and bid leverage/antitrust risk still block a clear override.
-RiskTags: cyclical, competitive, leverage, pension, key_person, regulatory, liquidity, accounting, other
+Rationale: Neutral on hold: cheapness and yield intact and Vesuvius talks remain live (PUSU 24 Nov), but no firm offer terms, FCF mismatch persists, and bid leverage/antitrust risk still block a clear override.
+RiskTags: cyclical, competitive, leverage, pension, key_person, regulatory, liquidity, accounting
 
 ## Weekly updates
 
@@ -33,3 +33,8 @@ No new parent fundamentals disclosure; cheapness/yield filing narrative otherwis
 27 Oct parent RNS: PUSU deadline extended to 24 Nov 2026; headline agreement on disposal-revenue remedies threshold and a related reverse break fee; Cevian support extended—still Rule 2.4, no firm offer.  
 Quant **hold** unchanged (12 weeks): **3/22** models; P/E ~13.6; yield ~5.6%; timing **neutral** (RSI ~47); FCF basis mismatch unchanged (~€268M filing vs ~€214M company-adj).  
 Commentary on Vesuvius-bid timing and further Takeover Code Form 8.3 disclosures only—no new parent fundamentals.
+
+### 2026-11-15T10:17:39.937810+00:00
+Quant **hold** unchanged (17 weeks): **3/22** models; P/E ~13.7, yield ~5.7%; timing **neutral** (RSI ~47); FCF basis mismatch unchanged (~€268M filing vs ~€214M company-adj).  
+No new London-listed parent RNS on the Vesuvius possible offer since the 27 Oct PUSU extension to 24 Nov 2026; news flow is mainly Takeover Code **Form 8.3** (e.g. Pentwater, 12 Nov) plus generic dividend/bid commentary.  
+No new parent fundamentals disclosure in the supplied batch.

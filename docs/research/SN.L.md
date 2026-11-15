@@ -1,6 +1,6 @@
 # Smith & Nephew plc (SN.L) — Research memo
 
-_Version 5 · Updated 2026-10-30T22:58:45.229226+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-15T10:09:35.158876+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.63
-Rationale: Filing-backed valuation still confirms the buy screen; late-Oct operating headlines are uncorroborated commentary, so conviction stays tempered on growth and governance.
+Confidence: 0.58
+Rationale: Q3 RNS filing supports cash return and health metrics but cuts full-year profit and FCF guidance on US orthopaedics, mildly weakening the buy case while the screen stays filing-backed.
 RiskTags: regulatory, competitive, governance, key_person, leverage, cyclical
 
 ## Weekly updates
@@ -33,3 +33,8 @@ CFO departure still lacks a named successor; filing-backed buy screen unchanged,
 Since 7 Oct, indexed RNS is limited to the 6 Oct CARTIHEAL Europe GNW and a routine 21 Oct share listing; no new accounts or trading statement.
 Late-Oct headlines (sales outlook, Xodus Medical, ex-div, UK budget) are third-party commentary only and are not corroborated in the filing pack.
 CFO successor still unannounced; filing-backed buy screen unchanged with FCF definition mismatch noted on the screen.
+
+### 2026-11-15T10:09:35.158876+00:00
+4 Nov RNS: Q3 underlying revenue +3.4%; FY guidance cut for slower US hips/knees (revenue ~3%, trading profit ~4%, FCF ~$750m).
+RNS confirms ended J&J orthopaedics talks and $250m of the $500m buyback; no CFO successor in the indexed pack.
+Buy screen unchanged on filing-aligned metrics; screen FCF basis mismatch persists.

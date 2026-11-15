@@ -1,6 +1,6 @@
 # IG Group Holdings plc (IGG.L) — Research memo
 
-_Version 6 · Updated 2026-11-10T01:31:34.982087+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-15T09:27:15.701140+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.73
-Rationale: Filing-aligned FCF and yield still support the buy screen at ten weeks; no new disclosures, but statutory vs adjusted EPS divergence keeps the overlay cautious.
+Confidence: 0.74
+Rationale: Filing-aligned FCF and yield still support the buy screen; the 11 Nov redomiciliation RNS reaffirms guidance yet keeps governance and EPS-basis divergence on the caution list.
 RiskTags: regulatory, cyclical, leverage, competitive, governance
 
 ## Weekly updates
@@ -38,3 +38,8 @@ The buy screen is unchanged in filing-backed terms (nine weeks, neutral timing; 
 No new trading statements, accounts, or material RNS since the 8 Nov refresh; the post-8 Nov news batch is empty.  
 Buy screen unchanged in filing-backed terms (10 weeks, neutral timing; FCF £486m, yield ~4.5%).  
 Statutory vs adjusted EPS divergence warnings and prior Q3 commentary remain; US prediction-markets licence talk is still uncorroborated in the filing set.
+
+### 2026-11-15T09:27:15.701140+00:00
+11 Nov RNS: court sanction of the Jersey redomiciliation scheme and FCA-approved prospectus; filing timetable points to 13–16 Nov implementation steps.  
+Since 10 Nov, news is only Yahoo quote/headline pages—no new trading statements or accounts in the supplied set.  
+Buy screen unchanged on filing-backed FCF and yield (11 weeks, accumulate timing); statutory vs adjusted EPS divergence warnings remain.

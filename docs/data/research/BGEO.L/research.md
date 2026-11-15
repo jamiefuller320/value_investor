@@ -1,6 +1,6 @@
 # Lion Finance Group PLC (BGEO.L) — Research memo
 
-_Version 5 · Updated 2026-11-10T01:15:37.452786+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-15T08:35:42.455836+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: No new disclosures since Q3 RNS; cheapness and quality on the screen hold, but unchanged statutory EPS decline, banking leverage, and Piotroski 3/9 still cap research below strong buy.
+Rationale: Strong-buy cheapness and cash-flow screen inputs hold, but unchanged statutory EPS decline, Piotroski 3/9, and banking leverage still cap research below the screen signal.
 RiskTags: regulatory, leverage, cyclical, other
 
 ## Weekly updates
@@ -32,4 +32,9 @@ Screen fail set unchanged (statutory basic EPS decline, Piotroski 3/9, Graham/fi
 ### 2026-11-10T01:15:37.452786+00:00
 Empty news batch since 7 Nov; no new RNS or press in the supplied sources.
 Strong buy screen is week eight (8/22 models, stable); filing-aligned FY2025 FCF yield and net dividend cover are unchanged.
+Screen fail set unchanged: statutory basic EPS decline, Piotroski 3/9, and Graham/financial-health leverage.
+
+### 2026-11-15T08:35:42.455836+00:00
+News since 10 Nov is Yahoo quote-page hits only; no new RNS or company disclosures in the supplied sources.  
+Strong buy screen is week nine (8/22 models, stable); filing-aligned FY2025 FCF yield and net dividend cover are unchanged.  
 Screen fail set unchanged: statutory basic EPS decline, Piotroski 3/9, and Graham/financial-health leverage.
