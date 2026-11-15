@@ -90,12 +90,15 @@ Each default is what the seal accepts if the owner signs unchanged.
 3. **Who can fall back.** Default: matched leavers only. There is no other Companies House share source in the repo.
 4. **No reveal by 2026-12-09.** Default: the owner chooses at that point between revealing v0 and revealing nothing (section 3).
 5. **Failures demoted before they failed.** Default: not added; Intu and any other name that left the FTSE 350 by demotion and later failed has no Companies House record and stays not computable when EODHD has no share count. Alternative: add those names to the Companies House store (same extraction and hand check) before the seal, which widens the extraction and moves the seal later.
-6. **Coverage that remains uneven.** The `share-coverage` count on the cached tape (2026-11-15, before the takeover reading) showed that EODHD has no share count at all for 42 of the 93 takeover leavers it matches, and for 51 it has one every month. The five named failures and NMC Health are covered either way. Those 42 takeovers and NMC Health were then page-read in the same way as the failures: 93 filings, 92 values and 1 withheld. Of the 42, 36 now have a Companies House count for most of their last 24 months. Three limits remain:
-   - Six leavers have no UK accounts in the store, so nothing can be read for them: Shire, UBM, Entertainment One, John Laing Infrastructure Fund, Calisen and Finablr.
-   - Some months fall between one count going stale and the next accounts being filed.
+6. **Coverage that remains uneven.** The `share-coverage` count on the cached tape (2026-11-15, before the takeover reading) showed that EODHD has no share count at all for 42 of the 93 takeover leavers it matches, and for 51 it has one every month. Those 42 takeovers and NMC Health were then page-read in the same way as the named failures (93 filings, 92 values, 1 withheld). The 66 store counts left from the old automatic extraction were page-read too, because a check against Companies House capital filings showed many were wrong. The final count (2026-11-15 17:05 UTC, 550-day limit, corrected store):
+   - Named failures: Carillion, Debenhams, Patisserie and Sirius have a count every month of their last 24; Thomas Cook matches no cached EODHD symbol.
+   - Takeovers: of the 42 gaps, 31 are now filled every month and 11 still have gaps; Companies House fills 832 of their months and 126 have no count.
+   - 110 of those 126 months belong to five takeovers with no UK accounts in the store (Shire, UBM, Entertainment One, John Laing Infrastructure Fund, Calisen). The other 16 are the first months of six windows that would need one earlier filing each.
+   - NMC Health has one month without a count; Finablr was not read.
    - 50 takeover leavers match no cached EODHD symbol and have no prices, which v0 shares.
+   - A Companies House count can lag a share issue until the next accounts: in the check, Laird (2017 rights issue) was 45 percent understated for 13 months, Cobham (2017 rights issue) 28 percent for 5 months, and Sirius (2019 bond conversion) 6 rising to 32 percent over 23 months.
 
-   The remaining lean is small against the strategy: unranked takeovers would mostly have ended in a gain. Default: accept, and read v1 with these limits. A fresh `share-coverage` dispatch after the store merges gives the exact counts and is published with the seal.
+   The remaining lean is small and against the strategy: unranked takeovers would mostly have ended in a gain, and a lagging count after an issue understates the cap. Default: accept, and read v1 with these limits.
 
 ## Appendix: constants added or changed
 
