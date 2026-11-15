@@ -66,7 +66,10 @@ from value_investor.scoring.fcf_basis_overlay import (
 from value_investor.scoring.fcf_three_way_conviction_overlay import (
     enrich_signals_with_fcf_three_way_conviction_overlay,
 )
-from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
+from value_investor.scoring.healthcare_overlay import (
+    enrich_signals_with_healthcare_overlay,
+    refresh_healthcare_overlays_after_primary_fcf,
+)
 from value_investor.scoring.healthcare_price_erosion_overlay import (
     enrich_signals_with_healthcare_price_erosion_overlay,
 )
@@ -574,6 +577,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = enrich_signals_with_primary_fcf_for_overlay_registry(
         signals_out,
         output_dir=output_dir,
+    )
+    signals_out = refresh_healthcare_overlays_after_primary_fcf(
+        signals_out,
+        result.model_results,
     )
     signals_out = enrich_signals_with_sector_cyclical_overlay_registry(
         signals_out,

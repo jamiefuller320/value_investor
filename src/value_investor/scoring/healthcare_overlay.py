@@ -163,6 +163,14 @@ def apply_healthcare_export_enforcement(
     return True, merged
 
 
+def refresh_healthcare_overlays_after_primary_fcf(
+    signals: pd.DataFrame,
+    model_results: pd.DataFrame,
+) -> pd.DataFrame:
+    """Re-apply healthcare caps after primary FCF / screen TTM harmonisation."""
+    return enrich_signals_with_healthcare_overlay(signals, model_results)
+
+
 def enrich_signals_with_healthcare_overlay(
     signals: pd.DataFrame,
     model_results: pd.DataFrame,
