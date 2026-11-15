@@ -27168,8 +27168,46 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261115-01",
+      "status": "pending_review",
+      "title": "Library ingest gap-closure rerun after engineering",
+      "summary": "Verification rerun for gap-closure run igc-20260912-01",
+      "ticker": "DQ7A.IR",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "DQ7A.IR"
+        ],
+        "market_id": "euro_depth",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260912-01",
+      "chain_attempt": 2,
+      "recorded_at": "2026-11-15T09:39:22.926475+00:00",
+      "completed_at": "2026-11-15T09:40:08.960480+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [],
+        "results": [],
+        "per_ticker": []
+      },
+      "trigger": "verification_rerun",
+      "parent_run_id": "igc-20260912-01"
     }
   ],
-  "updated_at": "2026-11-14T17:08:26.323138+00:00",
+  "updated_at": "2026-11-15T09:40:08.960489+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
