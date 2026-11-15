@@ -1,46 +1,45 @@
 # News phrase ↔ trajectory panel (observe-only)
 
-- Generated: `2026-11-08T10:36:47.316790+00:00`
+- Generated: `2026-11-15T10:37:51.014638+00:00`
 - Source pool: `buy_boundary`
 - Mode: `rolling`
-- Cohort tickers: **126** (with news: **81**)
-- Articles walked: **9269**
-- Phrase observations: **268901**
-- Train cutoff: `2026-10-05T09:58:03+00:00`
-- Lexicon generation: **5**
+- Cohort tickers: **145** (with news: **100**)
+- Articles walked: **11764**
+- Phrase observations: **342613**
+- Train cutoff: `2026-10-07T06:23:02+00:00`
+- Lexicon generation: **6**
 
 ## Self-improve delta
 
-- Newly promoted: 2
+- Newly promoted: 1
 - Demoted: 0
-- Continued promoted: 0
+- Continued promoted: 1
 
 ## Top promoted phrases
 
 | rank | phrase | lift 4w | test lift 4w | tickers | n |
 |---:|---|---:|---:|---:|---:|
-| 11 | `aerospace` | 0.153703 | 0.092533 | 3 | 6 |
-| 47 | `metals` | 0.069511 | 0.006395 | 7 | 29 |
+| 49 | `metals` | 0.069112 | 0.014258 | 8 | 30 |
 
 ## Top watch candidates (train lift; awaiting test labels)
 
 | rank | phrase | train lift 4w | reason | tickers | n |
 |---:|---|---:|---|---:|---:|
-| 3 | `breaking` | 0.210092 | insufficient_test_labels | 2 | 4 |
-| 2 | `man` | 0.197401 | insufficient_test_labels | 2 | 5 |
-| 5 | `apollo global` | 0.196196 | insufficient_test_labels | 2 | 4 |
-| 6 | `global management` | 0.196196 | insufficient_test_labels | 2 | 4 |
-| 7 | `apollo global management` | 0.196196 | insufficient_test_labels | 2 | 4 |
-| 21 | `lse climbing` | 0.160094 | insufficient_test_labels | 2 | 4 |
-| 24 | `agree` | 0.157486 | insufficient_test_labels | 2 | 4 |
-| 15 | `stockwatch` | 0.154802 | insufficient_test_labels | 2 | 5 |
-| 32 | `golden opportunity` | 0.15161 | insufficient_test_labels | 2 | 4 |
-| 33 | `expects record` | 0.150826 | insufficient_test_labels | 2 | 4 |
-| 8 | `lse greatland` | 0.147379 | insufficient_test_labels | 2 | 7 |
-| 44 | `lse focus gold` | 0.147215 | insufficient_test_labels | 2 | 4 |
-| 52 | `stay article` | 0.142779 | insufficient_test_labels | 3 | 4 |
-| 53 | `article see` | 0.142779 | insufficient_test_labels | 3 | 4 |
-| 54 | `stay article see` | 0.142779 | insufficient_test_labels | 3 | 4 |
+| 2 | `breaking` | 0.210931 | insufficient_test_labels | 2 | 4 |
+| 4 | `apollo global` | 0.197035 | insufficient_test_labels | 2 | 4 |
+| 5 | `global management` | 0.197035 | insufficient_test_labels | 2 | 4 |
+| 6 | `apollo global management` | 0.197035 | insufficient_test_labels | 2 | 4 |
+| 16 | `aligns` | 0.170775 | insufficient_test_labels | 2 | 4 |
+| 3 | `police` | 0.169845 | insufficient_test_labels | 2 | 6 |
+| 24 | `agree` | 0.158325 | insufficient_test_labels | 2 | 4 |
+| 15 | `stockwatch` | 0.155641 | insufficient_test_labels | 2 | 5 |
+| 29 | `golden opportunity` | 0.152449 | insufficient_test_labels | 2 | 4 |
+| 30 | `expects record` | 0.151665 | insufficient_test_labels | 2 | 4 |
+| 7 | `lse greatland` | 0.148218 | insufficient_test_labels | 2 | 7 |
+| 45 | `lse focus gold` | 0.148054 | insufficient_test_labels | 2 | 4 |
+| 53 | `strategic progress` | 0.144978 | insufficient_test_labels | 2 | 4 |
+| 54 | `stay article` | 0.143618 | insufficient_test_labels | 3 | 4 |
+| 55 | `article see` | 0.143618 | insufficient_test_labels | 3 | 4 |
 
 ## Coverage notes
 
