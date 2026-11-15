@@ -176,6 +176,36 @@ def _apply_verified_reading(
     return True
 
 
+def _apply_verified_weighted_shares(
+    filing: dict[str, Any],
+    reading: dict[str, Any],
+    *,
+    transaction_id: str,
+) -> None:
+    """Basic weighted-average shares read from the EPS note page (units)."""
+    value = str(reading.get("value") or "").replace(",", "")
+    if reading.get("withhold") or not value.isdigit():
+        reason = str(reading.get("absent_reason") or "weighted average not readable")
+        field = _empty_field(_page_read_absent(reason), source="primary")
+    else:
+        field = {
+            "value": value,
+            "scale": "units",
+            "currency": None,
+            "unit": None,
+            "source": "primary",
+            "absent_reason": None,
+            "extraction_method": PAGE_READ_METHOD,
+        }
+    field["citation"] = {
+        "transaction_id": transaction_id,
+        "page": reading.get("page"),
+        "line": str(reading.get("line") or reading.get("absent_reason") or ""),
+        "method": PAGE_READ_METHOD,
+    }
+    filing.setdefault("fields", {})["weighted_average_basic_shares"] = field
+
+
 def _is_target_leaver(key: str, reason_class: str | None) -> bool:
     if key in CH_NAME_BY_KEY:
         return True
@@ -613,6 +643,10 @@ def apply_verified_page_reads_to_store(
             tx = str(filing.get("transaction_id") or "")
             if want_tx and want_tx != tx:
                 continue
+            if want_tx and isinstance(reading.get("weighted_average_basic_shares"), dict):
+                _apply_verified_weighted_shares(
+                    filing, reading["weighted_average_basic_shares"], transaction_id=tx
+                )
             shares = (filing.get("fields") or {}).get("shares_in_issue") or {}
             if (
                 shares.get("value") not in (None, "")
@@ -625,7 +659,21 @@ def apply_verified_page_reads_to_store(
                     _apply_verified_withhold(filing, reading, transaction_id=tx)
                 continue
             if want_tx or shares.get("value") in (None, ""):
-                _apply_verified_reading(filing, reading, transaction_id=tx)
+                applied = _apply_verified_reading(filing, reading, transaction_id=tx)
+                if (
+                    not applied
+                    and want_tx
+                    and shares.get("value") not in (None, "")
+                    and shares.get("extraction_method") != PAGE_READ_METHOD
+                ):
+                    _apply_verified_withhold(
+                        filing,
+                        {
+                            **reading,
+                            "absent_reason": "failed verification (nominal/earnings/column)",
+                        },
+                        transaction_id=tx,
+                    )
         apply_shares_precision_to_filings(row.get("filings") or [], ftse_member=True)
     eodhd = load_eodhd_report(eodhd_path or Path("docs/data/eodhd_coverage_check.json"))
     payload = assemble_store(done, records, eodhd_payload=eodhd)
