@@ -43,18 +43,47 @@ PAGE_READ_DPI = 200
 VERIFIED_READINGS_PATH = Path("docs/data/ch_share_page_read_verified.json")
 
 
-def load_verified_readings(path: Path = VERIFIED_READINGS_PATH) -> dict[tuple[str, int], dict[str, Any]]:
+def load_verified_readings(path: Path = VERIFIED_READINGS_PATH) -> dict[tuple[str, int, str], dict[str, Any]]:
     if not path.is_file():
         return {}
     payload = json.loads(path.read_text(encoding="utf-8"))
-    out: dict[tuple[str, int], dict[str, Any]] = {}
+    out: dict[tuple[str, int, str], dict[str, Any]] = {}
     for row in payload.get("readings") or []:
         key = str(row.get("key"))
         year = row.get("fiscal_year")
         if not key or year is None:
             continue
-        out[(key, int(year))] = row
+        tx = str(row.get("transaction_id") or "")
+        out[(key, int(year), tx)] = row
+        if tx:
+            continue
+        dup = (key, int(year), "")
+        if dup not in out:
+            out[dup] = row
     return out
+
+
+def _page_read_absent(reason: str) -> str:
+    core = reason.removeprefix("page_read: ").strip()
+    return f"page_read: {core}"
+
+
+def _verified_hit(
+    verified: dict[tuple[str, int, str], dict[str, Any]] | None,
+    *,
+    key: str,
+    fiscal_year: int | None,
+    transaction_id: str,
+) -> dict[str, Any] | None:
+    if verified is None or fiscal_year is None:
+        return None
+    tx = str(transaction_id or "")
+    hit = verified.get((key, int(fiscal_year), tx))
+    if hit is not None:
+        if hit.get("transaction_id") and str(hit["transaction_id"]) != tx:
+            return None
+        return hit
+    return verified.get((key, int(fiscal_year), ""))
 
 
 def _nominal_from_verified(reading: dict[str, Any], value: str) -> dict[str, Any]:
@@ -80,6 +109,28 @@ def _nominal_from_verified(reading: dict[str, Any], value: str) -> dict[str, Any
         "stored_count": str(int(count)),
         "relative_error": str(rel.quantize(Decimal("0.0001"))),
     }
+
+
+def _apply_verified_withhold(
+    filing: dict[str, Any],
+    reading: dict[str, Any],
+    *,
+    transaction_id: str,
+) -> bool:
+    reason = str(
+        reading.get("absent_reason")
+        or reading.get("line")
+        or "withheld after page read (verified)"
+    )
+    field = _empty_field(_page_read_absent(reason), source="primary")
+    field["citation"] = {
+        "transaction_id": transaction_id,
+        "page": reading.get("page"),
+        "line": str(reading.get("line") or reason),
+        "method": PAGE_READ_METHOD,
+    }
+    filing.setdefault("fields", {})["shares_in_issue"] = field
+    return True
 
 
 def _apply_verified_reading(
@@ -413,18 +464,18 @@ def page_read_filing_shares(
     meta: dict[str, Any],
     api_key: str,
     cache_dir: Path,
-    verified: dict[tuple[str, int], dict[str, Any]] | None = None,
+    verified: dict[tuple[str, int, str], dict[str, Any]] | None = None,
+    force: bool = False,
 ) -> None:
     shares = (filing.get("fields") or {}).get("shares_in_issue") or {}
-    if shares.get("value") not in (None, ""):
+    if not force and shares.get("value") not in (None, ""):
         return
     made_up = str(meta.get("made_up_date") or filing.get("fiscal_year_end") or "")
     transaction_id = str(meta.get("transaction_id") or filing.get("transaction_id") or "")
     fiscal_year = filing.get("fiscal_year")
-    if verified is not None and fiscal_year is not None:
-        hit = verified.get((key, int(fiscal_year)))
-        if hit and _apply_verified_reading(filing, hit, transaction_id=transaction_id):
-            return
+    hit = _verified_hit(verified, key=key, fiscal_year=fiscal_year, transaction_id=transaction_id)
+    if hit and _apply_verified_reading(filing, hit, transaction_id=transaction_id):
+        return
     pdf = ensure_pdf(
         cache_dir,
         key=key,
@@ -433,18 +484,20 @@ def page_read_filing_shares(
         api_key=api_key,
     )
     if pdf is None:
-        filing.setdefault("fields", {})["shares_in_issue"] = _empty_field("no PDF for this filing", source="primary")
+        filing.setdefault("fields", {})["shares_in_issue"] = _empty_field(
+            _page_read_absent("no PDF for this filing"), source="primary"
+        )
         return
     page = _locate_share_capital_page(pdf, transaction_id=transaction_id, cache_dir=cache_dir)
     if page is None:
         filing.setdefault("fields", {})["shares_in_issue"] = _empty_field(
-            ABSENT_NO_SHARE_CAPITAL_NOTE, source="primary"
+            _page_read_absent(ABSENT_NO_SHARE_CAPITAL_NOTE), source="primary"
         )
         return
     text = _read_note_page_text(pdf, page, transaction_id=transaction_id, cache_dir=cache_dir)
     if not text.strip():
         filing.setdefault("fields", {})["shares_in_issue"] = _empty_field(
-            ABSENT_SHARES_CH_CAPITAL, source="primary"
+            _page_read_absent("share-capital note page not readable (OCR)"), source="primary"
         )
         return
     row, line, column_clear = _extract_from_note_text(
@@ -455,7 +508,8 @@ def page_read_filing_shares(
     )
     if row is None or row.get("value") in (None, ""):
         filing.setdefault("fields", {})["shares_in_issue"] = _empty_field(
-            "share-capital note present but year-end ordinary share count not readable", source="primary"
+            _page_read_absent("share-capital note present but year-end ordinary count not readable"),
+            source="primary",
         )
         return
     nominal = shares_nominal_cross_check([text], row["value"], row.get("scale"))
@@ -472,7 +526,7 @@ def page_read_filing_shares(
             row["citation"]["line"] = line
     if not _verification_passes(nominal=nominal, earnings=earnings, column_year_clear=column_clear):
         filing.setdefault("fields", {})["shares_in_issue"] = _empty_field(
-            "page read failed verification (nominal/earnings/column)", source="primary"
+            _page_read_absent("failed verification (nominal/earnings/column)"), source="primary"
         )
         return
     filing.setdefault("fields", {})["shares_in_issue"] = row
@@ -540,23 +594,89 @@ def apply_verified_page_reads_to_store(
     verified = load_verified_readings(verified_path)
     payload = load_store(out_path)
     done = {str(n.get("key")): n for n in payload.get("names") or [] if n.get("key")}
-    for (key, year), reading in verified.items():
+    for (key, year, _), reading in verified.items():
         row = done.get(key)
         if not row:
             continue
+        want_tx = str(reading.get("transaction_id") or "")
+        want_fye = str(reading.get("fiscal_year_end") or "")
         for filing in row.get("filings") or []:
             if int(filing.get("fiscal_year") or -1) != year:
                 continue
-            shares = (filing.get("fields") or {}).get("shares_in_issue") or {}
-            if shares.get("value") not in (None, ""):
+            if want_fye and str(filing.get("fiscal_year_end") or "") != want_fye:
                 continue
             tx = str(filing.get("transaction_id") or "")
-            _apply_verified_reading(filing, reading, transaction_id=tx)
+            if want_tx and want_tx != tx:
+                continue
+            shares = (filing.get("fields") or {}).get("shares_in_issue") or {}
+            if shares.get("value") not in (None, "") and not want_tx and not reading.get("withhold"):
+                continue
+            if reading.get("withhold"):
+                if want_tx or shares.get("value") not in (None, ""):
+                    _apply_verified_withhold(filing, reading, transaction_id=tx)
+                continue
+            if want_tx or shares.get("value") in (None, ""):
+                _apply_verified_reading(filing, reading, transaction_id=tx)
         apply_shares_precision_to_filings(row.get("filings") or [], ftse_member=True)
     eodhd = load_eodhd_report(eodhd_path or Path("docs/data/eodhd_coverage_check.json"))
     payload = assemble_store(done, records, eodhd_payload=eodhd)
     write_store(payload, out_path)
     return payload
+
+
+def run_force_page_read_filings(
+    *,
+    store_path: Path,
+    leaver_path: Path,
+    api_key: str,
+    cache_dir: Path,
+    targets: list[tuple[str, str]],
+    eodhd_path: Path | None = None,
+    verified_path: Path = VERIFIED_READINGS_PATH,
+) -> dict[str, Any]:
+    """Re page-read specific filings identified by (store key, fiscal_year_end)."""
+    listing = json.loads(leaver_path.read_text(encoding="utf-8"))
+    records = list(listing.get("names") or [])
+    records_by_key = {row["key"]: row for row in records}
+    payload = load_store(store_path)
+    done = {str(n.get("key")): n for n in payload.get("names") or [] if n.get("key")}
+    verified = load_verified_readings(verified_path)
+    eodhd = load_eodhd_report(eodhd_path or Path("docs/data/eodhd_coverage_check.json"))
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    for key, fiscal_year_end in targets:
+        row = done.get(key)
+        if not row:
+            continue
+        record = records_by_key.get(key) or CH_NAME_BY_KEY.get(key) or {}
+        company_number = str(row.get("company_number") or record.get("company_number") or "")
+        if not company_number:
+            continue
+        metas = list_aa_filings(company_number, api_key)
+        work_filing = None
+        meta = None
+        for filing in row.get("filings") or []:
+            if str(filing.get("fiscal_year_end") or "") == fiscal_year_end:
+                work_filing = filing
+                tx = str(filing.get("transaction_id") or "")
+                meta = next((m for m in metas if str(m.get("transaction_id")) == tx), None)
+                break
+        if work_filing is None or meta is None:
+            continue
+        work_filing.setdefault("fields", {})["shares_in_issue"] = _empty_field(None, source="primary")
+        page_read_filing_shares(
+            work_filing,
+            key=key,
+            meta=meta,
+            api_key=api_key,
+            cache_dir=cache_dir,
+            verified=verified,
+            force=True,
+        )
+        apply_shares_precision_to_filings([work_filing], ftse_member=True)
+        done[key] = row
+        payload = assemble_store(done, records, eodhd_payload=eodhd)
+        write_store(payload, store_path)
+    return assemble_store(done, records, eodhd_payload=eodhd)
 
 
 def withhold_failed_semantic_takeovers(
