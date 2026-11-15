@@ -1224,7 +1224,9 @@ def test_shares_gate_nulls_jump_and_weighted_average_mismatch() -> None:
         }
     ]
     counts = apply_value_gate(gate_only, financial=False)
-    assert gate_only[0]["fields"]["shares_in_issue"]["absent_reason"] == "shares_vs_weighted_average"
+    assert (
+        gate_only[0]["fields"]["shares_in_issue"]["absent_reason"] == "shares_vs_weighted_average"
+    )
     assert counts["by_check"].get("shares_vs_weighted_average", 0) == 1
 
 
@@ -1264,8 +1266,12 @@ def test_shares_context_rejects_known_false_lines() -> None:
         "the aggregate of 42,914,639 Ordinary Shares representing approximately",
     )
     assert shares_context_rejected("", "The employee share trust holds 1,068,301 ordinary shares")
-    assert shares_context_rejected("", "Weighted average number of ordinary shares (thousands) 1,340")
-    assert shares_context_rejected("", "Shares allotted on 1 January 2020: 5,000,000 ordinary shares")
+    assert shares_context_rejected(
+        "", "Weighted average number of ordinary shares (thousands) 1,340"
+    )
+    assert shares_context_rejected(
+        "", "Shares allotted on 1 January 2020: 5,000,000 ordinary shares"
+    )
 
 
 def test_shares_earnings_cross_check_pass() -> None:

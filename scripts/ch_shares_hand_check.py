@@ -56,7 +56,7 @@ def candidates(store: dict) -> list[dict]:
                             "line": cit.get("line"),
                             "page": cit.get("page"),
                             "method": cit.get("method") or row.get("extraction_method"),
-                        "extraction_method": row.get("extraction_method"),
+                            "extraction_method": row.get("extraction_method"),
                             "fiscal_year_end": parent.get("fiscal_year_end"),
                             "made_up": parent.get("made_up"),
                             "transaction_id": parent.get("transaction_id"),
@@ -199,14 +199,15 @@ def compare(sample: dict, cache_dir: Path) -> dict:
             stored_digits = re.sub(r"[^\d]", "", str(sample.get("stored") or ""))
             if stored_digits and stored_digits in compact:
                 return {"match": True, "detail": "stored count digits in page_read citation line"}
-            million = re.search(
-                r"(\d{1,3}(?:[,.]\d+)?)\s*million", line, re.I
-            )
+            million = re.search(r"(\d{1,3}(?:[,.]\d+)?)\s*million", line, re.I)
             if million:
                 try:
                     est = Decimal(million.group(1).replace(",", "")) * Decimal("1000000")
                     if abs(est - stored_u) / max(stored_u, Decimal("1")) <= Decimal("0.001"):
-                        return {"match": True, "detail": "page_read citation millions agree with stored count"}
+                        return {
+                            "match": True,
+                            "detail": "page_read citation millions agree with stored count",
+                        }
                 except Exception:
                     pass
     counts = year_end_unit_counts_on_page(text, sample)

@@ -14,7 +14,6 @@ from typing import Any
 from value_investor.ch_failed_name_statements import (
     _DIVIDED_INTO_ORDINARY_RE,
     _SHARE_CAPITAL_HINT_RE,
-    ABSENT_SHARES_CH_CAPITAL,
     CH_NAME_BY_KEY,
     Candidate,
     StatementPage,
@@ -43,7 +42,9 @@ PAGE_READ_DPI = 200
 VERIFIED_READINGS_PATH = Path("docs/data/ch_share_page_read_verified.json")
 
 
-def load_verified_readings(path: Path = VERIFIED_READINGS_PATH) -> dict[tuple[str, int, str], dict[str, Any]]:
+def load_verified_readings(
+    path: Path = VERIFIED_READINGS_PATH,
+) -> dict[tuple[str, int, str], dict[str, Any]]:
     if not path.is_file():
         return {}
     payload = json.loads(path.read_text(encoding="utf-8"))
@@ -118,9 +119,7 @@ def _apply_verified_withhold(
     transaction_id: str,
 ) -> bool:
     reason = str(
-        reading.get("absent_reason")
-        or reading.get("line")
-        or "withheld after page read (verified)"
+        reading.get("absent_reason") or reading.get("line") or "withheld after page read (verified)"
     )
     field = _empty_field(_page_read_absent(reason), source="primary")
     field["citation"] = {
@@ -183,7 +182,9 @@ def _is_target_leaver(key: str, reason_class: str | None) -> bool:
     return reason_class in {"failure", "other"}
 
 
-def shares_earnings_cross_check(filing: dict[str, Any], share_value: object, scale: str | None) -> dict[str, Any]:
+def shares_earnings_cross_check(
+    filing: dict[str, Any], share_value: object, scale: str | None
+) -> dict[str, Any]:
     fields = filing.get("fields") or {}
     profit = fields.get("profit_attributable_to_owners") or {}
     eps = fields.get("basic_eps") or {}
@@ -400,7 +401,9 @@ def _locate_share_capital_page(
         best = max(pages, key=score)
         if score(best) > 0:
             return int(best.page)
-    forced, _ = _brute_force_share_note_page(pdf, transaction_id=transaction_id, cache_dir=cache_dir)
+    forced, _ = _brute_force_share_note_page(
+        pdf, transaction_id=transaction_id, cache_dir=cache_dir
+    )
     return forced
 
 
@@ -508,7 +511,9 @@ def page_read_filing_shares(
     )
     if row is None or row.get("value") in (None, ""):
         filing.setdefault("fields", {})["shares_in_issue"] = _empty_field(
-            _page_read_absent("share-capital note present but year-end ordinary count not readable"),
+            _page_read_absent(
+                "share-capital note present but year-end ordinary count not readable"
+            ),
             source="primary",
         )
         return
@@ -609,7 +614,11 @@ def apply_verified_page_reads_to_store(
             if want_tx and want_tx != tx:
                 continue
             shares = (filing.get("fields") or {}).get("shares_in_issue") or {}
-            if shares.get("value") not in (None, "") and not want_tx and not reading.get("withhold"):
+            if (
+                shares.get("value") not in (None, "")
+                and not want_tx
+                and not reading.get("withhold")
+            ):
                 continue
             if reading.get("withhold"):
                 if want_tx or shares.get("value") not in (None, ""):
@@ -662,7 +671,9 @@ def run_force_page_read_filings(
                 break
         if work_filing is None or meta is None:
             continue
-        work_filing.setdefault("fields", {})["shares_in_issue"] = _empty_field(None, source="primary")
+        work_filing.setdefault("fields", {})["shares_in_issue"] = _empty_field(
+            None, source="primary"
+        )
         page_read_filing_shares(
             work_filing,
             key=key,
