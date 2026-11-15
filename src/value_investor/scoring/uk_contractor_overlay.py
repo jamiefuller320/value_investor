@@ -13,6 +13,8 @@ from value_investor.scoring.fcf import (
     compute_yoy_growth_rate,
     load_cached_financials,
     load_filing_bodies_for_ticker,
+    resolve_free_cashflow,
+    screen_ttm_from_row,
 )
 from value_investor.scoring.interim_quality_overlay import quality_family_passed
 from value_investor.storage import read_json, resolve_json_path
@@ -97,6 +99,14 @@ def _as_text(value: object | None) -> str:
         pass
     text = str(value).strip()
     return "" if text.lower() == "nan" else text
+
+
+def free_cashflow_for_uk_contractor_overlay(row: pd.Series) -> float | None:
+    """Screen TTM FCF for contractor revenue/FCF divergence; prefer harmonised screen TTM."""
+    trailing = screen_ttm_from_row(row)
+    if trailing is not None:
+        return trailing
+    return resolve_free_cashflow(row)
 
 
 def is_uk_listed_contractor(
@@ -405,6 +415,7 @@ def enrich_signals_with_uk_contractor_detection(
         return signals
 
     out = signals.copy()
+    contractor_flags: list[bool] = []
     detected_flags: list[bool] = []
     public_capex_flags: list[bool] = []
     mix_flags: list[bool] = []
@@ -448,13 +459,8 @@ def enrich_signals_with_uk_contractor_detection(
             else None
         )
 
-        fcf = row.get("free_cashflow")
+        free_cashflow = free_cashflow_for_uk_contractor_overlay(row)
         fcf_prev = row.get("free_cashflow_prev")
-        free_cashflow = (
-            float(fcf)
-            if fcf is not None and not (isinstance(fcf, float) and pd.isna(fcf))
-            else None
-        )
         free_cashflow_prev = (
             float(fcf_prev)
             if fcf_prev is not None and not (isinstance(fcf_prev, float) and pd.isna(fcf_prev))
@@ -490,12 +496,14 @@ def enrich_signals_with_uk_contractor_detection(
         if contractor and ch_backlog_margin_detected:
             cyclical_detected = True
 
+        contractor_flags.append(contractor)
         detected_flags.append(cyclical_detected)
         public_capex_flags.append(public_capex_detected)
         mix_flags.append(mix_confirmed)
         revenue_fcf_warnings.append(rev_fcf_warning)
         ch_backlog_margin_flags.append(ch_backlog_margin_detected)
 
+    out["uk_contractor"] = contractor_flags
     out["cyclical_exposure_detected"] = detected_flags
     out["public_capex_exposure_detected"] = public_capex_flags
     out["filing_mix_notes_confirmed"] = mix_flags
@@ -580,6 +588,15 @@ def uk_contractor_cyclical_overlay_should_apply(
     )
 
 
+def refresh_uk_contractor_overlays_after_primary_fcf(
+    signals: pd.DataFrame,
+    *,
+    output_dir: Path | None = None,
+) -> pd.DataFrame:
+    """Re-apply UK contractor detection after primary FCF / screen TTM harmonisation."""
+    return enrich_signals_with_uk_contractor_detection(signals, output_dir=output_dir)
+
+
 def resolve_uk_contractor_overlay_inputs(
     snapshot: dict[str, Any],
     *,
@@ -591,8 +608,14 @@ def resolve_uk_contractor_overlay_inputs(
         output_dir=output_dir,
     )
     row = detected.iloc[0]
+    ticker = str(snapshot.get("ticker") or "")
+    contractor = bool(row.get("uk_contractor")) or is_uk_listed_contractor(
+        ticker,
+        snapshot.get("name"),
+        snapshot.get("sector"),
+    )
     return {
-        "uk_contractor": bool(row.get("uk_contractor")),
+        "uk_contractor": contractor,
         "public_capex_exposure_detected": bool(row.get("public_capex_exposure_detected")),
         "filing_mix_notes_confirmed": bool(row.get("filing_mix_notes_confirmed")),
         "uk_contractor_revenue_fcf_warning": bool(row.get("uk_contractor_revenue_fcf_warning")),
