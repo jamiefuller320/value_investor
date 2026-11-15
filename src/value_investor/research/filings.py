@@ -920,6 +920,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.imdex.com/getmedia/9ff86649-1fbc-46ab-b045-ba87a03a3365/30-FY26-Imdex-Annual-Report.pdf",
         "https://wcsecure.weblink.com.au/pdf/IMD/03059253.pdf",
     ],
+    # asx200 buy-tier leftover — eng-20261115-02: NHC.AX no_key_bodies; Markit latest-five feed
+    # is capital-change only; FY26 Appendix 4E / 4D statutory packs on ASX + newhopegroup.com IR.
+    "NHC.AX": [
+        "https://announcements.asx.com.au/asxpdf/20260915/pdf/07434xc906mx0p.pdf",
+        "https://newhopegroup.com.au/wp-content/uploads/2026/03/New-Hope-Group-Appendix-4D-and-Half-Year-Financial-Report-2026.pdf",
+    ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
     "GIB-A.TO": [
         "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm",
@@ -1504,6 +1510,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "NEM": ("Newmont", "Newmont Corporation"),
     # asx200 IMD.AX Weblink allowlist — numeric wcsecure slugs need issuer tokens for IR title gate.
     "IMD": ("Imdex", "IMDEX Limited", "IMDEX"),
+    # asx200 NHC.AX — opaque ASX Appendix 4E hash slugs need issuer tokens for IR title gate.
+    "NHC": ("New Hope", "New Hope Corporation", "New Hope Group"),
     # sti J36.SI SGX allowlist — opaque 877984_JMH.pdf / 853959_JMH.pdf slugs need issuer
     # tokens for _ir_body_title_tokens_match (same pattern as FMG.AX / YAL.AX).
     "J36": ("Jardine Matheson", "Jardine Matheson Holdings"),
@@ -6216,6 +6224,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://links.sgx.com/FileOpen/slide-q2fy2526.ashx?App=Announcement&FileID=867072": "interim",
     # eng-20261109-01: IMD.AX — Weblink Appendix 4D slug is numeric-only (would classify other).
     "https://wcsecure.weblink.com.au/pdf/IMD/03059253.pdf": "interim",
+    # eng-20261115-02: NHC.AX — opaque ASX Appendix 4E hash slug (would classify other).
+    "https://announcements.asx.com.au/asxpdf/20260915/pdf/07434xc906mx0p.pdf": "annual",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
     # eng-20261009-03: JD.L HY27 slug has no half-year token (would classify other).
