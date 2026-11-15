@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-13T07:37:34.691680+00:00
+Track: `buy_tier_level_native` · updated 2026-11-15T07:08:14.155411+00:00
 
 ## Portfolio loser feedback
 
@@ -10,6 +10,13 @@ Track: `buy_tier_level_native` · updated 2026-11-13T07:37:34.691680+00:00
 
 ## Holding reviews
 
+### VOE.VI — intact / hold_tolerate (-3.7%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 47%
+
 ### CAI.VI — intact / hold_tolerate (-1.7%)
 - still buy
 - research accumulate
@@ -17,19 +24,14 @@ Track: `buy_tier_level_native` · updated 2026-11-13T07:37:34.691680+00:00
 - data_quality 1.00
 - conviction 55%
 
-### VOE.VI — weakening / watch_review (-0.4%)
-- conviction 31% below intact floor
-- still buy
-- research accumulate
-
-### OMV.VI — intact / hold_tolerate (+0.4%)
+### OMV.VI — intact / hold_tolerate (+1.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 68%
+- conviction 67%
 
-### STR.VI — intact / hold_tolerate (+5.8%)
+### STR.VI — intact / hold_tolerate (+5.2%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

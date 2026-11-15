@@ -1,0 +1,1165 @@
+{
+  "lab_id": "strategy-book-exit-lab-round-2",
+  "round": 2,
+  "registration_id": "strategy-book-us-rehearsal-v0",
+  "parent_registration_id": "owner-strategy-book-v0",
+  "observe_only": true,
+  "influences_live": false,
+  "exploratory": true,
+  "evidence": false,
+  "purpose": "Score the leave-tier hold per capital-day (its per-episode lead is not capital-adjusted) and the recovery leg (L688), beside the leave-tier control. Design input for the strategy book version review. Development signal sessions only; not evidence.",
+  "computed_at": "2026-11-14T14:37:54+00:00",
+  "signal_window": {
+    "first": "2000-01-01",
+    "last": "2012-12-31"
+  },
+  "development_reproduced": true,
+  "variants": [
+    {
+      "column": "lab_tier_tier",
+      "launched": {
+        "rule": "tier",
+        "param": 0.0
+      },
+      "unlaunched": {
+        "rule": "tier",
+        "param": 0,
+        "buffer": 0.0
+      },
+      "time_cap": null,
+      "review_spacing": 63
+    },
+    {
+      "column": "lab_tier_deadline63",
+      "launched": {
+        "rule": "tier",
+        "param": 0.0
+      },
+      "unlaunched": {
+        "rule": "deadline",
+        "param": 63,
+        "buffer": 0.0
+      },
+      "time_cap": null,
+      "review_spacing": 63
+    },
+    {
+      "column": "lab_laddertier_tier",
+      "launched": {
+        "rule": "ladder_tier",
+        "param": 0.0
+      },
+      "unlaunched": {
+        "rule": "tier",
+        "param": 0,
+        "buffer": 0.0
+      },
+      "time_cap": null,
+      "review_spacing": 63
+    },
+    {
+      "column": "lab_ladder_stop8_deadline63",
+      "launched": {
+        "rule": "ladder",
+        "param": 0.0
+      },
+      "unlaunched": {
+        "rule": "stop",
+        "param": 0.08,
+        "buffer": 0.0,
+        "deadline": 63
+      },
+      "time_cap": null,
+      "review_spacing": 63
+    },
+    {
+      "column": "lab_ladder_deadline32",
+      "launched": {
+        "rule": "ladder",
+        "param": 0.0
+      },
+      "unlaunched": {
+        "rule": "deadline",
+        "param": 32,
+        "buffer": 0.0
+      },
+      "time_cap": null,
+      "review_spacing": 63
+    }
+  ],
+  "controls": [
+    "leave_tier"
+  ],
+  "boards": {
+    "whole": {
+      "signal_window": {
+        "first": "2000-01-01",
+        "last": "2012-12-31"
+      },
+      "primary": {
+        "mature": 3802,
+        "still_open": 0,
+        "fair_cost_median": 0.019510311107427014,
+        "fair_cost_mean": 0.020456455483602927,
+        "matched_excess_median": -0.0011250453986914937,
+        "share_above_zero": 0.578642819568648,
+        "launch_share": 0.4095213045765387,
+        "held_sessions_median": 56.0,
+        "held_calendar_days_mean": 76.612309310889,
+        "turns_per_slot_year": 4.764247459489152,
+        "capital_days_return": 0.09745961606790816,
+        "slot_book": {
+          "annualised_return": 0.11190140933758719,
+          "max_drawdown": -0.39427718971611714,
+          "random_order_median": 0.11792435511435007,
+          "trades_taken": 1139,
+          "trades_skipped": 2663
+        },
+        "by_exit_reason": {
+          "delisted": {
+            "count": 11,
+            "fair_cost_median": 0.4047991803278689
+          },
+          "fail_to_launch": {
+            "count": 1121,
+            "fair_cost_median": -0.02221811453617878
+          },
+          "floor_exit": {
+            "count": 1332,
+            "fair_cost_median": 0.08994644997760187
+          },
+          "review_insufficient_data": {
+            "count": 8,
+            "fair_cost_median": 0.16443741636199644
+          },
+          "thesis_break": {
+            "count": 1296,
+            "fair_cost_median": -0.03891197123741175
+          },
+          "time_cap": {
+            "count": 34,
+            "fair_cost_median": 0.6706136506202646
+          }
+        }
+      },
+      "variants": {
+        "lab_tier_tier": {
+          "mature": 3802,
+          "still_open": 0,
+          "fair_cost_median": 0.01424431246450847,
+          "fair_cost_mean": 0.059583253384421726,
+          "matched_excess_median": -0.004506781378471736,
+          "share_above_zero": 0.5415570752235666,
+          "launch_share": 0.5215675960021041,
+          "held_sessions_median": 71.0,
+          "held_calendar_days_mean": 182.48869016307208,
+          "turns_per_slot_year": 2.00012395109985,
+          "capital_days_return": 0.11917389217863299,
+          "slot_book": {
+            "annualised_return": 0.0822222627505389,
+            "max_drawdown": -0.41478571508152084,
+            "random_order_median": 0.093354177409813,
+            "trades_taken": 561,
+            "trades_skipped": 3241
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 8,
+              "fair_cost_median": 0.2996114678131008
+            },
+            "left_tier_exit": {
+              "count": 1099,
+              "fair_cost_median": 0.11637540192926049
+            },
+            "review_insufficient_data": {
+              "count": 47,
+              "fair_cost_median": 0.014395097703119588
+            },
+            "thesis_break": {
+              "count": 2648,
+              "fair_cost_median": -0.01613244984336792
+            }
+          },
+          "paired": {
+            "n": 3802,
+            "entry_weeks": 567,
+            "mean_difference_vs_primary": 0.0391267979008188,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.005018604311642869,
+            "t": 7.796350433535259,
+            "share_variant_better": 0.3790110468174645
+          }
+        },
+        "lab_tier_deadline63": {
+          "mature": 3802,
+          "still_open": 0,
+          "fair_cost_median": 0.001956504810743113,
+          "fair_cost_mean": 0.037191651560484096,
+          "matched_excess_median": -0.00898486030849122,
+          "share_above_zero": 0.50894266175697,
+          "launch_share": 0.4095213045765387,
+          "held_sessions_median": 64.0,
+          "held_calendar_days_mean": 127.1194108364019,
+          "turns_per_slot_year": 2.8713160138048615,
+          "capital_days_return": 0.10678898470546863,
+          "slot_book": {
+            "annualised_return": 0.057999307061932015,
+            "max_drawdown": -0.453492655308269,
+            "random_order_median": 0.07175796193478301,
+            "trades_taken": 713,
+            "trades_skipped": 3089
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 7,
+              "fair_cost_median": 0.347011695906433
+            },
+            "fail_to_launch": {
+              "count": 1101,
+              "fair_cost_median": -0.02116843723790901
+            },
+            "left_tier_exit": {
+              "count": 629,
+              "fair_cost_median": 0.18440570550051266
+            },
+            "review_insufficient_data": {
+              "count": 43,
+              "fair_cost_median": -0.0198276231263384
+            },
+            "thesis_break": {
+              "count": 2022,
+              "fair_cost_median": -0.016794248925354745
+            }
+          },
+          "paired": {
+            "n": 3802,
+            "entry_weeks": 567,
+            "mean_difference_vs_primary": 0.01673519607688117,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.004139117709349029,
+            "t": 4.043179549854639,
+            "share_variant_better": 0.1980536559705418
+          }
+        },
+        "lab_laddertier_tier": {
+          "mature": 3802,
+          "still_open": 0,
+          "fair_cost_median": 0.034994673427399425,
+          "fair_cost_mean": 0.033006560054936046,
+          "matched_excess_median": 0.0035275879280365114,
+          "share_above_zero": 0.6270384008416623,
+          "launch_share": 0.5215675960021041,
+          "held_sessions_median": 48.0,
+          "held_calendar_days_mean": 105.81614939505523,
+          "turns_per_slot_year": 3.449378966128363,
+          "capital_days_return": 0.11385213399774922,
+          "slot_book": {
+            "annualised_return": 0.09629068584080769,
+            "max_drawdown": -0.3623440604878373,
+            "random_order_median": 0.0987569082694566,
+            "trades_taken": 943,
+            "trades_skipped": 2859
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 4,
+              "fair_cost_median": null
+            },
+            "floor_exit": {
+              "count": 1485,
+              "fair_cost_median": 0.08514569083447349
+            },
+            "left_tier_exit": {
+              "count": 628,
+              "fair_cost_median": 0.0669613088576348
+            },
+            "review_insufficient_data": {
+              "count": 22,
+              "fair_cost_median": -0.06094977447178873
+            },
+            "thesis_break": {
+              "count": 1663,
+              "fair_cost_median": -0.04545973805481435
+            }
+          },
+          "paired": {
+            "n": 3802,
+            "entry_weeks": 567,
+            "mean_difference_vs_primary": 0.012550104571333117,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.0023057971863773897,
+            "t": 5.442848419400856,
+            "share_variant_better": 0.22461862177801156
+          }
+        },
+        "lab_ladder_stop8_deadline63": {
+          "mature": 3802,
+          "still_open": 0,
+          "fair_cost_median": 0.006040293827313584,
+          "fair_cost_mean": 0.02151139348662804,
+          "matched_excess_median": -0.010110584356838377,
+          "share_above_zero": 0.5207785376117833,
+          "launch_share": 0.37480273540241976,
+          "held_sessions_median": 34.0,
+          "held_calendar_days_mean": 65.04024197790636,
+          "turns_per_slot_year": 5.611910240493685,
+          "capital_days_return": 0.12072000939489709,
+          "slot_book": {
+            "annualised_return": 0.09473344481491863,
+            "max_drawdown": -0.2986344658387653,
+            "random_order_median": 0.09392920621125977,
+            "trades_taken": 1395,
+            "trades_skipped": 2407
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 12,
+              "fair_cost_median": 0.4221149046569441
+            },
+            "fail_to_launch": {
+              "count": 525,
+              "fair_cost_median": 0.020836973478939147
+            },
+            "floor_exit": {
+              "count": 1230,
+              "fair_cost_median": 0.09313158628966983
+            },
+            "review_insufficient_data": {
+              "count": 14,
+              "fair_cost_median": 0.0698176369576134
+            },
+            "stop_exit": {
+              "count": 1216,
+              "fair_cost_median": -0.09364526466397366
+            },
+            "thesis_break": {
+              "count": 805,
+              "fair_cost_median": 0.0032511938086612936
+            }
+          },
+          "paired": {
+            "n": 3802,
+            "entry_weeks": 567,
+            "mean_difference_vs_primary": 0.0010549380030251123,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.0019370207840441235,
+            "t": 0.5446188351281428,
+            "share_variant_better": 0.16701735928458705
+          }
+        },
+        "lab_ladder_deadline32": {
+          "mature": 3802,
+          "still_open": 0,
+          "fair_cost_median": 0.011165994246577774,
+          "fair_cost_mean": 0.015574717984373153,
+          "matched_excess_median": -0.0023408096287091005,
+          "share_above_zero": 0.5576012624934246,
+          "launch_share": 0.27617043661230933,
+          "held_sessions_median": 33.0,
+          "held_calendar_days_mean": 51.53498158863756,
+          "turns_per_slot_year": 7.082567777233383,
+          "capital_days_return": 0.11030899573561845,
+          "slot_book": {
+            "annualised_return": 0.08556926620769945,
+            "max_drawdown": -0.43331279873935835,
+            "random_order_median": 0.08517888308290456,
+            "trades_taken": 1515,
+            "trades_skipped": 2287
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 8,
+              "fair_cost_median": 0.4221149046569441
+            },
+            "fail_to_launch": {
+              "count": 1979,
+              "fair_cost_median": -0.006841566177538779
+            },
+            "floor_exit": {
+              "count": 918,
+              "fair_cost_median": 0.0952140164481528
+            },
+            "review_insufficient_data": {
+              "count": 2,
+              "fair_cost_median": null
+            },
+            "thesis_break": {
+              "count": 895,
+              "fair_cost_median": -0.024016433870767073
+            }
+          },
+          "paired": {
+            "n": 3802,
+            "entry_weeks": 567,
+            "mean_difference_vs_primary": -0.004881737499229776,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.002166935478156054,
+            "t": -2.2528301135130584,
+            "share_variant_better": 0.2480273540241978
+          }
+        }
+      },
+      "controls": {
+        "leave_tier": {
+          "mature": 3802,
+          "still_open": 0,
+          "fair_cost_median": 0.09882620468410036,
+          "fair_cost_mean": 0.2044556858042188,
+          "matched_excess_median": 0.006346464524305793,
+          "share_above_zero": 0.6501841136244082,
+          "launch_share": 0.0,
+          "held_sessions_median": 208.0,
+          "held_calendar_days_mean": 518.2835349815887,
+          "turns_per_slot_year": 0.7042477241978489,
+          "capital_days_return": 0.14398745142693126,
+          "slot_book": {
+            "annualised_return": 0.08094937626419618,
+            "max_drawdown": -0.26046492903897034,
+            "random_order_median": 0.08365779038906362,
+            "trades_taken": 254,
+            "trades_skipped": 3548
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 69,
+              "fair_cost_median": 0.33591485864562787
+            },
+            "ineligible_runs": {
+              "count": 3733,
+              "fair_cost_median": 0.09526106194690259
+            }
+          },
+          "paired": {
+            "n": 3802,
+            "entry_weeks": 567,
+            "mean_difference_vs_primary": 0.18399923032061585,
+            "median_difference_vs_primary": 0.0663390051779621,
+            "standard_error": 0.019272881449306178,
+            "t": 9.547053501293643,
+            "share_variant_better": 0.6409784324039979
+          }
+        }
+      }
+    },
+    "first_half": {
+      "signal_window": {
+        "first": "2000-01-01",
+        "last": "2006-07-02"
+      },
+      "primary": {
+        "mature": 1921,
+        "still_open": 0,
+        "fair_cost_median": 0.027395754612136003,
+        "fair_cost_mean": 0.034009432559927805,
+        "matched_excess_median": 0.0004409015913262979,
+        "share_above_zero": 0.6199895887558563,
+        "launch_share": 0.43310775637688703,
+        "held_sessions_median": 61.0,
+        "held_calendar_days_mean": 78.79437792816242,
+        "turns_per_slot_year": 4.632310192648186,
+        "capital_days_return": 0.15754224109353446,
+        "slot_book": {
+          "annualised_return": 0.15551491522958605,
+          "max_drawdown": -0.15293475930553402,
+          "random_order_median": 0.13959331149626109,
+          "trades_taken": 598,
+          "trades_skipped": 1323
+        },
+        "by_exit_reason": {
+          "delisted": {
+            "count": 6,
+            "fair_cost_median": 0.3735889212761495
+          },
+          "fail_to_launch": {
+            "count": 626,
+            "fair_cost_median": -0.016733876052729243
+          },
+          "floor_exit": {
+            "count": 701,
+            "fair_cost_median": 0.09258257420941424
+          },
+          "review_insufficient_data": {
+            "count": 7,
+            "fair_cost_median": 0.19094915685542696
+          },
+          "thesis_break": {
+            "count": 563,
+            "fair_cost_median": -0.02084469952734641
+          },
+          "time_cap": {
+            "count": 18,
+            "fair_cost_median": 0.6706136506202646
+          }
+        }
+      },
+      "variants": {
+        "lab_tier_tier": {
+          "mature": 1921,
+          "still_open": 0,
+          "fair_cost_median": 0.04936077174307513,
+          "fair_cost_mean": 0.09751939274305796,
+          "matched_excess_median": -0.002505750554705711,
+          "share_above_zero": 0.6184279021343051,
+          "launch_share": 0.5767829255596044,
+          "held_sessions_median": 81.0,
+          "held_calendar_days_mean": 208.21811556481,
+          "turns_per_slot_year": 1.752969471507824,
+          "capital_days_return": 0.1709485183585621,
+          "slot_book": {
+            "annualised_return": 0.12440077264839089,
+            "max_drawdown": -0.14232980581661892,
+            "random_order_median": 0.12556132791580255,
+            "trades_taken": 290,
+            "trades_skipped": 1631
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 7,
+              "fair_cost_median": 0.25221123971976855
+            },
+            "left_tier_exit": {
+              "count": 656,
+              "fair_cost_median": 0.1287735815975976
+            },
+            "review_insufficient_data": {
+              "count": 23,
+              "fair_cost_median": 0.08380126786073655
+            },
+            "thesis_break": {
+              "count": 1235,
+              "fair_cost_median": 0.0105755635516987
+            }
+          },
+          "paired": {
+            "n": 1921,
+            "entry_weeks": 299,
+            "mean_difference_vs_primary": 0.06350996018313015,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.007701993420114441,
+            "t": 8.245912028082008,
+            "share_variant_better": 0.459135866736075
+          }
+        },
+        "lab_tier_deadline63": {
+          "mature": 1921,
+          "still_open": 0,
+          "fair_cost_median": 0.01726923076923087,
+          "fair_cost_mean": 0.06541515321265585,
+          "matched_excess_median": -0.008428322809885369,
+          "share_above_zero": 0.5632483081728267,
+          "launch_share": 0.43310775637688703,
+          "held_sessions_median": 64.0,
+          "held_calendar_days_mean": 136.23165018219677,
+          "turns_per_slot_year": 2.6792599187622517,
+          "capital_days_return": 0.1752641980823607,
+          "slot_book": {
+            "annualised_return": 0.0986746417276827,
+            "max_drawdown": -0.17907061796242862,
+            "random_order_median": 0.11274178065835505,
+            "trades_taken": 375,
+            "trades_skipped": 1546
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 6,
+              "fair_cost_median": 0.2965444850854452
+            },
+            "fail_to_launch": {
+              "count": 615,
+              "fair_cost_median": -0.015607671795611008
+            },
+            "left_tier_exit": {
+              "count": 377,
+              "fair_cost_median": 0.19571736036997517
+            },
+            "review_insufficient_data": {
+              "count": 21,
+              "fair_cost_median": 0.00014938838953854365
+            },
+            "thesis_break": {
+              "count": 902,
+              "fair_cost_median": 0.006017465408248494
+            }
+          },
+          "paired": {
+            "n": 1921,
+            "entry_weeks": 299,
+            "mean_difference_vs_primary": 0.03140572065272805,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.006648375085576453,
+            "t": 4.723819015696373,
+            "share_variant_better": 0.23633524206142634
+          }
+        },
+        "lab_laddertier_tier": {
+          "mature": 1921,
+          "still_open": 0,
+          "fair_cost_median": 0.04731767806460346,
+          "fair_cost_mean": 0.05301475406504481,
+          "matched_excess_median": 0.006718182614885621,
+          "share_above_zero": 0.6907860489328475,
+          "launch_share": 0.5767829255596044,
+          "held_sessions_median": 51.0,
+          "held_calendar_days_mean": 116.0832899531494,
+          "turns_per_slot_year": 3.144294068055032,
+          "capital_days_return": 0.16669397672611647,
+          "slot_book": {
+            "annualised_return": 0.12381374701851411,
+            "max_drawdown": -0.1469155444144452,
+            "random_order_median": 0.13467193896755503,
+            "trades_taken": 496,
+            "trades_skipped": 1425
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 3,
+              "fair_cost_median": null
+            },
+            "floor_exit": {
+              "count": 818,
+              "fair_cost_median": 0.08744104460313246
+            },
+            "left_tier_exit": {
+              "count": 352,
+              "fair_cost_median": 0.06534730000985695
+            },
+            "review_insufficient_data": {
+              "count": 11,
+              "fair_cost_median": 0.042436395759717416
+            },
+            "thesis_break": {
+              "count": 737,
+              "fair_cost_median": -0.022210774825502877
+            }
+          },
+          "paired": {
+            "n": 1921,
+            "entry_weeks": 299,
+            "mean_difference_vs_primary": 0.019005321505117006,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.003528952859734251,
+            "t": 5.385541337763352,
+            "share_variant_better": 0.2665278500780843
+          }
+        },
+        "lab_ladder_stop8_deadline63": {
+          "mature": 1921,
+          "still_open": 0,
+          "fair_cost_median": 0.013628712871287144,
+          "fair_cost_mean": 0.02981571316687289,
+          "matched_excess_median": -0.009544059565528937,
+          "share_above_zero": 0.553878188443519,
+          "launch_share": 0.3930244664237376,
+          "held_sessions_median": 37.0,
+          "held_calendar_days_mean": 67.4195731389901,
+          "turns_per_slot_year": 5.413858068302024,
+          "capital_days_return": 0.16141803929065357,
+          "slot_book": {
+            "annualised_return": 0.12285593703522757,
+            "max_drawdown": -0.19203053618224475,
+            "random_order_median": 0.12235152690116835,
+            "trades_taken": 727,
+            "trades_skipped": 1194
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 7,
+              "fair_cost_median": 0.400166146645866
+            },
+            "fail_to_launch": {
+              "count": 322,
+              "fair_cost_median": 0.01677617914015911
+            },
+            "floor_exit": {
+              "count": 641,
+              "fair_cost_median": 0.09930373831775713
+            },
+            "review_insufficient_data": {
+              "count": 12,
+              "fair_cost_median": 0.0698176369576134
+            },
+            "stop_exit": {
+              "count": 556,
+              "fair_cost_median": -0.09315540438552394
+            },
+            "thesis_break": {
+              "count": 383,
+              "fair_cost_median": 0.009624547429399059
+            }
+          },
+          "paired": {
+            "n": 1921,
+            "entry_weeks": 299,
+            "mean_difference_vs_primary": -0.004193719393054908,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.002632806786219902,
+            "t": -1.5928701699664463,
+            "share_variant_better": 0.12753774076002083
+          }
+        },
+        "lab_ladder_deadline32": {
+          "mature": 1921,
+          "still_open": 0,
+          "fair_cost_median": 0.01805649990883712,
+          "fair_cost_mean": 0.026092484512581927,
+          "matched_excess_median": -0.0013930430807569047,
+          "share_above_zero": 0.5934409161894847,
+          "launch_share": 0.3050494534096825,
+          "held_sessions_median": 33.0,
+          "held_calendar_days_mean": 54.43466944299844,
+          "turns_per_slot_year": 6.705285505264466,
+          "capital_days_return": 0.17495755819855327,
+          "slot_book": {
+            "annualised_return": 0.15713552489268134,
+            "max_drawdown": -0.16942119703062897,
+            "random_order_median": 0.14227889290651552,
+            "trades_taken": 763,
+            "trades_skipped": 1158
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 5,
+              "fair_cost_median": 0.400166146645866
+            },
+            "fail_to_launch": {
+              "count": 1009,
+              "fair_cost_median": -0.0053654446652337505
+            },
+            "floor_exit": {
+              "count": 501,
+              "fair_cost_median": 0.1008882978723405
+            },
+            "review_insufficient_data": {
+              "count": 2,
+              "fair_cost_median": null
+            },
+            "thesis_break": {
+              "count": 404,
+              "fair_cost_median": -0.007833538908797396
+            }
+          },
+          "paired": {
+            "n": 1921,
+            "entry_weeks": 299,
+            "mean_difference_vs_primary": -0.007916948047345874,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.002847442300328045,
+            "t": -2.78037172041512,
+            "share_variant_better": 0.23633524206142634
+          }
+        }
+      },
+      "controls": {
+        "leave_tier": {
+          "mature": 1921,
+          "still_open": 0,
+          "fair_cost_median": 0.12631501632208925,
+          "fair_cost_mean": 0.20665318946734731,
+          "matched_excess_median": 0.00210870383165479,
+          "share_above_zero": 0.7079646017699115,
+          "launch_share": 0.0,
+          "held_sessions_median": 195.0,
+          "held_calendar_days_mean": 490.29932326913064,
+          "turns_per_slot_year": 0.744443205767281,
+          "capital_days_return": 0.15384156284910572,
+          "slot_book": {
+            "annualised_return": 0.04581313303915091,
+            "max_drawdown": -0.04901966773643984,
+            "random_order_median": 0.047168109967781424,
+            "trades_taken": 149,
+            "trades_skipped": 1772
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 37,
+              "fair_cost_median": 0.2613435575264843
+            },
+            "ineligible_runs": {
+              "count": 1884,
+              "fair_cost_median": 0.12388472324374217
+            }
+          },
+          "paired": {
+            "n": 1921,
+            "entry_weeks": 299,
+            "mean_difference_vs_primary": 0.17264375690741954,
+            "median_difference_vs_primary": 0.08364235681911825,
+            "standard_error": 0.017127411965588132,
+            "t": 10.079967554601364,
+            "share_variant_better": 0.6887038001041125
+          }
+        }
+      }
+    },
+    "second_half": {
+      "signal_window": {
+        "first": "2006-07-03",
+        "last": "2012-12-31"
+      },
+      "primary": {
+        "mature": 1881,
+        "still_open": 0,
+        "fair_cost_median": 0.009680149992021662,
+        "fair_cost_mean": 0.006615270494969181,
+        "matched_excess_median": -0.0019769091987407728,
+        "share_above_zero": 0.5364167995746943,
+        "launch_share": 0.3854332801701223,
+        "held_sessions_median": 53.0,
+        "held_calendar_days_mean": 74.38383838383838,
+        "turns_per_slot_year": 4.906979902227051,
+        "capital_days_return": 0.03246099936660938,
+        "slot_book": {
+          "annualised_return": 0.07121184262404512,
+          "max_drawdown": -0.3760892338128238,
+          "random_order_median": 0.07657692123278581,
+          "trades_taken": 549,
+          "trades_skipped": 1332
+        },
+        "by_exit_reason": {
+          "delisted": {
+            "count": 5,
+            "fair_cost_median": 0.4061839155940813
+          },
+          "fail_to_launch": {
+            "count": 495,
+            "fair_cost_median": -0.034140205928755274
+          },
+          "floor_exit": {
+            "count": 631,
+            "fair_cost_median": 0.08722407045009778
+          },
+          "review_insufficient_data": {
+            "count": 1,
+            "fair_cost_median": null
+          },
+          "thesis_break": {
+            "count": 733,
+            "fair_cost_median": -0.05714258239859965
+          },
+          "time_cap": {
+            "count": 16,
+            "fair_cost_median": 0.6556396163386765
+          }
+        }
+      },
+      "variants": {
+        "lab_tier_tier": {
+          "mature": 1881,
+          "still_open": 0,
+          "fair_cost_median": -0.013256829780846576,
+          "fair_cost_mean": 0.020840391232406733,
+          "matched_excess_median": -0.005425208532614016,
+          "share_above_zero": 0.4630515683147262,
+          "launch_share": 0.46517809675704413,
+          "held_sessions_median": 62.0,
+          "held_calendar_days_mean": 156.21212121212122,
+          "turns_per_slot_year": 2.3365664403491753,
+          "capital_days_return": 0.048694958757388704,
+          "slot_book": {
+            "annualised_return": 0.03790104368652947,
+            "max_drawdown": -0.40113599466886296,
+            "random_order_median": 0.04637495042616124,
+            "trades_taken": 287,
+            "trades_skipped": 1594
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 1,
+              "fair_cost_median": null
+            },
+            "left_tier_exit": {
+              "count": 443,
+              "fair_cost_median": 0.10600110739892649
+            },
+            "review_insufficient_data": {
+              "count": 24,
+              "fair_cost_median": -0.04449640574650282
+            },
+            "thesis_break": {
+              "count": 1413,
+              "fair_cost_median": -0.04259009124791163
+            }
+          },
+          "paired": {
+            "n": 1881,
+            "entry_weeks": 268,
+            "mean_difference_vs_primary": 0.014225120737437553,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.005969189757283745,
+            "t": 2.383090723507278,
+            "share_variant_better": 0.29718234981392877
+          }
+        },
+        "lab_tier_deadline63": {
+          "mature": 1881,
+          "still_open": 0,
+          "fair_cost_median": -0.01487697882505373,
+          "fair_cost_mean": 0.008367969118260838,
+          "matched_excess_median": -0.009495896756427757,
+          "share_above_zero": 0.4534821903242956,
+          "launch_share": 0.3854332801701223,
+          "held_sessions_median": 64.0,
+          "held_calendar_days_mean": 117.8133971291866,
+          "turns_per_slot_year": 3.098119644235065,
+          "capital_days_return": 0.025924969507636272,
+          "slot_book": {
+            "annualised_return": 0.017557403584324227,
+            "max_drawdown": -0.43255183662060304,
+            "random_order_median": 0.0249131705300214,
+            "trades_taken": 355,
+            "trades_skipped": 1526
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 1,
+              "fair_cost_median": null
+            },
+            "fail_to_launch": {
+              "count": 486,
+              "fair_cost_median": -0.032479002545992175
+            },
+            "left_tier_exit": {
+              "count": 252,
+              "fair_cost_median": 0.16226917072992925
+            },
+            "review_insufficient_data": {
+              "count": 22,
+              "fair_cost_median": -0.06337610043251818
+            },
+            "thesis_break": {
+              "count": 1120,
+              "fair_cost_median": -0.0374215381469985
+            }
+          },
+          "paired": {
+            "n": 1881,
+            "entry_weeks": 268,
+            "mean_difference_vs_primary": 0.0017526986232916577,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.004527481603098754,
+            "t": 0.3871244053409415,
+            "share_variant_better": 0.15895800106326421
+          }
+        },
+        "lab_laddertier_tier": {
+          "mature": 1881,
+          "still_open": 0,
+          "fair_cost_median": 0.019787893541058088,
+          "fair_cost_mean": 0.012572886108408171,
+          "matched_excess_median": 0.0011943740473070175,
+          "share_above_zero": 0.5619351408825093,
+          "launch_share": 0.46517809675704413,
+          "held_sessions_median": 45.0,
+          "held_calendar_days_mean": 95.33067517278043,
+          "turns_per_slot_year": 3.8287780857364333,
+          "capital_days_return": 0.04813879080633322,
+          "slot_book": {
+            "annualised_return": 0.07000580469297168,
+            "max_drawdown": -0.34388448184596443,
+            "random_order_median": 0.06542926975988506,
+            "trades_taken": 465,
+            "trades_skipped": 1416
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 1,
+              "fair_cost_median": null
+            },
+            "floor_exit": {
+              "count": 667,
+              "fair_cost_median": 0.08346971819476529
+            },
+            "left_tier_exit": {
+              "count": 276,
+              "fair_cost_median": 0.07100867610393641
+            },
+            "review_insufficient_data": {
+              "count": 11,
+              "fair_cost_median": -0.1218854561194675
+            },
+            "thesis_break": {
+              "count": 926,
+              "fair_cost_median": -0.07324825290571774
+            }
+          },
+          "paired": {
+            "n": 1881,
+            "entry_weeks": 268,
+            "mean_difference_vs_primary": 0.00595761561343899,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.0028551526206401297,
+            "t": 2.0866189675364124,
+            "share_variant_better": 0.18181818181818182
+          }
+        },
+        "lab_ladder_stop8_deadline63": {
+          "mature": 1881,
+          "still_open": 0,
+          "fair_cost_median": -0.005161004152510248,
+          "fair_cost_mean": 0.013030480086441778,
+          "matched_excess_median": -0.010734253187693249,
+          "share_above_zero": 0.4869750132908028,
+          "launch_share": 0.35619351408825095,
+          "held_sessions_median": 32.0,
+          "held_calendar_days_mean": 62.610313662945245,
+          "turns_per_slot_year": 5.829710452577057,
+          "capital_days_return": 0.07596392596202682,
+          "slot_book": {
+            "annualised_return": 0.06528082095417198,
+            "max_drawdown": -0.297305753907402,
+            "random_order_median": 0.06828254953464175,
+            "trades_taken": 686,
+            "trades_skipped": 1195
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 5,
+              "fair_cost_median": 0.4750100286532951
+            },
+            "fail_to_launch": {
+              "count": 203,
+              "fair_cost_median": 0.028340538441625596
+            },
+            "floor_exit": {
+              "count": 589,
+              "fair_cost_median": 0.0881518466970797
+            },
+            "review_insufficient_data": {
+              "count": 2,
+              "fair_cost_median": null
+            },
+            "stop_exit": {
+              "count": 660,
+              "fair_cost_median": -0.09448285863650363
+            },
+            "thesis_break": {
+              "count": 422,
+              "fair_cost_median": -0.004388440350766461
+            }
+          },
+          "paired": {
+            "n": 1881,
+            "entry_weeks": 268,
+            "mean_difference_vs_primary": 0.006415209591472597,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.0028587745755742425,
+            "t": 2.2440417814979248,
+            "share_variant_better": 0.20733652312599682
+          }
+        },
+        "lab_ladder_deadline32": {
+          "mature": 1881,
+          "still_open": 0,
+          "fair_cost_median": 0.004869387899850978,
+          "fair_cost_mean": 0.004833288159445425,
+          "matched_excess_median": -0.0035330019213634413,
+          "share_above_zero": 0.5209994683678895,
+          "launch_share": 0.24667729930887825,
+          "held_sessions_median": 33.0,
+          "held_calendar_days_mean": 48.57363104731526,
+          "turns_per_slot_year": 7.514365142775838,
+          "capital_days_return": 0.03631909207032787,
+          "slot_book": {
+            "annualised_return": 0.015990599855289833,
+            "max_drawdown": -0.44009766817979057,
+            "random_order_median": 0.030622912941353553,
+            "trades_taken": 784,
+            "trades_skipped": 1097
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 3,
+              "fair_cost_median": null
+            },
+            "fail_to_launch": {
+              "count": 970,
+              "fair_cost_median": -0.00819044579347938
+            },
+            "floor_exit": {
+              "count": 417,
+              "fair_cost_median": 0.08774286102801204
+            },
+            "thesis_break": {
+              "count": 491,
+              "fair_cost_median": -0.03873693803159178
+            }
+          },
+          "paired": {
+            "n": 1881,
+            "entry_weeks": 268,
+            "mean_difference_vs_primary": -0.0017819823355237551,
+            "median_difference_vs_primary": 0.0,
+            "standard_error": 0.0033093469079790655,
+            "t": -0.5384694881117696,
+            "share_variant_better": 0.25996810207336524
+          }
+        }
+      },
+      "controls": {
+        "leave_tier": {
+          "mature": 1881,
+          "still_open": 0,
+          "fair_cost_median": 0.06894785949506038,
+          "fair_cost_mean": 0.2022114516006728,
+          "matched_excess_median": 0.010469729347004325,
+          "share_above_zero": 0.5911749069643807,
+          "launch_share": 0.0,
+          "held_sessions_median": 222.0,
+          "held_calendar_days_mean": 546.8628389154705,
+          "turns_per_slot_year": 0.6674434136425544,
+          "capital_days_return": 0.13496470153396894,
+          "slot_book": {
+            "annualised_return": 0.04910668002100005,
+            "max_drawdown": -0.24716033101620727,
+            "random_order_median": 0.049095751303852575,
+            "trades_taken": 125,
+            "trades_skipped": 1756
+          },
+          "by_exit_reason": {
+            "delisted": {
+              "count": 32,
+              "fair_cost_median": 0.7057256766477275
+            },
+            "ineligible_runs": {
+              "count": 1849,
+              "fair_cost_median": 0.06423707977922738
+            }
+          },
+          "paired": {
+            "n": 1881,
+            "entry_weeks": 268,
+            "mean_difference_vs_primary": 0.19559618110570365,
+            "median_difference_vs_primary": 0.042780295649963995,
+            "standard_error": 0.03605253810972578,
+            "t": 5.425309599851398,
+            "share_variant_better": 0.5922381711855396
+          }
+        }
+      }
+    }
+  },
+  "choice": {
+    "eligible": [
+      "lab_laddertier_tier"
+    ],
+    "pick": "lab_laddertier_tier",
+    "failed": {
+      "lab_tier_tier": [
+        "matched_excess_below_primary"
+      ],
+      "lab_tier_deadline63": [
+        "capital_days_not_above_primary_second_half",
+        "matched_excess_below_primary"
+      ],
+      "lab_ladder_stop8_deadline63": [
+        "paired_mean_not_above_zero_first_half",
+        "matched_excess_below_primary"
+      ],
+      "lab_ladder_deadline32": [
+        "paired_mean_not_above_zero_first_half",
+        "paired_mean_not_above_zero_second_half",
+        "matched_excess_below_primary"
+      ]
+    }
+  }
+}

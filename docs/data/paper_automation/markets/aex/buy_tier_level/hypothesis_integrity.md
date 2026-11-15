@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-13T07:36:45.946232+00:00
+Track: `buy_tier_level` · updated 2026-11-15T07:07:49.122447+00:00
 
 ## Portfolio loser feedback
 
@@ -10,33 +10,35 @@ Track: `buy_tier_level` · updated 2026-11-13T07:36:45.946232+00:00
 
 ## Holding reviews
 
-### ADYEN.AS — weakening / watch_review (+0.0%)
-- conviction 31% below intact floor
-- still buy
-- research accumulate
-
-### PRX.AS — weakening / watch_review (+0.9%)
+### PRX.AS — weakening / watch_review (-0.2%)
 - research verdict caution
 - still buy
 - cheapness family still passes
 
-### KPN.AS — intact / hold_tolerate (+1.1%)
+### ADYEN.AS — intact / hold_tolerate (-0.1%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 35%
+
+### KPN.AS — intact / hold_tolerate (+1.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 53%
 
-### AD.AS — intact / hold_tolerate (+5.5%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 89%
-
-### AKZA.AS — intact / hold_tolerate (+5.9%)
+### AKZA.AS — intact / hold_tolerate (+4.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 59%
+
+### AD.AS — intact / hold_tolerate (+7.8%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 89%

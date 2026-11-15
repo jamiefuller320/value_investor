@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-13T17:48:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-14T15:39:07+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -441,6 +441,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L712 | **Scale-in twin for the strategy-book buy-strategy lever** | The buy_strategy lever stays insufficient_data on strategy-book closes because v0 is a single fixed stake and the episode has no scale-in counterfactual. A later twin could score single-shot against scale-in inside the same stake. It is not a new live track. | A strategy-book version review asks for a buy-strategy comparison, and the owner seals it as a bench or a successor registration rather than a mid-run tune. |
 | L720 | **Profit-warning headlines for the UK replay** | The decline gate's profit-warning and impairment checks need a filings headline index. EODHD does not provide one, so those checks do not fire on the UK replay, matching the US rehearsal. | A point-in-time headline source for UK and European filings is licensed. |
 | L721 | **Pre-2013 UK point-in-time tape** | EODHD annual statements are deep from 2013, so the UK replay's development window starts in 2013 and cannot speak to 2008. A survivorship-free tape with statements before 2013 would be a new registration, not an extension of strategy-book-uk-replay-v0. | A survivorship-free source with dated annual statements before 2013 is licensed for LSE names, including delisted companies. |
+| L722 | **Exit choice rule: require the fixed-slot book to agree before an exit variant becomes a challenger** | Exit lab round 2 (US development 2000-2012) picked lab_laddertier_tier under the pre-fixed rule (capital-days return 11.4% vs primary 9.7%, paired +1.3pp t=5.4), but in the fixed-slot book the primary leads: 11.2% vs 9.6% a year whole-window, 15.6% vs 12.4% first half, about level second half. The leave-tier control shows the same split even more strongly (14.4% capital-days, 8.1% slot book). Capital-days return pools P&L over stake-days as if capital were unlimited; the slot book is the capital-constrained portfolio. Before any exit variant enters a version review as the challenger, the choice rule should also require the slot book (base order and random-order median) not to fall below the primary in either half. That is a rule change, so it applies at the next registration, not by re-reading round 2. | Next strategy-book version review that considers an exit challenger, or before any new exit-lab round is registered |
 
 ### Universe & data
 

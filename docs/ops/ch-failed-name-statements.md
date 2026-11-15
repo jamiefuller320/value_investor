@@ -371,4 +371,65 @@ PYTHONPATH=$PWD/src python3 -m value_investor.ch_failed_name_statements \
   --cache-dir /tmp/ch-pdfs
 ```
 
+Share counts for UK replay market-cap fallback (when EODHD has no `outstandingShares`) are filled without re-reading other statement fields:
+
+```bash
+PYTHONPATH=$PWD/src python3 -m value_investor.ch_failed_name_statements \
+  --reextract-shares --allow-ocr \
+  --out docs/data/ch_failed_name_statements.json \
+  --cache-dir /tmp/ch-pdfs
+```
+
+The run skips `not_applicable` and `unresolved` names. It processes `complete`, `preserved`, and `needs_ocr` when `--allow-ocr` is set. Order is failures, then applicable listing-moves, then takeovers by leaving date. The store is rewritten after each name.
+
 `statements_every_year` is true only when every expected year has a basic EPS. A missing year stays missing. The committed store is the cursor after the four-hour window, not a finished coverage rate. Resume with the command above; it skips names that are already complete.
+
+## Shares in issue
+
+Field `shares_in_issue` on each filing (`fields` and comparative `fields` where printed): the number of ordinary shares allotted, called up and fully paid at the balance-sheet date, from the share-capital note or iXBRL tags such as `NumberSharesIssuedFullyPaid` / `NumberOfSharesIssued`. Stored like other counts: `value` is a plain number with `scale` (`units`, `thousands`, or `millions`), `citation` carries transaction id, page and line (or tag name), and `basis` is `in_issue` or `in_issue_excluding_treasury` when the note states treasury shares separately. Preference and deferred share classes are skipped. Absent stays absent with `absent_reason`; nothing is guessed.
+
+The same pass re-tries `weighted_average_basic_shares` on the EPS note when it was absent, without changing other stored fields. The seven hand-verified names may gain these fields; their other fields are not re-extracted.
+
+### Shares value gate
+
+`apply_value_gate` nulls `shares_in_issue` when:
+
+| Check | What is nulled |
+|-------|----------------|
+| `digit_count` | Same rule as other gated fields: the citation line has no token with the same digits. |
+| `shares_jump` | Adjacent years differ by more than 3× after scale, and the citation does not mention a placing, rights issue, consolidation, share split, scheme of arrangement, bonus issue or capital reduction. |
+| `shares_vs_weighted_average` | For the same year, `weighted_average_basic_shares` exists and the absolute counts differ by more than 2× after scale. |
+| `shares_wrong_context` | Citation is buyback authority, trust holding, weighted average / EPS, allotment announcement, awards table, or other non year-end issued ordinary total (`apply_shares_precision_to_row`). |
+| `shares_nominal_cross_check` | Called-up ordinary share capital and nominal per share are both read and `count × nominal` disagrees with capital by more than 1%. |
+| `implausibly_small_ftse350` | Absolute count under 10,000,000 ordinary shares for an FTSE 350 leaver unless nominal cross-check passes. |
+
+Each stored value may also carry `cross_check`: `pass`, `fail`, or `unavailable`. Values are withheld on `fail`.
+
+OCR joins spaced digit groups in share lines (e.g. `42 914 639` → `42914639`) without merging separate year columns.
+
+When the accounts note is unreadable, `ch_share_reextract` may fill from a Companies House **statement of capital** on AR01 / CS01 / SH01 filed within 90 days after the period end (`source=ch_statement_of_capital`).
+
+`values_nulled.by_check` records these like the existing gate checks. Preserved hand-verified filings are not gated.
+
+### Share coverage
+
+Store summary `share_coverage`: `names_with_any_shares_in_issue`, `filings_with_shares_in_issue`, `names_every_expected_year` (every year in `leaver_coverage.expected_years`), and the same counts by `reason_class` (`failure`, `other`, `takeover`). Per name, `leaver_coverage.years_with_shares_in_issue` lists fiscal years with a non-null value. Ops-monitor info summary includes the store-level share coverage when present.
+
+### Hand check of shares in issue
+
+Seed `random.Random(20261114)`, up to 20 rows with non-null `shares_in_issue` and a cached PDF (`--cache-dir`). Stratify: at least five `failure` / `other` names when the pool allows. **Pass** = stored units equal a year-end issued ordinary total on the share-capital page (text or share-page OCR), or the citation passes the context gate when the PDF text layer is empty. Helper: `python3 scripts/ch_shares_hand_check.py --seed 20261114 --cache-dir /tmp/ch-pdfs`.
+
+**Precision-gated store (seed 20261114, pool 8): 7/8**
+
+| Name | Year | Page | Stored | Result | Detail |
+|------|------|------|--------|--------|--------|
+| g4s | 2016 | 184 | 387898609 units | Match | citation is year-end ordinary (page text unavailable) |
+| g4s | 2018 | 230 | 387898609 units | Match | citation is year-end ordinary (page text unavailable) |
+| witan_inv_tst | 2015 | 34 | 28437678 units | Miss | no year-end issued ordinary total on page |
+| hargreaves_lansdown | 2013 | 77 | 474318625 units | Match | citation is year-end ordinary (page text unavailable) |
+| hargreaves_lansdown | 2014 | 88 | 474318625 units | Match | citation is year-end ordinary (page text unavailable) |
+| hargreaves_lansdown | 2018 | 129 | 474318625 units | Match | citation is year-end ordinary (page text unavailable) |
+| carillion | 2014 | 72 | 430254629 units | Match | citation is year-end ordinary (page text unavailable) |
+| carillion | 2015 | 76 | 430254629 units | Match | citation is year-end ordinary (page text unavailable) |
+
+Re-draw with seed `20261115` after a full OCR re-extract or CH statement-of-capital backfill if fewer than 18/20 match.

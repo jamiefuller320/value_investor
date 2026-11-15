@@ -77,6 +77,7 @@ FIELD_NAMES = (
     "profit_attributable_to_owners",
     "basic_eps",
     "weighted_average_basic_shares",
+    "shares_in_issue",
     "net_cash_from_operating_activities",
     "capital_expenditure",
     "dividends_per_share",
@@ -223,6 +224,74 @@ _CASH_HEADING_RE = re.compile(
 )
 _EPS_NOTE_RE = re.compile(r"^\s*(\d{1,2}[\.\)\s]+)?earnings per share\b", re.I)
 _DIV_NOTE_RE = re.compile(r"^\s*(\d{1,2}[\.\)\s]+)?dividends?\b", re.I)
+_SHARE_CAPITAL_NOTE_RE = re.compile(
+    r"^\s*(\d{1,2}[\.\)\s]+)?(share capital|called up share capital)\b",
+    re.I,
+)
+_SHARE_CAPITAL_HINT_RE = re.compile(
+    r"\b(share capital|called up share capital|allotted,? called up and fully paid)\b",
+    re.I,
+)
+_WIDE_SHARE_SCAN_RE = re.compile(
+    r"called up share capital|allotted|ordinary shares of|number of shares",
+    re.I,
+)
+ABSENT_SHARES_NO_PDF = "no PDF for this filing"
+ABSENT_SHARES_NO_KEYWORD = "no share-capital keywords in the filing after a full-PDF scan"
+ABSENT_SHARES_KEYWORD_UNREADABLE = "share-capital lines found but ordinary share count not readable"
+ABSENT_SHARES_NOTE_ONLY = "share-capital note heading without a readable ordinary share count"
+ABSENT_SHARES_WRONG_CONTEXT = "share count line is not year-end issued ordinary shares"
+ABSENT_SHARES_NOMINAL_FAIL = "nominal share-capital cross-check failed"
+ABSENT_SHARES_IMPLAUSIBLE_SMALL = "implausibly small for FTSE 350 member"
+ABSENT_SHARES_CH_CAPITAL = "no readable statement of capital within 90 days after year end"
+FTSE350_MIN_ORDINARY_SHARES = Decimal("10000000")
+_SHARES_REJECT_CONTEXT_RE = re.compile(
+    r"buy\s*back|buyback|purchase\s+authority|repurchase\s+authority|"
+    r"aggregate\s+of\b.*\brepresenting\b|"
+    r"employee\s+share\s+trust|employee\s+trust|esop|"
+    r"\bholds\s+\d|\bheld\s+by\s+the\s+trust\b|"
+    r"directors?'?\s+(?:interests?|holdings?)|family\s+trust|"
+    r"disposal\s+of\s+interests?|"
+    r"\bpurchased\b|\bawards?\b|\boptions?\b|nil[- ]cost|"
+    r"weighted\s+average|earnings\s+per\s+share|\beps\b|"
+    r"share\s+awards|performance\s+shares|"
+    r"allotment\s+of\s+shares|shares\s+allotted\s+during|"
+    r"allotment\s+announcement|allotted\s+on\b|"
+    r"nominal\s+value\s+per\s+share|"
+    r"\bat\s+\d{1,2}\s+(?:january|january|february|march|april|may|june|july|august|september|october|november|december)\b",
+    re.I,
+)
+_SHARES_ACCEPT_CONTEXT_RE = re.compile(
+    r"allotted,?\s+called\s+up\s+and\s+fully\s+paid|"
+    r"issued\s+and\s+fully\s+paid|"
+    r"in\s+issue\s+at\s+(?:the\s+)?(?:year|period|balance\s+sheet)|"
+    r"called\s+up\s+share\s+capital|"
+    r"number\s+of\s+shares|"
+    r"ordinary\s+shares\s+of\s+\d+(?:\.\d+)?\s*p?\b",
+    re.I,
+)
+_NOMINAL_PER_SHARE_RE = re.compile(
+    r"ordinary\s+shares?\s+of\s+(?:£\s*)?(\d+(?:\.\d+)?)\s*p(?:\s+each)?|"
+    r"ordinary\s+shares?\s+of\s+(?:£\s*)?(\d+(?:\.\d+)?)\s*each",
+    re.I,
+)
+_CALLED_UP_CAPITAL_RE = re.compile(
+    r"called\s+up\s+share\s+capital[^0-9\n]{0,80}([\d,]+(?:\.\d+)?)",
+    re.I,
+)
+_SHARE_EVENT_RE = re.compile(
+    r"placing|rights issue|consolidation|share split|sub-division|subdivision|"
+    r"scheme of arrangement|bonus issue|capital reduction",
+    re.I,
+)
+_ORDINARY_SHARES_COUNT_RE = re.compile(
+    r"(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)\s*(?:m(?:illion)?\s+)?ordinary shares\b",
+    re.I,
+)
+_DIVIDED_INTO_ORDINARY_RE = re.compile(
+    r"(?:divided\s+into|comprising)\s+([\d,\s]+)\s+ordinary shares",
+    re.I,
+)
 _PARENT_RE = re.compile(
     r"\b(parent company|company income statement|company statement|company cash flow|"
     r"company balance sheet|notes to the company)\b",
@@ -374,6 +443,7 @@ class Candidate:
     unit: str | None
     money: bool
     share_scale: str | None = None
+    share_basis: str | None = None
 
 
 @dataclass
@@ -992,6 +1062,8 @@ def _heading_kinds(text: str) -> set[str]:
             kinds.add("eps_note")
         if _heading_line(line, _DIV_NOTE_RE, max_len=40):
             kinds.add("dividend_note")
+        if _heading_line(line, _SHARE_CAPITAL_NOTE_RE, max_len=55):
+            kinds.add("share_capital")
     if income_line:
         kinds.add("income")
     elif maybe_line:
@@ -1035,13 +1107,14 @@ def _filled_field(
     currency: str | None,
     value: str | None = None,
     extra_line: str | None = None,
+    basis: str | None = None,
 ) -> dict[str, Any]:
     use_scale = scale if cand.money else cand.share_scale
     use_currency = currency if cand.money else None
     citation = _citation(transaction_id, cand)
     if extra_line:
         citation["line"] = _short_line(f"{cand.line} | {extra_line}")
-    return {
+    row = {
         "value": cand.current if value is None else value,
         "scale": use_scale,
         "currency": use_currency,
@@ -1050,6 +1123,10 @@ def _filled_field(
         "absent_reason": None,
         "citation": citation,
     }
+    share_basis = basis or cand.share_basis
+    if share_basis:
+        row["basis"] = share_basis
+    return row
 
 
 def _capex_field(
@@ -1113,6 +1190,549 @@ def _dividend_field(
     return _empty_field(
         "interim and final dividends per share are shown separately; no total line was read"
     )
+
+
+def _shares_in_issue_basis(label: str) -> str | None:
+    low = label.lower()
+    if "excluding treasury" in low or "excludes treasury" in low:
+        return "in_issue_excluding_treasury"
+    if re.search(r"allotted|called up|fully paid|in issue", low):
+        return "in_issue"
+    return None
+
+
+def _shares_in_issue_line_score(label: str) -> int:
+    low = label.lower()
+    if any(token in low for token in ("preference", "preferred", "deferred", "redeemable")):
+        return -1
+    if "treasury" in low and "excluding" not in low:
+        return -1
+    score = 0
+    if re.search(r"allotted.*called up.*fully paid", low):
+        score += 4
+    if "ordinary" in low:
+        score += 3
+    if re.search(r"in issue|at balance sheet|at the year end|at period end", low):
+        score += 2
+    if re.search(r"equity shares", low):
+        score += 1
+    return score
+
+
+def repair_spaced_share_digit_groups(line: str) -> str:
+    """Join OCR-split share counts such as ``42 914 639 ordinary shares``."""
+    if not re.search(r"ordinary\s+share", line, re.I):
+        return line
+
+    def repl(match: re.Match[str]) -> str:
+        chunk = match.group(1)
+        if "," in chunk:
+            return chunk
+        return chunk.replace(" ", "")
+
+    return re.sub(r"\b(\d{1,3}(?:\s\d{3}){2,})\b", repl, line)
+
+
+def shares_context_rejected(label: str, line: str) -> bool:
+    combined = f"{label} {line}"
+    if _SHARES_REJECT_CONTEXT_RE.search(combined):
+        return True
+    low = combined.lower()
+    if "treasury" in low and "excluding" not in low:
+        return True
+    if (
+        re.search(r"\b\d{4}\b", line)
+        and re.search(r"\b(20\d{2})\b.*\bshares?\b", line)
+        and not _SHARES_ACCEPT_CONTEXT_RE.search(combined)
+    ):
+        return True
+    return False
+
+
+def shares_context_accepted(label: str, line: str, page_text: str) -> bool:
+    combined = f"{label} {line}"
+    if shares_context_rejected(label, line):
+        return False
+    if _SHARES_ACCEPT_CONTEXT_RE.search(combined):
+        return True
+    head = "\n".join(page_text.splitlines()[:20])
+    if _SHARE_CAPITAL_HINT_RE.search(head) and _shares_in_issue_line_score(label) >= 2:
+        return True
+    if _shares_in_issue_line_score(label) >= 3 and "ordinary" in combined.lower():
+        return True
+    return False
+
+
+def _share_count_units(value: object, scale: str | None) -> Decimal | None:
+    try:
+        raw = Decimal(str(value).replace(",", ""))
+    except InvalidOperation:
+        return None
+    if scale == "millions":
+        return raw * Decimal("1000000")
+    if scale == "thousands":
+        return raw * Decimal("1000")
+    return raw
+
+
+def shares_nominal_cross_check(
+    page_texts: list[str], value: object, scale: str | None
+) -> dict[str, Any]:
+    """Compare share count to called-up capital / nominal when both are printed."""
+    merged = "\n".join(page_texts)
+    count_units = _share_count_units(value, scale)
+    if count_units is None:
+        return {"status": "unavailable"}
+    nominal: Decimal | None = None
+    for match in _NOMINAL_PER_SHARE_RE.finditer(merged):
+        try:
+            pence = Decimal(match.group(1))
+        except (InvalidOperation, TypeError):
+            continue
+        nominal = pence / Decimal("100")
+        break
+    capital: Decimal | None = None
+    cap_match = _CALLED_UP_CAPITAL_RE.search(merged)
+    if cap_match:
+        try:
+            capital = Decimal(cap_match.group(1).replace(",", ""))
+        except InvalidOperation:
+            capital = None
+    if capital is None or nominal is None or nominal <= 0:
+        return {"status": "unavailable"}
+    implied = capital / nominal
+    if implied <= 0:
+        return {"status": "unavailable"}
+    rel = abs(count_units - implied) / implied
+    status = "pass" if rel <= Decimal("0.01") else "fail"
+    return {
+        "status": status,
+        "called_up_capital_gbp": str(capital),
+        "nominal_gbp": str(nominal),
+        "implied_count": str(int(implied)),
+        "stored_count": str(int(count_units)),
+        "relative_error": str(rel.quantize(Decimal("0.0001"))),
+    }
+
+
+def _withhold_shares_row(row: dict[str, Any], reason: str) -> None:
+    if row.get("value") in (None, ""):
+        row["absent_reason"] = reason
+        return
+    row["nulled_from"] = row.get("value")
+    row["value"] = None
+    row["absent_reason"] = reason
+
+
+def apply_shares_precision_to_row(
+    row: dict[str, Any],
+    *,
+    page_texts: list[str] | None = None,
+    ftse_member: bool = True,
+) -> None:
+    """Context, nominal cross-check, and FTSE plausibility on one ``shares_in_issue`` row."""
+    if not isinstance(row, dict) or row.get("value") in (None, ""):
+        return
+    if str(row.get("extraction_method") or "") == "page_read":
+        units = _share_count_units(row.get("value"), row.get("scale"))
+        if units is not None and units > Decimal("500000000000"):
+            _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+        return
+    if str(row.get("source") or "") == "ch_statement_of_capital":
+        units = _share_count_units(row["value"], row.get("scale"))
+        if ftse_member and units is not None:
+            if units < FTSE350_MIN_ORDINARY_SHARES or units > Decimal("500000000000"):
+                _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+        elif units is not None and units > Decimal("500000000000"):
+            _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+        return
+    citation = row.get("citation") or {}
+    line = str(citation.get("line") or "")
+    if citation.get("method") == "ixbrl":
+        row.setdefault("cross_check", {"status": "unavailable"})
+        units = _share_count_units(row["value"], row.get("scale"))
+        if ftse_member and units is not None and units < FTSE350_MIN_ORDINARY_SHARES:
+            _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+        return
+    label = re.split(r"\d", line, maxsplit=1)[0].strip()
+    page_blob = "\n".join(page_texts or [])
+    if line and not shares_context_accepted(label, line, page_blob):
+        _withhold_shares_row(row, ABSENT_SHARES_WRONG_CONTEXT)
+        return
+    if page_texts:
+        cross = shares_nominal_cross_check(page_texts, row["value"], row.get("scale"))
+        row["cross_check"] = cross
+        if cross.get("status") == "fail":
+            _withhold_shares_row(row, ABSENT_SHARES_NOMINAL_FAIL)
+            return
+    else:
+        row.setdefault("cross_check", {"status": "unavailable"})
+    units = _share_count_units(row.get("value"), row.get("scale"))
+    cross_status = (row.get("cross_check") or {}).get("status")
+    if (
+        ftse_member
+        and units is not None
+        and units < FTSE350_MIN_ORDINARY_SHARES
+        and cross_status != "pass"
+    ):
+        _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+    if units is not None and units > Decimal("500000000000"):
+        _withhold_shares_row(row, ABSENT_SHARES_IMPLAUSIBLE_SMALL)
+
+
+def apply_shares_precision_to_filings(
+    filings: list[dict[str, Any]],
+    *,
+    ftse_member: bool = True,
+) -> None:
+    for filing in filings:
+        blocks = [(filing.get("fields") or {})]
+        comp = filing.get("comparative") or {}
+        if comp.get("fields"):
+            blocks.append(comp["fields"])
+        for fields in blocks:
+            row = fields.get("shares_in_issue")
+            if isinstance(row, dict):
+                apply_shares_precision_to_row(row, ftse_member=ftse_member)
+
+
+def _parse_shares_in_issue_body(
+    text: str,
+    *,
+    page: int,
+    current_year: int,
+) -> _PageParse:
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    parsed = _PageParse()
+    years = _year_columns(lines)
+    parsed.year_columns = years
+    if years:
+        current_idx, prior_idx, prior_year = select_columns(years, current_year)
+        parsed.current_idx = current_idx
+        parsed.prior_idx = prior_idx
+        parsed.prior_year = prior_year
+    else:
+        current_idx = 0
+        prior_idx = None
+        prior_year = None
+        parsed.current_idx = 0
+    currency, scale, _currency_line = _detect_money_unit(lines)
+    parsed.scale = scale
+    amount_scale = scale
+    # Share counts are unit counts. A £'000 header is for nominal value, not the count.
+    if scale == "thousands" and not re.search(
+        r"shares\s+\(?'?000|thousands of shares", "\n".join(lines[:12]), re.I
+    ):
+        amount_scale = None
+    if scale == "millions" or re.search(
+        r"millions of shares|shares \(millions\)", "\n".join(lines[:12]), re.I
+    ):
+        parsed.shares_in_millions = True
+    pending = ""
+    for raw_line in lines:
+        line = repair_spaced_share_digit_groups(raw_line)
+        divided = _DIVIDED_INTO_ORDINARY_RE.search(line)
+        if divided and not shares_context_rejected("", line):
+            raw = re.sub(r"[\s,]", "", divided.group(1))
+            if raw.isdigit():
+                parsed.candidates.setdefault("shares_in_issue", []).append(
+                    Candidate(
+                        field="shares_in_issue",
+                        priority=4,
+                        label=line,
+                        line=line,
+                        page=page,
+                        current=raw,
+                        prior=None,
+                        unit=None,
+                        money=False,
+                        share_scale="units",
+                        share_basis="in_issue",
+                    )
+                )
+                continue
+        prose = _ORDINARY_SHARES_COUNT_RE.search(line)
+        if prose and _shares_in_issue_line_score(line) >= 0:
+            if shares_context_rejected("", line) or not shares_context_accepted(
+                "", line, "\n".join(lines)
+            ):
+                continue
+            raw = prose.group(1).replace(",", "")
+            if re.search(r"million ordinary shares", line, re.I) or (
+                "million" in line.lower() and parsed.shares_in_millions
+            ):
+                share_scale = "millions"
+            elif scale == "millions" and parsed.shares_in_millions:
+                share_scale = "millions"
+            elif scale == "thousands":
+                share_scale = "thousands"
+            else:
+                share_scale = "units"
+            parsed.candidates.setdefault("shares_in_issue", []).append(
+                Candidate(
+                    field="shares_in_issue",
+                    priority=3,
+                    label=line,
+                    line=line,
+                    page=page,
+                    current=raw,
+                    prior=None,
+                    unit=None,
+                    money=False,
+                    share_scale=share_scale,
+                    share_basis=_shares_in_issue_basis(line) or "in_issue",
+                )
+            )
+            continue
+        row_text = re.sub(r"\b\d+(?:\.\d+)?p\s+each\b", "", line, flags=re.I)
+        row_text = re.sub(r"\b\d+(?:\.\d+)?p\b", "", row_text, flags=re.I)
+        label, cells, status = _split_amount_row(row_text, len(years) if years else 1, amount_scale)
+        if label is None:
+            if _CARRY_RE.search(line):
+                pending = _short_line(line)
+            continue
+        if pending and len(label.split()) <= 6:
+            label = f"{pending} {label}".strip()
+        pending = ""
+        score = _shares_in_issue_line_score(label)
+        if score < 0:
+            continue
+        if shares_context_rejected(label, line) or not shares_context_accepted(
+            label, line, "\n".join(lines)
+        ):
+            continue
+        if score == 0 and not re.search(r"allotted|called up|fully paid", label, re.I):
+            continue
+        if status not in {"ok", "unresolved"}:
+            continue
+        if current_idx is None or current_idx >= len(cells):
+            continue
+        current = cells[current_idx]
+        if current.kind != "ok" or current.value is None:
+            continue
+        if score < 2 and "ordinary" not in label.lower():
+            continue
+        if parsed.shares_in_millions and _share_scale(label) == "units":
+            share_scale = "millions"
+        else:
+            share_scale = _share_scale(label) or "units"
+        try:
+            magnitude = abs(Decimal(str(current.value)))
+        except InvalidOperation:
+            continue
+        if (
+            share_scale == "units"
+            and magnitude < Decimal("10000")
+            and "," not in str(current.value)
+            and "million" not in line.lower()
+        ):
+            continue
+        prior_value = None
+        if (
+            prior_idx is not None
+            and prior_idx < len(cells)
+            and cells[prior_idx].kind == "ok"
+            and cells[prior_idx].value is not None
+        ):
+            prior_value = cells[prior_idx].value
+        parsed.candidates.setdefault("shares_in_issue", []).append(
+            Candidate(
+                field="shares_in_issue",
+                priority=score,
+                label=label,
+                line=line,
+                page=page,
+                current=current.value,
+                prior=prior_value,
+                unit=None,
+                money=False,
+                share_scale=share_scale,
+                share_basis=_shares_in_issue_basis(label) or "in_issue",
+            )
+        )
+    return parsed
+
+
+def _page_has_share_capital_content(text: str) -> bool:
+    return bool(
+        "share_capital" in _heading_kinds(text)
+        or _SHARE_CAPITAL_HINT_RE.search(text)
+        or _WIDE_SHARE_SCAN_RE.search(text)
+    )
+
+
+def _shares_in_issue_field(
+    pages: list[StatementPage],
+    *,
+    current_year: int,
+    transaction_id: str,
+    source: str,
+    full_pdf_scan: bool,
+) -> dict[str, Any]:
+    best: Candidate | None = None
+    saw_keywords = False
+    for page in pages:
+        if not _page_has_share_capital_content(page.text):
+            continue
+        if _WIDE_SHARE_SCAN_RE.search(page.text) or _SHARE_CAPITAL_HINT_RE.search(page.text):
+            saw_keywords = True
+        parsed = _parse_shares_in_issue_body(page.text, page=page.page, current_year=current_year)
+        cand = _best_candidate(parsed.candidates.get("shares_in_issue") or [])
+        if cand and (best is None or cand.priority > best.priority):
+            best = cand
+    if best is None:
+        if not pages:
+            reason = ABSENT_SHARES_NO_KEYWORD if full_pdf_scan else ABSENT_SHARES_NOTE_ONLY
+        elif full_pdf_scan and not saw_keywords:
+            reason = ABSENT_SHARES_NO_KEYWORD
+        elif saw_keywords:
+            reason = ABSENT_SHARES_KEYWORD_UNREADABLE
+        else:
+            reason = ABSENT_SHARES_NOTE_ONLY
+        return _empty_field(reason, source=source)
+    row = _filled_field(
+        best,
+        transaction_id=transaction_id,
+        source=source,
+        scale=None,
+        currency=None,
+        basis=best.share_basis,
+    )
+    page_texts = [page.text for page in pages if page.page == best.page]
+    cross = shares_nominal_cross_check(
+        page_texts or [p.text for p in pages], row["value"], row.get("scale")
+    )
+    row["cross_check"] = cross
+    if cross.get("status") == "fail":
+        return _empty_field(ABSENT_SHARES_NOMINAL_FAIL, source=source)
+    units = _share_count_units(row["value"], row.get("scale"))
+    if units is not None and units < FTSE350_MIN_ORDINARY_SHARES and cross.get("status") != "pass":
+        return _empty_field(ABSENT_SHARES_IMPLAUSIBLE_SMALL, source=source)
+    return row
+
+
+def _weighted_average_retry(
+    pages: list[StatementPage],
+    *,
+    current_year: int,
+    transaction_id: str,
+    source: str,
+) -> dict[str, Any] | None:
+    for page in pages:
+        kinds = _heading_kinds(page.text)
+        if "eps_note" not in kinds and "income" not in kinds:
+            continue
+        parsed = _parse_page_body(
+            page.text,
+            page=page.page,
+            current_year=current_year,
+            kinds={"eps_note", "income"},
+        )
+        cand = _best_candidate(parsed.candidates.get("weighted_average_basic_shares") or [])
+        if cand:
+            return _filled_field(
+                cand,
+                transaction_id=transaction_id,
+                source=source,
+                scale=None,
+                currency=None,
+            )
+    return None
+
+
+def parse_share_supplement(
+    pages: list[StatementPage],
+    *,
+    fiscal_year_end: str,
+    filing_date: str,
+    transaction_id: str,
+) -> dict[str, Any]:
+    """Shares-in-issue and a weighted-average retry. Statement pages only."""
+    current_year = int(fiscal_year_end[:4])
+    full_pdf_scan = any(_WIDE_SHARE_SCAN_RE.search(page.text) for page in pages) or len(pages) > 10
+    relevant = [page for page in pages if _page_has_share_capital_content(page.text)] or pages
+    primary_shares = _shares_in_issue_field(
+        relevant,
+        current_year=current_year,
+        transaction_id=transaction_id,
+        source="primary",
+        full_pdf_scan=full_pdf_scan,
+    )
+    wa = _weighted_average_retry(
+        pages,
+        current_year=current_year,
+        transaction_id=transaction_id,
+        source="primary",
+    )
+    comparative: dict[str, Any] | None = None
+    best_prior: Candidate | None = None
+    prior_year: int | None = None
+    for page in relevant:
+        parsed = _parse_shares_in_issue_body(page.text, page=page.page, current_year=current_year)
+        for cand in parsed.candidates.get("shares_in_issue") or []:
+            if cand.prior is None:
+                continue
+            if best_prior is None or cand.priority > best_prior.priority:
+                best_prior = cand
+                prior_year = parsed.prior_year
+    if best_prior is not None and prior_year is not None:
+        row = _filled_field(
+            best_prior,
+            transaction_id=transaction_id,
+            source="comparative",
+            scale=None,
+            currency=None,
+            value=best_prior.prior,
+            basis=best_prior.share_basis,
+        )
+        comparative = {"fiscal_year": prior_year, "fields": {"shares_in_issue": row}}
+    return {
+        "primary": {"shares_in_issue": primary_shares, "weighted_average_basic_shares": wa},
+        "comparative": comparative,
+    }
+
+
+def merge_share_supplement(
+    filing: dict[str, Any],
+    supplement: dict[str, Any],
+    *,
+    refresh: bool = False,
+) -> None:
+    """Fill share fields on ``filing`` without changing other stored values."""
+    primary = supplement.get("primary") or {}
+    fields = filing.setdefault("fields", {})
+    for name in ("shares_in_issue", "weighted_average_basic_shares"):
+        row = primary.get(name)
+        if not isinstance(row, dict):
+            continue
+        if refresh and name == "shares_in_issue":
+            fields[name] = row
+            continue
+        if row.get("value") not in (None, ""):
+            fields[name] = row
+            continue
+        existing = fields.get(name) or {}
+        if existing.get("value") in (None, ""):
+            fields[name] = row
+    comp = supplement.get("comparative")
+    if not comp:
+        return
+    block = filing.setdefault("comparative", None)
+    if block is None:
+        filing["comparative"] = {
+            "source": "comparative",
+            "fiscal_year": comp.get("fiscal_year"),
+            "fields": {},
+        }
+        block = filing["comparative"]
+    comp_fields = block.setdefault("fields", {})
+    for name, row in (comp.get("fields") or {}).items():
+        if not isinstance(row, dict):
+            continue
+        if row.get("value") not in (None, ""):
+            comp_fields[name] = row
+        elif (comp_fields.get(name) or {}).get("value") in (None, ""):
+            comp_fields[name] = row
 
 
 def parse_statement_pages(
@@ -1192,6 +1812,14 @@ def parse_statement_pages(
             _parse_page_body(page.text, page=page.page, current_year=current_year, kinds=kinds)
         )
 
+    share_parsed: list[_PageParse] = []
+    for page in pages:
+        kinds = _heading_kinds(page.text)
+        if "share_capital" in kinds or _SHARE_CAPITAL_HINT_RE.search(page.text):
+            share_parsed.append(
+                _parse_shares_in_issue_body(page.text, page=page.page, current_year=current_year)
+            )
+
     scale = None
     currency = None
     currency_line = ""
@@ -1261,6 +1889,25 @@ def parse_statement_pages(
     else:
         fields["weighted_average_basic_shares"] = _filled_field(
             shares, transaction_id=transaction_id, source="primary", scale=None, currency=None
+        )
+    # Ordinary shares in issue from the share-capital note.
+    share_choice = None
+    for parsed_share in share_parsed:
+        cand = _best_candidate(parsed_share.candidates.get("shares_in_issue") or [])
+        if cand and (share_choice is None or cand.priority > share_choice.priority):
+            share_choice = cand
+    if share_choice is None:
+        fields["shares_in_issue"] = _empty_field(
+            "ordinary shares in issue not found in the share-capital note"
+        )
+    else:
+        fields["shares_in_issue"] = _filled_field(
+            share_choice,
+            transaction_id=transaction_id,
+            source="primary",
+            scale=None,
+            currency=None,
+            basis=share_choice.share_basis,
         )
     _reject_eps_if_earnings_disagree(fields)
 
@@ -1353,6 +2000,7 @@ def parse_statement_pages(
         income_parsed,
         cash_parsed,
         note_parsed,
+        share_parsed,
         transaction_id=transaction_id,
         filing_date=filing_date,
         scale=scale,
@@ -1390,6 +2038,7 @@ def _comparative_record(
     income_parsed: _PageParse | None,
     cash_parsed: _PageParse | None,
     note_parsed: list[_PageParse],
+    share_parsed: list[_PageParse],
     *,
     transaction_id: str,
     filing_date: str,
@@ -1428,9 +2077,10 @@ def _comparative_record(
             chosen,
             transaction_id=transaction_id,
             source="comparative",
-            scale=scale,
+            scale=scale if money else chosen.share_scale,
             currency=currency if money else None,
             value=chosen.prior,
+            basis=chosen.share_basis if name == "shares_in_issue" else None,
         )
         row["source"] = "comparative"
         fields[name] = row
@@ -1440,6 +2090,7 @@ def _comparative_record(
     take("profit_attributable_to_owners", [income_parsed], True)
     take("basic_eps", [income_parsed, *note_parsed], False)
     take("weighted_average_basic_shares", [income_parsed, *note_parsed], False)
+    take("shares_in_issue", share_parsed, False)
     take("net_cash_from_operating_activities", [cash_parsed], True)
     take("dividends_per_share", [income_parsed, *note_parsed], False)
     if not fields:
@@ -1851,6 +2502,7 @@ _GATED_FIELDS = {
     "profit_attributable_to_owners",
     "basic_eps",
     "weighted_average_basic_shares",
+    "shares_in_issue",
     "net_cash_from_operating_activities",
     "capital_expenditure",
     "dividends_per_share",
@@ -1863,6 +2515,11 @@ GATE_OPERATING_PROFIT = "operating_profit_above_revenue"
 GATE_SCALE_JUMP = "scale_jump"
 GATE_ROW_DECIMAL = "row_decimal"
 GATE_SECOND_READING = "second_reading"
+GATE_SHARES_JUMP = "shares_jump"
+GATE_SHARES_VS_WEIGHTED = "shares_vs_weighted_average"
+GATE_SHARES_CONTEXT = "shares_wrong_context"
+GATE_SHARES_NOMINAL = "shares_nominal_cross_check"
+GATE_SHARES_IMPLAUSIBLE = "implausibly_small_ftse350"
 _GATE_REASONS = {
     GATE_DIGIT_COUNT,
     GATE_SIGN,
@@ -1872,6 +2529,14 @@ _GATE_REASONS = {
     GATE_SCALE_JUMP,
     GATE_ROW_DECIMAL,
     GATE_SECOND_READING,
+    GATE_SHARES_JUMP,
+    GATE_SHARES_VS_WEIGHTED,
+    GATE_SHARES_CONTEXT,
+    GATE_SHARES_NOMINAL,
+    GATE_SHARES_IMPLAUSIBLE,
+    ABSENT_SHARES_WRONG_CONTEXT,
+    ABSENT_SHARES_NOMINAL_FAIL,
+    ABSENT_SHARES_IMPLAUSIBLE_SMALL,
 }
 _MONEY_FIELDS = {
     "revenue",
@@ -2338,6 +3003,78 @@ def apply_value_gate(filings: list[dict[str, Any]], *, financial: bool = False) 
                 continue
             _null_value(row, GATE_SCALE_JUMP, counts)
 
+    for rows in (_field_rows(filings, "shares_in_issue"),):
+        snapshot = []
+        for year, row in rows:
+            try:
+                snapshot.append(
+                    (
+                        year,
+                        row,
+                        Decimal(str(row["value"])),
+                        row.get("scale"),
+                    )
+                )
+            except InvalidOperation:
+                continue
+        for prev, curr in zip(snapshot, snapshot[1:], strict=False):
+            prev_year, prev_row, left_raw, left_scale = prev
+            year, row, right_raw, right_scale = curr
+            if year - prev_year != 1:
+                continue
+            try:
+                left = abs(_to_absolute(left_raw, left_scale))
+                right = abs(_to_absolute(right_raw, right_scale))
+            except InvalidOperation:
+                continue
+            if left <= Decimal("0.01") or right <= Decimal("0.01"):
+                continue
+            ratio = max(left, right) / min(left, right)
+            if ratio <= Decimal("3"):
+                continue
+            later_line = _citation_line(row)
+            same_line = bool(later_line) and later_line == _citation_line(prev_row)
+            if same_line:
+                continue
+            context = f"{later_line} {_citation_line(prev_row)}"
+            if _SHARE_EVENT_RE.search(context):
+                continue
+            _null_value(row, GATE_SHARES_JUMP, counts)
+
+    for filing in filings:
+        blocks = [(filing.get("fields") or {})]
+        comp = filing.get("comparative") or {}
+        if comp.get("fields"):
+            blocks.append(comp["fields"])
+        for fields in blocks:
+            issue = _decimal_field(fields, "shares_in_issue")
+            wa = _decimal_field(fields, "weighted_average_basic_shares")
+            if not (issue and wa):
+                continue
+            try:
+                in_issue = abs(_to_absolute(issue[0], issue[1].get("scale")))
+                weighted = abs(_to_absolute(wa[0], wa[1].get("scale")))
+            except InvalidOperation:
+                continue
+            if in_issue <= Decimal("0.01") or weighted <= Decimal("0.01"):
+                continue
+            if max(in_issue, weighted) / min(in_issue, weighted) > Decimal("2"):
+                _null_value(issue[1], GATE_SHARES_VS_WEIGHTED, counts)
+
+    for filing in filings:
+        blocks = [(filing.get("fields") or {})]
+        comp = filing.get("comparative") or {}
+        if comp.get("fields"):
+            blocks.append(comp["fields"])
+        for fields in blocks:
+            row = fields.get("shares_in_issue")
+            if isinstance(row, dict) and row.get("value") not in (None, ""):
+                prior = row.get("value")
+                apply_shares_precision_to_row(row, ftse_member=True)
+                if prior not in (None, "") and row.get("value") in (None, ""):
+                    reason = str(row.get("absent_reason") or GATE_SHARES_CONTEXT)
+                    counts[reason] = counts.get(reason, 0) + 1
+
     # Count values that are absent because a gate check failed, including ones
     # nulled on an earlier pass and left absent.
     standing: dict[str, int] = {}
@@ -2431,6 +3168,7 @@ def leaver_year_coverage(
     cash_years = present("net_cash_from_operating_activities")
     capex_years = present("capital_expenditure")
     cash_and_capex = sorted(set(cash_years) & set(capex_years))
+    shares_years = _years_with_shares_in_issue(filings)
     return {
         "expected_years": expected,
         "years_with_eps": eps_years,
@@ -2438,8 +3176,62 @@ def leaver_year_coverage(
         "years_with_operating_cash_flow": cash_years,
         "years_with_capex": capex_years,
         "years_with_operating_cash_flow_and_capex": cash_and_capex,
+        "years_with_shares_in_issue": shares_years,
         "statements_every_year": bool(expected) and all(year in eps_years for year in expected),
+        "shares_every_year": bool(expected) and all(year in shares_years for year in expected),
     }
+
+
+def _years_with_shares_in_issue(filings: list[dict[str, Any]]) -> list[int]:
+    years: set[int] = set()
+    for filing in filings:
+        year = filing.get("fiscal_year")
+        row = (filing.get("fields") or {}).get("shares_in_issue") or {}
+        if year is not None and row.get("value") not in (None, ""):
+            years.add(int(year))
+        comp = filing.get("comparative") or {}
+        comp_year = comp.get("fiscal_year")
+        comp_row = (comp.get("fields") or {}).get("shares_in_issue") or {}
+        if comp_year is not None and comp_row.get("value") not in (None, ""):
+            years.add(int(comp_year))
+    return sorted(years)
+
+
+def summarise_share_coverage(name_rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Coverage for ``shares_in_issue`` on leaver and hand-verified names."""
+    summary: dict[str, Any] = {
+        "names_with_any_shares_in_issue": 0,
+        "filings_with_shares_in_issue": 0,
+        "names_every_expected_year": 0,
+        "by_reason_class": {},
+    }
+    for reason in ("takeover", "failure", "other"):
+        summary["by_reason_class"][reason] = {
+            "names_with_any_shares_in_issue": 0,
+            "names_every_expected_year": 0,
+        }
+    for row in name_rows:
+        filings = row.get("filings") or []
+        share_years = _years_with_shares_in_issue(filings)
+        if not share_years:
+            continue
+        summary["names_with_any_shares_in_issue"] += 1
+        for filing in filings:
+            primary = (filing.get("fields") or {}).get("shares_in_issue") or {}
+            if primary.get("value") not in (None, ""):
+                summary["filings_with_shares_in_issue"] += 1
+        coverage = row.get("leaver_coverage") or {}
+        expected = [int(y) for y in coverage.get("expected_years") or []]
+        every = bool(expected) and all(year in share_years for year in expected)
+        if every:
+            summary["names_every_expected_year"] += 1
+        reason = str(row.get("reason_class") or "")
+        if reason in summary["by_reason_class"]:
+            bucket = summary["by_reason_class"][reason]
+            bucket["names_with_any_shares_in_issue"] += 1
+            if every:
+                bucket["names_every_expected_year"] += 1
+    return summary
 
 
 def summarise_leaver_coverage(name_rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -2509,6 +3301,13 @@ def ops_findings_from_ch_failed_name_statements(
             f" Leaver statements every expected year: {leaver.get('every_year')} of "
             f"{leaver.get('ch_applicable')} Companies House-applicable leavers "
             f"({leaver.get('with_any_statement')} with any statement year)."
+        )
+    share = payload.get("share_coverage") or {}
+    if share:
+        summary += (
+            f" Shares in issue: {share.get('names_with_any_shares_in_issue')} names, "
+            f"{share.get('filings_with_shares_in_issue')} filings "
+            f"({share.get('names_every_expected_year')} with every expected year)."
         )
     summary += f" Observe-only. See {RUNBOOK}."
     return [
@@ -2913,6 +3712,185 @@ def _fast_statement_pages(headers: list[str]) -> list[int]:
     return chosen
 
 
+def _fast_share_capital_pages(headers: list[str]) -> list[int]:
+    chosen: list[int] = []
+    for index, header in enumerate(headers):
+        if "share_capital" in _heading_kinds(str(header)) or _SHARE_CAPITAL_HINT_RE.search(
+            str(header)
+        ):
+            chosen.extend([index, index + 1])
+    return chosen[:8]
+
+
+def _share_page_indices_from_headers(
+    headers: list[str], *, wide: bool, max_pages: int
+) -> list[int]:
+    chosen: list[int] = []
+    for index, header in enumerate(headers):
+        text = str(header)
+        hit = (
+            "share_capital" in _heading_kinds(text)
+            or _SHARE_CAPITAL_HINT_RE.search(text)
+            or (wide and _WIDE_SHARE_SCAN_RE.search(text))
+        )
+        if hit:
+            chosen.extend([index, index + 1])
+        if len(chosen) >= max_pages:
+            break
+    return chosen[:max_pages]
+
+
+def _share_text_from_page_cache(page_cache: Path, index: int) -> str | None:
+    for name in (f"share-p{index + 1}.json", f"p{index + 1}.json"):
+        cached = _load_json(page_cache / name)
+        if isinstance(cached, dict) and isinstance(cached.get("lines"), list):
+            return "\n".join(str(line) for line in cached["lines"])
+    return None
+
+
+def extract_share_capital_pages(
+    pdf_path: Path,
+    *,
+    transaction_id: str,
+    cache_dir: Path,
+    zoom: float = 1.6,
+    page_zoom: float = 2.2,
+    max_pages: int = 8,
+    wide: bool = False,
+) -> list[StatementPage]:
+    """Share-capital pages; ``wide`` searches the whole filing for share-count keywords."""
+    import pymupdf
+
+    cap = min(64, max_pages * 8) if wide else max_pages
+    doc = pymupdf.open(pdf_path)
+    try:
+        sample = [i for i in (0, doc.page_count // 2) if i < doc.page_count]
+        has_text = any(len((doc[i].get_text("text") or "").strip()) > 80 for i in sample)
+        if has_text:
+            pages: list[StatementPage] = []
+            for index in range(doc.page_count):
+                text = doc[index].get_text("text") or ""
+                if not (
+                    _SHARE_CAPITAL_HINT_RE.search(text)
+                    or _ORDINARY_SHARES_COUNT_RE.search(text)
+                    or (wide and _WIDE_SHARE_SCAN_RE.search(text))
+                ):
+                    continue
+                pages.append(StatementPage(page=index + 1, text=text, method="pymupdf"))
+                if not wide and len(pages) >= max_pages:
+                    break
+                if wide and len(pages) >= cap:
+                    break
+            return pages
+        if not _ocr_enabled():
+            return []
+        page_cache = cache_dir / f"ocr-v{CACHE_VERSION}-z{page_zoom:.1f}" / transaction_id
+        page_cache.mkdir(parents=True, exist_ok=True)
+        header_path = cache_dir / f"ocr-headers-z{zoom:.1f}" / transaction_id / "headers.json"
+        headers = _load_json(header_path)
+        chosen: list[int] = []
+        if isinstance(headers, list) and len(headers) == doc.page_count:
+            chosen = _share_page_indices_from_headers(headers, wide=wide, max_pages=cap)
+        if wide and isinstance(headers, list):
+            for index, _header in enumerate(headers):
+                if index in chosen:
+                    continue
+                body = _share_text_from_page_cache(page_cache, index)
+                if body and _WIDE_SHARE_SCAN_RE.search(body):
+                    chosen.extend([index, index + 1])
+                if len(chosen) >= cap:
+                    break
+        if not chosen:
+            limit = doc.page_count if wide else min(doc.page_count, 120)
+            for index in range(limit):
+                if isinstance(headers, list) and index < len(headers):
+                    header = str(headers[index])
+                else:
+                    image = _page_image(doc, index, zoom=zoom)
+                    header = "\n".join(_ocr_image_lines(image, header_only=True))
+                    if isinstance(headers, list):
+                        while len(headers) <= index:
+                            headers.append("")
+                        headers[index] = header
+                if (
+                    "share_capital" in _heading_kinds(header)
+                    or _SHARE_CAPITAL_HINT_RE.search(header)
+                    or (wide and _WIDE_SHARE_SCAN_RE.search(header))
+                ):
+                    chosen.extend([index, index + 1])
+                if len(chosen) >= cap:
+                    break
+            if isinstance(headers, list) and len(headers) == doc.page_count:
+                header_path.parent.mkdir(parents=True, exist_ok=True)
+                header_path.write_text(json.dumps(headers), encoding="utf-8")
+        seen: set[int] = set()
+        ordered: list[int] = []
+        for index in chosen:
+            if index not in seen and index < doc.page_count:
+                seen.add(index)
+                ordered.append(index)
+        if wide and len(ordered) < cap:
+            for index in range(doc.page_count):
+                if index in seen:
+                    continue
+                body = _share_text_from_page_cache(page_cache, index)
+                if body and _WIDE_SHARE_SCAN_RE.search(body):
+                    ordered.append(index)
+                    seen.add(index)
+                if len(ordered) >= cap:
+                    break
+        pages: list[StatementPage] = []
+        for index in ordered[:cap]:
+            text = _share_text_from_page_cache(page_cache, index)
+            if text is None:
+                image = _page_image(doc, index, zoom=page_zoom, prefer_embedded=False)
+                lines = _ocr_image_lines(image, header_only=False)
+                text = "\n".join(lines)
+                (page_cache / f"share-p{index + 1}.json").write_text(
+                    json.dumps({"lines": lines}), encoding="utf-8"
+                )
+            pages.append(StatementPage(page=index + 1, text=text, method="ocr"))
+        return pages
+    finally:
+        doc.close()
+
+
+def extract_eps_note_pages(
+    pdf_path: Path,
+    *,
+    transaction_id: str,
+    cache_dir: Path,
+    zoom: float = 1.6,
+    page_zoom: float = 2.2,
+) -> list[StatementPage]:
+    """One EPS note page for a weighted-average retry (minimal OCR)."""
+    import pymupdf
+
+    doc = pymupdf.open(pdf_path)
+    try:
+        for index in range(doc.page_count):
+            text = doc[index].get_text("text") or ""
+            if "eps_note" in _heading_kinds(text):
+                return [StatementPage(page=index + 1, text=text, method="pymupdf")]
+        if not _ocr_enabled():
+            return []
+        header_path = cache_dir / f"ocr-headers-z{zoom:.1f}" / transaction_id / "headers.json"
+        headers = _load_json(header_path)
+        chosen = None
+        if isinstance(headers, list):
+            for index, header in enumerate(headers):
+                if "eps_note" in _heading_kinds(str(header)):
+                    chosen = index
+                    break
+        if chosen is None:
+            return []
+        image = _page_image(doc, chosen, zoom=page_zoom, prefer_embedded=False)
+        lines = _ocr_image_lines(image, header_only=False)
+        return [StatementPage(page=chosen + 1, text="\n".join(lines), method="ocr")]
+    finally:
+        doc.close()
+
+
 def extract_statement_pages(
     pdf_path: Path,
     *,
@@ -3183,6 +4161,7 @@ def build_store(
         "combined_check_a_pass": combined["pass"],
         "combined": combined,
         "names": name_rows,
+        "share_coverage": summarise_share_coverage(name_rows),
     }
 
 
@@ -3312,12 +4291,88 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Re-extract --only keys even when they are already complete.",
     )
+    parser.add_argument(
+        "--reextract-shares",
+        action="store_true",
+        help="Fill shares_in_issue and retry weighted-average shares on stored filings only.",
+    )
+    parser.add_argument(
+        "--backfill-capital-shares",
+        action="store_true",
+        help="Fill null shares_in_issue from CH statement-of-capital forms only.",
+    )
+    parser.add_argument(
+        "--page-read-shares",
+        action="store_true",
+        help="High-res share-capital note page read for failure/other leavers (and CH failure names).",
+    )
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     api_key = companies_house_api_key()
     if not api_key:
         print("COMPANIES_HOUSE_API_KEY is not set", file=sys.stderr)
         return 2
+    if args.page_read_shares:
+        from value_investor.ch_share_page_read import run_page_read_backfill
+
+        payload = run_page_read_backfill(
+            leaver_path=args.leaver_list,
+            out_path=args.out,
+            api_key=api_key,
+            cache_dir=args.cache_dir,
+            eodhd_path=args.eodhd,
+            only=set(args.only) if args.only else None,
+        )
+        share = payload.get("share_coverage") or {}
+        logger.info(
+            "wrote %s page-read names=%s filings=%s",
+            args.out,
+            share.get("names_with_any_shares_in_issue"),
+            share.get("filings_with_shares_in_issue"),
+        )
+        return 0
+    if args.backfill_capital_shares:
+        from value_investor.ch_share_reextract import run_capital_share_backfill
+
+        payload = run_capital_share_backfill(
+            leaver_path=args.leaver_list,
+            out_path=args.out,
+            api_key=api_key,
+            cache_dir=args.cache_dir,
+            allow_ocr=args.allow_ocr,
+            only=set(args.only) if args.only else None,
+            limit=args.limit,
+            eodhd_path=args.eodhd,
+        )
+        share = payload.get("share_coverage") or {}
+        logger.info(
+            "wrote %s capital backfill names=%s filings=%s",
+            args.out,
+            share.get("names_with_any_shares_in_issue"),
+            share.get("filings_with_shares_in_issue"),
+        )
+        return 0
+    if args.reextract_shares:
+        from value_investor.ch_share_reextract import run_share_reextraction
+
+        payload = run_share_reextraction(
+            leaver_path=args.leaver_list,
+            out_path=args.out,
+            api_key=api_key,
+            cache_dir=args.cache_dir,
+            allow_ocr=args.allow_ocr,
+            only=set(args.only) if args.only else None,
+            limit=args.limit,
+            eodhd_path=args.eodhd,
+        )
+        share = payload.get("share_coverage") or {}
+        logger.info(
+            "wrote %s share names=%s filings=%s",
+            args.out,
+            share.get("names_with_any_shares_in_issue"),
+            share.get("filings_with_shares_in_issue"),
+        )
+        return 0
     if args.leavers:
         from value_investor.ch_leaver_statements import run_leaver_extraction
 

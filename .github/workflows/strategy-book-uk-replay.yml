@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       phase:
-        description: fetch, development, development-amendment, or reveal
+        description: fetch, development, development-amendment, reveal, or share-coverage (counts only, cache only)
         required: true
         type: choice
         options:
@@ -14,6 +14,7 @@ on:
           - development
           - development-amendment
           - reveal
+          - share-coverage
       registration:
         description: v0 (sealed 2026-11-12) or v1 (Companies House shares for the cap; refuses until sealed)
         required: true
@@ -98,6 +99,7 @@ jobs:
           case "$PHASE" in
             development) set -- develop ;;
             development-amendment) set -- develop --amend ;;
+            share-coverage) set -- share-coverage ;;
             *) set -- "$PHASE" ;;
           esac
           ftse-strategy-book-uk-replay --registration "$REGISTRATION" "$@" --cache "$UK_REPLAY_CACHE"
@@ -131,7 +133,7 @@ jobs:
       - name: Commit aggregate store
         if: steps.secrets.outputs.ready == 'true'
         env:
-          GHA_COMMIT_OWNED: docs/data/strategy_book_uk_replay.json docs/data/strategy_book_uk_replay_v1.json
+          GHA_COMMIT_OWNED: docs/data/strategy_book_uk_replay.json docs/data/strategy_book_uk_replay_v1.json docs/data/strategy_book_uk_replay_share_coverage.json
           COMMIT_MESSAGE: "chore: strategy-book UK replay aggregates [skip ci]"
           GHA_COMMIT_LABEL: "strategy-book UK replay"
         run: bash scripts/gha_commit_artifacts.sh

@@ -3708,6 +3708,10 @@
         {
           "as_of": "2026-11-13T02:35:26.034847-05:00",
           "price": 70.04
+        },
+        {
+          "as_of": "2026-11-15T02:07:01.610104-05:00",
+          "price": 70.91
         }
       ]
     },
@@ -3932,6 +3936,10 @@
         {
           "as_of": "2026-11-13T02:35:26.034847-05:00",
           "price": 134.75
+        },
+        {
+          "as_of": "2026-11-15T02:07:01.610104-05:00",
+          "price": 134.18
         }
       ]
     },
@@ -4280,7 +4288,7 @@
       "track_id": "buy_tier_level_native",
       "ticker": "AEM.TO",
       "started_at": "2026-11-12T02:39:04.208507-05:00",
-      "status": "open",
+      "status": "closed",
       "lifecycle_stage": "starter",
       "entry_kind": "first_entry",
       "entry_price": 265.03,
@@ -4299,6 +4307,170 @@
         {
           "as_of": "2026-11-13T02:35:26.034847-05:00",
           "price": 265.03
+        },
+        {
+          "as_of": "2026-11-15T02:07:01.610104-05:00",
+          "price": 254.4
+        }
+      ],
+      "cadence_scores": [
+        {
+          "id": "lump_sum",
+          "label": "100% at decision",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 1,
+          "avg_fill": 265.03,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -1.61,
+          "peak_deployed_return": -0.0401,
+          "end_value": 38.63,
+          "end_value_delta": 0.0,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-12T02:39:04.208507-05:00",
+              "price": 265.03
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_2x_weekly",
+          "label": "50/50 over 1 week",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 265.03,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 20.12,
+          "peak_loss_gbp": -0.81,
+          "peak_deployed_return": -0.0401,
+          "end_value": 39.43,
+          "end_value_delta": 0.81,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-12T02:39:04.208507-05:00",
+              "price": 265.03
+            }
+          ],
+          "de_risk_gbp": 0.8
+        },
+        {
+          "id": "dca_4x_weekly",
+          "label": "25% weekly \u00d7 4",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 4,
+          "avg_fill": 265.03,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 30.18,
+          "peak_loss_gbp": -0.4,
+          "peak_deployed_return": -0.0401,
+          "end_value": 39.84,
+          "end_value_delta": 1.21,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-12T02:39:04.208507-05:00",
+              "price": 265.03
+            }
+          ],
+          "de_risk_gbp": 1.21
+        },
+        {
+          "id": "dca_2x_biweekly",
+          "label": "50/50 over 2 weeks",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 265.03,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 20.12,
+          "peak_loss_gbp": -0.81,
+          "peak_deployed_return": -0.0401,
+          "end_value": 39.43,
+          "end_value_delta": 0.81,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-12T02:39:04.208507-05:00",
+              "price": 265.03
+            }
+          ],
+          "de_risk_gbp": 0.8
+        },
+        {
+          "id": "dca_5x_weekday",
+          "label": "20% over 5 weekday marks",
+          "scored": true,
+          "tranches_filled": 4,
+          "tranches_target": 5,
+          "avg_fill": 259.6062,
+          "fill_advantage_pct": 0.0205,
+          "extra_cost": 0.01,
+          "leftover_cash": 8.05,
+          "peak_loss_gbp": -0.65,
+          "peak_deployed_return": -0.0267,
+          "end_value": 39.59,
+          "end_value_delta": 0.96,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-12T02:39:04.208507-05:00",
+              "price": 265.03
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-11-13T02:35:26.034847-05:00",
+              "price": 265.03
+            },
+            {
+              "tranche": 3,
+              "as_of": "2026-11-15T02:07:01.610104-05:00",
+              "price": 254.4
+            },
+            {
+              "tranche": 4,
+              "as_of": "2026-11-15T02:07:01.610104-05:00",
+              "price": 254.4
+            }
+          ],
+          "de_risk_gbp": 0.96
+        }
+      ],
+      "winning_cadence": "dca_4x_weekly",
+      "winning_end_value_delta": 1.21,
+      "any_de_risk": true,
+      "closed_at": "2026-11-15T02:07:01.610104-05:00",
+      "close_reason": "sold_before_window"
+    },
+    {
+      "id": "buy_tier_level_native:CTC-A.TO:2026-11-15T02:07:01.610104-05:00",
+      "track_id": "buy_tier_level_native",
+      "ticker": "CTC-A.TO",
+      "started_at": "2026-11-15T02:07:01.610104-05:00",
+      "status": "open",
+      "lifecycle_stage": "starter",
+      "entry_kind": "first_entry",
+      "entry_price": 220.32,
+      "notional": 49.5,
+      "shares": 0.224687,
+      "buy_cost_pct": 0.00025,
+      "screen_signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5109,
+      "data_quality_score": 1.0,
+      "marks": [
+        {
+          "as_of": "2026-11-15T02:07:01.610104-05:00",
+          "price": 220.32
         }
       ]
     }

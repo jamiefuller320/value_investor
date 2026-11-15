@@ -230,6 +230,9 @@ RUNBOOK_PATH = "docs/ops/strategy-book-uk-replay-runbook.md"
 TITLE = "Strategy-book UK replay"
 TITLE_FAILED = "Strategy-book UK replay store unreadable"
 CACHE_ENV = "UK_REPLAY_CACHE"
+SHARE_COVERAGE_PATH = Path("docs/data/strategy_book_uk_replay_share_coverage.json")
+SHARE_COVERAGE_MONTHS = 24
+TITLE_SHARE_COVERAGE = "Strategy-book UK replay leaver share coverage"
 
 # v1 (docs/ops/strategy-book-uk-replay-v1-registration-draft.md) is v0 with the
 # Companies House share-count fallback for the cap. Every other constant is v0's.
@@ -2534,6 +2537,172 @@ def _records_from_cache(cache: Path) -> list[dict[str, Any]]:
     return records
 
 
+def _serving_ch_filing(
+    filings: Sequence[Mapping[str, Any]], session: date
+) -> Mapping[str, Any] | None:
+    """The filing ``ch_shares_on`` would read on ``session``, whether or not it has a count."""
+    lag = timedelta(days=int(tape._const("CH_SHARES_LAG_DAYS")))
+    best: tuple[date, date] | None = None
+    chosen: Mapping[str, Any] | None = None
+    for filing in filings:
+        period_end = tape._parse_date(filing.get("fiscal_year_end"))
+        if period_end is None:
+            continue
+        filed = tape._parse_date(filing.get("filing_date"))
+        base = filed or period_end + timedelta(days=int(tape._const("STATEMENT_LAG_DAYS")))
+        if base + lag > session:
+            continue
+        if best is None or (period_end, base) > best:
+            best, chosen = (period_end, base), filing
+    if best is None or (session - best[0]).days > int(tape._const("CH_SHARES_STALE_DAYS")):
+        return None
+    return chosen
+
+
+def share_coverage(
+    records: Sequence[Mapping[str, Any]],
+    ch_store: Mapping[str, Any],
+    *,
+    months: int = SHARE_COVERAGE_MONTHS,
+) -> dict[str, Any]:
+    """Which Companies House leavers lack an EODHD share count near their exit.
+
+    For each store name matched to a cached EODHD symbol, each of its last
+    ``months`` month-ends is counted as covered by EODHD, by the v1 Companies
+    House fallback only, or by neither. For the neither months it names the
+    filing the fallback would read, so page reading can be sized. Counts only:
+    no price, share value, rank or return is read into the output.
+    """
+    with registration("v1"):
+        tape_start = date.fromisoformat(str(REGISTRATION_CONSTANTS["TAPE_START"]))
+        matched: dict[str, list[Mapping[str, Any]]] = {}
+        for record in records:
+            slim = _slim_record(record)
+            bars = slim["bars"]
+            if not len(bars):
+                continue
+            key = tape.match_ch_record(
+                ch_store,
+                symbol=str(slim.get("symbol") or ""),
+                name=str(slim.get("name") or "") or None,
+                last_bar=bars.dates[-1],
+            )
+            if key:
+                matched.setdefault(key, []).append(slim)
+        rows: list[dict[str, Any]] = []
+        for name in ch_store.get("names") or []:
+            if not isinstance(name, Mapping) or not name.get("key"):
+                continue
+            key = str(name["key"])
+            kind = str(name.get("reason_class") or "named_failure")
+            candidates = matched.get(key) or []
+            row: dict[str, Any] = {"key": key, "reason_class": kind}
+            if len(candidates) != 1:
+                row["matched"] = False
+                row["symbols_matched"] = len(candidates)
+                rows.append(row)
+                continue
+            slim = candidates[0]
+            filings = tape.ch_filings_for_key(ch_store, key)
+            ends = [day for day in tape.month_end_dates(slim["bars"].dates) if day >= tape_start]
+            ends = ends[-months:]
+            counts = Counter()
+            to_read: set[str] = set()
+            for day in ends:
+                if tape.select_shares(slim["shares_annual"], slim["shares_quarterly"], day):
+                    counts["eodhd"] += 1
+                elif tape.ch_shares_on(filings, day):
+                    counts["ch_only"] += 1
+                else:
+                    counts["neither"] += 1
+                    serving = _serving_ch_filing(filings, day)
+                    to_read.add(
+                        str(serving.get("fiscal_year_end")) if serving else "no_visible_filing"
+                    )
+            row.update(
+                {
+                    "matched": True,
+                    "months": len(ends),
+                    "eodhd_months": counts["eodhd"],
+                    "ch_only_months": counts["ch_only"],
+                    "neither_months": counts["neither"],
+                    "filings_to_read": sorted(to_read),
+                }
+            )
+            rows.append(row)
+    by_kind: dict[str, Counter] = {}
+    for row in rows:
+        tally = by_kind.setdefault(row["reason_class"], Counter())
+        tally["names"] += 1
+        if not row["matched"]:
+            tally["not_matched"] += 1
+            continue
+        tally["matched"] += 1
+        if row["neither_months"]:
+            tally["gap_remaining"] += 1
+            readable = [item for item in row["filings_to_read"] if item != "no_visible_filing"]
+            tally["filings_to_read"] += len(readable)
+            if len(readable) < len(row["filings_to_read"]):
+                tally["gap_without_a_filing"] += 1
+        elif row["ch_only_months"]:
+            tally["gap_filled_by_ch"] += 1
+        else:
+            tally["eodhd_every_month"] += 1
+    return {
+        "schema_version": 1,
+        "computed_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        "purpose": (
+            "Size page reading of Companies House share counts before the v1 seal: "
+            "which leavers lack an EODHD share count in their last months. "
+            "Coverage counts only; nothing is scored."
+        ),
+        "observe_only": True,
+        "influences_live": False,
+        "scored": False,
+        "rule": "v1 Companies House fallback constants (unsealed draft); EODHD rule as v0",
+        "months_before_exit": months,
+        "by_reason_class": {kind: dict(tally) for kind, tally in sorted(by_kind.items())},
+        "names": rows,
+    }
+
+
+def write_share_coverage(payload: Mapping[str, Any], repo_root: Path = REPO_ROOT) -> Path:
+    assert_store_has_no_licensed_numbers(payload)
+    path = Path(repo_root) / SHARE_COVERAGE_PATH
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
+def _share_coverage_findings(repo_root: Path) -> list[dict[str, Any]]:
+    path = Path(repo_root) / SHARE_COVERAGE_PATH
+    if not path.exists():
+        return []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        kinds = payload["by_reason_class"]
+    except (OSError, ValueError, KeyError, TypeError):
+        return [
+            {
+                "severity": "warn",
+                "title": TITLE_SHARE_COVERAGE,
+                "summary": f"{SHARE_COVERAGE_PATH} is unreadable.",
+            }
+        ]
+    parts = [
+        f"{kind}: {tally.get('gap_remaining', 0)} of {tally.get('matched', 0)} matched "
+        f"still lack a share count ({tally.get('filings_to_read', 0)} filings to read)"
+        for kind, tally in kinds.items()
+    ]
+    return [
+        {
+            "severity": "info",
+            "title": TITLE_SHARE_COVERAGE,
+            "summary": "; ".join(parts) + f". See {RUNBOOK_PATH}.",
+        }
+    ]
+
+
 def confirm_deleted(repo_root: Path = REPO_ROOT, cache: Path | None = None) -> dict[str, Any]:
     store = _read_store(repo_root)
     if store is None:
@@ -2553,6 +2722,7 @@ def findings(repo_root: Path = REPO_ROOT) -> list[dict[str, Any]]:
     for version in REGISTRATIONS:
         with registration(version):
             rows.extend(_store_findings(repo_root))
+    rows.extend(_share_coverage_findings(repo_root))
     return rows
 
 
@@ -2656,11 +2826,25 @@ def main(argv: list[str] | None = None) -> int:
     rev_p = sub.add_parser("reveal", help="The single holdout write.")
     rev_p.add_argument("--cache", type=Path)
     sub.add_parser("status", help="Print the aggregate store status.")
+    cov_p = sub.add_parser(
+        "share-coverage",
+        help="Count leaver months without an EODHD share count from the cache. No EODHD call.",
+    )
+    cov_p.add_argument("--cache", type=Path)
     del_p = sub.add_parser("confirm-deleted", help="Stamp licensed_data.deleted_at.")
     del_p.add_argument("--cache", type=Path)
     args = parser.parse_args(argv)
     if args.command == "status":
         print(json.dumps(findings(args.repo), indent=2))
+        return 0
+    if args.command == "share-coverage":
+        cache = Path(args.cache) if args.cache is not None else default_cache_dir()
+        if not (cache / "raw").is_dir():
+            print(f"No cached EODHD data under {cache}; share-coverage never fetches.", flush=True)
+            return 2
+        payload = share_coverage(_records_from_cache(cache), _load_ch(args.repo))
+        write_share_coverage(payload, args.repo)
+        print(json.dumps(payload["by_reason_class"], indent=2))
         return 0
     previous_registration = ACTIVE_REGISTRATION
     use_registration(args.registration)

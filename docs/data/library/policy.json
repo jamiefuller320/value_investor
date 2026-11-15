@@ -367,15 +367,15 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 174.7,
-    "estimated_spend_usd_this_week": 67.5,
+    "estimated_spend_usd_this_cycle": 175.5,
+    "estimated_spend_usd_this_week": 68.3,
     "week_id": "2026-W46",
     "cycle_id": "2026-11-d8",
     "weekly_ops_cap_usd": 124.5,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "token_usage_weekly_warning_raw_usd": null,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 19.5,
+    "estimated_spend_weekly_ops_usd_this_week": 20.3,
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
@@ -415,7 +415,7 @@
     }
   },
   "model_review": {
-    "last_reviewed_at": "2026-09-20T06:54:20.282943+00:00",
+    "last_reviewed_at": "2026-11-15T07:29:14.126528+00:00",
     "review_interval_days": 14,
     "history": [
       {
@@ -452,6 +452,13 @@
         "previous_model_id": "composer-2.5",
         "pool": "first_party",
         "available_count": 39
+      },
+      {
+        "reviewed_at": "2026-11-15T07:29:14.126514+00:00",
+        "model_id": "composer-2.5",
+        "previous_model_id": "composer-2.5",
+        "pool": "first_party",
+        "available_count": 49
       }
     ]
   },
@@ -567,7 +574,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-11-15T02:51:14.375630+00:00",
+  "updated_at": "2026-11-15T07:29:14.126531+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -579,8 +586,12 @@
     "omxs30",
     "psi20"
   ],
-  "ingest_parallel_sprint": [],
-  "ingest_parallel_sprint_2": [],
+  "ingest_parallel_sprint": [
+    "asx200"
+  ],
+  "ingest_parallel_sprint_2": [
+    "ftse_smallcap"
+  ],
   "ladder": {
     "enabled": true,
     "layers": [
@@ -593,10 +604,10 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-11-13T06:53:26.029457+00:00",
+      "run_at": "2026-11-15T06:23:05.089574+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 41,
+      "screen_shortlist": 39,
       "research": {
         "model": "composer-2.5",
         "research_cap": 100,
@@ -631,17 +642,17 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 124.5,
-        "estimated_spend_weekly_ops_usd_this_week": 19.1,
+        "estimated_spend_weekly_ops_usd_this_week": 20.3,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 106.2,
+        "remaining_usd_before": 105.0,
         "dedupe": {
-          "already_researched_count": 551,
-          "fresh_skipped_count": 551,
+          "already_researched_count": 553,
+          "fresh_skipped_count": 553,
           "rememo_eligible_count": 0,
           "rememo_eligible_sample": [],
-          "skipped_count": 402,
+          "skipped_count": 396,
           "skipped_sample": [
             {
               "market": "euro_depth",
@@ -665,12 +676,12 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "C5H.IR",
+              "ticker": "EG7.IR",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "EG7.IR",
+              "ticker": "C5H.IR",
               "reason": "fresh_memo"
             },
             {
@@ -695,12 +706,17 @@
             },
             {
               "market": "euro_depth",
+              "ticker": "ANDR.VI",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
               "ticker": "ACKB.BR",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "ANDR.VI",
+              "ticker": "MELE.BR",
               "reason": "fresh_memo"
             },
             {
@@ -720,11 +736,6 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "BOL.ST",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "SKA-B.ST",
               "reason": "fresh_memo"
             },
@@ -735,12 +746,12 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "TTE.PA",
+              "ticker": "BOL.ST",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "WIE.VI",
+              "ticker": "TTE.PA",
               "reason": "fresh_memo"
             }
           ],
@@ -749,18 +760,18 @@
         },
         "targets": [
           {
-            "market": "ibex35",
-            "ticker": "LOG.MC",
-            "name": "Logista Integral, S.A.",
+            "market": "asx200",
+            "ticker": "NHC.AX",
+            "name": "New Hope Corporation Limited",
             "signal": "buy",
-            "conviction_score": 0.2166
+            "conviction_score": 0.2007
           },
           {
-            "market": "sti",
-            "ticker": "C6L.SI",
-            "name": "Singapore Airlines Limited",
+            "market": "ibex35",
+            "ticker": "ACS.MC",
+            "name": "ACS, Actividades de Construcción y Servicios, S.A.",
             "signal": "buy",
-            "conviction_score": 0.3167
+            "conviction_score": 0.2782
           }
         ],
         "executed": 2,
@@ -768,7 +779,7 @@
         "updated": 0,
         "errors": [],
         "estimated_spend_usd": 0.8,
-        "remaining_usd_after": 105.4
+        "remaining_usd_after": 104.2
       },
       "graduation": {
         "graduated": false,
@@ -866,22 +877,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-11-02T20:50:20.516594+00:00",
-        "parallel_stream": 2,
-        "from_market": "us_adr_asia",
-        "to_market": null,
-        "stream_markets_after": [],
-        "ingest_parity_recorded": false
-      },
-      {
-        "at": "2026-11-02T23:46:57.416164+00:00",
-        "parallel_stream": 1,
-        "from_market": "sp500",
-        "to_market": null,
-        "stream_markets_after": [],
-        "ingest_parity_recorded": false
-      },
       {
         "reseeded": true,
         "market_queue_appended": false,
@@ -1481,6 +1476,50 @@
         "to_market": null,
         "stream_markets_after": [],
         "ingest_parity_recorded": false
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-11-15T07:10:40.223809+00:00",
+        "parallel_stream": 1,
+        "from_market": null,
+        "to_market": "asx200",
+        "stream_markets_after": [
+          "asx200"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "asx200",
+          "forced": true,
+          "prior_screen_at": "2026-11-15T06:23:05.089574+00:00",
+          "prior_age_days": 0,
+          "run_at": "2026-11-15T07:10:40.223829+00:00",
+          "shortlist_count": 32,
+          "ticker_count": 189
+        }
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-11-15T07:10:48.663288+00:00",
+        "parallel_stream": 2,
+        "from_market": null,
+        "to_market": "ftse_smallcap",
+        "stream_markets_after": [
+          "ftse_smallcap"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "ftse_smallcap",
+          "forced": true,
+          "prior_screen_at": "2026-11-15T06:23:05.089574+00:00",
+          "prior_age_days": 0,
+          "run_at": "2026-11-15T07:10:48.663307+00:00",
+          "shortlist_count": 10,
+          "ticker_count": 75
+        }
       }
     ]
   },

@@ -1,14 +1,20 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-13T07:34:52.366356+00:00
+Track: `buy_tier_level_native` · updated 2026-11-15T07:06:34.243695+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **5** / 30 (17% count, 17% NAV)
+- Losers: **4** / 30 (13% count, 14% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
+
+### ZIM.AX — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### YAL.AX — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### RRL.AX — intact / hold_tolerate (-14.0%)
 - price drawdown alone does not invalidate value thesis
@@ -16,20 +22,12 @@ Track: `buy_tier_level_native` · updated 2026-11-13T07:34:52.366356+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 81%
+- conviction 82%
 
 ### NWS.AX — weakening / watch_review (-9.0%)
 - research verdict caution
 - still buy
 - cheapness family still passes
-
-### ZIM.AX — intact / hold_tolerate (-8.7%)
-- price drawdown alone does not invalidate value thesis
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 51%
 
 ### AAI.AX — weakening / watch_review (-5.6%)
 - research verdict caution
@@ -42,7 +40,7 @@ Track: `buy_tier_level_native` · updated 2026-11-13T07:34:52.366356+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 49%
+- conviction 50%
 
 ### WHC.AX — weakening / watch_review (-3.7%)
 - research verdict neutral
@@ -55,16 +53,10 @@ Track: `buy_tier_level_native` · updated 2026-11-13T07:34:52.366356+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 60%
+- conviction 61%
 
 ### WDS.AX — weakening / watch_review (-2.1%)
 - research verdict caution
-- still buy
-- cheapness family still passes
-
-### YAL.AX — weakening / watch_review (-1.4%)
-- research verdict caution
-- conviction 19% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -73,7 +65,7 @@ Track: `buy_tier_level_native` · updated 2026-11-13T07:34:52.366356+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 61%
+- conviction 62%
 
 ### CDA.AX — weakening / watch_review (-0.7%)
 - research verdict neutral
@@ -85,7 +77,7 @@ Track: `buy_tier_level_native` · updated 2026-11-13T07:34:52.366356+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 57%
+- conviction 58%
 
 ### PXA.AX — weakening / watch_review (-0.4%)
 - conviction 30% below intact floor
@@ -115,14 +107,14 @@ Track: `buy_tier_level_native` · updated 2026-11-13T07:34:52.366356+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 49%
+- conviction 50%
 
 ### PMV.AX — intact / hold_tolerate (+4.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 49%
+- conviction 56%
 
 ### WGX.AX — intact / hold_tolerate (+5.3%)
 - still buy
@@ -147,7 +139,7 @@ Track: `buy_tier_level_native` · updated 2026-11-13T07:34:52.366356+00:00
 
 ### BPT.AX — weakening / watch_review (+6.5%)
 - research verdict caution
-- conviction 33% below intact floor
+- conviction 32% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -163,14 +155,14 @@ Track: `buy_tier_level_native` · updated 2026-11-13T07:34:52.366356+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 61%
+- conviction 62%
 
 ### CQR.AX — intact / hold_tolerate (+8.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 81%
+- conviction 80%
 
 ### CLW.AX — weakening / watch_review (+9.2%)
 - research verdict neutral
@@ -182,7 +174,7 @@ Track: `buy_tier_level_native` · updated 2026-11-13T07:34:52.366356+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 53%
+- conviction 52%
 
 ### JBH.AX — intact / hold_tolerate (+12.5%)
 - still buy

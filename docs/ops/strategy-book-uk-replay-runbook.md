@@ -140,6 +140,20 @@ source, the matched leavers ranked through the fallback, and
 `named_failures_ranked` for Carillion, Thomas Cook, Debenhams and Intu
 (`not_in_store` when the store has no record).
 
+### Leaver share coverage (before the v1 seal)
+
+Dispatch the workflow with phase `share-coverage` (either `registration`) to
+size Companies House page reading. It reads the encrypted cache only. It never
+calls EODHD, does not need a seal, scores nothing, and leaves both stores
+untouched. For each Companies House store name matched to a cached symbol, it
+counts each of the last 24 month-ends before exit as covered by EODHD's share
+count, by the v1 fallback only, or by neither. For the neither months it names
+the filing year the fallback would read (`filings_to_read`).
+The output is `docs/data/strategy_book_uk_replay_share_coverage.json`, which
+holds counts and Companies House keys, with no prices or share values. With no
+cached raw data the command exits 2. Locally:
+`ftse-strategy-book-uk-replay share-coverage --cache <dir>`.
+
 ## Memory and run time
 
 The full cache is roughly 13.6k symbols. `develop` and `reveal` read one
@@ -156,7 +170,10 @@ pre-change runner by `tests/test_strategy_book_uk_replay_develop.py`
 `check_strategy_book_uk_replay` in the daily ops-monitor pass. One finding per
 registration store (titles **Strategy-book UK replay** and **Strategy-book UK
 replay v1**, each with a "store unreadable" warn variant). No finding when
-a store is absent. Info with the phase and verdict when it reads.
+a store is absent. Info with the phase and verdict when it reads. When
+`docs/data/strategy_book_uk_replay_share_coverage.json` exists, one more info
+finding, **Strategy-book UK replay leaver share coverage**, gives the leavers
+per leaving kind still without a share count and the filings to read.
 Warn when the JSON is unreadable. `auto_fixable` is false. The check does not
 call EODHD and does not heal the store.
 

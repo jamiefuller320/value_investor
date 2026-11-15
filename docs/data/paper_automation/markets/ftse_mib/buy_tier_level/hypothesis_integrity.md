@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-13T07:36:32.290981+00:00
+Track: `buy_tier_level` · updated 2026-11-15T07:07:48.532166+00:00
 
 ## Portfolio loser feedback
 
@@ -10,44 +10,42 @@ Track: `buy_tier_level` · updated 2026-11-13T07:36:32.290981+00:00
 
 ## Holding reviews
 
-### ENI.MI — intact / hold_tolerate (-0.3%)
+### ENI.MI — intact / hold_tolerate (+1.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 76%
 
-### MONC.MI — intact / hold_tolerate (+2.2%)
+### AZM.MI — weakening / watch_review (+2.9%)
+- left buy tier (hold)
+- conviction 24% below intact floor
+- research accumulate
+- cheapness family still passes
+
+### MONC.MI — intact / hold_tolerate (+3.5%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
 
-### AZM.MI — intact / hold_tolerate (+3.2%)
+### IG.MI — intact / hold_tolerate (+4.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 57%
+- conviction 51%
 
-### IG.MI — intact / hold_tolerate (+3.3%)
-- still buy
+### LTMC.MI — weakening / watch_review (+8.5%)
+- left buy tier (hold)
+- conviction 32% below intact floor
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 56%
 
-### LTMC.MI — intact / hold_tolerate (+9.3%)
+### BZU.MI — intact / hold_tolerate (+16.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 52%
-
-### BZU.MI — intact / hold_tolerate (+14.8%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 45%
+- conviction 43%
