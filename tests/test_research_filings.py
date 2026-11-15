@@ -15554,6 +15554,35 @@ def test_parked_source_hunter_aem_to_tsx60_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_tsx60_ctc_a_to_builtins(tmp_path: Path):
+    """Regression: CTC-A.TO parked IWB — q4cdn FY2025 annual report + AIF PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("CTC-A.TO", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("2025-Annual-Report-to-Shareholders" in url for url in urls)
+    assert any("AIF-EN.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 2
+    assert len(fetch_filings_ir_allowlist("CTC-A", path=allowlist_path)) == 2
+
+
+def test_parked_source_hunter_ctc_a_to_tsx60_has_fetchable_ir():
+    """eng-20261115-08: CTC-A.TO has live-fetchable corp.canadiantire.ca q4cdn statutory PDFs."""
+    assert "CTC-A.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("CTC-A.TO")
+    assert len(rows) == 2
+    urls = [row["url"] for row in rows]
+    assert all("q4cdn.com" in url and url.endswith(".pdf") for url in urls)
+    annual_url = next(url for url in urls if "Annual-Report" in url)
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("q4cdn body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_skip_tri_to_tsx60():
     """eng-20260914-01: TRI.TO leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim."""
     assert "TRI.TO" in PARKED_SOURCE_HUNTER_SKIP

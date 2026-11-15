@@ -1065,6 +1065,16 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/2809/000110465926032153/aem-20251231xex99d3.htm",
         "https://www.sec.gov/Archives/edgar/data/2809/000110465926088216/tm2619289d3_ex99-1.htm",
     ],
+    # tsx60 IWB blocker — eng-20261115-08: CTC-A.TO parked unfetchable_iwb; no SEC listing;
+    # google_news_tsx PR Newswire/SEDAR indexed rows fail live-fetch; q4cdn FY2025 AR + AIF PDFs.
+    "CTC-A.TO": [
+        "https://s201.q4cdn.com/326551073/files/doc_financials/2025/ar/2025-Annual-Report-to-Shareholders-ENG-AODA-File_FINAL.pdf",
+        "https://s201.q4cdn.com/326551073/files/doc_financials/2025/ar/AIF-EN.pdf",
+    ],
+    "CTC-A": [
+        "https://s201.q4cdn.com/326551073/files/doc_financials/2025/ar/2025-Annual-Report-to-Shareholders-ENG-AODA-File_FINAL.pdf",
+        "https://s201.q4cdn.com/326551073/files/doc_financials/2025/ar/AIF-EN.pdf",
+    ],
     # hang_seng buy-tier deepen — eng-20260930-03: asia_filings Google News miss / zero-body;
     # seed HKEX statutory PDFs and issuer IR mirrors for stalled buy-tier names.
     "1099.HK": [
