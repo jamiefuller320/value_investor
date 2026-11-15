@@ -438,9 +438,9 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://thenavigatorcompany.com/wp-content/uploads/2025/02/Navigator-l-Divulgacao_Resultados_2024.pdf",
     ],
     # euro_depth parked DQ7A.IR — eng-20260910-01: prior allowlist misattributed DCC plc PDF.
-    # eng-20260912-01 / eng-20261111-01 / eng-20261114-01: donegaligroup.com https TLS is
-    # reset from datacenter ingest; http serves PDFs; stale unfetchable flags on live http
-    # rows must be cleared on refetch (igc-20260912-01 zero_body / skipped_unfetchable).
+    # eng-20260912-01 / eng-20261111-01 / eng-20261114-01 / eng-20261115-01: donegaligroup.com
+    # https TLS is reset from datacenter ingest; http serves PDFs; stale unfetchable flags on
+    # live allowlisted rows must be cleared on refetch (igc-20260912-01 zero_body / skipped).
     "DQ7A.IR": [
         "http://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
         "http://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
@@ -6016,8 +6016,10 @@ def _ir_allowlist_unfetchable_may_retry(
     """True when a prior fetch failure should be retried (URL still on the live allowlist)."""
     if not row.get("unfetchable"):
         return False
+    if row.get("has_body"):
+        return False
     reason = str(row.get("unfetchable_reason") or "").strip()
-    if reason != "ir_allowlist_fetch_failed":
+    if reason == "allowlist_removed":
         return False
     url = str(row.get("url") or "").strip()
     if not url:
@@ -6027,11 +6029,15 @@ def _ir_allowlist_unfetchable_may_retry(
     on_allowlist = any(candidate in allowlist_urls for candidate in {url, canon, fetch_url})
     if not on_allowlist:
         return False
-    # Canonical / scheme rewrites since the last failure (e.g. https→http Donegal IR PDFs).
-    if canon != url or fetch_url != url:
-        return True
     host = urllib.parse.urlparse(canon).netloc.lower()
-    return host.endswith("donegaligroup.com")
+    # eng-20261115-01: Donegal IR PDFs stayed skipped_unfetchable under legacy reasons during
+    # igc-20260912-01; any live allowlisted donegaligroup row should retry before 0/0 refetch.
+    if host.endswith("donegaligroup.com"):
+        return True
+    if reason != "ir_allowlist_fetch_failed":
+        return False
+    # Canonical / scheme rewrites since the last failure (e.g. https→http Donegal IR PDFs).
+    return canon != url or fetch_url != url
 
 
 _IR_ALLOWLIST_PERIOD_DEDUPE_RANK = {

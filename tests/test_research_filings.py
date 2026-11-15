@@ -15946,13 +15946,60 @@ def test_refetch_euro_filings_primary_bodies_dq7a_ir_zero_body_gap(mock_fetch, t
         max_bodies=5,
     )
     ir = result.get("ir_allowlist") or {}
-    assert int(ir.get("retry_cleared") or 0) == 2
     assert result["with_body_after"] >= 1
     assert result["fetched"] >= 1
     assert int(ir.get("skipped_unfetchable") or 0) == 0
+    if int(ir.get("with_body_before") or 0) == 0:
+        assert int(ir.get("retry_cleared") or 0) == 2
     payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
-    assert all(not row.get("unfetchable") for row in payload.get("filings") or [])
     assert int(payload["summary"]["with_body"]) >= 1
+    assert all(row.get("has_body") for row in payload.get("filings") or [])
+
+
+def test_refetch_ir_allowlist_retries_dq7a_ir_legacy_unfetchable_reason(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20261115-01: Donegal IR rows with legacy unfetchable reasons retry (not skipped_unfetchable)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, refetch_ir_allowlist_filing_bodies
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    filings: list[dict] = []
+    for url in _BUILTIN_IR_URLS["DQ7A.IR"]:
+        digest = __import__("hashlib").sha256(url.encode("utf-8")).hexdigest()[:16]
+        filings.append(
+            {
+                "id": f"ir_{digest}",
+                "source": "ir_allowlist",
+                "headline": f"IR allowlist document — {url.rsplit('/', 1)[-1]}",
+                "url": url,
+                "period": "annual",
+                "has_body": False,
+                "unfetchable": True,
+                "unfetchable_reason": "title_mismatch",
+            }
+        )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": filings, "summary": {"with_body": 0, "total": len(filings)}}),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return "Donegal Investment Group plc consolidated financial statements " * 25, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "DQ7A.IR",
+        max_bodies=5,
+    )
+    assert int(result.get("retry_cleared") or 0) == 2
+    assert result["attempted"] == 2
+    assert int(result.get("skipped_unfetchable") or 0) == 0
+    assert result["fetched"] >= 1
 
 
 def test_fetch_filings_ir_allowlist_euro_depth_eg7_ir_builtins(tmp_path: Path):
