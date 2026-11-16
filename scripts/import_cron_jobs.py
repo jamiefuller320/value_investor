@@ -125,6 +125,27 @@ def _euro_dispatch_enabled() -> dict[str, bool]:
     return cron_enabled_for_dispatch(evaluation)
 
 
+def _near_close_specs() -> list[CronJobSpec]:
+    """One cron-job.org job per send minute, covering every near-close slot."""
+    from value_investor.strategy_book_demo_mirror import NEAR_CLOSE_SLOTS_UTC
+
+    by_minute: dict[int, list[int]] = {}
+    for hour, minute in NEAR_CLOSE_SLOTS_UTC:
+        by_minute.setdefault(minute, []).append(hour)
+    return [
+        CronJobSpec(
+            key=f"strategy-book-demo-near-close-{minute:02d}",
+            title=f"FTSE strategy book demo near-close (weekday :{minute:02d} slots)",
+            workflow="strategy-book-demo-near-close.yml",
+            body={"ref": REF},
+            hours=sorted(hours),
+            minutes=[minute],
+            wdays=[1, 2, 3, 4, 5],
+        )
+        for minute, hours in sorted(by_minute.items())
+    ]
+
+
 def _job_specs() -> list[CronJobSpec]:
     from value_investor.epoch0_weekday_cron import EPOCH0_WEEKDAY_SLOTS, EPOCH0_WEEKDAY_WORKFLOW
 
@@ -267,6 +288,7 @@ def _job_specs() -> list[CronJobSpec]:
             minutes=[30],
             wdays=[1, 2, 3, 4, 5],
         ),
+        *_near_close_specs(),
         CronJobSpec(
             key="project-traffic-midday",
             title="FTSE project traffic (weekday midday)",

@@ -2862,7 +2862,7 @@ def check_strategy_book_demo_mirror(
 ) -> list[OpsFinding]:
     """Read the demo-mirror ledger. Does not place orders or call Trading 212.
 
-    Observe-only (``auto_fixable=False``). The forward job owns placement.
+    Observe-only (``auto_fixable=False``). The forward and near-close jobs own placement.
     See docs/ops/strategy-book-demo-mirror.md.
     """
     from value_investor.strategy_book_demo_mirror import (

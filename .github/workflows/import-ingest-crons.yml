@@ -23,6 +23,7 @@ on:
       - ".github/workflows/library-ingest-maintenance.yml"
       - ".github/workflows/import-ingest-crons.yml"
       - ".github/workflows/strategy-book-forward.yml"
+      - ".github/workflows/strategy-book-demo-near-close.yml"
   workflow_dispatch:
 
 permissions:
@@ -46,7 +47,7 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Re-import library ingest, epoch-0 and strategy-book forward cron slots
+      - name: Re-import library ingest, epoch-0 and strategy-book cron slots
         env:
           CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
           WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
@@ -82,6 +83,8 @@ jobs:
             --job library-epoch0-weekday-us-est \
             --job strategy-book-forward-europe \
             --job strategy-book-forward \
+            --job strategy-book-demo-near-close-10 \
+            --job strategy-book-demo-near-close-40 \
             --disable-legacy-ingest
           rc=$?
           set -e

@@ -43,7 +43,30 @@ SCHEMA_VERSION = 1
 PRIMARY = "primary"
 ORDER_CAP = 20
 CATCHUP_LEG = "exit_catchup"
+ENTRY_CATCHUP_LEG = "entry_catchup"
+CATCHUP_LEGS = frozenset({CATCHUP_LEG, ENTRY_CATCHUP_LEG})
 CATCHUP_ATTEMPT_LIMIT = 5
+# Orders go out shortly before the cash close of the session they fill in, so a
+# fill lands near the close the book scores. Owner, 2026-11-16.
+SEND_LEAD_MAX = timedelta(minutes=40)
+SEND_LEAD_MIN = timedelta(minutes=3)
+# Entry and exit limits sit this far through the signal close, so they fill at
+# the market unless the price has moved more than this since the signal.
+NEAR_CLOSE_BAND = Decimal("0.03")
+BAND_PRICE_QUANTUM = Decimal("0.01")
+# UTC (hour, minute) send slots. Each lands 20 minutes before a close in one
+# daylight-saving season: ASX (05:00 / 06:00), London and the continent
+# (15:30 / 16:30), New York and Toronto (20:00 / 21:00). Hong Kong and
+# Singapore have no Trading 212 listing on the overlay, so no slot.
+NEAR_CLOSE_SLOTS_UTC: tuple[tuple[int, int], ...] = (
+    (4, 40),
+    (5, 40),
+    (15, 10),
+    (16, 10),
+    (19, 40),
+    (20, 40),
+)
+NEAR_CLOSE_UNSLOTTED_MARKETS = frozenset({"hang_seng", "sti"})
 DEMO_KEY_ENV = "TRADING212_DEMO_API_KEY"
 DEMO_SECRET_ENV = "TRADING212_DEMO_API_SECRET"
 DEMO_HOST = "demo.trading212.com"
@@ -88,6 +111,7 @@ TITLE_MISMATCH = "Strategy book demo reconciliation mismatch"
 TITLE_SLIPPAGE = "Strategy book demo slippage"
 TITLE_STUCK = "Strategy book demo position stuck"
 TITLE_FX_REJECTED = "Strategy book demo FX order rejected"
+TITLE_CATCHUP_WAITING = "Strategy book demo catch-up waiting"
 
 _LIMIT_PATH = "/api/v0/equity/orders/limit"
 _MARKET_PATH = "/api/v0/equity/orders/market"
@@ -265,8 +289,42 @@ def window_open(market: str, fill_session: Any, now: datetime) -> bool | None:
     return _aware(now) <= close_at
 
 
+def send_window(market: str, day: Any, now: datetime) -> str | None:
+    """Where ``now`` sits against the send window of ``day``'s cash close.
+
+    ``open`` from 40 to 3 minutes before the close, ``early`` before that,
+    ``closed`` after it. A weekend day is ``early`` for no session. None when the
+    market has no registered close.
+    """
+    session = _parse_day(day)
+    if session is None:
+        return None
+    try:
+        close_at = session_close(str(market or ""), session)
+    except UnknownMarketClose:
+        return None
+    if session.weekday() >= 5:
+        return "early"
+    moment = _aware(now)
+    if moment > close_at - SEND_LEAD_MIN:
+        return "closed"
+    if moment < close_at - SEND_LEAD_MAX:
+        return "early"
+    return "open"
+
+
 def round_price(value: float) -> float:
     return float(Decimal(str(value)).quantize(PRICE_QUANTUM, rounding=ROUND_HALF_UP))
+
+
+def band_price(close: float, side: str) -> float:
+    """Signal close moved through by ``NEAR_CLOSE_BAND``, to the cent or penny."""
+    factor = Decimal("1") + (
+        NEAR_CLOSE_BAND if str(side or "").upper() == "BUY" else -NEAR_CLOSE_BAND
+    )
+    return float(
+        (Decimal(str(close)) * factor).quantize(BAND_PRICE_QUANTUM, rounding=ROUND_HALF_UP)
+    )
 
 
 def share_quantity(
@@ -399,12 +457,12 @@ def client_order_ref(episode_id: str, leg: str) -> str:
 def _resend_blocked(order: Mapping[str, Any]) -> bool:
     """True when this reference must not be posted again.
 
-    A market exit catch-up that was rejected, or whose submit result is unknown,
-    is retried until ``CATCHUP_ATTEMPT_LIMIT`` attempts. Any other leg rejected
-    for quantity precision gets one more send, floored to the allowed decimals.
+    A market catch-up (entry or exit) that was rejected, or whose submit result is
+    unknown, is retried until ``CATCHUP_ATTEMPT_LIMIT`` attempts. Any other leg
+    rejected for quantity precision gets one more send, floored to the allowed decimals.
     """
     status = str(order.get("status") or "")
-    catchup = str(order.get("leg") or "") == CATCHUP_LEG
+    catchup = str(order.get("leg") or "") in CATCHUP_LEGS
     if catchup and status in {"rejected", "submit_unknown", "rate_limited"}:
         try:
             attempts = int(order.get("attempt_count") or 0)
@@ -421,14 +479,16 @@ def _resend_blocked(order: Mapping[str, Any]) -> bool:
 
 
 def _place_rank(plan: Mapping[str, Any]) -> tuple[int, str, str]:
-    """Catch-up sells, then limit exits, then entries. All exits go before entries."""
+    """Catch-up sells, then limit exits, then catch-up buys, then entries."""
     leg = str(plan.get("leg") or "")
     if leg == CATCHUP_LEG:
         rank = 0
     elif leg == "exit":
         rank = 1
-    else:
+    elif leg == ENTRY_CATCHUP_LEG:
         rank = 2
+    else:
+        rank = 3
     return (rank, str(plan.get("ticker") or ""), str(plan.get("client_order_ref") or ""))
 
 
@@ -662,8 +722,9 @@ def _plan_candidate(
         plan["reason"] = quote.get("reason")
         return plan
     plan["chart_close"] = quote["close"]
-    plan["limit_price"] = round_price(float(quote["close"]))
-    plan["price_basis"] = "signal_session_chart_close_as_instrument_currency"
+    plan["limit_price"] = band_price(float(quote["close"]), str(plan["side"]))
+    plan["limit_band"] = float(NEAR_CLOSE_BAND)
+    plan["price_basis"] = "signal_session_chart_close_through_band_as_instrument_currency"
     open_now = window_open(market, fill_day, now)
     if open_now is None:
         plan["action"] = "insufficient_data"
@@ -678,7 +739,7 @@ def _plan_candidate(
         return plan
     qty, qty_reason = share_quantity(
         float(STAKE_UNITS),
-        float(plan["limit_price"]),
+        float(quote["close"]),
         str(costs.currency),
         str(plan["instrument_currency"] or ""),
     )
@@ -691,6 +752,21 @@ def _plan_candidate(
     plan["action"] = "would_place"
     plan["reason"] = None
     return plan
+
+
+def _latest_close(repo_root: Path, ticker: str) -> dict[str, Any]:
+    """Last stored chart close, for sizing a catch-up buy. Not a live quote."""
+    path = Path(repo_root) / "docs" / "data" / "charts" / _chart_filename(ticker)
+    payload = _read_json(path) if path.is_file() else None
+    if not isinstance(payload, dict):
+        return {"status": "insufficient_data", "reason": "no_chart"}
+    dates: list[Any] = payload["dates"] if isinstance(payload.get("dates"), list) else []
+    closes: list[Any] = payload["closes"] if isinstance(payload.get("closes"), list) else []
+    for day, value in reversed(list(zip(dates, closes, strict=False))):
+        close = _positive(value)
+        if close is not None:
+            return {"status": "ok", "close": close, "session": str(day)[:10]}
+    return {"status": "insufficient_data", "reason": "no_signal_close"}
 
 
 def _episode_id(market: str, ticker: str, column: str, signal_session: str) -> str:
@@ -778,7 +854,11 @@ def build_plans(
         episode_id = str(
             episode.get("episode_id") or _episode_id(market, ticker, column, signal or "")
         )
-        listed = episode.get("t212_listed") if "t212_listed" in episode else None
+        # The walker writes "unknown" when its own catalogue read was missing; the
+        # mirror then decides from the overlay, as it does for pending signals.
+        listed = episode.get("t212_listed")
+        if not isinstance(listed, bool):
+            listed = None
         if episode.get("status") == "pending_fill":
             add(
                 _plan_candidate(
@@ -938,12 +1018,15 @@ def plan_exit_catchups(
     episodes: Mapping[str, Mapping[str, Any]],
     now: datetime,
     observe_data_commit: Any,
+    not_filled: frozenset[str] | set[str] = frozenset(),
 ) -> None:
-    """Market-sell shares the book has already exited and the limit did not.
+    """Market-sell demo shares the book does not hold.
 
-    Entries are not repeated after the fill session. Exits are. A catch-up uses
-    ``sbdemo:{episode_id}:exit_catchup`` and is sent on the run after the limit
-    remainder was cancelled, or immediately when the book closed with no exit order.
+    That is shares the book has already exited and the limit did not, or shares
+    bought for a signal the book never filled (``not_filled``: memo not ready,
+    late signal, gap). A catch-up uses ``sbdemo:{episode_id}:exit_catchup`` and is
+    planned on the run after the limit remainder was cancelled, or as soon as the
+    book closed with no exit order. It is sent in the next near-close window.
     """
     held = shares_by_episode(events)
     by_episode: dict[str, list[dict[str, Any]]] = {}
@@ -958,11 +1041,12 @@ def plan_exit_catchups(
         rows = by_episode.get(episode_id, [])
         catchup = next((row for row in rows if str(row.get("leg") or "") == CATCHUP_LEG), None)
         limit_exit = next((row for row in rows if str(row.get("leg") or "") == "exit"), None)
+        entry_row = next((row for row in rows if str(row.get("leg") or "") == "entry"), None)
         episode = episodes.get(episode_id)
         ref = client_order_ref(episode_id, CATCHUP_LEG)
         if catchup and _resend_blocked(catchup):
             if str(catchup.get("status") or "") in {"rejected", "submit_unknown"}:
-                facts = _catchup_instrument(episode_id, events, limit_exit, episode)
+                facts = _catchup_instrument(episode_id, events, limit_exit or entry_row, episode)
                 plans.append(
                     {
                         "client_order_ref": ref,
@@ -1000,14 +1084,17 @@ def plan_exit_catchups(
                 reason = "unfilled_exit"
         elif episode is not None and str(episode.get("status") or "") == "closed":
             reason = "missed_exit_order"
+        elif episode is None and episode_id in not_filled:
+            reason = "book_not_filled"
         if reason is None or ref in seen:
             continue
         if catchup and str(catchup.get("catchup_reason") or "") in {
             "unfilled_exit",
             "missed_exit_order",
+            "book_not_filled",
         }:
             reason = str(catchup["catchup_reason"])
-        facts = _catchup_instrument(episode_id, events, limit_exit, episode)
+        facts = _catchup_instrument(episode_id, events, limit_exit or entry_row, episode)
         if facts["column"] not in {"", PRIMARY}:
             continue
         if not facts["t212_ticker"] or not facts["instrument_currency"]:
@@ -1034,6 +1121,8 @@ def plan_exit_catchups(
             exit_session = episode.get("exit_session") or episode.get("exit_fill_session")
         if exit_session is None and limit_exit is not None:
             exit_session = limit_exit.get("fill_session")
+        if exit_session is None and reason == "book_not_filled" and entry_row is not None:
+            exit_session = entry_row.get("fill_session")
         late = sessions_late(exit_session, now)
         if catchup is not None and catchup.get("sessions_late") is not None and late is None:
             late = catchup.get("sessions_late")
@@ -1058,6 +1147,233 @@ def plan_exit_catchups(
             }
         )
         seen.add(ref)
+
+
+_NOT_FILLED_KINDS = frozenset(
+    {"memo_not_ready", "memo_blocked", "late_signal", "gap_drop", "no_next_bar"}
+)
+
+
+def not_filled_episode_ids(observe: Mapping[str, Any]) -> set[str]:
+    """Primary signals the book recorded as not filled. Demo shares there are not the book's."""
+    found: set[str] = set()
+    events = observe.get("events") if isinstance(observe.get("events"), list) else []
+    for event in events:
+        if not isinstance(event, dict) or event.get("kind") not in _NOT_FILLED_KINDS:
+            continue
+        if str(event.get("column") or PRIMARY) != PRIMARY:
+            continue
+        market = str(event.get("market") or "")
+        ticker = str(event.get("ticker") or "")
+        session = str(event.get("session") or "")[:10]
+        if market and ticker and session:
+            found.add(_episode_id(market, ticker, PRIMARY, session))
+    return found
+
+
+def plan_entry_catchups(
+    plans: list[dict[str, Any]],
+    prior_orders: list[dict[str, Any]],
+    events: list[dict[str, Any]],
+    episodes: Mapping[str, Mapping[str, Any]],
+    now: datetime,
+    observe_data_commit: Any,
+    *,
+    repo_root: Path,
+    overlay: dict[tuple[str, str], dict[str, Any]] | None = None,
+) -> None:
+    """Market-buy open book positions the demo account does not hold.
+
+    The book filled the episode at a close the demo order missed (the limit was
+    cancelled, rejected or only partly filled), or the mirror never sent an entry
+    (``missed_entry_order``). Uses ``sbdemo:{episode_id}:entry_catchup``, sized at
+    the stake over the latest stored close, and is sent in the next near-close
+    window. An entry order that may still be working is left alone.
+    """
+    root = Path(repo_root)
+    listing = overlay if overlay is not None else _overlay_index(root)
+    held = shares_by_episode(events)
+    by_episode: dict[str, list[dict[str, Any]]] = {}
+    for order in prior_orders:
+        if isinstance(order, dict) and order.get("episode_id"):
+            by_episode.setdefault(str(order["episode_id"]), []).append(order)
+    seen = {str(plan.get("client_order_ref") or "") for plan in plans}
+    for episode_id, episode in episodes.items():
+        if str(episode.get("column") or "") != PRIMARY:
+            continue
+        if str(episode.get("status") or "") != "open" or episode.get("pending_exit"):
+            continue
+        ref = client_order_ref(episode_id, ENTRY_CATCHUP_LEG)
+        if ref in seen:
+            continue
+        market = str(episode.get("market") or "")
+        ticker = str(episode.get("ticker") or "")
+        rows = by_episode.get(episode_id, [])
+        entry = next((row for row in rows if str(row.get("leg") or "") == "entry"), None)
+        catchup = next(
+            (row for row in rows if str(row.get("leg") or "") == ENTRY_CATCHUP_LEG), None
+        )
+        have = held.get(episode_id, 0.0)
+        base = {
+            "client_order_ref": ref,
+            "episode_id": episode_id,
+            "leg": ENTRY_CATCHUP_LEG,
+            "order_type": "MARKET",
+            "side": "BUY",
+            "column": PRIMARY,
+            "market": market,
+            "ticker": ticker,
+            "signal_session": str(episode.get("signal_session") or "")[:10] or None,
+            "fill_session": str(episode.get("fill_session") or "")[:10] or None,
+            "time_validity": None,
+            "limit_price": None,
+            "observe_data_commit": observe_data_commit,
+            "planned_at": _aware(now).isoformat(),
+            "influences_live": False,
+        }
+        if catchup is not None and _resend_blocked(catchup):
+            status = str(catchup.get("status") or "")
+            if status in {"rejected", "submit_unknown"}:
+                plans.append(
+                    {
+                        **base,
+                        **{
+                            key: catchup.get(key)
+                            for key in ("t212_ticker", "instrument_currency", "quantity")
+                        },
+                        "action": "stuck",
+                        "reason": "catchup_attempt_limit",
+                        "sessions_late": catchup.get("sessions_late"),
+                    }
+                )
+                seen.add(ref)
+            continue
+        if catchup is not None and str(catchup.get("status") or "") in {
+            "submitting",
+            "placed",
+            "partial",
+            "filled",
+            "cancelling",
+        }:
+            continue
+        if entry is None:
+            if have > QTY_TOLERANCE:
+                continue
+            reason = "missed_entry_order"
+        else:
+            status = str(entry.get("status") or "")
+            unfilled = status in {"cancelled", "rejected"} or (
+                status == "partial" and bool(entry.get("remainder_cancelled"))
+            )
+            if not unfilled:
+                continue
+            reason = "unfilled_entry"
+        if catchup is not None and catchup.get("catchup_reason"):
+            reason = str(catchup["catchup_reason"])
+        signal_day = _parse_day(base["signal_session"]) or _aware(now).date()
+        state, listing_reason = _listing_decision(listing.get((market, ticker)), signal_day)
+        if state != "mirror":
+            plans.append({**base, "action": "not_mirrored", "reason": listing_reason})
+            seen.add(ref)
+            continue
+        row = listing[(market, ticker)]
+        instrument_ccy = str(row.get("t212_currency") or "").upper() or None
+        costs = costs_for_market(market)
+        quote = _latest_close(root, ticker)
+        sized = dict(base)
+        sized.update(
+            {
+                "t212_ticker": str(row.get("t212_ticker") or "").strip(),
+                "t212_listed": True,
+                "instrument_currency": instrument_ccy,
+                "limit_currency": instrument_ccy,
+                "currency": costs.currency,
+                "stake": float(STAKE_UNITS),
+                "half_spread": float(costs.half_spread),
+                "sizing_close": quote.get("close"),
+                "sizing_session": quote.get("session"),
+                "sessions_late": sessions_late(base["fill_session"], now),
+            }
+        )
+        target = _positive((entry or {}).get("quantity"))
+        if target is None:
+            if quote.get("status") != "ok":
+                sized.update({"action": "insufficient_data", "reason": quote.get("reason")})
+                plans.append(sized)
+                seen.add(ref)
+                continue
+            target, qty_reason = share_quantity(
+                float(STAKE_UNITS),
+                float(quote["close"]),
+                str(costs.currency),
+                str(instrument_ccy or ""),
+            )
+            if target is None:
+                sized.update(
+                    {
+                        "action": "insufficient_data"
+                        if qty_reason == "insufficient_data"
+                        else "not_mirrored",
+                        "reason": qty_reason,
+                    }
+                )
+                plans.append(sized)
+                seen.add(ref)
+                continue
+        remaining = floor_shares(target - have)
+        if remaining is None:
+            continue
+        sized.update({"action": "would_place", "reason": reason, "quantity": remaining})
+        plans.append(sized)
+        seen.add(ref)
+
+
+def _send_day(plan: Mapping[str, Any], now: datetime) -> Any:
+    """Session the order would fill in: the planned fill session, or today for a catch-up."""
+    if str(plan.get("leg") or "") in CATCHUP_LEGS:
+        return _aware(now).date()
+    return plan.get("fill_session")
+
+
+def apply_send_window(plans: list[dict[str, Any]], now: datetime) -> None:
+    """Hold every placeable row until its market's near-close send window.
+
+    A row outside the window becomes ``waiting``. It is planned again on the next
+    run. An entry or exit whose window has passed before its close is
+    ``missed_send_window``; the catch-up path picks it up once the book has moved.
+    """
+    for plan in plans:
+        if plan.get("action") != "would_place":
+            continue
+        day = _send_day(plan, now)
+        state = send_window(str(plan.get("market") or ""), day, now)
+        plan["send_session"] = str(day)[:10] if day else None
+        if state == "open":
+            continue
+        if state is None:
+            plan["action"] = "insufficient_data"
+            plan["reason"] = "no_session_close"
+        elif state == "closed" and str(plan.get("leg") or "") not in CATCHUP_LEGS:
+            plan["action"] = "not_mirrored"
+            plan["reason"] = "missed_send_window"
+        else:
+            plan["action"] = "waiting"
+            plan["wait_reason"] = "before_send_window"
+
+
+def stamp_waiting_since(
+    plans: list[dict[str, Any]], prior_plans: list[dict[str, Any]], now: datetime
+) -> None:
+    """Carry the first time each ``waiting`` row began waiting across runs."""
+    since = {
+        str(row.get("client_order_ref")): row.get("waiting_since")
+        for row in prior_plans
+        if row.get("action") == "waiting" and row.get("waiting_since")
+    }
+    for plan in plans:
+        if plan.get("action") == "waiting":
+            ref = str(plan.get("client_order_ref") or "")
+            plan["waiting_since"] = since.get(ref) or _aware(now).isoformat()
 
 
 def apply_order_cap(plans: list[dict[str, Any]], order_cap: int | None = None) -> int:
@@ -1093,7 +1409,7 @@ def merge_prior_plans(
         if not ref:
             continue
         order = orders.get(ref) or {}
-        if order or ref.endswith(":exit_catchup"):
+        if order or ref.endswith((":exit_catchup", ":entry_catchup")):
             sent = _resend_blocked(order)
         else:
             sent = str(old.get("action") or "") in _NO_RETRY
@@ -1133,7 +1449,7 @@ def _book_price(episode: Mapping[str, Any] | None, leg: str) -> float | None:
     if not episode:
         return None
     status = str(episode.get("status") or "")
-    if leg == "entry":
+    if leg in {"entry", ENTRY_CATCHUP_LEG}:
         if status not in {"open", "closed"}:
             return None
         value = episode.get("return_entry_fill")
@@ -1285,7 +1601,7 @@ def ingest_statement(
                 book_price=_book_price(episodes.get(episode_id), leg),
                 half_spread=(order or {}).get("half_spread"),
             )
-            timing = "catchup" if leg == CATCHUP_LEG else "on_time"
+            timing = "catchup" if leg in CATCHUP_LEGS else "on_time"
             converted = bool((order or {}).get("fx_conversion")) or fx_conversion(
                 str(item.get("wallet_currency") or ""), str(item.get("currency") or "")
             )
@@ -1618,7 +1934,7 @@ def _median_pct(pcts: list[float]) -> float | None:
 
 
 def slippage_summary(fills: list[dict[str, Any]]) -> dict[str, Any]:
-    """All measured fills, plus on-time exits and catch-up exits separately."""
+    """All measured fills, plus on-time entries, on-time exits and catch-ups separately."""
     measured = [
         row
         for row in fills
@@ -1630,7 +1946,7 @@ def slippage_summary(fills: list[dict[str, Any]]) -> dict[str, Any]:
             return [
                 row
                 for row in measured
-                if str(row.get("leg") or "") == CATCHUP_LEG or row.get("timing") == "catchup"
+                if str(row.get("leg") or "") in CATCHUP_LEGS or row.get("timing") == "catchup"
             ]
         return [row for row in measured if str(row.get("leg") or "") == "exit"]
 
@@ -1639,6 +1955,7 @@ def slippage_summary(fills: list[dict[str, Any]]) -> dict[str, Any]:
 
     on_time = _bucket("on_time")
     catchup = _bucket("catchup")
+    entries = [row for row in measured if str(row.get("leg") or "") == "entry"]
     fx_pcts = [
         float(row["fx_fee_pct"])
         for row in fills
@@ -1653,6 +1970,80 @@ def slippage_summary(fills: list[dict[str, Any]]) -> dict[str, Any]:
         "on_time_median_pct": _median_pct(_pcts(on_time)),
         "catchup_count": len(catchup),
         "catchup_median_pct": _median_pct(_pcts(catchup)),
+        "entry_on_time_count": len(entries),
+        "entry_on_time_median_pct": _median_pct(_pcts(entries)),
+    }
+
+
+_UNSENT_STATUSES = frozenset(
+    {"submitting", "submit_unknown", "auth_blocked", "rate_limited", "not_placed"}
+)
+
+
+def execution_summary(
+    orders: list[dict[str, Any]],
+    events: list[dict[str, Any]],
+    episodes: Mapping[str, Mapping[str, Any]],
+    now: datetime,
+) -> dict[str, Any]:
+    """On-time entry fill rate, and how far the book's fill was from the signal close on misses.
+
+    An entry is due once its fill session has closed. A miss is an entry that was
+    accepted but has no buy fill. ``missed_book_move_median_pct`` is the book's
+    entry close over the signal close, minus one: positive means the price ran up.
+    """
+    bought: dict[str, float] = {}
+    for event in events:
+        if not isinstance(event, dict) or event.get("type") != "fill":
+            continue
+        if str(event.get("side") or "").upper() != "BUY":
+            continue
+        ref = str(event.get("client_order_ref") or "")
+        shares = _positive(event.get("quantity"))
+        if ref and shares is not None:
+            bought[ref] = bought.get(ref, 0.0) + shares
+    due = filled = missed = rejected = 0
+    moves: list[float] = []
+    catchups: Counter[str] = Counter()
+    for record in orders:
+        if not isinstance(record, dict):
+            continue
+        leg = str(record.get("leg") or "")
+        status = str(record.get("status") or "")
+        if leg in CATCHUP_LEGS and status not in _UNSENT_STATUSES | {"rejected"}:
+            catchups[leg] += 1
+            continue
+        if leg != "entry" or status in _UNSENT_STATUSES:
+            continue
+        if (
+            window_open(str(record.get("market") or ""), record.get("fill_session"), now)
+            is not False
+        ):
+            continue
+        due += 1
+        if bought.get(str(record.get("client_order_ref") or ""), 0.0) > QTY_TOLERANCE:
+            filled += 1
+            continue
+        if status == "rejected":
+            rejected += 1
+            continue
+        missed += 1
+        signal = _positive(record.get("signal_close"))
+        if signal is None and record.get("limit_band") is None:
+            signal = _positive(record.get("limit_price"))
+        book = _book_price(episodes.get(str(record.get("episode_id") or "")), "entry")
+        if signal is not None and book is not None:
+            moves.append(book / signal - 1.0)
+    return {
+        "entries_due": due,
+        "entries_filled": filled,
+        "entries_missed": missed,
+        "entries_rejected": rejected,
+        "entry_fill_rate": (filled / due) if due else None,
+        "missed_book_move_median_pct": _median_pct(moves),
+        "missed_book_move_count": len(moves),
+        "entry_catchups_sent": catchups.get(ENTRY_CATCHUP_LEG, 0),
+        "exit_catchups_sent": catchups.get(CATCHUP_LEG, 0),
     }
 
 
@@ -1700,6 +2091,8 @@ def summarize(payload: Mapping[str, Any]) -> dict[str, Any]:
         "slippage_median_pct": slip["median_pct"],
         "fx_fee_count": slip["fx_fee_count"],
         "fx_fee_median_pct": slip["fx_fee_median_pct"],
+        "waiting": counts.get("waiting", 0),
+        "execution": payload.get("execution"),
         "names": names,
         "errors": list(payload.get("errors") or []),
     }
@@ -1784,12 +2177,15 @@ def findings_from_ledger(ledger: Mapping[str, Any] | None) -> list[dict[str, Any
                 "title": TITLE_SLIPPAGE,
                 "summary": (
                     f"{slip['measured_count']} measured fill(s). "
+                    f"On-time entries: {slip.get('entry_on_time_count', 0)}, "
+                    f"median {_pct_text(slip.get('entry_on_time_median_pct'))}. "
                     f"On-time exits: {slip['on_time_count']}, "
                     f"median {_pct_text(slip['on_time_median_pct'])}. "
-                    f"Catch-up exits: {slip['catchup_count']}, "
+                    f"Catch-ups: {slip['catchup_count']}, "
                     f"median {_pct_text(slip['catchup_median_pct'])}. "
-                    "Catch-up slippage is versus the book's exit close, "
-                    "kept apart from on-time exits. "
+                    "Catch-up slippage is versus the book's fill close, "
+                    "kept apart from on-time orders. "
+                    f"{_execution_text(ledger.get('execution'))}"
                     f"FX-converted fills with a conversion fee: {slip['fx_fee_count']}, "
                     f"median fee {_pct_text(slip['fx_fee_median_pct'])} of cash, "
                     "not counted as price slippage. "
@@ -1804,7 +2200,7 @@ def findings_from_ledger(ledger: Mapping[str, Any] | None) -> list[dict[str, Any
         row
         for row in order_rows
         if isinstance(row, dict)
-        and str(row.get("leg") or "") == CATCHUP_LEG
+        and str(row.get("leg") or "") in CATCHUP_LEGS
         and str(row.get("status") or "") in {"rejected", "submit_unknown"}
         and int(row.get("attempt_count") or 0) >= CATCHUP_ATTEMPT_LIMIT
     ]
@@ -1840,14 +2236,58 @@ def findings_from_ledger(ledger: Mapping[str, Any] | None) -> list[dict[str, Any
                 "category": "research",
                 "title": TITLE_STUCK,
                 "summary": (
-                    f"Demo shares are still held after {CATCHUP_ATTEMPT_LIMIT} market-sell "
-                    f"attempts ({names}). The catch-up is not retried. "
+                    f"The demo account still differs from the book after {CATCHUP_ATTEMPT_LIMIT} "
+                    f"market-order catch-up attempts ({names}). The catch-up is not retried. "
+                    "See docs/ops/strategy-book-demo-mirror.md."
+                ),
+                "auto_fixable": False,
+            }
+        )
+    plan_rows: list[Any] = ledger["plans"] if isinstance(ledger.get("plans"), list) else []
+    generated_day = _parse_day(ledger.get("generated_at"))
+    generated = (
+        datetime.combine(generated_day, datetime.min.time(), tzinfo=UTC) if generated_day else None
+    )
+    late_waiting = [
+        row
+        for row in plan_rows
+        if isinstance(row, dict)
+        and str(row.get("leg") or "") in CATCHUP_LEGS
+        and row.get("action") == "waiting"
+        and generated is not None
+        and (sessions_late(row.get("waiting_since"), generated) or 0) >= 2
+    ]
+    if late_waiting:
+        names = ", ".join(str(row.get("ticker") or "") for row in late_waiting)
+        rows.append(
+            {
+                "severity": "warn",
+                "category": "research",
+                "title": TITLE_CATCHUP_WAITING,
+                "summary": (
+                    f"{len(late_waiting)} catch-up order(s) have waited through a full "
+                    f"weekday of near-close slots without a send ({names}). The near-close "
+                    "workflow (strategy-book-demo-near-close.yml) may not be firing. "
                     "See docs/ops/strategy-book-demo-mirror.md."
                 ),
                 "auto_fixable": False,
             }
         )
     return rows
+
+
+def _execution_text(execution: Any) -> str:
+    if not isinstance(execution, dict) or not execution.get("entries_due"):
+        return ""
+    rate = execution.get("entry_fill_rate")
+    move = execution.get("missed_book_move_median_pct")
+    text = (
+        f"On-time entries filled: {execution.get('entries_filled', 0)} of "
+        f"{execution['entries_due']}" + (f" ({float(rate):.0%})" if rate is not None else "") + "."
+    )
+    if move is not None:
+        text += f" Misses: book fill {float(move):+.2%} from the signal close (median)."
+    return text + " "
 
 
 def _redact(text: str, secrets: tuple[str, ...]) -> str:
@@ -2119,7 +2559,7 @@ def _apply_broker_status(
     }.get(status, "placed")
     record["status"] = mapped
     plan["action"] = mapped
-    if plan.get("leg") != CATCHUP_LEG:
+    if plan.get("leg") not in CATCHUP_LEGS:
         plan["reason"] = "rejected" if mapped == "rejected" else None
 
 
@@ -2134,7 +2574,7 @@ def _sync_working(plan: dict[str, Any], record: Mapping[str, Any]) -> None:
         plan["broker_status"] = record.get("broker_status")
     if status in {"placed", "partial", "filled", "rejected", "cancelled", "submit_unknown"}:
         plan["action"] = "partial" if status == "partial" else status
-        if status == "rejected" and plan.get("leg") != CATCHUP_LEG:
+        if status == "rejected" and plan.get("leg") not in CATCHUP_LEGS:
             plan["reason"] = "rejected"
 
 
@@ -2278,7 +2718,7 @@ def _settle_unknowns(
     """Settle unknown non-catch-up sends, and reopen a ``not_placed`` one while its window is open."""
     plans_by_ref = {str(plan.get("client_order_ref") or ""): plan for plan in plans}
     for ref, record in orders.items():
-        if str(record.get("leg") or "") == CATCHUP_LEG:
+        if str(record.get("leg") or "") in CATCHUP_LEGS:
             continue
         if str(record.get("status") or "") != "submit_unknown" or record.get("broker_order_id"):
             continue
@@ -2368,12 +2808,12 @@ def _execute(
     history_rows: list[dict[str, Any]] = []
     history_ok = True
     unknown_catchup = any(
-        str(row.get("leg") or "") == CATCHUP_LEG
+        str(row.get("leg") or "") in CATCHUP_LEGS
         and str(row.get("status") or "") == "submit_unknown"
         for row in orders.values()
     )
     unknown_other = pending_ok and any(
-        str(row.get("leg") or "") != CATCHUP_LEG
+        str(row.get("leg") or "") not in CATCHUP_LEGS
         and str(row.get("status") or "") == "submit_unknown"
         and not row.get("broker_order_id")
         for row in orders.values()
@@ -2386,7 +2826,7 @@ def _execute(
             history_ok = False
         else:
             for record in orders.values():
-                if str(record.get("leg") or "") != CATCHUP_LEG:
+                if str(record.get("leg") or "") not in CATCHUP_LEGS:
                     continue
                 if str(record.get("status") or "") != "submit_unknown":
                     continue
@@ -2417,7 +2857,7 @@ def _execute(
         prior = orders.get(ref)
         if prior and _resend_blocked(prior):
             if (
-                str(prior.get("leg") or "") == CATCHUP_LEG
+                str(prior.get("leg") or "") in CATCHUP_LEGS
                 and int(prior.get("attempt_count") or 0) >= CATCHUP_ATTEMPT_LIMIT
             ):
                 plan["action"] = "stuck"
@@ -2429,7 +2869,7 @@ def _execute(
         market = str(plan.get("order_type") or "") == "MARKET"
         retrying = (
             prior is not None
-            and str(prior.get("leg") or "") == CATCHUP_LEG
+            and str(prior.get("leg") or "") in CATCHUP_LEGS
             and str(prior.get("status") or "") in {"rejected", "submit_unknown", "rate_limited"}
         )
         if retrying and str(prior.get("status") or "") == "submit_unknown" and not history_ok:
@@ -2441,6 +2881,7 @@ def _execute(
             record["status"] = "submitting"
             record["quantity"] = plan.get("quantity")
             record["sessions_late"] = plan.get("sessions_late")
+            record["send_session"] = plan.get("send_session")
             record["submitted_at"] = _aware(now).isoformat()
             record["broker_order_id"] = None
             record["detail"] = None
@@ -2458,13 +2899,18 @@ def _execute(
                 "quantity": plan.get("quantity"),
                 "limit_price": plan.get("limit_price"),
                 "limit_currency": plan.get("limit_currency") or plan.get("instrument_currency"),
+                "instrument_currency": plan.get("instrument_currency"),
+                "signal_close": plan.get("chart_close"),
+                "limit_band": plan.get("limit_band"),
+                "sizing_close": plan.get("sizing_close"),
                 "time_validity": None if market else TIME_VALIDITY,
                 "fill_session": plan.get("fill_session"),
+                "send_session": plan.get("send_session"),
                 "half_spread": plan.get("half_spread"),
                 "fx_conversion": converted,
                 "account_currency": account_ccy,
                 "sessions_late": plan.get("sessions_late"),
-                "catchup_reason": plan.get("reason") if plan.get("leg") == CATCHUP_LEG else None,
+                "catchup_reason": plan.get("reason") if plan.get("leg") in CATCHUP_LEGS else None,
                 "attempt_count": 1 if market else None,
                 "status": "submitting",
                 "submitted_at": _aware(now).isoformat(),
@@ -2480,7 +2926,7 @@ def _execute(
             record["broker_status"] = exc.status
             record["detail"] = exc.detail
             plan["action"] = "rejected"
-            if plan.get("leg") != CATCHUP_LEG:
+            if plan.get("leg") not in CATCHUP_LEGS:
                 plan["reason"] = "rejected"
             checkpoint()
             continue
@@ -2644,8 +3090,14 @@ def run_mirror(
     env: Mapping[str, str] | None = None,
     order_cap: int | None = None,
     min_interval_s: float = 2.0,
+    only_if_due: bool = False,
 ) -> dict[str, Any]:
-    """Plan, and place only when ``place`` and ``apply`` are set and demo keys exist."""
+    """Plan, and place only when ``place`` and ``apply`` are set and demo keys exist.
+
+    Orders are sent only inside their market's near-close window. With
+    ``only_if_due``, a run with nothing in its window returns before any API call
+    and writes nothing.
+    """
     moment = _aware(now or datetime.now(UTC))
     root = Path(repo_root) if repo_root is not None else Path()
     creds = demo_credentials(env)
@@ -2682,22 +3134,36 @@ def run_mirror(
     else:
         prior_error = None
     prior = prior or {}
-    plans = build_plans(root, observe, moment)
+    overlay = _overlay_index(root)
+    plans = build_plans(root, observe, moment, overlay=overlay)
     prior_orders = [row for row in (prior.get("orders") or []) if isinstance(row, dict)]
     prior_plans = [row for row in (prior.get("plans") or []) if isinstance(row, dict)]
     events = [dict(row) for row in (prior.get("ledger") or []) if isinstance(row, dict)]
     fills = [dict(row) for row in (prior.get("fills") or []) if isinstance(row, dict)]
+    episodes = _episodes_by_id(observe)
     attach_exit_quantities(plans, events)
     plan_exit_catchups(
         plans,
         prior_orders,
         events,
-        _episodes_by_id(observe),
+        episodes,
         moment,
         observe.get("data_commit"),
+        not_filled_episode_ids(observe),
+    )
+    plan_entry_catchups(
+        plans,
+        prior_orders,
+        events,
+        episodes,
+        moment,
+        observe.get("data_commit"),
+        repo_root=root,
+        overlay=overlay,
     )
     plans = merge_prior_plans(plans, prior_plans, prior_orders, moment)
-    cap = apply_order_cap(plans, order_cap)
+    apply_send_window(plans, moment)
+    stamp_waiting_since(plans, prior_plans, moment)
     orders = {
         str(row.get("client_order_ref")): dict(row)
         for row in prior_orders
@@ -2707,7 +3173,7 @@ def run_mirror(
         existing = orders.get(str(plan.get("client_order_ref") or ""))
         if existing and _resend_blocked(existing) and plan.get("action") == "would_place":
             if (
-                str(existing.get("leg") or "") == CATCHUP_LEG
+                str(existing.get("leg") or "") in CATCHUP_LEGS
                 and int(existing.get("attempt_count") or 0) >= CATCHUP_ATTEMPT_LIMIT
             ):
                 plan["action"] = "stuck"
@@ -2715,6 +3181,14 @@ def run_mirror(
             else:
                 plan["action"] = "already_working"
                 plan["broker_order_id"] = existing.get("broker_order_id")
+    if only_if_due and not any(plan.get("action") == "would_place" for plan in plans):
+        idle = _empty_store(
+            moment, placement="skipped_nothing_due", configured=configured, error=None
+        )
+        idle["plans"] = plans
+        idle["summary"] = summarize(idle)
+        return idle
+    cap = apply_order_cap(plans, order_cap)
     if transport is not None:
         _require_demo_transport(transport)
     placing = bool(place) and configured and bool(apply)
@@ -2757,8 +3231,9 @@ def run_mirror(
         payload["fills"] = fills
         payload["ledger"] = events
         payload["orders_sent"] = sent_box[0]
-        payload["summary"] = summarize(payload)
         payload["slippage"] = slippage_summary(fills)
+        payload["execution"] = execution_summary(payload["orders"], events, episodes, moment)
+        payload["summary"] = summarize(payload)
         if apply:
             _write_json(ledger_path(root), payload)
 
@@ -2800,6 +3275,7 @@ def run_mirror(
     payload["orders_sent"] = sent_box[0]
     payload["errors"] = errors
     payload["slippage"] = slippage_summary(fills)
+    payload["execution"] = execution_summary(payload["orders"], events, episodes, moment)
     payload["summary"] = summarize(payload)
     payload["influences_live"] = False
     if apply:
@@ -2820,7 +3296,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--place",
         action="store_true",
-        help="Send limit orders. Requires demo secrets and --apply. Demo host only.",
+        help=(
+            "Send orders that are inside their near-close window. Requires demo secrets "
+            "and --apply. Demo host only."
+        ),
+    )
+    parser.add_argument(
+        "--only-if-due",
+        action="store_true",
+        help="Exit before any API call or write when no order is inside its send window.",
     )
     parser.add_argument("--as-of", help="Planning time (ISO-8601). Default: now UTC.")
     args = parser.parse_args(argv)
@@ -2835,6 +3319,7 @@ def main(argv: list[str] | None = None) -> int:
             now=moment,
             apply=args.apply,
             place=args.place,
+            only_if_due=args.only_if_due,
         )
     except DemoMirrorSafetyError as exc:
         print(json.dumps({"influences_live": False, "errors": [str(exc)]}, indent=2))
