@@ -9600,6 +9600,60 @@ def test_ensure_ir_allowlist_direct_merges_before_refetch_c6l_si(
     assert "ir_allowlist" in payload["sources_used"]
 
 
+def test_refetch_ir_allowlist_retries_c6l_si_sgx_unfetchable_eng_20261116_02(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20261116-02: sti C6L.SI SGX FileOpen rows retry after ir_allowlist_fetch_failed (not 0/0)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, refetch_ir_allowlist_filing_bodies
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    filings: list[dict] = []
+    for url in _BUILTIN_IR_URLS["C6L.SI"]:
+        digest = __import__("hashlib").sha256(url.encode("utf-8")).hexdigest()[:16]
+        period = "annual" if "FS-fy2526" in url else "interim"
+        filings.append(
+            {
+                "id": f"ir_{digest}",
+                "source": "ir_allowlist",
+                "headline": f"IR allowlist document — {url.rsplit('/', 1)[-1]}",
+                "url": url,
+                "period": period,
+                "has_body": False,
+                "unfetchable": True,
+                "unfetchable_reason": "ir_allowlist_fetch_failed",
+            }
+        )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": filings, "summary": {"with_body": 0, "total": len(filings)}}),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return (
+            "Singapore Airlines Limited consolidated revenue profit passenger load factor " * 25,
+            "pdf",
+        )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "C6L.SI",
+        company_name="Singapore Airlines Limited",
+        max_bodies=5,
+    )
+    assert int(result.get("retry_cleared") or 0) == 3
+    assert result["attempted"] == 3
+    assert int(result.get("skipped_unfetchable") or 0) == 0
+    assert result["fetched"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(saved["summary"]["with_body"]) >= 1
+    assert all(row.get("unfetchable") is not True for row in saved["filings"])
+
+
 def test_fetch_filings_ir_allowlist_sti_g13_si_builtins_eng_20261115_03(tmp_path: Path):
     """eng-20261115-03: sti buy-tier leftover G13.SI — SGX annual/interim statutory PDF seeds."""
     allowlist_path = tmp_path / "ir.json"
