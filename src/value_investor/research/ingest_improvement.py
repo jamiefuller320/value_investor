@@ -885,30 +885,7 @@ def _run_improvement_primary_body_refetch(
             )
     ir_allowlist_rows = fetch_filings_ir_allowlist(target.ticker)
     if ir_allowlist_rows:
-        from value_investor.research.filings import (
-            ensure_ir_allowlist_direct_filings_ingested,
-            ir_allowlist_direct_eligible,
-        )
-
-        if _market_bucket(market, target.ticker) == "asia" and ir_allowlist_direct_eligible(
-            target.ticker
-        ):
-            ir_ensure = _invoke_with_transient_fetch_retry(
-                ensure_ir_allowlist_direct_filings_ingested,
-                sources_dir,
-                ticker=target.ticker,
-                company_name=target.name,
-                market=market,
-                deepen_history=True,
-                max_bodies=target_max_bodies,
-            )
-            ir_refetch = dict(ir_ensure.get("ir_refetch") or {})
-            if int(ir_refetch.get("fetched") or 0) <= 0 and not ir_ensure.get("skipped"):
-                ir_refetch.setdefault("attempted", ir_ensure.get("attempted"))
-                ir_refetch.setdefault("fetched", ir_ensure.get("fetched"))
-                ir_refetch.setdefault("with_body_before", ir_ensure.get("with_body_before"))
-                ir_refetch.setdefault("with_body_after", ir_ensure.get("with_body_after"))
-        elif _is_uk_listed(market=market, ticker=target.ticker):
+        if _is_uk_listed(market=market, ticker=target.ticker):
             ir_refetch = _invoke_with_transient_fetch_retry(
                 refetch_ir_allowlist_filing_bodies,
                 sources_dir / "filings",

@@ -565,29 +565,13 @@ def prepare_gap_fill_source_pack(
             body_refetch = primary_refetch
     ir_refetch: dict[str, Any] = {}
     if ir_allowlist_rows:
-        from value_investor.research.filings import (
-            ensure_ir_allowlist_direct_filings_ingested,
-            ir_allowlist_direct_eligible,
+        ir_refetch = refetch_ir_allowlist_filing_bodies(
+            filings_dir,
+            ticker,
+            company_name=company_name,
+            max_bodies=20,
+            sources_dir=sources_dir,
         )
-
-        if _market_bucket(market, ticker) == "asia" and ir_allowlist_direct_eligible(ticker):
-            ir_ensure = ensure_ir_allowlist_direct_filings_ingested(
-                sources_dir,
-                ticker=ticker,
-                company_name=company_name,
-                market=market,
-                deepen_history=True,
-                max_bodies=20,
-            )
-            ir_refetch = dict(ir_ensure.get("ir_refetch") or {})
-        else:
-            ir_refetch = refetch_ir_allowlist_filing_bodies(
-                filings_dir,
-                ticker,
-                company_name=company_name,
-                max_bodies=20,
-                sources_dir=sources_dir,
-            )
         ir_refetch["mandatory"] = True
         ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
         if int(ir_refetch.get("fetched") or 0) > 0:
