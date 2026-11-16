@@ -1,23 +1,98 @@
 {
-  "run_at": "2026-11-15T19:38:06.315773+00:00",
+  "run_at": "2026-11-16T17:30:17.390067+00:00",
   "market_id": "euro_stoxx50",
-  "targets": [],
-  "target_details": [],
-  "results": [],
+  "targets": [
+    "SAP.DE"
+  ],
+  "target_details": [
+    {
+      "ticker": "SAP.DE",
+      "priority_score": 14.5199,
+      "filings_total": 18,
+      "filings_with_body": 17,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "SAP.DE",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 18,
+        "filings_with_body": 17,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 19,
+        "filings_with_body": 18,
+        "indexed_without_body": 1
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 19,
+        "annual": 2,
+        "interim": 16,
+        "trading_update": 0,
+        "other": 1,
+        "with_body": 18,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 16,
+            "with_body": 16
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 1,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 18,
+        "with_body_after": 18,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 1,
+        "retry_cleared": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-15T19:37:17.183028+00:00",
+    "snapshot_at": "2026-11-16T17:29:03.967390+00:00",
     "market_id": "euro_stoxx50",
-    "buy_tier_count": 10,
+    "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 1,
-    "indexed_without_body": 0,
+    "indexed_without_body": 1,
     "bodies_min": 1,
-    "bodies_median": 11.5,
+    "bodies_median": 12,
     "bodies_max": 145,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -26,28 +101,34 @@
     "thin_body_tickers": [
       "BAS.DE"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "SAP.DE"
+    ],
+    "indexed_without_body_by_ticker": {
+      "SAP.DE": 1
+    },
     "parked_tickers": [
       "BAS.DE"
     ],
     "parked_count": 1,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body_tickers": [
+      "SAP.DE"
+    ],
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-15T19:38:00.641691+00:00",
+    "snapshot_at": "2026-11-16T17:29:12.675014+00:00",
     "market_id": "euro_stoxx50",
-    "buy_tier_count": 10,
+    "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 1,
-    "indexed_without_body": 0,
+    "indexed_without_body": 1,
     "bodies_min": 1,
-    "bodies_median": 11.5,
+    "bodies_median": 12,
     "bodies_max": 145,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -56,12 +137,17 @@
     "thin_body_tickers": [
       "BAS.DE"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
-    "parked_tickers": [
-      "BAS.DE"
+    "indexed_without_body_tickers": [
+      "SAP.DE"
     ],
-    "parked_count": 1,
+    "indexed_without_body_by_ticker": {
+      "SAP.DE": 1
+    },
+    "parked_tickers": [
+      "BAS.DE",
+      "SAP.DE"
+    ],
+    "parked_count": 2,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -74,62 +160,82 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 10,
-    "hits": 10,
-    "new_rows_total": 0,
-    "curiosity_total": 11,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "BAS.DE"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "euro_stoxx50"
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "euro_stoxx50",
+    "to_market": "ftse_mib",
+    "stream_markets_after": [
+      "ftse_mib"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "euro_stoxx50",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "BAS.DE",
+        "SAP.DE"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "ftse_mib",
+      "forced": true,
+      "prior_screen_at": "2026-11-16T06:52:35.888659+00:00",
+      "prior_age_days": 0,
+      "run_at": "2026-11-16T17:30:12.125129+00:00",
+      "shortlist_count": 6,
+      "ticker_count": 40
+    },
+    "at": "2026-11-16T17:29:19.642924+00:00",
+    "ingest_parity_recorded": false
   },
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-11-15T19:37:17.881378+00:00",
+    "assessed_at": "2026-11-16T17:29:04.474221+00:00",
     "unmeasured": [],
     "zero_body": [],
-    "indexed_without_body": [],
+    "indexed_without_body": [
+      {
+        "ticker": "SAP.DE",
+        "indexed_without_body": 1,
+        "filings_total": 18,
+        "filings_with_body": 17
+      }
+    ],
     "thin_need_discovery": [
       "BAS.DE"
     ],
     "thin_need_bodies": [],
-    "primary_blocker": "thin_need_discovery",
+    "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
-    "auto_pin_tickers": [],
+    "auto_pin_tickers": [
+      "SAP.DE"
+    ],
     "recommended_actions": [
+      "Prefer indexed-without-body body refetch (1 tickers, top: SAP.DE(1))",
       "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 0,
-      "indexed_without_body_rows": 0,
+      "indexed_without_body_tickers": 1,
+      "indexed_without_body_rows": 1,
       "thin_need_discovery": 1,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 42.070024444999945,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3557.929975555,
+  "used_seconds": 7.629575297999992,
+  "budget_seconds": 87.5,
+  "leftover_seconds": 79.87042470200001,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -137,9 +243,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-11-15T19:38:00.648537+00:00",
+    "updated_at": "2026-11-16T17:29:12.680088+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 6,
+    "complete_zero_improve_runs": 7,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -153,14 +259,27 @@
         "indexed_without_body": 0,
         "thin": true,
         "source_surface": "euro_filings+ir_allowlist_direct"
+      },
+      {
+        "ticker": "SAP.DE",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-16T17:29:12.680088+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 19,
+        "filings_with_body": 18,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "euro_filings+ir_allowlist_direct"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
-      "BAS.DE"
+      "BAS.DE",
+      "SAP.DE"
     ],
     "unparked_leftover": [],
     "surface_released": [],
@@ -201,7 +320,7 @@
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 71,
-    "candidate_count": 56,
+    "candidate_count": 54,
     "skipped_resolved_tickers": [
       "ACKB.BR",
       "APAM.AS",
@@ -212,7 +331,6 @@
       "ESSITY-B.ST",
       "LMT",
       "APTV",
-      "BXP",
       "MER.L",
       "TPT.L",
       "FOXT.L",
@@ -221,14 +339,15 @@
       "DFS.L",
       "SU.TO",
       "NTR.TO",
+      "GIB-A.TO",
       "MFC.TO",
       "BAS.DE",
+      "SAP.DE",
       "PDD",
       "BAS.DE",
       "DTE.DE",
       "DTG.DE",
       "HEN3.DE",
-      "PST.MI",
       "APAM.AS",
       "0285.HK",
       "0857.HK",
