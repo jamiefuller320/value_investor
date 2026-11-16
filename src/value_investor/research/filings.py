@@ -6062,6 +6062,10 @@ def _ir_allowlist_unfetchable_may_retry(
     # igc-20260912-01; any live allowlisted donegaligroup row should retry before 0/0 refetch.
     if host.endswith("donegaligroup.com"):
         return True
+    # eng-20261116-02: sti C6L.SI SGX FileOpen PDFs stayed skipped_unfetchable after a prior
+    # transient ir_allowlist_fetch_failed; links.sgx.com rows must retry like Donegal IR.
+    if host.endswith("links.sgx.com"):
+        return True
     if reason != "ir_allowlist_fetch_failed":
         return False
     # Canonical / scheme rewrites since the last failure (e.g. https→http Donegal IR PDFs).
