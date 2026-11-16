@@ -207,6 +207,44 @@ git push -u origin cursor/exit-lab-round-2-results-567c
 
 It writes `docs/data/strategy_book_exit_lab_round2.json` (aggregates only; the privacy guard runs first) and leaves the round 1 file and the rehearsal store untouched. Run time and memory are about the same as round 1. It refuses once `deleted_at` is stamped, so run it before step 7. The ops-monitor info row **Strategy-book exit lab round 2: development-window scores committed** names the capital-days return of the primary and of the leave-tier control.
 
+## 6d. Slot-ranking lab (exploratory, before deletion)
+
+The 20-slot book offers each fill session's signals in ticker order and skips the rest once every slot is full. In the confirmation window about 70% of primary signals were skipped and the book's return matched random ordering, so which signal gets a slot is unexamined (L691). The selection board pointed one way in three of the four US and UK windows: signals furthest above their 52-week low, above their 200-day average, or with a higher 6-month return did better, and the deepest dips did worst.
+
+The lab re-runs the slot book on the primary's own mature episodes with eight rules fixed before the first run (`RANK_RULES` in `src/value_investor/strategy_book_ranking_lab.py`). Episodes, exits and returns are the registered ones; only which signals take a slot changes.
+
+| Column | Rule |
+|---|---|
+| `rank_lo252` | Within a fill session, furthest above the 52-week low first |
+| `rank_sma200` | Highest close versus the 200-day average first |
+| `rank_ret126` | Highest 6-month return first |
+| `rank_trend3` | Highest mean of those three scores first |
+| `rank_deep_dip` | Contrast: closest to the 52-week low first |
+| `skip_lo252` | Skip signals in the bottom fifth by 52-week-low distance; ticker order |
+| `skip_trend3` | Skip the bottom fifth by the mean score; ticker order |
+| `skip_trend3_rank_trend3` | Skip the bottom fifth by the mean score, then highest mean first |
+
+Scores are point in time: a feature's score is its percentile among the primary signals of strictly earlier signal sessions in the same walk, so the confirmation window reads the development window as history. Until 250 earlier values exist the score is missing, and a missing score neither ranks (it sits in the middle) nor skips. `end_cutoffs` gives the raw value at the skip line in each window, which a forward rule would need.
+
+Each window (development 2000–2012, confirmation 2013–2025) and its two calendar halves gets a board: the registered order's slot book, its random-order median, the taken trades' medians, and how many skips came on contested sessions (more signals due than slots free) against sessions that started full; then each rule's slot book, its gain over the registered order, the share of the registered order's trades it still takes, and for skip rules the kept-minus-dropped mean with an entry-week standard error.
+
+**Choice rule (fixed before the first run).** A rule is eligible when, in all four halves, its slot-book annualised return is above both the registered order's and that order's random-order median, and in both whole windows its taken trades' median matched excess is not below the registered order's. The pick is the eligible rule with the largest smaller-of-the-two whole-window gains. No eligible rule means no pick. The rules came from the confirmation board, so the development window is the cleaner read. Both windows are spent: the pick is a candidate bench challenger for the version review, not evidence, and seals nothing.
+
+The UK replay's raw files were deleted at its v1 reveal, so this lab runs on the US data only.
+
+```bash
+git checkout main && git pull
+pip install -e .
+ftse-strategy-book-rehearsal ranking-lab --build ~/hsr-build --mid-build ~/hsr-mid-build \
+  --sharadar-dir ~/sharadar
+git checkout -b cursor/ranking-lab-results-567c
+git add docs/data/strategy_book_ranking_lab.json
+git commit -m "Strategy-book slot-ranking lab: both-window scores"
+git push -u origin cursor/ranking-lab-results-567c
+```
+
+It needs the committed development block and the reveal, and refuses once `deleted_at` is stamped, so run it before step 7. It walks both windows once (one delisting variant, about half the reveal's run time, with similar memory; `--batch-size` works the same way). It prints one row per rule and window, then the choice rule's result, and writes `docs/data/strategy_book_ranking_lab.json` with aggregates only; the privacy guard runs before the write. The rehearsal store and both exit-lab files are untouched. The ops-monitor info row **Strategy-book slot-ranking lab: scores committed** names the registered order's slot-book return in each window and the pick.
+
 ## 7. Delete (by 2026-12-09 at the latest)
 
 ```bash
@@ -242,7 +280,7 @@ deletion warn clears on the next ops-monitor run.
 
 ## Ops-monitor
 
-`check_strategy_book_us_rehearsal` reads the committed store and the exit-lab store daily and never
+`check_strategy_book_us_rehearsal` reads the committed store and the lab stores daily and never
 writes them. Both are excluded from GHA artifact commits.
 
 | Title | Severity | When |
@@ -252,6 +290,8 @@ writes them. Both are excluded from GHA artifact commits.
 | Strategy-book US rehearsal: licensed data deletion due | warn | `first_used_at` is set and `deleted_at` is not |
 | Strategy-book US rehearsal store unreadable | warn | The store is not valid JSON |
 | Strategy-book exit lab: development-window scores committed | info | `strategy_book_exit_lab.json` exists (names the choice-rule pick) |
+| Strategy-book exit lab round 2: development-window scores committed | info | `strategy_book_exit_lab_round2.json` exists (names the capital-days returns) |
+| Strategy-book slot-ranking lab: scores committed | info | `strategy_book_ranking_lab.json` exists (names the registered order's slot-book return per window and the choice-rule pick) |
 
 All are `auto_fixable=false`. None triggers rememo, ingest or engineering work.
 
