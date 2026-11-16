@@ -1186,6 +1186,108 @@ def test_strategy_book_demo_buys_an_open_primary_the_mirror_never_sent(tmp_path:
     assert not any(row["action"] == "would_place" for row in later["plans"])
 
 
+class _QueuedMarketTransport(FakeTransport):
+    """Market orders stay working on the demo host until the test clears them."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.next_id = 77
+
+    def place_market(self, body: dict) -> dict:
+        response = super().place_market(body)
+        response.update({"id": self.next_id, "status": "NEW", "filledQuantity": 0})
+        self.pending.append({"id": self.next_id, "ticker": body["ticker"], "side": "BUY"})
+        self.next_id += 1
+        return response
+
+
+def test_strategy_book_demo_catchup_works_its_send_session_then_retries(
+    tmp_path: Path,
+) -> None:
+    _overlay(tmp_path, [_hit("FOUR.L")])
+    _chart(tmp_path, "FOUR.L", 4100.0, last="2026-11-11")
+    _observe(tmp_path, [], [_open_episode()])
+    fake = _QueuedMarketTransport()
+    sent = _run(tmp_path, fake, CATCH_NOW)
+    assert fake.market_calls == 1
+    assert fake.cancelled == []
+    order = next(row for row in sent["orders"] if row["leg"] == "entry_catchup")
+    assert order["status"] == "placed"
+    assert order["send_session"] == "2026-11-12"
+
+    closed = _run(tmp_path, fake, datetime(2026, 11, 12, 17, 45, tzinfo=UTC))
+    assert fake.cancelled == [77]
+    order = next(row for row in closed["orders"] if row["leg"] == "entry_catchup")
+    assert order["status"] == "cancelled"
+    assert order["remainder_cancelled"] is True
+
+    fake.pending = []
+    retried = _run(tmp_path, fake, datetime(2026, 11, 13, 16, 10, tzinfo=UTC))
+    assert fake.market_calls == 2
+    assert fake.market_orders[-1] == {"ticker": "FOURl_EQ", "quantity": 2.439}
+    order = next(row for row in retried["orders"] if row["leg"] == "entry_catchup")
+    assert order["status"] == "placed"
+    assert order["attempt_count"] == 2
+    assert order["broker_order_id"] == 78
+    assert order["prior_broker_order_ids"] == [77]
+    assert order["remainder_cancelled"] is False
+    assert order["send_session"] == "2026-11-13"
+
+    fake.pending = []
+    fake.history = [
+        {
+            "order": {"id": 77, "ticker": "FOURl_EQ", "side": "BUY", "status": "FILLED"},
+            "fill": {
+                "id": 96,
+                "price": 4150.0,
+                "quantity": 1.0,
+                "filledAt": "2026-11-12T16:12:00Z",
+                "type": "TRADE",
+                "walletImpact": {"netValue": -41.7, "currency": "GBP"},
+            },
+        }
+    ]
+    late = _run(tmp_path, fake, datetime(2026, 11, 13, 16, 20, tzinfo=UTC))
+    fill = next(row for row in late["ledger"] if row.get("fill_id") == 96)
+    assert fill["episode_id"] == EPISODE
+    assert fill["leg"] == "entry_catchup"
+
+
+def test_strategy_book_demo_cancelled_catchup_stops_at_the_attempt_limit(
+    tmp_path: Path,
+) -> None:
+    _overlay(tmp_path, [_hit("FOUR.L")])
+    _chart(tmp_path, "FOUR.L", 4100.0, last="2026-11-11")
+    _observe(tmp_path, [], [_open_episode()])
+    catchup = {
+        "client_order_ref": f"sbdemo:{EPISODE}:entry_catchup",
+        "episode_id": EPISODE,
+        "leg": "entry_catchup",
+        "order_type": "MARKET",
+        "market": "ftse350",
+        "ticker": "FOUR.L",
+        "t212_ticker": "FOURl_EQ",
+        "side": "BUY",
+        "quantity": 2.439,
+        "fill_session": "2026-11-11",
+        "send_session": "2026-11-11",
+        "broker_order_id": 70,
+        "status": "cancelled",
+        "remainder_cancelled": True,
+        "attempt_count": CATCHUP_ATTEMPT_LIMIT,
+    }
+    _write(
+        tmp_path / "docs/data/strategy_book_demo_ledger.json",
+        {"orders": [catchup], "plans": [], "fills": [], "ledger": []},
+    )
+    fake = FakeTransport()
+    store = _run(tmp_path, fake, CATCH_NOW)
+    assert fake.market_calls == 0
+    plan = next(row for row in store["plans"] if row["leg"] == "entry_catchup")
+    assert plan["action"] == "stuck"
+    assert plan["reason"] == "catchup_attempt_limit"
+
+
 def _entry_order(status: str, **extra: object) -> dict:
     row = {
         "client_order_ref": "sbdemo:ftse350:FOUR.L:primary:2026-11-10:entry",

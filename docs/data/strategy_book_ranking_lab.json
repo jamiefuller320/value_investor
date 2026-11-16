@@ -1,0 +1,1677 @@
+{
+  "lab_id": "strategy-book-slot-ranking-lab-v0",
+  "registration_id": "strategy-book-us-rehearsal-v0",
+  "parent_registration_id": "owner-strategy-book-v0",
+  "observe_only": true,
+  "influences_live": false,
+  "exploratory": true,
+  "evidence": false,
+  "purpose": "Which primary signals should take a slot when the 20-slot book is full (L691): ranking and skip rules fixed before the first run, against the registered order, on both US windows. Both windows were already read, so this is design input for the strategy book version review, not evidence.",
+  "computed_at": "2026-11-16T20:34:56+00:00",
+  "windows_reproduced": {
+    "development": true,
+    "confirmation": true
+  },
+  "score_basis": {
+    "features": {
+      "lo252": "lo252_dist_pct",
+      "sma200": "close_vs_sma200",
+      "ret126": "return_126"
+    },
+    "trend3": [
+      "lo252",
+      "sma200",
+      "ret126"
+    ],
+    "trend3_min_parts": 2,
+    "percentile_of": "primary signals of strictly earlier signal sessions in the walk",
+    "warmup_signals": 250,
+    "skip_below": 0.2,
+    "slot_count": 20
+  },
+  "variants": [
+    {
+      "column": "rank_lo252",
+      "rank_by": "lo252",
+      "rank_order": "high_first",
+      "skip_bottom_share_of": null,
+      "skip_below": null,
+      "note": "Furthest above the 52-week low first"
+    },
+    {
+      "column": "rank_sma200",
+      "rank_by": "sma200",
+      "rank_order": "high_first",
+      "skip_bottom_share_of": null,
+      "skip_below": null,
+      "note": "Highest close versus the 200-day average first"
+    },
+    {
+      "column": "rank_ret126",
+      "rank_by": "ret126",
+      "rank_order": "high_first",
+      "skip_bottom_share_of": null,
+      "skip_below": null,
+      "note": "Highest 6-month return first"
+    },
+    {
+      "column": "rank_trend3",
+      "rank_by": "trend3",
+      "rank_order": "high_first",
+      "skip_bottom_share_of": null,
+      "skip_below": null,
+      "note": "Highest mean of the three trend scores first"
+    },
+    {
+      "column": "rank_deep_dip",
+      "rank_by": "lo252",
+      "rank_order": "low_first",
+      "skip_bottom_share_of": null,
+      "skip_below": null,
+      "note": "Contrast: closest to the 52-week low first"
+    },
+    {
+      "column": "skip_lo252",
+      "rank_by": null,
+      "rank_order": null,
+      "skip_bottom_share_of": "lo252",
+      "skip_below": 0.2,
+      "note": "Skip the bottom fifth by 52-week-low distance"
+    },
+    {
+      "column": "skip_trend3",
+      "rank_by": null,
+      "rank_order": null,
+      "skip_bottom_share_of": "trend3",
+      "skip_below": 0.2,
+      "note": "Skip the bottom fifth by trend score"
+    },
+    {
+      "column": "skip_trend3_rank_trend3",
+      "rank_by": "trend3",
+      "rank_order": "high_first",
+      "skip_bottom_share_of": "trend3",
+      "skip_below": 0.2,
+      "note": "Skip the bottom fifth by trend score, then highest trend score first"
+    }
+  ],
+  "boards": {
+    "development": {
+      "signal_window": {
+        "first": "2000-01-01",
+        "last": "2012-12-31"
+      },
+      "whole": {
+        "registered_order": {
+          "all_signals": {
+            "count": 3802,
+            "fair_cost_median": 0.019510311107427014,
+            "fair_cost_mean": 0.020456455483602927,
+            "matched_excess_median": -0.0011250453986914937,
+            "share_above_zero": 0.578642819568648
+          },
+          "slot_book": {
+            "annualised_return": 0.11190140933758719,
+            "max_drawdown": -0.39427718971611714,
+            "random_order_median": 0.12087558709275914,
+            "trades_taken": 1139,
+            "trades_skipped": 2663
+          },
+          "taken": {
+            "count": 1139,
+            "fair_cost_median": 0.026346263585681318,
+            "fair_cost_mean": 0.02865462167405867,
+            "matched_excess_median": -0.0015538699546992461,
+            "share_above_zero": 0.6031606672519754
+          },
+          "contest": {
+            "fill_sessions": 1489,
+            "contested_sessions": 272,
+            "skipped_contested": 984,
+            "skipped_full": 1679
+          },
+          "scored_share": {
+            "lo252": 0.9331930562861652,
+            "sma200": 0.9337190952130457,
+            "ret126": 0.9339821146764861,
+            "trend3": 0.9337190952130457
+          }
+        },
+        "variants": {
+          "rank_lo252": {
+            "slot_book": {
+              "annualised_return": 0.12983406324414992,
+              "max_drawdown": -0.32782653055471345,
+              "random_order_median": 0.12087558709275914,
+              "trades_taken": 1150,
+              "trades_skipped": 2652
+            },
+            "taken": {
+              "count": 1150,
+              "fair_cost_median": 0.02710424880780843,
+              "fair_cost_mean": 0.03228863894259358,
+              "matched_excess_median": 0.0005529209313904493,
+              "share_above_zero": 0.6060869565217392
+            },
+            "annualised_vs_registered": 0.017932653906562734,
+            "taken_overlap_share": 0.7471466198419666
+          },
+          "rank_sma200": {
+            "slot_book": {
+              "annualised_return": 0.1279584610750446,
+              "max_drawdown": -0.3451528812308352,
+              "random_order_median": 0.12087558709275914,
+              "trades_taken": 1119,
+              "trades_skipped": 2683
+            },
+            "taken": {
+              "count": 1119,
+              "fair_cost_median": 0.02830637982195855,
+              "fair_cost_mean": 0.033411234087626245,
+              "matched_excess_median": 0.0013303231897157236,
+              "share_above_zero": 0.6148346738159071
+            },
+            "annualised_vs_registered": 0.016057051737457417,
+            "taken_overlap_share": 0.7339771729587358
+          },
+          "rank_ret126": {
+            "slot_book": {
+              "annualised_return": 0.12030354775823926,
+              "max_drawdown": -0.3804019303785373,
+              "random_order_median": 0.12087558709275914,
+              "trades_taken": 1130,
+              "trades_skipped": 2672
+            },
+            "taken": {
+              "count": 1130,
+              "fair_cost_median": 0.02771514592855423,
+              "fair_cost_mean": 0.03219225627894649,
+              "matched_excess_median": 0.0005529209313904493,
+              "share_above_zero": 0.6097345132743363
+            },
+            "annualised_vs_registered": 0.008402138420652072,
+            "taken_overlap_share": 0.7497805092186128
+          },
+          "rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.11684566179400613,
+              "max_drawdown": -0.37413878716548965,
+              "random_order_median": 0.12087558709275914,
+              "trades_taken": 1135,
+              "trades_skipped": 2667
+            },
+            "taken": {
+              "count": 1135,
+              "fair_cost_median": 0.027076145552560604,
+              "fair_cost_mean": 0.030622234264399847,
+              "matched_excess_median": -0.0004337801528514623,
+              "share_above_zero": 0.6035242290748899
+            },
+            "annualised_vs_registered": 0.0049442524564189405,
+            "taken_overlap_share": 0.7585601404741001
+          },
+          "rank_deep_dip": {
+            "slot_book": {
+              "annualised_return": 0.11509936797370912,
+              "max_drawdown": -0.3639652193470212,
+              "random_order_median": 0.12087558709275914,
+              "trades_taken": 1142,
+              "trades_skipped": 2660
+            },
+            "taken": {
+              "count": 1142,
+              "fair_cost_median": 0.02745999614891398,
+              "fair_cost_mean": 0.029792158873328277,
+              "matched_excess_median": 0.0009585597600714688,
+              "share_above_zero": 0.6129597197898424
+            },
+            "annualised_vs_registered": 0.0031979586361219337,
+            "taken_overlap_share": 0.7304653204565408
+          },
+          "skip_lo252": {
+            "slot_book": {
+              "annualised_return": 0.11669972809102114,
+              "max_drawdown": -0.3972059343453479,
+              "random_order_median": 0.1156568455161675,
+              "trades_taken": 1066,
+              "trades_skipped": 2016
+            },
+            "taken": {
+              "count": 1066,
+              "fair_cost_median": 0.02756390426860139,
+              "fair_cost_mean": 0.031651358304147344,
+              "matched_excess_median": -0.0005879536218083292,
+              "share_above_zero": 0.6191369606003753
+            },
+            "annualised_vs_registered": 0.00479831875343395,
+            "taken_overlap_share": 0.7172958735733099,
+            "skip": {
+              "kept": {
+                "count": 3082,
+                "fair_cost_median": 0.021690263957223566,
+                "fair_cost_mean": 0.022695875143790564,
+                "matched_excess_median": -0.0011971605202590156,
+                "share_above_zero": 0.5869565217391305
+              },
+              "dropped": {
+                "count": 720,
+                "fair_cost_median": 0.010706240557211425,
+                "fair_cost_mean": 0.010870495215966409,
+                "matched_excess_median": -0.0007274948264064142,
+                "share_above_zero": 0.5430555555555555
+              },
+              "mean_difference_kept_minus_dropped": 0.011825379927824155,
+              "standard_error": 0.009798605788414612,
+              "t": 1.2068431145383869,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3": {
+            "slot_book": {
+              "annualised_return": 0.10852548506357573,
+              "max_drawdown": -0.3818959034703532,
+              "random_order_median": 0.11150744640583943,
+              "trades_taken": 1056,
+              "trades_skipped": 2250
+            },
+            "taken": {
+              "count": 1056,
+              "fair_cost_median": 0.02664460099252758,
+              "fair_cost_mean": 0.02926030540804376,
+              "matched_excess_median": -0.0011392390289589986,
+              "share_above_zero": 0.6117424242424242
+            },
+            "annualised_vs_registered": -0.003375924274011455,
+            "taken_overlap_share": 0.7611940298507462,
+            "skip": {
+              "kept": {
+                "count": 3306,
+                "fair_cost_median": 0.020752957593912325,
+                "fair_cost_mean": 0.02151560842214784,
+                "matched_excess_median": -0.001389613450963497,
+                "share_above_zero": 0.5837870538415003
+              },
+              "dropped": {
+                "count": 496,
+                "fair_cost_median": 0.010842507440126884,
+                "fair_cost_mean": 0.013396859485962854,
+                "matched_excess_median": 0.0024240912838590575,
+                "share_above_zero": 0.5443548387096774
+              },
+              "mean_difference_kept_minus_dropped": 0.008118748936184986,
+              "standard_error": 0.012742082846021912,
+              "t": 0.6371602691878326,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3_rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.11142806919088577,
+              "max_drawdown": -0.390167561800559,
+              "random_order_median": 0.11150744640583943,
+              "trades_taken": 1052,
+              "trades_skipped": 2254
+            },
+            "taken": {
+              "count": 1052,
+              "fair_cost_median": 0.027725018939839197,
+              "fair_cost_mean": 0.031225620563992657,
+              "matched_excess_median": 0.00016538065661639637,
+              "share_above_zero": 0.6159695817490495
+            },
+            "annualised_vs_registered": -0.00047334014670141755,
+            "taken_overlap_share": 0.630377524143986,
+            "skip": {
+              "kept": {
+                "count": 3306,
+                "fair_cost_median": 0.020752957593912325,
+                "fair_cost_mean": 0.02151560842214784,
+                "matched_excess_median": -0.001389613450963497,
+                "share_above_zero": 0.5837870538415003
+              },
+              "dropped": {
+                "count": 496,
+                "fair_cost_median": 0.010842507440126884,
+                "fair_cost_mean": 0.013396859485962854,
+                "matched_excess_median": 0.0024240912838590575,
+                "share_above_zero": 0.5443548387096774
+              },
+              "mean_difference_kept_minus_dropped": 0.008118748936184986,
+              "standard_error": 0.012742082846021912,
+              "t": 0.6371602691878326,
+              "pairing": "unpaired"
+            }
+          }
+        }
+      },
+      "end_cutoffs": {
+        "lo252": {
+          "feature": "lo252_dist_pct",
+          "present": 3799,
+          "value_at_skip_line": 7.7
+        },
+        "sma200": {
+          "feature": "close_vs_sma200",
+          "present": 3801,
+          "value_at_skip_line": -0.12469551550666869
+        },
+        "ret126": {
+          "feature": "return_126",
+          "present": 3802,
+          "value_at_skip_line": -0.14312977099236635
+        }
+      },
+      "first_half": {
+        "signal_window": {
+          "first": "2000-01-01",
+          "last": "2006-07-02"
+        },
+        "registered_order": {
+          "all_signals": {
+            "count": 1921,
+            "fair_cost_median": 0.027395754612136003,
+            "fair_cost_mean": 0.034009432559927805,
+            "matched_excess_median": 0.0004409015913262979,
+            "share_above_zero": 0.6199895887558563
+          },
+          "slot_book": {
+            "annualised_return": 0.15551491522958605,
+            "max_drawdown": -0.15293475930553402,
+            "random_order_median": 0.14099060199688052,
+            "trades_taken": 598,
+            "trades_skipped": 1323
+          },
+          "taken": {
+            "count": 598,
+            "fair_cost_median": 0.03147743264706809,
+            "fair_cost_mean": 0.03743483864620078,
+            "matched_excess_median": 0.0030051172093315606,
+            "share_above_zero": 0.6337792642140468
+          },
+          "contest": {
+            "fill_sessions": 822,
+            "contested_sessions": 134,
+            "skipped_contested": 407,
+            "skipped_full": 916
+          },
+          "scored_share": {
+            "lo252": 0.8682977615825092,
+            "sma200": 0.8688183237896928,
+            "ret126": 0.8693388859968766,
+            "trend3": 0.8688183237896928
+          }
+        },
+        "variants": {
+          "rank_lo252": {
+            "slot_book": {
+              "annualised_return": 0.16286862977018246,
+              "max_drawdown": -0.15287135765151827,
+              "random_order_median": 0.14099060199688052,
+              "trades_taken": 596,
+              "trades_skipped": 1325
+            },
+            "taken": {
+              "count": 596,
+              "fair_cost_median": 0.035193234476367075,
+              "fair_cost_mean": 0.040076084487443084,
+              "matched_excess_median": 0.003906820629653906,
+              "share_above_zero": 0.6409395973154363
+            },
+            "annualised_vs_registered": 0.007353714540596412,
+            "taken_overlap_share": 0.7859531772575251
+          },
+          "rank_sma200": {
+            "slot_book": {
+              "annualised_return": 0.15998980415908348,
+              "max_drawdown": -0.133505483851023,
+              "random_order_median": 0.14099060199688052,
+              "trades_taken": 590,
+              "trades_skipped": 1331
+            },
+            "taken": {
+              "count": 590,
+              "fair_cost_median": 0.03335716675489814,
+              "fair_cost_mean": 0.03978293040829579,
+              "matched_excess_median": 0.005147211028314011,
+              "share_above_zero": 0.6372881355932203
+            },
+            "annualised_vs_registered": 0.004474888929497434,
+            "taken_overlap_share": 0.782608695652174
+          },
+          "rank_ret126": {
+            "slot_book": {
+              "annualised_return": 0.15614774280484456,
+              "max_drawdown": -0.1454169361388309,
+              "random_order_median": 0.14099060199688052,
+              "trades_taken": 597,
+              "trades_skipped": 1324
+            },
+            "taken": {
+              "count": 597,
+              "fair_cost_median": 0.03466840811309152,
+              "fair_cost_mean": 0.03954102728346235,
+              "matched_excess_median": 0.004548639456537398,
+              "share_above_zero": 0.6432160804020101
+            },
+            "annualised_vs_registered": 0.00063282757525851,
+            "taken_overlap_share": 0.8010033444816054
+          },
+          "rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.15057871235202325,
+              "max_drawdown": -0.1477275388786624,
+              "random_order_median": 0.14099060199688052,
+              "trades_taken": 596,
+              "trades_skipped": 1325
+            },
+            "taken": {
+              "count": 596,
+              "fair_cost_median": 0.03335716675489814,
+              "fair_cost_mean": 0.03814807778597009,
+              "matched_excess_median": 0.0030051172093315606,
+              "share_above_zero": 0.6291946308724832
+            },
+            "annualised_vs_registered": -0.004936202877562801,
+            "taken_overlap_share": 0.7993311036789298
+          },
+          "rank_deep_dip": {
+            "slot_book": {
+              "annualised_return": 0.14629958510965757,
+              "max_drawdown": -0.15039305751612542,
+              "random_order_median": 0.14099060199688052,
+              "trades_taken": 607,
+              "trades_skipped": 1314
+            },
+            "taken": {
+              "count": 607,
+              "fair_cost_median": 0.03106571283869336,
+              "fair_cost_mean": 0.0362031362072206,
+              "matched_excess_median": 0.004548639456537398,
+              "share_above_zero": 0.6408566721581549
+            },
+            "annualised_vs_registered": -0.009215330119928478,
+            "taken_overlap_share": 0.774247491638796
+          },
+          "skip_lo252": {
+            "slot_book": {
+              "annualised_return": 0.15034361073991587,
+              "max_drawdown": -0.12853979031922513,
+              "random_order_median": 0.1435487483529294,
+              "trades_taken": 560,
+              "trades_skipped": 1039
+            },
+            "taken": {
+              "count": 560,
+              "fair_cost_median": 0.03582825135552531,
+              "fair_cost_mean": 0.03924763627546437,
+              "matched_excess_median": 0.006544043102740482,
+              "share_above_zero": 0.6464285714285715
+            },
+            "annualised_vs_registered": -0.005171304489670181,
+            "taken_overlap_share": 0.7608695652173914,
+            "skip": {
+              "kept": {
+                "count": 1599,
+                "fair_cost_median": 0.02918212525104963,
+                "fair_cost_mean": 0.0374821415798927,
+                "matched_excess_median": 0.001867828662454005,
+                "share_above_zero": 0.6260162601626016
+              },
+              "dropped": {
+                "count": 322,
+                "fair_cost_median": 0.017320826891153274,
+                "fair_cost_mean": 0.01676452037693439,
+                "matched_excess_median": -0.005335589779310718,
+                "share_above_zero": 0.5900621118012422
+              },
+              "mean_difference_kept_minus_dropped": 0.02071762120295831,
+              "standard_error": 0.016026175261671143,
+              "t": 1.2927364679773232,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3": {
+            "slot_book": {
+              "annualised_return": 0.1521410641651031,
+              "max_drawdown": -0.1411358606374543,
+              "random_order_median": 0.1412947549516752,
+              "trades_taken": 567,
+              "trades_skipped": 1187
+            },
+            "taken": {
+              "count": 567,
+              "fair_cost_median": 0.033622140522875876,
+              "fair_cost_mean": 0.03895180314692895,
+              "matched_excess_median": 0.00350319824529085,
+              "share_above_zero": 0.6472663139329806
+            },
+            "annualised_vs_registered": -0.003373851064482958,
+            "taken_overlap_share": 0.8528428093645485,
+            "skip": {
+              "kept": {
+                "count": 1754,
+                "fair_cost_median": 0.028257134348911583,
+                "fair_cost_mean": 0.03664020438912551,
+                "matched_excess_median": 0.001106720056684371,
+                "share_above_zero": 0.6254275940706956
+              },
+              "dropped": {
+                "count": 167,
+                "fair_cost_median": 0.012637830107097573,
+                "fair_cost_mean": 0.0063784517909888875,
+                "matched_excess_median": -0.0051773491571372975,
+                "share_above_zero": 0.562874251497006
+              },
+              "mean_difference_kept_minus_dropped": 0.030261752598136626,
+              "standard_error": 0.021077242355482657,
+              "t": 1.4357548339460486,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3_rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.14731297060230664,
+              "max_drawdown": -0.14538398894739624,
+              "random_order_median": 0.1412947549516752,
+              "trades_taken": 567,
+              "trades_skipped": 1187
+            },
+            "taken": {
+              "count": 567,
+              "fair_cost_median": 0.03434941848602341,
+              "fair_cost_mean": 0.039083749727760624,
+              "matched_excess_median": 0.00350319824529085,
+              "share_above_zero": 0.6507936507936508
+            },
+            "annualised_vs_registered": -0.008201944627279412,
+            "taken_overlap_share": 0.7307692307692307,
+            "skip": {
+              "kept": {
+                "count": 1754,
+                "fair_cost_median": 0.028257134348911583,
+                "fair_cost_mean": 0.03664020438912551,
+                "matched_excess_median": 0.001106720056684371,
+                "share_above_zero": 0.6254275940706956
+              },
+              "dropped": {
+                "count": 167,
+                "fair_cost_median": 0.012637830107097573,
+                "fair_cost_mean": 0.0063784517909888875,
+                "matched_excess_median": -0.0051773491571372975,
+                "share_above_zero": 0.562874251497006
+              },
+              "mean_difference_kept_minus_dropped": 0.030261752598136626,
+              "standard_error": 0.021077242355482657,
+              "t": 1.4357548339460486,
+              "pairing": "unpaired"
+            }
+          }
+        }
+      },
+      "second_half": {
+        "signal_window": {
+          "first": "2006-07-03",
+          "last": "2012-12-31"
+        },
+        "registered_order": {
+          "all_signals": {
+            "count": 1881,
+            "fair_cost_median": 0.009680149992021662,
+            "fair_cost_mean": 0.006615270494969181,
+            "matched_excess_median": -0.0019769091987407728,
+            "share_above_zero": 0.5364167995746943
+          },
+          "slot_book": {
+            "annualised_return": 0.07121184262404512,
+            "max_drawdown": -0.3760892338128238,
+            "random_order_median": 0.07825913224667547,
+            "trades_taken": 549,
+            "trades_skipped": 1332
+          },
+          "taken": {
+            "count": 549,
+            "fair_cost_median": 0.02190993866566543,
+            "fair_cost_mean": 0.022527263853853924,
+            "matched_excess_median": -0.002255891503056745,
+            "share_above_zero": 0.5792349726775956
+          },
+          "contest": {
+            "fill_sessions": 667,
+            "contested_sessions": 140,
+            "skipped_contested": 580,
+            "skipped_full": 752
+          },
+          "scored_share": {
+            "lo252": 0.9994683678894205,
+            "sma200": 1.0,
+            "ret126": 1.0,
+            "trend3": 1.0
+          }
+        },
+        "variants": {
+          "rank_lo252": {
+            "slot_book": {
+              "annualised_return": 0.0860046686521676,
+              "max_drawdown": -0.31969039146112666,
+              "random_order_median": 0.07825913224667547,
+              "trades_taken": 557,
+              "trades_skipped": 1324
+            },
+            "taken": {
+              "count": 557,
+              "fair_cost_median": 0.021223061430010015,
+              "fair_cost_mean": 0.02656851988149235,
+              "matched_excess_median": -0.0015538699546992461,
+              "share_above_zero": 0.5655296229802513
+            },
+            "annualised_vs_registered": 0.014792826028122485,
+            "taken_overlap_share": 0.7140255009107468
+          },
+          "rank_sma200": {
+            "slot_book": {
+              "annualised_return": 0.07943510989013203,
+              "max_drawdown": -0.3544274372258741,
+              "random_order_median": 0.07825913224667547,
+              "trades_taken": 540,
+              "trades_skipped": 1341
+            },
+            "taken": {
+              "count": 540,
+              "fair_cost_median": 0.024185679218730993,
+              "fair_cost_mean": 0.025912636623046086,
+              "matched_excess_median": -0.0014069290126595864,
+              "share_above_zero": 0.587037037037037
+            },
+            "annualised_vs_registered": 0.008223267266086909,
+            "taken_overlap_share": 0.6848816029143898
+          },
+          "rank_ret126": {
+            "slot_book": {
+              "annualised_return": 0.07949420440751265,
+              "max_drawdown": -0.3605392786573065,
+              "random_order_median": 0.07825913224667547,
+              "trades_taken": 538,
+              "trades_skipped": 1343
+            },
+            "taken": {
+              "count": 538,
+              "fair_cost_median": 0.02217736248579244,
+              "fair_cost_mean": 0.02608987515803106,
+              "matched_excess_median": -0.0006493715932941336,
+              "share_above_zero": 0.5724907063197026
+            },
+            "annualised_vs_registered": 0.008282361783467529,
+            "taken_overlap_share": 0.6958105646630237
+          },
+          "rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.07495727224674376,
+              "max_drawdown": -0.37182890747452746,
+              "random_order_median": 0.07825913224667547,
+              "trades_taken": 544,
+              "trades_skipped": 1337
+            },
+            "taken": {
+              "count": 544,
+              "fair_cost_median": 0.0215795995370322,
+              "fair_cost_mean": 0.023422967104222977,
+              "matched_excess_median": -0.0017292229107375087,
+              "share_above_zero": 0.5735294117647058
+            },
+            "annualised_vs_registered": 0.0037454296226986372,
+            "taken_overlap_share": 0.7194899817850637
+          },
+          "rank_deep_dip": {
+            "slot_book": {
+              "annualised_return": 0.0688680601833005,
+              "max_drawdown": -0.3627189773989722,
+              "random_order_median": 0.07825913224667547,
+              "trades_taken": 550,
+              "trades_skipped": 1331
+            },
+            "taken": {
+              "count": 550,
+              "fair_cost_median": 0.019149827885474535,
+              "fair_cost_mean": 0.020410487531458174,
+              "matched_excess_median": -0.0018465626140455951,
+              "share_above_zero": 0.5709090909090909
+            },
+            "annualised_vs_registered": -0.002343782440744624,
+            "taken_overlap_share": 0.7194899817850637
+          },
+          "skip_lo252": {
+            "slot_book": {
+              "annualised_return": 0.0757113560621332,
+              "max_drawdown": -0.38418632370297723,
+              "random_order_median": 0.07980791206511695,
+              "trades_taken": 508,
+              "trades_skipped": 975
+            },
+            "taken": {
+              "count": 508,
+              "fair_cost_median": 0.022113765721086975,
+              "fair_cost_mean": 0.02382128551731577,
+              "matched_excess_median": -0.0036112167186575454,
+              "share_above_zero": 0.5905511811023622
+            },
+            "annualised_vs_registered": 0.004499513438088076,
+            "taken_overlap_share": 0.6775956284153005,
+            "skip": {
+              "kept": {
+                "count": 1483,
+                "fair_cost_median": 0.01343683622135267,
+                "fair_cost_mean": 0.0067530295393891365,
+                "matched_excess_median": -0.003922497845956859,
+                "share_above_zero": 0.5448415374241402
+              },
+              "dropped": {
+                "count": 398,
+                "fair_cost_median": 0.0010620270609306736,
+                "fair_cost_mean": 0.006101962296791307,
+                "matched_excess_median": 0.002987450342782895,
+                "share_above_zero": 0.5050251256281407
+              },
+              "mean_difference_kept_minus_dropped": 0.0006510672425978298,
+              "standard_error": 0.01177978438500834,
+              "t": 0.05526987772598088,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3": {
+            "slot_book": {
+              "annualised_return": 0.057192810223991364,
+              "max_drawdown": -0.38714123231192743,
+              "random_order_median": 0.06605066709451024,
+              "trades_taken": 488,
+              "trades_skipped": 1064
+            },
+            "taken": {
+              "count": 488,
+              "fair_cost_median": 0.020462363637518022,
+              "fair_cost_mean": 0.01910011368267971,
+              "matched_excess_median": -0.004665754176477842,
+              "share_above_zero": 0.5676229508196722
+            },
+            "annualised_vs_registered": -0.014019032400053755,
+            "taken_overlap_share": 0.6593806921675774,
+            "skip": {
+              "kept": {
+                "count": 1552,
+                "fair_cost_median": 0.009658148071261034,
+                "fair_cost_mean": 0.004422476124416623,
+                "matched_excess_median": -0.00346703029712637,
+                "share_above_zero": 0.5367268041237113
+              },
+              "dropped": {
+                "count": 329,
+                "fair_cost_median": 0.009713213213213227,
+                "fair_cost_mean": 0.016959394698913166,
+                "matched_excess_median": 0.006119769723857374,
+                "share_above_zero": 0.5349544072948328
+              },
+              "mean_difference_kept_minus_dropped": -0.012536918574496543,
+              "standard_error": 0.01588330860266526,
+              "t": -0.7893140458400976,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3_rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.0641308375142251,
+              "max_drawdown": -0.396199990621666,
+              "random_order_median": 0.06605066709451024,
+              "trades_taken": 489,
+              "trades_skipped": 1063
+            },
+            "taken": {
+              "count": 489,
+              "fair_cost_median": 0.021468080578805504,
+              "fair_cost_mean": 0.021018298867732998,
+              "matched_excess_median": -0.0035330019213634413,
+              "share_above_zero": 0.5725971370143149
+            },
+            "annualised_vs_registered": -0.0070810051098200155,
+            "taken_overlap_share": 0.5209471766848816,
+            "skip": {
+              "kept": {
+                "count": 1552,
+                "fair_cost_median": 0.009658148071261034,
+                "fair_cost_mean": 0.004422476124416623,
+                "matched_excess_median": -0.00346703029712637,
+                "share_above_zero": 0.5367268041237113
+              },
+              "dropped": {
+                "count": 329,
+                "fair_cost_median": 0.009713213213213227,
+                "fair_cost_mean": 0.016959394698913166,
+                "matched_excess_median": 0.006119769723857374,
+                "share_above_zero": 0.5349544072948328
+              },
+              "mean_difference_kept_minus_dropped": -0.012536918574496543,
+              "standard_error": 0.01588330860266526,
+              "t": -0.7893140458400976,
+              "pairing": "unpaired"
+            }
+          }
+        }
+      }
+    },
+    "confirmation": {
+      "signal_window": {
+        "first": "2013-01-01",
+        "last": "2025-09-30"
+      },
+      "whole": {
+        "registered_order": {
+          "all_signals": {
+            "count": 4113,
+            "fair_cost_median": 0.017261876961249423,
+            "fair_cost_mean": 0.01129462821146101,
+            "matched_excess_median": -0.001043484478546056,
+            "share_above_zero": 0.5657670799902748
+          },
+          "slot_book": {
+            "annualised_return": 0.05456940220179418,
+            "max_drawdown": -0.2640723484184867,
+            "random_order_median": 0.05809745507176345,
+            "trades_taken": 1159,
+            "trades_skipped": 2954
+          },
+          "taken": {
+            "count": 1159,
+            "fair_cost_median": 0.01641976760271119,
+            "fair_cost_mean": 0.01364412881313598,
+            "matched_excess_median": -0.0047041802514022416,
+            "share_above_zero": 0.5539257981018119
+          },
+          "contest": {
+            "fill_sessions": 1460,
+            "contested_sessions": 287,
+            "skipped_contested": 1211,
+            "skipped_full": 1743
+          },
+          "scored_share": {
+            "lo252": 0.9982980792608801,
+            "sma200": 0.9987843423292001,
+            "ret126": 0.9992706053975201,
+            "trend3": 0.9987843423292001
+          }
+        },
+        "variants": {
+          "rank_lo252": {
+            "slot_book": {
+              "annualised_return": 0.06480758534283981,
+              "max_drawdown": -0.327187329995546,
+              "random_order_median": 0.05809745507176345,
+              "trades_taken": 1147,
+              "trades_skipped": 2966
+            },
+            "taken": {
+              "count": 1147,
+              "fair_cost_median": 0.01992150785642194,
+              "fair_cost_mean": 0.01717561386957507,
+              "matched_excess_median": -0.0015788539095021165,
+              "share_above_zero": 0.5710549258936356
+            },
+            "annualised_vs_registered": 0.010238183141045631,
+            "taken_overlap_share": 0.6971527178602244
+          },
+          "rank_sma200": {
+            "slot_book": {
+              "annualised_return": 0.05738483306164399,
+              "max_drawdown": -0.31246459151740924,
+              "random_order_median": 0.05809745507176345,
+              "trades_taken": 1146,
+              "trades_skipped": 2967
+            },
+            "taken": {
+              "count": 1146,
+              "fair_cost_median": 0.017484906040286352,
+              "fair_cost_mean": 0.015531882818905088,
+              "matched_excess_median": -0.0050817309537216325,
+              "share_above_zero": 0.5645724258289704
+            },
+            "annualised_vs_registered": 0.00281543085984981,
+            "taken_overlap_share": 0.7031924072476272
+          },
+          "rank_ret126": {
+            "slot_book": {
+              "annualised_return": 0.06864320290606818,
+              "max_drawdown": -0.2929054773654661,
+              "random_order_median": 0.05809745507176345,
+              "trades_taken": 1141,
+              "trades_skipped": 2972
+            },
+            "taken": {
+              "count": 1141,
+              "fair_cost_median": 0.017434454777872477,
+              "fair_cost_mean": 0.018032498141904513,
+              "matched_excess_median": -0.003963031655372304,
+              "share_above_zero": 0.5644171779141104
+            },
+            "annualised_vs_registered": 0.014073800704273998,
+            "taken_overlap_share": 0.7066436583261432
+          },
+          "rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.06718165140851573,
+              "max_drawdown": -0.31797752603000673,
+              "random_order_median": 0.05809745507176345,
+              "trades_taken": 1142,
+              "trades_skipped": 2971
+            },
+            "taken": {
+              "count": 1142,
+              "fair_cost_median": 0.017765022747387393,
+              "fair_cost_mean": 0.017686980453740894,
+              "matched_excess_median": -0.0025616593800946667,
+              "share_above_zero": 0.5691768826619965
+            },
+            "annualised_vs_registered": 0.012612249206721549,
+            "taken_overlap_share": 0.6997411561691113
+          },
+          "rank_deep_dip": {
+            "slot_book": {
+              "annualised_return": 0.041080656515869896,
+              "max_drawdown": -0.2683143733200697,
+              "random_order_median": 0.05809745507176345,
+              "trades_taken": 1165,
+              "trades_skipped": 2948
+            },
+            "taken": {
+              "count": 1165,
+              "fair_cost_median": 0.015575871988493363,
+              "fair_cost_mean": 0.011022582880393447,
+              "matched_excess_median": -0.005179380766814526,
+              "share_above_zero": 0.5527896995708155
+            },
+            "annualised_vs_registered": -0.013488745685924286,
+            "taken_overlap_share": 0.7023295944779983
+          },
+          "skip_lo252": {
+            "slot_book": {
+              "annualised_return": 0.05010441595360837,
+              "max_drawdown": -0.2942604653831008,
+              "random_order_median": 0.048354292461848525,
+              "trades_taken": 1071,
+              "trades_skipped": 2190
+            },
+            "taken": {
+              "count": 1071,
+              "fair_cost_median": 0.02043733567046463,
+              "fair_cost_mean": 0.013658678567441636,
+              "matched_excess_median": -0.0014780098435632884,
+              "share_above_zero": 0.5611577964519141
+            },
+            "annualised_vs_registered": -0.004464986248185809,
+            "taken_overlap_share": 0.6928386540120793,
+            "skip": {
+              "kept": {
+                "count": 3261,
+                "fair_cost_median": 0.021153833164471447,
+                "fair_cost_mean": 0.016182764465895276,
+                "matched_excess_median": -0.00048089825784287943,
+                "share_above_zero": 0.5841766329346826
+              },
+              "dropped": {
+                "count": 852,
+                "fair_cost_median": -0.0012489244747947961,
+                "fair_cost_mean": -0.007414541184912401,
+                "matched_excess_median": -0.004604833048648765,
+                "share_above_zero": 0.4953051643192488
+              },
+              "mean_difference_kept_minus_dropped": 0.023597305650807678,
+              "standard_error": 0.009421256983856026,
+              "t": 2.5046876113498753,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3": {
+            "slot_book": {
+              "annualised_return": 0.05699462967262914,
+              "max_drawdown": -0.2749803865205588,
+              "random_order_median": 0.05111491912811306,
+              "trades_taken": 1076,
+              "trades_skipped": 2351
+            },
+            "taken": {
+              "count": 1076,
+              "fair_cost_median": 0.020459421952539414,
+              "fair_cost_mean": 0.015517818539931743,
+              "matched_excess_median": -0.0031450698610850994,
+              "share_above_zero": 0.5641263940520446
+            },
+            "annualised_vs_registered": 0.0024252274708349564,
+            "taken_overlap_share": 0.723037100949094,
+            "skip": {
+              "kept": {
+                "count": 3427,
+                "fair_cost_median": 0.02001800554016603,
+                "fair_cost_mean": 0.015273092792893869,
+                "matched_excess_median": -0.0007881501321402827,
+                "share_above_zero": 0.5792238109133353
+              },
+              "dropped": {
+                "count": 686,
+                "fair_cost_median": -0.0008555853168435404,
+                "fair_cost_mean": -0.008580296162548337,
+                "matched_excess_median": -0.00311578420533809,
+                "share_above_zero": 0.49854227405247814
+              },
+              "mean_difference_kept_minus_dropped": 0.023853388955442208,
+              "standard_error": 0.010350268882010067,
+              "t": 2.30461538993466,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3_rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.050319835559658355,
+              "max_drawdown": -0.3022044155181126,
+              "random_order_median": 0.05111491912811306,
+              "trades_taken": 1070,
+              "trades_skipped": 2357
+            },
+            "taken": {
+              "count": 1070,
+              "fair_cost_median": 0.017484906040286352,
+              "fair_cost_mean": 0.014159841500546595,
+              "matched_excess_median": -0.005539708230522685,
+              "share_above_zero": 0.5598130841121496
+            },
+            "annualised_vs_registered": -0.004249566642135827,
+            "taken_overlap_share": 0.5763589301121657,
+            "skip": {
+              "kept": {
+                "count": 3427,
+                "fair_cost_median": 0.02001800554016603,
+                "fair_cost_mean": 0.015273092792893869,
+                "matched_excess_median": -0.0007881501321402827,
+                "share_above_zero": 0.5792238109133353
+              },
+              "dropped": {
+                "count": 686,
+                "fair_cost_median": -0.0008555853168435404,
+                "fair_cost_mean": -0.008580296162548337,
+                "matched_excess_median": -0.00311578420533809,
+                "share_above_zero": 0.49854227405247814
+              },
+              "mean_difference_kept_minus_dropped": 0.023853388955442208,
+              "standard_error": 0.010350268882010067,
+              "t": 2.30461538993466,
+              "pairing": "unpaired"
+            }
+          }
+        }
+      },
+      "end_cutoffs": {
+        "lo252": {
+          "feature": "lo252_dist_pct",
+          "present": 4106,
+          "value_at_skip_line": 7.61
+        },
+        "sma200": {
+          "feature": "close_vs_sma200",
+          "present": 4108,
+          "value_at_skip_line": -0.10489683629060653
+        },
+        "ret126": {
+          "feature": "return_126",
+          "present": 4110,
+          "value_at_skip_line": -0.1278611212749522
+        }
+      },
+      "first_half": {
+        "signal_window": {
+          "first": "2013-01-01",
+          "last": "2019-05-17"
+        },
+        "registered_order": {
+          "all_signals": {
+            "count": 2151,
+            "fair_cost_median": 0.020636353237245386,
+            "fair_cost_mean": 0.01879403788297272,
+            "matched_excess_median": -0.002290881830513694,
+            "share_above_zero": 0.5894932589493259
+          },
+          "slot_book": {
+            "annualised_return": 0.03826833453909173,
+            "max_drawdown": -0.19025782938904368,
+            "random_order_median": 0.053034323207788336,
+            "trades_taken": 531,
+            "trades_skipped": 1620
+          },
+          "taken": {
+            "count": 531,
+            "fair_cost_median": 0.012666883963494083,
+            "fair_cost_mean": 0.010970893600349151,
+            "matched_excess_median": -0.007042726086449749,
+            "share_above_zero": 0.5404896421845574
+          },
+          "contest": {
+            "fill_sessions": 780,
+            "contested_sessions": 134,
+            "skipped_contested": 541,
+            "skipped_full": 1079
+          },
+          "scored_share": {
+            "lo252": 0.99860529986053,
+            "sma200": 0.99907019990702,
+            "ret126": 0.99953509995351,
+            "trend3": 0.99907019990702
+          }
+        },
+        "variants": {
+          "rank_lo252": {
+            "slot_book": {
+              "annualised_return": 0.07804304747963098,
+              "max_drawdown": -0.20186423998445735,
+              "random_order_median": 0.053034323207788336,
+              "trades_taken": 527,
+              "trades_skipped": 1624
+            },
+            "taken": {
+              "count": 527,
+              "fair_cost_median": 0.0204815082346142,
+              "fair_cost_mean": 0.023096884557198397,
+              "matched_excess_median": -0.00364717429373727,
+              "share_above_zero": 0.5787476280834914
+            },
+            "annualised_vs_registered": 0.03977471294053925,
+            "taken_overlap_share": 0.6591337099811676
+          },
+          "rank_sma200": {
+            "slot_book": {
+              "annualised_return": 0.05171932635515719,
+              "max_drawdown": -0.23928668306377399,
+              "random_order_median": 0.053034323207788336,
+              "trades_taken": 532,
+              "trades_skipped": 1619
+            },
+            "taken": {
+              "count": 532,
+              "fair_cost_median": 0.01568982840462202,
+              "fair_cost_mean": 0.015554302595178154,
+              "matched_excess_median": -0.007772474894791947,
+              "share_above_zero": 0.5601503759398496
+            },
+            "annualised_vs_registered": 0.01345099181606546,
+            "taken_overlap_share": 0.6779661016949152
+          },
+          "rank_ret126": {
+            "slot_book": {
+              "annualised_return": 0.07132597419452802,
+              "max_drawdown": -0.2200018575075252,
+              "random_order_median": 0.053034323207788336,
+              "trades_taken": 526,
+              "trades_skipped": 1625
+            },
+            "taken": {
+              "count": 526,
+              "fair_cost_median": 0.017909282458357823,
+              "fair_cost_mean": 0.02102300965619467,
+              "matched_excess_median": -0.005168467363883766,
+              "share_above_zero": 0.5665399239543726
+            },
+            "annualised_vs_registered": 0.03305763965543629,
+            "taken_overlap_share": 0.6704331450094162
+          },
+          "rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.06607440859148928,
+              "max_drawdown": -0.229328500595937,
+              "random_order_median": 0.053034323207788336,
+              "trades_taken": 526,
+              "trades_skipped": 1625
+            },
+            "taken": {
+              "count": 526,
+              "fair_cost_median": 0.018093611115863883,
+              "fair_cost_mean": 0.019753024002233062,
+              "matched_excess_median": -0.0055160914495285575,
+              "share_above_zero": 0.5703422053231939
+            },
+            "annualised_vs_registered": 0.027806074052397545,
+            "taken_overlap_share": 0.6666666666666666
+          },
+          "rank_deep_dip": {
+            "slot_book": {
+              "annualised_return": 0.02914671086433862,
+              "max_drawdown": -0.21670316495043762,
+              "random_order_median": 0.053034323207788336,
+              "trades_taken": 534,
+              "trades_skipped": 1617
+            },
+            "taken": {
+              "count": 534,
+              "fair_cost_median": 0.013863059773317424,
+              "fair_cost_mean": 0.009473407356175636,
+              "matched_excess_median": -0.008832715940113133,
+              "share_above_zero": 0.5449438202247191
+            },
+            "annualised_vs_registered": -0.00912162367475311,
+            "taken_overlap_share": 0.672316384180791
+          },
+          "skip_lo252": {
+            "slot_book": {
+              "annualised_return": 0.05308257403360206,
+              "max_drawdown": -0.17508089678980254,
+              "random_order_median": 0.04922099627097598,
+              "trades_taken": 495,
+              "trades_skipped": 1182
+            },
+            "taken": {
+              "count": 495,
+              "fair_cost_median": 0.024393414341433994,
+              "fair_cost_mean": 0.016708239256034096,
+              "matched_excess_median": -0.0007881501321402827,
+              "share_above_zero": 0.5797979797979798
+            },
+            "annualised_vs_registered": 0.014814239494510328,
+            "taken_overlap_share": 0.6516007532956686,
+            "skip": {
+              "kept": {
+                "count": 1677,
+                "fair_cost_median": 0.02660763354992307,
+                "fair_cost_mean": 0.024901733353183544,
+                "matched_excess_median": -0.000509118114162127,
+                "share_above_zero": 0.6171735241502684
+              },
+              "dropped": {
+                "count": 474,
+                "fair_cost_median": -0.001561264077511945,
+                "fair_cost_mean": -0.0028148340654314133,
+                "matched_excess_median": -0.007188634277353871,
+                "share_above_zero": 0.49156118143459915
+              },
+              "mean_difference_kept_minus_dropped": 0.027716567418614956,
+              "standard_error": 0.011764795988279264,
+              "t": 2.3558901868105258,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3": {
+            "slot_book": {
+              "annualised_return": 0.060869740981492226,
+              "max_drawdown": -0.15375847006373022,
+              "random_order_median": 0.057877898943970996,
+              "trades_taken": 502,
+              "trades_skipped": 1294
+            },
+            "taken": {
+              "count": 502,
+              "fair_cost_median": 0.023938171689247334,
+              "fair_cost_mean": 0.01835095280999466,
+              "matched_excess_median": -0.003727330657520154,
+              "share_above_zero": 0.5776892430278885
+            },
+            "annualised_vs_registered": 0.022601406442400496,
+            "taken_overlap_share": 0.711864406779661,
+            "skip": {
+              "kept": {
+                "count": 1796,
+                "fair_cost_median": 0.02448371382462272,
+                "fair_cost_mean": 0.024594401135604568,
+                "matched_excess_median": -0.0008629523065053057,
+                "share_above_zero": 0.6096881959910914
+              },
+              "dropped": {
+                "count": 355,
+                "fair_cost_median": -0.005592448164352278,
+                "fair_cost_mean": -0.010550898459919696,
+                "matched_excess_median": -0.006876195126735134,
+                "share_above_zero": 0.48732394366197185
+              },
+              "mean_difference_kept_minus_dropped": 0.03514529959552426,
+              "standard_error": 0.012666213110424002,
+              "t": 2.774728270330497,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3_rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.05905232414174444,
+              "max_drawdown": -0.19715437896693166,
+              "random_order_median": 0.057877898943970996,
+              "trades_taken": 505,
+              "trades_skipped": 1291
+            },
+            "taken": {
+              "count": 505,
+              "fair_cost_median": 0.021049637088391526,
+              "fair_cost_mean": 0.01794547695572855,
+              "matched_excess_median": -0.007042726086449749,
+              "share_above_zero": 0.5782178217821782
+            },
+            "annualised_vs_registered": 0.020783989602652708,
+            "taken_overlap_share": 0.551789077212806,
+            "skip": {
+              "kept": {
+                "count": 1796,
+                "fair_cost_median": 0.02448371382462272,
+                "fair_cost_mean": 0.024594401135604568,
+                "matched_excess_median": -0.0008629523065053057,
+                "share_above_zero": 0.6096881959910914
+              },
+              "dropped": {
+                "count": 355,
+                "fair_cost_median": -0.005592448164352278,
+                "fair_cost_mean": -0.010550898459919696,
+                "matched_excess_median": -0.006876195126735134,
+                "share_above_zero": 0.48732394366197185
+              },
+              "mean_difference_kept_minus_dropped": 0.03514529959552426,
+              "standard_error": 0.012666213110424002,
+              "t": 2.774728270330497,
+              "pairing": "unpaired"
+            }
+          }
+        }
+      },
+      "second_half": {
+        "signal_window": {
+          "first": "2019-05-18",
+          "last": "2025-09-30"
+        },
+        "registered_order": {
+          "all_signals": {
+            "count": 1962,
+            "fair_cost_median": 0.012622305562539574,
+            "fair_cost_mean": 0.003072798342234869,
+            "matched_excess_median": -0.00047631660775121487,
+            "share_above_zero": 0.5397553516819572
+          },
+          "slot_book": {
+            "annualised_return": 0.06997481005945616,
+            "max_drawdown": -0.26344818180364993,
+            "random_order_median": 0.06783838145170473,
+            "trades_taken": 640,
+            "trades_skipped": 1322
+          },
+          "taken": {
+            "count": 640,
+            "fair_cost_median": 0.019700377945057357,
+            "fair_cost_mean": 0.017057888521460163,
+            "matched_excess_median": -0.0006728258262434714,
+            "share_above_zero": 0.5671875
+          },
+          "contest": {
+            "fill_sessions": 680,
+            "contested_sessions": 152,
+            "skipped_contested": 662,
+            "skipped_full": 660
+          },
+          "scored_share": {
+            "lo252": 0.9979612640163099,
+            "sma200": 0.9984709480122325,
+            "ret126": 0.9989806320081549,
+            "trend3": 0.9984709480122325
+          }
+        },
+        "variants": {
+          "rank_lo252": {
+            "slot_book": {
+              "annualised_return": 0.054086256602061455,
+              "max_drawdown": -0.3114835841914274,
+              "random_order_median": 0.06783838145170473,
+              "trades_taken": 632,
+              "trades_skipped": 1330
+            },
+            "taken": {
+              "count": 632,
+              "fair_cost_median": 0.019467019544640307,
+              "fair_cost_mean": 0.013994978194932927,
+              "matched_excess_median": -0.0009299775935639062,
+              "share_above_zero": 0.5664556962025317
+            },
+            "annualised_vs_registered": -0.015888553457394705,
+            "taken_overlap_share": 0.7375
+          },
+          "rank_sma200": {
+            "slot_book": {
+              "annualised_return": 0.06279952849967207,
+              "max_drawdown": -0.29838442721429237,
+              "random_order_median": 0.06783838145170473,
+              "trades_taken": 626,
+              "trades_skipped": 1336
+            },
+            "taken": {
+              "count": 626,
+              "fair_cost_median": 0.019467019544640307,
+              "fair_cost_mean": 0.01635196238006735,
+              "matched_excess_median": -0.0014306150477318802,
+              "share_above_zero": 0.5702875399361023
+            },
+            "annualised_vs_registered": -0.007175281559784086,
+            "taken_overlap_share": 0.734375
+          },
+          "rank_ret126": {
+            "slot_book": {
+              "annualised_return": 0.059782689134587175,
+              "max_drawdown": -0.2953109054626789,
+              "random_order_median": 0.06783838145170473,
+              "trades_taken": 626,
+              "trades_skipped": 1336
+            },
+            "taken": {
+              "count": 626,
+              "fair_cost_median": 0.017636356609477544,
+              "fair_cost_mean": 0.015592506853264854,
+              "matched_excess_median": -0.004634236317493923,
+              "share_above_zero": 0.5670926517571885
+            },
+            "annualised_vs_registered": -0.010192120924868986,
+            "taken_overlap_share": 0.7421875
+          },
+          "rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.06562076152783392,
+              "max_drawdown": -0.306262645003085,
+              "random_order_median": 0.06783838145170473,
+              "trades_taken": 629,
+              "trades_skipped": 1333
+            },
+            "taken": {
+              "count": 629,
+              "fair_cost_median": 0.01773735591625486,
+              "fair_cost_mean": 0.016827792012854927,
+              "matched_excess_median": -0.0005342323777095953,
+              "share_above_zero": 0.5707472178060413
+            },
+            "annualised_vs_registered": -0.0043540485316222455,
+            "taken_overlap_share": 0.734375
+          },
+          "rank_deep_dip": {
+            "slot_book": {
+              "annualised_return": 0.053006149819223136,
+              "max_drawdown": -0.2704168465727752,
+              "random_order_median": 0.06783838145170473,
+              "trades_taken": 639,
+              "trades_skipped": 1323
+            },
+            "taken": {
+              "count": 639,
+              "fair_cost_median": 0.018051422603759637,
+              "fair_cost_mean": 0.012847162024025102,
+              "matched_excess_median": -0.0008114192747773474,
+              "share_above_zero": 0.564945226917058
+            },
+            "annualised_vs_registered": -0.016968660240233024,
+            "taken_overlap_share": 0.7421875
+          },
+          "skip_lo252": {
+            "slot_book": {
+              "annualised_return": 0.054098839234572926,
+              "max_drawdown": -0.2628468602500347,
+              "random_order_median": 0.044000190574721154,
+              "trades_taken": 589,
+              "trades_skipped": 995
+            },
+            "taken": {
+              "count": 589,
+              "fair_cost_median": 0.017261876961249423,
+              "fair_cost_mean": 0.013892546973358549,
+              "matched_excess_median": -0.0027729651445467934,
+              "share_above_zero": 0.5534804753820034
+            },
+            "annualised_vs_registered": -0.015875970824883234,
+            "taken_overlap_share": 0.7296875,
+            "skip": {
+              "kept": {
+                "count": 1584,
+                "fair_cost_median": 0.0156954555419489,
+                "fair_cost_mean": 0.006951886420451824,
+                "matched_excess_median": -0.0002673264427572649,
+                "share_above_zero": 0.5492424242424242
+              },
+              "dropped": {
+                "count": 378,
+                "fair_cost_median": -0.00020442016744131838,
+                "fair_cost_mean": -0.013182427890293322,
+                "matched_excess_median": -0.0008012878415361848,
+                "share_above_zero": 0.5
+              },
+              "mean_difference_kept_minus_dropped": 0.020134314310745145,
+              "standard_error": 0.014722971881399882,
+              "t": 1.3675441665538755,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3": {
+            "slot_book": {
+              "annualised_return": 0.05360428243701931,
+              "max_drawdown": -0.25870503800690403,
+              "random_order_median": 0.0421203474172307,
+              "trades_taken": 584,
+              "trades_skipped": 1047
+            },
+            "taken": {
+              "count": 584,
+              "fair_cost_median": 0.017713624405598705,
+              "fair_cost_mean": 0.014215265160203511,
+              "matched_excess_median": -0.00319686027574689,
+              "share_above_zero": 0.5547945205479452
+            },
+            "annualised_vs_registered": -0.016370527622436848,
+            "taken_overlap_share": 0.7375,
+            "skip": {
+              "kept": {
+                "count": 1631,
+                "fair_cost_median": 0.015101196418730702,
+                "fair_cost_mean": 0.005008794948927946,
+                "matched_excess_median": -0.000623552255169621,
+                "share_above_zero": 0.545677498467198
+              },
+              "dropped": {
+                "count": 331,
+                "fair_cost_median": 0.001963286713286886,
+                "fair_cost_mean": -0.006466810314914402,
+                "matched_excess_median": 0.00018359697715941876,
+                "share_above_zero": 0.5105740181268882
+              },
+              "mean_difference_kept_minus_dropped": 0.011475605263842347,
+              "standard_error": 0.016458428368807444,
+              "t": 0.697247939274159,
+              "pairing": "unpaired"
+            }
+          },
+          "skip_trend3_rank_trend3": {
+            "slot_book": {
+              "annualised_return": 0.04068612555181317,
+              "max_drawdown": -0.29854715762450823,
+              "random_order_median": 0.0421203474172307,
+              "trades_taken": 576,
+              "trades_skipped": 1055
+            },
+            "taken": {
+              "count": 576,
+              "fair_cost_median": 0.015972143485561252,
+              "fair_cost_mean": 0.011380139270030216,
+              "matched_excess_median": -0.004677372360912863,
+              "share_above_zero": 0.5486111111111112
+            },
+            "annualised_vs_registered": -0.029288684507642992,
+            "taken_overlap_share": 0.6046875,
+            "skip": {
+              "kept": {
+                "count": 1631,
+                "fair_cost_median": 0.015101196418730702,
+                "fair_cost_mean": 0.005008794948927946,
+                "matched_excess_median": -0.000623552255169621,
+                "share_above_zero": 0.545677498467198
+              },
+              "dropped": {
+                "count": 331,
+                "fair_cost_median": 0.001963286713286886,
+                "fair_cost_mean": -0.006466810314914402,
+                "matched_excess_median": 0.00018359697715941876,
+                "share_above_zero": 0.5105740181268882
+              },
+              "mean_difference_kept_minus_dropped": 0.011475605263842347,
+              "standard_error": 0.016458428368807444,
+              "t": 0.697247939274159,
+              "pairing": "unpaired"
+            }
+          }
+        }
+      }
+    }
+  },
+  "choice": {
+    "eligible": [],
+    "pick": null,
+    "failed": {
+      "rank_lo252": [
+        "not_above_registered_confirmation_second_half",
+        "not_above_random_confirmation_second_half"
+      ],
+      "rank_sma200": [
+        "not_above_random_confirmation_first_half",
+        "not_above_registered_confirmation_second_half",
+        "not_above_random_confirmation_second_half",
+        "matched_excess_below_registered_confirmation"
+      ],
+      "rank_ret126": [
+        "not_above_registered_confirmation_second_half",
+        "not_above_random_confirmation_second_half"
+      ],
+      "rank_trend3": [
+        "not_above_registered_development_first_half",
+        "not_above_random_development_second_half",
+        "not_above_registered_confirmation_second_half",
+        "not_above_random_confirmation_second_half"
+      ],
+      "rank_deep_dip": [
+        "not_above_registered_development_first_half",
+        "not_above_registered_development_second_half",
+        "not_above_random_development_second_half",
+        "not_above_registered_confirmation_first_half",
+        "not_above_random_confirmation_first_half",
+        "not_above_registered_confirmation_second_half",
+        "not_above_random_confirmation_second_half",
+        "matched_excess_below_registered_confirmation"
+      ],
+      "skip_lo252": [
+        "not_above_registered_development_first_half",
+        "not_above_random_development_second_half",
+        "not_above_registered_confirmation_second_half",
+        "not_above_random_confirmation_second_half"
+      ],
+      "skip_trend3": [
+        "not_above_registered_development_first_half",
+        "not_above_registered_development_second_half",
+        "not_above_random_development_second_half",
+        "not_above_registered_confirmation_second_half",
+        "not_above_random_confirmation_second_half"
+      ],
+      "skip_trend3_rank_trend3": [
+        "not_above_registered_development_first_half",
+        "not_above_registered_development_second_half",
+        "not_above_random_development_second_half",
+        "not_above_registered_confirmation_second_half",
+        "not_above_random_confirmation_second_half",
+        "matched_excess_below_registered_confirmation"
+      ]
+    }
+  }
+}

@@ -299,8 +299,13 @@ the 20-order cap. `sessions_late` is the number of weekdays after the book's
 fill session up to the send day. The fill is tagged `timing: catchup` and
 reported apart from the on-time medians.
 
-A rejected catch-up, or one whose result is unknown, is retried on the next
-due run. Before an unknown result is retried, a single matching pending
+A catch-up works for the session it was sent in (`send_session`), not the
+book's original fill session. The post-close cancel only removes it once
+that send session has closed. A catch-up cancelled that way, rejected, or
+with an unknown result, is retried on the next due run for whatever the book
+still holds that the ledger does not. Earlier broker order ids are kept in
+`prior_broker_order_ids` so a late fill on the old order still maps to the
+episode. Before an unknown result is retried, a single matching pending
 order or a single later fill is adopted so a queued or filled order is not
 sent twice. After 5 attempts the row is `stuck` and is not sent again.
 Ops-monitor warns **Strategy book demo position stuck**. A catch-up that has
