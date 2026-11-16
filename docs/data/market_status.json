@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-15T21:31:31.777749+00:00",
+  "generated_at": "2026-11-16T07:37:36.666698+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -75,7 +75,7 @@
       "1": "sti",
       "2": "ftse_smallcap"
     },
-    "equal_support_generated_at": "2026-11-15T07:06:03.528721+00:00"
+    "equal_support_generated_at": "2026-11-16T07:15:52.548994+00:00"
   },
   "markets": [
     {
@@ -1062,14 +1062,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 5,
         "hold_near_buy_count": 57,
         "not_buy_tier_count": 155,
         "never_buy_tier_count": 122,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 5,
@@ -1929,21 +1929,21 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 5,
         "not_buy_tier_count": 21,
         "never_buy_tier_count": 20,
         "rememo_eligible_count": 2,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 5,
         "not_buy_tier_count": 21,
         "never_buy_tier_count": 20,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -1958,8 +1958,8 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 4,
-        "targets": 3,
+        "run_count": 3,
+        "targets": 2,
         "improved": 1,
         "improved_tickers": [
           "G13.SI"
@@ -2748,27 +2748,25 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
-        "buy_tier_not_now_count": 1,
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 14,
         "not_buy_tier_count": 65,
         "never_buy_tier_count": 59,
-        "rememo_eligible_count": 0,
+        "rememo_eligible_count": 1,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 14,
         "not_buy_tier_count": 65,
         "never_buy_tier_count": 59,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "ULTP.L"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "NRR.L",
           "FORT.L",
@@ -3660,14 +3658,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 5,
         "not_buy_tier_count": 15,
         "never_buy_tier_count": 13,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
@@ -4444,14 +4442,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 9,
         "not_buy_tier_count": 41,
         "never_buy_tier_count": 36,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
@@ -5170,14 +5168,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 3,
         "not_buy_tier_count": 13,
         "never_buy_tier_count": 11,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
@@ -5913,14 +5911,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 6,
         "not_buy_tier_count": 17,
         "never_buy_tier_count": 13,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
@@ -6687,14 +6685,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 4,
         "not_buy_tier_count": 26,
         "never_buy_tier_count": 26,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
@@ -7513,14 +7511,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 2,
         "hold_near_buy_count": 5,
         "not_buy_tier_count": 32,
         "never_buy_tier_count": 24,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 2,
@@ -8341,14 +8339,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 12,
         "not_buy_tier_count": 40,
         "never_buy_tier_count": 33,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
@@ -9182,14 +9180,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 10,
         "not_buy_tier_count": 34,
         "never_buy_tier_count": 24,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
@@ -9982,21 +9980,21 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 24,
+        "hold_near_buy_count": 25,
         "not_buy_tier_count": 61,
         "never_buy_tier_count": 49,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 24,
+        "hold_near_buy_count": 25,
         "not_buy_tier_count": 61,
         "never_buy_tier_count": 49,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -10743,14 +10741,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 12,
         "not_buy_tier_count": 32,
         "never_buy_tier_count": 27,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
@@ -11558,14 +11556,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 5,
         "not_buy_tier_count": 17,
         "never_buy_tier_count": 11,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
@@ -12281,14 +12279,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 5,
         "hold_near_buy_count": 23,
         "not_buy_tier_count": 62,
         "never_buy_tier_count": 48,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 5,
@@ -13100,14 +13098,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 3,
         "not_buy_tier_count": 20,
         "never_buy_tier_count": 17,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
@@ -13818,14 +13816,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 6,
         "not_buy_tier_count": 16,
         "never_buy_tier_count": 14,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
@@ -14553,14 +14551,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 15,
         "hold_near_buy_count": 126,
         "not_buy_tier_count": 358,
         "never_buy_tier_count": 297,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 15,
@@ -15374,8 +15372,8 @@
         "acted": true,
         "last_run_at": "2026-11-15T07:06:34.469569+00:00",
         "holdings": 30,
-        "nav": 511.49,
-        "cash": 0.0,
+        "nav": 511.68,
+        "cash": -0.0,
         "contributed_capital": 1000.0,
         "weekday_batch_count": 52,
         "epoch0_batch_count": 24
@@ -15385,21 +15383,21 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 46,
+        "hold_near_buy_count": 47,
         "not_buy_tier_count": 157,
         "never_buy_tier_count": 140,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 46,
+        "hold_near_buy_count": 47,
         "not_buy_tier_count": 157,
         "never_buy_tier_count": 140,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -16014,6 +16012,19 @@
               "buy_tier_level_gbp_fx_warped": 511.49
             },
             "market": 1032.75
+          },
+          {
+            "date": "2026-11-16",
+            "held": 1039.42,
+            "nav": 1039.42,
+            "held_stock": 1039.42,
+            "cash": 0.0,
+            "positions": 31,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 511.68
+            },
+            "market": 1032.75
           }
         ],
         "series": [
@@ -16053,16 +16064,16 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 60
+            "point_count": 61
           }
         ],
         "last": {
-          "date": "2026-11-15",
-          "held": 1039.46,
+          "date": "2026-11-16",
+          "held": 1039.42,
           "market": 1032.75,
-          "nav": 1039.46,
-          "positions": 30,
-          "excess_pct": 0.006497
+          "nav": 1039.42,
+          "positions": 31,
+          "excess_pct": 0.006458
         }
       },
       "learning_depth": null,
@@ -16226,27 +16237,25 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
-        "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 12,
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 13,
         "not_buy_tier_count": 42,
         "never_buy_tier_count": 35,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 12,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 13,
         "not_buy_tier_count": 42,
         "never_buy_tier_count": 35,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "GIB-A.TO"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "FFH.TO",
           "PPL.TO",
@@ -17040,14 +17049,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 4,
         "not_buy_tier_count": 15,
         "never_buy_tier_count": 14,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
@@ -17760,14 +17769,14 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 3,
         "not_buy_tier_count": 18,
         "never_buy_tier_count": 16,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
