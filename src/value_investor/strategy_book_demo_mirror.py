@@ -454,16 +454,25 @@ def client_order_ref(episode_id: str, leg: str) -> str:
     return f"sbdemo:{episode_id}:{leg}"
 
 
+def _catchup_retryable(order: Mapping[str, Any]) -> bool:
+    """A catch-up that ended without its full quantity and may be sent again."""
+    status = str(order.get("status") or "")
+    if status in {"rejected", "submit_unknown", "rate_limited", "cancelled"}:
+        return True
+    return status == "partial" and bool(order.get("remainder_cancelled"))
+
+
 def _resend_blocked(order: Mapping[str, Any]) -> bool:
     """True when this reference must not be posted again.
 
-    A market catch-up (entry or exit) that was rejected, or whose submit result is
-    unknown, is retried until ``CATCHUP_ATTEMPT_LIMIT`` attempts. Any other leg
-    rejected for quantity precision gets one more send, floored to the allowed decimals.
+    A market catch-up (entry or exit) that was rejected, cancelled unfilled after its
+    send session, or whose submit result is unknown, is retried until
+    ``CATCHUP_ATTEMPT_LIMIT`` attempts. Any other leg rejected for quantity precision
+    gets one more send, floored to the allowed decimals.
     """
     status = str(order.get("status") or "")
     catchup = str(order.get("leg") or "") in CATCHUP_LEGS
-    if catchup and status in {"rejected", "submit_unknown", "rate_limited"}:
+    if catchup and _catchup_retryable(order):
         try:
             attempts = int(order.get("attempt_count") or 0)
         except (TypeError, ValueError):
@@ -1045,7 +1054,7 @@ def plan_exit_catchups(
         episode = episodes.get(episode_id)
         ref = client_order_ref(episode_id, CATCHUP_LEG)
         if catchup and _resend_blocked(catchup):
-            if str(catchup.get("status") or "") in {"rejected", "submit_unknown"}:
+            if _catchup_retryable(catchup):
                 facts = _catchup_instrument(episode_id, events, limit_exit or entry_row, episode)
                 plans.append(
                     {
@@ -1066,13 +1075,12 @@ def plan_exit_catchups(
                     }
                 )
             continue
-        if catchup and str(catchup.get("status") or "") in {
-            "submitting",
-            "placed",
-            "partial",
-            "filled",
-            "cancelling",
-        }:
+        if (
+            catchup
+            and str(catchup.get("status") or "")
+            in {"submitting", "placed", "partial", "filled", "cancelling"}
+            and not _catchup_retryable(catchup)
+        ):
             continue
         reason = None
         if limit_exit is not None:
@@ -1232,8 +1240,7 @@ def plan_entry_catchups(
             "influences_live": False,
         }
         if catchup is not None and _resend_blocked(catchup):
-            status = str(catchup.get("status") or "")
-            if status in {"rejected", "submit_unknown"}:
+            if _catchup_retryable(catchup):
                 plans.append(
                     {
                         **base,
@@ -1248,13 +1255,12 @@ def plan_entry_catchups(
                 )
                 seen.add(ref)
             continue
-        if catchup is not None and str(catchup.get("status") or "") in {
-            "submitting",
-            "placed",
-            "partial",
-            "filled",
-            "cancelling",
-        }:
+        if (
+            catchup is not None
+            and str(catchup.get("status") or "")
+            in {"submitting", "placed", "partial", "filled", "cancelling"}
+            and not _catchup_retryable(catchup)
+        ):
             continue
         if entry is None:
             if have > QTY_TOLERANCE:
@@ -1562,10 +1568,17 @@ def ingest_statement(
     known = {str(event.get("event_id") or "") for event in events}
     gaps: list[str] = []
     by_broker = {
-        str(row.get("broker_order_id")): row
+        str(earlier): row
         for row in orders.values()
-        if row.get("broker_order_id") is not None
+        for earlier in row.get("prior_broker_order_ids") or []
     }
+    by_broker.update(
+        {
+            str(row.get("broker_order_id")): row
+            for row in orders.values()
+            if row.get("broker_order_id") is not None
+        }
+    )
     for raw in statement.get("history_orders") or []:
         if not isinstance(raw, dict):
             continue
@@ -2870,7 +2883,7 @@ def _execute(
         retrying = (
             prior is not None
             and str(prior.get("leg") or "") in CATCHUP_LEGS
-            and str(prior.get("status") or "") in {"rejected", "submit_unknown", "rate_limited"}
+            and _catchup_retryable(prior)
         )
         if retrying and str(prior.get("status") or "") == "submit_unknown" and not history_ok:
             plan["action"] = "submit_unknown"
@@ -2883,7 +2896,11 @@ def _execute(
             record["sessions_late"] = plan.get("sessions_late")
             record["send_session"] = plan.get("send_session")
             record["submitted_at"] = _aware(now).isoformat()
+            if record.get("broker_order_id") is not None:
+                earlier = list(record.get("prior_broker_order_ids") or [])
+                record["prior_broker_order_ids"] = [*earlier, record["broker_order_id"]]
             record["broker_order_id"] = None
+            record["remainder_cancelled"] = False
             record["detail"] = None
             record["attempt_count"] = int(record.get("attempt_count") or 0) + 1
         else:
@@ -3027,7 +3044,10 @@ def _cancel_expired(
     for ref, record in orders.items():
         if str(record.get("status") or "") not in {"placed", "partial"}:
             continue
-        closed = window_open(str(record.get("market") or ""), record.get("fill_session"), now)
+        session = record.get("fill_session")
+        if str(record.get("leg") or "") in CATCHUP_LEGS and record.get("send_session"):
+            session = record.get("send_session")
+        closed = window_open(str(record.get("market") or ""), session, now)
         if closed is not False:
             continue
         broker_id = record.get("broker_order_id")
