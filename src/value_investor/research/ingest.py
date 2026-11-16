@@ -1493,7 +1493,10 @@ def ingest_research_sources(
             # intensive library pins (6618.HK) land bodies before per-ticker deadline.
             if regime == "asia_filings":
                 from value_investor.library_ingest_budget import deadline_reached
-                from value_investor.research.filings import ensure_hkex_direct_filings_ingested
+                from value_investor.research.filings import (
+                    ensure_hkex_direct_filings_ingested,
+                    ensure_ir_allowlist_direct_filings_ingested,
+                )
 
                 if not deadline_reached(deadline_monotonic):
                     hkex_ensure = ensure_hkex_direct_filings_ingested(
@@ -1511,6 +1514,42 @@ def ingest_research_sources(
                         filings_meta["filings_sources"] = list(ingest_payload["filings_sources"])
                     if ingest_payload.get("filings_index_path"):
                         filings_meta["filings_index_path"] = ingest_payload["filings_index_path"]
+                if not deadline_reached(deadline_monotonic):
+                    ir_allowlist_ensure = ensure_ir_allowlist_direct_filings_ingested(
+                        sources_dir,
+                        ticker=ticker,
+                        company_name=company_name,
+                        market=market,
+                        deepen_history=deepen_history,
+                        deadline_monotonic=deadline_monotonic,
+                    )
+                    filings_meta["ir_allowlist_ensure"] = ir_allowlist_ensure
+                    ir_refetch = dict(ir_allowlist_ensure.get("ir_refetch") or {})
+                    if ir_refetch:
+                        filings_meta["ir_refetch"] = ir_refetch
+                    merge_added = int((ir_allowlist_ensure.get("merge") or {}).get("added") or 0)
+                    if (
+                        int(ir_allowlist_ensure.get("fetched") or 0)
+                        or int(ir_refetch.get("fetched") or 0)
+                        or merge_added > 0
+                    ):
+                        index_path = sources_dir / "filings" / "filings_index.json"
+                        resolved_index = resolve_json_path(index_path)
+                        if resolved_index is not None:
+                            try:
+                                index_payload = read_json(resolved_index)
+                                filings_meta["filings_summary"] = dict(
+                                    index_payload.get("summary")
+                                    or filings_meta.get("filings_summary")
+                                    or {}
+                                )
+                                filings_meta["filings_sources"] = list(
+                                    index_payload.get("sources_used")
+                                    or filings_meta.get("filings_sources")
+                                    or []
+                                )
+                            except (OSError, ValueError, TypeError):
+                                pass
 
             if regime == "uk_rns":
                 from value_investor.research.companies_house import DEEPEN_MAX_ACCOUNTS
@@ -1657,8 +1696,16 @@ def ingest_research_sources(
             if fetch_filings_ir_allowlist(ticker):
                 summary = filings_meta.get("filings_summary") or {}
                 ir_refetch = dict(filings_meta.get("ir_refetch") or {})
-                if regime not in {"euro_filings", "tsx_announcements"} and not deadline_reached(
-                    deadline_monotonic
+                ir_allowlist_ensure = dict(filings_meta.get("ir_allowlist_ensure") or {})
+                ensure_attempted = int(
+                    ir_allowlist_ensure.get("attempted")
+                    or (ir_allowlist_ensure.get("ir_refetch") or {}).get("attempted")
+                    or 0
+                )
+                if (
+                    regime not in {"euro_filings", "tsx_announcements"}
+                    and not deadline_reached(deadline_monotonic)
+                    and ensure_attempted <= 0
                 ):
                     ir_refetch = refetch_ir_presentation_sources(
                         sources_dir / "filings",

@@ -221,6 +221,28 @@ def test_planned_sources_includes_ir_presentation_for_tsx60_su_to():
     assert len(fetch_filings_ir_allowlist("SU.TO")) == 5
 
 
+def test_planned_sources_includes_ir_presentation_for_sti_c6l_si():
+    """eng-20261116-01: C6L.SI zero_body — ingest improvement plans SGX IR allowlist refetch."""
+    from value_investor.research.filings import fetch_filings_ir_allowlist
+
+    inventory = {
+        "thin": ["filings_bodies"],
+        "filings_summary": {"with_body": 0, "total": 4},
+    }
+    planned = _planned_sources_for_ticker(
+        ticker="C6L.SI",
+        market="sti",
+        inventory=inventory,
+        ingest_suggestions=[],
+        filings_with_body=0,
+    )
+    planned_ids = {row["id"] for row in planned}
+    assert "company_ir_presentation" in planned_ids
+    rows = fetch_filings_ir_allowlist("C6L.SI")
+    assert len(rows) == 3
+    assert all("links.sgx.com" in str(row.get("url") or "") for row in rows)
+
+
 def test_planned_sources_includes_ir_presentation_for_euro_depth_dq7a_ir():
     """eng-20261114-01: DQ7A.IR zero_body gap — ingest improvement plans Donegal IR allowlist refetch."""
     from value_investor.research.filings import fetch_filings_ir_allowlist
