@@ -35,6 +35,7 @@ import numpy as np
 from value_investor import historical_screen_replay as hsr
 from value_investor import strategy_book_exit_lab as lab
 from value_investor import strategy_book_observe as sbo
+from value_investor import strategy_book_ranking_lab as ranking
 from value_investor.strategy_book_rules import (
     COLUMN_ALTERNATIVE,
     COLUMN_BUY_ON_SIGNAL,
@@ -87,6 +88,13 @@ EXIT_LAB_ROUNDS: dict[int, dict[str, Any]] = {
         ),
     },
 }
+RANKING_LAB_PATH = Path("docs/data") / ranking.LAB_STORE_NAME
+RANKING_LAB_PURPOSE = (
+    "Which primary signals should take a slot when the 20-slot book is full (L691): "
+    "ranking and skip rules fixed before the first run, against the registered order, on "
+    "both US windows. Both windows were already read, so this is design input for the "
+    "strategy book version review, not evidence."
+)
 PARENT_SEAL = Path("docs/data") / REGISTRATION_STORE_NAME
 SCRATCH_DIRNAME = "strategy_book_rehearsal"
 DELETION_DAYS = 30
@@ -110,6 +118,7 @@ TITLE_DELETION_DUE = "Strategy-book US rehearsal: licensed data deletion due"
 TITLE_FAILED = "Strategy-book US rehearsal store unreadable"
 TITLE_EXIT_LAB = "Strategy-book exit lab: development-window scores committed"
 TITLE_EXIT_LAB_ROUND_2 = "Strategy-book exit lab round 2: development-window scores committed"
+TITLE_RANKING_LAB = "Strategy-book slot-ranking lab: scores committed"
 
 
 class RehearsalRefused(RuntimeError):
@@ -1584,6 +1593,139 @@ def exit_lab_table(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
     return out
 
 
+# --- Slot-ranking lab ----------------------------------------------------------------------
+
+
+def ranking_lab(
+    build: Path,
+    mid_build: Path,
+    sharadar_dir: Path,
+    *,
+    scratch: Path | None = None,
+    repo_root: Path = REPO_ROOT,
+    batch_size: int = DEFAULT_BATCH_SIZE,
+    rules: tuple[ranking.RankRule, ...] = ranking.RANK_RULES,
+) -> dict[str, Any]:
+    """Score slot-ranking rules on both windows' primary episodes (exploratory).
+
+    Writes ``docs/data/strategy_book_ranking_lab.json`` only. Needs the reveal (the
+    confirmation window is read) and refuses once the licensed data is recorded as
+    deleted. Never writes the rehearsal store.
+    """
+    scratch_dir = _scratch_dir(scratch, build)
+    registration = preflight(repo_root, build, mid_build, sharadar_dir, scratch_dir)
+    store = _load_json(Path(repo_root) / STORE_PATH) or {}
+    if not store.get("development"):
+        raise RehearsalRefused("No development block is committed. Run `develop` first.")
+    if not store.get("reveal"):
+        raise RehearsalRefused(
+            "The confirmation window is not revealed. The ranking lab reads both windows, so "
+            "it runs only after the reveal."
+        )
+    if (store.get("licensed_data") or {}).get("deleted_at"):
+        raise RehearsalRefused("The licensed data is recorded as deleted; the lab cannot run.")
+    windows = _windows(registration)
+    options = walk_options(registration, windows["confirmation"][1])
+    source = prepare(
+        BuildDir(Path(build).expanduser(), "sp500"),
+        BuildDir(Path(mid_build).expanduser(), "midcap"),
+        Path(sharadar_dir).expanduser(),
+        registration,
+        work_dir=scratch_dir,
+        batch_size=batch_size,
+        cross_options=options,
+    )
+    rows: list[dict[str, Any]] = []
+    try:
+        warning = memory_warning(source.names_walked, len(source.calendar), batch_size)
+        if warning:
+            print(warning, file=sys.stderr)
+        for position in range(max(len(source.batches), 1)):
+            specs = source.specs(position) if source.batches else []
+            result = sbo.walk_book(
+                with_variant(specs, source.haircuts, BASELINE), options=options, cross=source.cross
+            )
+            rows.extend(
+                _compact(episode)
+                for episode in result["episodes"]
+                if episode["column"] == COLUMN_PRIMARY and episode.get("mature")
+            )
+            del result, specs
+        tickers = source.tickers
+    finally:
+        source.remove()
+    named = {"development": windows["development"], "confirmation": windows["confirmation"]}
+    boards = ranking.lab_boards(rows, named, rules)
+    reproduced = {}
+    for name in named:
+        committed = (store.get(name) or {}).get("primary") or {}
+        mine = boards[name]["whole"]["registered_order"]["all_signals"]
+        reproduced[name] = mine.get("count") == committed.get("mature") and mine.get(
+            "fair_cost_median"
+        ) == committed.get("fair_cost_median")
+    payload = {
+        "lab_id": ranking.LAB_ID,
+        "registration_id": registration.get("registration_id"),
+        "parent_registration_id": registration.get("parent_registration_id"),
+        "observe_only": True,
+        "influences_live": False,
+        "exploratory": True,
+        "evidence": False,
+        "purpose": RANKING_LAB_PURPOSE,
+        "computed_at": _now(),
+        "windows_reproduced": reproduced,
+        "score_basis": {
+            "features": dict(ranking.FEATURES),
+            "trend3": list(ranking.TREND_PARTS),
+            "trend3_min_parts": ranking.TREND_MIN_PARTS,
+            "percentile_of": "primary signals of strictly earlier signal sessions in the walk",
+            "warmup_signals": ranking.WARMUP_SIGNALS,
+            "skip_below": ranking.SKIP_BELOW,
+            "slot_count": ranking.SLOT_COUNT,
+        },
+        "variants": [rule.describe() for rule in rules],
+        "boards": suppress_small(boards),
+    }
+    payload["choice"] = ranking.apply_choice_rule(payload["boards"])
+    write_store(Path(repo_root) / RANKING_LAB_PATH, payload, tickers)
+    return {"store": payload}
+
+
+def ranking_lab_table(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """One row per rule and window: the slot book against the registered order."""
+    out = []
+    for name, block in (payload.get("boards") or {}).items():
+        whole = block.get("whole") or {}
+        base = whole.get("registered_order") or {}
+        rows = [("registered_order", base)] + list((whole.get("variants") or {}).items())
+        for column, board in rows:
+            halves = [
+                (
+                    (((block.get(half) or {}).get("variants") or {}).get(column) or {}).get(
+                        "annualised_vs_registered"
+                    )
+                )
+                for half in ("first_half", "second_half")
+            ]
+            slot = board.get("slot_book") or {}
+            out.append(
+                {
+                    "window": name,
+                    "column": column,
+                    "slot_book_annualised": slot.get("annualised_return"),
+                    "random_order_median": slot.get("random_order_median"),
+                    "max_drawdown": slot.get("max_drawdown"),
+                    "trades_taken": slot.get("trades_taken"),
+                    "taken_matched_excess_median": (board.get("taken") or {}).get(
+                        "matched_excess_median"
+                    ),
+                    "vs_registered": board.get("annualised_vs_registered"),
+                    "vs_registered_halves": None if column == "registered_order" else halves,
+                }
+            )
+    return out
+
+
 # --- Status and findings -------------------------------------------------------------------
 
 
@@ -1646,6 +1788,28 @@ def findings(repo_root: Path = REPO_ROOT, now: datetime | None = None) -> list[d
                 "summary": (
                     f"Revealed {reveal_row.get('at')}: primary {verdicts.get('primary')}, bench "
                     f"{verdicts.get('bench')}. Method evidence only; the forward bench is unchanged."
+                ),
+            }
+        )
+    ranking_store = _load_json(Path(repo_root) / RANKING_LAB_PATH)
+    if ranking_store:
+        boards = ranking_store.get("boards") or {}
+        parts = []
+        for name in ("development", "confirmation"):
+            slot = (
+                ((boards.get(name) or {}).get("whole") or {}).get("registered_order") or {}
+            ).get("slot_book") or {}
+            parts.append(f"{name} registered order {slot.get('annualised_return')}")
+        out.append(
+            {
+                "severity": "info",
+                "title": TITLE_RANKING_LAB,
+                "summary": (
+                    f"Slot-ranking lab computed {ranking_store.get('computed_at')} "
+                    f"({len(ranking_store.get('variants') or [])} rules; "
+                    f"{'; '.join(parts)}; choice-rule pick: "
+                    f"{(ranking_store.get('choice') or {}).get('pick')}). Exploratory, not "
+                    "evidence: input to the strategy book version review (L691)."
                 ),
             }
         )
@@ -1755,6 +1919,11 @@ def main(argv: list[str] | None = None) -> int:
         default=1,
         help="1: the trend-led variants; 2: leave-tier hold and recovery variants",
     )
+    rank_p = sub.add_parser(
+        "ranking-lab",
+        help="Score slot-ranking rules on both windows after the reveal (exploratory)",
+    )
+    _paths(rank_p)
     sub.add_parser("status", help="Print the store status (reads the committed store only)")
     del_p = sub.add_parser("confirm-deleted", help="Stamp licensed_data.deleted_at after deletion")
     del_p.add_argument("--at", help="Deletion timestamp (default: the screen replay's deleted_at)")
@@ -1775,6 +1944,18 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         if args.batch_size < 1:
             parser.error("--batch-size must be at least 1")
+        if args.command == "ranking-lab":
+            rank_out = ranking_lab(
+                args.build,
+                args.mid_build,
+                args.sharadar_dir,
+                scratch=args.scratch,
+                batch_size=args.batch_size,
+            )
+            print(json.dumps(ranking_lab_table(rank_out["store"]), indent=2))
+            print(json.dumps({"choice": rank_out["store"]["choice"]}, indent=2))
+            print(f"wrote {RANKING_LAB_PATH}", file=sys.stderr)
+            return 0
         if args.command == "exit-lab":
             lab_out = exit_lab(
                 args.build,

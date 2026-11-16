@@ -683,6 +683,14 @@
           "doc_anchor": "6c-exit-lab-round-2-exploratory-before-deletion"
         },
         {
+          "id": "adhoc-strategy-slot-ranking-lab",
+          "title": "Run the slot-ranking lab on the US data before it is deleted",
+          "summary": "Run before deleting the Sharadar files (by 2026-12-09). On the machine that holds ~/sharadar, ~/hsr-build and ~/hsr-mid-build: ftse-strategy-book-rehearsal ranking-lab (runbook section 6d), then commit docs/data/strategy_book_ranking_lab.json on a branch and open a PR. It re-runs the 20-slot book on the primary's own episodes with eight ranking and skip rules fixed before the first run, on both windows (2000-2012 and 2013-2025). Exploratory, not evidence; it seals nothing and is input to the strategy book version review (L691). It refuses once deleted_at is stamped, so it must run before the deletion step of adhoc-strategy-us-pit-rehearsal.",
+          "automated": false,
+          "doc_path": "docs/ops/strategy-book-us-rehearsal-runbook.md",
+          "doc_anchor": "6d-slot-ranking-lab-exploratory-before-deletion"
+        },
+        {
           "id": "adhoc-observe-instrument-freeze",
           "title": "Decide which observe instruments to freeze",
           "summary": "When strategy-book step 2.3 starts, decide which existing observe instruments to freeze under the single-track decision. Candidates: N201, N206, the parallel timing lenses (L652) and the super book's unbuilt spawn and cull work (N223, N226, N227). Frozen books keep their history; the super book's lab book stays as an outside reference.",
