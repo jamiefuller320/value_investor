@@ -2,9 +2,9 @@
   "schema_version": 1,
   "influences_live": false,
   "registration_id": "owner-strategy-book-v0",
-  "generated_at": "2026-11-14T01:39:01.176184+00:00",
-  "observe_data_commit": "f687138ba07871c786433f3fb956123aabdf4e7e",
-  "observe_generated_at": "2026-11-14T01:38:42.508945+00:00",
+  "generated_at": "2026-11-16T17:48:38.010564+00:00",
+  "observe_data_commit": "717457009168dec39ceba0f3ed76717e6f058b03",
+  "observe_generated_at": "2026-11-16T17:48:16.858757+00:00",
   "observe_store": "docs/data/strategy_book_observe.json",
   "observe_error": null,
   "constants": {
@@ -77,26 +77,26 @@
     "spans": {
       "GBP": {
         "first_as_of": "2026-07-17",
-        "last_as_of": "2026-11-13",
-        "points": 66
+        "last_as_of": "2026-11-16",
+        "points": 68
       },
       "EUR": {
         "first_as_of": "2026-07-17",
-        "last_as_of": "2026-11-13",
-        "points": 56
+        "last_as_of": "2026-11-16",
+        "points": 57
       },
       "AUD": {
         "first_as_of": "2026-07-18",
-        "last_as_of": "2026-11-13",
-        "points": 70
+        "last_as_of": "2026-11-16",
+        "points": 72
       },
       "CAD": {
         "first_as_of": "2026-07-18",
-        "last_as_of": "2026-11-13",
-        "points": 70
+        "last_as_of": "2026-11-16",
+        "points": 72
       }
     },
-    "files_read": 70,
+    "files_read": 72,
     "unreadable_files": 0,
     "no_daily_series": [
       "CHF",
@@ -107,11 +107,11 @@
   },
   "coverage": {
     "episodes": 101,
-    "with_range": 57,
-    "insufficient_data": 44,
+    "with_range": 36,
+    "insufficient_data": 65,
     "reasons": {
       "currency_sources_disagree": 8,
-      "financials_after_signal": 23,
+      "financials_after_signal": 44,
       "fx_rate_missing": 1,
       "implausible_multiple": 1,
       "reporting_currency_unstated": 11
@@ -171,7 +171,7 @@
       "buy_on_signal": {
         "population": "mature or closed episodes with a range",
         "n": 1,
-        "n_with_range": 44,
+        "n_with_range": 24,
         "verdict": "insufficient_data",
         "minimum_n": 12,
         "buckets": [
@@ -215,15 +215,15 @@
       },
       "decline_rejected_shadow": {
         "population": "mature or closed episodes with a range",
-        "n": 1,
-        "n_with_range": 1,
+        "n": 0,
+        "n_with_range": 0,
         "verdict": "insufficient_data",
         "minimum_n": 12,
         "buckets": [
           {
             "id": "below_0",
             "rule": "margin < 0",
-            "n": 1,
+            "n": 0,
             "verdict": "insufficient_data",
             "median_fair_cost_return": null,
             "median_matched_excess": null,
@@ -250,9 +250,9 @@
         ],
         "recovery": {
           "verdict": "insufficient_data",
-          "n_closed_with_range": 1,
+          "n_closed_with_range": 0,
           "minimum_n": 12,
-          "reached_mid": 1,
+          "reached_mid": 0,
           "reached_low_only": 0,
           "not_reached": 0,
           "no_closes_in_window": 0
@@ -451,7 +451,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.004279780744002534,
-      "matched_excess": 0.005477389011374692,
+      "matched_excess": 0.0054245232061421265,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -571,7 +571,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.02567808672624966,
-      "matched_excess": -0.01592091697087243,
+      "matched_excess": -0.015973782776105,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -681,8 +681,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.011302707930367525,
-      "matched_excess": -0.0027151666650666244,
+      "fair_cost_return": -0.0117862669245648,
+      "matched_excess": 4.652843465514228e-05,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -805,11 +805,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.011336575875486362,
-      "matched_excess": -0.0027490346101854616,
+      "fair_cost_return": 0.02562840466926081,
+      "matched_excess": 0.03746120002848075,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 103.4,
       "entry_reference_unit": "GBX",
@@ -825,12 +825,6 @@
             "published_at": "2026-07-13",
             "headline": "2026 Interim Results",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
@@ -838,7 +832,7 @@
       "inputs": {
         "financials_path": "docs/data/research/MEGP.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/MEGP.L.json"
@@ -1128,115 +1122,41 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.01846456352636133,
-      "matched_excess": -0.00987702226106043,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.019328867761452092,
+      "matched_excess": -0.00749607240223215,
+      "verdict": "insufficient_data",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 230.0,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/ABDN.L/sources/financials_annual.json",
         "financials_state": "file",
         "fetched_at": "2026-11-10",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": -0.268,
-            "fcf": 83000000.0,
-            "shares": 2110000000.0,
-            "fcf_per_share": 0.039336
-          },
-          {
-            "year": 2023,
-            "eps": 0.001,
-            "fcf": 162000000.0,
-            "shares": 1930000000.0,
-            "fcf_per_share": 0.083938
-          },
-          {
-            "year": 2024,
-            "eps": 0.13,
-            "fcf": 180000000.0,
-            "shares": 1818000000.0,
-            "fcf_per_share": 0.09901
-          },
-          {
-            "year": 2025,
-            "eps": 0.212,
-            "fcf": 406000000.0,
-            "shares": 1829000000.0,
-            "fcf_per_share": 0.221979
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.01875,
-        "latest_per_share": 0.212,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 10.8491,
-        "implied_trailing_pe_close": 2.3,
-        "implied_trailing_pe_eps": 0.212,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 1.875,
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/ABDN.L.json"
       },
-      "range": {
-        "low": 18.75,
-        "mid": 28.125,
-        "high": 37.5,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -7.177778,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 21.2,
-        "low": 212.0,
-        "mid": 265.0,
-        "high": 353.3333,
-        "cross_check": "outside_band",
-        "implied_earnings_yield": 0.008152
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 11.106586,
-        "range": {
-          "low": 111.0659,
-          "mid": 166.5988,
-          "high": 222.1317
-        },
-        "cross_check": "outside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "above_high"
+      }
     },
     {
       "episode_id": "ftse350:ABF.L:buy_on_signal:2026-11-10",
@@ -1247,8 +1167,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.02927822580645151,
-      "matched_excess": 0.03786576707175241,
+      "fair_cost_return": 0.03583064516129026,
+      "matched_excess": 0.0476634405205102,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -1266,12 +1186,6 @@
             "path": "docs/data/research/ABF.L/sources/filings/bodies/e5b08184120bf063.txt",
             "published_at": "2026-11-03",
             "headline": "Annual Results Announcement",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -1373,8 +1287,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.04288709677419373,
-      "matched_excess": 0.051474638039494626,
+      "fair_cost_return": 0.060256823821340184,
+      "matched_excess": 0.07208961918056012,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
@@ -1392,12 +1306,6 @@
             "path": "docs/data/research/ALFA.L/sources/filings/bodies/ch_10713517_MzUyMDIyOTQyMWFkaXF6a2N4.txt",
             "published_at": "2026-05-11",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-group",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -1432,7 +1340,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.008949225565726134,
-      "matched_excess": -0.016336146540844657,
+      "matched_excess": -0.01641619859739854,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -1552,7 +1460,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.034259017481743814,
-      "matched_excess": -0.03323509405548543,
+      "matched_excess": -0.0333732487309186,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-12 is after the signal session 2026-11-09.",
@@ -1596,20 +1504,19 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.050199140401146085,
-      "matched_excess": -0.04161159913584519,
+      "fair_cost_return": -0.05592979942693415,
+      "matched_excess": -0.04409700406771421,
       "verdict": "insufficient_data",
-      "reason": "currency_sources_disagree",
-      "reason_detail": "Statement currency sources disagree: filing_body_unit=GBP, screen_action_note=EUR",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-14 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 843.0,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": null,
+      "statement_currency": "GBP",
       "currency": {
-        "reason": "currency_sources_disagree",
-        "detail": "Statement currency sources disagree: filing_body_unit=GBP, screen_action_note=EUR",
+        "currency": "GBP",
         "sources": [
           {
             "source": "filing_body_unit",
@@ -1617,20 +1524,14 @@
             "published_at": "2026-05-26",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-total-exemption-full",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "EUR"
           }
         ]
       },
       "method": null,
       "inputs": {
         "financials_path": "docs/data/research/ATYM.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-03",
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-14",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/ATYM.L.json"
@@ -1655,8 +1556,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.007877926421404672,
-      "matched_excess": 0.016465467686705572,
+      "fair_cost_return": 0.016239130434782704,
+      "matched_excess": 0.028071925794002646,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -1674,12 +1575,6 @@
             "path": "docs/data/research/BAG.L/sources/filings/bodies/ch_SC005653_MzUyMDYzNzA3OGFkaXF6a2N4.txt",
             "published_at": "2026-05-12",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-group",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -1781,11 +1676,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.013320586543990761,
-      "matched_excess": -0.004733045278689861,
+      "fair_cost_return": -0.021256181713628582,
+      "matched_excess": -0.00942338635440864,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 430.05,
       "entry_reference_unit": "GBX",
@@ -1801,7 +1696,7 @@
       "inputs": {
         "financials_path": "docs/data/research/BARC.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/BARC.L.json"
@@ -1826,11 +1721,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0003642699926633085,
-      "matched_excess": 0.00822327127263759,
+      "fair_cost_return": -0.010635730007336804,
+      "matched_excess": 0.0011970653518831378,
       "verdict": "insufficient_data",
-      "reason": "reporting_currency_unstated",
-      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 13480.0,
       "entry_reference_unit": "GBX",
@@ -1845,8 +1740,8 @@
       "method": null,
       "inputs": {
         "financials_path": "docs/data/research/BGEO.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-10",
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/BGEO.L.json"
@@ -1871,115 +1766,41 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.0012415730337079257,
-      "matched_excess": 0.009829114299008825,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": 0.0006797752808989689,
+      "matched_excess": 0.01251257064011891,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 3636.0,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/BKG.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-10",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2023,
-            "eps": 4.377656,
-            "fcf": 333600000.0,
-            "shares": 106331980.0,
-            "fcf_per_share": 3.137344
-          },
-          {
-            "year": 2024,
-            "eps": 3.845994,
-            "fcf": 232000000.0,
-            "shares": 103340790.0,
-            "fcf_per_share": 2.244999
-          },
-          {
-            "year": 2025,
-            "eps": 3.7,
-            "fcf": 192100000.0,
-            "shares": 103200000.0,
-            "fcf_per_share": 1.861434
-          },
-          {
-            "year": 2026,
-            "eps": 3.311,
-            "fcf": 260300000.0,
-            "shares": 96200000.0,
-            "fcf_per_share": 2.705821
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 3.808663,
-        "latest_per_share": 3.311,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 10.9816,
-        "implied_trailing_pe_close": 36.36,
-        "implied_trailing_pe_eps": 3.311,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 380.86625,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/BKG.L.json"
       },
-      "range": {
-        "low": 3808.6625,
-        "mid": 5712.9937,
-        "high": 7617.325,
-        "unit": "GBX"
-      },
-      "margin_of_safety": 0.363556,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 331.1,
-        "low": 3311.0,
-        "mid": 4138.75,
-        "high": 5518.3333,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.104749
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 248.739965,
-        "range": {
-          "low": 2487.3997,
-          "mid": 3731.0995,
-          "high": 4974.7993
-        },
-        "cross_check": "outside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "below_low"
+      }
     },
     {
       "episode_id": "ftse350:BOWL.L:buy_on_signal:2026-11-10",
@@ -1990,11 +1811,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.012268189509306245,
-      "matched_excess": -0.003680648244005345,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.007192047377326534,
+      "matched_excess": 0.0046407479818934075,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 296.0,
       "entry_reference_unit": "GBX",
@@ -2010,102 +1831,28 @@
             "published_at": "2026-05-27",
             "headline": "Half-year Results",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/BOWL.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-04",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 0.2178,
-            "fcf": 53338000.0,
-            "shares": 171912504.0,
-            "fcf_per_share": 0.310262
-          },
-          {
-            "year": 2023,
-            "eps": 0.1982,
-            "fcf": 40616000.0,
-            "shares": 172301914.0,
-            "fcf_per_share": 0.235726
-          },
-          {
-            "year": 2024,
-            "eps": 0.1731,
-            "fcf": 29104000.0,
-            "shares": 172802113.0,
-            "fcf_per_share": 0.168424
-          },
-          {
-            "year": 2025,
-            "eps": 0.2014,
-            "fcf": 37017000.0,
-            "shares": 171845138.0,
-            "fcf_per_share": 0.215409
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.197625,
-        "latest_per_share": 0.2014,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 14.6971,
-        "implied_trailing_pe_close": 2.96,
-        "implied_trailing_pe_eps": 0.2014,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 19.7625,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/BOWL.L.json"
       },
-      "range": {
-        "low": 197.625,
-        "mid": 296.4375,
-        "high": 395.25,
-        "unit": "GBX"
-      },
-      "margin_of_safety": 0.001476,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 20.14,
-        "low": 201.4,
-        "mid": 251.75,
-        "high": 335.6667,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.066765
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 23.245529,
-        "range": {
-          "low": 232.4553,
-          "mid": 348.6829,
-          "high": 464.9106
-        },
-        "cross_check": "inside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "between_low_and_mid"
+      }
     },
     {
       "episode_id": "ftse350:BREE.L:buy_on_signal:2026-11-10",
@@ -2116,33 +1863,27 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.010984460694698436,
-      "matched_excess": -0.0023969194293975353,
+      "fair_cost_return": -0.014031383302864183,
+      "matched_excess": -0.002198587943644241,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 334.0,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
       "method": null,
       "inputs": {
         "financials_path": "docs/data/research/BREE.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/BREE.L.json"
@@ -2167,8 +1908,8 @@
       "signal_session": "2026-11-11",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.011521390374331583,
-      "matched_excess": 0.0023283545616810935,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.012547146769260427,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2288,7 +2029,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.028912877082395257,
-      "matched_excess": -0.020325335817094357,
+      "matched_excess": -0.017080081723175315,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2306,12 +2047,6 @@
             "path": "docs/data/research/BYIT.L/sources/filings/bodies/87feb5712d87290f.txt",
             "published_at": "2026-10-13",
             "headline": "Interim Results",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -2414,7 +2149,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.021801886792452936,
-      "matched_excess": 0.02892130817002625,
+      "matched_excess": 0.029520099451513022,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -2458,8 +2193,8 @@
       "signal_session": "2026-11-11",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.02936053147850909,
-      "matched_excess": -0.01551078654249641,
+      "fair_cost_return": -0.04380675940788298,
+      "matched_excess": -0.027759612638622547,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -2504,7 +2239,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.03969312528267738,
-      "matched_excess": 0.03947196617172677,
+      "matched_excess": 0.03940768380535518,
       "verdict": "insufficient_data",
       "reason": "currency_sources_disagree",
       "reason_detail": "Statement currency sources disagree: filing_body_unit=GBP, sec_companyfacts.annual.currency=USD",
@@ -2564,7 +2299,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.005523913370431736,
-      "matched_excess": 0.0050211509397612075,
+      "matched_excess": 0.0020066124360653597,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2683,11 +2418,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.01120146137787065,
-      "matched_excess": 0.01978900264317155,
+      "fair_cost_return": 0.023727557411273695,
+      "matched_excess": 0.03556035277049364,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 145.0,
       "entry_reference_unit": "GBX",
@@ -2710,7 +2445,7 @@
       "inputs": {
         "financials_path": "docs/data/research/CURY.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/CURY.L.json"
@@ -2735,8 +2470,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.028450617283950767,
-      "matched_excess": 0.03703815854925167,
+      "fair_cost_return": 0.03462345679012364,
+      "matched_excess": 0.046456252149343576,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2754,12 +2489,6 @@
             "path": "docs/data/research/DATA.L/sources/filings/bodies/3f67a1987880100f.txt",
             "published_at": "2026-09-14",
             "headline": "Half Year Results",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -2861,11 +2590,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.01992041042706599,
-      "matched_excess": -0.01133286916176509,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": 4.631170271768748e-05,
+      "matched_excess": 0.011879107061937628,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 914.0,
       "entry_reference_unit": "GBX",
@@ -2881,102 +2610,28 @@
             "published_at": "2026-09-08",
             "headline": "Preliminary Results",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/DNLM.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-03",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2023,
-            "eps": 0.75,
-            "fcf": 218800000.0,
-            "shares": 202663000.0,
-            "fcf_per_share": 1.079625
-          },
-          {
-            "year": 2024,
-            "eps": 0.744,
-            "fcf": 199900000.0,
-            "shares": 203248000.0,
-            "fcf_per_share": 0.983528
-          },
-          {
-            "year": 2025,
-            "eps": 0.768,
-            "fcf": 211400000.0,
-            "shares": 203385000.0,
-            "fcf_per_share": 1.039408
-          },
-          {
-            "year": 2026,
-            "eps": 0.768,
-            "fcf": 227700000.0,
-            "shares": 202416000.0,
-            "fcf_per_share": 1.124911
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.7575,
-        "latest_per_share": 0.768,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 11.901,
-        "implied_trailing_pe_close": 9.14,
-        "implied_trailing_pe_eps": 0.768,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 75.75,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/DNLM.L.json"
       },
-      "range": {
-        "low": 757.5,
-        "mid": 1136.25,
-        "high": 1515.0,
-        "unit": "GBX"
-      },
-      "margin_of_safety": 0.1956,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 76.8,
-        "low": 768.0,
-        "mid": 960.0,
-        "high": 1280.0,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.082877
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 105.686785,
-        "range": {
-          "low": 1056.8679,
-          "mid": 1585.3018,
-          "high": 2113.7357
-        },
-        "cross_check": "outside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "between_low_and_mid"
+      }
     },
     {
       "episode_id": "ftse350:DOM.L:buy_on_signal:2026-11-10",
@@ -2987,11 +2642,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.020073192239858765,
-      "matched_excess": 0.028660733505159665,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": 0.019191358024691244,
+      "matched_excess": 0.031024153383911186,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 229.0,
       "entry_reference_unit": "GBX",
@@ -3007,102 +2662,28 @@
             "published_at": "2026-08-04",
             "headline": "Half year results ended 28 June 2026",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/DOM.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-04",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 0.187,
-            "fcf": 65400000.0,
-            "shares": 436037579.0,
-            "fcf_per_share": 0.149987
-          },
-          {
-            "year": 2023,
-            "eps": 0.279,
-            "fcf": 92700000.0,
-            "shares": 412321922.0,
-            "fcf_per_share": 0.224824
-          },
-          {
-            "year": 2024,
-            "eps": 0.228,
-            "fcf": 85000000.0,
-            "shares": 396301908.0,
-            "fcf_per_share": 0.214483
-          },
-          {
-            "year": 2025,
-            "eps": 0.15,
-            "fcf": 79800000.0,
-            "shares": 390266510.0,
-            "fcf_per_share": 0.204476
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.211,
-        "latest_per_share": 0.15,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 15.2667,
-        "implied_trailing_pe_close": 2.29,
-        "implied_trailing_pe_eps": 0.15,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 21.1,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/DOM.L.json"
       },
-      "range": {
-        "low": 211.0,
-        "mid": 316.5,
-        "high": 422.0,
-        "unit": "GBX"
-      },
-      "margin_of_safety": 0.276461,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 15.0,
-        "low": 150.0,
-        "mid": 187.5,
-        "high": 250.0,
-        "cross_check": "outside_band",
-        "implied_earnings_yield": 0.09214
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 19.84425,
-        "range": {
-          "low": 198.4425,
-          "mid": 297.6638,
-          "high": 396.885
-        },
-        "cross_check": "inside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "between_low_and_mid"
+      }
     },
     {
       "episode_id": "sp500:EXPD:buy_on_signal:2026-11-09",
@@ -3114,7 +2695,7 @@
       "exit_session": "2026-11-13",
       "mature": false,
       "fair_cost_return": 0.026152730059728457,
-      "matched_excess": 0.02717665348598684,
+      "matched_excess": 0.027038498810553674,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -3233,8 +2814,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.004048621190130659,
-      "matched_excess": 0.00453892007517024,
+      "fair_cost_return": -0.0055000000000000005,
+      "matched_excess": 0.006332795359219941,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
@@ -3252,12 +2833,6 @@
             "path": "docs/data/research/EZJ.L/sources/filings/bodies/ch_03959649_MzUwNjM0MjA2M2FkaXF6a2N4.txt",
             "published_at": "2026-02-24",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-group",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -3292,7 +2867,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.003305553041683954,
-      "matched_excess": 0.004329476467942335,
+      "matched_excess": 0.004191321792509169,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -3411,8 +2986,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.011302707930367525,
-      "matched_excess": -0.0027151666650666244,
+      "fair_cost_return": -0.0117862669245648,
+      "matched_excess": 4.652843465514228e-05,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -3535,11 +3110,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.04321337832473198,
-      "matched_excess": -0.034625837059431085,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.06703235410877334,
+      "matched_excess": -0.055199558749553394,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 2513.0,
       "entry_reference_unit": "GBX",
@@ -3558,97 +3133,25 @@
           }
         ]
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/FRES.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-10",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 0.369,
-            "fcf": -89944000.0,
-            "shares": 736894000.0,
-            "fcf_per_share": -0.122058
-          },
-          {
-            "year": 2023,
-            "eps": 0.317,
-            "fcf": -57487000.0,
-            "shares": 736894000.0,
-            "fcf_per_share": -0.078013
-          },
-          {
-            "year": 2024,
-            "eps": 0.191,
-            "fcf": 929260000.0,
-            "shares": 736893589.0,
-            "fcf_per_share": 1.26105
-          },
-          {
-            "year": 2025,
-            "eps": 1.878,
-            "fcf": 1889566000.0,
-            "shares": 736893589.0,
-            "fcf_per_share": 2.564232
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.68875,
-        "latest_per_share": 1.878,
-        "normalised_unit": "USD",
-        "implied_trailing_pe": 17.9122,
-        "implied_trailing_pe_close": 33.639,
-        "implied_trailing_pe_eps": 1.878,
-        "implied_trailing_pe_currency": "USD",
-        "fx": {
-          "pair": "GBP per USD",
-          "rate": 0.747049,
-          "as_of_rule": "latest macro marker on or before the signal session"
-        },
-        "normalised_per_share_price_units": 51.453011,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/FRES.L.json"
       },
-      "range": {
-        "low": 514.5301,
-        "mid": 771.7952,
-        "high": 1029.0602,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -2.256045,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 140.295831,
-        "low": 1402.9583,
-        "mid": 1753.6979,
-        "high": 2338.2639,
-        "cross_check": "outside_band",
-        "implied_earnings_yield": 0.020475
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 67.705279,
-        "range": {
-          "low": 677.0528,
-          "mid": 1015.5792,
-          "high": 1354.1056
-        },
-        "cross_check": "inside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "above_high"
+      }
     },
     {
       "episode_id": "ftse350:GEN.L:buy_on_signal:2026-11-10",
@@ -3659,11 +3162,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.014515777610818844,
-      "matched_excess": -0.005928236345517944,
+      "fair_cost_return": -0.024282870022539423,
+      "matched_excess": -0.012450074663319481,
       "verdict": "insufficient_data",
-      "reason": "reporting_currency_unstated",
-      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 269.2,
       "entry_reference_unit": "GBX",
@@ -3678,8 +3181,8 @@
       "method": null,
       "inputs": {
         "financials_path": "docs/data/research/GEN.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-10",
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/GEN.L.json"
@@ -3705,7 +3208,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.00414077085215309,
-      "matched_excess": 0.00516469427841147,
+      "matched_excess": 0.0050265396029783044,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -3831,8 +3334,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.027971910112359607,
-      "matched_excess": -0.019384368847058707,
+      "fair_cost_return": -0.0363988764044944,
+      "matched_excess": -0.02456608104527446,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
@@ -3850,12 +3353,6 @@
             "path": "docs/data/research/GFRD.L/sources/filings/bodies/a768299df91cf7c8.txt",
             "published_at": "2026-09-17",
             "headline": "Final Results",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -3889,11 +3386,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.010322530864197484,
-      "matched_excess": -0.001734989598896584,
+      "fair_cost_return": -0.008779320987654157,
+      "matched_excess": 0.0030534743715657856,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 1047.6,
       "entry_reference_unit": "GBX",
@@ -3909,12 +3406,6 @@
             "published_at": "2026-06-24",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-full",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
@@ -3922,7 +3413,7 @@
       "inputs": {
         "financials_path": "docs/data/research/GFTU.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/GFTU.L.json"
@@ -3947,8 +3438,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.010170886075949351,
-      "matched_excess": 0.007020783748060107,
+      "fair_cost_return": 0.019284810126582175,
+      "matched_excess": 0.007640357474920015,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -3992,8 +3483,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.051429298339582256,
-      "matched_excess": -0.04284175707428136,
+      "fair_cost_return": -0.029669791108730633,
+      "matched_excess": -0.01783699574951069,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -4011,12 +3502,6 @@
             "path": "docs/data/research/GNS.L/sources/filings/bodies/ch_02972325_MzU1MTMzNzUwM2FkaXF6a2N4.txt",
             "published_at": "2026-10-16",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-group",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -4118,11 +3603,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.007574839810687909,
-      "matched_excess": 0.01616238107598881,
+      "fair_cost_return": 0.017114649968465626,
+      "matched_excess": 0.02894744532768557,
       "verdict": "insufficient_data",
-      "reason": "reporting_currency_unstated",
-      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 1916.83,
       "entry_reference_unit": "GBX",
@@ -4137,8 +3622,8 @@
       "method": null,
       "inputs": {
         "financials_path": "docs/data/research/GSK.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-08",
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/GSK.L.json"
@@ -4164,114 +3649,40 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.006476047904191711,
-      "matched_excess": 0.01506358916949261,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "matched_excess": 0.018308843263411652,
+      "verdict": "insufficient_data",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 255.5,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/HFD.L/sources/financials_annual.json",
         "financials_state": "file",
         "fetched_at": "2026-11-09",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2023,
-            "eps": 0.15,
-            "fcf": 100300000.0,
-            "shares": 227400000.0,
-            "fcf_per_share": 0.441073
-          },
-          {
-            "year": 2024,
-            "eps": 0.074,
-            "fcf": 121800000.0,
-            "shares": 225900000.0,
-            "fcf_per_share": 0.539177
-          },
-          {
-            "year": 2025,
-            "eps": -0.154,
-            "fcf": 141500000.0,
-            "shares": 227400000.0,
-            "fcf_per_share": 0.622252
-          },
-          {
-            "year": 2026,
-            "eps": 0.146,
-            "fcf": 127600000.0,
-            "shares": 225200000.0,
-            "fcf_per_share": 0.566607
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.054,
-        "latest_per_share": 0.146,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 17.5,
-        "implied_trailing_pe_close": 2.555,
-        "implied_trailing_pe_eps": 0.146,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 5.4,
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/HFD.L.json"
       },
-      "range": {
-        "low": 54.0,
-        "mid": 81.0,
-        "high": 108.0,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -2.154321,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 14.6,
-        "low": 146.0,
-        "mid": 182.5,
-        "high": 243.3333,
-        "cross_check": "outside_band",
-        "implied_earnings_yield": 0.021135
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 54.227716,
-        "range": {
-          "low": 542.2772,
-          "mid": 813.4157,
-          "high": 1084.5543
-        },
-        "cross_check": "outside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "above_high"
+      }
     },
     {
       "episode_id": "ftse350:HIK.L:buy_on_signal:2026-11-10",
@@ -4282,26 +3693,26 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.010974452554744548,
-      "matched_excess": -0.0023869112894436477,
+      "fair_cost_return": 0.014572992700729929,
+      "matched_excess": 0.02640578805994987,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 1625.0,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": "EUR",
       "currency": {
-        "currency": "GBP",
+        "currency": "EUR",
         "sources": [
           {
             "source": "filing_body_unit",
-            "path": "docs/data/research/HIK.L/sources/filings/bodies/ch_05557934_MzMwMDQ5MDMxNmFkaXF6a2N4.txt",
-            "published_at": "2021-05-14",
+            "path": "docs/data/research/HIK.L/sources/filings/bodies/ch_05557934_MzMzNzcwNjQxNGFkaXF6a2N4.txt",
+            "published_at": "2022-04-29",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-group",
-            "currency": "GBP"
+            "currency": "EUR"
           }
         ]
       },
@@ -4309,10 +3720,69 @@
       "inputs": {
         "financials_path": "docs/data/research/HIK.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/HIK.L.json"
+      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      }
+    },
+    {
+      "episode_id": "ftse350:HOC.L:buy_on_signal:2026-11-15",
+      "market": "ftse350",
+      "ticker": "HOC.L",
+      "column": "buy_on_signal",
+      "status": "open",
+      "signal_session": "2026-11-15",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0055000000000000005,
+      "matched_excess": 0.0,
+      "verdict": "insufficient_data",
+      "reason": "currency_sources_disagree",
+      "reason_detail": "Statement currency sources disagree: filing_body_unit=USD, screen_action_note=GBP",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": null,
+      "entry_reference_unit": "GBX",
+      "price_unit": "GBX",
+      "major_currency": "GBP",
+      "statement_currency": null,
+      "currency": {
+        "reason": "currency_sources_disagree",
+        "detail": "Statement currency sources disagree: filing_body_unit=USD, screen_action_note=GBP",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/research/HOC.L/sources/filings/bodies/d3470879e6fa801d.txt",
+            "published_at": "2026-08-26",
+            "headline": "Interim Results",
+            "currency": "USD"
+          },
+          {
+            "source": "screen_action_note",
+            "path": "docs/data/history/run_20261115_072927.json.gz",
+            "as_of": "2026-11-15",
+            "currency": "GBP"
+          }
+        ]
+      },
+      "method": null,
+      "inputs": {
+        "financials_path": "docs/data/research/HOC.L/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
+        "chart_path": "docs/data/charts/HOC.L.json"
       },
       "range": null,
       "margin_of_safety": null,
@@ -4334,8 +3804,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.017713740458015267,
-      "matched_excess": -0.009126199192714367,
+      "fair_cost_return": -0.016405125408942175,
+      "matched_excess": -0.004572330049722233,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -4379,8 +3849,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.022729508196721426,
-      "matched_excess": 0.019996282207106062,
+      "fair_cost_return": 0.012893442622950838,
+      "matched_excess": 0.020079532700480556,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -4424,11 +3894,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0023992248062016342,
-      "matched_excess": 0.006188316459099265,
+      "fair_cost_return": 0.0009082687338502528,
+      "matched_excess": 0.012741064093070194,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 944.0,
       "entry_reference_unit": "GBX",
@@ -4451,7 +3921,7 @@
       "inputs": {
         "financials_path": "docs/data/research/IGG.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/IGG.L.json"
@@ -4476,8 +3946,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.02114359861591703,
-      "matched_excess": 0.02973113988121793,
+      "fair_cost_return": 0.024603806228373607,
+      "matched_excess": 0.03643660158759355,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -4495,12 +3965,6 @@
             "path": "docs/data/research/IMB.L/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
             "published_at": "2026-02-07",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-group",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -4603,7 +4067,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.01258667287977638,
-      "matched_excess": -0.011562749453518,
+      "matched_excess": -0.011700904128951166,
       "verdict": "insufficient_data",
       "reason": "currency_sources_disagree",
       "reason_detail": "Statement currency sources disagree: filing_body_unit=EUR, sec_companyfacts.annual.currency=USD",
@@ -4663,32 +4127,26 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.0030337470907680396,
-      "matched_excess": 0.011621288356068939,
+      "matched_excess": 0.01486654244998798,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 66.8,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
       "method": null,
       "inputs": {
         "financials_path": "docs/data/research/ITV.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/ITV.L.json"
@@ -4713,8 +4171,8 @@
       "signal_session": "2026-11-11",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.013353494100868554,
-      "matched_excess": 0.0004962508351441224,
+      "fair_cost_return": -0.01089012057565136,
+      "matched_excess": 0.005157026193609067,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -4758,115 +4216,41 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.004232305091907913,
-      "matched_excess": 0.004355236173392986,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.00021793788294959915,
+      "matched_excess": 0.011614857476270342,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 97.6,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/JD.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-10",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2023,
-            "eps": 0.0276,
-            "fcf": 735000000.0,
-            "shares": 5158600000.0,
-            "fcf_per_share": 0.142481
-          },
-          {
-            "year": 2024,
-            "eps": 0.1045,
-            "fcf": 610000000.0,
-            "shares": 5158000000.0,
-            "fcf_per_share": 0.118263
-          },
-          {
-            "year": 2025,
-            "eps": 0.095,
-            "fcf": 713000000.0,
-            "shares": 5160000000.0,
-            "fcf_per_share": 0.138178
-          },
-          {
-            "year": 2026,
-            "eps": 0.0854,
-            "fcf": 956000000.0,
-            "shares": 5112000000.0,
-            "fcf_per_share": 0.187011
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.078125,
-        "latest_per_share": 0.0854,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 11.4286,
-        "implied_trailing_pe_close": 0.976,
-        "implied_trailing_pe_eps": 0.0854,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 7.8125,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/JD.L.json"
       },
-      "range": {
-        "low": 78.125,
-        "mid": 117.1875,
-        "high": 156.25,
-        "unit": "GBX"
-      },
-      "margin_of_safety": 0.167147,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 8.54,
-        "low": 85.4,
-        "mid": 106.75,
-        "high": 142.3333,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.080046
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 14.648316,
-        "range": {
-          "low": 146.4832,
-          "mid": 219.7247,
-          "high": 292.9663
-        },
-        "cross_check": "outside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "between_low_and_mid"
+      }
     },
     {
       "episode_id": "ftse350:JMAT.L:buy_on_signal:2026-11-10",
@@ -4877,33 +4261,27 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.021974464579901206,
-      "matched_excess": -0.013386923314600306,
+      "fair_cost_return": -0.024445634266886337,
+      "matched_excess": -0.012612838907666395,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 2400.0,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
       "method": null,
       "inputs": {
         "financials_path": "docs/data/research/JMAT.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/JMAT.L.json"
@@ -4928,8 +4306,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.003997964721845386,
-      "matched_excess": 0.012585505987146285,
+      "fair_cost_return": -0.004821573948439568,
+      "matched_excess": 0.007011221410780373,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -4947,12 +4325,6 @@
             "path": "docs/data/research/JSG.L/sources/filings/bodies/ab5038e77ea77b83.txt",
             "published_at": "2026-09-08",
             "headline": "Interim Results: Six Months ended 30 June 2026",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -5054,11 +4426,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.00980107526881729,
-      "matched_excess": -0.0012135340035163904,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.018403225806451647,
+      "matched_excess": -0.006570430447231705,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 183.0,
       "entry_reference_unit": "GBX",
@@ -5074,102 +4446,28 @@
             "published_at": "2026-08-10",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-interim",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/JUP.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-03",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 0.088,
-            "fcf": 157000000.0,
-            "shares": 538900000.0,
-            "fcf_per_share": 0.291334
-          },
-          {
-            "year": 2023,
-            "eps": -0.025,
-            "fcf": 84500000.0,
-            "shares": 519300000.0,
-            "fcf_per_share": 0.162719
-          },
-          {
-            "year": 2024,
-            "eps": 0.122,
-            "fcf": 66300000.0,
-            "shares": 533700000.0,
-            "fcf_per_share": 0.124227
-          },
-          {
-            "year": 2025,
-            "eps": 0.179,
-            "fcf": 56600000.0,
-            "shares": 561700000.0,
-            "fcf_per_share": 0.100766
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.091,
-        "latest_per_share": 0.179,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 10.2235,
-        "implied_trailing_pe_close": 1.83,
-        "implied_trailing_pe_eps": 0.179,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 9.1,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/JUP.L.json"
       },
-      "range": {
-        "low": 91.0,
-        "mid": 136.5,
-        "high": 182.0,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -0.340659,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 17.9,
-        "low": 179.0,
-        "mid": 223.75,
-        "high": 298.3333,
-        "cross_check": "outside_band",
-        "implied_earnings_yield": 0.049727
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 16.976147,
-        "range": {
-          "low": 169.7615,
-          "mid": 254.6422,
-          "high": 339.5229
-        },
-        "cross_check": "outside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "above_high"
+      }
     },
     {
       "episode_id": "ftse350:KLR.L:buy_on_signal:2026-11-10",
@@ -5180,11 +4478,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.025333653230966088,
-      "matched_excess": -0.016746111965665188,
+      "fair_cost_return": -0.03748976327575176,
+      "matched_excess": -0.02565696791653182,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 3008.0,
       "entry_reference_unit": "GBX",
@@ -5207,7 +4505,7 @@
       "inputs": {
         "financials_path": "docs/data/research/KLR.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/KLR.L.json"
@@ -5232,11 +4530,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.0008391442155309449,
-      "matched_excess": 0.009426685480831844,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": 0.0024239302694136254,
+      "matched_excess": 0.014256725628633567,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-14 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 315.5,
       "entry_reference_unit": "GBX",
@@ -5252,102 +4550,28 @@
             "published_at": "2026-05-21",
             "headline": "HALF YEAR RESULTS",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/MAB.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-03",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 0.022,
-            "fcf": 116000000.0,
-            "shares": 596000000.0,
-            "fcf_per_share": 0.194631
-          },
-          {
-            "year": 2023,
-            "eps": -0.007,
-            "fcf": 91000000.0,
-            "shares": 595000000.0,
-            "fcf_per_share": 0.152941
-          },
-          {
-            "year": 2024,
-            "eps": 0.248,
-            "fcf": 232000000.0,
-            "shares": 600000000.0,
-            "fcf_per_share": 0.386667
-          },
-          {
-            "year": 2025,
-            "eps": 0.295,
-            "fcf": 187000000.0,
-            "shares": 601000000.0,
-            "fcf_per_share": 0.311148
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.1395,
-        "latest_per_share": 0.295,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 10.6949,
-        "implied_trailing_pe_close": 3.155,
-        "implied_trailing_pe_eps": 0.295,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 13.95,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-14",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/MAB.L.json"
       },
-      "range": {
-        "low": 139.5,
-        "mid": 209.25,
-        "high": 279.0,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -0.507766,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 29.5,
-        "low": 295.0,
-        "mid": 368.75,
-        "high": 491.6667,
-        "cross_check": "outside_band",
-        "implied_earnings_yield": 0.044216
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 26.13467,
-        "range": {
-          "low": 261.3467,
-          "mid": 392.0201,
-          "high": 522.6934
-        },
-        "cross_check": "outside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "above_high"
+      }
     },
     {
       "episode_id": "nasdaq100:MCHP:buy_on_signal:2026-11-09",
@@ -5359,7 +4583,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.01887692690203885,
-      "matched_excess": 0.011490005926920331,
+      "matched_excess": 0.011409953870366444,
       "verdict": "insufficient_data",
       "reason": "implausible_multiple",
       "reason_detail": "Implied trailing P/E 279.55 is outside 2 to 200 (close 61.5000 USD / latest EPS 0.2200 USD). This is a unit and currency guard, not a valuation view.",
@@ -5454,11 +4678,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.011336575875486362,
-      "matched_excess": -0.0027490346101854616,
+      "fair_cost_return": 0.02562840466926081,
+      "matched_excess": 0.03746120002848075,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 103.4,
       "entry_reference_unit": "GBX",
@@ -5474,12 +4698,6 @@
             "published_at": "2026-07-13",
             "headline": "2026 Interim Results",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
@@ -5487,7 +4705,7 @@
       "inputs": {
         "financials_path": "docs/data/research/MEGP.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/MEGP.L.json"
@@ -5512,11 +4730,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.0011964285714286028,
-      "matched_excess": 0.009783969836729502,
+      "fair_cost_return": -0.01174999999999998,
+      "matched_excess": 8.27953592199629e-05,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 4424.0,
       "entry_reference_unit": "GBX",
@@ -5532,12 +4750,6 @@
             "published_at": "2026-11-10",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-interim",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
@@ -5545,7 +4757,7 @@
       "inputs": {
         "financials_path": "docs/data/research/MGNS.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/MGNS.L.json"
@@ -5570,8 +4782,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.015543402016659439,
-      "matched_excess": 0.02413094328196034,
+      "fair_cost_return": 0.026503507233669513,
+      "matched_excess": 0.038336302592889455,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -5589,12 +4801,6 @@
             "path": "docs/data/research/MKS.L/sources/filings/bodies/ch_04256886_MzUzMzExMzgwM2FkaXF6a2N4.txt",
             "published_at": "2026-07-24",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-group",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -5697,114 +4903,40 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.0016904761904760711,
-      "matched_excess": 0.006897065074824828,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "matched_excess": 0.01014231916874387,
+      "verdict": "insufficient_data",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 208.0,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/MONY.L/sources/financials_annual.json",
         "financials_state": "file",
         "fetched_at": "2026-11-07",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 0.127,
-            "fcf": 93000000.0,
-            "shares": 538900000.0,
-            "fcf_per_share": 0.172574
-          },
-          {
-            "year": 2023,
-            "eps": 0.135,
-            "fcf": 91200000.0,
-            "shares": 539100000.0,
-            "fcf_per_share": 0.169171
-          },
-          {
-            "year": 2024,
-            "eps": 0.149,
-            "fcf": 101500000.0,
-            "shares": 539900000.0,
-            "fcf_per_share": 0.187998
-          },
-          {
-            "year": 2025,
-            "eps": 0.152,
-            "fcf": 98100000.0,
-            "shares": 533000000.0,
-            "fcf_per_share": 0.184053
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.14075,
-        "latest_per_share": 0.152,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 13.6842,
-        "implied_trailing_pe_close": 2.08,
-        "implied_trailing_pe_eps": 0.152,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 14.075,
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/MONY.L.json"
       },
-      "range": {
-        "low": 140.75,
-        "mid": 211.125,
-        "high": 281.5,
-        "unit": "GBX"
-      },
-      "margin_of_safety": 0.014802,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 15.2,
-        "low": 152.0,
-        "mid": 190.0,
-        "high": 253.3333,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.067668
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 17.844873,
-        "range": {
-          "low": 178.4487,
-          "mid": 267.6731,
-          "high": 356.8975
-        },
-        "cross_check": "inside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "between_low_and_mid"
+      }
     },
     {
       "episode_id": "asx200:NEM.AX:buy_on_signal:2026-11-11",
@@ -5815,8 +4947,8 @@
       "signal_session": "2026-11-11",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.025806348281886937,
-      "matched_excess": -0.011956603345874258,
+      "fair_cost_return": -0.041356726849155534,
+      "matched_excess": -0.025309580079895103,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -5861,7 +4993,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.00018252492663289573,
-      "matched_excess": 0.0008413984996254848,
+      "matched_excess": 0.0007032438241923191,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -5972,126 +5104,6 @@
       "entry_vs_range": "above_high"
     },
     {
-      "episode_id": "nasdaq100:NVDA:buy_on_signal:2026-11-12",
-      "market": "nasdaq100",
-      "ticker": "NVDA",
-      "column": "buy_on_signal",
-      "status": "open",
-      "signal_session": "2026-11-12",
-      "exit_session": null,
-      "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
-      "entry_reference": "signal_session_close",
-      "entry_reference_price": 166.19,
-      "entry_reference_unit": "USD",
-      "price_unit": "USD",
-      "major_currency": "USD",
-      "statement_currency": "USD",
-      "currency": {
-        "currency": "USD",
-        "sources": [
-          {
-            "source": "sec_companyfacts.annual.currency",
-            "path": "docs/data/library/markets/nasdaq100/screen/research/NVDA/sources/sec_companyfacts.json",
-            "state": "file",
-            "first_filed": "2026-02-25",
-            "currency": "USD"
-          }
-        ]
-      },
-      "method": "normalised_earnings",
-      "inputs": {
-        "financials_path": "docs/data/library/markets/nasdaq100/screen/research/NVDA/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-12",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2023,
-            "eps": 0.174,
-            "fcf": 3808000000.0,
-            "shares": 25070000000.0,
-            "fcf_per_share": 0.151895
-          },
-          {
-            "year": 2024,
-            "eps": 1.19,
-            "fcf": 27021000000.0,
-            "shares": 24940000000.0,
-            "fcf_per_share": 1.08344
-          },
-          {
-            "year": 2025,
-            "eps": 2.94,
-            "fcf": 60853000000.0,
-            "shares": 24804000000.0,
-            "fcf_per_share": 2.453354
-          },
-          {
-            "year": 2026,
-            "eps": 4.9,
-            "fcf": 96676000000.0,
-            "shares": 24514000000.0,
-            "fcf_per_share": 3.943706
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 2.301,
-        "latest_per_share": 4.9,
-        "normalised_unit": "USD",
-        "implied_trailing_pe": 33.9163,
-        "implied_trailing_pe_close": 166.19,
-        "implied_trailing_pe_eps": 4.9,
-        "implied_trailing_pe_currency": "USD",
-        "fx": null,
-        "normalised_per_share_price_units": 2.301,
-        "chart_path": "docs/data/charts/NVDA.json"
-      },
-      "range": {
-        "low": 23.01,
-        "mid": 34.515,
-        "high": 46.02,
-        "unit": "USD"
-      },
-      "margin_of_safety": -3.815008,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 4.9,
-        "low": 49.0,
-        "mid": 61.25,
-        "high": 81.6667,
-        "cross_check": "outside_band",
-        "implied_earnings_yield": 0.013846
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 1.908099,
-        "range": {
-          "low": 19.081,
-          "mid": 28.6215,
-          "high": 38.162
-        },
-        "cross_check": "inside_band"
-      },
-      "recovery": {
-        "label": "not_closed",
-        "reached_low": null,
-        "reached_mid": null,
-        "closes_used": 0
-      },
-      "entry_vs_range": "above_high"
-    },
-    {
       "episode_id": "ftse350:NWG.L:buy_on_signal:2026-11-10",
       "market": "ftse350",
       "ticker": "NWG.L",
@@ -6100,8 +5112,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.003087541265300899,
+      "fair_cost_return": -0.013166666666666712,
+      "matched_excess": -0.0013338713074467698,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
@@ -6152,8 +5164,8 @@
       "signal_session": "2026-11-11",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.012197642481116818,
-      "matched_excess": 0.0016521024548958579,
+      "fair_cost_return": 0.009317578393224949,
+      "matched_excess": 0.025364725162485377,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -6273,7 +5285,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.023146364674533626,
-      "matched_excess": 0.02292520556358302,
+      "matched_excess": 0.022860923197211426,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-12 is after the signal session 2026-11-11.",
@@ -6324,11 +5336,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.020105647517039967,
-      "matched_excess": -0.011518106251739067,
+      "fair_cost_return": -0.0220530671859786,
+      "matched_excess": -0.010220271826758658,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-14 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 507.5,
       "entry_reference_unit": "GBX",
@@ -6351,7 +5363,7 @@
       "inputs": {
         "financials_path": "docs/data/research/OSB.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-14",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/OSB.L.json"
@@ -6376,11 +5388,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.04263527851458875,
-      "matched_excess": -0.034047737249287856,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.04351945181255528,
+      "matched_excess": -0.03168665645333534,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 113.8,
       "entry_reference_unit": "GBX",
@@ -6399,88 +5411,25 @@
           }
         ]
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/PAF.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-10",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 0.039,
-            "fcf": null,
-            "shares": 1926066000.0,
-            "fcf_per_share": null
-          },
-          {
-            "year": 2023,
-            "eps": 0.0319,
-            "fcf": -12699000.0,
-            "shares": 1916504000.0,
-            "fcf_per_share": -0.006626
-          },
-          {
-            "year": 2024,
-            "eps": 0.0414,
-            "fcf": -75440000.0,
-            "shares": 1916503988.0,
-            "fcf_per_share": -0.039363
-          },
-          {
-            "year": 2025,
-            "eps": 0.0716,
-            "fcf": -3760000.0,
-            "shares": 2029300000.0,
-            "fcf_per_share": -0.001853
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.045975,
-        "latest_per_share": 0.0716,
-        "normalised_unit": "USD",
-        "implied_trailing_pe": 21.2755,
-        "implied_trailing_pe_close": 1.5233,
-        "implied_trailing_pe_eps": 0.0716,
-        "implied_trailing_pe_currency": "USD",
-        "fx": {
-          "pair": "GBP per USD",
-          "rate": 0.747049,
-          "as_of_rule": "latest macro marker on or before the signal session"
-        },
-        "normalised_per_share_price_units": 3.434558,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/PAF.L.json"
       },
-      "range": {
-        "low": 34.3456,
-        "mid": 51.5184,
-        "high": 68.6912,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -1.20892,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 5.348872,
-        "low": 53.4887,
-        "mid": 66.8609,
-        "high": 89.1479,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.030181
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
       "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "above_high"
+      }
     },
     {
       "episode_id": "ftse350:PFD.L:buy_on_signal:2026-11-10",
@@ -6491,11 +5440,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.03998275862068961,
-      "matched_excess": -0.031395217355388715,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.04490886699507384,
+      "matched_excess": -0.0330760716358539,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-14 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 201.6,
       "entry_reference_unit": "GBX",
@@ -6511,102 +5460,28 @@
             "published_at": "2026-07-28",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-group",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/PFD.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-03",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2023,
-            "eps": 0.104,
-            "fcf": 67200000.0,
-            "shares": 880700000.0,
-            "fcf_per_share": 0.076303
-          },
-          {
-            "year": 2024,
-            "eps": 0.127,
-            "fcf": 88900000.0,
-            "shares": 883500000.0,
-            "fcf_per_share": 0.100623
-          },
-          {
-            "year": 2025,
-            "eps": 0.141,
-            "fcf": 116700000.0,
-            "shares": 885200000.0,
-            "fcf_per_share": 0.131835
-          },
-          {
-            "year": 2026,
-            "eps": 0.155,
-            "fcf": 134100000.0,
-            "shares": 882200000.0,
-            "fcf_per_share": 0.152006
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.13175,
-        "latest_per_share": 0.155,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 13.0065,
-        "implied_trailing_pe_close": 2.016,
-        "implied_trailing_pe_eps": 0.155,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 13.175,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-14",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/PFD.L.json"
       },
-      "range": {
-        "low": 131.75,
-        "mid": 197.625,
-        "high": 263.5,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -0.020114,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 15.5,
-        "low": 155.0,
-        "mid": 193.75,
-        "high": 258.3333,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.065352
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 11.519161,
-        "range": {
-          "low": 115.1916,
-          "mid": 172.7874,
-          "high": 230.3832
-        },
-        "cross_check": "inside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "between_mid_and_high"
+      }
     },
     {
       "episode_id": "asx200:PLS.AX:buy_on_signal:2026-11-11",
@@ -6617,8 +5492,8 @@
       "signal_session": "2026-11-11",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 8.771929824572238e-06,
-      "matched_excess": 0.013858516865837249,
+      "fair_cost_return": 0.01053508771929829,
+      "matched_excess": 0.026582234488558718,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -6741,115 +5616,41 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.019438919342208257,
-      "matched_excess": -0.010851378076907357,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.04230501174628037,
+      "matched_excess": -0.03047221638706043,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 6323.0,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/RIO.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-10",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 7.621,
-            "fcf": 9384000000.0,
-            "shares": 1629707387.0,
-            "fcf_per_share": 5.758089
-          },
-          {
-            "year": 2023,
-            "eps": 6.165,
-            "fcf": 8074000000.0,
-            "shares": 1631467964.0,
-            "fcf_per_share": 4.948917
-          },
-          {
-            "year": 2024,
-            "eps": 7.072,
-            "fcf": 5978000000.0,
-            "shares": 1633484163.0,
-            "fcf_per_share": 3.659662
-          },
-          {
-            "year": 2025,
-            "eps": 6.084,
-            "fcf": 4497000000.0,
-            "shares": 1638067061.0,
-            "fcf_per_share": 2.745309
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 6.7355,
-        "latest_per_share": 6.084,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 10.3928,
-        "implied_trailing_pe_close": 63.23,
-        "implied_trailing_pe_eps": 6.084,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 673.55,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/RIO.L.json"
       },
-      "range": {
-        "low": 6735.5,
-        "mid": 10103.25,
-        "high": 13471.0,
-        "unit": "GBX"
-      },
-      "margin_of_safety": 0.374162,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 608.4,
-        "low": 6084.0,
-        "mid": 7605.0,
-        "high": 10140.0,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.106524
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 427.799427,
-        "range": {
-          "low": 4277.9943,
-          "mid": 6416.9914,
-          "high": 8555.9885
-        },
-        "cross_check": "outside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "below_low"
+      }
     },
     {
       "episode_id": "ftse350:RKT.L:buy_on_signal:2026-11-10",
@@ -6860,8 +5661,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.0029895649097984632,
-      "matched_excess": 0.011577106175099362,
+      "fair_cost_return": 0.01643137601697903,
+      "matched_excess": 0.028264171376198972,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
@@ -6870,17 +5671,11 @@
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
       "method": null,
       "inputs": {
@@ -6911,8 +5706,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.041747334754797354,
-      "matched_excess": -0.03315979348949646,
+      "fair_cost_return": -0.05027611940298509,
+      "matched_excess": -0.03844332404376515,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -6930,12 +5725,6 @@
             "path": "docs/data/research/RNK.L/sources/filings/bodies/ch_03140769_MzU1MTE0OTU3N2FkaXF6a2N4.txt",
             "published_at": "2026-10-16",
             "headline": "Companies House accounts \u2014 accounts-with-accounts-type-group",
-            "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
             "currency": "GBP"
           }
         ]
@@ -7028,11 +5817,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.000523550351741726,
-      "matched_excess": 0.008063990913559173,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.008999255348775267,
+      "matched_excess": 0.0028335400104446753,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 1591.79,
       "entry_reference_unit": "GBX",
@@ -7051,93 +5840,25 @@
           }
         ]
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/SCT.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-08",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 0.553,
-            "fcf": null,
-            "shares": null,
-            "fcf_per_share": null
-          },
-          {
-            "year": 2023,
-            "eps": 0.56,
-            "fcf": 101557000.0,
-            "shares": 200159000.0,
-            "fcf_per_share": 0.507382
-          },
-          {
-            "year": 2024,
-            "eps": 0.594,
-            "fcf": 108476000.0,
-            "shares": 200516000.0,
-            "fcf_per_share": 0.540984
-          },
-          {
-            "year": 2026,
-            "eps": 0.753,
-            "fcf": 150900000.0,
-            "shares": 199600000.0,
-            "fcf_per_share": 0.756012
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.615,
-        "latest_per_share": 0.753,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 21.1393,
-        "implied_trailing_pe_close": 15.9179,
-        "implied_trailing_pe_eps": 0.753,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 61.5,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/SCT.L.json"
       },
-      "range": {
-        "low": 615.0,
-        "mid": 922.5,
-        "high": 1230.0,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -0.725518,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 75.3,
-        "low": 753.0,
-        "mid": 941.25,
-        "high": 1255.0,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.038636
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 60.72667,
-        "range": {
-          "low": 607.2667,
-          "mid": 910.9001,
-          "high": 1214.5334
-        },
-        "cross_check": "inside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "above_high"
+      }
     },
     {
       "episode_id": "ftse350:SHAW.L:buy_on_signal:2026-11-10",
@@ -7148,11 +5869,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.00661072664359869,
-      "matched_excess": 0.015198267908899589,
+      "fair_cost_return": 0.0031505190311418895,
+      "matched_excess": 0.01498331439036183,
       "verdict": "insufficient_data",
-      "reason": "reporting_currency_unstated",
-      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 283.5,
       "entry_reference_unit": "GBX",
@@ -7167,8 +5888,8 @@
       "method": null,
       "inputs": {
         "financials_path": "docs/data/research/SHAW.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-08",
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/SHAW.L.json"
@@ -7193,115 +5914,41 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.013114718614718527,
-      "matched_excess": 0.021702259880019427,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": 0.012681818181818075,
+      "matched_excess": 0.024514613541038018,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 1138.5,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/SN.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-03",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 0.25,
-            "fcf": 110000000.0,
-            "shares": 892000000.0,
-            "fcf_per_share": 0.123318
-          },
-          {
-            "year": 2023,
-            "eps": 0.301,
-            "fcf": 181000000.0,
-            "shares": 873754153.0,
-            "fcf_per_share": 0.207152
-          },
-          {
-            "year": 2024,
-            "eps": 0.47,
-            "fcf": 606000000.0,
-            "shares": 876595745.0,
-            "fcf_per_share": 0.691311
-          },
-          {
-            "year": 2025,
-            "eps": 0.716,
-            "fcf": 852000000.0,
-            "shares": 872905028.0,
-            "fcf_per_share": 0.976051
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.43425,
-        "latest_per_share": 0.716,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 15.9008,
-        "implied_trailing_pe_close": 11.385,
-        "implied_trailing_pe_eps": 0.716,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 43.425,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/SN.L.json"
       },
-      "range": {
-        "low": 434.25,
-        "mid": 651.375,
-        "high": 868.5,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -0.747841,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 71.6,
-        "low": 716.0,
-        "mid": 895.0,
-        "high": 1193.3333,
-        "cross_check": "outside_band",
-        "implied_earnings_yield": 0.038142
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 49.945809,
-        "range": {
-          "low": 499.4581,
-          "mid": 749.1871,
-          "high": 998.9162
-        },
-        "cross_check": "inside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "above_high"
+      }
     },
     {
       "episode_id": "nasdaq100:STX:buy_on_signal:2026-11-09",
@@ -7313,7 +5960,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.049667736533630935,
-      "matched_excess": 0.042280815558512416,
+      "matched_excess": 0.04220076350195853,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -7433,7 +6080,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.010327257503542405,
-      "matched_excess": -0.009303334077284025,
+      "matched_excess": -0.00944148875271719,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -7553,7 +6200,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.013411165444172705,
-      "matched_excess": 0.006024244469054184,
+      "matched_excess": 0.005944192412500297,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -7672,115 +6319,41 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.003087541265300899,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.028625794155019143,
+      "matched_excess": -0.0167929987957992,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 82.4,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/TW.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-10",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 0.18,
-            "fcf": 475400000.0,
-            "shares": 3576500000.0,
-            "fcf_per_share": 0.132923
-          },
-          {
-            "year": 2023,
-            "eps": 0.099,
-            "fcf": 122700000.0,
-            "shares": 3537500000.0,
-            "fcf_per_share": 0.034686
-          },
-          {
-            "year": 2024,
-            "eps": 0.062,
-            "fcf": 161500000.0,
-            "shares": 3551900000.0,
-            "fcf_per_share": 0.045469
-          },
-          {
-            "year": 2025,
-            "eps": 0.028,
-            "fcf": 126500000.0,
-            "shares": 3548600000.0,
-            "fcf_per_share": 0.035648
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.09225,
-        "latest_per_share": 0.028,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 29.4286,
-        "implied_trailing_pe_close": 0.824,
-        "implied_trailing_pe_eps": 0.028,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 9.225,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/TW.L.json"
       },
-      "range": {
-        "low": 92.25,
-        "mid": 138.375,
-        "high": 184.5,
-        "unit": "GBX"
-      },
-      "margin_of_safety": 0.404517,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 2.8,
-        "low": 28.0,
-        "mid": 35.0,
-        "high": 46.6667,
-        "cross_check": "outside_band",
-        "implied_earnings_yield": 0.111954
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 6.218131,
-        "range": {
-          "low": 62.1813,
-          "mid": 93.272,
-          "high": 124.3626
-        },
-        "cross_check": "inside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "below_low"
+      }
     },
     {
       "episode_id": "ftse350:VCT.L:buy_on_signal:2026-11-10",
@@ -7791,11 +6364,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.006569518716577567,
-      "matched_excess": 0.0020180225487233324,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.024751336898395756,
+      "matched_excess": -0.012918541539175814,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 909.0,
       "entry_reference_unit": "GBX",
@@ -7814,93 +6387,25 @@
           }
         ]
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/VCT.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-10",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2022,
-            "eps": 0.873,
-            "fcf": 34500000.0,
-            "shares": 87239312.0,
-            "fcf_per_share": 0.395464
-          },
-          {
-            "year": 2023,
-            "eps": 0.705,
-            "fcf": 3200000.0,
-            "shares": 87496409.0,
-            "fcf_per_share": 0.036573
-          },
-          {
-            "year": 2024,
-            "eps": 0.197,
-            "fcf": 51400000.0,
-            "shares": 87371283.0,
-            "fcf_per_share": 0.588294
-          },
-          {
-            "year": 2025,
-            "eps": 0.318,
-            "fcf": 49300000.0,
-            "shares": 87715056.0,
-            "fcf_per_share": 0.562047
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.52325,
-        "latest_per_share": 0.318,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 28.5849,
-        "implied_trailing_pe_close": 9.09,
-        "implied_trailing_pe_eps": 0.318,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 52.325,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-15",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/VCT.L.json"
       },
-      "range": {
-        "low": 523.25,
-        "mid": 784.875,
-        "high": 1046.5,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -0.158146,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 31.8,
-        "low": 318.0,
-        "mid": 397.5,
-        "high": 530.0,
-        "cross_check": "outside_band",
-        "implied_earnings_yield": 0.057563
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 39.55945,
-        "range": {
-          "low": 395.5945,
-          "mid": 593.3918,
-          "high": 791.189
-        },
-        "cross_check": "inside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "between_mid_and_high"
+      }
     },
     {
       "episode_id": "ftse350:VLX.L:buy_on_signal:2026-11-10",
@@ -7911,115 +6416,41 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.08310141093474427,
-      "matched_excess": -0.07451386966944336,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "fair_cost_return": -0.0989744268077602,
+      "matched_excess": -0.08714163144854026,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-14 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 540.0,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/VLX.L/sources/financials_annual.json",
-        "financials_state": "file",
-        "fetched_at": "2026-11-10",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2023,
-            "eps": 0.221,
-            "fcf": 37400000.0,
-            "shares": 166577501.0,
-            "fcf_per_share": 0.22452
-          },
-          {
-            "year": 2024,
-            "eps": 0.214,
-            "fcf": 44000000.0,
-            "shares": 183330924.0,
-            "fcf_per_share": 0.240003
-          },
-          {
-            "year": 2025,
-            "eps": 0.256,
-            "fcf": 31200000.0,
-            "shares": 187422855.0,
-            "fcf_per_share": 0.166468
-          },
-          {
-            "year": 2026,
-            "eps": 0.349,
-            "fcf": 35000000.0,
-            "shares": 188271550.0,
-            "fcf_per_share": 0.185902
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 0.26,
-        "latest_per_share": 0.349,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 15.4728,
-        "implied_trailing_pe_close": 5.4,
-        "implied_trailing_pe_eps": 0.349,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 26.0,
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-14",
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/VLX.L.json"
       },
-      "range": {
-        "low": 260.0,
-        "mid": 390.0,
-        "high": 520.0,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -0.384615,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 34.9,
-        "low": 349.0,
-        "mid": 436.25,
-        "high": 581.6667,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.048148
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 20.422336,
-        "range": {
-          "low": 204.2234,
-          "mid": 306.335,
-          "high": 408.4467
-        },
-        "cross_check": "inside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      },
-      "entry_vs_range": "above_high"
+      }
     },
     {
       "episode_id": "sp500:YUM:buy_on_signal:2026-11-09",
@@ -8031,7 +6462,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.003490824542787655,
-      "matched_excess": 0.004514747969046036,
+      "matched_excess": 0.00437659329361287,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8158,7 +6589,7 @@
       "exit_session": "2026-11-12",
       "mature": false,
       "fair_cost_return": -0.0027949802594472964,
-      "matched_excess": 0.010641835290255672,
+      "matched_excess": 0.010652083441812978,
       "verdict": "insufficient_data",
       "reason": "currency_sources_disagree",
       "reason_detail": "Statement currency sources disagree: filing_body_unit=EUR, sec_companyfacts.annual.currency=USD",
@@ -8218,114 +6649,40 @@
       "exit_session": "2026-11-12",
       "mature": false,
       "fair_cost_return": 0.007141673931996555,
-      "matched_excess": 0.013700051365709457,
-      "verdict": "range",
-      "reason": null,
-      "reason_detail": "",
+      "matched_excess": 0.014399017807733753,
+      "verdict": "insufficient_data",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 4392.0,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
-      "statement_currency": "GBP",
+      "statement_currency": null,
       "currency": {
-        "currency": "GBP",
-        "sources": [
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
-          }
-        ]
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
       },
-      "method": "normalised_earnings",
+      "method": null,
       "inputs": {
         "financials_path": "docs/data/research/CKN.L/sources/financials_annual.json",
         "financials_state": "file",
         "fetched_at": "2026-11-09",
-        "eps_label": "Diluted EPS",
-        "years": [
-          {
-            "year": 2021,
-            "eps": 1.632,
-            "fcf": null,
-            "shares": 30700000.0,
-            "fcf_per_share": null
-          },
-          {
-            "year": 2022,
-            "eps": 2.461,
-            "fcf": 169300000.0,
-            "shares": 30700000.0,
-            "fcf_per_share": 5.514658
-          },
-          {
-            "year": 2023,
-            "eps": 2.736,
-            "fcf": 144500000.0,
-            "shares": 30700000.0,
-            "fcf_per_share": 4.70684
-          },
-          {
-            "year": 2024,
-            "eps": 2.752,
-            "fcf": 107400000.0,
-            "shares": 30900000.0,
-            "fcf_per_share": 3.475728
-          }
-        ],
-        "share_label": "Diluted Average Shares",
-        "normalised_per_share": 2.39525,
-        "latest_per_share": 2.752,
-        "normalised_unit": "GBP",
-        "implied_trailing_pe": 15.9593,
-        "implied_trailing_pe_close": 43.92,
-        "implied_trailing_pe_eps": 2.752,
-        "implied_trailing_pe_currency": "GBP",
-        "fx": null,
-        "normalised_per_share_price_units": 239.525,
+        "eps_label": null,
+        "years": [],
         "chart_path": "docs/data/charts/CKN.L.json"
       },
-      "range": {
-        "low": 2395.25,
-        "mid": 3592.875,
-        "high": 4790.5,
-        "unit": "GBX"
-      },
-      "margin_of_safety": -0.222419,
-      "reverse_dcf": {
-        "status": "computed",
-        "growth": 0,
-        "discounts": {
-          "value_low": 0.1,
-          "value_mid": 0.08,
-          "value_high": 0.06
-        },
-        "latest_per_share": 275.2,
-        "low": 2752.0,
-        "mid": 3440.0,
-        "high": 4586.6667,
-        "cross_check": "inside_band",
-        "implied_earnings_yield": 0.054537
-      },
-      "fcf_per_share_cross_check": {
-        "method": "fcf_per_share",
-        "normalised_per_share": 456.574218,
-        "range": {
-          "low": 4565.7422,
-          "mid": 6848.6133,
-          "high": 9131.4844
-        },
-        "cross_check": "outside_band"
-      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
       "recovery": {
-        "label": "reached_mid",
-        "reached_low": true,
-        "reached_mid": true,
-        "closes_used": 2
-      },
-      "entry_vs_range": "between_mid_and_high"
+        "label": "no_range",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      }
     },
     {
       "episode_id": "sp500:CRM:draft_v0_exit:2026-11-10",
@@ -8337,7 +6694,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.004279780744002534,
-      "matched_excess": 0.005477389011374692,
+      "matched_excess": 0.0054245232061421265,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8457,7 +6814,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.02567808672624966,
-      "matched_excess": -0.01592091697087243,
+      "matched_excess": -0.015973782776105,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8567,8 +6924,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.011302707930367525,
-      "matched_excess": -0.0027151666650666244,
+      "fair_cost_return": -0.0117862669245648,
+      "matched_excess": 4.652843465514228e-05,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8691,11 +7048,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.011336575875486362,
-      "matched_excess": -0.0027490346101854616,
+      "fair_cost_return": 0.02562840466926081,
+      "matched_excess": 0.03746120002848075,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 103.4,
       "entry_reference_unit": "GBX",
@@ -8711,12 +7068,6 @@
             "published_at": "2026-07-13",
             "headline": "2026 Interim Results",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
@@ -8724,7 +7075,7 @@
       "inputs": {
         "financials_path": "docs/data/research/MEGP.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/MEGP.L.json"
@@ -8810,7 +7161,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.004279780744002534,
-      "matched_excess": 0.005477389011374692,
+      "matched_excess": 0.0054245232061421265,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8930,7 +7281,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.02567808672624966,
-      "matched_excess": -0.01592091697087243,
+      "matched_excess": -0.015973782776105,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -9040,8 +7391,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.011302707930367525,
-      "matched_excess": -0.0027151666650666244,
+      "fair_cost_return": -0.0117862669245648,
+      "matched_excess": 4.652843465514228e-05,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -9164,11 +7515,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.011336575875486362,
-      "matched_excess": -0.0027490346101854616,
+      "fair_cost_return": 0.02562840466926081,
+      "matched_excess": 0.03746120002848075,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 103.4,
       "entry_reference_unit": "GBX",
@@ -9184,12 +7535,6 @@
             "published_at": "2026-07-13",
             "headline": "2026 Interim Results",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
@@ -9197,7 +7542,7 @@
       "inputs": {
         "financials_path": "docs/data/research/MEGP.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/MEGP.L.json"
@@ -9283,7 +7628,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.004279780744002534,
-      "matched_excess": 0.005477389011374692,
+      "matched_excess": 0.0054245232061421265,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -9403,7 +7748,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.02567808672624966,
-      "matched_excess": -0.01592091697087243,
+      "matched_excess": -0.015973782776105,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -9513,8 +7858,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.011302707930367525,
-      "matched_excess": -0.0027151666650666244,
+      "fair_cost_return": -0.0117862669245648,
+      "matched_excess": 4.652843465514228e-05,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -9637,11 +7982,11 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.011336575875486362,
-      "matched_excess": -0.0027490346101854616,
+      "fair_cost_return": 0.02562840466926081,
+      "matched_excess": 0.03746120002848075,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-13 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-15 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 103.4,
       "entry_reference_unit": "GBX",
@@ -9657,12 +8002,6 @@
             "published_at": "2026-07-13",
             "headline": "2026 Interim Results",
             "currency": "GBP"
-          },
-          {
-            "source": "screen_action_note",
-            "path": "docs/data/history/run_20261110_005303.json.gz",
-            "as_of": "2026-11-10",
-            "currency": "GBP"
           }
         ]
       },
@@ -9670,7 +8009,7 @@
       "inputs": {
         "financials_path": "docs/data/research/MEGP.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-13",
+        "fetched_at": "2026-11-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/MEGP.L.json"
