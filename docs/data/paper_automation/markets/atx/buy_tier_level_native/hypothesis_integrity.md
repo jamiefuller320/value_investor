@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-15T07:08:14.155411+00:00
+Track: `buy_tier_level_native` · updated 2026-11-16T07:28:38.631625+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 4 (0% count, 0% NAV)
+- Losers: **0** / 5 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
@@ -15,25 +15,32 @@ Track: `buy_tier_level_native` · updated 2026-11-15T07:08:14.155411+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 47%
+- conviction 52%
 
 ### CAI.VI — intact / hold_tolerate (-1.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 55%
+- conviction 57%
+
+### ANDR.VI — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 42%
 
 ### OMV.VI — intact / hold_tolerate (+1.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 67%
+- conviction 68%
 
 ### STR.VI — intact / hold_tolerate (+5.2%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 75%
+- data_quality 0.90
+- conviction 61%

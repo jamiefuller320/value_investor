@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-11-15T07:08:13.739954+00:00",
+  "updated_at": "2026-11-16T07:28:15.973437+00:00",
   "hold_episodes": [
     {
       "episode_id": "buy_tier_level_native:BUOU.SI:2026-10-04T08:10:11.518010+01:00",
@@ -543,7 +543,7 @@
           "trough_unrealized_pct": -0.0265
         }
       ],
-      "peak_unrealized_pct": -0.0221,
+      "peak_unrealized_pct": -0.0088,
       "trough_unrealized_pct": -0.0265,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -556,7 +556,7 @@
       "ticker": "C6L.SI",
       "name": "Singapore Airlines Limited",
       "started_at": "2026-11-13T07:37:23.134600+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -590,9 +590,9 @@
       "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": 0.0,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-16T07:28:15.967722+00:00",
+      "linked_sell_trade_id": "96ce9366-950b-48ce-90bf-da00c00b6fff"
     }
   ],
   "swap_rotations": [
@@ -691,12 +691,12 @@
       ],
       "sell_returns_since_rotation": {
         "U14.SI": -0.0183,
-        "BS6.SI": -0.1462
+        "BS6.SI": -0.1245
       },
       "buy_returns_since_rotation": {
         "BUOU.SI": 0.0171,
-        "Y92.SI": -0.0116,
-        "A17U.SI": 0.0
+        "Y92.SI": 0.0,
+        "A17U.SI": 0.0136
       },
       "verdict": null,
       "closed_at": null
@@ -758,7 +758,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "A17U.SI": 0.0
+        "A17U.SI": 0.0136
       },
       "buy_returns_since_rotation": {
         "U14.SI": 0.01
@@ -877,7 +877,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "Y92.SI": -0.0116,
+        "Y92.SI": 0.0,
         "U14.SI": 0.0441,
         "BUOU.SI": 0.0114
       },
@@ -961,7 +961,7 @@
         "N2IU.SI": 0.0
       },
       "buy_returns_since_rotation": {
-        "Y92.SI": 0.0119,
+        "Y92.SI": 0.0238,
         "U14.SI": 0.0523,
         "BUOU.SI": 0.0
       },
@@ -1072,7 +1072,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "Y92.SI": 0.0119,
+        "Y92.SI": 0.0238,
         "U14.SI": 0.0334,
         "BUOU.SI": 0.0056
       },
@@ -1142,7 +1142,7 @@
         "U14.SI": 0.0204
       },
       "buy_returns_since_rotation": {
-        "Y92.SI": 0.0119,
+        "Y92.SI": 0.0238,
         "N2IU.SI": 0.0087
       },
       "verdict": null,
@@ -1201,7 +1201,7 @@
         "BUOU.SI": -0.0056
       },
       "buy_returns_since_rotation": {
-        "Y92.SI": 0.0
+        "Y92.SI": 0.0118
       },
       "verdict": null,
       "closed_at": null
@@ -1328,9 +1328,9 @@
         "N2IU.SI": 0.0
       },
       "buy_returns_since_rotation": {
-        "Y92.SI": -0.023,
-        "BS6.SI": -0.0046,
-        "J36.SI": -0.0114,
+        "Y92.SI": -0.0115,
+        "BS6.SI": 0.0207,
+        "J36.SI": -0.01,
         "BUOU.SI": -0.0378
       },
       "verdict": null,
@@ -1390,7 +1390,7 @@
         "BUOU.SI": -0.0378
       },
       "buy_returns_since_rotation": {
-        "A17U.SI": -0.0221
+        "A17U.SI": -0.0088
       },
       "verdict": null,
       "closed_at": null
@@ -1517,17 +1517,75 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "Y92.SI": 0.0,
-        "BS6.SI": 0.0047,
-        "J36.SI": -0.0055,
-        "A17U.SI": 0.0045
+        "Y92.SI": 0.0118,
+        "BS6.SI": 0.0302,
+        "J36.SI": -0.0041,
+        "A17U.SI": 0.0182
       },
       "buy_returns_since_rotation": {
         "C6L.SI": 0.0
       },
       "verdict": null,
       "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-11-16T07:28:15.967722+00:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-11-16T07:28:15.967722+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "C6L.SI",
+          "price": 7.14,
+          "shares": 27.621717,
+          "gross": 197.22,
+          "cost": 0.05,
+          "avg_cost_at_exit": 7.14,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "Y92.SI",
+          "price": 0.43,
+          "shares": 308.850294,
+          "gross": 132.81,
+          "cost": 0.03
+        },
+        {
+          "ticker": "J36.SI",
+          "price": 60.13,
+          "shares": 1.069597,
+          "gross": 64.31,
+          "cost": 0.02
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "C6L.SI": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "Y92.SI": 0.0,
+        "J36.SI": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
     }
   ],
-  "hypothesis_outcome_link_updated_at": "2026-11-15T07:08:13.734227+00:00"
+  "hypothesis_outcome_link_updated_at": "2026-11-16T07:28:15.967722+00:00"
 }

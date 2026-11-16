@@ -3348,7 +3348,7 @@
       "track_id": "buy_tier_level_native",
       "ticker": "MUV2.DE",
       "started_at": "2026-11-06T08:52:08.902927+01:00",
-      "status": "open",
+      "status": "closed",
       "lifecycle_stage": "recommit",
       "entry_kind": "recommit",
       "entry_price": 594.6,
@@ -3387,6 +3387,185 @@
         {
           "as_of": "2026-11-15T08:07:08.385557+01:00",
           "price": 591.2
+        },
+        {
+          "as_of": "2026-11-16T08:26:32.373866+01:00",
+          "price": 591.2
+        }
+      ],
+      "cadence_scores": [
+        {
+          "id": "lump_sum",
+          "label": "100% at decision",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 1,
+          "avg_fill": 594.6,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -2.84,
+          "peak_deployed_return": -0.0427,
+          "end_value": 66.02,
+          "end_value_delta": 0.0,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-06T08:52:08.902927+01:00",
+              "price": 594.6
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_2x_weekly",
+          "label": "50/50 over 1 week",
+          "scored": true,
+          "tranches_filled": 2,
+          "tranches_target": 2,
+          "avg_fill": 590.1672,
+          "fill_advantage_pct": 0.0075,
+          "extra_cost": 0.01,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -2.36,
+          "peak_deployed_return": -0.0355,
+          "end_value": 66.51,
+          "end_value_delta": 0.49,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-06T08:52:08.902927+01:00",
+              "price": 594.6
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-11-13T08:35:30.203330+01:00",
+              "price": 585.8
+            }
+          ],
+          "de_risk_gbp": 0.48
+        },
+        {
+          "id": "dca_4x_weekly",
+          "label": "25% weekly \u00d7 4",
+          "scored": true,
+          "tranches_filled": 2,
+          "tranches_target": 4,
+          "avg_fill": 590.1672,
+          "fill_advantage_pct": 0.0075,
+          "extra_cost": 0.0,
+          "leftover_cash": 33.2,
+          "peak_loss_gbp": -1.18,
+          "peak_deployed_return": -0.0355,
+          "end_value": 66.45,
+          "end_value_delta": 0.43,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-06T08:52:08.902927+01:00",
+              "price": 594.6
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-11-13T08:35:30.203330+01:00",
+              "price": 585.8
+            }
+          ],
+          "de_risk_gbp": 1.66
+        },
+        {
+          "id": "dca_2x_biweekly",
+          "label": "50/50 over 2 weeks",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 594.6,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 33.2,
+          "peak_loss_gbp": -1.42,
+          "peak_deployed_return": -0.0427,
+          "end_value": 66.21,
+          "end_value_delta": 0.19,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-06T08:52:08.902927+01:00",
+              "price": 594.6
+            }
+          ],
+          "de_risk_gbp": 1.42
+        },
+        {
+          "id": "dca_5x_weekday",
+          "label": "20% over 5 weekday marks",
+          "scored": true,
+          "tranches_filled": 5,
+          "tranches_target": 5,
+          "avg_fill": 574.1456,
+          "fill_advantage_pct": 0.0344,
+          "extra_cost": 0.01,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -0.57,
+          "peak_deployed_return": -0.0214,
+          "end_value": 68.36,
+          "end_value_delta": 2.34,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-06T08:52:08.902927+01:00",
+              "price": 594.6
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-11-07T13:49:13.582011+01:00",
+              "price": 569.2
+            },
+            {
+              "tranche": 3,
+              "as_of": "2026-11-08T07:58:36.156701+01:00",
+              "price": 569.2
+            },
+            {
+              "tranche": 4,
+              "as_of": "2026-11-09T08:35:46.640762+01:00",
+              "price": 569.2
+            },
+            {
+              "tranche": 5,
+              "as_of": "2026-11-12T08:39:10.258541+01:00",
+              "price": 569.4
+            }
+          ],
+          "de_risk_gbp": 2.27
+        }
+      ],
+      "winning_cadence": "dca_5x_weekday",
+      "winning_end_value_delta": 2.34,
+      "any_de_risk": true,
+      "closed_at": "2026-11-16T08:26:32.373866+01:00",
+      "close_reason": "sold_before_window"
+    },
+    {
+      "id": "buy_tier_level_native:SAP.DE:2026-11-16T08:26:32.373866+01:00",
+      "track_id": "buy_tier_level_native",
+      "ticker": "SAP.DE",
+      "started_at": "2026-11-16T08:26:32.373866+01:00",
+      "status": "open",
+      "lifecycle_stage": "starter",
+      "entry_kind": "first_entry",
+      "entry_price": 213.45,
+      "notional": 123.21,
+      "shares": 0.577223,
+      "buy_cost_pct": 0.00025,
+      "screen_signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.1916,
+      "data_quality_score": 1.0,
+      "marks": [
+        {
+          "as_of": "2026-11-16T08:26:32.373866+01:00",
+          "price": 213.45
         }
       ]
     }

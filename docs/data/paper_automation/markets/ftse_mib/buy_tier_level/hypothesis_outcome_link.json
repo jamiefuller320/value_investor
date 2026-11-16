@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-15T07:07:48.533983+00:00",
+  "generated_at": "2026-11-16T07:27:35.986962+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 8,
+    "closed_total": 10,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 5,
+    "open_with_thesis": 3,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,13 +27,13 @@
         }
       },
       "broken": {
-        "closed_count": 4,
+        "closed_count": 6,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0183,
-        "mean_trough_unrealized_pct": 0.0156,
+        "mean_peak_unrealized_pct": 0.0313,
+        "mean_trough_unrealized_pct": 0.0295,
         "outcome_labels": {
-          "recovered": 4
+          "recovered": 6
         }
       },
       "insufficient_data": {
@@ -62,7 +62,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 8,
+    "hold_closed_with_thesis": 10,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -618,7 +618,7 @@
       "ticker": "LTMC.MI",
       "name": "Lottomatica Group S.p.A.",
       "started_at": "2026-11-15T07:07:48.509225+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -650,9 +650,9 @@
       "peak_unrealized_pct": 0.0854,
       "trough_unrealized_pct": 0.0854,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-16T07:27:35.965175+00:00",
+      "linked_sell_trade_id": "bb8b6de8-72c9-4130-9887-fd4a44ae52b3"
     },
     {
       "episode_id": "buy_tier_level:AZM.MI:2026-11-15T07:07:48.509225+00:00",
@@ -660,7 +660,7 @@
       "ticker": "AZM.MI",
       "name": "Azimut Holding S.p.A.",
       "started_at": "2026-11-15T07:07:48.509225+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -692,9 +692,9 @@
       "peak_unrealized_pct": 0.0295,
       "trough_unrealized_pct": 0.0295,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-16T07:27:35.965175+00:00",
+      "linked_sell_trade_id": "471a075f-840a-440b-8661-0603a00bf2dc"
     }
   ],
   "swap_rotations": [
@@ -1468,7 +1468,7 @@
       },
       "buy_returns_since_rotation": {
         "MONC.MI": 0.0398,
-        "PST.MI": 0.0,
+        "PST.MI": 0.0704,
         "UNI.MI": 0.0545,
         "LTMC.MI": 0.1066,
         "FCT.MI": 0.0,
@@ -1534,7 +1534,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "PST.MI": 0.0
+        "PST.MI": 0.0704
       },
       "buy_returns_since_rotation": {
         "MONC.MI": 0.0398,
@@ -1985,6 +1985,112 @@
         "IG.MI": 0.0105,
         "LTMC.MI": -0.0071,
         "BZU.MI": 0.0115
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-16T07:27:35.965175+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-16T07:27:35.965175+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "LTMC.MI",
+          "price": 27.82,
+          "shares": 6.70932,
+          "gross": 186.65,
+          "cost": 0.33,
+          "avg_cost_at_exit": 25.6313,
+          "realized_pct": 0.0854,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0854
+        },
+        {
+          "ticker": "AZM.MI",
+          "price": 37.05,
+          "shares": 5.0633,
+          "gross": 187.6,
+          "cost": 0.33,
+          "avg_cost_at_exit": 35.9897,
+          "realized_pct": 0.0295,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0295
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "ENI.MI",
+          "price": 25.975,
+          "shares": 1.36091,
+          "gross": 35.35,
+          "cost": 0.06
+        },
+        {
+          "ticker": "MONC.MI",
+          "price": 44.36,
+          "shares": 0.8309,
+          "gross": 36.86,
+          "cost": 0.06
+        },
+        {
+          "ticker": "IG.MI",
+          "price": 9.388,
+          "shares": 3.950834,
+          "gross": 37.09,
+          "cost": 0.06
+        },
+        {
+          "ticker": "PST.MI",
+          "price": 25.69,
+          "shares": 8.825903,
+          "gross": 226.74,
+          "cost": 0.4
+        },
+        {
+          "ticker": "BZU.MI",
+          "price": 44.87,
+          "shares": 0.822481,
+          "gross": 36.9,
+          "cost": 0.06
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "LTMC.MI": 0.0,
+        "AZM.MI": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "ENI.MI": 0.0,
+        "MONC.MI": 0.0,
+        "IG.MI": 0.0,
+        "PST.MI": 0.0,
+        "BZU.MI": 0.0
       },
       "verdict": null,
       "closed_at": null

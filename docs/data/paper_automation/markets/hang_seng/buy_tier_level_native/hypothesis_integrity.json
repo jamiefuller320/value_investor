@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "updated_at": "2026-11-15T07:08:07.694819+00:00",
-  "as_of": "2026-11-15T07:08:07.680490+00:00",
+  "updated_at": "2026-11-16T07:28:10.115989+00:00",
+  "as_of": "2026-11-16T07:28:10.100669+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -19,16 +19,16 @@
   "holding_count": 15,
   "underwater_count": 4,
   "thesis_status_counts": {
-    "intact": 5,
+    "intact": 4,
     "weakening": 10,
-    "broken": 0,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
     "holding_count": 15,
     "loser_count": 4,
     "loser_share": 0.2667,
-    "loser_nav_share": 0.2866,
+    "loser_nav_share": 0.282,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
@@ -38,16 +38,16 @@
     "family_fail_rate_losers": {
       "cheapness": 0.0,
       "quality": 0.0,
-      "dividend": 0.0,
+      "dividend": 0.5,
       "garp": 0.5,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
-      "quality": 0.2727,
-      "dividend": 0.1818,
-      "garp": 0.6364,
-      "risk": 0.0
+      "cheapness": 0.0909,
+      "quality": 0.3636,
+      "dividend": 0.4545,
+      "garp": 0.7273,
+      "risk": 0.0909
     },
     "selection_feedback_flags": [],
     "balancing_hint": "tolerate_intact_losers",
@@ -55,27 +55,101 @@
   },
   "holdings": [
     {
-      "ticker": "1093.HK",
-      "name": "CSPC Pharmaceutical Group Limited",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": true,
+      "ticker": "2020.HK",
+      "name": "2020.HK",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.1214,
-      "mark": 8.03,
-      "avg_cost": 9.1397,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.775,
-      "data_quality_score": 1.0,
-      "passed_families": [
+      "unrealized_pct": 0.0,
+      "mark": 79.1,
+      "avg_cost": 79.1,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
         "cheapness",
         "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
+    {
+      "ticker": "2628.HK",
+      "name": "China Life Insurance Company Limited",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.1203,
+      "mark": 23.08,
+      "avg_cost": 26.2356,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.167,
+      "data_quality_score": 0.8,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "conviction 17% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 0.80"
+      ],
+      "weaken_reasons": [
+        "research verdict caution",
+        "conviction 17% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "1093.HK",
+      "name": "CSPC Pharmaceutical Group Limited",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.1198,
+      "mark": 8.045,
+      "avg_cost": 9.1397,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5723,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
       "research_verdict": "neutral",
       "reasons": [
         "research verdict neutral",
@@ -85,51 +159,11 @@
       "intact_reasons": [
         "still strong_buy",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 78%"
+        "data_quality 0.90",
+        "conviction 57%"
       ],
       "weaken_reasons": [
         "research verdict neutral"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "2628.HK",
-      "name": "China Life Insurance Company Limited",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.1172,
-      "mark": 23.16,
-      "avg_cost": 26.2356,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.3873,
-      "data_quality_score": 0.9,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "still strong_buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 39%"
-      ],
-      "weaken_reasons": [
-        "research verdict caution"
       ],
       "broken_reasons": []
     },
@@ -140,12 +174,12 @@
       "recommended_action": "watch_review",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0936,
-      "mark": 25.92,
+      "unrealized_pct": -0.1097,
+      "mark": 25.46,
       "avg_cost": 28.5967,
-      "signal": "strong_buy",
+      "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5043,
+      "conviction_score": 0.2922,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -159,17 +193,18 @@
       "research_verdict": "caution",
       "reasons": [
         "research verdict caution",
-        "still strong_buy",
+        "conviction 29% below intact floor",
+        "still buy",
         "cheapness family still passes"
       ],
       "intact_reasons": [
-        "still strong_buy",
+        "still buy",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 50%"
+        "data_quality 1.00"
       ],
       "weaken_reasons": [
-        "research verdict caution"
+        "research verdict caution",
+        "conviction 29% below intact floor"
       ],
       "broken_reasons": []
     },
@@ -180,8 +215,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0594,
-      "mark": 19.44,
+      "unrealized_pct": -0.0798,
+      "mark": 19.02,
       "avg_cost": 20.6684,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -215,94 +250,14 @@
       "broken_reasons": []
     },
     {
-      "ticker": "1099.HK",
-      "name": "Sinopharm Group Co. Ltd.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0006,
-      "mark": 16.67,
-      "avg_cost": 16.68,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.705,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "neutral",
-      "reasons": [
-        "research verdict neutral",
-        "still strong_buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 70%"
-      ],
-      "weaken_reasons": [
-        "research verdict neutral"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "2020.HK",
-      "name": "ANTA Sports Products Limited",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 79.1,
-      "avg_cost": 79.1,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.2937,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "conviction 29% below intact floor",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "research verdict caution",
-        "conviction 29% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
       "ticker": "0101.HK",
       "name": "Hang Lung Properties Limited",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.003,
-      "mark": 6.505,
+      "unrealized_pct": 0.0107,
+      "mark": 6.555,
       "avg_cost": 6.4854,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -336,19 +291,100 @@
       "broken_reasons": []
     },
     {
+      "ticker": "1099.HK",
+      "name": "Sinopharm Group Co. Ltd.",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0162,
+      "mark": 16.95,
+      "avg_cost": 16.68,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.67,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "neutral",
+      "reasons": [
+        "research verdict neutral",
+        "still strong_buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 67%"
+      ],
+      "weaken_reasons": [
+        "research verdict neutral"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "2382.HK",
+      "name": "Sunny Optical Technology (Group) Company Limited",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0254,
+      "mark": 64.6,
+      "avg_cost": 63.0,
+      "signal": "hold",
+      "timing_signal": "neutral",
+      "conviction_score": 0.2492,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "left buy tier (hold)",
+        "conviction 25% below intact floor",
+        "research accumulate",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "left buy tier (hold)",
+        "conviction 25% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
       "ticker": "2618.HK",
       "name": "JD Logistics, Inc.",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0336,
-      "mark": 10.27,
+      "unrealized_pct": 0.0296,
+      "mark": 10.23,
       "avg_cost": 9.9359,
-      "signal": "buy",
+      "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.36,
-      "data_quality_score": 1.0,
+      "conviction_score": 0.2379,
+      "data_quality_score": 0.9,
       "passed_families": [
         "cheapness",
         "quality",
@@ -361,18 +397,60 @@
       "research_verdict": "neutral",
       "reasons": [
         "research verdict neutral",
-        "still buy",
+        "conviction 24% below intact floor",
+        "still strong_buy",
         "cheapness family still passes"
       ],
       "intact_reasons": [
-        "still buy",
+        "still strong_buy",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 36%"
+        "data_quality 0.90"
       ],
       "weaken_reasons": [
-        "research verdict neutral"
+        "research verdict neutral",
+        "conviction 24% below intact floor"
       ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "0001.HK",
+      "name": "CK Hutchison Holdings Limited",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0527,
+      "mark": 68.75,
+      "avg_cost": 65.3061,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3934,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality",
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 39%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 39%"
+      ],
+      "weaken_reasons": [],
       "broken_reasons": []
     },
     {
@@ -382,12 +460,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0431,
-      "mark": 101.6,
+      "unrealized_pct": 0.0534,
+      "mark": 102.6,
       "avg_cost": 97.4,
       "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6194,
+      "timing_signal": "wait",
+      "conviction_score": 0.6245,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -416,67 +494,26 @@
       "broken_reasons": []
     },
     {
-      "ticker": "2382.HK",
-      "name": "Sunny Optical Technology (Group) Company Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0452,
-      "mark": 65.85,
-      "avg_cost": 63.0,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.39,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 39%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 39%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "6690.HK",
       "name": "Haier Smart Home Co., Ltd.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0486,
-      "mark": 20.92,
+      "unrealized_pct": 0.0596,
+      "mark": 21.14,
       "avg_cost": 19.95,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.6511,
-      "data_quality_score": 1.0,
+      "conviction_score": 0.4665,
+      "data_quality_score": 0.9,
       "passed_families": [
         "cheapness",
         "quality",
-        "dividend",
         "risk"
       ],
       "failed_families": [
+        "dividend",
         "garp"
       ],
       "research_verdict": "accumulate",
@@ -484,56 +521,15 @@
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 65%"
+        "data_quality 0.90",
+        "conviction 47%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 65%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "0001.HK",
-      "name": "CK Hutchison Holdings Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0527,
-      "mark": 68.75,
-      "avg_cost": 65.3061,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.3929,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 39%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 39%"
+        "data_quality 0.90",
+        "conviction 47%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -545,12 +541,12 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0575,
-      "mark": 20.46,
+      "unrealized_pct": 0.0999,
+      "mark": 21.28,
       "avg_cost": 19.3467,
-      "signal": "buy",
+      "signal": "hold",
       "timing_signal": "neutral",
-      "conviction_score": 0.295,
+      "conviction_score": 0.1694,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -563,19 +559,59 @@
       ],
       "research_verdict": "caution",
       "reasons": [
+        "left buy tier (hold)",
         "research verdict caution",
-        "conviction 30% below intact floor",
+        "conviction 17% below intact floor",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "intact_reasons": [
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "left buy tier (hold)",
+        "research verdict caution",
+        "conviction 17% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "1113.HK",
+      "name": "CK Asset Holdings Limited",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.1094,
+      "mark": 49.52,
+      "avg_cost": 44.636,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6616,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "neutral",
+      "reasons": [
+        "research verdict neutral",
         "still buy",
         "cheapness family still passes"
       ],
       "intact_reasons": [
         "still buy",
         "cheapness family still passes",
-        "data_quality 1.00"
+        "data_quality 1.00",
+        "conviction 66%"
       ],
       "weaken_reasons": [
-        "research verdict caution",
-        "conviction 30% below intact floor"
+        "research verdict neutral"
       ],
       "broken_reasons": []
     },
@@ -586,12 +622,12 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0763,
-      "mark": 9.92,
+      "unrealized_pct": 0.1316,
+      "mark": 10.43,
       "avg_cost": 9.217,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4326,
+      "conviction_score": 0.4307,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -616,45 +652,6 @@
       ],
       "weaken_reasons": [
         "research verdict caution"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "1113.HK",
-      "name": "CK Asset Holdings Limited",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.1031,
-      "mark": 49.24,
-      "avg_cost": 44.636,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6816,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "neutral",
-      "reasons": [
-        "research verdict neutral",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 68%"
-      ],
-      "weaken_reasons": [
-        "research verdict neutral"
       ],
       "broken_reasons": []
     }

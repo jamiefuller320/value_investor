@@ -367,15 +367,15 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 194.3,
-    "estimated_spend_usd_this_week": 3.6,
+    "estimated_spend_usd_this_cycle": 193.9,
+    "estimated_spend_usd_this_week": 3.2,
     "week_id": "2026-W47",
     "cycle_id": "2026-11-d8",
     "weekly_ops_cap_usd": 124.5,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "token_usage_weekly_warning_raw_usd": null,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 1.2,
+    "estimated_spend_weekly_ops_usd_this_week": 2.0,
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
@@ -567,7 +567,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-11-16T07:57:30.822383+00:00",
+  "updated_at": "2026-11-16T07:33:39.793148+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -583,7 +583,7 @@
     "sti"
   ],
   "ingest_parallel_sprint_2": [
-    "ftse_smallcap"
+    "sp500"
   ],
   "ladder": {
     "enabled": true,
@@ -597,10 +597,10 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-11-15T06:23:05.089574+00:00",
+      "run_at": "2026-11-16T06:52:35.888659+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 39,
+      "screen_shortlist": 40,
       "research": {
         "model": "composer-2.5",
         "research_cap": 100,
@@ -635,23 +635,18 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 124.5,
-        "estimated_spend_weekly_ops_usd_this_week": 20.3,
+        "estimated_spend_weekly_ops_usd_this_week": 2.0,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 105.0,
+        "remaining_usd_before": 124.5,
         "dedupe": {
-          "already_researched_count": 553,
-          "fresh_skipped_count": 553,
+          "already_researched_count": 555,
+          "fresh_skipped_count": 555,
           "rememo_eligible_count": 0,
           "rememo_eligible_sample": [],
-          "skipped_count": 396,
+          "skipped_count": 378,
           "skipped_sample": [
-            {
-              "market": "euro_depth",
-              "ticker": "UMI.BR",
-              "reason": "fresh_memo"
-            },
             {
               "market": "euro_depth",
               "ticker": "DG.PA",
@@ -664,17 +659,7 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "STR.VI",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "EG7.IR",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "C5H.IR",
+              "ticker": "UMI.BR",
               "reason": "fresh_memo"
             },
             {
@@ -694,6 +679,11 @@
             },
             {
               "market": "euro_depth",
+              "ticker": "STR.VI",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
               "ticker": "EVN.VI",
               "reason": "fresh_memo"
             },
@@ -709,27 +699,12 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "MELE.BR",
+              "ticker": "EG7.IR",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "DTE.DE",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "SKF-B.ST",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "RAND.AS",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "SKA-B.ST",
+              "ticker": "C5H.IR",
               "reason": "fresh_memo"
             },
             {
@@ -739,12 +714,37 @@
             },
             {
               "market": "euro_depth",
+              "ticker": "SKF-B.ST",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "DTE.DE",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "RAND.AS",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "SAN.PA",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "SKA-B.ST",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
               "ticker": "BOL.ST",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "TTE.PA",
+              "ticker": "TEL2-B.ST",
               "reason": "fresh_memo"
             }
           ],
@@ -753,26 +753,47 @@
         },
         "targets": [
           {
-            "market": "asx200",
-            "ticker": "NHC.AX",
-            "name": "New Hope Corporation Limited",
+            "market": "sp500",
+            "ticker": "TWLO",
+            "name": "Twilio Inc.",
             "signal": "buy",
-            "conviction_score": 0.2007
+            "conviction_score": 0.1975
           },
           {
-            "market": "ibex35",
-            "ticker": "ACS.MC",
-            "name": "ACS, Actividades de Construcción y Servicios, S.A.",
+            "market": "asx200",
+            "ticker": "360.AX",
+            "name": "Life360, Inc.",
             "signal": "buy",
-            "conviction_score": 0.2782
+            "conviction_score": 0.2934
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "CNE.L",
+            "name": "Capricorn Energy PLC",
+            "signal": "buy",
+            "conviction_score": 0.2008
+          },
+          {
+            "market": "hang_seng",
+            "ticker": "2359.HK",
+            "name": "WuXi AppTec Co., Ltd.",
+            "signal": "buy",
+            "conviction_score": 0.3477
+          },
+          {
+            "market": "sp500",
+            "ticker": "FFIV",
+            "name": "F5, Inc.",
+            "signal": "buy",
+            "conviction_score": 0.1237
           }
         ],
-        "executed": 2,
-        "created": 2,
+        "executed": 5,
+        "created": 5,
         "updated": 0,
         "errors": [],
-        "estimated_spend_usd": 0.8,
-        "remaining_usd_after": 104.2
+        "estimated_spend_usd": 2.0,
+        "remaining_usd_after": 122.5
       },
       "graduation": {
         "graduated": false,
@@ -870,16 +891,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-11-03T18:36:39.066460+00:00",
-        "parallel_stream": 2,
-        "from_market": "asx200",
-        "to_market": "euro_stoxx50",
-        "stream_markets_after": [
-          "euro_stoxx50"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-11-03T20:25:43.999673+00:00",
         "parallel_stream": 1,
@@ -1487,6 +1498,16 @@
         "to_market": "sti",
         "stream_markets_after": [
           "sti"
+        ],
+        "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-11-16T07:31:50.485700+00:00",
+        "parallel_stream": 2,
+        "from_market": "ftse_smallcap",
+        "to_market": "sp500",
+        "stream_markets_after": [
+          "sp500"
         ],
         "ingest_parity_recorded": false
       }

@@ -17826,5 +17826,938 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-11-16T07:28:57.339449+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (CHF reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/smi/screen_latest.json",
+      "run_at": "2026-11-16T06:52:35.888659+00:00",
+      "generated_at": "2026-11-16T07:28:46.509386+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-11-16T07:28:51.696566+00:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-11-16T08:00:00+00:00",
+      "settle_at": "2026-11-16T09:15:00+00:00",
+      "can_act": false,
+      "reason": "before market open"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (5 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0003,
+    "candidates": [
+      {
+        "ticker": "AMRZ.SW",
+        "name": "Amrize AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.3595,
+        "data_quality_score": 0.9,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 34.48,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ALC.SW",
+        "name": "Alcon Inc.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.44429500000000005,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Healthcare",
+        "price": 61.36,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "NOVN.SW",
+        "name": "Novartis AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4165,
+        "data_quality_score": 0.9,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 134.06,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.41609999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Technology",
+        "price": 84.72,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "PGHN.SW",
+        "name": "Partners Group Holding AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5107,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 658.4,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "AMRZ.SW",
+        "name": "Amrize AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.3595,
+        "data_quality_score": 0.9,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 34.48,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ALC.SW",
+        "name": "Alcon Inc.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.44429500000000005,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Healthcare",
+        "price": 61.36,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "NOVN.SW",
+        "name": "Novartis AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4165,
+        "data_quality_score": 0.9,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 134.06,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.41609999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Technology",
+        "price": 84.72,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "PGHN.SW",
+        "name": "Partners Group Holding AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5107,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 658.4,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1100.24,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 275.06,
+      "targets": [
+        {
+          "ticker": "PGHN.SW",
+          "name": "Partners Group Holding AG",
+          "signal": "buy",
+          "conviction_score": 0.5107,
+          "price": 658.4
+        },
+        {
+          "ticker": "NOVN.SW",
+          "name": "Novartis AG",
+          "signal": "buy",
+          "conviction_score": 0.4165,
+          "price": 134.06
+        },
+        {
+          "ticker": "LOGN.SW",
+          "name": "Logitech International S.A.",
+          "signal": "buy",
+          "conviction_score": 0.41609999999999997,
+          "price": 84.72
+        },
+        {
+          "ticker": "AMRZ.SW",
+          "name": "Amrize AG",
+          "signal": "buy",
+          "conviction_score": 0.3595,
+          "price": 34.48
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "PGHN.SW",
+          "name": "Partners Group Holding AG",
+          "reason": "Already near equal-weight target",
+          "value": 275.06,
+          "target_value": 275.06,
+          "conviction_score": 0.5107,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "NOVN.SW",
+          "name": "Novartis AG",
+          "reason": "Already near equal-weight target",
+          "value": 275.06,
+          "target_value": 275.06,
+          "conviction_score": 0.4165,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "LOGN.SW",
+          "name": "Logitech International S.A.",
+          "reason": "Already near equal-weight target",
+          "value": 275.06,
+          "target_value": 275.06,
+          "conviction_score": 0.41609999999999997,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "AMRZ.SW",
+          "name": "Amrize AG",
+          "reason": "Already near equal-weight target",
+          "value": 275.06,
+          "target_value": 275.06,
+          "conviction_score": 0.3595,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [
+        {
+          "ticker": "ALC.SW",
+          "name": "Alcon Inc.",
+          "signal": "buy",
+          "conviction_score": 0.44429500000000005,
+          "reason": "timing_signal=wait \u2014 skipped until timing improves"
+        }
+      ],
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "4a77001c-609d-4450-bdda-e360a99eb1f1",
+        "fund_id": "e27da3c3-a0f6-40cb-9a73-a08e7cce46cd",
+        "acted_at": "2026-11-16T07:28:51.696566+00:00",
+        "ticker": "ALC.SW",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 3.507226,
+        "price": 61.36,
+        "gross": 215.2,
+        "cost": 0.05,
+        "net_cash": 215.15,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Alcon Inc.",
+        "avg_cost_at_exit": 62.78,
+        "position_closed": true
+      },
+      {
+        "id": "6f047f8d-e294-4e45-bb1a-4ac771c49490",
+        "fund_id": "e27da3c3-a0f6-40cb-9a73-a08e7cce46cd",
+        "acted_at": "2026-11-16T07:28:51.696566+00:00",
+        "ticker": "PGHN.SW",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.071788,
+        "price": 658.4,
+        "gross": 47.27,
+        "cost": 0.01,
+        "net_cash": -47.28,
+        "note": "Automated buy",
+        "name": "Partners Group Holding AG"
+      },
+      {
+        "id": "1a58ede4-1e86-44f7-ae73-2ccf967032e8",
+        "fund_id": "e27da3c3-a0f6-40cb-9a73-a08e7cce46cd",
+        "acted_at": "2026-11-16T07:28:51.696566+00:00",
+        "ticker": "NOVN.SW",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.409754,
+        "price": 134.06,
+        "gross": 54.93,
+        "cost": 0.01,
+        "net_cash": -54.95,
+        "note": "Automated buy",
+        "name": "Novartis AG"
+      },
+      {
+        "id": "a25243e1-ec63-4ffc-a1f2-a0f0751e6ec5",
+        "fund_id": "e27da3c3-a0f6-40cb-9a73-a08e7cce46cd",
+        "acted_at": "2026-11-16T07:28:51.696566+00:00",
+        "ticker": "LOGN.SW",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.658511,
+        "price": 84.72,
+        "gross": 55.79,
+        "cost": 0.01,
+        "net_cash": -55.8,
+        "note": "Automated buy",
+        "name": "Logitech International S.A."
+      },
+      {
+        "id": "7e927da1-a393-4829-b804-54c295b7a954",
+        "fund_id": "e27da3c3-a0f6-40cb-9a73-a08e7cce46cd",
+        "acted_at": "2026-11-16T07:28:51.696566+00:00",
+        "ticker": "AMRZ.SW",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 1.656321,
+        "price": 34.48,
+        "gross": 57.11,
+        "cost": 0.01,
+        "net_cash": -57.12,
+        "note": "Automated buy",
+        "name": "Amrize AG"
+      }
+    ],
+    "nav_before": 1100.35,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "NOVN.SW",
+        "shares": 1.642012,
+        "avg_cost": 119.9275,
+        "sector": "Healthcare",
+        "name": "Novartis AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "LOGN.SW",
+        "shares": 2.588179,
+        "avg_cost": 83.6658,
+        "sector": "Technology",
+        "name": "Logitech International S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AMRZ.SW",
+        "shares": 6.321035,
+        "avg_cost": 31.2679,
+        "sector": "Basic Materials",
+        "name": "Amrize AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "PGHN.SW",
+        "shares": 0.345985,
+        "avg_cost": 630.3007,
+        "sector": "Financial Services",
+        "name": "Partners Group Holding AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ALC.SW",
+        "shares": 3.507226,
+        "avg_cost": 62.78,
+        "sector": "Healthcare",
+        "name": "Alcon Inc.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "ALC.SW": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "nav_after": 1100.24,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "NOVN.SW",
+        "shares": 2.051766,
+        "avg_cost": 122.7499,
+        "sector": "Healthcare",
+        "name": "Novartis AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "LOGN.SW",
+        "shares": 3.24669,
+        "avg_cost": 83.8796,
+        "sector": "Technology",
+        "name": "Logitech International S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AMRZ.SW",
+        "shares": 7.977356,
+        "avg_cost": 31.9348,
+        "sector": "Basic Materials",
+        "name": "Amrize AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "PGHN.SW",
+        "shares": 0.417773,
+        "avg_cost": 635.1291,
+        "sector": "Financial Services",
+        "name": "Partners Group Holding AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "ALC.SW": 1
+      }
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
+      "verdict_counts": {
+        "agree": 5,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "ALC.SW",
+          "name": "Alcon Inc.",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "still_buyish is false and effective screen_signal is hold \u2014 left buy cohort is decisive for exit.",
+            "rank_drop is 0 but hold gate applies to in-cohort names; not still_buyish so capacity-bump veto does not apply.",
+            "Algo reason aligns with leaving target set while no longer buy/strong_buy on the decision screen."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-16T07:28:51.696566+00:00",
+          "proposal_id": "buy_tier_level_native:ALC.SW:sell:2026-11-16T07:28:51.696566+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "PGHN.SW",
+          "name": "Partners Group Holding AG",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Effective screen_signal is buy and still_buyish is true.",
+            "Conviction rank 1 among buyish names with rank_drop 0 vs entry.",
+            "Research overlay bound with verdict accumulate supports entry into buyish target set."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 1
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-16T07:28:51.696566+00:00",
+          "proposal_id": "buy_tier_level_native:PGHN.SW:buy:2026-11-16T07:28:51.696566+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "NOVN.SW",
+          "name": "Novartis AG",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Effective screen_signal is buy and still_buyish is true.",
+            "Stable conviction rank vs entry with rank_drop 0.",
+            "Research overlay bound with verdict accumulate supports automated buy."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-16T07:28:51.696566+00:00",
+          "proposal_id": "buy_tier_level_native:NOVN.SW:buy:2026-11-16T07:28:51.696566+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "LOGN.SW",
+          "name": "Logitech International S.A.",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Effective screen_signal is buy and still_buyish is true.",
+            "Conviction rank unchanged from entry (rank_drop 0).",
+            "Research overlay bound with verdict accumulate aligns with algo buy."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 4
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-16T07:28:51.696566+00:00",
+          "proposal_id": "buy_tier_level_native:LOGN.SW:buy:2026-11-16T07:28:51.696566+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "AMRZ.SW",
+          "name": "Amrize AG",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Effective screen_signal is buy and still_buyish is true.",
+            "Rank stable at sleeve entry with rank_drop 0.",
+            "Research overlay bound with verdict accumulate supports buy into target set."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 5
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-16T07:28:51.696566+00:00",
+          "proposal_id": "buy_tier_level_native:AMRZ.SW:buy:2026-11-16T07:28:51.696566+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    }
   }
 ]

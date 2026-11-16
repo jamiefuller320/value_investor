@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "updated_at": "2026-11-15T07:07:56.119692+00:00",
-  "as_of": "2026-11-15T07:07:56.114650+00:00",
+  "updated_at": "2026-11-16T07:28:03.993112+00:00",
+  "as_of": "2026-11-16T07:28:03.987153+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,41 +16,43 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 2,
+  "holding_count": 3,
   "underwater_count": 1,
   "thesis_status_counts": {
     "intact": 2,
-    "weakening": 0,
+    "weakening": 1,
     "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 2,
+    "holding_count": 3,
     "loser_count": 1,
-    "loser_share": 0.5,
-    "loser_nav_share": 0.49,
+    "loser_share": 0.3333,
+    "loser_nav_share": 0.3333,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
-    "within_tolerance": false,
+    "within_tolerance": true,
     "intact_loser_count": 1,
     "weakening_loser_count": 0,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
       "quality": 0.0,
-      "dividend": 0.0,
+      "dividend": 1.0,
       "garp": 0.0,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
       "cheapness": 0.0,
       "quality": 0.0,
-      "dividend": 0.0,
-      "garp": 1.0,
+      "dividend": 0.5,
+      "garp": 0.5,
       "risk": 0.0
     },
-    "selection_feedback_flags": [],
-    "balancing_hint": "hold_intact_review_selection",
+    "selection_feedback_flags": [
+      "dividend fails more often among losers (100% vs 50%)"
+    ],
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
@@ -66,33 +68,74 @@
       "avg_cost": 18.9992,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7776,
-      "data_quality_score": 1.0,
+      "conviction_score": 0.6046,
+      "data_quality_score": 0.9,
       "passed_families": [
         "cheapness",
         "quality",
-        "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [],
+      "failed_families": [
+        "dividend"
+      ],
       "research_verdict": "accumulate",
       "reasons": [
         "price drawdown alone does not invalidate value thesis",
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 78%"
+        "data_quality 0.90",
+        "conviction 60%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 78%"
+        "data_quality 0.90",
+        "conviction 60%"
       ],
       "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ACKB.BR",
+      "name": "Ackermans & Van Haaren NV",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 277.0,
+      "avg_cost": 277.0,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3309,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "conviction 33% below intact floor",
+        "still buy",
+        "research accumulate"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "conviction 33% below intact floor"
+      ],
       "broken_reasons": []
     },
     {
@@ -107,7 +150,7 @@
       "avg_cost": 63.098,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4,
+      "conviction_score": 0.4583,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -124,14 +167,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 40%"
+        "conviction 46%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 40%"
+        "conviction 46%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []

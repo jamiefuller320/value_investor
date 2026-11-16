@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-15T07:08:39.535072+00:00",
+  "generated_at": "2026-11-16T07:29:10.426289+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 5,
+    "closed_total": 6,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 2,
+        "closed_count": 3,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0425,
-        "mean_trough_unrealized_pct": 0.0425,
+        "mean_peak_unrealized_pct": 0.0467,
+        "mean_trough_unrealized_pct": 0.0246,
         "outcome_labels": {
-          "recovered": 2
+          "recovered": 3
         }
       },
       "broken": {
@@ -63,11 +63,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 5,
+    "hold_closed_with_thesis": 6,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=5 (target >=8)",
-      "hold thesis buckets thin (weakening=2; target >=3 each)",
+      "hold closed with thesis=6 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -230,7 +229,7 @@
       "ticker": "C5H.IR",
       "name": "Cairn Homes plc",
       "started_at": "2026-10-11T08:08:08.695692+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -280,9 +279,9 @@
       "peak_unrealized_pct": 0.0549,
       "trough_unrealized_pct": -0.0114,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-16T07:29:10.366522+00:00",
+      "linked_sell_trade_id": "f69c5e40-e05e-48c4-baef-9a8be3408d25"
     },
     {
       "episode_id": "buy_tier_level:EG7.IR:2026-10-14T09:52:21.886414+01:00",
@@ -1129,6 +1128,66 @@
       },
       "buy_returns_since_rotation": {
         "GL9.IR": 0.0309
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-16T07:29:10.366522+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-16T07:29:10.366522+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.77,
+          "shares": 120.848225,
+          "gross": 334.75,
+          "cost": 0.59,
+          "avg_cost_at_exit": 2.6843,
+          "realized_pct": 0.0319,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0319
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "OIZ.IR",
+          "price": 4.09,
+          "shares": 40.003064,
+          "gross": 163.61,
+          "cost": 0.29
+        },
+        {
+          "ticker": "GL9.IR",
+          "price": 20.02,
+          "shares": 8.489884,
+          "gross": 169.97,
+          "cost": 0.3
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "C5H.IR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "OIZ.IR": 0.0,
+        "GL9.IR": 0.0
       },
       "verdict": null,
       "closed_at": null

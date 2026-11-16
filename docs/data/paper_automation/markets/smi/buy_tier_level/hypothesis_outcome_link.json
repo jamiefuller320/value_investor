@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-15T07:08:14.773953+00:00",
+  "generated_at": "2026-11-16T07:28:46.585722+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 1,
+    "closed_total": 2,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 4,
+    "open_with_thesis": 3,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 1,
+        "closed_count": 2,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.1051,
-        "mean_trough_unrealized_pct": 0.0101,
+        "mean_peak_unrealized_pct": 0.0413,
+        "mean_trough_unrealized_pct": -0.0213,
         "outcome_labels": {
-          "recovered": 1
+          "recovered": 2
         }
       },
       "broken": {
@@ -55,11 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 1,
+    "hold_closed_with_thesis": 2,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=1 (target >=8)",
-      "hold thesis buckets thin (weakening=1; target >=3 each)",
+      "hold closed with thesis=2 (target >=8)",
+      "hold thesis buckets thin (weakening=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -299,7 +299,7 @@
       "ticker": "ALC.SW",
       "name": "Alcon Inc.",
       "started_at": "2026-11-06T07:54:01.171950+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -342,9 +342,9 @@
       "peak_unrealized_pct": -0.0226,
       "trough_unrealized_pct": -0.0526,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-16T07:28:46.521633+00:00",
+      "linked_sell_trade_id": "016893b6-b9d4-4f80-8097-2ffb5ea43230"
     }
   ],
   "swap_rotations": [
@@ -755,6 +755,83 @@
       },
       "buy_returns_since_rotation": {
         "ALC.SW": -0.0226
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-16T07:28:46.521633+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-16T07:28:46.521633+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "ALC.SW",
+          "price": 61.36,
+          "shares": 3.489743,
+          "gross": 214.13,
+          "cost": 0.37,
+          "avg_cost_at_exit": 62.78,
+          "realized_pct": -0.0226,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "research verdict caution",
+            "cheapness family no longer passes",
+            "still buy",
+            "data_quality 1.00"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": -0.0226
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "PGHN.SW",
+          "price": 658.4,
+          "shares": 0.071156,
+          "gross": 46.85,
+          "cost": 0.08
+        },
+        {
+          "ticker": "NOVN.SW",
+          "price": 134.06,
+          "shares": 0.406352,
+          "gross": 54.48,
+          "cost": 0.1
+        },
+        {
+          "ticker": "LOGN.SW",
+          "price": 84.72,
+          "shares": 0.653978,
+          "gross": 55.4,
+          "cost": 0.1
+        },
+        {
+          "ticker": "AMRZ.SW",
+          "price": 34.48,
+          "shares": 1.643063,
+          "gross": 56.65,
+          "cost": 0.1
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "ALC.SW": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "PGHN.SW": 0.0,
+        "NOVN.SW": 0.0,
+        "LOGN.SW": 0.0,
+        "AMRZ.SW": 0.0
       },
       "verdict": null,
       "closed_at": null

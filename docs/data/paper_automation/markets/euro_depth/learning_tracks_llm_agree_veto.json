@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-15T07:09:49.578278+00:00",
+  "generated_at": "2026-11-16T07:31:11.232534+00:00",
   "observe_only": true,
   "influences_live": false,
   "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
@@ -9,28 +9,42 @@
     "rules": {
       "schema_version": 1,
       "track_id": "rules",
-      "generated_at": "2026-11-15T08:08:46.079712+01:00",
+      "generated_at": "2026-11-16T08:29:28.541417+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 2,
+      "card_count": 7,
       "verdict_counts": {
-        "agree": 2,
-        "veto": 0,
+        "agree": 4,
+        "veto": 3,
         "abstain": 0
       },
       "by_algo_action": {
         "rebuy_skip": {
-          "agree": 2,
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        },
+        "sell": {
+          "agree": 0,
+          "veto": 3,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 3,
           "veto": 0,
           "abstain": 0
         }
       },
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "veto_sell_count": 3,
+      "veto_sell_tickers": [
+        "C5H.IR",
+        "UMI.BR",
+        "EG7.IR"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -46,28 +60,42 @@
     "ai_judgment": {
       "schema_version": 1,
       "track_id": "ai_judgment",
-      "generated_at": "2026-11-15T08:08:56.104778+01:00",
+      "generated_at": "2026-11-16T08:29:38.714262+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 2,
+      "card_count": 7,
       "verdict_counts": {
-        "agree": 2,
-        "veto": 0,
+        "agree": 4,
+        "veto": 3,
         "abstain": 0
       },
       "by_algo_action": {
         "rebuy_skip": {
-          "agree": 2,
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        },
+        "sell": {
+          "agree": 0,
+          "veto": 3,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 3,
           "veto": 0,
           "abstain": 0
         }
       },
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "veto_sell_count": 3,
+      "veto_sell_tickers": [
+        "C5H.IR",
+        "UMI.BR",
+        "EG7.IR"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -83,28 +111,42 @@
     "momentum_grace": {
       "schema_version": 1,
       "track_id": "momentum_grace",
-      "generated_at": "2026-11-15T08:09:30.196678+01:00",
+      "generated_at": "2026-11-16T08:30:29.446817+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 3,
+      "card_count": 8,
       "verdict_counts": {
-        "agree": 3,
-        "veto": 0,
+        "agree": 5,
+        "veto": 3,
         "abstain": 0
       },
       "by_algo_action": {
         "rebuy_skip": {
+          "agree": 2,
+          "veto": 0,
+          "abstain": 0
+        },
+        "sell": {
+          "agree": 0,
+          "veto": 3,
+          "abstain": 0
+        },
+        "buy": {
           "agree": 3,
           "veto": 0,
           "abstain": 0
         }
       },
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "veto_sell_count": 3,
+      "veto_sell_tickers": [
+        "C5H.IR",
+        "UMI.BR",
+        "EG7.IR"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -120,22 +162,37 @@
     "graduated_allocation": {
       "schema_version": 1,
       "track_id": "graduated_allocation",
-      "generated_at": "2026-11-15T08:09:40.773230+01:00",
+      "generated_at": "2026-11-16T08:30:42.177364+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 6,
       "verdict_counts": {
-        "agree": 0,
-        "veto": 0,
+        "agree": 3,
+        "veto": 3,
         "abstain": 0
       },
-      "by_algo_action": {},
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "by_algo_action": {
+        "sell": {
+          "agree": 0,
+          "veto": 3,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 3,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "veto_sell_count": 3,
+      "veto_sell_tickers": [
+        "C5H.IR",
+        "UMI.BR",
+        "EG7.IR"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -151,7 +208,7 @@
     "technical": {
       "schema_version": 1,
       "track_id": "technical",
-      "generated_at": "2026-11-15T08:08:41.746381+01:00",
+      "generated_at": "2026-11-16T08:29:23.197875+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -182,20 +239,26 @@
     "buy_tier_level": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-15T08:09:45.020848+01:00",
+      "generated_at": "2026-11-16T08:30:57.102319+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 18,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 18,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 18,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -213,29 +276,29 @@
     "buy_tier_level_dca": {
       "schema_version": 1,
       "track_id": "buy_tier_level_dca",
-      "generated_at": "2026-11-15T08:09:07.573893+01:00",
+      "generated_at": "2026-11-16T08:30:05.411177+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 5,
+      "card_count": 4,
       "verdict_counts": {
         "agree": 4,
         "veto": 0,
-        "abstain": 1
+        "abstain": 0
       },
       "by_algo_action": {
         "sell": {
-          "agree": 3,
+          "agree": 2,
           "veto": 0,
           "abstain": 0
         },
         "buy": {
-          "agree": 1,
+          "agree": 2,
           "veto": 0,
-          "abstain": 1
+          "abstain": 0
         }
       },
       "veto_sell_count": 0,
@@ -255,21 +318,26 @@
     "still_in_buy_set": {
       "schema_version": 1,
       "track_id": "still_in_buy_set",
-      "generated_at": "2026-11-15T08:09:21.387398+01:00",
+      "generated_at": "2026-11-16T08:30:15.578633+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 2,
+      "card_count": 5,
       "verdict_counts": {
-        "agree": 2,
+        "agree": 5,
         "veto": 0,
         "abstain": 0
       },
       "by_algo_action": {
         "rebuy_skip": {
+          "agree": 3,
+          "veto": 0,
+          "abstain": 0
+        },
+        "sell": {
           "agree": 2,
           "veto": 0,
           "abstain": 0

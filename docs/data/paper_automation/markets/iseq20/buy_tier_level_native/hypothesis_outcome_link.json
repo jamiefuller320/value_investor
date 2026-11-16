@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-11-15T07:08:39.563472+00:00",
+  "generated_at": "2026-11-16T07:29:16.513692+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 4,
+    "closed_total": 5,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 1,
+        "closed_count": 2,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0851,
-        "mean_trough_unrealized_pct": 0.0638,
+        "mean_peak_unrealized_pct": 0.07,
+        "mean_trough_unrealized_pct": 0.0262,
         "outcome_labels": {
-          "recovered": 1
+          "recovered": 2
         }
       },
       "broken": {
@@ -63,11 +63,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 4,
+    "hold_closed_with_thesis": 5,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=4 (target >=8)",
-      "hold thesis buckets thin (weakening=1; target >=3 each)",
+      "hold closed with thesis=5 (target >=8)",
+      "hold thesis buckets thin (weakening=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -186,7 +186,7 @@
       "ticker": "C5H.IR",
       "name": "Cairn Homes plc",
       "started_at": "2026-10-11T08:08:08.732414+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -236,9 +236,9 @@
       "peak_unrealized_pct": 0.0549,
       "trough_unrealized_pct": -0.0114,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-16T07:29:16.506893+00:00",
+      "linked_sell_trade_id": "c1790df4-5eff-4bd5-910c-c4c27f86cb24"
     },
     {
       "episode_id": "buy_tier_level_native:EG7.IR:2026-10-14T09:52:21.975865+01:00",
@@ -920,6 +920,66 @@
       },
       "buy_returns_since_rotation": {
         "GL9.IR": 0.0309
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-11-16T07:29:16.506893+00:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-11-16T07:29:16.506893+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.77,
+          "shares": 121.926918,
+          "gross": 337.74,
+          "cost": 0.08,
+          "avg_cost_at_exit": 2.6845,
+          "realized_pct": 0.0318,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0318
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "OIZ.IR",
+          "price": 4.09,
+          "shares": 40.504031,
+          "gross": 165.66,
+          "cost": 0.04
+        },
+        {
+          "ticker": "GL9.IR",
+          "price": 20.02,
+          "shares": 8.586776,
+          "gross": 171.91,
+          "cost": 0.04
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "C5H.IR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "OIZ.IR": 0.0,
+        "GL9.IR": 0.0
       },
       "verdict": null,
       "closed_at": null

@@ -3,28 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "rules",
-  "generated_at": "2026-11-15T07:08:50.238732+00:00",
+  "generated_at": "2026-11-16T07:29:33.893830+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 25,
+    "closed_total": 28,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 0,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 24,
-        "recovery_rate": 0.7083,
-        "sold_underwater_rate": 0.2917,
-        "mean_peak_unrealized_pct": 0.0126,
-        "mean_trough_unrealized_pct": -0.0021,
+        "closed_count": 27,
+        "recovery_rate": 0.6667,
+        "sold_underwater_rate": 0.3333,
+        "mean_peak_unrealized_pct": 0.0109,
+        "mean_trough_unrealized_pct": -0.0047,
         "outcome_labels": {
-          "recovered": 17,
-          "sold_underwater": 7
+          "recovered": 18,
+          "sold_underwater": 9
         }
       },
       "broken": {
@@ -63,7 +63,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 25,
+    "hold_closed_with_thesis": 28,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "hold thesis buckets thin (broken=1; target >=3 each)",
@@ -657,7 +657,7 @@
       "ticker": "C5H.IR",
       "name": "Cairn Homes plc",
       "started_at": "2026-10-20T09:37:22.374638+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -699,9 +699,9 @@
       "peak_unrealized_pct": 0.0528,
       "trough_unrealized_pct": -0.0113,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-16T08:29:28.541417+01:00",
+      "linked_sell_trade_id": "24e72722-183a-46fc-92b9-efb272f56b94"
     },
     {
       "episode_id": "rules:TTE.PA:2026-10-25T07:56:40.556934+01:00",
@@ -1269,7 +1269,7 @@
       "ticker": "EG7.IR",
       "name": "FBD Holdings plc",
       "started_at": "2026-11-13T08:22:51.217532+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -1302,9 +1302,9 @@
       "peak_unrealized_pct": -0.0128,
       "trough_unrealized_pct": -0.0179,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-11-16T08:29:28.541417+01:00",
+      "linked_sell_trade_id": "09bddfbf-8b22-40f6-a794-3150d05143c3"
     },
     {
       "episode_id": "rules:UMI.BR:2026-11-15T07:58:07.856299+01:00",
@@ -1312,7 +1312,7 @@
       "ticker": "UMI.BR",
       "name": "Umicore SA",
       "started_at": "2026-11-15T07:58:07.856299+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -1345,9 +1345,9 @@
       "peak_unrealized_pct": -0.0491,
       "trough_unrealized_pct": -0.0491,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-11-16T08:29:28.541417+01:00",
+      "linked_sell_trade_id": "56715c5c-1556-4d4e-b967-e9f29e00b215"
     }
   ],
   "swap_rotations": [
@@ -2708,6 +2708,126 @@
       "buy_returns_since_rotation": {
         "UMI.BR": -0.0501,
         "EG7.IR": -0.0128
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "rules:2026-11-16T08:29:28.541417+01:00",
+      "track_id": "rules",
+      "logged_at": "2026-11-16T08:29:28.541417+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0019,
+      "sells": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.77,
+          "shares": 76.669296,
+          "gross": 212.37,
+          "cost": 0.39,
+          "avg_cost_at_exit": 2.6531,
+          "realized_pct": 0.0441,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0441
+        },
+        {
+          "ticker": "UMI.BR",
+          "price": 17.62,
+          "shares": 11.758286,
+          "gross": 207.18,
+          "cost": 0.38,
+          "avg_cost_at_exit": 18.5305,
+          "realized_pct": -0.0491,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0491
+        },
+        {
+          "ticker": "EG7.IR",
+          "price": 19.3,
+          "shares": 10.922484,
+          "gross": 210.8,
+          "cost": 0.39,
+          "avg_cost_at_exit": 19.55,
+          "realized_pct": -0.0128,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0128
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "DG.PA",
+          "price": 115.5,
+          "shares": 1.841726,
+          "gross": 212.72,
+          "cost": 0.39
+        },
+        {
+          "ticker": "ERIC-B.ST",
+          "price": 106.3,
+          "shares": 2.001123,
+          "gross": 212.72,
+          "cost": 0.39
+        },
+        {
+          "ticker": "SAN.PA",
+          "price": 87.6,
+          "shares": 2.312695,
+          "gross": 202.59,
+          "cost": 0.37
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "C5H.IR": -0.0,
+        "UMI.BR": 0.0,
+        "EG7.IR": -0.0
+      },
+      "buy_returns_since_rotation": {
+        "DG.PA": 0.0,
+        "ERIC-B.ST": 0.0,
+        "SAN.PA": -0.0
       },
       "verdict": null,
       "closed_at": null

@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-11-15T07:07:48.575573+00:00",
+  "generated_at": "2026-11-16T07:27:40.845106+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 4,
+    "closed_total": 6,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 5,
+    "open_with_thesis": 3,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,13 +27,13 @@
         }
       },
       "broken": {
-        "closed_count": 1,
+        "closed_count": 3,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0732,
-        "mean_trough_unrealized_pct": 0.0623,
+        "mean_peak_unrealized_pct": 0.0627,
+        "mean_trough_unrealized_pct": 0.059,
         "outcome_labels": {
-          "recovered": 1
+          "recovered": 3
         }
       },
       "insufficient_data": {
@@ -62,11 +62,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 4,
+    "hold_closed_with_thesis": 6,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=4 (target >=8)",
-      "hold thesis buckets thin (broken=1; target >=3 each)",
+      "hold closed with thesis=6 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -453,7 +452,7 @@
       "ticker": "LTMC.MI",
       "name": "Lottomatica Group S.p.A.",
       "started_at": "2026-11-15T07:07:48.566366+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -485,9 +484,9 @@
       "peak_unrealized_pct": 0.0853,
       "trough_unrealized_pct": 0.0853,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-16T07:27:40.835201+00:00",
+      "linked_sell_trade_id": "25d226b6-d1d5-437e-bf20-5f4b87ae8cd3"
     },
     {
       "episode_id": "buy_tier_level_native:AZM.MI:2026-11-15T07:07:48.566366+00:00",
@@ -495,7 +494,7 @@
       "ticker": "AZM.MI",
       "name": "Azimut Holding S.p.A.",
       "started_at": "2026-11-15T07:07:48.566366+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -527,9 +526,9 @@
       "peak_unrealized_pct": 0.0295,
       "trough_unrealized_pct": 0.0295,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-16T07:27:40.835201+00:00",
+      "linked_sell_trade_id": "6b3f7bae-b04c-41b8-9c35-5475ad761e5b"
     }
   ],
   "swap_rotations": [
@@ -1604,6 +1603,112 @@
         "IG.MI": 0.0105,
         "LTMC.MI": -0.0071,
         "BZU.MI": 0.0115
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-11-16T07:27:40.835201+00:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-11-16T07:27:40.835201+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "LTMC.MI",
+          "price": 27.82,
+          "shares": 6.772297,
+          "gross": 188.41,
+          "cost": 0.05,
+          "avg_cost_at_exit": 25.6329,
+          "realized_pct": 0.0853,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0853
+        },
+        {
+          "ticker": "AZM.MI",
+          "price": 37.05,
+          "shares": 5.110707,
+          "gross": 189.35,
+          "cost": 0.05,
+          "avg_cost_at_exit": 35.989,
+          "realized_pct": 0.0295,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0295
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "ENI.MI",
+          "price": 25.975,
+          "shares": 1.38011,
+          "gross": 35.85,
+          "cost": 0.01
+        },
+        {
+          "ticker": "MONC.MI",
+          "price": 44.36,
+          "shares": 0.842237,
+          "gross": 37.36,
+          "cost": 0.01
+        },
+        {
+          "ticker": "IG.MI",
+          "price": 9.388,
+          "shares": 4.006016,
+          "gross": 37.61,
+          "cost": 0.01
+        },
+        {
+          "ticker": "PST.MI",
+          "price": 25.69,
+          "shares": 8.926515,
+          "gross": 229.32,
+          "cost": 0.06
+        },
+        {
+          "ticker": "BZU.MI",
+          "price": 44.87,
+          "shares": 0.834132,
+          "gross": 37.43,
+          "cost": 0.01
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "LTMC.MI": 0.0,
+        "AZM.MI": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "ENI.MI": 0.0,
+        "MONC.MI": 0.0,
+        "IG.MI": 0.0,
+        "PST.MI": 0.0,
+        "BZU.MI": 0.0
       },
       "verdict": null,
       "closed_at": null

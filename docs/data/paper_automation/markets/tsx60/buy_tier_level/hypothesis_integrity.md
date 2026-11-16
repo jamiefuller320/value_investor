@@ -1,14 +1,17 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-15T07:06:56.495436+00:00
+Track: `buy_tier_level` · updated 2026-11-16T07:26:21.613658+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **4** / 12 (33% count, 35% NAV)
+- Losers: **4** / 13 (31% count, 34% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
+
+### CTC-A.TO — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### K.TO — weakening / watch_review (-19.7%)
 - research verdict neutral
@@ -23,13 +26,10 @@ Track: `buy_tier_level` · updated 2026-11-15T07:06:56.495436+00:00
 - data_quality 1.00
 - conviction 71%
 
-### ABX.TO — intact / hold_tolerate (-5.6%)
-- price drawdown alone does not invalidate value thesis
-- still buy
+### ABX.TO — weakening / watch_review (-5.6%)
+- conviction 31% below intact floor
+- still strong_buy
 - research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 45%
 
 ### TECK-B.TO — intact / hold_tolerate (-5.4%)
 - price drawdown alone does not invalidate value thesis
@@ -37,33 +37,31 @@ Track: `buy_tier_level` · updated 2026-11-15T07:06:56.495436+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 58%
+- conviction 78%
 
 ### MG.TO — weakening / watch_review (-2.9%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### CTC-A.TO — intact / hold_tolerate (+0.0%)
-- still strong_buy
+### IFC.TO — weakening / watch_review (+0.0%)
+- conviction 25% below intact floor
+- still buy
 - research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 51%
 
 ### L.TO — intact / hold_tolerate (+3.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
+- conviction 67%
 
 ### WSP.TO — intact / hold_tolerate (+4.2%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 82%
+- conviction 80%
 
 ### CP.TO — weakening / watch_review (+6.4%)
 - research verdict neutral
@@ -76,16 +74,18 @@ Track: `buy_tier_level` · updated 2026-11-15T07:06:56.495436+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 86%
+- conviction 87%
 
 ### MRU.TO — intact / hold_tolerate (+8.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 42%
+- data_quality 0.90
+- conviction 44%
 
 ### SAP.TO — weakening / watch_review (+11.3%)
+- left buy tier (hold)
 - research verdict caution
-- still buy
+- conviction 22% below intact floor
 - cheapness family still passes
+- data_quality 1.00

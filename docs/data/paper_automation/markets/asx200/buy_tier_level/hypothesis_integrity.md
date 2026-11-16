@@ -1,35 +1,41 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-16T00:47:29.142744+00:00
+Track: `buy_tier_level` · updated 2026-11-16T07:25:58.685159+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **6** / 30 (20% count, 18% NAV)
+- Losers: **8** / 30 (27% count, 24% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `tolerate_intact_losers`
+- Balancing hint: `rotate_broken_first`
 
 ## Holding reviews
 
-### WHC.AX — weakening / watch_review (-15.6%)
+### NWS.AX — broken / exit_candidate (-7.1%)
+- cheapness lost and not in buy tier
+
+### AMC.AX — broken / exit_candidate (+3.1%)
+- cheapness lost and not in buy tier
+
+### AAI.AX — weakening / watch_review (-16.6%)
+- research verdict caution
+- still strong_buy
+- cheapness family still passes
+
+### WHC.AX — weakening / watch_review (-16.5%)
 - research verdict neutral
 - conviction 27% below intact floor
 - still buy
 - cheapness family still passes
 
-### AAI.AX — weakening / watch_review (-15.4%)
-- research verdict caution
-- still strong_buy
-- cheapness family still passes
-
-### WAF.AX — intact / hold_tolerate (-10.2%)
+### WAF.AX — intact / hold_tolerate (-12.0%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 61%
+- conviction 60%
 
-### RRL.AX — intact / hold_tolerate (-9.5%)
+### RRL.AX — intact / hold_tolerate (-10.6%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
@@ -37,12 +43,15 @@ Track: `buy_tier_level` · updated 2026-11-16T00:47:29.142744+00:00
 - data_quality 0.95
 - conviction 82%
 
-### NWS.AX — weakening / watch_review (-9.0%)
-- research verdict caution
+### GGP.AX — intact / hold_tolerate (-6.9%)
+- price drawdown alone does not invalidate value thesis
 - still buy
+- research accumulate
 - cheapness family still passes
+- data_quality 0.95
+- conviction 48%
 
-### WGX.AX — intact / hold_tolerate (-6.5%)
+### WGX.AX — intact / hold_tolerate (-6.6%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
@@ -50,152 +59,140 @@ Track: `buy_tier_level` · updated 2026-11-16T00:47:29.142744+00:00
 - data_quality 0.95
 - conviction 43%
 
-### GGP.AX — intact / hold_tolerate (-5.0%)
-- still buy
-- research accumulate
+### NHC.AX — weakening / watch_review (-5.9%)
+- left buy tier (hold)
+- research verdict caution
+- conviction 16% below intact floor
 - cheapness family still passes
 - data_quality 0.95
-- conviction 50%
 
 ### WDS.AX — weakening / watch_review (-4.3%)
 - research verdict caution
 - still buy
 - cheapness family still passes
 
-### FMG.AX — intact / hold_tolerate (-1.1%)
+### FMG.AX — intact / hold_tolerate (-4.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
-- data_quality 0.95
-- conviction 62%
+- data_quality 0.85
+- conviction 42%
 
-### ALK.AX — intact / hold_tolerate (-0.5%)
+### GMD.AX — weakening / watch_review (-3.4%)
+- left buy tier (hold)
+- research verdict caution
+- conviction 19% below intact floor
+- cheapness family still passes
+- data_quality 0.85
+
+### CDA.AX — weakening / watch_review (-1.2%)
+- research verdict neutral
+- still buy
+- cheapness family still passes
+
+### ALK.AX — intact / hold_tolerate (-0.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 58%
+- conviction 57%
 
-### PXA.AX — weakening / watch_review (-0.4%)
-- conviction 30% below intact floor
+### TUA.AX — weakening / watch_review (-0.3%)
+- research verdict caution
+- conviction 32% below intact floor
 - still buy
-- research accumulate
+- cheapness family still passes
 
-### CQR.AX — intact / hold_tolerate (-0.2%)
+### CQR.AX — intact / hold_tolerate (+0.5%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
 - conviction 80%
 
-### GMD.AX — weakening / watch_review (+0.0%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
-### NHC.AX — weakening / watch_review (+0.0%)
-- research verdict caution
-- conviction 20% below intact floor
-- still buy
-- cheapness family still passes
-
-### CDA.AX — weakening / watch_review (+0.2%)
-- research verdict neutral
-- still buy
-- cheapness family still passes
-
-### PLS.AX — weakening / watch_review (+0.4%)
-- research verdict caution
-- conviction 27% below intact floor
-- still buy
-- cheapness family still passes
-
-### TUA.AX — weakening / watch_review (+2.4%)
-- research verdict caution
-- conviction 31% below intact floor
-- still buy
-- cheapness family still passes
-
-### AMC.AX — intact / hold_tolerate (+2.6%)
+### PXA.AX — weakening / watch_review (+0.6%)
+- conviction 30% below intact floor
 - still buy
 - research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 50%
 
-### ANN.AX — intact / hold_tolerate (+3.0%)
-- still buy
-- research accumulate
+### PLS.AX — weakening / watch_review (+1.4%)
+- left buy tier (hold)
+- research verdict caution
+- conviction 16% below intact floor
 - cheapness family still passes
 - data_quality 0.95
-- conviction 69%
 
-### BPT.AX — weakening / watch_review (+3.5%)
+### BPT.AX — weakening / watch_review (+2.3%)
 - research verdict caution
 - conviction 32% below intact floor
 - still buy
 - cheapness family still passes
 
-### HVN.AX — intact / hold_tolerate (+3.5%)
-- still strong_buy
+### ANN.AX — intact / hold_tolerate (+3.2%)
+- still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 53%
+- conviction 68%
 
-### ARB.AX — weakening / watch_review (+3.5%)
+### HVN.AX — weakening / watch_review (+4.2%)
+- conviction 23% below intact floor
+- still buy
+- research accumulate
+
+### ARB.AX — weakening / watch_review (+5.2%)
 - research verdict caution
 - still buy
 - cheapness family still passes
 
-### EBO.AX — weakening / watch_review (+4.0%)
+### NEM.AX — intact / hold_tolerate (+6.6%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 63%
+
+### EBO.AX — weakening / watch_review (+7.0%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### BWP.AX — intact / hold_tolerate (+6.3%)
+### BWP.AX — intact / hold_tolerate (+7.2%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
 - conviction 58%
 
-### PMV.AX — intact / hold_tolerate (+8.0%)
+### PMV.AX — intact / hold_tolerate (+8.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 56%
+- conviction 55%
 
-### NEM.AX — intact / hold_tolerate (+8.3%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 62%
-
-### CLW.AX — weakening / watch_review (+9.2%)
+### CLW.AX — weakening / watch_review (+10.5%)
+- left buy tier (hold)
 - research verdict neutral
-- still buy
+- conviction 21% below intact floor
 - cheapness family still passes
+- data_quality 0.80
 
-### RMD.AX — intact / hold_tolerate (+11.4%)
+### RMD.AX — intact / hold_tolerate (+12.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 52%
+- conviction 53%
 
-### CYL.AX — intact / hold_tolerate (+12.9%)
+### JBH.AX — weakening / watch_review (+13.3%)
+- conviction 35% below intact floor
+- still buy
+- research accumulate
+
+### CYL.AX — intact / hold_tolerate (+13.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 50%
-
-### JBH.AX — intact / hold_tolerate (+13.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 51%
+- conviction 49%

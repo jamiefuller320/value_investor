@@ -1,79 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-15T07:06:51.096714+00:00",
+    "local_time": "2026-11-16T07:26:20.414284+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-15T08:00:00+00:00",
-    "settle_at": "2026-11-15T09:15:00+00:00",
+    "market_open_at": "2026-11-16T08:00:00+00:00",
+    "settle_at": "2026-11-16T09:15:00+00:00",
     "can_act": false,
     "reason": "before market open"
   },
-  "trades": [
-    {
-      "id": "9350a351-60a1-4212-a741-dae4ab51e07f",
-      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
-      "acted_at": "2026-11-15T07:06:51.096714+00:00",
-      "ticker": "CARD.L",
-      "side": "sell",
-      "sizing_mode": "cash",
-      "shares": 1.057521,
-      "price": 85.0,
-      "gross": 89.89,
-      "cost": 0.04,
-      "net_cash": 89.84,
-      "note": "Automated trim",
-      "name": "Card Factory plc",
-      "avg_cost_at_exit": 86.9
-    },
-    {
-      "id": "271f420a-092f-4514-bb3e-61f81ec74d52",
-      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
-      "acted_at": "2026-11-15T07:06:51.096714+00:00",
-      "ticker": "CAPD.L",
-      "side": "sell",
-      "sizing_mode": "cash",
-      "shares": 0.828748,
-      "price": 108.0,
-      "gross": 89.5,
-      "cost": 0.04,
-      "net_cash": 89.46,
-      "note": "Automated trim",
-      "name": "Capital Limited",
-      "avg_cost_at_exit": 115.6742
-    },
-    {
-      "id": "bdbfb898-1b81-4866-b292-5384c5cb8f86",
-      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
-      "acted_at": "2026-11-15T07:06:51.096714+00:00",
-      "ticker": "SBRE.L",
-      "side": "sell",
-      "sizing_mode": "cash",
-      "shares": 0.584201,
-      "price": 182.8,
-      "gross": 106.79,
-      "cost": 0.05,
-      "net_cash": 106.74,
-      "note": "Automated trim",
-      "name": "Sabre Insurance Group plc",
-      "avg_cost_at_exit": 174.0
-    },
-    {
-      "id": "ab57a447-598a-4814-9a25-e2132ab0978b",
-      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
-      "acted_at": "2026-11-15T07:06:51.096714+00:00",
-      "ticker": "CLIG.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.564658,
-      "price": 504.0,
-      "gross": 284.59,
-      "cost": 1.57,
-      "net_cash": -286.15,
-      "note": "Automated buy",
-      "name": "City of London Investment Group Plc"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -100,60 +36,82 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 285.73,
+    "target_sleeve_value": 285.69,
     "targets": [
-      {
-        "ticker": "CARD.L",
-        "name": "Card Factory plc",
-        "signal": "strong_buy",
-        "conviction_score": 0.6839000000000001,
-        "price": 85.0
-      },
       {
         "ticker": "CAPD.L",
         "name": "Capital Limited",
         "signal": "strong_buy",
-        "conviction_score": 0.6733,
+        "conviction_score": 0.6607000000000001,
         "price": 108.0
+      },
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.4802,
+        "price": 85.0
       },
       {
         "ticker": "SBRE.L",
         "name": "Sabre Insurance Group plc",
         "signal": "buy",
-        "conviction_score": 0.4244,
+        "conviction_score": 0.4476,
         "price": 182.8
       },
       {
-        "ticker": "CLIG.L",
-        "name": "City of London Investment Group Plc",
+        "ticker": "CNE.L",
+        "name": "Capricorn Energy PLC",
         "signal": "buy",
-        "conviction_score": 0.3969,
-        "price": 504.0
+        "conviction_score": 0.17068,
+        "price": 421.0
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "CLIG.L",
+        "name": "City of London Investment Group Plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.564658,
+        "price": 504.0,
+        "value": 284.59
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
-        "ticker": "CARD.L",
-        "name": "Card Factory plc",
-        "reason": "Already near equal-weight target",
-        "value": 286.11,
-        "target_value": 285.73,
-        "conviction_score": 0.6839000000000001,
-        "signal": "strong_buy"
-      },
+        "action": "buy",
+        "ticker": "CNE.L",
+        "name": "Capricorn Energy PLC",
+        "reason": "New sleeve",
+        "value": 284.45,
+        "price": 421.0,
+        "target_value": 285.69,
+        "conviction_score": 0.17068,
+        "signal": "buy"
+      }
+    ],
+    "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "CAPD.L",
         "name": "Capital Limited",
         "reason": "Already near equal-weight target",
         "value": 286.11,
-        "target_value": 285.73,
-        "conviction_score": 0.6733,
+        "target_value": 285.69,
+        "conviction_score": 0.6607000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "reason": "Already near equal-weight target",
+        "value": 286.11,
+        "target_value": 285.69,
+        "conviction_score": 0.4802,
         "signal": "strong_buy"
       },
       {
@@ -162,24 +120,14 @@
         "name": "Sabre Insurance Group plc",
         "reason": "Already near equal-weight target",
         "value": 286.1,
-        "target_value": 285.73,
-        "conviction_score": 0.4244,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "CLIG.L",
-        "name": "City of London Investment Group Plc",
-        "reason": "Already near equal-weight target",
-        "value": 284.59,
-        "target_value": 285.73,
-        "conviction_score": 0.3969,
+        "target_value": 285.69,
+        "conviction_score": 0.4476,
         "signal": "buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
+    "summary": "Next rebalance would target 4 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -219,8 +167,8 @@
       "ticker": "CLIG.L",
       "name": "City of London Investment Group Plc",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Screen signal is now hold",
       "mark": 504.0,
       "stop_loss": null,
       "take_profit": null,
@@ -3458,22 +3406,40 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-16T07:26:20.414284+00:00",
+        "portfolio_value": 1142.9,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-15T07:06:51.096714+00:00",
+    "last_mark_at": "2026-11-16T07:26:20.414284+00:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "CLIG.L": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (4 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "ftse_smallcap",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-15T07:06:51.106109+00:00",
+    "generated_at": "2026-11-16T07:26:20.424536+00:00",
     "observe_only": true,
     "open_count": 30,
     "closed_count": 0,
@@ -3547,12 +3513,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 4
+    "checkpoints_added_this_pass": 3
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-15T07:06:51.108095+00:00",
+    "generated_at": "2026-11-16T07:26:20.426975+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -3608,7 +3574,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 28,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 17,
+      "hold_with_data_quality_count": 18,
       "gaps": [
         "swap_rotation closed rotations=0 (target >=10)"
       ],
@@ -3616,10 +3582,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 2,
-        "recovered_to_breakeven": 0,
+        "count": 3,
+        "recovered_to_breakeven": 1,
         "close_reasons": {
-          "open": 2
+          "open": 3
         }
       },
       "closed": {
@@ -3644,11 +3610,11 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 1,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 4
+      "swap_rotations": 2
     }
   },
   "hypothesis_integrity": {
@@ -3656,8 +3622,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-15T07:06:51.111114+00:00",
-    "as_of": "2026-11-15T07:06:51.096714+00:00",
+    "updated_at": "2026-11-16T07:26:20.430321+00:00",
+    "as_of": "2026-11-16T07:26:20.414284+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3672,8 +3638,8 @@
     "holding_count": 4,
     "underwater_count": 1,
     "thesis_status_counts": {
-      "intact": 4,
-      "weakening": 0,
+      "intact": 3,
+      "weakening": 1,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -3698,13 +3664,11 @@
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
         "quality": 0.3333,
-        "dividend": 0.0,
+        "dividend": 0.6667,
         "garp": 0.3333,
         "risk": 0.0
       },
-      "selection_feedback_flags": [
-        "dividend fails more often among losers (100% vs 0%)"
-      ],
+      "selection_feedback_flags": [],
       "balancing_hint": "tolerate_intact_losers",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
@@ -3721,7 +3685,7 @@
         "avg_cost": 115.6742,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6733,
+        "conviction_score": 0.6607,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3739,14 +3703,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 67%"
+          "conviction 66%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 67%"
+          "conviction 66%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3763,31 +3727,31 @@
         "avg_cost": 86.9,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6839,
-        "data_quality_score": 1.0,
+        "conviction_score": 0.4802,
+        "data_quality_score": 0.9,
         "passed_families": [
           "cheapness",
-          "dividend",
           "garp",
           "risk"
         ],
         "failed_families": [
-          "quality"
+          "quality",
+          "dividend"
         ],
         "research_verdict": "accumulate",
         "reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 68%"
+          "data_quality 0.90",
+          "conviction 48%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 68%"
+          "data_quality 0.90",
+          "conviction 48%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3795,41 +3759,42 @@
       {
         "ticker": "CLIG.L",
         "name": "City of London Investment Group Plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
         "unrealized_pct": 0.0,
         "mark": 504.0,
         "avg_cost": 504.0,
-        "signal": "buy",
+        "signal": "hold",
         "timing_signal": "neutral",
-        "conviction_score": 0.3969,
-        "data_quality_score": 1.0,
+        "conviction_score": 0.264,
+        "data_quality_score": 0.9,
         "passed_families": [
           "cheapness",
           "quality",
-          "dividend",
           "garp",
           "risk"
         ],
-        "failed_families": [],
+        "failed_families": [
+          "dividend"
+        ],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "left buy tier (hold)",
+          "conviction 26% below intact floor",
           "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 40%"
+          "cheapness family still passes"
         ],
         "intact_reasons": [
-          "still buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 40%"
+          "data_quality 0.90"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "left buy tier (hold)",
+          "conviction 26% below intact floor"
+        ],
         "broken_reasons": []
       },
       {
@@ -3844,7 +3809,7 @@
         "avg_cost": 174.0,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4244,
+        "conviction_score": 0.4476,
         "data_quality_score": 0.85,
         "passed_families": [
           "cheapness",
@@ -3861,14 +3826,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.85",
-          "conviction 42%"
+          "conviction 45%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.85",
-          "conviction 42%"
+          "conviction 45%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3881,7 +3846,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-15T07:06:51.114719+00:00",
+    "generated_at": "2026-11-16T07:26:20.433738+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -3889,7 +3854,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 28,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 2,
+      "open_with_thesis": 3,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -3954,7 +3919,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-15T07:06:51.122274+00:00",
+    "generated_at": "2026-11-16T07:26:20.440367+00:00",
     "open_count": 3,
     "closed_count": 27,
     "scored_count": 11,
@@ -4015,14 +3980,14 @@
       "recommit_scored": 16
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
-    "marked_this_pass": 2,
+    "ingested_this_pass": 0,
+    "marked_this_pass": 3,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-15T07:06:51.096714+00:00",
+    "generated_at": "2026-11-16T07:26:20.414284+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -4046,12 +4011,12 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 10,
+    "open_count": 11,
     "closed_count": 3,
     "open_by_capital_status": {
       "on_book": 4,
       "off_book": 6,
-      "never_funded": 0
+      "never_funded": 1
     },
     "closed_by_capital_status": {
       "on_book": 0,
@@ -4070,16 +4035,16 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 0,
+      "opened": 1,
       "closed": 0,
-      "tagged_on_book": 1,
+      "tagged_on_book": 0,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-15T07:06:51.096714+00:00",
+    "generated_at": "2026-11-16T07:26:20.414284+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -4087,147 +4052,39 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 1,
-    "card_count": 1,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 1,
+      "agree": 0,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "buy": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
+    "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
-    "cards": [
-      {
-        "ticker": "CLIG.L",
-        "name": "City of London Investment Group Plc",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "screen_signal is buy and still_buyish is true at decision time.",
-          "rank_drop is 0 versus entry_rank 4 and conviction_rank 4, so no hold-gate deterioration.",
-          "research_verdict is accumulate with overlay_bound true, consistent with automated buy into the buyish set."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 4
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 4
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-15T07:06:51.096714+00:00",
-        "proposal_id": "buy_tier_level:CLIG.L:buy:2026-11-15T07:06:51.096714+00:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Buy into buyish target set \u2014 agree with algo selection."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      }
-    ],
+    "cards": [],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null,
-      "llm_card_count": 1
+      "fallback": null
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-15T07:06:51.096714+00:00",
+      "generated_at": "2026-11-16T07:26:20.414284+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 1,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 1,
+        "agree": 0,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "buy": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
+      "by_algo_action": {},
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -4243,7 +4100,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-15T07:06:55.581112+00:00",
+  "generated_at": "2026-11-16T07:26:20.446382+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

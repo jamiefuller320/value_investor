@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-15T07:07:25.993102+00:00
+Track: `buy_tier_level_native` · updated 2026-11-16T07:26:55.689721+00:00
 
 ## Portfolio loser feedback
 
@@ -28,11 +28,11 @@ Track: `buy_tier_level_native` · updated 2026-11-15T07:07:25.993102+00:00
 - cheapness family still passes
 
 ### TTE.PA — intact / hold_tolerate (+3.2%)
-- still strong_buy
+- still buy
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 76%
+- data_quality 0.90
+- conviction 36%
 
 ### PUB.PA — intact / hold_tolerate (+4.1%)
 - still buy
@@ -42,25 +42,25 @@ Track: `buy_tier_level_native` · updated 2026-11-15T07:07:25.993102+00:00
 - conviction 49%
 
 ### URW.PA — intact / hold_tolerate (+5.1%)
-- still buy
+- still strong_buy
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 74%
+- data_quality 0.90
+- conviction 39%
 
 ### MC.PA — intact / hold_tolerate (+5.2%)
 - still buy
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 56%
+- data_quality 0.90
+- conviction 37%
 
 ### DG.PA — intact / hold_tolerate (+5.5%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 78%
+- conviction 79%
 
 ### RI.PA — weakening / watch_review (+6.8%)
 - research verdict caution
@@ -69,16 +69,18 @@ Track: `buy_tier_level_native` · updated 2026-11-15T07:07:25.993102+00:00
 - cheapness family still passes
 
 ### EN.PA — weakening / watch_review (+8.0%)
+- left buy tier (hold)
 - research verdict neutral
-- still buy
+- conviction 16% below intact floor
 - cheapness family still passes
+- data_quality 0.90
 
 ### FGR.PA — intact / hold_tolerate (+9.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 74%
+- conviction 75%
 
 ### ORA.PA — weakening / watch_review (+10.0%)
 - research verdict caution
@@ -90,4 +92,4 @@ Track: `buy_tier_level_native` · updated 2026-11-15T07:07:25.993102+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 55%
+- conviction 54%

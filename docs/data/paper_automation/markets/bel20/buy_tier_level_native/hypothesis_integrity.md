@@ -1,12 +1,14 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-15T07:07:56.119692+00:00
+Track: `buy_tier_level_native` · updated 2026-11-16T07:28:03.993112+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 2 (50% count, 49% NAV)
-- Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
-- Balancing hint: `hold_intact_review_selection`
+- Losers: **1** / 3 (33% count, 33% NAV)
+- Tolerance: count ≤ 40%, NAV ≤ 35% → within band
+- Balancing hint: `tolerate_intact_losers`
+- Selection feedback:
+  - dividend fails more often among losers (100% vs 50%)
 
 ## Holding reviews
 
@@ -15,12 +17,17 @@ Track: `buy_tier_level_native` · updated 2026-11-15T07:07:56.119692+00:00
 - still strong_buy
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 78%
+- data_quality 0.90
+- conviction 60%
+
+### ACKB.BR — weakening / watch_review (+0.0%)
+- conviction 33% below intact floor
+- still buy
+- research accumulate
 
 ### AED.BR — intact / hold_tolerate (+5.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 40%
+- conviction 46%

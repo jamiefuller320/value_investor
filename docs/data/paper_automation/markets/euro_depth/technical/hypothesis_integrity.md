@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `technical` · updated 2026-11-15T07:08:45.993645+00:00
+Track: `technical` · updated 2026-11-16T07:29:28.450533+00:00
 
 ## Portfolio loser feedback
 
@@ -22,7 +22,7 @@ Track: `technical` · updated 2026-11-15T07:08:45.993645+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 71%
+- conviction 70%
 
 ### AD.AS — intact / hold_tolerate (+15.7%)
 - still strong_buy
@@ -36,9 +36,10 @@ Track: `technical` · updated 2026-11-15T07:08:45.993645+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 61%
+- conviction 68%
 
 ### PHIA.AS — weakening / watch_review (+25.9%)
 - left buy tier (hold)
+- conviction 32% below intact floor
 - research accumulate
 - cheapness family still passes
