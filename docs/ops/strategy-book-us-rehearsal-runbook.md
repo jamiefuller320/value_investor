@@ -245,6 +245,21 @@ git push -u origin cursor/ranking-lab-results-567c
 
 It needs the committed development block and the reveal, and refuses once `deleted_at` is stamped, so run it before step 7. It walks both windows once (one delisting variant, about half the reveal's run time, with similar memory; `--batch-size` works the same way). It prints one row per rule and window, then the choice rule's result, and writes `docs/data/strategy_book_ranking_lab.json` with aggregates only; the privacy guard runs before the write. The rehearsal store and both exit-lab files are untouched. The ops-monitor info row **Strategy-book slot-ranking lab: scores committed** names the registered order's slot-book return in each window and the pick.
 
+**Result (run 2026-11-16, both windows reproduced): no pick.** Every rule lost to the registered order in the 2019–2025 half.
+
+| Rule | Slot-book gain 2000–2012 | Gain 2013–2025 | Halves beaten (of 4) |
+|---|---|---|---|
+| `rank_lo252` | +1.8 points a year | +1.0 | 3 (lost 2019–2025 by 1.6) |
+| `rank_ret126` | +0.8 | +1.4 | 2 |
+| `rank_trend3` | +0.5 | +1.3 | 2 |
+| `rank_deep_dip` (contrast) | +0.3 | −1.4 | 1 |
+| `skip_lo252` | +0.5 | −0.5 | 2 |
+
+- The registered order made 11.2% a year (2000–2012) and 5.5% (2013–2025). Its random-order median differs from it by up to 1.5 points in a half, so rank gains of about a point are inside ordering noise.
+- About 19% of fill sessions were contested. About 60% of skips came when the book was already full, where order cannot help.
+- Signals in the bottom fifth by distance above the 52-week low did worse per trade (kept minus dropped +1.2 points, t 1.2, in 2000–2012; +2.4, t 2.5, in 2013–2025). Skipping them did not raise the slot book, because the freed slots went to average trades.
+- `rank_lo252` is queued for the first version review as L723. It seals nothing.
+
 ## 7. Delete (by 2026-12-09 at the latest)
 
 ```bash
