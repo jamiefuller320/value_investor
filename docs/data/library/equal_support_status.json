@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "library_equal_support",
-  "generated_at": "2026-11-15T07:06:03.528721+00:00",
+  "generated_at": "2026-11-16T00:47:32.262656+00:00",
   "admitted": [
     "sp500",
     "asx200",
@@ -37,19 +37,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "sp500",
-        "tickers_fetched": 479,
-        "dated_archives_stamped": 86,
-        "latest_wait_count": 51,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "sp500",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:01:54.660421+00:00",
+        "generated_at": "2026-11-16T00:47:30.488311+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 15,
@@ -3953,17 +3949,7 @@
         "path": "docs/data/library/markets/sp500/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "sp500",
-        "snapshots_written": 86,
-        "exclusion": {
-          "snapshot_count": 86,
-          "ready_for_priors": true,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 86,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -3982,8 +3968,8 @@
       "never_buy_tier_count": 297,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": true,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "asx200": {
       "market_id": "asx200",
@@ -3993,24 +3979,20 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "asx200",
-        "tickers_fetched": 172,
-        "dated_archives_stamped": 83,
-        "latest_wait_count": 13,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "asx200",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:02:40.687424+00:00",
+        "generated_at": "2026-11-16T00:47:30.886484+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
         "not_buy_tier_count": 157,
-        "hold_near_buy_count": 46,
+        "hold_near_buy_count": 47,
         "never_buy_tier_count": 140,
         "buy_tier_not_now": [],
         "not_buy_tier": [
@@ -4071,13 +4053,13 @@
           {
             "ticker": "SUL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "accumulate",
             "conviction_score": 0.437
           },
           {
             "ticker": "FLT.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "wait",
             "conviction_score": 0.4219
           },
           {
@@ -4237,6 +4219,12 @@
             "conviction_score": 0.2994
           },
           {
+            "ticker": "IMD.AX",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.299
+          },
+          {
             "ticker": "360.AX",
             "signal": "hold",
             "timing_signal": "neutral",
@@ -4281,7 +4269,7 @@
           {
             "ticker": "HDN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "wait",
             "conviction_score": 0.2831
           },
           {
@@ -4323,7 +4311,7 @@
           {
             "ticker": "BXB.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "neutral",
             "conviction_score": 0.2546
           },
           {
@@ -4331,12 +4319,6 @@
             "signal": "hold",
             "timing_signal": "accumulate",
             "conviction_score": 0.2517
-          },
-          {
-            "ticker": "IMD.AX",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.2492
           },
           {
             "ticker": "MIN.AX",
@@ -4407,7 +4389,7 @@
           {
             "ticker": "VEA.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "accumulate",
             "conviction_score": 0.219
           },
           {
@@ -4419,7 +4401,7 @@
           {
             "ticker": "RHC.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "wait",
             "conviction_score": 0.2152
           },
           {
@@ -4557,7 +4539,7 @@
           {
             "ticker": "ALL.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "wait",
             "conviction_score": 0.1666
           },
           {
@@ -4591,6 +4573,12 @@
             "conviction_score": 0.1455
           },
           {
+            "ticker": "GDG.AX",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.1422
+          },
+          {
             "ticker": "CGF.AX",
             "signal": "avoid",
             "timing_signal": "wait",
@@ -4601,6 +4589,12 @@
             "signal": "avoid",
             "timing_signal": "insufficient_data",
             "conviction_score": 0.1332
+          },
+          {
+            "ticker": "CHC.AX",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.129
           },
           {
             "ticker": "NIC.AX",
@@ -4621,16 +4615,16 @@
             "conviction_score": 0.1223
           },
           {
-            "ticker": "GDG.AX",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1219
-          },
-          {
             "ticker": "LOV.AX",
             "signal": "avoid",
             "timing_signal": "neutral",
             "conviction_score": 0.1199
+          },
+          {
+            "ticker": "DYL.AX",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.1187
           },
           {
             "ticker": "REA.AX",
@@ -4645,10 +4639,10 @@
             "conviction_score": 0.1136
           },
           {
-            "ticker": "CHC.AX",
-            "signal": "hold",
+            "ticker": "IAG.AX",
+            "signal": "avoid",
             "timing_signal": "neutral",
-            "conviction_score": 0.1106
+            "conviction_score": 0.1111
           },
           {
             "ticker": "TLS.AX",
@@ -4669,12 +4663,6 @@
             "conviction_score": 0.1039
           },
           {
-            "ticker": "DYL.AX",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1018
-          },
-          {
             "ticker": "ASX.AX",
             "signal": "avoid",
             "timing_signal": "wait",
@@ -4691,12 +4679,6 @@
             "signal": "hold",
             "timing_signal": "neutral",
             "conviction_score": 0.0969
-          },
-          {
-            "ticker": "IAG.AX",
-            "signal": "avoid",
-            "timing_signal": "wait",
-            "conviction_score": 0.0926
           },
           {
             "ticker": "BRG.AX",
@@ -4789,6 +4771,12 @@
             "conviction_score": 0.068
           },
           {
+            "ticker": "STO.AX",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.0675
+          },
+          {
             "ticker": "ALQ.AX",
             "signal": "avoid",
             "timing_signal": "neutral",
@@ -4827,14 +4815,8 @@
           {
             "ticker": "AUB.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "wait",
             "conviction_score": 0.0568
-          },
-          {
-            "ticker": "STO.AX",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0562
           },
           {
             "ticker": "WES.AX",
@@ -4861,6 +4843,12 @@
             "conviction_score": 0.0435
           },
           {
+            "ticker": "MQG.AX",
+            "signal": "avoid",
+            "timing_signal": "insufficient_data",
+            "conviction_score": 0.0429
+          },
+          {
             "ticker": "HUB.AX",
             "signal": "avoid",
             "timing_signal": "neutral",
@@ -4871,12 +4859,6 @@
             "signal": "avoid",
             "timing_signal": "insufficient_data",
             "conviction_score": 0.0376
-          },
-          {
-            "ticker": "MQG.AX",
-            "signal": "avoid",
-            "timing_signal": "insufficient_data",
-            "conviction_score": 0.0358
           },
           {
             "ticker": "CBA.AX",
@@ -5015,13 +4997,13 @@
           {
             "ticker": "SUL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "accumulate",
             "conviction_score": 0.437
           },
           {
             "ticker": "FLT.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "wait",
             "conviction_score": 0.4219
           },
           {
@@ -5181,6 +5163,12 @@
             "conviction_score": 0.2994
           },
           {
+            "ticker": "IMD.AX",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.299
+          },
+          {
             "ticker": "360.AX",
             "signal": "hold",
             "timing_signal": "neutral",
@@ -5225,7 +5213,7 @@
           {
             "ticker": "HDN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "wait",
             "conviction_score": 0.2831
           },
           {
@@ -5661,17 +5649,7 @@
         "path": "docs/data/library/markets/asx200/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "asx200",
-        "snapshots_written": 83,
-        "exclusion": {
-          "snapshot_count": 83,
-          "ready_for_priors": true,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 83,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -5686,12 +5664,12 @@
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 157,
-      "hold_near_buy_count": 46,
+      "hold_near_buy_count": 47,
       "never_buy_tier_count": 140,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": true,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "euro_depth": {
       "market_id": "euro_depth",
@@ -5701,19 +5679,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "euro_depth",
-        "tickers_fetched": 186,
-        "dated_archives_stamped": 63,
-        "latest_wait_count": 25,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "euro_depth",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:03:17.550982+00:00",
+        "generated_at": "2026-11-16T00:47:30.999270+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 5,
@@ -7400,17 +7374,7 @@
         "path": "docs/data/library/markets/euro_depth/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "euro_depth",
-        "snapshots_written": 63,
-        "exclusion": {
-          "snapshot_count": 63,
-          "ready_for_priors": true,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 63,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -7429,8 +7393,8 @@
       "never_buy_tier_count": 122,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": true,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "ftse_smallcap": {
       "market_id": "ftse_smallcap",
@@ -7440,422 +7404,411 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "ftse_smallcap",
-        "tickers_fetched": 69,
-        "dated_archives_stamped": 72,
-        "latest_wait_count": 4,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "ftse_smallcap",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:03:35.213911+00:00",
+        "generated_at": "2026-11-16T00:47:31.117649+00:00",
         "min_conviction": 0.28,
-        "timing_signal_present": true,
-        "buy_tier_not_now_count": 1,
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
         "not_buy_tier_count": 65,
         "hold_near_buy_count": 14,
         "never_buy_tier_count": 59,
-        "buy_tier_not_now": [
-          {
-            "ticker": "ULTP.L",
-            "signal": "strong_buy",
-            "timing_signal": "wait",
-            "conviction_score": 0.4359
-          }
-        ],
+        "buy_tier_not_now": [],
         "not_buy_tier": [
           {
             "ticker": "NRR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5439
           },
           {
             "ticker": "FORT.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5375
           },
           {
             "ticker": "REC.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5115
           },
           {
             "ticker": "PRV.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4492
           },
           {
             "ticker": "CABP.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4354
           },
           {
             "ticker": "LSL.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.425
           },
           {
             "ticker": "LUCE.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.408
           },
           {
             "ticker": "SNWS.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4067
           },
           {
             "ticker": "ZTF.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3867
           },
           {
             "ticker": "OTB.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3708
           },
           {
             "ticker": "MARS.L",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.3304
           },
           {
             "ticker": "CNE.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3
           },
           {
             "ticker": "STB.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2993
           },
           {
             "ticker": "LIO.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2841
           },
           {
             "ticker": "MACF.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2764
           },
           {
             "ticker": "HSW.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2376
           },
           {
             "ticker": "SUS.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.229
           },
           {
             "ticker": "CLI.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2262
           },
           {
             "ticker": "NXR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2083
-          },
-          {
-            "ticker": "BOOT.L",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1914
           },
           {
             "ticker": "TRI.L",
             "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.174
+            "timing_signal": "",
+            "conviction_score": 0.1989
+          },
+          {
+            "ticker": "BOOT.L",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.1914
           },
           {
             "ticker": "MOTR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1603
+            "timing_signal": "",
+            "conviction_score": 0.187
           },
           {
             "ticker": "SDY.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.159
           },
           {
             "ticker": "FSTA.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1458
           },
           {
             "ticker": "PHAR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.138
           },
           {
             "ticker": "GLE.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1313
           },
           {
             "ticker": "XAR.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1298
           },
           {
             "ticker": "RCH.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1182
           },
           {
             "ticker": "GYM.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1096
           },
           {
             "ticker": "SFR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1007
           },
           {
             "ticker": "RWA.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.095
           },
           {
             "ticker": "MMIT.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0885
           },
           {
             "ticker": "STVG.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0789
           },
           {
             "ticker": "SHI.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0754
+          },
+          {
+            "ticker": "TTG.L",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.0748
           },
           {
             "ticker": "VID.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0744
           },
           {
             "ticker": "SYNT.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0739
           },
           {
             "ticker": "BGS.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0736
+          },
+          {
+            "ticker": "PCA.L",
+            "signal": "avoid",
+            "timing_signal": "",
+            "conviction_score": 0.0706
           },
           {
             "ticker": "CYN.L",
             "signal": "insufficient_data",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.0685
           },
           {
             "ticker": "EVOK.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.066
           },
           {
             "ticker": "CTPE.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0642
-          },
-          {
-            "ticker": "TTG.L",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0641
           },
           {
             "ticker": "CPI.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.064
           },
           {
             "ticker": "HLCL.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0634
           },
           {
             "ticker": "PSDL.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0621
           },
           {
             "ticker": "CREI.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.062
-          },
-          {
-            "ticker": "PCA.L",
-            "signal": "avoid",
-            "timing_signal": "accumulate",
-            "conviction_score": 0.0617
           },
           {
             "ticker": "PDL.L",
             "signal": "avoid",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.0607
           },
           {
             "ticker": "SCF.L",
             "signal": "insufficient_data",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0549
           },
           {
             "ticker": "LWI.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0519
           },
           {
             "ticker": "FSJ.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0513
           },
           {
             "ticker": "KMR.L",
             "signal": "avoid",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.0496
           },
           {
             "ticker": "GMS.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0486
           },
           {
             "ticker": "MAJE.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0245
+            "timing_signal": "",
+            "conviction_score": 0.0294
           },
           {
             "ticker": "INOV.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "VANQ.L",
             "signal": "avoid",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "AEWU.L",
             "signal": "avoid",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "LTI.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "RSE.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "HEAD.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "JZCP.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "MWY.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "BGEU.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "FAS.L",
             "signal": "insufficient_data",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "SEC.L",
             "signal": "insufficient_data",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "DGI9.L",
             "signal": "insufficient_data",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           }
         ],
@@ -7863,85 +7816,85 @@
           {
             "ticker": "NRR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5439
           },
           {
             "ticker": "FORT.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5375
           },
           {
             "ticker": "REC.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5115
           },
           {
             "ticker": "PRV.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4492
           },
           {
             "ticker": "CABP.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4354
           },
           {
             "ticker": "LSL.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.425
           },
           {
             "ticker": "LUCE.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.408
           },
           {
             "ticker": "SNWS.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4067
           },
           {
             "ticker": "ZTF.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3867
           },
           {
             "ticker": "OTB.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3708
           },
           {
             "ticker": "MARS.L",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.3304
           },
           {
             "ticker": "CNE.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3
           },
           {
             "ticker": "STB.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2993
           },
           {
             "ticker": "LIO.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2841
           }
         ],
@@ -8128,22 +8081,17 @@
         "path": "docs/data/library/markets/ftse_smallcap/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "ftse_smallcap",
-        "snapshots_written": 72,
-        "exclusion": {
-          "snapshot_count": 72,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 72,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
-        "eligible_count": 0,
+        "eligible_count": 1,
         "body_lag_threshold": 10,
-        "sample": [],
+        "sample": [
+          {
+            "ticker": "CLIG.L",
+            "reason": "strong_grade_large_body_lag_36"
+          }
+        ],
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
@@ -8151,14 +8099,14 @@
         "sample": [],
         "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
-      "buy_tier_not_now_count": 1,
+      "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 65,
       "hold_near_buy_count": 14,
       "never_buy_tier_count": 59,
-      "rememo_eligible_count": 0,
+      "rememo_eligible_count": 1,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "tsx60": {
       "market_id": "tsx60",
@@ -8168,284 +8116,273 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "tsx60",
-        "tickers_fetched": 57,
-        "dated_archives_stamped": 65,
-        "latest_wait_count": 5,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "tsx60",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:03:49.523078+00:00",
+        "generated_at": "2026-11-16T00:47:31.215396+00:00",
         "min_conviction": 0.28,
-        "timing_signal_present": true,
-        "buy_tier_not_now_count": 1,
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
         "not_buy_tier_count": 42,
-        "hold_near_buy_count": 12,
+        "hold_near_buy_count": 13,
         "never_buy_tier_count": 35,
-        "buy_tier_not_now": [
-          {
-            "ticker": "GIB-A.TO",
-            "signal": "strong_buy",
-            "timing_signal": "wait",
-            "conviction_score": 0.4625
-          }
-        ],
+        "buy_tier_not_now": [],
         "not_buy_tier": [
           {
             "ticker": "FFH.TO",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.6869
           },
           {
             "ticker": "PPL.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5191
           },
           {
             "ticker": "QSR.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4834
           },
           {
             "ticker": "BAM.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4449
           },
           {
             "ticker": "ENB.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3811
           },
           {
             "ticker": "IFC.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3732
           },
           {
             "ticker": "IMO.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3647
           },
           {
             "ticker": "CM.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3505
           },
           {
             "ticker": "CLS.TO",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.34
           },
           {
             "ticker": "CNR.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.335
           },
           {
             "ticker": "BNS.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3025
+          },
+          {
+            "ticker": "AEM.TO",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.2953
           },
           {
             "ticker": "DOL.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.28
           },
           {
             "ticker": "FSV.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2713
           },
           {
             "ticker": "GIL.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.27
           },
           {
             "ticker": "WN.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.261
-          },
-          {
-            "ticker": "AEM.TO",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.2531
           },
           {
             "ticker": "BCE.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.25
           },
           {
             "ticker": "FNV.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2494
           },
           {
             "ticker": "CCL-B.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.24
           },
           {
             "ticker": "WPM.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2275
           },
           {
             "ticker": "ATD.TO",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.225
           },
           {
             "ticker": "TRP.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2071
+          },
+          {
+            "ticker": "CAE.TO",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.2062
           },
           {
             "ticker": "RCI-B.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1867
           },
           {
             "ticker": "T.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1816
-          },
-          {
-            "ticker": "CAE.TO",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1719
           },
           {
             "ticker": "WCN.TO",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.1675
           },
           {
             "ticker": "SLF.TO",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1674
           },
           {
             "ticker": "CCO.TO",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1627
           },
           {
             "ticker": "TD.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1605
           },
           {
             "ticker": "H.TO",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1575
           },
           {
             "ticker": "TRI.TO",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.145
           },
           {
             "ticker": "TOU.TO",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1365
+          },
+          {
+            "ticker": "CSU.TO",
+            "signal": "avoid",
+            "timing_signal": "",
+            "conviction_score": 0.1335
           },
           {
             "ticker": "RY.TO",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1328
+          },
+          {
+            "ticker": "POW.TO",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.1274
+          },
+          {
+            "ticker": "BN.TO",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.1196
           },
           {
             "ticker": "EMA.TO",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.1163
           },
           {
             "ticker": "FTS.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1163
-          },
-          {
-            "ticker": "CSU.TO",
-            "signal": "avoid",
-            "timing_signal": "wait",
-            "conviction_score": 0.1113
-          },
-          {
-            "ticker": "POW.TO",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1061
-          },
-          {
-            "ticker": "BN.TO",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0997
           },
           {
             "ticker": "BMO.TO",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0571
           },
           {
             "ticker": "FM.TO",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0506
           },
           {
             "ticker": "SHOP.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.05
           },
           {
             "ticker": "BIP-UN.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           }
         ],
@@ -8453,73 +8390,79 @@
           {
             "ticker": "FFH.TO",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.6869
           },
           {
             "ticker": "PPL.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5191
           },
           {
             "ticker": "QSR.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4834
           },
           {
             "ticker": "BAM.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4449
           },
           {
             "ticker": "ENB.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3811
           },
           {
             "ticker": "IFC.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3732
           },
           {
             "ticker": "IMO.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3647
           },
           {
             "ticker": "CM.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3505
           },
           {
             "ticker": "CLS.TO",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.34
           },
           {
             "ticker": "CNR.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.335
           },
           {
             "ticker": "BNS.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3025
+          },
+          {
+            "ticker": "AEM.TO",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.2953
           },
           {
             "ticker": "DOL.TO",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.28
           }
         ],
@@ -8634,17 +8577,7 @@
         "path": "docs/data/library/markets/tsx60/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "tsx60",
-        "snapshots_written": 65,
-        "exclusion": {
-          "snapshot_count": 65,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 65,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -8657,14 +8590,14 @@
         "sample": [],
         "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
-      "buy_tier_not_now_count": 1,
+      "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 42,
-      "hold_near_buy_count": 12,
+      "hold_near_buy_count": 13,
       "never_buy_tier_count": 35,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "euro_stoxx50": {
       "market_id": "euro_stoxx50",
@@ -8674,19 +8607,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "euro_stoxx50",
-        "tickers_fetched": 52,
-        "dated_archives_stamped": 65,
-        "latest_wait_count": 7,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "euro_stoxx50",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:04:01.874550+00:00",
+        "generated_at": "2026-11-16T00:47:31.319332+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 1,
@@ -9122,17 +9051,7 @@
         "path": "docs/data/library/markets/euro_stoxx50/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "euro_stoxx50",
-        "snapshots_written": 65,
-        "exclusion": {
-          "snapshot_count": 65,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 65,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -9151,8 +9070,8 @@
       "never_buy_tier_count": 33,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "nasdaq100": {
       "market_id": "nasdaq100",
@@ -9162,19 +9081,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "nasdaq100",
-        "tickers_fetched": 89,
-        "dated_archives_stamped": 66,
-        "latest_wait_count": 9,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "nasdaq100",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:04:20.489713+00:00",
+        "generated_at": "2026-11-16T00:47:31.400208+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 5,
@@ -9877,17 +9792,7 @@
         "path": "docs/data/library/markets/nasdaq100/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "nasdaq100",
-        "snapshots_written": 66,
-        "exclusion": {
-          "snapshot_count": 66,
-          "ready_for_priors": true,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 66,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -9906,8 +9811,8 @@
       "never_buy_tier_count": 48,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": true,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "cac40": {
       "market_id": "cac40",
@@ -9917,19 +9822,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "cac40",
-        "tickers_fetched": 42,
-        "dated_archives_stamped": 56,
-        "latest_wait_count": 7,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "cac40",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:04:30.731959+00:00",
+        "generated_at": "2026-11-16T00:47:31.515250+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 1,
@@ -10212,17 +10113,7 @@
         "path": "docs/data/library/markets/cac40/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "cac40",
-        "snapshots_written": 56,
-        "exclusion": {
-          "snapshot_count": 56,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 56,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -10241,8 +10132,8 @@
       "never_buy_tier_count": 26,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "dax": {
       "market_id": "dax",
@@ -10252,19 +10143,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "dax",
-        "tickers_fetched": 39,
-        "dated_archives_stamped": 64,
-        "latest_wait_count": 8,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "dax",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:04:40.725647+00:00",
+        "generated_at": "2026-11-16T00:47:31.582853+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 2,
@@ -10589,17 +10476,7 @@
         "path": "docs/data/library/markets/dax/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "dax",
-        "snapshots_written": 64,
-        "exclusion": {
-          "snapshot_count": 64,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 64,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -10618,8 +10495,8 @@
       "never_buy_tier_count": 24,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "aim": {
       "market_id": "aim",
@@ -10629,19 +10506,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "aim",
-        "tickers_fetched": 51,
-        "dated_archives_stamped": 49,
-        "latest_wait_count": 2,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "aim",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:04:51.123400+00:00",
+        "generated_at": "2026-11-16T00:47:31.638833+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 1,
@@ -11074,17 +10947,7 @@
         "path": "docs/data/library/markets/aim/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "aim",
-        "snapshots_written": 49,
-        "exclusion": {
-          "snapshot_count": 49,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 49,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -11103,8 +10966,8 @@
       "never_buy_tier_count": 36,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "ibex35": {
       "market_id": "ibex35",
@@ -11114,19 +10977,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "ibex35",
-        "tickers_fetched": 34,
-        "dated_archives_stamped": 46,
-        "latest_wait_count": 3,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "ibex35",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:04:58.222700+00:00",
+        "generated_at": "2026-11-16T00:47:31.689588+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -11489,17 +11348,7 @@
         "path": "docs/data/library/markets/ibex35/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "ibex35",
-        "snapshots_written": 46,
-        "exclusion": {
-          "snapshot_count": 46,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 46,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -11518,8 +11367,8 @@
       "never_buy_tier_count": 27,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "ftse_mib": {
       "market_id": "ftse_mib",
@@ -11529,19 +11378,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "ftse_mib",
-        "tickers_fetched": 38,
-        "dated_archives_stamped": 52,
-        "latest_wait_count": 3,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "ftse_mib",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:05:06.412628+00:00",
+        "generated_at": "2026-11-16T00:47:31.741221+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -11895,17 +11740,7 @@
         "path": "docs/data/library/markets/ftse_mib/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "ftse_mib",
-        "snapshots_written": 52,
-        "exclusion": {
-          "snapshot_count": 52,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 52,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -11924,8 +11759,8 @@
       "never_buy_tier_count": 24,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "aex": {
       "market_id": "aex",
@@ -11935,19 +11770,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "aex",
-        "tickers_fetched": 24,
-        "dated_archives_stamped": 54,
-        "latest_wait_count": 2,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "aex",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:05:12.515893+00:00",
+        "generated_at": "2026-11-16T00:47:31.794523+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -12124,17 +11955,7 @@
         "path": "docs/data/library/markets/aex/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "aex",
-        "snapshots_written": 54,
-        "exclusion": {
-          "snapshot_count": 54,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 54,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -12153,8 +11974,8 @@
       "never_buy_tier_count": 13,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "bel20": {
       "market_id": "bel20",
@@ -12164,19 +11985,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "bel20",
-        "tickers_fetched": 19,
-        "dated_archives_stamped": 43,
-        "latest_wait_count": 5,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "bel20",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:05:17.392112+00:00",
+        "generated_at": "2026-11-16T00:47:31.838184+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -12371,17 +12188,7 @@
         "path": "docs/data/library/markets/bel20/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "bel20",
-        "snapshots_written": 43,
-        "exclusion": {
-          "snapshot_count": 43,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 43,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -12400,8 +12207,8 @@
       "never_buy_tier_count": 13,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "hang_seng": {
       "market_id": "hang_seng",
@@ -12411,391 +12218,387 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "hang_seng",
-        "tickers_fetched": 83,
-        "dated_archives_stamped": 49,
-        "latest_wait_count": 3,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "hang_seng",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:05:31.689796+00:00",
+        "generated_at": "2026-11-16T00:47:31.895129+00:00",
         "min_conviction": 0.28,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "not_buy_tier_count": 61,
-        "hold_near_buy_count": 24,
+        "hold_near_buy_count": 25,
         "never_buy_tier_count": 49,
         "buy_tier_not_now": [],
         "not_buy_tier": [
           {
             "ticker": "2688.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.6033
           },
           {
             "ticker": "2359.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5156
           },
           {
             "ticker": "0762.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4621
           },
           {
             "ticker": "2057.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4464
           },
           {
             "ticker": "0267.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4393
           },
           {
             "ticker": "6618.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4375
           },
           {
             "ticker": "0175.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4196
           },
           {
             "ticker": "1038.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4167
           },
           {
             "ticker": "0316.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4086
           },
           {
             "ticker": "0322.HK",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.4067
           },
           {
             "ticker": "0006.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3967
           },
           {
             "ticker": "0027.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3922
           },
           {
             "ticker": "1929.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3844
           },
           {
             "ticker": "0386.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.38
           },
           {
             "ticker": "9618.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3634
           },
           {
             "ticker": "1398.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3631
           },
           {
             "ticker": "0868.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.36
           },
           {
             "ticker": "0066.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.36
           },
           {
             "ticker": "2899.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.35
+          },
+          {
+            "ticker": "2313.HK",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.3192
           },
           {
             "ticker": "0003.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3
           },
           {
             "ticker": "1044.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.299
           },
           {
             "ticker": "0939.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2927
           },
           {
             "ticker": "0016.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2919
           },
           {
             "ticker": "2319.HK",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.2809
           },
           {
             "ticker": "1177.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2775
           },
           {
             "ticker": "0012.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2738
           },
           {
             "ticker": "0992.HK",
             "signal": "avoid",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.27
           },
           {
             "ticker": "3988.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2696
-          },
-          {
-            "ticker": "2313.HK",
-            "signal": "hold",
-            "timing_signal": "wait",
-            "conviction_score": 0.266
           },
           {
             "ticker": "1928.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2575
           },
           {
             "ticker": "1211.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2558
           },
           {
             "ticker": "1209.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2473
           },
           {
             "ticker": "0241.HK",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.24
           },
           {
             "ticker": "0836.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.235
           },
           {
             "ticker": "1299.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2332
           },
           {
             "ticker": "0688.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2227
           },
           {
             "ticker": "1088.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.22
           },
           {
             "ticker": "0960.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2028
           },
           {
             "ticker": "2318.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1981
           },
           {
             "ticker": "1876.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.194
           },
           {
             "ticker": "9633.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1828
           },
           {
             "ticker": "9999.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.176
           },
           {
             "ticker": "0981.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1725
           },
           {
             "ticker": "3692.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1706
           },
           {
             "ticker": "0700.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.166
           },
           {
             "ticker": "0669.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1586
           },
           {
             "ticker": "2015.HK",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1562
           },
           {
             "ticker": "3968.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1484
           },
           {
             "ticker": "1810.HK",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1433
           },
           {
             "ticker": "0002.HK",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1367
           },
           {
             "ticker": "0388.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1336
           },
           {
             "ticker": "0005.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1207
           },
           {
             "ticker": "2388.HK",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1182
           },
           {
             "ticker": "9888.HK",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1161
           },
           {
             "ticker": "1997.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0948
           },
           {
             "ticker": "2269.HK",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.075
           },
           {
             "ticker": "9992.HK",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.062
           },
           {
             "ticker": "0823.HK",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0607
           },
           {
             "ticker": "3690.HK",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0563
           },
           {
             "ticker": "9988.HK",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0492
           },
           {
             "ticker": "0881.HK",
             "signal": "avoid",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.0
           }
         ],
@@ -12803,145 +12606,151 @@
           {
             "ticker": "2688.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.6033
           },
           {
             "ticker": "2359.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5156
           },
           {
             "ticker": "0762.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4621
           },
           {
             "ticker": "2057.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4464
           },
           {
             "ticker": "0267.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4393
           },
           {
             "ticker": "6618.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4375
           },
           {
             "ticker": "0175.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4196
           },
           {
             "ticker": "1038.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4167
           },
           {
             "ticker": "0316.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4086
           },
           {
             "ticker": "0322.HK",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.4067
           },
           {
             "ticker": "0006.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3967
           },
           {
             "ticker": "0027.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3922
           },
           {
             "ticker": "1929.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3844
           },
           {
             "ticker": "0386.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.38
           },
           {
             "ticker": "9618.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3634
           },
           {
             "ticker": "1398.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3631
           },
           {
             "ticker": "0868.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.36
           },
           {
             "ticker": "0066.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.36
           },
           {
             "ticker": "2899.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.35
+          },
+          {
+            "ticker": "2313.HK",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.3192
           },
           {
             "ticker": "0003.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3
           },
           {
             "ticker": "1044.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.299
           },
           {
             "ticker": "0939.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2927
           },
           {
             "ticker": "0016.HK",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2919
           },
           {
             "ticker": "2319.HK",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.2809
           }
         ],
@@ -13098,17 +12907,7 @@
         "path": "docs/data/library/markets/hang_seng/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "hang_seng",
-        "snapshots_written": 49,
-        "exclusion": {
-          "snapshot_count": 49,
-          "ready_for_priors": true,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 49,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -13123,12 +12922,12 @@
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 61,
-      "hold_near_buy_count": 24,
+      "hold_near_buy_count": 25,
       "never_buy_tier_count": 49,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": true,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "us_adr_asia": {
       "market_id": "us_adr_asia",
@@ -13138,19 +12937,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "us_adr_asia",
-        "tickers_fetched": 23,
-        "dated_archives_stamped": 48,
-        "latest_wait_count": 4,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "us_adr_asia",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:05:37.654632+00:00",
+        "generated_at": "2026-11-16T00:47:31.971935+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 1,
@@ -13349,17 +13144,7 @@
         "path": "docs/data/library/markets/us_adr_asia/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "us_adr_asia",
-        "snapshots_written": 48,
-        "exclusion": {
-          "snapshot_count": 48,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 48,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -13378,8 +13163,8 @@
       "never_buy_tier_count": 16,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "sti": {
       "market_id": "sti",
@@ -13389,21 +13174,17 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "sti",
-        "tickers_fetched": 28,
-        "dated_archives_stamped": 50,
-        "latest_wait_count": 0,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "sti",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:05:44.177785+00:00",
+        "generated_at": "2026-11-16T00:47:32.031704+00:00",
         "min_conviction": 0.28,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "not_buy_tier_count": 21,
         "hold_near_buy_count": 5,
@@ -13413,127 +13194,127 @@
           {
             "ticker": "5E2.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4112
           },
           {
             "ticker": "H78.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3908
           },
           {
             "ticker": "J69U.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3825
           },
           {
             "ticker": "F34.SI",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.355
           },
           {
             "ticker": "C09.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3183
           },
           {
             "ticker": "V03.SI",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.2783
           },
           {
             "ticker": "BUOU.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2742
           },
           {
             "ticker": "S58.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2675
           },
           {
             "ticker": "U11.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2419
           },
           {
             "ticker": "D01.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2333
           },
           {
             "ticker": "AJBU.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2098
-          },
-          {
-            "ticker": "S68.SI",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.19
           },
           {
             "ticker": "Z74.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1616
+            "timing_signal": "",
+            "conviction_score": 0.1939
+          },
+          {
+            "ticker": "S68.SI",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.19
           },
           {
             "ticker": "C38U.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1462
           },
           {
             "ticker": "M44U.SI",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1422
           },
           {
             "ticker": "9CI.SI",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1186
           },
           {
             "ticker": "S63.SI",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0983
           },
           {
             "ticker": "O39.SI",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.0794
           },
           {
             "ticker": "U96.SI",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0736
           },
           {
             "ticker": "BN4.SI",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0692
           },
           {
             "ticker": "D05.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.065
           }
         ],
@@ -13541,31 +13322,31 @@
           {
             "ticker": "5E2.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4112
           },
           {
             "ticker": "H78.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3908
           },
           {
             "ticker": "J69U.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3825
           },
           {
             "ticker": "F34.SI",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.355
           },
           {
             "ticker": "C09.SI",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3183
           }
         ],
@@ -13635,17 +13416,7 @@
         "path": "docs/data/library/markets/sti/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "sti",
-        "snapshots_written": 50,
-        "exclusion": {
-          "snapshot_count": 50,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 50,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 2,
@@ -13673,8 +13444,8 @@
       "never_buy_tier_count": 20,
       "rememo_eligible_count": 2,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "atx": {
       "market_id": "atx",
@@ -13684,19 +13455,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "atx",
-        "tickers_fetched": 17,
-        "dated_archives_stamped": 30,
-        "latest_wait_count": 1,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "atx",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:05:48.066933+00:00",
+        "generated_at": "2026-11-16T00:47:32.085964+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -13843,17 +13610,7 @@
         "path": "docs/data/library/markets/atx/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "atx",
-        "snapshots_written": 30,
-        "exclusion": {
-          "snapshot_count": 30,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 30,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -13872,8 +13629,8 @@
       "never_buy_tier_count": 11,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "psi20": {
       "market_id": "psi20",
@@ -13883,19 +13640,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "psi20",
-        "tickers_fetched": 17,
-        "dated_archives_stamped": 31,
-        "latest_wait_count": 0,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "psi20",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:05:51.087832+00:00",
+        "generated_at": "2026-11-16T00:47:32.121780+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -14087,17 +13840,7 @@
         "path": "docs/data/library/markets/psi20/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "psi20",
-        "snapshots_written": 31,
-        "exclusion": {
-          "snapshot_count": 31,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 31,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -14116,8 +13859,8 @@
       "never_buy_tier_count": 14,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "smi": {
       "market_id": "smi",
@@ -14127,19 +13870,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "smi",
-        "tickers_fetched": 21,
-        "dated_archives_stamped": 31,
-        "latest_wait_count": 5,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "smi",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:05:54.379433+00:00",
+        "generated_at": "2026-11-16T00:47:32.155441+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 1,
@@ -14320,17 +14059,7 @@
         "path": "docs/data/library/markets/smi/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "smi",
-        "snapshots_written": 31,
-        "exclusion": {
-          "snapshot_count": 31,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 31,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -14349,8 +14078,8 @@
       "never_buy_tier_count": 14,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "omxs30": {
       "market_id": "omxs30",
@@ -14360,19 +14089,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "omxs30",
-        "tickers_fetched": 29,
-        "dated_archives_stamped": 35,
-        "latest_wait_count": 3,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "omxs30",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:05:58.941814+00:00",
+        "generated_at": "2026-11-16T00:47:32.198886+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 1,
@@ -14586,17 +14311,7 @@
         "path": "docs/data/library/markets/omxs30/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "omxs30",
-        "snapshots_written": 35,
-        "exclusion": {
-          "snapshot_count": 35,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 35,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -14615,8 +14330,8 @@
       "never_buy_tier_count": 17,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     },
     "iseq20": {
       "market_id": "iseq20",
@@ -14626,19 +14341,15 @@
       "ai_judgment": false,
       "knob_apply": false,
       "timing": {
-        "skipped": false,
-        "market_id": "iseq20",
-        "tickers_fetched": 19,
-        "dated_archives_stamped": 30,
-        "latest_wait_count": 3,
-        "timing_signal_present": true
+        "skipped": true,
+        "reason": "stamp_timing off"
       },
       "near_miss": {
         "schema_version": 2,
         "scope": "library_near_miss_watch",
         "market_id": "iseq20",
         "observe_only": true,
-        "generated_at": "2026-11-15T07:06:02.312964+00:00",
+        "generated_at": "2026-11-16T00:47:32.247629+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 1,
@@ -14828,17 +14539,7 @@
         "path": "docs/data/library/markets/iseq20/screen/near_miss_watch.json"
       },
       "archives": {
-        "market_id": "iseq20",
-        "snapshots_written": 30,
-        "exclusion": {
-          "snapshot_count": 30,
-          "ready_for_priors": false,
-          "universe_mode": "buy_tier_only"
-        },
-        "exit_timing": {
-          "snapshot_count": 30,
-          "ready_for_probability_analysis": true
-        }
+        "skipped": true
       },
       "rememo": {
         "eligible_count": 0,
@@ -14857,8 +14558,8 @@
       "never_buy_tier_count": 11,
       "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
-      "exclusion_ready_for_priors": false,
-      "timing_signal_present": true
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
     }
   }
 }

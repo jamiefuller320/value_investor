@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-15T07:06:27.732007+00:00
+Track: `buy_tier_level` · updated 2026-11-16T00:47:29.142744+00:00
 
 ## Portfolio loser feedback
 
@@ -9,12 +9,6 @@ Track: `buy_tier_level` · updated 2026-11-15T07:06:27.732007+00:00
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
-
-### ZIM.AX — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### YAL.AX — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
 
 ### WHC.AX — weakening / watch_review (-15.6%)
 - research verdict neutral
@@ -93,6 +87,17 @@ Track: `buy_tier_level` · updated 2026-11-15T07:06:27.732007+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 80%
+
+### GMD.AX — weakening / watch_review (+0.0%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
+### NHC.AX — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 20% below intact floor
+- still buy
+- cheapness family still passes
 
 ### CDA.AX — weakening / watch_review (+0.2%)
 - research verdict neutral

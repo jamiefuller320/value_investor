@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-11-15T07:06:27.732007+00:00",
-  "as_of": "2026-11-15T18:06:27.612341+11:00",
+  "updated_at": "2026-11-16T00:47:29.142744+00:00",
+  "as_of": "2026-11-16T11:47:29.010706+11:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -20,8 +20,8 @@
   "underwater_count": 6,
   "thesis_status_counts": {
     "intact": 16,
-    "weakening": 12,
-    "broken": 2,
+    "weakening": 14,
+    "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
@@ -43,81 +43,17 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0833,
-      "quality": 0.3333,
-      "dividend": 0.375,
-      "garp": 0.5,
-      "risk": 0.0833
+      "cheapness": 0.0,
+      "quality": 0.2917,
+      "dividend": 0.2917,
+      "garp": 0.4583,
+      "risk": 0.0
     },
     "selection_feedback_flags": [],
     "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
-    {
-      "ticker": "ZIM.AX",
-      "name": "ZIM.AX",
-      "thesis_status": "broken",
-      "recommended_action": "exit_candidate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 16.513,
-      "avg_cost": 16.513,
-      "signal": null,
-      "timing_signal": null,
-      "conviction_score": null,
-      "data_quality_score": null,
-      "passed_families": [],
-      "failed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "research_verdict": null,
-      "reasons": [
-        "cheapness lost and not in buy tier"
-      ],
-      "intact_reasons": [],
-      "weaken_reasons": [],
-      "broken_reasons": [
-        "cheapness lost and not in buy tier"
-      ]
-    },
-    {
-      "ticker": "YAL.AX",
-      "name": "YAL.AX",
-      "thesis_status": "broken",
-      "recommended_action": "exit_candidate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 5.81,
-      "avg_cost": 5.81,
-      "signal": null,
-      "timing_signal": null,
-      "conviction_score": null,
-      "data_quality_score": null,
-      "passed_families": [],
-      "failed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "research_verdict": null,
-      "reasons": [
-        "cheapness lost and not in buy tier"
-      ],
-      "intact_reasons": [],
-      "weaken_reasons": [],
-      "broken_reasons": [
-        "cheapness lost and not in buy tier"
-      ]
-    },
     {
       "ticker": "WHC.AX",
       "name": "Whitehaven Coal Limited",
@@ -604,6 +540,86 @@
         "conviction 80%"
       ],
       "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "GMD.AX",
+      "name": "Genesis Minerals Limited",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 7.05,
+      "avg_cost": 7.05,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.425,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 42%"
+      ],
+      "weaken_reasons": [
+        "research verdict caution"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "NHC.AX",
+      "name": "New Hope Corporation Limited",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 5.23,
+      "avg_cost": 5.23,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.2047,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "quality",
+        "garp"
+      ],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "conviction 20% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 0.95"
+      ],
+      "weaken_reasons": [
+        "research verdict caution",
+        "conviction 20% below intact floor"
+      ],
       "broken_reasons": []
     },
     {
@@ -1182,7 +1198,7 @@
       "mark": 4.24,
       "avg_cost": 3.7549,
       "signal": "buy",
-      "timing_signal": "neutral",
+      "timing_signal": "accumulate",
       "conviction_score": 0.4977,
       "data_quality_score": 0.95,
       "passed_families": [
