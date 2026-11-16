@@ -1,5 +1,6 @@
 """Tests for research source ingestion helpers."""
 
+import json
 from pathlib import Path
 from unittest.mock import patch
 
@@ -198,6 +199,73 @@ def test_eng_20260921_02_uk_ingest_runs_ir_results_presentation_pipeline(
     metrics = meta["ir_presentation_metrics"]
     assert metrics["bridge_count"] == 2
     assert metrics["mandatory"] is True
+
+
+@patch("value_investor.research.ingest.fetch_google_news_rss", return_value=[])
+@patch("value_investor.research.ingest.fetch_yfinance_news", return_value=[])
+@patch(
+    "value_investor.research.ingest.fetch_annual_financials", return_value={"income_statement": {}}
+)
+@patch("value_investor.research.filings.ingest_filings")
+@patch("value_investor.research.filings.refetch_ir_presentation_sources")
+@patch("value_investor.research.filings.ensure_ir_allowlist_direct_filings_ingested")
+@patch("value_investor.research.filings.ensure_hkex_direct_filings_ingested")
+def test_asia_ingest_ensures_ir_allowlist_direct_for_c6l_si(
+    mock_hkex_ensure,
+    mock_ir_ensure,
+    mock_ir_presentation,
+    mock_ingest_filings,
+    _mock_financials,
+    _mock_yf_news,
+    _mock_google_news,
+    tmp_path: Path,
+):
+    """eng-20261116-01: sti deepen must bootstrap SGX allowlist before generic IR refetch."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    index_path = filings_dir / "filings_index.json"
+    index_path.write_text(
+        json.dumps(
+            {
+                "summary": {"total": 1, "with_body": 0, "annual": 0, "interim": 0},
+                "filings": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    mock_hkex_ensure.return_value = {"skipped": True, "reason": "not_hk_ticker"}
+    mock_ingest_filings.return_value = {
+        "filings_index_path": str(index_path),
+        "filings_regime": "asia_filings",
+        "filings_summary": {"total": 1, "with_body": 0},
+        "filings_sources": ["google_news_asia"],
+    }
+    mock_ir_ensure.return_value = {
+        "skipped": False,
+        "merge": {"added": 3, "total_allowlist": 3},
+        "attempted": 3,
+        "fetched": 2,
+        "ir_refetch": {"attempted": 3, "fetched": 2, "note": "refetch_ir_presentation_sources"},
+    }
+    mock_ir_presentation.return_value = {
+        "attempted": 0,
+        "fetched": 0,
+        "note": "refetch_ir_presentation_sources",
+    }
+
+    meta = ingest_research_sources(
+        ticker="C6L.SI",
+        company_name="Singapore Airlines Limited",
+        screening_snapshot={"ticker": "C6L.SI", "name": "Singapore Airlines", "signal": "buy"},
+        sources_dir=tmp_path,
+        market="sti",
+        deepen_history=True,
+    )
+
+    mock_ir_ensure.assert_called_once()
+    assert mock_ir_ensure.call_args.kwargs["ticker"] == "C6L.SI"
+    assert meta["ir_refetch"]["fetched"] == 2
+    assert meta["ir_refetch"]["attempted"] == 3
 
 
 @patch("value_investor.research.ingest.fetch_google_news_rss", return_value=[])

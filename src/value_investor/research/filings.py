@@ -6239,7 +6239,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://links.sgx.com/FileOpen/20241029_2QFY24%20Results_Financial%20Statement.ashx?App=Announcement&FileID=823421": "interim",
     # eng-20261028-05: U14.SI — 1H2025_Final slug has no half-year token (would classify other).
     "https://links.sgx.com/1.0.0/corporate-announcements/U776Y0C8YROX8M8K/855378_1.%20UOL%201H2025_Final.pdf": "interim",
-    # eng-20261114-02: C6L.SI — nr-q2fy2627 / slide-q2fy2526 slugs contain fy (would classify annual).
+    # eng-20261114-02 / eng-20261116-01: C6L.SI — FileOpen slugs need explicit periods (fy token).
+    "https://links.sgx.com/FileOpen/FS-fy2526.ashx?App=Announcement&FileID=888804": "annual",
     "https://links.sgx.com/FileOpen/nr-q2fy2627.ashx?App=Announcement&FileID=911002": "interim",
     "https://links.sgx.com/FileOpen/slide-q2fy2526.ashx?App=Announcement&FileID=867072": "interim",
     # eng-20261115-03: G13.SI — 1H2025 Results Announcement slug has no half-year token.
@@ -12235,6 +12236,103 @@ def filings_index_hkex_direct_gap(payload: dict[str, Any]) -> bool:
     if total == 0 or with_body == 0:
         return True
     return with_body < max(3, total // 2)
+
+
+def filings_index_ir_allowlist_direct_gap(payload: dict[str, Any]) -> bool:
+    """True when a ticker with builtin IR URLs still lacks key statutory bodies."""
+    from value_investor.filings_index_dating import key_bodies
+
+    if not isinstance(payload, dict):
+        return True
+    if not key_bodies(payload):
+        return True
+    filings = list(payload.get("filings") or [])
+    ir_rows = [row for row in filings if _is_ir_allowlist_row(row)]
+    if ir_rows and not any(row.get("has_body") for row in ir_rows):
+        return True
+    return int((payload.get("summary") or {}).get("with_body") or 0) == 0
+
+
+def ensure_ir_allowlist_direct_filings_ingested(
+    sources_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    market: str | None,
+    deepen_history: bool = False,
+    max_bodies: int = 20,
+    deadline_monotonic: float | None = None,
+) -> dict[str, Any]:
+    """
+    Merge builtin IR allowlist rows and refetch bodies when key bodies are still missing.
+
+    Listing-only ``asia_filings`` indexes (google_news_asia only) left sti names such as
+    C6L.SI at zero_body with 0/0 gap-closure refetch before allowlist URLs shipped.
+    """
+    if not ir_allowlist_direct_eligible(ticker):
+        return {"skipped": True, "reason": "no_ir_allowlist_direct"}
+
+    sources_dir = Path(sources_dir)
+    filings_dir = sources_dir / "filings"
+    index_path = filings_dir / "filings_index.json"
+    before = 0
+    if index_path.exists():
+        try:
+            raw = json.loads(index_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            raw = None
+        if isinstance(raw, dict):
+            before = int((raw.get("summary") or {}).get("with_body") or 0)
+            if not deepen_history and not filings_index_ir_allowlist_direct_gap(raw):
+                return {
+                    "skipped": True,
+                    "reason": "ir_allowlist_sufficient",
+                    "with_body_before": before,
+                    "with_body_after": before,
+                }
+
+    merge_meta = merge_ir_allowlist_filings(ticker, filings_dir)
+    if int(merge_meta.get("total_allowlist") or 0) <= 0:
+        return {
+            "skipped": True,
+            "reason": "no_allowlist_urls",
+            "merge": merge_meta,
+            "with_body_before": before,
+            "with_body_after": before,
+        }
+
+    from value_investor.library_ingest_budget import deadline_reached
+
+    ir_refetch: dict[str, Any] = {}
+    if not deadline_reached(deadline_monotonic):
+        ir_refetch = refetch_ir_presentation_sources(
+            filings_dir,
+            ticker,
+            company_name=company_name,
+            sources_dir=sources_dir,
+            max_bodies=max_bodies,
+            deadline_monotonic=deadline_monotonic,
+        )
+
+    after = before
+    if index_path.exists():
+        try:
+            post = json.loads(index_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            post = None
+        if isinstance(post, dict):
+            after = int((post.get("summary") or {}).get("with_body") or before)
+
+    return {
+        "skipped": False,
+        "merge": merge_meta,
+        "ir_refetch": ir_refetch,
+        "with_body_before": before,
+        "with_body_after": after,
+        "fetched": max(0, after - before),
+        "attempted": int(ir_refetch.get("attempted") or 0),
+        "note": "ensure_ir_allowlist_direct_filings_ingested",
+    }
 
 
 def ensure_hkex_direct_filings_ingested(

@@ -15,6 +15,7 @@ from value_investor.fetch import CompanyMetrics
 from value_investor.financials import extract_statement_metrics
 from value_investor.research.filings import (
     _BUILTIN_IR_URLS,
+    _IR_ALLOWLIST_URL_PERIOD,
     _PDF_DEPTH_LEAD_CHARS,
     PARKED_SOURCE_HUNTER_SKIP,
     _apply_headline_period,
@@ -9510,6 +9511,13 @@ def test_ir_allowlist_period_classifies_c6l_si_fs_and_q2fy_slugs():
         )
         == "annual"
     )
+    # eng-20261116-01: FS-fy2526 override keeps annual even if fy heuristics change.
+    assert (
+        _IR_ALLOWLIST_URL_PERIOD[
+            "https://links.sgx.com/FileOpen/FS-fy2526.ashx?App=Announcement&FileID=888804"
+        ]
+        == "annual"
+    )
     assert (
         _ir_allowlist_period_from_url(
             "https://links.sgx.com/FileOpen/nr-q2fy2627.ashx?App=Announcement&FileID=911002"
@@ -9530,6 +9538,66 @@ def test_filing_source_surface_c6l_si_ir_allowlist_direct_eng_20261114_02():
 
     assert ir_allowlist_direct_eligible("C6L.SI")
     assert filing_source_surface("sti", "C6L.SI") == "asia_filings+ir_allowlist_direct"
+
+
+@patch("value_investor.research.filings.refetch_ir_presentation_sources")
+def test_ensure_ir_allowlist_direct_merges_before_refetch_c6l_si(
+    mock_refetch,
+    tmp_path: Path,
+):
+    """eng-20261116-01: sti C6L.SI zero_body must merge SGX allowlist then attempt IR refetch."""
+    from value_investor.research.filings import (
+        ensure_ir_allowlist_direct_filings_ingested,
+        filings_index_ir_allowlist_direct_gap,
+    )
+
+    sources_dir = tmp_path / "sources"
+    filings_dir = sources_dir / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 1, "with_body": 0, "annual": 0, "interim": 0},
+                "filings": [
+                    {
+                        "id": "gn1",
+                        "source": "google_news_asia",
+                        "url": "https://news.google.com/foo",
+                        "period": "other",
+                        "has_body": False,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert filings_index_ir_allowlist_direct_gap(
+        json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    )
+
+    mock_refetch.return_value = {
+        "attempted": 3,
+        "fetched": 3,
+        "with_body_after": 3,
+        "allowlist_count": 3,
+    }
+
+    result = ensure_ir_allowlist_direct_filings_ingested(
+        sources_dir,
+        ticker="C6L.SI",
+        company_name="Singapore Airlines Limited",
+        market="sti",
+        deepen_history=True,
+    )
+
+    assert result["skipped"] is False
+    assert int(result["merge"]["total_allowlist"]) == 3
+    assert int(result["merge"]["added"]) >= 1
+    assert result["attempted"] == 3
+    mock_refetch.assert_called_once()
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 3
+    assert "ir_allowlist" in payload["sources_used"]
 
 
 def test_fetch_filings_ir_allowlist_sti_g13_si_builtins_eng_20261115_03(tmp_path: Path):
