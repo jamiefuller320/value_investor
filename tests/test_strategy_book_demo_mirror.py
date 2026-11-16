@@ -15,7 +15,10 @@ from value_investor.strategy_book_demo_mirror import (
     CATCHUP_ATTEMPT_LIMIT,
     DEMO_KEY_ENV,
     DEMO_SECRET_ENV,
+    NEAR_CLOSE_SLOTS_UTC,
+    NEAR_CLOSE_UNSLOTTED_MARKETS,
     ORDER_CAP,
+    TITLE_CATCHUP_WAITING,
     TITLE_FX_REJECTED,
     TITLE_MISMATCH,
     TITLE_NOT_CONFIGURED,
@@ -35,6 +38,7 @@ from value_investor.strategy_book_demo_mirror import (
     compute_slippage,
     demo_base_url,
     demo_credentials,
+    execution_summary,
     findings_from_ledger,
     fx_conversion,
     fx_fee,
@@ -43,10 +47,12 @@ from value_investor.strategy_book_demo_mirror import (
     note_delistings,
     reconcile,
     run_mirror,
+    send_window,
 )
 from value_investor.t212_client import DEMO_BASE, LIVE_BASE
 
-NOW = datetime(2026, 11, 11, 10, 0, tzinfo=UTC)
+NOW = datetime(2026, 11, 11, 16, 10, tzinfo=UTC)
+US_NOW = datetime(2026, 11, 11, 20, 40, tzinfo=UTC)
 AFTER_CLOSE = datetime(2026, 11, 11, 17, 0, tzinfo=UTC)
 SIGNAL = "2026-11-10"
 MODULE = Path(__file__).resolve().parents[1] / "src/value_investor/strategy_book_demo_mirror.py"
@@ -268,14 +274,15 @@ def test_strategy_book_demo_plans_entry_exit_unlisted_and_non_primary(tmp_path: 
     assert entry["action"] == "would_place"
     assert entry["side"] == "BUY"
     assert entry["t212_ticker"] == "FOURl_EQ"
-    assert entry["limit_price"] == 4066.0
+    assert entry["limit_price"] == 4187.98
+    assert entry["chart_close"] == 4066.0
     assert entry["limit_currency"] == "GBX"
     assert entry["quantity"] == 2.4594
     assert entry["time_validity"] == "GOOD_TILL_CANCEL"
     assert entry["fill_session"] == "2026-11-11"
     assert entry["observe_data_commit"] == "abc123"
     assert entry["influences_live"] is False
-    assert entry["price_basis"] == "signal_session_chart_close_as_instrument_currency"
+    assert entry["price_basis"] == "signal_session_chart_close_through_band_as_instrument_currency"
 
     exit_row = rows["MEGP.L"]
     assert exit_row["action"] == "would_place"
@@ -439,7 +446,8 @@ def test_strategy_book_demo_idempotent_rerun_and_submitting_checkpoint(tmp_path:
     assert buy["timeValidity"] == "GOOD_TILL_CANCEL"
     assert buy["ticker"] == "FOURl_EQ"
     assert buy["quantity"] == 2.4594
-    assert buy["limitPrice"] == 4066.0
+    assert buy["limitPrice"] == 4187.98
+    assert sell["limitPrice"] == 100.3
     assert sell["quantity"] == -2.5
     assert sell["ticker"] == "PHTMl_EQ"
 
@@ -545,14 +553,14 @@ def test_strategy_book_demo_submit_unknown_adopts_a_pending_order(tmp_path: Path
             "ticker": "FOURl_EQ",
             "side": "BUY",
             "quantity": 2.4594,
-            "limitPrice": 4066.0,
+            "limitPrice": 4187.98,
             "status": "NEW",
         }
     ]
     fake.history = [
         {
             "order": {"ticker": "PHTMl_EQ", "side": "SELL", "id": 502},
-            "fill": {"id": 9, "quantity": 2.5, "price": 104.0, "filledAt": "2026-11-11T11:00:00Z"},
+            "fill": {"id": 9, "quantity": 2.5, "price": 104.0, "filledAt": "2026-11-11T16:15:00Z"},
         }
     ]
     store = _run(tmp_path, fake)
@@ -1015,7 +1023,7 @@ def test_strategy_book_demo_gbp_account_sends_a_us_entry_and_records_the_fx_fee(
     env = {DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"}
     store = run_mirror(
         repo_root=tmp_path,
-        now=NOW,
+        now=US_NOW,
         apply=True,
         place=True,
         transport=fake,
@@ -1024,7 +1032,7 @@ def test_strategy_book_demo_gbp_account_sends_a_us_entry_and_records_the_fx_fee(
     )
     assert fake.calls == 1
     assert fake.placed[0]["ticker"] == "CRM_US_EQ"
-    assert fake.placed[0]["limitPrice"] == 255.0
+    assert fake.placed[0]["limitPrice"] == 262.65
     plan = store["plans"][0]
     assert plan["action"] == "placed"
     assert plan["fx_conversion"] is True
@@ -1062,7 +1070,7 @@ def test_strategy_book_demo_gbp_account_sends_a_us_entry_and_records_the_fx_fee(
     fake.position_rows = [{"ticker": "CRM_US_EQ", "quantity": 0.3921}]
     again = run_mirror(
         repo_root=tmp_path,
-        now=NOW,
+        now=US_NOW,
         apply=True,
         place=True,
         transport=fake,
@@ -1087,7 +1095,7 @@ def test_strategy_book_demo_fx_rejection_is_final_and_warns(tmp_path: Path) -> N
     env = {DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"}
     store = run_mirror(
         repo_root=tmp_path,
-        now=NOW,
+        now=US_NOW,
         apply=True,
         place=True,
         transport=fake,
@@ -1102,7 +1110,7 @@ def test_strategy_book_demo_fx_rejection_is_final_and_warns(tmp_path: Path) -> N
     fake.fail = None
     run_mirror(
         repo_root=tmp_path,
-        now=NOW,
+        now=US_NOW,
         apply=True,
         place=True,
         transport=fake,
@@ -1112,37 +1120,186 @@ def test_strategy_book_demo_fx_rejection_is_final_and_warns(tmp_path: Path) -> N
     assert fake.calls == 1
 
 
-def test_strategy_book_demo_does_not_backfill_an_open_primary(tmp_path: Path) -> None:
+def _open_episode(**extra: object) -> dict:
+    row = {
+        "episode_id": "ftse350:FOUR.L:primary:2026-11-10",
+        "market": "ftse350",
+        "ticker": "FOUR.L",
+        "column": "primary",
+        "status": "open",
+        "signal_session": SIGNAL,
+        "fill_session": "2026-11-11",
+        "return_entry_fill": 4136.0,
+        "t212_listed": "unknown",
+        "currency": "GBP",
+    }
+    row.update(extra)
+    return row
+
+
+def test_strategy_book_demo_buys_an_open_primary_the_mirror_never_sent(tmp_path: Path) -> None:
+    _overlay(tmp_path, [_hit("FOUR.L")])
+    _chart(tmp_path, "FOUR.L", 4100.0, last="2026-11-11")
+    _observe(tmp_path, [], [_open_episode()])
+    fake = FakeTransport()
+    early = _run(tmp_path, fake, datetime(2026, 11, 12, 10, 0, tzinfo=UTC))
+    plan = next(row for row in early["plans"] if row["leg"] == "entry_catchup")
+    assert plan["action"] == "waiting"
+    assert plan["reason"] == "missed_entry_order"
+    assert fake.market_calls == 0
+
+    store = _run(tmp_path, fake, CATCH_NOW)
+    assert fake.market_orders == [{"ticker": "FOURl_EQ", "quantity": 2.439}]
+    plan = next(row for row in store["plans"] if row["leg"] == "entry_catchup")
+    assert plan["client_order_ref"] == "sbdemo:ftse350:FOUR.L:primary:2026-11-10:entry_catchup"
+    assert plan["side"] == "BUY"
+    assert plan["order_type"] == "MARKET"
+    assert plan["sizing_close"] == 4100.0
+    assert plan["sessions_late"] == 1
+    order = next(row for row in store["orders"] if row["leg"] == "entry_catchup")
+    assert order["catchup_reason"] == "missed_entry_order"
+    assert order["attempt_count"] == 1
+
+    fake.history = [
+        {
+            "order": {"id": 77, "ticker": "FOURl_EQ", "side": "BUY", "status": "FILLED"},
+            "fill": {
+                "id": 95,
+                "price": 4150.0,
+                "quantity": 2.439,
+                "filledAt": "2026-11-12T16:11:00Z",
+                "type": "TRADE",
+                "walletImpact": {"netValue": -101.7, "currency": "GBP"},
+            },
+        }
+    ]
+    again = _run(tmp_path, fake, CATCH_NOW)
+    assert fake.market_calls == 1
+    fill = next(row for row in again["fills"] if row["leg"] == "entry_catchup")
+    assert fill["timing"] == "catchup"
+    assert fill["sessions_late"] == 1
+    assert fill["slippage"]["slippage_pct"] == pytest.approx(4150.0 / 4136.0 - 1)
+    assert again["slippage"]["catchup_count"] == 1
+    assert again["execution"]["entry_catchups_sent"] == 1
+    later = _run(tmp_path, fake, datetime(2026, 11, 13, 16, 10, tzinfo=UTC))
+    assert fake.market_calls == 1
+    assert not any(row["action"] == "would_place" for row in later["plans"])
+
+
+def _entry_order(status: str, **extra: object) -> dict:
+    row = {
+        "client_order_ref": "sbdemo:ftse350:FOUR.L:primary:2026-11-10:entry",
+        "episode_id": "ftse350:FOUR.L:primary:2026-11-10",
+        "leg": "entry",
+        "order_type": "LIMIT",
+        "market": "ftse350",
+        "ticker": "FOUR.L",
+        "t212_ticker": "FOURl_EQ",
+        "side": "BUY",
+        "quantity": 2.459,
+        "limit_price": 4066.0,
+        "limit_currency": "GBX",
+        "fill_session": "2026-11-11",
+        "broker_order_id": 11,
+        "status": status,
+    }
+    row.update(extra)
+    return row
+
+
+@pytest.mark.parametrize(
+    ("order", "held", "bought"),
+    [
+        (_entry_order("cancelled", remainder_cancelled=True), 0.0, 2.459),
+        (_entry_order("partial", remainder_cancelled=True), 1.0, 1.459),
+        (_entry_order("placed"), 0.0, None),
+        (_entry_order("partial", remainder_cancelled=False), 1.0, None),
+    ],
+)
+def test_strategy_book_demo_unfilled_entry_catches_up_what_the_book_holds(
+    tmp_path: Path, order: dict, held: float, bought: float | None
+) -> None:
+    _overlay(tmp_path, [_hit("FOUR.L")])
+    _chart(tmp_path, "FOUR.L", 4100.0, last="2026-11-11")
+    _observe(tmp_path, [], [_open_episode()])
+    ledger = []
+    if held:
+        fill = _buy_fill(held)
+        fill["client_order_ref"] = order["client_order_ref"]
+        ledger.append(fill)
+    _write(
+        tmp_path / "docs/data/strategy_book_demo_ledger.json",
+        {"orders": [order], "plans": [], "fills": [], "ledger": ledger},
+    )
+    fake = FakeTransport()
+    store = _run(tmp_path, fake, CATCH_NOW)
+    if bought is None:
+        assert fake.market_calls == 0
+        assert not any(row["leg"] == "entry_catchup" for row in store["plans"])
+        return
+    assert fake.market_orders == [{"ticker": "FOURl_EQ", "quantity": bought}]
+    plan = next(row for row in store["plans"] if row["leg"] == "entry_catchup")
+    assert plan["reason"] == "unfilled_entry"
+
+
+def test_strategy_book_demo_sells_shares_the_book_never_filled(tmp_path: Path) -> None:
     _overlay(tmp_path, [_hit("FOUR.L")])
     _chart(tmp_path, "FOUR.L")
     _observe(
         tmp_path,
-        [_pending("FOUR.L")],
         [
             {
-                "episode_id": "ftse350:FOUR.L:primary:2026-11-10",
+                "kind": "memo_not_ready",
                 "market": "ftse350",
                 "ticker": "FOUR.L",
+                "session": SIGNAL,
+                "fill_session": "2026-11-11",
                 "column": "primary",
-                "status": "open",
-                "signal_session": SIGNAL,
-                "t212_listed": True,
             }
         ],
     )
-    fake = FakeTransport()
-    store = run_mirror(
-        repo_root=tmp_path,
-        now=NOW,
-        apply=True,
-        place=True,
-        transport=fake,
-        env={DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"},
-        min_interval_s=0,
+    _write(
+        tmp_path / "docs/data/strategy_book_demo_ledger.json",
+        {
+            "orders": [_entry_order("placed")],
+            "plans": [],
+            "fills": [],
+            "ledger": [_buy_fill(2.459)],
+        },
     )
-    assert store["plans"][0]["reason"] == "already_open"
-    assert store["plans"][0]["action"] == "not_mirrored"
-    assert fake.calls == 0
+    fake = FakeTransport()
+    store = _run(tmp_path, fake, CATCH_NOW)
+    assert fake.market_orders == [{"ticker": "FOURl_EQ", "quantity": -2.459}]
+    plan = next(row for row in store["plans"] if row["leg"] == "exit_catchup")
+    assert plan["reason"] == "book_not_filled"
+    assert plan["market"] == "ftse350"
+    assert plan["sessions_late"] == 1
+
+
+def test_strategy_book_demo_exit_with_unknown_listing_uses_the_overlay(tmp_path: Path) -> None:
+    _overlay(tmp_path, [_hit("FOUR.L")])
+    _chart(tmp_path, "FOUR.L", 4300.0, last="2026-11-11")
+    _observe(
+        tmp_path,
+        [],
+        [_open_episode(pending_exit=True, exit_signal_session="2026-11-11")],
+    )
+    _write(
+        tmp_path / "docs/data/strategy_book_demo_ledger.json",
+        {"orders": [], "plans": [], "fills": [], "ledger": [_buy_fill(2.459)]},
+    )
+    fake = FakeTransport()
+    store = _run(tmp_path, fake, CATCH_NOW)
+    sell = fake.placed[0]
+    assert sell == {
+        "ticker": "FOURl_EQ",
+        "quantity": -2.459,
+        "limitPrice": 4171.0,
+        "timeValidity": "GOOD_TILL_CANCEL",
+    }
+    plan = next(row for row in store["plans"] if row["leg"] == "exit")
+    assert plan["fill_session"] == "2026-11-12"
+    assert plan["action"] == "placed"
 
 
 def test_strategy_book_demo_stale_quote_and_missed_session(tmp_path: Path) -> None:
@@ -1199,7 +1356,7 @@ def test_strategy_book_demo_cli_dry_run(tmp_path: Path, capsys: pytest.CaptureFi
     _overlay(tmp_path, [_hit("FOUR.L")])
     _chart(tmp_path, "FOUR.L")
     _observe(tmp_path, [_pending("FOUR.L")])
-    code = main(["--repo-root", str(tmp_path), "--as-of", "2026-11-11T10:00:00+00:00"])
+    code = main(["--repo-root", str(tmp_path), "--as-of", "2026-11-11T16:10:00+00:00"])
     assert code == 0
     printed = json.loads(capsys.readouterr().out)
     assert printed["placement"] == "dry_run"
@@ -1286,7 +1443,7 @@ def test_strategy_book_demo_cancelled_order_is_not_a_fill_gap() -> None:
 
 
 EPISODE = "ftse350:FOUR.L:primary:2026-11-10"
-CATCH_NOW = datetime(2026, 11, 12, 18, 0, tzinfo=UTC)
+CATCH_NOW = datetime(2026, 11, 12, 16, 10, tzinfo=UTC)
 ENV = {DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"}
 
 
@@ -1563,3 +1720,204 @@ def test_strategy_book_demo_catchup_unknown_adopts_a_fill_instead_of_resending(
     adopted = next(row for row in second["orders"] if row["leg"] == "exit_catchup")
     assert adopted["status"] == "filled"
     assert adopted["broker_order_id"] == 77
+
+
+NEAR_CLOSE = (
+    Path(__file__).resolve().parents[1] / ".github/workflows/strategy-book-demo-near-close.yml"
+)
+IMPORT_CRONS = Path(__file__).resolve().parents[1] / ".github/workflows/import-ingest-crons.yml"
+
+
+def test_strategy_book_demo_send_window_edges() -> None:
+    day = "2026-11-11"
+    assert send_window("ftse350", day, datetime(2026, 11, 11, 15, 49, tzinfo=UTC)) == "early"
+    assert send_window("ftse350", day, datetime(2026, 11, 11, 15, 50, tzinfo=UTC)) == "open"
+    assert send_window("ftse350", day, datetime(2026, 11, 11, 16, 27, tzinfo=UTC)) == "open"
+    assert send_window("ftse350", day, datetime(2026, 11, 11, 16, 28, tzinfo=UTC)) == "closed"
+    assert send_window("sp500", day, datetime(2026, 11, 11, 20, 40, tzinfo=UTC)) == "open"
+    assert send_window("sp500", day, NOW) == "early"
+    assert send_window("ftse350", "2026-07-15", datetime(2026, 7, 15, 15, 10, tzinfo=UTC)) == "open"
+    assert send_window("ftse350", "2026-11-14", datetime(2026, 11, 14, 16, 10, tzinfo=UTC)) == (
+        "early"
+    )
+    assert send_window("nowhere", day, NOW) is None
+
+
+@pytest.mark.parametrize("day", ["2026-01-14", "2026-07-15", "2026-11-11"])
+def test_strategy_book_demo_every_listed_market_has_a_near_close_slot(day: str) -> None:
+    from datetime import date, timedelta
+
+    from value_investor.strategy_book_rules import MARKET_CLOSE_LOCAL, session_close
+
+    session = date.fromisoformat(day)
+    for market in MARKET_CLOSE_LOCAL:
+        if market in NEAR_CLOSE_UNSLOTTED_MARKETS:
+            continue
+        close_at = session_close(market, session)
+        slots = [
+            datetime(session.year, session.month, session.day, hour, minute, tzinfo=UTC)
+            for hour, minute in NEAR_CLOSE_SLOTS_UTC
+        ]
+        hits = [slot for slot in slots if send_window(market, session, slot) == "open"]
+        assert hits, f"{market} has no near-close slot on {day} (close {close_at})"
+        assert all(close_at - slot >= timedelta(minutes=15) for slot in hits), market
+
+
+def test_strategy_book_demo_entry_waits_for_its_near_close_window(tmp_path: Path) -> None:
+    _overlay(tmp_path, [_hit("FOUR.L")])
+    _chart(tmp_path, "FOUR.L")
+    _observe(tmp_path, [_pending("FOUR.L")])
+    fake = FakeTransport()
+    morning = _run(tmp_path, fake, datetime(2026, 11, 11, 10, 0, tzinfo=UTC))
+    assert fake.calls == 0
+    assert morning["plans"][0]["action"] == "waiting"
+    assert morning["plans"][0]["send_session"] == "2026-11-11"
+    first_wait = morning["plans"][0]["waiting_since"]
+    again = _run(tmp_path, fake, datetime(2026, 11, 11, 12, 0, tzinfo=UTC))
+    assert again["plans"][0]["waiting_since"] == first_wait
+    late = _run(tmp_path, fake, datetime(2026, 11, 11, 16, 29, tzinfo=UTC))
+    assert fake.calls == 0
+    assert late["plans"][0]["reason"] == "missed_send_window"
+
+    _us_world(tmp_path / "us")
+    us = FakeTransport()
+    after_london = _run(tmp_path / "us", us, datetime(2026, 11, 11, 17, 45, tzinfo=UTC))
+    assert us.calls == 0
+    assert after_london["plans"][0]["action"] == "waiting"
+    _run(tmp_path / "us", us, US_NOW)
+    assert us.calls == 1
+
+
+def test_strategy_book_demo_only_if_due_makes_no_call_and_no_write(tmp_path: Path) -> None:
+    _overlay(tmp_path, [_hit("FOUR.L")])
+    _chart(tmp_path, "FOUR.L")
+    _observe(tmp_path, [_pending("FOUR.L")])
+
+    class NoCalls(FakeTransport):
+        def account_summary(self) -> dict:
+            raise AssertionError("no API call when nothing is due")
+
+    store = run_mirror(
+        repo_root=tmp_path,
+        now=datetime(2026, 11, 11, 10, 0, tzinfo=UTC),
+        apply=True,
+        place=True,
+        transport=NoCalls(),
+        env=ENV,
+        min_interval_s=0,
+        only_if_due=True,
+    )
+    assert store["placement"] == "skipped_nothing_due"
+    assert store["plans"][0]["action"] == "waiting"
+    assert not (tmp_path / "docs/data/strategy_book_demo_ledger.json").exists()
+    fake = FakeTransport()
+    run_mirror(
+        repo_root=tmp_path,
+        now=NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=ENV,
+        min_interval_s=0,
+        only_if_due=True,
+    )
+    assert fake.calls == 1
+
+
+def test_strategy_book_demo_execution_summary_counts_misses_and_their_move() -> None:
+    ref = "sbdemo:ftse350:MEGP.L:primary:2026-11-10:entry"
+    orders = [
+        _entry_order("cancelled", remainder_cancelled=True),
+        {
+            **_entry_order("placed"),
+            "client_order_ref": ref,
+            "episode_id": "ftse350:MEGP.L:primary:2026-11-10",
+            "ticker": "MEGP.L",
+        },
+        {
+            **_entry_order("placed"),
+            "client_order_ref": "sbdemo:sp500:NVDA:primary:2026-11-13:entry",
+            "market": "sp500",
+            "fill_session": "2026-11-16",
+        },
+        {"leg": "entry_catchup", "status": "filled"},
+    ]
+    events = [{"type": "fill", "side": "BUY", "quantity": 96.7, "client_order_ref": ref}]
+    episodes = {"ftse350:FOUR.L:primary:2026-11-10": _open_episode()}
+    summary = execution_summary(orders, events, episodes, CATCH_NOW)
+    assert summary["entries_due"] == 2
+    assert summary["entries_filled"] == 1
+    assert summary["entries_missed"] == 1
+    assert summary["entry_fill_rate"] == pytest.approx(0.5)
+    assert summary["missed_book_move_median_pct"] == pytest.approx(4136.0 / 4066.0 - 1)
+    assert summary["entry_catchups_sent"] == 1
+    text = next(
+        row["summary"]
+        for row in findings_from_ledger(
+            {
+                "demo_credentials_present": True,
+                "execution": summary,
+                "fills": [{"slippage": {"status": "measured", "slippage_pct": 0.005}}],
+            }
+        )
+        if row["title"] == TITLE_SLIPPAGE
+    )
+    assert "On-time entries filled: 1 of 2 (50%)" in text
+    assert "+1.72% from the signal close" in text
+
+
+def test_strategy_book_demo_warns_when_a_catchup_keeps_waiting() -> None:
+    plans = [
+        {
+            "leg": "entry_catchup",
+            "action": "waiting",
+            "sessions_late": 4,
+            "waiting_since": "2026-11-16T17:45:00+00:00",
+            "ticker": "CRM",
+        },
+        {
+            "leg": "exit_catchup",
+            "action": "waiting",
+            "sessions_late": 4,
+            "waiting_since": "2026-11-17T21:30:00+00:00",
+            "ticker": "FIS",
+        },
+    ]
+    ledger = {
+        "demo_credentials_present": True,
+        "generated_at": "2026-11-18T17:45:00+00:00",
+        "plans": plans,
+    }
+    rows = findings_from_ledger(ledger)
+    waiting = [row for row in rows if row["title"] == TITLE_CATCHUP_WAITING]
+    assert len(waiting) == 1
+    assert waiting[0]["severity"] == "warn" and waiting[0]["auto_fixable"] is False
+    assert "CRM" in waiting[0]["summary"] and "FIS" not in waiting[0]["summary"]
+    friday = {
+        **ledger,
+        "generated_at": "2026-11-23T17:45:00+00:00",
+        "plans": [{**plans[0], "waiting_since": "2026-11-20T21:30:00+00:00"}],
+    }
+    assert not [
+        row for row in findings_from_ledger(friday) if row["title"] == TITLE_CATCHUP_WAITING
+    ]
+
+
+def test_strategy_book_demo_near_close_workflow_wiring() -> None:
+    import re
+
+    workflow = NEAR_CLOSE.read_text(encoding="utf-8")
+    assert "TRADING212_DEMO_API_KEY" in workflow
+    assert "TRADING212_API_KEY" not in workflow
+    assert "--only-if-due" in workflow and "--place" in workflow
+    assert "docs/data/strategy_book_demo_ledger.json" in workflow
+    group = re.search(r"concurrency:\n\s+group: (\S+)", workflow)
+    forward_group = re.search(r"concurrency:\n\s+group: (\S+)", FORWARD.read_text("utf-8"))
+    assert group and forward_group and group.group(1) == forward_group.group(1)
+    crons = re.findall(r'cron: "(\d+) ([\d,]+) \* \* 1-5"', workflow)
+    slots = {(int(hour), int(minute)) for minute, hours in crons for hour in hours.split(",")}
+    assert slots == set(NEAR_CLOSE_SLOTS_UTC)
+    imports = IMPORT_CRONS.read_text(encoding="utf-8")
+    assert ".github/workflows/strategy-book-demo-near-close.yml" in imports
+    for minute in sorted({minute for _, minute in NEAR_CLOSE_SLOTS_UTC}):
+        assert f"--job strategy-book-demo-near-close-{minute:02d}" in imports

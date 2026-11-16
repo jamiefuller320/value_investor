@@ -2,10 +2,10 @@
 
 Observe-only copy of the strategy book's **primary** orders onto a Trading 212
 **practice** account, plus a raw-price ledger. Plan step 5.1. Learning
-question: when those orders are real limit orders, how do the fills (price,
-time, fill rate, partials, rejections) differ from the book's assumed close
-fills and assumed spread, and does the raw-price ledger reconcile to the demo
-statement?
+question: when those orders are real orders sent just before the fill
+session's close, how do the fills (price, time, fill rate, partials,
+rejections) differ from the book's assumed close fills and assumed spread,
+and does the raw-price ledger reconcile to the demo statement?
 
 The book keeps scoring on adjusted closes. This ledger does not feed the book,
 its scores, the registration, or any knob. `influences_live` is false.
@@ -41,8 +41,9 @@ is `not_mirrored` or `insufficient_data`, and no price or quantity is invented:
 | Catalogue hit but no Trading 212 ticker | `unmapped_instrument` |
 | Signal-session chart close missing | `insufficient_data` (`no_signal_close` or `no_chart`) |
 | Chart has not reached the signal session | `stale_quote` |
-| A primary episode with this signal is already `open` or `closed` | `already_open` (no backfill) |
+| A primary episode with this signal is already `open` or `closed` | `already_open` (the entry catch-up handles it, see [Catch-ups](#catch-ups)) |
 | Planning time is after that fill session's registered cash close | `missed_fill_session` |
+| The near-close send window for the fill session has passed, but the close has not | `missed_send_window` |
 | Stake currency and instrument currency have no rule below | `currency_mismatch` |
 | Practice-account currency (known only when a key is present) is missing | `account_currency_missing` (`insufficient_data`) |
 | Exit, but the ledger holds no shares from our entry fill | `no_demo_position` |
@@ -52,48 +53,64 @@ The overlay is `docs/data/library/t212_coverage/by_market/{market}.json`, the
 same catalogue hit the book uses. The mirror does not call the live catalogue
 key.
 
-Already-open primary episodes are not backfilled. The mirror starts from
-signals that are still pending. A `would_place` row that is still unsent when
-its fill session closes becomes `missed_fill_session` on the next run.
+An open primary episode the demo account does not hold is bought by an entry
+catch-up, and demo shares the book never filled are sold by an unwind (see
+[Catch-ups](#catch-ups)). A `would_place` row that is still unsent when its
+fill session closes becomes `missed_fill_session` on the next run.
 
 ## Order timing
 
-The book signals on a session close and assumes a fill at the **next**
-session's close (`fill_session`). The forward job runs at 17:45 UTC (after
-London and the continent) and 21:30 UTC (after New York and Toronto), which is
-**after** the signal session and **before** the next session's close.
+The book signals on a session close and assumes a **market buy** filled at
+the **next** session's close (`fill_session`, registration section 3). The
+public API has limit, market, stop and stop-limit orders. It has no
+closing-auction order. So the mirror sends shortly before the close instead
+(owner, 2026-11-16).
 
-The public API has limit, market, stop and stop-limit orders. It has no
-closing-auction order. A market order sent at 17:45 would rest until the next
-open and fill at the open, not the close.
+**Send window.** An order is sent only from 40 to 3 minutes before its
+session's registered cash close (`session_close` in `strategy_book_rules`;
+`send_window` returns `early`, `open` or `closed`). Before the window the
+plan row is `waiting` with `wait_reason` `before_send_window` and nothing is
+sent. A planned entry or exit whose window has passed before the close is
+`not_mirrored` / `missed_send_window`.
 
-**Order we send:** limit, `timeValidity` `GOOD_TILL_CANCEL`, price = the
-signal session's chart close, in the instrument's Trading 212 currency.
+The near-close job runs Monday to Friday at these UTC times. Each local close
+has at least one slot 15 to 40 minutes before it in both summer and winter:
 
-- Buy (entry): positive quantity. Fills at the limit or lower.
-- Sell (exit): negative quantity. Limit is the exit-signal session's close.
-  Fills at the limit or higher.
+| UTC | Closes covered |
+|---|---|
+| 04:40, 05:40 | ASX 16:00 Sydney |
+| 15:10, 16:10 | London 16:30, the continent 17:30 CET, Dublin and Lisbon 16:30 local |
+| 19:40, 20:40 | New York 16:00 and Toronto 16:00 |
+
+Hong Kong and Singapore have no slot because they have no Trading 212
+listing. The forward job (17:45 and 21:30 UTC) still plans, syncs, cancels
+and reconciles. It sends only when a row's window happens to be open at that
+moment.
+
+**Order we send:** a capped market order, sent as a limit through the signal
+close. A buy limit is the signal session's chart close × 1.03; a sell limit
+is that close × 0.97, rounded to 0.01 in the instrument's Trading 212
+currency. `timeValidity` is `GOOD_TILL_CANCEL`. Quantity is still the stake
+divided by the signal close, so the 3% band is not spent on extra shares.
+
+- Buy (entry): positive quantity. Fills at the best price up to the cap.
+- Sell (exit): negative quantity. Fills at the best price down to the floor.
 - `extendedHours` is left unset, so the order is regular hours only.
 
-`DAY` is not used. A DAY order expires at midnight in the exchange zone. Placed
-after the London close, it can die before the next session opens. GTC stays
-live through the next session, including the close.
+The order row keeps `signal_close`, `limit_band`, `sizing_close`,
+`send_session` and `instrument_currency`. The plan's `price_basis` is
+`signal_session_chart_close_through_band_as_instrument_currency`.
 
-The expected fill session is the next weekday after the signal. The order must
-be placed while `now` is still at or before that session's registered cash
-close (`session_close` in `strategy_book_rules`). After that close the mirror
-cancels any remainder. An entry that missed the session is not chased: the
-book does not fill a later bar. An exit that missed the session is chased,
-because the demo account has to get flat. See [Exit catch-up](#exit-catch-up).
+After the fill session's close the mirror cancels any remainder, as before.
+An entry that missed its session is bought by an entry catch-up on the next
+near-close run, and an exit that missed is sold the same way. See
+[Catch-ups](#catch-ups).
 
-**Trade-off.** The limit can fill at the open or at any print through the
-session, not only at the close. A gap the wrong way (buy: close above the
-signal close) never fills, while the book still assumes a fill at that close.
-Both results are the measurement: fill time, fill price, and misses. A job
-that sends the order a few minutes before the cash close would track the
-close more tightly. That is queued ("Send strategy-book demo limits shortly
-before the fill-session close"), not built: this step's trigger is the
-existing forward workflow.
+**Trade-off.** The band order fills at the market price in the last minutes,
+not the closing auction print. Price slippage against the book's close is
+the measurement. A move of more than 3% from the signal close before the
+send still leaves the order unfilled; the catch-up then buys or sells at
+market on the next session, with `sessions_late` recorded.
 
 **Holiday.** The next weekday is not an exchange holiday calendar. A bank
 holiday can be treated as the fill session and the remainder cancelled that
@@ -108,8 +125,8 @@ The broker order does.
 
 | Stake currency | Instrument currency | Shares |
 |---|---|---|
-| same (USD/USD, EUR/EUR, GBP/GBP) | | `stake / limit`, floored to 4 decimal places |
-| GBP | GBX | `stake × 100 / limit`, floored to 4 decimal places |
+| same (USD/USD, EUR/EUR, GBP/GBP) | | `stake / signal close`, floored to 4 decimal places |
+| GBP | GBX | `stake × 100 / signal close`, floored to 4 decimal places |
 
 London chart files are labelled `GBP`, but the stored closes are pence, the
 same unit as Trading 212 `GBX` (4imprint around 4066, ME Group around 103).
@@ -182,7 +199,7 @@ One store, `docs/data/strategy_book_demo_ledger.json`. `schema_version` 1.
 | Array | Contents |
 |---|---|
 | `plans` | One row per candidate this run. Includes `observe_data_commit`, `planned_at`, action, reason, limit, quantity, side, currencies, `client_order_ref`. |
-| `orders` | Broker order rows. Keyed by `client_order_ref` = `sbdemo:{episode_id}:{entry\|exit}`. |
+| `orders` | Broker order rows. Keyed by `client_order_ref` = `sbdemo:{episode_id}:{entry\|exit\|entry_catchup\|exit_catchup}`. |
 | `fills` | Trade fills with raw price, quantity, time, wallet impact, taxes, FX rate and conversion fee for converted fills, and slippage versus the book's adjusted close. |
 | `ledger` | Raw-price events: `fill`, `dividend`, `split`, `corporate_action`, `transaction`, `delisting`. |
 | `reconciliation` | `match`, `mismatch`, `insufficient_data`, or `skipped`. |
@@ -221,8 +238,8 @@ workflow commits the ledger. The mirror step exits 0 once a `submitting` row
 exists so that commit still runs. It exits 1 only when the resolved host is
 not the demo host, and that check happens before any POST.
 
-Hard cap: **20** new orders per run (`ORDER_CAP`). Exits are sent before
-entries. The rest are `capped` and are not sent. The cap is not configurable
+Hard cap: **20** new orders per run (`ORDER_CAP`). Order of sending: exit
+catch-ups, exits, entry catch-ups, entries. The rest are `capped` and are not sent. The cap is not configurable
 upward.
 
 ## Slippage
@@ -242,48 +259,60 @@ Until the book has recorded the fill close, slippage is `insufficient_data`.
 Nothing here writes the half-spread back into the book. That replacement is
 the rest of step 5.1's "done when" and waits on measured fills.
 
-On-time exit slippage and catch-up exit slippage are stored and reported
-separately. Both use the book's `exit_fill` (the adjusted close). The
-slippage finding states the on-time exit count and the catch-up count.
+On-time and catch-up slippage are stored and reported separately for entries
+and exits. Exits use the book's `exit_fill` and entry catch-ups use the
+book's entry price. The slippage finding states the on-time entry and exit
+medians and the catch-up count.
 
-## Exit catch-up
+`execution` (in the store and its `summary`) counts on-time entries whose
+fill session has closed: `entries_due`, `entries_filled`, `entries_missed`,
+`entries_rejected` and `entry_fill_rate`. `missed_book_move_median_pct` is
+the book's entry price over the missed limit, minus one: how far the price
+ran past the order. It also counts `entry_catchups_sent` and
+`exit_catchups_sent`.
 
-The demo account has to track the book's holdings. An entry that does not
-fill is cancelled and left alone: the book never fills that name on a later
-bar, so a later buy would be a position the book does not have. An exit is
-the opposite. Once the book has sold, demo shares that are still held are a
-position the book does not have. Leaving them makes every later
-reconciliation fail, and the gap never closes.
+## Catch-ups
 
-When an exit limit is cancelled, rejected, or only partly filled after its
-fill session, and the ledger still holds shares for that episode, the **next**
-run sends a market sell for the remaining shares. The same run that cancels
-the limit does not also send the market order. The client reference is
-`sbdemo:{episode_id}:exit_catchup`. It uses the same submitting checkpoint as
-a limit, it counts toward the 20-order cap, and catch-up sells are sent
-before limit exits, which are sent before entries.
+The demo account has to hold what the book holds. A catch-up is a market
+order sent on a later near-close run when the demo account and the book
+disagree. It is `POST /api/v0/equity/orders/market`, with no limit price and
+no `timeValidity`, and `extendedHours` left unset. It is sent only inside
+the send window for that market on that day, so it fills in the last minutes
+of a session, not at the next open. A 400 does not create an order.
 
-The same market sell is sent when the book episode is already `closed` and
-the mirror never had an exit order (the signal was gone by planning time).
-That row's reason is `missed_exit_order`. A cancelled or partial limit uses
-reason `unfilled_exit`.
+| Leg | Client reference | When | Reason |
+|---|---|---|---|
+| Entry catch-up (buy) | `sbdemo:{episode_id}:entry_catchup` | Open primary episode, no `pending_exit`, and the mirror never sent an entry and holds nothing | `missed_entry_order` |
+| | | The entry was cancelled or rejected, or only partly filled and the remainder cancelled | `unfilled_entry` |
+| Exit catch-up (sell) | `sbdemo:{episode_id}:exit_catchup` | The exit limit was cancelled, rejected or partly filled and shares are still held | `unfilled_exit` |
+| | | The book episode is `closed` and the mirror never had an exit order | `missed_exit_order` |
+| | | Demo shares exist for a primary signal the book never filled (`memo_not_ready`, `memo_blocked`, `late_signal`, `gap_drop` or `no_next_bar`) | `book_not_filled` |
 
-The order is `POST /api/v0/equity/orders/market` with a negative quantity.
-`extendedHours` is left unset. There is no limit price and no `timeValidity`.
-The published API queues a market order placed while the market is closed
-until the next open. A 400 does not create an order.
+Entry catch-up quantity is the entry order's quantity minus shares already
+held, or, with no entry order, the stake divided by the latest stored chart
+close (`sizing_close`). Exit catch-up quantity is all shares the ledger
+holds for that episode.
 
-`sessions_late` is the number of weekdays after the book's exit session, up
-to the day the catch-up is sent. The same evening is 0. The fill is tagged
-`timing: catchup` and its slippage is against `exit_fill`, not mixed into
-the on-time exit median.
+The same run that cancels a limit does not also send the catch-up. A
+catch-up uses the same submitting checkpoint as a limit and counts toward
+the 20-order cap. `sessions_late` is the number of weekdays after the book's
+fill session up to the send day. The fill is tagged `timing: catchup` and
+reported apart from the on-time medians.
 
 A rejected catch-up, or one whose result is unknown, is retried on the next
-run. Before an unknown result is retried, a single matching pending order or
-a single later sell fill is adopted so a queued or filled sell is not sent
-twice. After 5 attempts the row is `stuck` and is not sent again. Ops-monitor
-warns **Strategy book demo position stuck**. That finding does not place,
-cancel, or repair anything.
+due run. Before an unknown result is retried, a single matching pending
+order or a single later fill is adopted so a queued or filled order is not
+sent twice. After 5 attempts the row is `stuck` and is not sent again.
+Ops-monitor warns **Strategy book demo position stuck**. A catch-up that has
+been `waiting` (stamped `waiting_since`) through a full weekday of slots
+warns **Strategy book demo catch-up waiting** (the near-close job may not be
+firing). Neither finding places,
+cancels or repairs anything.
+
+Known edge: a limit that fills between the statement read and the
+post-close cancel can make the next entry catch-up overbuy. The
+reconciliation then shows a quantity mismatch, and the next exit sells
+everything the ledger holds.
 
 ## Reconciliation
 
@@ -323,8 +352,20 @@ and is skipped; a filled order without a `fill.id` is still a gap.
 `strategy-book-forward.yml` runs `ftse-strategy-book-demo` after the forward
 walk. With both demo secrets and a real (not workflow dry-run) walk, it passes
 `--apply --place`. With either secret missing, it plans only and exits 0.
-The ledger is on that workflow's `GHA_COMMIT_OWNED` list and on email-report's
-exclude list, so this workflow is the only writer.
+
+`strategy-book-demo-near-close.yml` runs
+`ftse-strategy-book-demo --apply --place --only-if-due` at the near-close
+slots. cron-job.org is the primary trigger (`strategy-book-demo-near-close-10`
+for 15:10 and 16:10 UTC, `strategy-book-demo-near-close-40` for 04:40, 05:40,
+19:40 and 20:40 UTC, imported by `import-ingest-crons.yml`); the workflow's
+own schedule is a backup. `--only-if-due` returns before any API call or
+write when no row is due, so idle slots commit nothing. Without the demo
+secrets the step prints that nothing was sent and exits 0.
+
+Both workflows share the concurrency group `strategy-book-forward`, so only
+one writes the ledger at a time. The ledger is on the forward workflow's
+`GHA_COMMIT_OWNED` list and on email-report's exclude list; the near-close
+workflow commits only the ledger.
 
 Ops-monitor `check_strategy_book_demo_mirror` reads the ledger and does not
 place orders. All findings are `auto_fixable` false:
@@ -334,8 +375,9 @@ place orders. All findings are `auto_fixable` false:
 | Strategy book demo mirror not configured | info | Ledger missing, or the last run had no demo credentials |
 | Strategy book demo orders placed | info | The last run sent at least one order |
 | Strategy book demo reconciliation mismatch | warn | Reconciliation status is `mismatch`, or the ledger is unreadable |
-| Strategy book demo slippage | info | At least one fill has measured slippage; also reports the median FX conversion fee |
-| Strategy book demo position stuck | warn | A market exit catch-up is still held after 5 attempts |
+| Strategy book demo slippage | info | At least one fill has measured slippage; reports on-time entry and exit medians, catch-ups, the on-time entry fill rate, the median move past missed entries, and the median FX conversion fee |
+| Strategy book demo position stuck | warn | A catch-up is still unfilled after 5 attempts |
+| Strategy book demo catch-up waiting | warn | A catch-up has been `waiting` through a full weekday of near-close slots without a send |
 | Strategy book demo FX order rejected | warn | Trading 212 rejected an order that converts from the account currency |
 
 ## Owner setup
@@ -360,4 +402,7 @@ ftse-strategy-book-demo --repo-root . --apply --place
   and 103.4 (MEGP.L) are sent as GBX because that is the pence scale in the
   chart file and on the overlay.
 - The cap of 20 and the next-weekday fill window are safety choices. A
-  holiday calendar and a pre-close send are queued behind this step.
+  holiday calendar is queued behind this step.
+- The 3% band and the 40-to-3-minute send window (owner, 2026-11-16). Widen
+  the band only if missed on-time entries keep showing a median move past the
+  order above 3%.

@@ -1,0 +1,67 @@
+name: Strategy book demo near-close
+
+# Sends strategy-book orders to the Trading 212 practice account shortly before
+# each market's cash close, so demo fills land near the close the book scores.
+# Primary trigger is cron-job.org workflow_dispatch (scripts/import_cron_jobs.py
+# keys strategy-book-demo-near-close-10 / strategy-book-demo-near-close-40);
+# GitHub's schedule below is a backup and is often late. A late run is safe: the
+# mirror only sends orders inside the 40-to-3-minute window before a close, so a
+# run outside every window exits without an API call or a write.
+# Slots (UTC) are NEAR_CLOSE_SLOTS_UTC in strategy_book_demo_mirror.py, 20 minutes
+# before: ASX 05:00 / 06:00, London and the continent 15:30 / 16:30, New York and
+# Toronto 20:00 / 21:00 (summer / winter).
+on:
+  schedule:
+    - cron: "40 4,5,19,20 * * 1-5"
+    - cron: "10 15,16 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Shared with strategy-book-forward.yml: both write the demo ledger, and a run
+# must check out the ledger the previous run committed.
+concurrency:
+  group: strategy-book-forward
+  cancel-in-progress: false
+
+jobs:
+  near-close:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: bash scripts/gha_pip_install.sh -e .
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      # Practice-account mirror only. Never uses the live catalogue key.
+      # See docs/ops/strategy-book-demo-mirror.md.
+      - name: Send near-close orders on the Trading 212 demo account
+        env:
+          TRADING212_DEMO_API_KEY: ${{ secrets.TRADING212_DEMO_API_KEY }}
+          TRADING212_DEMO_API_SECRET: ${{ secrets.TRADING212_DEMO_API_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "${TRADING212_DEMO_API_KEY:-}" ] || [ -z "${TRADING212_DEMO_API_SECRET:-}" ]; then
+            echo "Demo secrets absent — nothing sent"
+            exit 0
+          fi
+          ftse-strategy-book-demo --repo-root . --apply --place --only-if-due
+
+      - name: Commit the demo ledger
+        env:
+          COMMIT_MESSAGE: "chore: strategy book demo near-close [skip ci]"
+          GHA_COMMIT_LABEL: "Strategy book demo near-close"
+          GHA_COMMIT_OWNED: |
+            docs/data/strategy_book_demo_ledger.json
+        run: bash scripts/gha_commit_artifacts.sh
