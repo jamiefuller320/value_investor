@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-11-16T02:36:15.406350+00:00",
+  "compiled_at": "2026-11-16T07:51:07.663803+00:00",
   "run_at": null,
-  "task_count": 290,
+  "task_count": 291,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -4642,6 +4642,87 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
+    },
+    {
+      "id": "eng-20261116-02",
+      "area": "ingest",
+      "title": "Close library ingest gaps for sti / C6L.SI (chain 2/3: 0/0 improved, run igc-20261113-03)",
+      "summary": "Ingest gap-closure run igc-20261113-03 (chain root igc-20261113-03, round 2) targeted C6L.SI with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20261113-03",
+        "trial_id": "igc-20261113-03",
+        "chain_root_id": "igc-20261113-03",
+        "chain_round": 2,
+        "tickers": [
+          "C6L.SI"
+        ],
+        "ticker": "C6L.SI",
+        "market_id": "sti",
+        "library_market": "sti",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "C6L.SI"
+          ],
+          "market_id": "sti",
+          "universe": "library",
+          "critical_path_blocker": "zero_body"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "C6L.SI"
+          ],
+          "market_id": "sti",
+          "universe": "library",
+          "critical_path_blocker": "zero_body"
+        },
+        "compile_reason": "gaps_remain_without_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for C6L.SI",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20261116-01",
@@ -18754,7 +18835,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-11-16T02:35:37.988138+00:00",
+    "evaluated_at": "2026-11-16T07:50:23.599304+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -18815,7 +18896,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 3,
-    "evaluated_at": "2026-11-16T07:18:04.479964+00:00",
+    "evaluated_at": "2026-11-16T07:50:23.554103+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {

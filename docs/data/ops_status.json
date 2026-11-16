@@ -1,12 +1,30 @@
 {
-  "run_at": "2026-11-16T02:32:02.797823+00:00",
+  "run_at": "2026-11-16T07:46:49.035388+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "dashboard",
       "title": "Dashboard bundle is stale",
-      "summary": "latest.json updated 2026-11-08T08:26:03.098701+00:00 (186h ago; threshold 168h).",
+      "summary": "latest.json updated 2026-11-08T08:26:03.098701+00:00 (191h ago; threshold 168h).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "budget",
+      "title": "Agent token usage (measuring)",
+      "summary": "Week 2026-W47: raw $0.0000, charged $0.0000, tokens 0 (in 0 / out 0 / cache_read 0 / cache_write 0). Top jobs: research_memo $0.0000 (3 runs), engineering $0.0000 (1 runs). Research memo raw median n/a / p90 n/a vs ledger estimate $0.40 (0 of 3 runs with cost). Estimated-USD ledger this week $2.40. Measuring mode (token_usage_weekly_warning_raw_usd is null).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "budget",
+      "title": "Agent token usage coverage gap",
+      "summary": "Week 2026-W47: 4 of 4 rows (100%) have usage_error or are still cost-pending after 48h (usage_error 4, pending after 48h 0). Coverage gap only — the estimated-USD cap is unchanged.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -24,7 +42,7 @@
       "severity": "info",
       "category": "research",
       "title": "Library decision-input binds (observe)",
-      "summary": "Graduated library buy-tier names: 377; all four binds true: 42. Gaps: key_filing_bodies=4, fcf_basis_bound=1, overlay_bound=48, memo_recent=333. Largest gap: memo_recent. Observe-only — do not rememo, ingest, or open an engineering task from this finding. See docs/data/library_decision_input_inventory.json.",
+      "summary": "Graduated library buy-tier names: 377; all four binds true: 44. Gaps: key_filing_bodies=4, fcf_basis_bound=1, overlay_bound=47, memo_recent=331. Largest gap: memo_recent. Observe-only — do not rememo, ingest, or open an engineering task from this finding. See docs/data/library_decision_input_inventory.json.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -51,7 +69,7 @@
       "severity": "info",
       "category": "research",
       "title": "Post-sale review queue (observe)",
-      "summary": "Active uncommented post-sale reviews: 169; actioned history=139; candidates sealed+control=496. Accept/Comment/Duplicate observe-only (influences_live=false).",
+      "summary": "Active uncommented post-sale reviews: 174; actioned history=139; candidates sealed+control=501. Accept/Comment/Duplicate observe-only (influences_live=false).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -96,7 +114,7 @@
       "severity": "info",
       "category": "research",
       "title": "Parallel timing lenses (observe)",
-      "summary": "L652 parallel timing lenses: candidates=38 (buy=24 sell=14); looking=53 entered=43 abandoned=42; concurrence_mean=1.132; buy_watch_armed=0. Observe-only fixed-stake v0; concurrence companion only (N241 not_now); no Package L / no sealed zoo. See docs/ops/parallel-timing-lenses.md.",
+      "summary": "L652 parallel timing lenses: candidates=38 (buy=24 sell=14); looking=48 entered=43 abandoned=47; concurrence_mean=1.132; buy_watch_armed=0. Observe-only fixed-stake v0; concurrence companion only (N241 not_now); no Package L / no sealed zoo. See docs/ops/parallel-timing-lenses.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -105,7 +123,7 @@
       "severity": "info",
       "category": "research",
       "title": "Lab learning progress (observe)",
-      "summary": "Lab learning progress: MFT open/closed=42 / 158; median fair-cost=0.0046; shadows_eligible=True; L652 looking/entered/abandoned=53/43/42; concurrence_mean=1.132; learning_marks=172; gaps=had_themes=2 miss_themes=2 scored_reviews=50. Package M observe strip; influences_live=false; never Package L / N241. Dashboard: Automation → Observe utilization.",
+      "summary": "Lab learning progress: MFT open/closed=42 / 158; median fair-cost=0.0046; shadows_eligible=True; L652 looking/entered/abandoned=48/43/47; concurrence_mean=1.132; learning_marks=172; gaps=had_themes=2 miss_themes=2 scored_reviews=50. Package M observe strip; influences_live=false; never Package L / N241. Dashboard: Automation → Observe utilization.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -114,7 +132,7 @@
       "severity": "info",
       "category": "research",
       "title": "Entry-blind review queue (observe)",
-      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=18; candidates=48. PIT-only; influences_live=false.",
+      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=18; candidates=56. PIT-only; influences_live=false.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -123,7 +141,7 @@
       "severity": "info",
       "category": "research",
       "title": "Entry news polarity (observe)",
-      "summary": "Buy-day PIT polarity on entry_blind: 2/12 cards with usable news cites; 10 no_usable_news. Labels={'improvement_path': 0, 'mixed_or_unclear': 2, 'no_usable_news': 10, 'structural_negative': 0}. Observe-only (influences_live=false); not Package L / not strand-A veto. See docs/ops/entry-news-polarity.md.",
+      "summary": "Buy-day PIT polarity on entry_blind: 10/12 cards with usable news cites; 2 no_usable_news. Labels={'improvement_path': 3, 'mixed_or_unclear': 6, 'no_usable_news': 2, 'structural_negative': 1}. Observe-only (influences_live=false); not Package L / not strand-A veto. See docs/ops/entry-news-polarity.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -177,7 +195,7 @@
       "severity": "info",
       "category": "research",
       "title": "Strategy book memo job refreshed",
-      "summary": "Spend on. Signals 8, all-but-memo 0, memo needed 0, dry-run requests 0. First tickers: none. ftse350 signals 2 all_but_memo 0 memo_needed 0; sti signals 1 all_but_memo 0 memo_needed 0; ftse_smallcap signals 0 all_but_memo 0 memo_needed 0; aex signals 0 all_but_memo 0 memo_needed 0; aim signals 3 all_but_memo 0 memo_needed 0; atx signals 1 all_but_memo 0 memo_needed 0; bel20 signals 0 all_but_memo 0 memo_needed 0; cac40 signals 0 all_but_memo 0 memo_needed 0 Observe-only; no rememo or ingest from this finding.",
+      "summary": "Spend on. Signals 2, all-but-memo 0, memo needed 0, dry-run requests 0. First tickers: none. nasdaq100 signals 1 all_but_memo 0 memo_needed 0; sp500 signals 1 all_but_memo 0 memo_needed 0; tsx60 signals 0 all_but_memo 0 memo_needed 0 Observe-only; no rememo or ingest from this finding.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -186,7 +204,7 @@
       "severity": "info",
       "category": "research",
       "title": "Strategy book memo spend this week",
-      "summary": "2026-W46: 7 memos requested ($2.80 at $0.40), 0 budget skips, 7 memo needed. Since switch-on 2026-11-10: 7 memos ($2.80). weekly_ops cap $124.50, remaining $93.80. Spend-vs-use review next 2026-12-08. Whether a memo fed an entry decision is not tracked yet. Observe-only; no rememo or ingest from this finding.",
+      "summary": "2026-W46: 7 memos requested ($2.80 at $0.40), 0 budget skips, 7 memo needed. Since switch-on 2026-11-10: 7 memos ($2.80). weekly_ops cap $124.50, remaining $123.30. Spend-vs-use review next 2026-12-08. Whether a memo fed an entry decision is not tracked yet. Observe-only; no rememo or ingest from this finding.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -240,7 +258,7 @@
       "severity": "info",
       "category": "research",
       "title": "Strategy book demo slippage",
-      "summary": "1 measured fill(s). On-time exits: 0, median n/a. Catch-up exits: 0, median n/a. Catch-up slippage is versus the book's exit close, kept apart from on-time exits. FX-converted fills with a conversion fee: 0, median fee n/a of cash, not counted as price slippage. The assumed half-spread is not replaced. See docs/ops/strategy-book-demo-mirror.md.",
+      "summary": "1 measured fill(s). On-time entries: 1, median 0.5837%. On-time exits: 0, median n/a. Catch-ups: 0, median n/a. Catch-up slippage is versus the book's fill close, kept apart from on-time orders. FX-converted fills with a conversion fee: 0, median fee n/a of cash, not counted as price slippage. The assumed half-spread is not replaced. See docs/ops/strategy-book-demo-mirror.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -429,7 +447,7 @@
       "severity": "info",
       "category": "research",
       "title": "Trading 212 catalogue fresh",
-      "summary": "Catalogue age 6.53 days (fetched 2026-11-09T13:45:23.337923+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
+      "summary": "Catalogue age 6.75 days (fetched 2026-11-09T13:45:23.337923+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -528,11 +546,11 @@
   "auto_fixes": [
     {
       "action": "market_eng_gap_burndown",
-      "detail": "gap_closure_compile for sti → eng-20261116-01"
+      "detail": "gap_closure_compile for sti → eng-20261116-02"
     }
   ],
   "drafted_task_ids": [
-    "eng-20261116-01"
+    "eng-20261116-02"
   ],
   "workflow_checks": [
     {
@@ -541,9 +559,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-11-16T02:18:01+00:00",
-      "last_success_run_id": 43791312867,
-      "age_hours": 0.3,
+      "last_success_at": "2026-11-16T07:18:46+00:00",
+      "last_success_run_id": 43822931345,
+      "age_hours": 0.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -552,11 +570,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": false,
+      "past_email_ready": true,
       "max_age_hours": 28,
       "last_success_at": "2026-11-15T18:54:21+00:00",
       "last_success_run_id": 43749368118,
-      "age_hours": 7.7,
+      "age_hours": 12.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -567,9 +585,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 26,
-      "last_success_at": "2026-11-16T02:15:36+00:00",
-      "last_success_run_id": 43791062239,
-      "age_hours": 0.3,
+      "last_success_at": "2026-11-16T07:15:36+00:00",
+      "last_success_run_id": 43822538347,
+      "age_hours": 0.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -580,9 +598,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-11-16T02:30:50+00:00",
-      "last_success_run_id": 43792624633,
-      "age_hours": 0.1,
+      "last_success_at": "2026-11-16T07:40:37+00:00",
+      "last_success_run_id": 43825486947,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -593,9 +611,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-15T14:53:17+00:00",
-      "last_success_run_id": 43726793055,
-      "age_hours": 11.7,
+      "last_success_at": "2026-11-16T07:30:50+00:00",
+      "last_success_run_id": 43824399653,
+      "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -608,7 +626,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-15T15:44:15+00:00",
       "last_success_run_id": 43731534332,
-      "age_hours": 10.9,
+      "age_hours": 16.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -621,7 +639,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-15T06:21:53+00:00",
       "last_success_run_id": 43685095607,
-      "age_hours": 20.2,
+      "age_hours": 25.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -634,7 +652,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-15T07:28:05+00:00",
       "last_success_run_id": 43690066817,
-      "age_hours": 19.1,
+      "age_hours": 24.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -647,7 +665,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-15T07:28:06+00:00",
       "last_success_run_id": 43690068558,
-      "age_hours": 19.1,
+      "age_hours": 24.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -660,7 +678,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-15T18:58:37+00:00",
       "last_success_run_id": 43749757146,
-      "age_hours": 7.6,
+      "age_hours": 12.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -673,7 +691,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-11-13T13:22:26+00:00",
       "last_success_run_id": 43433072834,
-      "age_hours": 61.2,
+      "age_hours": 66.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -684,9 +702,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-15T19:21:15+00:00",
-      "last_success_run_id": 43751948458,
-      "age_hours": 7.2,
+      "last_success_at": "2026-11-16T02:30:44+00:00",
+      "last_success_run_id": 43792614037,
+      "age_hours": 5.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -696,7 +714,7 @@
     "open_count": 0,
     "pr_open_count": 0,
     "parked_count": 4,
-    "merged_count": 239,
+    "merged_count": 240,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
