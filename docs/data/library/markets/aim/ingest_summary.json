@@ -1,13 +1,22 @@
 {
-  "run_at": "2026-11-15T13:38:55.299227+00:00",
+  "run_at": "2026-11-16T17:28:19.553504+00:00",
   "market_id": "aim",
   "targets": [
+    "PEBB.L",
     "CAML.L"
   ],
   "target_details": [
     {
+      "ticker": "PEBB.L",
+      "priority_score": 25.810000000000002,
+      "filings_total": 49,
+      "filings_with_body": 48,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    },
+    {
       "ticker": "CAML.L",
-      "priority_score": 18.7727,
+      "priority_score": 18.7617,
       "filings_total": 70,
       "filings_with_body": 69,
       "indexed_without_body": 1,
@@ -15,6 +24,69 @@
     }
   ],
   "results": [
+    {
+      "ticker": "PEBB.L",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 49,
+        "filings_with_body": 48,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 54,
+        "filings_with_body": 54,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "uk_rns",
+      "filings_summary": {
+        "total": 54,
+        "annual": 2,
+        "interim": 2,
+        "trading_update": 2,
+        "other": 48,
+        "with_body": 54,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 2,
+            "with_body": 2
+          },
+          "trading_update": {
+            "total": 2,
+            "with_body": 2
+          },
+          "other": {
+            "total": 30,
+            "with_body": 30
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 54,
+        "with_body_after": 54,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "retry_cleared": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 3,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    },
     {
       "ticker": "CAML.L",
       "reason": "indexed_without_body",
@@ -80,20 +152,21 @@
     }
   ],
   "improved": [
+    "PEBB.L",
     "CAML.L"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-15T13:36:50.721170+00:00",
+    "snapshot_at": "2026-11-16T17:25:33.198345+00:00",
     "market_id": "aim",
-    "buy_tier_count": 16,
+    "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 4,
-    "bodies_min": 37,
+    "indexed_without_body": 3,
+    "bodies_min": 48,
     "bodies_median": 52.0,
     "bodies_max": 78,
     "coverage_scope": "canonical_plus_shards",
@@ -102,12 +175,10 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
-      "DOTD.L",
-      "PAF.L"
+      "DOTD.L"
     ],
     "indexed_without_body_by_ticker": {
-      "DOTD.L": 3,
-      "PAF.L": 1
+      "DOTD.L": 3
     },
     "parked_tickers": [
       "DOTD.L",
@@ -121,15 +192,15 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-15T13:38:48.148961+00:00",
+    "snapshot_at": "2026-11-16T17:28:12.984017+00:00",
     "market_id": "aim",
-    "buy_tier_count": 16,
+    "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 4,
-    "bodies_min": 37,
-    "bodies_median": 52.0,
+    "indexed_without_body": 3,
+    "bodies_min": 49,
+    "bodies_median": 53.0,
     "bodies_max": 78,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -137,18 +208,15 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
-      "DOTD.L",
-      "PAF.L"
+      "DOTD.L"
     ],
     "indexed_without_body_by_ticker": {
-      "DOTD.L": 3,
-      "PAF.L": 1
+      "DOTD.L": 3
     },
     "parked_tickers": [
-      "DOTD.L",
-      "PAF.L"
+      "DOTD.L"
     ],
-    "parked_count": 2,
+    "parked_count": 1,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -162,9 +230,9 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 16,
+    "scanned": 12,
     "hits": 5,
-    "new_rows_total": 0,
+    "new_rows_total": 1,
     "curiosity_total": 5,
     "errors": 0,
     "prioritization_weights": {
@@ -177,8 +245,7 @@
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
-      "DOTD.L",
-      "PAF.L"
+      "DOTD.L"
     ],
     "runtime_cutoff": false
   },
@@ -191,7 +258,7 @@
   },
   "critical_path": {
     "market_id": "aim",
-    "assessed_at": "2026-11-15T13:36:52.871324+00:00",
+    "assessed_at": "2026-11-16T17:25:35.254344+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -200,12 +267,6 @@
         "indexed_without_body": 3,
         "filings_total": 58,
         "filings_with_body": 55
-      },
-      {
-        "ticker": "PAF.L",
-        "indexed_without_body": 1,
-        "filings_total": 57,
-        "filings_with_body": 55
       }
     ],
     "thin_need_discovery": [],
@@ -213,24 +274,23 @@
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": false,
     "auto_pin_tickers": [
-      "DOTD.L",
-      "PAF.L"
+      "DOTD.L"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (2 tickers, top: DOTD.L(3), PAF.L(1))"
+      "Prefer indexed-without-body body refetch (1 tickers, top: DOTD.L(3))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 2,
-      "indexed_without_body_rows": 4,
+      "indexed_without_body_tickers": 1,
+      "indexed_without_body_rows": 3,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 113.13019604400003,
+  "used_seconds": 155.65695410399996,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3486.869803956,
+  "leftover_seconds": 3444.343045896,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -238,23 +298,11 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aim",
-    "updated_at": "2026-11-15T13:38:48.153822+00:00",
+    "updated_at": "2026-11-16T17:28:12.989025+00:00",
     "exhausted": true,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
-      {
-        "ticker": "PAF.L",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-11-03T18:29:29.783180+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 57,
-        "filings_with_body": 55,
-        "indexed_without_body": 1,
-        "thin": false,
-        "source_surface": "uk_rns"
-      },
       {
         "ticker": "DOTD.L",
         "reason": "unfetchable_iwb",
@@ -273,8 +321,7 @@
     "straggler_zero_runs": 2,
     "had_complete_targets": false,
     "leftover_tickers": [
-      "DOTD.L",
-      "PAF.L"
+      "DOTD.L"
     ],
     "unparked_leftover": [],
     "surface_released": [],
@@ -314,8 +361,8 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 70,
-    "candidate_count": 60,
+    "tried_count": 71,
+    "candidate_count": 52,
     "skipped_resolved_tickers": [
       "ACKB.BR",
       "APAM.AS",
@@ -323,11 +370,9 @@
       "DQ7A.IR",
       "EVN.VI",
       "UCB.BR",
-      "WIE.VI",
       "ESSITY-B.ST",
       "LMT",
       "APTV",
-      "BXP",
       "MER.L",
       "TPT.L",
       "FOXT.L",
@@ -336,23 +381,21 @@
       "DFS.L",
       "SU.TO",
       "NTR.TO",
+      "GIB-A.TO",
       "MFC.TO",
       "BAS.DE",
       "PDD",
       "BAS.DE",
       "DTE.DE",
       "DTG.DE",
-      "HNR1.DE",
       "HEN3.DE",
-      "PST.MI",
       "APAM.AS",
       "0285.HK",
       "0857.HK",
       "0288.HK",
       "0883.HK",
       "2331.HK",
-      "EVN.VI",
-      "WIE.VI"
+      "EVN.VI"
     ],
     "wait_behind_task_id": ""
   }
