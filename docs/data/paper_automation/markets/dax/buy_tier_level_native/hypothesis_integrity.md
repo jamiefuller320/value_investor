@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-16T07:27:07.013450+00:00
+Track: `buy_tier_level_native` · updated 2026-11-17T07:30:52.246962+00:00
 
 ## Portfolio loser feedback
 
@@ -10,18 +10,18 @@ Track: `buy_tier_level_native` · updated 2026-11-16T07:27:07.013450+00:00
 
 ## Holding reviews
 
-### VOW3.DE — weakening / watch_review (-2.4%)
+### VOW3.DE — weakening / watch_review (-3.0%)
 - research verdict caution
-- conviction 34% below intact floor
+- conviction 32% below intact floor
 - still buy
 - cheapness family still passes
 
-### FME.DE — weakening / watch_review (-0.5%)
+### FME.DE — weakening / watch_review (-1.2%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
 
-### DHL.DE — intact / hold_tolerate (+2.1%)
+### DHL.DE — intact / hold_tolerate (+2.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

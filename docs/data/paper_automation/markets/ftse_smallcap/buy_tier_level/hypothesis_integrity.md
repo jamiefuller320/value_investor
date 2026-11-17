@@ -1,39 +1,31 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-16T07:26:20.430321+00:00
+Track: `buy_tier_level` · updated 2026-11-17T07:29:54.855793+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 4 (25% count, 25% NAV)
+- Losers: **0** / 3 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `tolerate_intact_losers`
+- Balancing hint: `maintain`
 
 ## Holding reviews
 
-### CAPD.L — intact / hold_tolerate (-6.6%)
-- price drawdown alone does not invalidate value thesis
+### CAPD.L — intact / hold_tolerate (-3.9%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
+- conviction 67%
 
-### CARD.L — intact / hold_tolerate (-2.2%)
+### CARD.L — intact / hold_tolerate (-1.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
-- data_quality 0.90
-- conviction 48%
+- data_quality 1.00
+- conviction 67%
 
-### CLIG.L — weakening / watch_review (+0.0%)
+### SBRE.L — weakening / watch_review (+5.4%)
 - left buy tier (hold)
-- conviction 26% below intact floor
+- conviction 28% below intact floor
 - research accumulate
 - cheapness family still passes
-
-### SBRE.L — intact / hold_tolerate (+5.1%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.85
-- conviction 45%

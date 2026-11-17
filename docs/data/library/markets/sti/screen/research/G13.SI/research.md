@@ -1,6 +1,6 @@
 # Genting Singapore Limited (G13.SI) — Research memo
 
-_Version 2 · Updated 2026-11-17T00:59:36.591005+00:00 · Mode: structured_verdict_update_
+_Version 1 · Updated 2026-11-16T10:40:34.037905+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,12 +9,5 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.62
-Rationale: Research still weakens the buy case: FY2025 FCF (~S$121m) trails dividends (~S$483m) and earnings fell amid RWS 2.0 capex, while the screen shows zero models passed and suppressed quarterly cash.
+Rationale: Research weakens the buy case: filing FY2025 FCF (~S$121m) is well below dividends (S$483m) and profits fell in RWS 2.0, while the screen’s buy has no models passed and thin metrics.
 RiskTags: cyclical, regulatory, competitive
-
-## Weekly updates
-
-### 2026-11-17T00:59:36.591005+00:00
-Yahoo annuals and the screening snapshot were refreshed on 17 Nov; the screen remains **buy** with zero models passed and quarterly cashflow still suppressed.  
-The news batch since 16 Nov is empty—no new company disclosures.  
-FY2025 FCF ~S$121m vs dividends ~S$483m and the RWS 2.0 earnings picture are unchanged versus the prior verdict.

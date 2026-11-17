@@ -1,46 +1,49 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-16T07:28:38.631625+00:00
+Track: `buy_tier_level_native` · updated 2026-11-17T07:31:54.484483+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 5 (0% count, 0% NAV)
+- Losers: **1** / 5 (20% count, 20% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `maintain`
+- Balancing hint: `tolerate_intact_losers`
+- Selection feedback:
+  - garp fails more often among losers (100% vs 50%)
 
 ## Holding reviews
 
-### VOE.VI — intact / hold_tolerate (-3.7%)
+### VOE.VI — intact / hold_tolerate (-6.4%)
+- price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 52%
+- conviction 54%
 
-### CAI.VI — intact / hold_tolerate (-1.7%)
+### CAI.VI — intact / hold_tolerate (-2.2%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 57%
+- conviction 54%
 
-### ANDR.VI — intact / hold_tolerate (+0.0%)
+### ANDR.VI — intact / hold_tolerate (+0.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 42%
+- conviction 45%
 
-### OMV.VI — intact / hold_tolerate (+1.1%)
+### OMV.VI — intact / hold_tolerate (+0.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 68%
+- conviction 67%
 
-### STR.VI — intact / hold_tolerate (+5.2%)
+### STR.VI — intact / hold_tolerate (+4.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
-- data_quality 0.90
-- conviction 61%
+- data_quality 1.00
+- conviction 75%

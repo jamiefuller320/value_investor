@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-16T07:27:46.150442+00:00
+Track: `buy_tier_level` · updated 2026-11-17T07:31:13.723204+00:00
 
 ## Portfolio loser feedback
 
@@ -10,9 +10,25 @@ Track: `buy_tier_level` · updated 2026-11-16T07:27:46.150442+00:00
 
 ## Holding reviews
 
-### PRX.AS — weakening / watch_review (-0.2%)
+### ASM.AS — weakening / watch_review (-3.6%)
+- research verdict neutral
+- still buy
+- cheapness family still passes
+
+### ASML.AS — weakening / watch_review (-2.4%)
+- research verdict neutral
+- still buy
+- cheapness family still passes
+
+### RAND.AS — intact / hold_tolerate (-1.7%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 68%
+
+### PRX.AS — weakening / watch_review (-1.1%)
 - research verdict caution
-- conviction 32% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -23,13 +39,6 @@ Track: `buy_tier_level` · updated 2026-11-16T07:27:46.150442+00:00
 - data_quality 1.00
 - conviction 39%
 
-### RAND.AS — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 68%
-
 ### WKL.AS — intact / hold_tolerate (+0.0%)
 - still strong_buy
 - research accumulate
@@ -37,32 +46,23 @@ Track: `buy_tier_level` · updated 2026-11-16T07:27:46.150442+00:00
 - data_quality 1.00
 - conviction 64%
 
-### ASML.AS — weakening / watch_review (+0.0%)
-- research verdict neutral
-- still buy
-- cheapness family still passes
-
-### ASM.AS — weakening / watch_review (+0.0%)
-- research verdict neutral
-- conviction 35% below intact floor
-- still buy
-- cheapness family still passes
-
-### KPN.AS — weakening / watch_review (+1.9%)
-- conviction 35% below intact floor
-- still buy
-- research accumulate
-
-### AKZA.AS — intact / hold_tolerate (+4.8%)
+### KPN.AS — intact / hold_tolerate (+3.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 53%
 
-### AD.AS — intact / hold_tolerate (+7.8%)
+### AKZA.AS — intact / hold_tolerate (+4.6%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 59%
+
+### AD.AS — intact / hold_tolerate (+6.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 86%
+- conviction 89%
