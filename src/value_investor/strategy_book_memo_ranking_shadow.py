@@ -5,8 +5,10 @@ fills, names it skips because the book is full, and names a gate rejects, in
 every market that produces a signal. A missing or stale cite is no score.
 
 ``influences_live`` is false. ``authorize_live_llm_influence`` is called on
-every card and fail-closes. This module does not call a model and does not
-read or write ``forward_live``.
+every card and fail-closes. The default path does not call a model and does
+not read or write ``forward_live``. ``--request-memos`` asks for missing or
+stale observe memos inside the existing memo raise. A memo dated after the
+candidate session still does not score that session.
 
 The readout rule lives in ``docs/ops/strategy-book-observe.md`` under
 ``l694-memo-ranking-readout-v1``. Outcome comparison stays null until that
@@ -21,10 +23,15 @@ import random
 import statistics
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from value_investor.agent_model_policy import (
+    SPEND_POOL_WEEKLY_OPS,
+    record_estimated_spend,
+    weekly_ops_budget_status,
+)
 from value_investor.decision_input_inventory import _memo_age_days, _overlay_bound
 from value_investor.filings_index_dating import bodies_at, key_bodies
 from value_investor.llm_agree_veto_shadow import _cite as cite_evidence
@@ -32,7 +39,7 @@ from value_investor.llm_agree_veto_shadow import authorize_live_llm_influence
 from value_investor.research.verdict import ALLOWED_RISK_TAGS, coerce_research_verdict
 from value_investor.storage import read_json, write_json
 from value_investor.strategy_book_forward import latest_forward_slot
-from value_investor.strategy_book_memo_job import ESTIMATED_MEMO_USD
+from value_investor.strategy_book_memo_job import ESTIMATED_MEMO_USD, _headroom_allows
 from value_investor.strategy_book_rules import (
     MEMO_MAX_AGE_DAYS,
     SLOT_BOOK_RANDOM_SEED,
@@ -43,13 +50,18 @@ from value_investor.strategy_book_rules import (
     session_close,
 )
 from value_investor.strategy_book_signals import (
+    history_dir_for,
+    newest_screen_run,
     parse_day,
     repo_paths,
     research_root_for,
+    screen_rows,
     session_end,
 )
 
 STORE_NAME = "strategy_book_memo_ranking_shadow.json"
+MEMO_LOG_NAME = "strategy_book_memo_ranking_shadow_memos.jsonl"
+JOB_LOG_NAME = "strategy_book_memo_log.jsonl"
 RULE_ID = "l694-memo-ranking-readout-v1"
 RULE_DOC = "docs/ops/strategy-book-observe.md"
 SAMPLING_ID = "l694-memo-sample-v1"
@@ -90,6 +102,8 @@ GATE_COLUMNS = {
 VERDICT_POINTS = {"accumulate": 3.0, "neutral": 2.0, "caution": 1.0, "pass": 0.0}
 RISK_POINTS = {"low": 0.2, "medium": 0.0, "high": -0.2}
 RISK_LEVELS = frozenset(RISK_POINTS)
+
+DISPOSITION_RANK = {"filled": 0, "skipped_no_slot": 1, "gate_rejected": 2}
 
 SAMPLING_RULE: dict[str, Any] = {
     "id": SAMPLING_ID,
@@ -604,6 +618,242 @@ def estimate_cost(cards: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def _week_key(day: date) -> str:
+    iso = day.isocalendar()
+    return f"{iso.year}-W{iso.week:02d}"
+
+
+def _jsonl_rows(path: Path) -> list[dict[str, Any]]:
+    if not path.is_file():
+        return []
+    rows: list[dict[str, Any]] = []
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return []
+    for line in lines:
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(row, dict):
+            rows.append(row)
+    return rows
+
+
+def memo_raise_spent_usd(repo_root: Path, *, now: datetime) -> float:
+    """Estimated memo-raise dollars already requested in this ISO week."""
+    week = _week_key(now.date())
+    paths = repo_paths(repo_root)
+    spent = 0.0
+    for row in _jsonl_rows(paths.data / JOB_LOG_NAME):
+        if row.get("action") != "requested":
+            continue
+        day = parse_day(row.get("session"))
+        if day is None or _week_key(day) != week:
+            continue
+        spent += float(row.get("estimated_spend_usd") or ESTIMATED_MEMO_USD)
+    for row in _jsonl_rows(paths.data / MEMO_LOG_NAME):
+        if row.get("action") != "requested":
+            continue
+        stamp = _aware(row.get("requested_at"))
+        if stamp is None or _week_key(stamp.date()) != week:
+            continue
+        spent += float(row.get("estimated_spend_usd") or ESTIMATED_MEMO_USD)
+    return round(spent, 2)
+
+
+def plan_observe_memos(
+    names: list[dict[str, Any]],
+    *,
+    now: datetime,
+    spent_this_week_usd: float,
+    full_width_over_budget: bool,
+) -> dict[str, Any]:
+    """One memo per name. Fresh memos are reused. The $40 raise is the cap.
+
+    Priority and the 100-memo sample apply when a full-width week is above
+    $40. A memo younger than 21 days is not bought again.
+    """
+    chosen: dict[tuple[str, str], dict[str, Any]] = {}
+    for row in names:
+        market = str(row.get("market") or "")
+        ticker = str(row.get("ticker") or "")
+        if not market or not ticker:
+            continue
+        rank = DISPOSITION_RANK.get(str(row.get("disposition") or ""), 9)
+        current = chosen.get((market, ticker))
+        session = str(row.get("session") or "")
+        if (
+            current is None
+            or rank < int(current["rank"])
+            or (rank == int(current["rank"]) and session > str(current.get("session") or ""))
+        ):
+            chosen[(market, ticker)] = {**row, "market": market, "ticker": ticker, "rank": rank}
+    due: list[dict[str, Any]] = []
+    reused: list[dict[str, Any]] = []
+    for row in chosen.values():
+        stamp = _aware(row.get("memo_at"))
+        age = _memo_age_days(stamp, now=now) if stamp is not None else None
+        if age is not None and age <= float(MEMO_MAX_AGE_DAYS):
+            reused.append({"market": row["market"], "ticker": row["ticker"], "memo_age_days": age})
+            continue
+        due.append(row)
+    due.sort(key=lambda row: (int(row["rank"]), str(row["ticker"]), str(row["market"])))
+    room_usd = max(0.0, WEEKLY_BUDGET_USD - float(spent_this_week_usd))
+    room_n = int(round(room_usd * 100)) // int(round(float(ESTIMATED_MEMO_USD) * 100))
+    cap = min(room_n, WEEKLY_CAP_MEMOS)
+    selected = due[:cap]
+    held = due[cap:]
+    return {
+        "sampling_id": SAMPLING_ID if full_width_over_budget else None,
+        "sampling_applied": bool(full_width_over_budget and held),
+        "spent_this_week_usd": round(float(spent_this_week_usd), 2),
+        "room_usd": round(room_usd, 2),
+        "cap": cap,
+        "selected": selected,
+        "held_for_budget": held,
+        "reused": reused,
+    }
+
+
+def _screen_row(repo_root: Path, market: str, ticker: str, now: datetime) -> dict[str, Any]:
+    paths = repo_paths(repo_root)
+    _path, payload, _day = newest_screen_run(
+        history_dir_for(paths, market),
+        now.date() + timedelta(days=1),
+    )
+    row = screen_rows(payload).get(ticker.upper())
+    if isinstance(row, dict) and row:
+        return dict(row)
+    return {"ticker": ticker, "signal": "buy", "name": ticker}
+
+
+def _append_jsonl(path: Path, row: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\n")
+
+
+def request_observe_memos(
+    names: list[dict[str, Any]],
+    *,
+    repo_root: Path,
+    now: datetime,
+    spent_this_week_usd: float,
+    full_width_over_budget: bool,
+    apply: bool,
+    runner: Any = None,
+    budget_status: Any = None,
+    record_spend: Any = None,
+) -> dict[str, Any]:
+    """Ask for observe memos. Does not set a live-capital flag.
+
+    Spend is the existing $0.40 estimate on ``weekly_ops``, and only after a
+    memo returns. Headroom keeps the memo job's $8 reserve.
+    """
+    plan = plan_observe_memos(
+        names,
+        now=now,
+        spent_this_week_usd=spent_this_week_usd,
+        full_width_over_budget=full_width_over_budget,
+    )
+    rows: list[dict[str, Any]] = []
+    for held in plan["held_for_budget"]:
+        rows.append(
+            {
+                "market": held["market"],
+                "ticker": held["ticker"],
+                "disposition": held.get("disposition"),
+                "action": "skipped",
+                "skip_reason": "memo_raise_cap",
+                "estimated_spend_usd": 0.0,
+            }
+        )
+    if not apply:
+        for item in plan["selected"]:
+            rows.append(
+                {
+                    "market": item["market"],
+                    "ticker": item["ticker"],
+                    "disposition": item.get("disposition"),
+                    "action": "planned",
+                    "skip_reason": None,
+                    "estimated_spend_usd": 0.0,
+                }
+            )
+        spent = 0.0
+    else:
+        call = runner
+        if call is None:
+            from value_investor.strategy_book_memo_job import default_memo_runner
+
+            call = default_memo_runner
+        budget = budget_status or (
+            lambda: weekly_ops_budget_status(estimated_memo_usd=float(ESTIMATED_MEMO_USD))
+        )
+        record = record_spend or (
+            lambda amount: record_estimated_spend(amount, pool=SPEND_POOL_WEEKLY_OPS)
+        )
+        reserved = 0.0
+        spent = 0.0
+        log_path = repo_paths(repo_root).data / MEMO_LOG_NAME
+        for item in plan["selected"]:
+            record_row: dict[str, Any] = {
+                "market": item["market"],
+                "ticker": item["ticker"],
+                "disposition": item.get("disposition"),
+                "session": item.get("session"),
+                "action": "skipped",
+                "skip_reason": None,
+                "estimated_spend_usd": 0.0,
+                "requested_at": now.astimezone(UTC).isoformat(),
+                "verdict": None,
+                "memo_finished_at": None,
+                "influences_live": False,
+            }
+            status = budget()
+            if not _headroom_allows(status if isinstance(status, dict) else {}, reserved=reserved):
+                record_row["skip_reason"] = "memo_not_ready_budget"
+            else:
+                try:
+                    outcome = call(
+                        market=item["market"],
+                        ticker=item["ticker"],
+                        screen_row=_screen_row(repo_root, item["market"], item["ticker"], now),
+                        repo_root=repo_root,
+                        session=str(item.get("session") or ""),
+                    )
+                except Exception as exc:  # noqa: BLE001 — one name must not stop the others
+                    record_row["skip_reason"] = f"runner_error: {exc}"
+                else:
+                    record_row["action"] = "requested"
+                    record_row["estimated_spend_usd"] = ESTIMATED_MEMO_USD
+                    if isinstance(outcome, dict):
+                        record_row["verdict"] = outcome.get("verdict")
+                        record_row["memo_finished_at"] = outcome.get("finished_at")
+                    record(float(ESTIMATED_MEMO_USD))
+                    reserved += float(ESTIMATED_MEMO_USD)
+                    spent += float(ESTIMATED_MEMO_USD)
+            rows.append(record_row)
+            _append_jsonl(log_path, record_row)
+    requested = sum(1 for row in rows if row.get("action") == "requested")
+    return {
+        "observe_only": True,
+        "influences_live": False,
+        "spend_enabled": False,
+        "sampling_id": plan["sampling_id"],
+        "sampling_applied": plan["sampling_applied"],
+        "spent_before_usd": plan["spent_this_week_usd"],
+        "estimated_spend_usd": round(spent, 2),
+        "requested": requested,
+        "reused": len(plan["reused"]),
+        "names": rows,
+    }
+
+
 def rule_text_in_force(text: str | None) -> bool:
     """True when the committed observe doc still carries this readout."""
     if not text:
@@ -806,8 +1056,20 @@ def load_facts(
 ) -> MemoFacts:
     """Point-in-time cites. A file dated after the session is left unused."""
     paths = repo_paths(repo_root)
-    root = research_root_for(paths, str(candidate.get("market") or ""))
+    market = str(candidate.get("market") or "")
+    root = research_root_for(paths, market)
     ticker = str(candidate.get("ticker") or "")
+    # The memo job writes a name in its research home, which can differ from
+    # the market that signalled it (VOE.VI is atx on the book and euro_depth
+    # at home). Read that home when this market has no memo file.
+    if ticker and not (root / ticker / "research.json").is_file():
+        from value_investor.library_dedupe import research_home_market
+
+        home = research_home_market(paths.library, ticker)
+        if home and home != market:
+            home_root = paths.library / "markets" / home / "screen" / "research"
+            if (home_root / ticker / "research.json").is_file():
+                root = home_root
     facts = MemoFacts(adjusted_signal=candidate.get("adjusted_signal"))
     session = parse_day(candidate.get("session"))
     cutoff = session_end(session) if session is not None else None
@@ -933,6 +1195,7 @@ def build_store(
     markets: dict[str, list[str]],
     now: datetime,
     rule_text: str,
+    memo_run: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     counts = Counter(str(card.get("disposition") or "") for card in cards)
     scored = sum(1 for card in cards if card.get("score") is not None)
@@ -956,6 +1219,7 @@ def build_store(
         "input_gaps": rank_input_gaps(cards),
         "cost": estimate_cost(cards),
         "readout": compare_outcomes(cards, rule_text=rule_text),
+        "memo_run": memo_run,
         "candidates": cards,
     }
 
@@ -981,6 +1245,11 @@ def public_summary(store: dict[str, Any]) -> dict[str, Any]:
         "sampling": bool(cost.get("sampling")),
         "readout_status": readout.get("status"),
         "counts_as_evidence": readout.get("counts_as_evidence"),
+        "observe_memo_spend_usd": (
+            (store.get("memo_run") or {}).get("estimated_spend_usd")
+            if isinstance(store.get("memo_run"), dict)
+            else 0.0
+        ),
     }
 
 
@@ -993,6 +1262,10 @@ def run_shadow(
     episodes: list[dict[str, Any]] | None = None,
     roster: list[dict[str, Any]] | None = None,
     facts_for=None,
+    request_memos: bool = False,
+    memo_runner: Any = None,
+    budget_status: Any = None,
+    record_spend: Any = None,
 ) -> dict[str, Any]:
     """Build the shadow. Writes only its own store, and only when ``apply`` is set."""
     root = Path(repo_root) if repo_root is not None else Path()
@@ -1007,12 +1280,61 @@ def run_shadow(
         episodes = list(observe.get("episodes") or []) if episodes is None else episodes
         roster = list(status.get("candidates") or []) if roster is None else roster
     candidates = collect_candidates(events, episodes, roster)
+    memo_run = None
+    if request_memos:
+        preview = (
+            build_cards(candidates, repo_root=root, facts_for=facts_for)
+            if facts_for is not None
+            else None
+        )
+        index = (
+            {}
+            if facts_for is not None
+            else _gate_index(paths.data / "strategy_book_gate_log.jsonl")
+        )
+        names: list[dict[str, Any]] = []
+        for candidate in candidates:
+            if facts_for is not None:
+                memo_at = None
+            else:
+                memo_at = load_facts(root, candidate, _gate_row_for(index, candidate)).memo_at
+            names.append(
+                {
+                    "market": candidate.get("market"),
+                    "ticker": candidate.get("ticker"),
+                    "disposition": candidate.get("disposition"),
+                    "session": candidate.get("session"),
+                    "memo_at": memo_at,
+                }
+            )
+        if preview is not None:
+            by_id = {
+                (card.get("market"), card.get("ticker"), card.get("session")): card
+                for card in preview
+            }
+            for name in names:
+                card = by_id.get((name["market"], name["ticker"], name["session"]))
+                if card and "memo_recent" not in (card.get("gaps") or []):
+                    name["memo_at"] = moment.isoformat()
+        width = estimate_cost([{"session": candidate.get("session")} for candidate in candidates])
+        memo_run = request_observe_memos(
+            names,
+            repo_root=root,
+            now=moment,
+            spent_this_week_usd=memo_raise_spent_usd(root, now=moment),
+            full_width_over_budget=bool(width.get("over_budget")),
+            apply=apply,
+            runner=memo_runner,
+            budget_status=budget_status,
+            record_spend=record_spend,
+        )
     cards = build_cards(candidates, repo_root=root, facts_for=facts_for)
     store = build_store(
         cards=cards,
         markets=market_split(candidates),
         now=moment,
         rule_text=read_rule_text(root),
+        memo_run=memo_run,
     )
     store["influences_live"] = False
     wrote = False
@@ -1158,6 +1480,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--repo-root", type=Path, default=Path())
     parser.add_argument("--apply", action="store_true", help="Write the shadow store")
+    parser.add_argument(
+        "--request-memos",
+        action="store_true",
+        help=(
+            "Ask for missing or stale observe memos inside the $40 raise. "
+            "Does not set influences_live. A memo after the session does not score it."
+        ),
+    )
     parser.add_argument("--as-of", help="Override the run timestamp (ISO-8601)")
     args = parser.parse_args(argv)
     moment = None
@@ -1165,7 +1495,12 @@ def main(argv: list[str] | None = None) -> int:
         moment = datetime.fromisoformat(args.as_of.replace("Z", "+00:00"))
         if moment.tzinfo is None:
             moment = moment.replace(tzinfo=UTC)
-    summary = run_shadow(repo_root=args.repo_root, now=moment, apply=args.apply)
+    summary = run_shadow(
+        repo_root=args.repo_root,
+        now=moment,
+        apply=args.apply,
+        request_memos=args.request_memos,
+    )
     print(json.dumps(summary, indent=2, default=str))
     return 1 if summary.get("errors") else 0
 

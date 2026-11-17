@@ -25,8 +25,10 @@ from value_investor.strategy_book_memo_ranking_shadow import (
     compare_outcomes,
     estimate_cost,
     findings_from_store,
+    plan_observe_memos,
     rank_input_gaps,
     read_rule_text,
+    request_observe_memos,
     rule_text_in_force,
     run_shadow,
     score_candidate,
@@ -413,3 +415,67 @@ def _closed_pool() -> list[dict]:
                     }
                 )
     return rows
+
+
+def test_observe_memo_plan_reuses_fresh_memos_and_keeps_the_raise() -> None:
+    now = datetime(2026, 11, 17, 1, tzinfo=UTC)
+    fresh = (now - timedelta(days=3)).isoformat()
+    stale = (now - timedelta(days=40)).isoformat()
+    names = [
+        {"market": "ftse350", "ticker": "B.L", "disposition": "gate_rejected", "memo_at": stale},
+        {"market": "ftse350", "ticker": "A.L", "disposition": "filled", "memo_at": None},
+        {"market": "sp500", "ticker": "ZZ", "disposition": "filled", "memo_at": fresh},
+        {"market": "ftse350", "ticker": "A.L", "disposition": "skipped_no_slot", "memo_at": None},
+    ]
+    plan = plan_observe_memos(
+        names,
+        now=now,
+        spent_this_week_usd=39.6,
+        full_width_over_budget=True,
+    )
+    assert [row["ticker"] for row in plan["selected"]] == ["A.L"]
+    assert plan["selected"][0]["disposition"] == "filled"
+    assert plan["sampling_applied"] is True
+    assert [row["ticker"] for row in plan["held_for_budget"]] == ["B.L"]
+    assert plan["reused"][0]["ticker"] == "ZZ"
+
+
+def test_observe_memo_request_records_spend_and_stays_observe_only(tmp_path: Path) -> None:
+    (tmp_path / "docs" / "data").mkdir(parents=True)
+    calls: list[str] = []
+    spent: list[float] = []
+
+    def runner(**kwargs):
+        calls.append(kwargs["ticker"])
+        return {"verdict": "accumulate", "finished_at": "2026-11-17T01:00:00+00:00"}
+
+    result = request_observe_memos(
+        [
+            {
+                "market": "ftse350",
+                "ticker": "NEW.L",
+                "disposition": "filled",
+                "session": "2026-11-16",
+                "memo_at": None,
+            }
+        ],
+        repo_root=tmp_path,
+        now=datetime(2026, 11, 17, 1, tzinfo=UTC),
+        spent_this_week_usd=0.0,
+        full_width_over_budget=False,
+        apply=True,
+        runner=runner,
+        budget_status=lambda: {"remaining_weekly_ops_usd": 50.0},
+        record_spend=spent.append,
+    )
+    assert calls == ["NEW.L"]
+    assert spent == [0.4]
+    assert result["estimated_spend_usd"] == 0.4
+    assert result["influences_live"] is False
+    assert result["spend_enabled"] is False
+    assert result["names"][0]["action"] == "requested"
+    log = (tmp_path / "docs" / "data" / "strategy_book_memo_ranking_shadow_memos.jsonl").read_text(
+        encoding="utf-8"
+    )
+    assert "influences_live" in log
+    assert "false" in log

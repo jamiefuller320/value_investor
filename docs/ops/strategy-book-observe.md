@@ -312,6 +312,19 @@ at most 100 new memos an ISO week; priority filled, then skipped for a slot,
 then gate-rejected; ticker order within a priority; one new memo per name
 per week. The proposal does not enable spend.
 
+An explicit observe run may ask for those memos:
+
+```bash
+ftse-strategy-book-memo-ranking-shadow --repo-root . --request-memos --apply
+```
+
+That asks once per name whose memo is missing or older than 21 days, in the
+same priority, and stops when this ISO week's memo raise would pass $40.
+The weekday workflow does not pass `--request-memos`. A memo written after
+the candidate's session close is not a cite for that session, so it does
+not score it. `influences_live` stays false. The run records the $0.40
+estimate on `weekly_ops` only after a memo returns.
+
 ### Readout rule
 
 Metric: median fair-cost episode % (the book's fair-cost fraction). Three
