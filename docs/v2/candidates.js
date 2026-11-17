@@ -701,11 +701,20 @@
   }
 
   function sourceIso(store) {
-    if (!store || typeof store !== "object") return { asOf: null, generated: null };
+    if (!store || typeof store !== "object") {
+      return { asOf: null, generated: null, screenRun: null };
+    }
     return {
       asOf: store.as_of || null,
       generated: store.generated_at || store.as_of || null,
+      screenRun: store.screen_run_at || null,
     };
+  }
+
+  // Inventory generated_at is a later rebuild. The screen cohort is screen_run_at.
+  function ftseScreenIso(store) {
+    const iso = sourceIso(store);
+    return iso.screenRun || iso.generated;
   }
 
   function freshnessItem(helpers, label, iso) {
@@ -729,7 +738,7 @@
 
   function sourceStrip(ctx, helpers) {
     const parts = [
-      freshnessItem(helpers, "FTSE screen buys", sourceIso(ctx.decisionInv).generated),
+      freshnessItem(helpers, "FTSE screen buys", ftseScreenIso(ctx.decisionInv)),
       freshnessItem(helpers, "Library screen buys", sourceIso(ctx.libraryInv).generated),
       freshnessItem(helpers, "Operating check", sourceIso(ctx.declineGate).generated),
       freshnessItem(helpers, "Sector check", sourceIso(ctx.sectorGate).generated),
@@ -763,7 +772,8 @@
       "<h2>Where this list comes from</h2>" +
       '<p class="v2-panel-meta">Each check uses the store dated below. A missing store is not treated as a pass.</p>' +
       '<ul class="v2-freshness-list">' +
-      freshnessItem(helpers, "FTSE screen buys and input quality", ftse.generated) +
+      freshnessItem(helpers, "FTSE screen buys", ftseScreenIso(ctx.decisionInv)) +
+      freshnessItem(helpers, "FTSE input quality", ftse.generated) +
       freshnessItem(helpers, "Library screen buys and input quality", lib.generated) +
       freshnessItem(helpers, "Operating performance (as of " + (decline.asOf ? helpers.displayDate(decline.asOf) : "not yet available") + ")", decline.generated) +
       freshnessItem(helpers, "Sector soundness (as of " + (sector.asOf ? helpers.displayDate(sector.asOf) : "not yet available") + ")", sector.generated) +
@@ -1268,6 +1278,7 @@
     NOT_MEASURED: NOT_MEASURED,
     PENDING_ENTRY: PENDING_ENTRY,
     OUTCOME_LABELS: OUTCOME_LABELS,
+    ftseScreenIso: ftseScreenIso,
     buildCandidateRows: buildCandidateRows,
     funnelCounts: funnelCounts,
     outcomeLabel: outcomeLabel,
