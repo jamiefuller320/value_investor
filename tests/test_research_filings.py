@@ -7612,6 +7612,22 @@ def test_builtin_ir_allowlist_includes_enq_l():
     assert "interim" in periods
 
 
+def test_builtin_ir_allowlist_includes_cne_l():
+    """eng-20261117-03: ftse_smallcap CNE.L buy-tier no_key_bodies — capricornenergy.com IR PDFs."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("CNE.L") or []
+    assert any("capricorn_ar25_final.pdf" in url for url in urls)
+    assert any("capricorn-energy-ar-2024.pdf" in url for url in urls)
+    assert any("interim-results-2026.pdf" in url for url in urls)
+    assert all("capricornenergy.com" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("CNE.L")
+    assert len(rows) == 3
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    periods = {row.get("period") for row in rows}
+    assert periods == {"annual", "interim"}
+
+
 def test_enq_l_fy_results_headline_classified_as_annual():
     """eng-20261025-05: Investegate FY RNS uses 'Results for the year ended' without 'full year'."""
     from value_investor.research.filings import classify_filing_period
@@ -12744,6 +12760,37 @@ def test_fetch_filings_ir_allowlist_hvn_ax_asx200_builtin(tmp_path: Path):
     assert any("2A1656711" in url for url in urls)
     assert all(row["source"] == "ir_allowlist" for row in rows)
     assert "HVN.AX" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_fetch_filings_ir_allowlist_cne_l_ftse_smallcap_builtin(tmp_path: Path):
+    """eng-20261117-03: CNE.L buy-tier no_key_bodies — capricornenergy.com FY AR + H1 interim PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("CNE.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    periods = {row["period"] for row in rows}
+    assert periods == {"annual", "interim"}
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    urls = [row["url"] for row in rows]
+    assert any("capricorn_ar25_final.pdf" in url for url in urls)
+    assert any("capricorn-energy-ar-2024.pdf" in url for url in urls)
+    assert any("interim-results-2026.pdf" in url for url in urls)
+    assert all("capricornenergy.com" in url for url in urls)
+    assert "CNE.L" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_parked_source_hunter_cne_l_ftse_smallcap_has_fetchable_ir():
+    """eng-20261117-03: CNE.L leftover — capricornenergy.com statutory PDFs live-fetch with issuer text."""
+    assert "CNE.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("CNE.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("capricornenergy.com" in url for url in urls)
+    assert any("capricorn_ar25_final.pdf" in url for url in urls)
+    _first_fetchable_allowlist_body(urls)
 
 
 def test_parked_source_hunter_hvn_ax_asx200_has_fetchable_ir():

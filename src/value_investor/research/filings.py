@@ -208,6 +208,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.enquest.com/fileadmin/content/press_release_pdfs/2026/EnQuest_2025_Full_Year_Results_vFinal.pdf",
         "https://www.enquest.com/fileadmin/content/press_release_pdfs/2026/EnQuest_HY26_Results_Combined_vF.pdf",
     ],
+    # eng-20261117-03: ftse_smallcap CNE.L buy-tier no_key_bodies — Investegate index is Form 8.3 noise only;
+    # capricornenergy.com FY2025/2024 AR + H1 2026 interim statutory PDFs fetch.
+    "CNE.L": [
+        "https://www.capricornenergy.com/media/foop2124/capricorn_ar25_final.pdf",
+        "https://www.capricornenergy.com/media/qqogvtdy/capricorn-energy-ar-2024.pdf",
+        "https://www.capricornenergy.com/media/cgoiklie/capricorn-energy-plc-interim-results-2026.pdf",
+    ],
     # eng-20261102-01: ftse350 EZJ.L gap-closure had empty IR allowlist (0 refetch); Q4 CDN issuer PDFs.
     "EZJ.L": [
         "https://s203.q4cdn.com/522538739/files/doc_financials/2025/ar/easyJetARA25_DIGITAL_sm.pdf",
@@ -6264,6 +6271,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # eng-20261117-02: HVN.AX — opaque Markit documentKey slugs (would classify other).
     "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03127979-2A1693078": "annual",
     "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03062425-2A1656711": "interim",
+    # eng-20261117-03: CNE.L — capricorn-energy-ar-2024 slug lacks ar\d{2} token (would classify other).
+    "https://www.capricornenergy.com/media/qqogvtdy/capricorn-energy-ar-2024.pdf": "annual",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
     # eng-20261009-03: JD.L HY27 slug has no half-year token (would classify other).
