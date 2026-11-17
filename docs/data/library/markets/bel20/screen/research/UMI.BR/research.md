@@ -1,6 +1,6 @@
 # Umicore SA (UMI.BR) — Research memo
 
-_Version 1 · Updated 2026-09-15T07:16:26.683349+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-11-17T02:33:51.543380+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,13 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: H1 2026 filings and upgraded FY26 adj. EBITDA guidance support the screen’s earnings and cash-generation case, but metal-price sensitivity, battery take-or-pay accruals and still-material leverage temper full alignment.
+Confidence: 0.68
+Rationale: H1 2026 results and upgraded FY26 adj. EBITDA guidance support the screen, but metal-price sensitivity, ~1.5bn net debt, competitive batteries and unverified TTM FCF temper full strong-buy alignment.
 RiskTags: cyclical, leverage, competitive
+
+## Weekly updates
+
+### 2026-11-17T02:33:51.543380+00:00
+News since 2026-09-15 is third-party valuation commentary, plus generic EV cathode supply-chain competition (Tesla); no new company results in the indexed pack.
+H1 2026 IR release (upgraded FY26 adj. EBITDA guidance, €577m H1 adj. EBITDA, €1.5bn net debt) unchanged in sources; structured interim extract is empty.
+Screen remains strong buy on refreshed Yahoo FY25 cash metrics; quarterly cash flow still absent so TTM FCF stays unverified.
