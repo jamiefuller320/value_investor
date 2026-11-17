@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-17T17:07:41.347523+00:00",
+  "generated_at": "2026-11-17T19:29:38.513071+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -74,7 +74,7 @@
     "spare_sprint": {
       "2": "sp500"
     },
-    "equal_support_generated_at": "2026-11-17T15:16:57.302423+00:00"
+    "equal_support_generated_at": "2026-11-17T17:54:06.514104+00:00"
   },
   "markets": [
     {
@@ -815,6 +815,19 @@
               "buy_tier_level_dca_market": 2032.11
             },
             "market": 1022.53
+          },
+          {
+            "date": "2026-11-17",
+            "held": 996.16,
+            "nav": 996.16,
+            "held_stock": 996.16,
+            "cash": 0.0,
+            "positions": 63,
+            "contributed_capital": null,
+            "branches": {
+              "buy_tier_level_dca_market": 2032.11
+            },
+            "market": 1022.53
           }
         ],
         "series": [
@@ -874,16 +887,16 @@
               "monthly_deposit": 500.0,
               "kind": "deposit_matched_index"
             },
-            "point_count": 38
+            "point_count": 39
           }
         ],
         "last": {
-          "date": "2026-11-16",
-          "held": 1009.66,
+          "date": "2026-11-17",
+          "held": 996.16,
           "market": 1022.53,
-          "nav": 1009.66,
+          "nav": 996.16,
           "positions": 63,
-          "excess_pct": -0.012586
+          "excess_pct": -0.025789
         }
       },
       "learning_depth": null,
