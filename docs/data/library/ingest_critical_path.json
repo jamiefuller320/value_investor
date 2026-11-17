@@ -1,22 +1,46 @@
 {
-  "market_id": "psi20",
-  "assessed_at": "2026-11-17T13:38:20.863094+00:00",
+  "market_id": "sti",
+  "assessed_at": "2026-11-17T13:50:34.849510+00:00",
   "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
+  "indexed_without_body": [
+    {
+      "ticker": "U14.SI",
+      "indexed_without_body": 4,
+      "filings_total": 14,
+      "filings_with_body": 10
+    },
+    {
+      "ticker": "ME8U.SI",
+      "indexed_without_body": 2,
+      "filings_total": 16,
+      "filings_with_body": 14
+    },
+    {
+      "ticker": "N2IU.SI",
+      "indexed_without_body": 1,
+      "filings_total": 15,
+      "filings_with_body": 11
+    }
+  ],
   "thin_need_discovery": [],
   "thin_need_bodies": [],
-  "primary_blocker": "none",
-  "force_discovery_scan": false,
-  "auto_pin_tickers": [],
+  "primary_blocker": "indexed_without_body",
+  "force_discovery_scan": true,
+  "auto_pin_tickers": [
+    "U14.SI",
+    "ME8U.SI",
+    "N2IU.SI"
+  ],
   "recommended_actions": [
-    "Filing critical path clear — maintenance deepen only"
+    "Prefer indexed-without-body body refetch (3 tickers, top: U14.SI(4), ME8U.SI(2), N2IU.SI(1))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
+    "indexed_without_body_tickers": 3,
+    "indexed_without_body_rows": 7,
     "thin_need_discovery": 0,
     "thin_need_bodies": 0
   }
