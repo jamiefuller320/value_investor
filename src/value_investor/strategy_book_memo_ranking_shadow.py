@@ -7,8 +7,11 @@ every market that produces a signal. A missing or stale cite is no score.
 ``influences_live`` is false. ``authorize_live_llm_influence`` is called on
 every card and fail-closes. The default path does not call a model and does
 not read or write ``forward_live``. ``--request-memos`` asks for missing or
-stale observe memos inside the existing memo raise. A memo dated after the
-candidate session still does not score that session.
+stale observe memos while this ISO week is inside the relaxed observe
+ceiling ($80, 200 memos), reviewed on 2026-11-30 Europe/London. Above that
+ceiling the sampling rule still holds names back. A memo dated after the
+candidate session still does not score that session. This does not turn on
+live capital.
 
 The readout rule lives in ``docs/ops/strategy-book-observe.md`` under
 ``l694-memo-ranking-readout-v1``. Outcome comparison stays null until that
@@ -85,9 +88,16 @@ MIN_PER_HALF = 12
 # fair-cost episode fraction (1.5 percentage points).
 NOISE_BAND = 0.015
 
-# Existing weekly memo raise. This shadow does not change it.
-WEEKLY_BUDGET_USD = 40.0
-WEEKLY_CAP_MEMOS = 100
+# Registered strategy-book memo raise. This shadow does not change it.
+REGISTERED_MEMO_RAISE_USD = 40.0
+REGISTERED_MEMO_RAISE_MEMOS = 100
+# Owner 2026-11-17: the observe-shadow token cost is acceptable until a human
+# review on 30 Nov 2026 (Europe/London). Sampling applies only above this.
+OBSERVE_CEILING_USD = 80.0
+OBSERVE_CEILING_MEMOS = 200
+OBSERVE_CEILING_REVIEW_ON = "2026-11-30"
+WEEKLY_BUDGET_USD = OBSERVE_CEILING_USD
+WEEKLY_CAP_MEMOS = OBSERVE_CEILING_MEMOS
 
 P1_SOURCES = (
     "key_filing_bodies",
@@ -109,6 +119,10 @@ SAMPLING_RULE: dict[str, Any] = {
     "id": SAMPLING_ID,
     "weekly_cap_memos": WEEKLY_CAP_MEMOS,
     "weekly_cap_usd": WEEKLY_BUDGET_USD,
+    "relaxed_from_usd": REGISTERED_MEMO_RAISE_USD,
+    "relaxed_from_memos": REGISTERED_MEMO_RAISE_MEMOS,
+    "review_on": OBSERVE_CEILING_REVIEW_ON,
+    "review_timezone": "Europe/London",
     "priority": ["filled", "skipped_no_slot", "gate_rejected"],
     "within_priority": "ticker",
     "reuse_memo_within_days": MEMO_MAX_AGE_DAYS,
@@ -610,6 +624,9 @@ def estimate_cost(cards: list[dict[str, Any]]) -> dict[str, Any]:
         "weekday_week_candidates": round(weekly_n, 2),
         "weekday_week_usd": round(weekly_usd, 2),
         "weekly_budget_usd": WEEKLY_BUDGET_USD,
+        "observe_ceiling_usd": OBSERVE_CEILING_USD,
+        "observe_ceiling_review_on": OBSERVE_CEILING_REVIEW_ON,
+        "relaxed_from_usd": REGISTERED_MEMO_RAISE_USD,
         "over_budget": over,
         "sampling": SAMPLING_RULE if over else None,
         "spend_enabled": False,
@@ -672,10 +689,10 @@ def plan_observe_memos(
     spent_this_week_usd: float,
     full_width_over_budget: bool,
 ) -> dict[str, Any]:
-    """One memo per name. Fresh memos are reused. The $40 raise is the cap.
+    """One memo per name. Fresh memos are reused. The observe ceiling is the cap.
 
-    Priority and the 100-memo sample apply when a full-width week is above
-    $40. A memo younger than 21 days is not bought again.
+    Priority and the memo sample apply when a full-width week is above the
+    relaxed ceiling. A memo younger than 21 days is not bought again.
     """
     chosen: dict[tuple[str, str], dict[str, Any]] = {}
     for row in names:
@@ -772,6 +789,7 @@ def request_observe_memos(
                 "estimated_spend_usd": 0.0,
             }
         )
+    written: list[str] = []
     if not apply:
         for item in plan["selected"]:
             rows.append(
@@ -834,6 +852,14 @@ def request_observe_memos(
                     if isinstance(outcome, dict):
                         record_row["verdict"] = outcome.get("verdict")
                         record_row["memo_finished_at"] = outcome.get("finished_at")
+                        for path in outcome.get("written_paths") or []:
+                            text = str(path)
+                            if (
+                                text.startswith("docs/data/")
+                                and "/research/" in text
+                                and "/sources/" not in text
+                            ):
+                                written.append(text)
                     record(float(ESTIMATED_MEMO_USD))
                     reserved += float(ESTIMATED_MEMO_USD)
                     spent += float(ESTIMATED_MEMO_USD)
@@ -850,6 +876,7 @@ def request_observe_memos(
         "estimated_spend_usd": round(spent, 2),
         "requested": requested,
         "reused": len(plan["reused"]),
+        "written_paths": sorted(set(written)),
         "names": rows,
     }
 
@@ -1411,19 +1438,26 @@ def findings_from_store(
     ranked = gaps.get("ranked_sources") or []
     top = ranked[0]["source"] if ranked else "none"
     sampling = cost.get("sampling")
+    ceiling = (
+        f"${WEEKLY_BUDGET_USD:.0f} observe ceiling "
+        f"(relaxed from ${REGISTERED_MEMO_RAISE_USD:.0f} until {OBSERVE_CEILING_REVIEW_ON} "
+        "Europe/London)"
+    )
     if sampling:
         cost_text = (
             f"Full width is ${cost.get('usd_per_candidate_per_day')} a candidate a day, "
-            f"about ${cost.get('weekday_week_usd')} a weekday week, above the ${WEEKLY_BUDGET_USD} "
-            f"memo raise. Proposal {SAMPLING_ID}: at most {WEEKLY_CAP_MEMOS} new memos a week, "
+            f"about ${cost.get('weekday_week_usd')} a weekday week, above the {ceiling}. "
+            f"{SAMPLING_ID} holds names past {WEEKLY_CAP_MEMOS} new memos a week: "
             "filled then slot-skipped then gate-rejected, ticker order, reuse a memo for "
-            f"{MEMO_MAX_AGE_DAYS} days. Spend is not turned on."
+            f"{MEMO_MAX_AGE_DAYS} days. influences_live stays false. "
+            "This does not turn on live capital."
         )
     else:
         cost_text = (
             f"Full width is ${cost.get('usd_per_candidate_per_day')} a candidate a day, "
-            f"about ${cost.get('weekday_week_usd')} a weekday week, inside the ${WEEKLY_BUDGET_USD} "
-            "memo raise. No sampling proposal. Spend is not turned on."
+            f"about ${cost.get('weekday_week_usd')} a weekday week, inside the {ceiling}. "
+            "The weekday job requests missing or stale observe memos. "
+            "influences_live stays false. This does not turn on live capital."
         )
     rank_text = ", ".join(
         f"{row.get('rank')}.{row.get('source')} unlocks {row.get('would_unlock')}" for row in ranked
@@ -1476,7 +1510,9 @@ def check_findings(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Memo-led ranking shadow (observe-only, does not spend or write the book)"
+        description=(
+            "Memo-led ranking shadow (observe-only; does not write the book or set live capital)"
+        )
     )
     parser.add_argument("--repo-root", type=Path, default=Path())
     parser.add_argument("--apply", action="store_true", help="Write the shadow store")
@@ -1484,8 +1520,11 @@ def main(argv: list[str] | None = None) -> int:
         "--request-memos",
         action="store_true",
         help=(
-            "Ask for missing or stale observe memos inside the $40 raise. "
-            "Does not set influences_live. A memo after the session does not score it."
+            "Ask for missing or stale observe memos while this ISO week is inside "
+            f"the ${OBSERVE_CEILING_USD:.0f} ceiling "
+            f"(relaxed from ${REGISTERED_MEMO_RAISE_USD:.0f} until {OBSERVE_CEILING_REVIEW_ON} "
+            "Europe/London). Does not set influences_live or forward_live. "
+            "A memo after the session does not score it."
         ),
     )
     parser.add_argument("--as-of", help="Override the run timestamp (ISO-8601)")

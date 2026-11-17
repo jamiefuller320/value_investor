@@ -305,25 +305,34 @@ does not rememo or ingest.
 ### Cost
 
 A memo is $0.40. Full width is that price times every candidate on a session.
-A weekday week is five times the mean session. The existing memo raise is
-$40 a week (100 memos). When the estimate is above $40, the stored proposal
-`l694-memo-sample-v1` is: do not pay again for a memo younger than 21 days;
-at most 100 new memos an ISO week; priority filled, then skipped for a slot,
-then gate-rejected; ticker order within a priority; one new memo per name
-per week. The proposal does not enable spend.
+A weekday week is five times the mean session. The registered strategy-book
+memo raise stays $40 a week (100 memos). This shadow does not change that
+raise and does not set `forward_live`.
 
-An explicit observe run may ask for those memos:
+### Ceiling review
+
+On 2026-11-17 the owner accepted the observe-shadow token cost and relaxed
+this shadow's sampling cap from $40 (100 memos) to **$80 a week (200 memos
+at $0.40)**. A person reviews that ceiling on **30 Nov 2026 (Europe/London)**:
+keep it, lower it, or restore the $40 cap. Ops-monitor flags the dated
+deferred trigger that day. `influences_live` stays false. The review does
+not turn on live capital.
+
+While an ISO week's estimated observe spend is inside $80, the weekday
+forward job requests a memo for each candidate whose memo is missing or
+older than 21 days. Above $80, `l694-memo-sample-v1` still holds names
+back: do not pay again for a memo younger than 21 days; at most 200 new
+memos an ISO week; priority filled, then skipped for a slot, then
+gate-rejected; ticker order within a priority; one new memo per name per
+week. The shared `weekly_ops` headroom check still applies.
 
 ```bash
 ftse-strategy-book-memo-ranking-shadow --repo-root . --request-memos --apply
 ```
 
-That asks once per name whose memo is missing or older than 21 days, in the
-same priority, and stops when this ISO week's memo raise would pass $40.
-The weekday workflow does not pass `--request-memos`. A memo written after
-the candidate's session close is not a cite for that session, so it does
-not score it. `influences_live` stays false. The run records the $0.40
-estimate on `weekly_ops` only after a memo returns.
+A memo written after the candidate's session close is not a cite for that
+session, so it does not score it. The run records the $0.40 estimate on
+`weekly_ops` only after a memo returns.
 
 ### Readout rule
 
@@ -361,14 +370,17 @@ memo-free shadow (17:45 and 21:30 UTC). The step is `continue-on-error`.
 
 ```bash
 ftse-strategy-book-memo-ranking-shadow --repo-root .           # counts only
-ftse-strategy-book-memo-ranking-shadow --repo-root . --apply   # write the store
+ftse-strategy-book-memo-ranking-shadow --repo-root . --apply --request-memos
 ```
 
-Writes `docs/data/strategy_book_memo_ranking_shadow.json` only. Module:
+A workflow dry run does not pass `--request-memos`. The apply path writes
+`docs/data/strategy_book_memo_ranking_shadow.json`, the observe memo log, and
+the research files a memo actually changed. It does not commit `sources/`.
+Module:
 `src/value_investor/strategy_book_memo_ranking_shadow.py`.
 
 `check_strategy_book_memo_ranking_shadow` runs inside `collect_ops_findings`.
-It does not walk and it does not spend.
+The check does not walk and it does not spend.
 
 | Title | Severity | When |
 |---|---|---|
@@ -376,7 +388,7 @@ It does not walk and it does not spend.
 | Strategy book memo-ranking shadow missing | warn | No store file |
 | Strategy book memo-ranking shadow stale | warn | Store is older than that slot |
 | Strategy book memo-ranking shadow unreadable | warn | File is not valid JSON |
-| Strategy book memo-ranking cost | info | Store is fresh. Names the full-width estimate and the sampling proposal when the week is above $40. `auto_fixable` false. Does not turn spend on |
+| Strategy book memo-ranking cost | info | Store is fresh. Names the full-width estimate and, when the week is above the $80 observe ceiling, sampling proposal `l694-memo-sample-v1`. `auto_fixable` false. `influences_live` stays false |
 | Strategy book memo-ranking input gaps | info | Store is fresh. Names the P1 cite rank on these candidates. `auto_fixable` false. No ingest |
 
 ### Out of scope
