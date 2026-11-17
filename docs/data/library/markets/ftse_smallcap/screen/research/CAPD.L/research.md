@@ -1,95 +1,20 @@
 # Capital Limited (CAPD.L) — Research memo
 
-_Version 1 · Updated 2026-09-09T07:46:07.215916+00:00 · Mode: initial_
+_Version 2 · Updated 2026-11-17T17:57:10.905630+00:00 · Mode: structured_verdict_update_
 
-## EXECUTIVE SUMMARY
-Capital Limited is a diversified mining-services group spanning contract drilling, load-and-haul mining, MSALABS geochemical laboratories, and a mark-to-market exploration investment portfolio. The quantitative screen rates CAPD as a **strong buy**, though the snapshot carries **no populated model metrics** (`data_quality_score` 0.0), so the signal rests on the label rather than disclosed screen inputs. Filings show a business transitioning from a margin-trough year (FY2024) into revenue acceleration: FY2025 revenue was broadly flat at **$345.8m**, but H1 2026 revenue reached **$219.0m** (+37.6% YoY), with management reiterating FY2026 guidance of **$410–440m**. The valuation debate is whether operational earnings and cash conversion can catch up with headline NPAT inflated by investment gains (**$66.0m** in FY2025), and whether growth contracts (Reko Diq, Sukari, MSALABS) outweigh cyclical, geographic, and portfolio-volatility risks.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
-## INVESTMENT THESIS
-For a value investor, the screen’s strong-buy label aligns directionally with a company whose **operating asset base is working harder** after a painful FY2024 margin reset. FY2024 revenue rose **9.3%** to **$348.0m**, but adjusted EBITDA fell **12.9%** to **$80.0m** (margin **23.0%** vs **28.8%**), reflecting delayed North American and laboratory ramp-ups, exceptional VAT provisions, and impairments. FY2025 stabilised: revenue **$345.8m** (-0.6%), adjusted EBITDA **$79.5m** (+1.1%) at **23.0%** margin, operating profit **$46.6m** (+23.0%), adjusted cash from operations **$92.9m** (+20.5%), capex **$47.1m** (-30%), and net debt **$31.8m** (-58% from **$75.7m**). **Operational NPAT** (excluding investment gains and exceptional items) was only **$12.4m** (-3.9%), underscoring that the “value” case is operational recovery and deleveraging, not reported EPS of **34.9 cents**.
-
-The growth vector is credible in filings: MSALABS FY2025 revenue **$73.5m** (+68% vs **$43.7m** in FY2024); mining revenue re-accelerated via Reko Diq civils (contract signed April 2025, targeting **>$60m annual revenue** at full run-rate) and Sukari waste stripping; drilling fleet grew to **137 rigs** at FY2025 with **74%** utilisation. H1 2026 trading updates show mining revenue **$43.5m** (+472% H1 YoY) and MSALABS **$44.7m** (+44.7%). Management guided FY2026 capex **$55–65m** and MSALABS **$85–95m**, implying continued reinvestment rather than pure cash harvest. The November 2025 placing (**~£31m / ~$40m**, **28.6m shares** at **107p**) supports fleet and lab expansion into a tight equipment market—a growth-positive but dilutive trade-off typical of small-cap cyclicals transitioning scale.
-
-Without populated screen metrics, the thesis leans on **filings-backed operational inflection**: revenue guidance up ~23% at midpoint, balance sheet lighter, cash generation improving, and contract pipeline with tier-one counterparties (Barrick, AngloGold Ashanti, Montage Gold). That supports the screen’s directional call, but earnings quality remains distorted by the investment book.
-
-## FINANCIAL REVIEW
-**Annual results (primary source: RNS body extracts)**
-
-| Metric | FY2023 | FY2024 | FY2025 |
-|--------|--------|--------|--------|
-| Revenue ($m) | 318.4 | 348.0 | 345.8 |
-| Adj. EBITDA ($m) | 91.8 | 80.0 | 79.5 |
-| Adj. EBITDA margin | 28.8% | 23.0% | 23.0% |
-| Operating profit ($m) | 60.3 | 39.3* | 46.6 |
-| Reported NPAT ($m) | 38.5 | 18.3* | 71.0 |
-| Operational NPAT ($m) | 35.5 | 14.3* | 12.4 |
-| Adj. cash from ops ($m) | 84.3 | 77.1 | 92.9 |
-| Capex ($m) | 69.0 | 67.2 | 47.1 |
-| Net debt ($m) | 69.8 | 75.7 | 31.8 |
-| Investment portfolio ($m) | 47.2 | 30.3 | 97.5 |
-
-*FY2024 figures restated in the FY2025 release for payroll tax misconfiguration (**$1.3m** net impact on 2024 P&L).
-
-FY2024 (Full Year Financial Results, 27 March 2025): Revenue growth masked a sharp margin compression. Exceptional items included ERP costs (**$2.7m**), VAT receivable provisions (**$2.5m**), and MSALABS impairments (**$2.8m**). Net debt rose to **$75.7m**; **$75m** RCF utilisation was **$60m**. Going-concern disclosure stated EBITDA would need to fall **19%** (or **34%** with investment sales as mitigation) to breach June 2025 covenant tests—no going-concern qualification.
-
-FY2025 (Full Year Results, 19 March 2026): Flat revenue but improved cash and leverage. **Investment gains of $66.0m** drove reported NPAT; operational earnings were essentially flat. MSALABS became divisionally profitable. Mining revenue fell to **$26.4m** (from **$65.2m**) as legacy contracts ended before Reko Diq/Sukari ramp. Macquarie term loan largely repaid (**$0.7m** outstanding vs **$13.1m**). RCF refinanced post year-end (March 2026) into **$37.5m** term loan (2029) plus **$37.5m** RCF (2030). Prior-period payroll tax restatement is an **accounting red flag**, though management assessed 2023 impact as immaterial.
-
-**Interim / trading updates (primary source: RNS)**
-
-H1 2025 (Unaudited, 14 August 2025): Revenue **$159.2m** (-6.0% YoY); adjusted EBITDA **$32.1m** (-25.2%), margin **20.2%**; operational NPAT **~$2.1m** (-82.2%); net debt **$55.4m**; investment portfolio **$49.5m**. Management raised FY2025 revenue guidance to **$320–340m** (from **$300–320m**). BDO review report: no material going-concern issues identified.
-
-Q2 2025 trading update (17 July 2025): Q2 revenue **$87.4m** (+21.7% QoQ); MSALABS record quarter **$17.4m**; Reko Diq mining ramp began.
-
-Q2 2026 trading update (16 July 2026): H1 revenue **$219.0m** (+37.6%); Q2 **$117.3m** (+34.2% YoY). Mining **$25.5m** in Q2 (+264% YoY); MSALABS **$23.8m** (+36.8%). Investment portfolio **$116.5m** at 30 June 2026. FY2026 guidance **$410–440m** reiterated.
-
-**Gap:** H1 2026 Results (Unaudited) is listed in `filings_index.json` (August 2026) but **has no downloadable body extract**; interim P&L, balance sheet, and covenant detail for H1 2026 are therefore unavailable from primary filings in this pack.
-
-**Yahoo fallback (FY2025 only, for cross-check):** Yahoo aligns on revenue **$345.8m** and net income **$69.4m**. Yahoo shows free cash flow **$35.8m**, operating cash flow **$73.6m**, net debt **~$31.4m**, and total debt **$130.9m** (lease-inclusive presentation differs from filing net-debt definition). TTM quarterly cash flow is suppressed in the snapshot (`quarterly_cashflow_empty`).
-
-**Trend summary:** Revenue inflecting sharply in 2026 after a flat FY2025; margins stabilised around **23%** adjusted EBITDA but operational NPAT remains modest; balance sheet strengthened in FY2025; headline earnings are dominated by fair-value investment movements, not services margins.
-
-## RISKS AND RED FLAGS
-**Cyclical:** Revenue tied to global mining capex and commodity cycles. FY2024 risk disclosure highlights dependence on exploration/development spend; gold remains a large order-book component despite copper diversification (Reko Diq, Lumwana).
-
-**Customer concentration:** H1 2025 segment note: two Africa customers contributed **10%** and **19%** of group revenue in the half—material single-customer exposure.
-
-**Investment portfolio / accounting:** FY2025 NPAT is not representative of services earnings (**operational NPAT $12.4m** vs reported **$71.0m**). Portfolio at **$97.5m** (FY2025) / **$116.5m** (H1 2026 trading update) creates mark-to-market volatility; H1 2025 included **$5.6m** impairment of associate Eco Detection. Capital Investments is governed by an investment committee, but remains a non-core earnings swing factor.
-
-**Geographic / regulatory:** Operations across Mali, Pakistan, Egypt, Guinea, and others carry political and local-content risk. Q2 2026 update cites political unrest and local-content rules behind Sadiola drilling exit; Barrick announced slower Reko Diq development until mid-2027—Capital states no change to its operating position, but project pace risk is real.
-
-**Leverage / covenants:** **$75m** RCF (SOFR + **5.5%**) with interest cover, gross debt/EBITDA, debt/equity, and tangible net worth covenants. FY2025 reverse stress test: adjusted EBITDA must fall **~48%** immediately to breach covenants. Group complied throughout FY2024–FY2025; H1 2026 covenant status **not available** (missing interim body).
-
-**Operational execution:** Nevada Gold Mines drilling was repeatedly cited as underperforming; Q2 2026 confirms contract termination and demobilisation costs largely offsetting H1 operational outperformance. US regulatory-configured rigs to be sold.
-
-**Governance / payroll restatement:** FY2025 annual report disclosed payroll tax miscalculation in one jurisdiction (**$1.3m** 2024 impact; receivable/liability adjustments)—immaterial individually but worth monitoring.
-
-**Dilution:** November 2025 placing issued **28.6m shares** (~**14.5%** of pre-deal capital on full settlement); Executive Chair related party BPM Investments subscribed **399,000 shares**.
-
-**Going concern:** Latest annual filing (FY2025) affirms going concern to June 2027 with no material uncertainties disclosed; mitigants include investment liquidation, capex deferral, and dividend adjustment.
-
-RiskTags: cyclical, customer_concentration, accounting, leverage, regulatory, competitive, other
-RiskTags: cyclical, customer_concentration, accounting, leverage, regulatory, competitive, other
-
-## NEWS HIGHLIGHTS
-Relevant CAPD-specific coverage over the past year (many Google News hits are false positives for other “Capital Limited” entities):
-
-- **Capital Limited shares rise as half-year revenue jumps 37.6%** (Yahoo Finance UK, 20 August 2026) — market reaction to H1 momentum.
-- **Capital H1 Earnings Call Highlights: Record Revenue and Margins** (Yahoo Finance, 28 August 2026 / 20 August 2026) — record H1 revenue, MSALABS contribution.
-- **Capital Limited reports record first-half revenue as mining services expansion continues** (Yahoo Finance UK, 16 July 2026) — Q2/H1 trading update.
-- **CAPD: Record Q2 revenue and strong outlook** (TradingView, 16 July 2026).
-- **Capital Ltd (CAPFF) Full Year 2025 Earnings Call Highlights** (Yahoo Finance, 19 March 2026) — FY2025 results commentary; flat revenue, investment gains.
-- **Capital Holds Guidance After Record Q1** (Yahoo Finance, 20 May 2026) — AGM trading commentary.
-- **Capital Limited Wins Strong Shareholder Backing at AGM** (TipRanks, 20 May 2026).
-- **Why You Might Be Interested In Capital Limited (LON:CAPD) For Its Upcoming Dividend** (simplywall.st, 23 August 2026).
-- **Is Now The Time To Put Capital (LON:CAPD) On Your Watchlist?** (Yahoo Finance, 10 June 2026).
-- **Capital Limited's (LON:CAPD) Stock is Soaring But Financials Seem Inconsistent** (Yahoo Finance, 4 January 2026) — sceptical take on earnings quality.
-
-Material corporate actions from filings (not always in news feed): **Reko Diq mining contract** (2 April 2025, **>$60m** annual revenue at full run-rate); **proposed equity raise** (20 November 2025) and **results of placing** (21 November 2025, **£31m** gross); portfolio optimisation including **NGM and Sadiola drilling exits** (Q2 2026 trading update).
-
-News coverage for CAPD specifically is **moderate but adequate** on results and trading updates; the Google News query captures substantial noise from unrelated “Capital Limited” names.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Filings confirm accelerating revenue, deleveraging, and a credible contract pipeline that supports the quantitative strong-buy directionally, but thin operational NPAT, investment-portfolio-driven headline earnings, missing H1 2026 filing body, and cyclical/project-execution risks prevent full confirmation of the screen signal.
+Rationale: Non-material news leaves filings as the anchor: revenue acceleration and deleveraging support the screen directionally, but thin operational NPAT, investment-driven headline earnings, and missing H1 2026 accounts prevent full strong-buy...
+RiskTags: cyclical, customer_concentration, accounting, leverage, regulatory, competitive, other
+
+## Weekly updates
+
+### 2026-11-17T17:57:10.905630+00:00
+News since 9 September is thin: third-party forecast, LSE quote, and market-report mentions only—no new RNS or company disclosures in the indexed batch.
+Filing-backed picture is unchanged: H1 2026 trading momentum and FY2026 guidance stand; H1 2026 accounts body extract remains absent from the pack.
+Strong buy screen unchanged; snapshot now carries Yahoo H1 cash flow but model inputs remain empty and operational earnings-quality concerns persist.

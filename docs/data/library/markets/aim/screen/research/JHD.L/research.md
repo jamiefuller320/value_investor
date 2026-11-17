@@ -1,6 +1,6 @@
 # James Halstead plc (JHD.L) — Research memo
 
-_Version 1 · Updated 2026-09-29T07:56:08.070562+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-11-17T17:59:53.116346+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,13 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.68
-Rationale: FY25 RNS cash inflow from operations (£50.0m) less capex (£3.9m) comfortably covered equity dividends (£36.5m), but H1 to Dec-2025 EPS fell to 4.4p and the Jul-2026 trading update guides FY26 profit ~10–15% lower, tempering the screen buy.
+Confidence: 0.71
+Rationale: FY26 RNS confirms EPS 8.5p and lower PBT, but £49.1m operating cash and an 8.95p dividend keep the income screen credible; earnings pressure still tempers the buy signal.
 RiskTags: cyclical, competitive, key_person, accounting
+
+## Weekly updates
+
+### 2026-11-17T17:59:53.116346+00:00
+14 Oct FY26 audited preliminary results (after the 28 Sep BDO delay): EPS 8.5p, PBT £48.2m, total dividend 8.95p, operating cash £49.1m.  
+Annual report and AGM notice posted 23 Oct; gross margin held at 44.6% with cash £75.7m.  
+Since 29 Sep news is mostly margin or dividend commentary; no trading update beyond the Jul-2026 profit guide now realised in the RNS.
