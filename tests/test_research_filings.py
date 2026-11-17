@@ -9600,6 +9600,132 @@ def test_ensure_ir_allowlist_direct_merges_before_refetch_c6l_si(
     assert "ir_allowlist" in payload["sources_used"]
 
 
+def test_headline_relevant_c6l_si_rejects_yahoo_finance_singapore_suffix_eng_20261117_01():
+    """eng-20261117-01: C6L.SI google_news_asia must not keep unrelated Asia feed shells."""
+    noise = (
+        "Anta Group's HEMIN Foundation Releases 2025 Annual Report; RMB 2 Billion "
+        "Donation-Funded Public Tertiary Hospital to Open Within the Year - "
+        "Yahoo Finance Singapore"
+    )
+    assert not headline_relevant_to_issuer(noise, "Singapore Airlines Limited", "C6L.SI")
+    assert headline_relevant_to_issuer(
+        "Singapore Airlines (SGX:C6L) Stock Forecast & Analyst Predictions - Simply Wall St",
+        "Singapore Airlines Limited",
+        "C6L.SI",
+    )
+    assert not headline_relevant_to_issuer(
+        "Air India posts annual loss of $2.8 billion, Singapore Air results show - "
+        "Yahoo Finance Singapore",
+        "Singapore Airlines Limited",
+        "C6L.SI",
+    )
+
+
+def test_filter_misattributed_filings_prunes_c6l_si_yahoo_singapore_noise_eng_20261117_01():
+    """eng-20261117-01: sanitize/prune misattributed google_news_asia rows on C6L.SI index."""
+    rows = [
+        {
+            "id": "ir_annual",
+            "source": "ir_allowlist",
+            "headline": "IR allowlist FS-fy2526",
+            "period": "annual",
+            "has_body": True,
+        },
+        {
+            "id": "gn_ant",
+            "source": "google_news_asia",
+            "headline": (
+                "Anta Group's HEMIN Foundation Releases 2025 Annual Report - "
+                "Yahoo Finance Singapore"
+            ),
+            "period": "other",
+            "has_body": False,
+        },
+        {
+            "id": "gn_sia",
+            "source": "google_news_asia",
+            "headline": "Singapore Airlines (SGX:C6L) Stock Forecast & Analyst Predictions",
+            "period": "other",
+            "has_body": False,
+        },
+    ]
+    kept = filter_misattributed_filings(
+        rows,
+        company_name="Singapore Airlines Limited",
+        ticker="C6L.SI",
+        regime="asia_filings",
+    )
+    kept_ids = {row["id"] for row in kept}
+    assert "ir_annual" in kept_ids
+    assert "gn_sia" in kept_ids
+    assert "gn_ant" not in kept_ids
+
+
+def test_sanitize_filings_index_c6l_si_closes_library_body_penetration_gap(tmp_path: Path):
+    """eng-20261117-01: pruning Asia feed noise leaves enough IR bodies for library gap rule."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    filings = [
+        {
+            "id": "ir_a",
+            "source": "ir_allowlist",
+            "headline": "FS-fy2526",
+            "period": "annual",
+            "has_body": True,
+            "body_path": "bodies/ir_a.txt",
+        },
+        {
+            "id": "ir_i1",
+            "source": "ir_allowlist",
+            "headline": "nr-q2fy2627",
+            "period": "interim",
+            "has_body": True,
+            "body_path": "bodies/ir_i1.txt",
+        },
+        {
+            "id": "ir_i2",
+            "source": "ir_allowlist",
+            "headline": "slide-q2fy2526",
+            "period": "interim",
+            "has_body": True,
+            "body_path": "bodies/ir_i2.txt",
+        },
+    ]
+    for _ in range(5):
+        filings.append(
+            {
+                "id": f"gn_{_}",
+                "source": "google_news_asia",
+                "headline": f"Unrelated issuer {_} - Yahoo Finance Singapore",
+                "period": "other",
+                "has_body": False,
+            }
+        )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "C6L.SI",
+                "company_name": "Singapore Airlines Limited",
+                "filings": filings,
+                "summary": {"total": len(filings), "with_body": 3},
+            }
+        ),
+        encoding="utf-8",
+    )
+    meta = sanitize_filings_index(
+        filings_dir,
+        company_name="Singapore Airlines Limited",
+        ticker="C6L.SI",
+        regime="asia_filings",
+    )
+    assert meta["pruned"] >= 5
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    total = int(payload["summary"]["total"])
+    with_body = int(payload["summary"]["with_body"])
+    assert with_body == 3
+    assert with_body >= max(3, total // 2)
+
+
 def test_refetch_ir_allowlist_retries_c6l_si_sgx_unfetchable_eng_20261116_02(
     tmp_path: Path, monkeypatch
 ):

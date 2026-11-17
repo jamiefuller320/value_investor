@@ -3402,6 +3402,16 @@ _ISSUER_WEAK_HEADLINE_TOKENS = frozenset(
     }
 )
 
+# Listing geography words must not alone prove relevance on SGX/HKEX names — Yahoo/Google
+# Asia feeds suffix headlines with "Yahoo Finance Singapore" (eng-20261117-01: C6L.SI).
+_ASIA_LISTING_GEO_ONLY_TOKENS = frozenset({"singapore", "hong", "kong"})
+
+
+def _asia_exchange_listing_ticker(ticker: str) -> bool:
+    epic = (ticker or "").strip().upper()
+    return epic.endswith(".SI") or epic.endswith(".HK")
+
+
 # Headline brand aliases when Yahoo legal names omit the trading brand (e.g. H&M).
 _ISSUER_HEADLINE_BRAND_ALIASES: dict[str, tuple[str, ...]] = {
     "HM-B": (
@@ -3535,6 +3545,10 @@ def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -
     matched = [tok for tok in tokens[:4] if re.search(rf"\b{re.escape(tok)}\b", text)]
     if not matched:
         return False
+    if _asia_exchange_listing_ticker(ticker):
+        strong = [tok for tok in matched if tok not in _ASIA_LISTING_GEO_ONLY_TOKENS]
+        if not strong:
+            return False
     if any(tok not in _ISSUER_WEAK_HEADLINE_TOKENS for tok in matched):
         return True
     return False
