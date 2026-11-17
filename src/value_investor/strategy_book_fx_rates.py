@@ -149,10 +149,7 @@ def _merge_points(
         chosen.setdefault(day, rate)
     for day, rate in fresh:
         chosen.setdefault(day, rate)
-    return [
-        {"as_of": day.isoformat(), "value": round(chosen[day], 6)}
-        for day in sorted(chosen)
-    ]
+    return [{"as_of": day.isoformat(), "value": round(chosen[day], 6)} for day in sorted(chosen)]
 
 
 def yahoo_history(symbol: str, start: date, end: date) -> list[tuple[date, float]]:
@@ -195,9 +192,7 @@ def refresh_store(
     payload = empty_store()
     if isinstance(current, dict) and isinstance(current.get("pairs"), dict):
         payload["pairs"] = {
-            code: [
-                {"as_of": day.isoformat(), "value": rate} for day, rate in existing[code]
-            ]
+            code: [{"as_of": day.isoformat(), "value": rate} for day, rate in existing[code]]
             for code in PAIRS
         }
     errors: list[str] = []
@@ -337,10 +332,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     payload = refresh_store(args.repo_root)
     write_store(args.repo_root, payload)
-    counts = {
-        code: len(rows)
-        for code, rows in series_from_store(payload).items()
-    }
+    counts = {code: len(rows) for code, rows in series_from_store(payload).items()}
     print(
         json.dumps(
             {

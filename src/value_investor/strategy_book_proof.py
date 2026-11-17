@@ -364,9 +364,7 @@ class FxHistory:
             "files_read": self.files_read,
             "unreadable_files": self.unreadable,
             "no_daily_series": [
-                code
-                for code in ("CHF", "SEK", "HKD", "SGD")
-                if not self.usd_per_unit.get(code)
+                code for code in ("CHF", "SEK", "HKD", "SGD") if not self.usd_per_unit.get(code)
             ],
         }
 
