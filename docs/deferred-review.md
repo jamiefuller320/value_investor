@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-17T08:11:12+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-17T21:00:25+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -780,7 +780,6 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L708 | **Use an exchange holiday calendar for the strategy-book demo fill window** | The demo mirror treats the next weekday as the fill session. A bank holiday can be treated as that session and the unfilled remainder cancelled that evening, while the book waits for the next real session. | When a primary fill session is an exchange holiday and the demo remainder is cancelled that evening with no fill. |
 | L709 | **Show strategy-book demo slippage on the observe dashboard** | Once the practice account has measured fills, a small dashboard strip can show median slippage versus the book's adjusted close. The strip must not feed the book or replace the assumed half-spread. | When strategy_book_demo_ledger.json slippage.measured_count is at least 1. _(machine-checked)_ |
 | L710 | **Resize a rejected strategy-book demo order to whole shares** | The demo mirror sends a fractional quantity floored to 4 decimal places and does not resize a rejection in the same run. If the practice API rejects that fraction, a later pass can retry a whole-share quantity under the same 100-unit stake. | When a demo order is rejected because the quantity is not an accepted share increment. |
-| L711 | **Show strategy-book reviews on the dashboard** | The step 2.4 review queue is in docs/data/strategy_book_review_queue.json and is read at the version review. A dashboard v2 Reviews card would show the primary attention list and the companion columns without a new daily human gate. | The dashboard v2 Reviews tab is being built, or the strategy-book thickness gate is ready for its version review. |
 | L714 | **Daily FX history for CHF, SEK, HKD and SGD** | The step 3.2 sterling bars use dated macro snapshots, which price GBP, EUR, AUD and CAD against USD. A counted strategy-book episode in CHF, SEK, HKD or SGD is insufficient_data rather than a guessed rate. | When a counted mature strategy-book episode is denominated in CHF, SEK, HKD or SGD, or when those currencies gain a committed daily FX series. |
 | L719 | **Dated Trading 212 catalogue for the UK replay tradable bar** | The step 3.2 tradable-subset bar needs t212_listed as of the signal date. The UK replay leaves that label not_applicable so today's catalogue is not painted backward. | A dated Trading 212 catalogue history exists that can be read as of each signal session. |
 
