@@ -244,6 +244,134 @@ primary exit without the memo bind, and it records early marks at 10 and 20
 sessions. It does not write this store and it does not count here. See
 [strategy-book-memo-free-shadow.md](strategy-book-memo-free-shadow.md).
 
+## Memo-led ranking shadow (L694)
+
+Observe-only. `influences_live` is false. The shadow does not read or write
+`forward_live`, does not call a model, and does not turn memo spend on. It
+does not open a book episode, and it does not count toward the thickness gate
+or the bench. A ranking that later replaces the registered order is a sealed
+version at a version review, with at most one challenger.
+
+Rule id: `l694-memo-ranking-readout-v1`. The text in this section is the
+readout. Outcome code refuses to compare arms until this id, the fair-cost
+episode metric, and the evidence start date below are present in this file.
+Sessions before that date are not evidence. The slot-ranking lab on
+[PR #1427](https://github.com/jamiefuller320/value_investor/pull/1427) is not
+an input: this shadow does not read `strategy_book_ranking_lab.json`.
+
+### Who is scored
+
+Every same-day buy candidate, in every market the book signals in, including
+markets where it never buys:
+
+| Disposition | Who |
+|---|---|
+| `filled` | The registered 20-slot book took the name (ticker order within the day, the book's order) |
+| `skipped_no_slot` | The name was offered to that book and skipped because 20 slots were full |
+| `gate_rejected` | The price rule fired and a gate refused the name (operating decline, sector headwind, or an F9-B bind including the memo) |
+
+The buy-on-signal control is not a candidate. A late signal or a gap drop is
+not a candidate. Stake on any later arm is the book's fixed 100 local units.
+Fair-cost episode % is the book's `fair_cost_return`.
+
+### Evidence for a score
+
+A score exists only when the card has structured reasons and cited inputs,
+and `authorize_live_llm_influence` is called. That call stays false because
+`influences_live` is false and `observe_only` is true. Missing or stale
+inputs produce no score. The shadow does not invent one.
+
+Required cites, each with a date on or before the session (memo age also
+within 21 days of the cash close):
+
+- filing bodies (`key_filing_bodies`, body stamp)
+- free-cash-flow basis (`fcf_basis_bound`)
+- overlay bind (`overlay_bound`: a verdict and an adjusted signal)
+- memo recency (`memo_recent`)
+
+Reasons are machine-readable codes (`verdict:accumulate`, `risk:low`,
+`risk_tag:leverage`), not the prose rationale. The score is the verdict
+(accumulate 3, neutral 2, caution 1, pass 0) plus risk (low +0.2, medium 0,
+high −0.2). Confidence is cited and is not added. Ties break by ticker, the
+same tie-break as the registered order.
+
+### Input gaps (P1)
+
+On this candidate set only, each of the four cites is ranked by how many
+candidates would gain a score if that one cite were the only one missing.
+The rank is not a wider ingest list. The ops finding names the order and
+does not rememo or ingest.
+
+### Cost
+
+A memo is $0.40. Full width is that price times every candidate on a session.
+A weekday week is five times the mean session. The existing memo raise is
+$40 a week (100 memos). When the estimate is above $40, the stored proposal
+`l694-memo-sample-v1` is: do not pay again for a memo younger than 21 days;
+at most 100 new memos an ISO week; priority filled, then skipped for a slot,
+then gate-rejected; ticker order within a priority; one new memo per name
+per week. The proposal does not enable spend.
+
+### Readout rule
+
+Metric: median fair-cost episode % (the book's fair-cost fraction). Three
+arms, same pool, book's 20 slots:
+
+- top-ranked: higher memo score first, ticker tie-break
+- registered order: fill session, then ticker
+- random: 15 orders, seed `SLOT_BOOK_RANDOM_SEED`, then the median of those
+  fifteen medians
+
+The pool is offered names (`filled` and `skipped_no_slot`) that have a memo
+score and a closed fair-cost return. A name with no score is left out of
+every arm. Gate-rejected scores are stored and are not in the arms.
+
+Dates, fixed before any forward score is read:
+
+- rule fixed 2026-11-16
+- evidence starts on signal sessions from 2026-11-17 inclusive
+- half A: 2026-11-17 through 2027-05-16
+- half B: 2027-05-17 through 2027-11-16
+
+Minimum before a comparison is evidence: 48 closed outcomes in that pool,
+at least 12 in each half. Until then the store's comparison is null and
+`counts_as_evidence` is false. A beat, once the minimum is met, is the
+memo-rank median ahead of both the registered median and the random median
+by more than 1.5 percentage points in each half. That band is the ranking
+lab's reported random-order range in a half. It is a hurdle, not a result
+from this shadow.
+
+### Schedule and files
+
+Weekdays, in `.github/workflows/strategy-book-forward.yml`, after the
+memo-free shadow (17:45 and 21:30 UTC). The step is `continue-on-error`.
+
+```bash
+ftse-strategy-book-memo-ranking-shadow --repo-root .           # counts only
+ftse-strategy-book-memo-ranking-shadow --repo-root . --apply   # write the store
+```
+
+Writes `docs/data/strategy_book_memo_ranking_shadow.json` only. Module:
+`src/value_investor/strategy_book_memo_ranking_shadow.py`.
+
+`check_strategy_book_memo_ranking_shadow` runs inside `collect_ops_findings`.
+It does not walk and it does not spend.
+
+| Title | Severity | When |
+|---|---|---|
+| Strategy book memo-ranking shadow refreshed | info | Store exists and `generated_at` is at or after the latest 21:30 UTC weekday slot |
+| Strategy book memo-ranking shadow missing | warn | No store file |
+| Strategy book memo-ranking shadow stale | warn | Store is older than that slot |
+| Strategy book memo-ranking shadow unreadable | warn | File is not valid JSON |
+| Strategy book memo-ranking cost | info | Store is fresh. Names the full-width estimate and the sampling proposal when the week is above $40. `auto_fixable` false. Does not turn spend on |
+| Strategy book memo-ranking input gaps | info | Store is fresh. Names the P1 cite rank on these candidates. `auto_fixable` false. No ingest |
+
+### Out of scope
+
+Not started here: L692 slot count and stake size, L693 queue-aware sell
+urgency, L695 selectivity dial, N266 memo-free shadow (already a separate
+instrument), L723 ranking-lab follow-up.
+
 ## Reviews
 
 Closed episodes are not reviewed inside this walker. The daily ops-monitor
@@ -289,6 +417,7 @@ without firing the same title twice for one missed run.
 - `docs/data/strategy_book_proof_board.json` (step 3.2 proof bars; see [strategy-book-proof.md](strategy-book-proof.md))
 - `docs/data/strategy_book_fair_value.json` (step 4.1 fair-value range; see [strategy-book-fair-value.md](strategy-book-fair-value.md))
 - `docs/data/strategy_book_memo_free_shadow.json` (memo-free shadow; see [strategy-book-memo-free-shadow.md](strategy-book-memo-free-shadow.md))
+- `docs/data/strategy_book_memo_ranking_shadow.json` (memo-led ranking shadow; see [Memo-led ranking shadow](#memo-led-ranking-shadow-l694))
 
 One writer each. They are not on the ops-monitor optional or owned lists.
 `docs/data/charts` is owned here so a close refresh is committed, and email-report

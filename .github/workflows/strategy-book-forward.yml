@@ -75,6 +75,20 @@ jobs:
             ftse-strategy-book-memo-free-shadow --repo-root . --apply
           fi
 
+      # Observe-only L694 ranking. A failure must not stop the forward commit.
+      # Does not spend. See docs/ops/strategy-book-observe.md.
+      - name: Memo-led ranking shadow
+        continue-on-error: true
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          set -euo pipefail
+          if [ "${DRY_RUN}" = "true" ]; then
+            ftse-strategy-book-memo-ranking-shadow --repo-root .
+          else
+            ftse-strategy-book-memo-ranking-shadow --repo-root . --apply
+          fi
+
       # Practice-account mirror only. Missing demo secrets plan rows and exit 0.
       # Never uses the live catalogue key. See docs/ops/strategy-book-demo-mirror.md.
       # A mirror failure must not stop the commit of the forward store and gate log.
@@ -146,5 +160,6 @@ jobs:
             docs/data/strategy_book_proof_board.json
             docs/data/strategy_book_fair_value.json
             docs/data/strategy_book_memo_free_shadow.json
+            docs/data/strategy_book_memo_ranking_shadow.json
             docs/data/charts
         run: bash scripts/gha_commit_artifacts.sh
