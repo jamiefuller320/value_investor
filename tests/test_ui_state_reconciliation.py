@@ -63,6 +63,20 @@ def _seed_v2_today_stores(data_dir: Path, *, now: datetime, replay_day: str | No
         {"schema_version": 1, "generated_at": now.isoformat()},
         compact=False,
     )
+    write_json(
+        data_dir / "strategy_book_review_queue.json",
+        {
+            "schema_version": 1,
+            "generated_at": now.isoformat(),
+            "scoring_date": day,
+            "influences_live": False,
+            "observe_only": True,
+            "counts": {"active": 0, "companion": 0, "closed": 0},
+            "active": [],
+            "companion": [],
+        },
+        compact=False,
+    )
     (data_dir / "strategy_book_replay_episodes.json.gz").write_bytes(b"")
     write_json(
         data_dir / "strategy_book_memo_job.json",

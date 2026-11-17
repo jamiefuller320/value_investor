@@ -71,6 +71,15 @@
     return `${path}${joiner}t=${Date.now()}`;
   }
 
+  function parseDashboardJson(text) {
+    // Python writers emit bare NaN. Browsers reject that. Values only, not words inside strings.
+    const cleaned = String(text).replace(
+      /([:\[,]\s*)(?:-Infinity|Infinity|NaN)(?=\s*[,\]}])/g,
+      "$1null"
+    );
+    return JSON.parse(cleaned);
+  }
+
   /**
    * @param {string} path
    * @returns {Promise<{ ok: boolean, data: object | null, error?: string }>}
@@ -82,7 +91,7 @@
       if (!response.ok) {
         return { ok: false, data: null, error: `HTTP ${response.status}` };
       }
-      const data = await response.json();
+      const data = parseDashboardJson(await response.text());
       return { ok: true, data };
     } catch (e) {
       const msg = e && e.message ? String(e.message) : String(e);
@@ -1150,4 +1159,5 @@
   // Tests and static analysis: exported path list (optional)
   window.__dashboardV2DataPaths = DATA_PATHS;
   window.__dashboardV2OptionalDataFiles = OPTIONAL_DATA_FILES;
+  window.__dashboardV2ParseJson = parseDashboardJson;
 })();

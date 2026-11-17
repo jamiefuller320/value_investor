@@ -247,5 +247,5 @@ Both are in the [human tasks checklist](human-tasks-checklist.md#ad-hoc-when-tri
 | WP2 | Built: Candidates funnel and per-name checks; Today lists strategy decisions first. Queued N258 (per-name T212 flag, G5) | `cursor/dashboard-v2-candidates-book-4306` | Grok 4.7 (high) |
 | WP3 | Built: Book and Proof on the archive replay, three results kept apart. Queued L685 (episode gzip writes bare `NaN`) | `cursor/dashboard-v2-candidates-book-4306` | Grok 4.7 (high) |
 | WP5 | Built: `dashboard_v2_stores_present_and_fresh` in the UI reconciliation check (daily ops-monitor) | `cursor/dashboard-v2-candidates-book-4306` | Composer 2.5 |
-| WP6 | Waiting on step 2.4 | — | — |
+| WP6 | Built: Reviews shows the strategy-book closed-episode queue (primary attention list and companion columns). Entry-blind and buy+28d stay on the legacy Lifecycle queues until they are pointed at strategy-book episodes. | #1436 | Grok 4.7 |
 | WP7 | Waiting on the cutover decision | — | — |
