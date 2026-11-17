@@ -1,6 +1,6 @@
 # Impax Asset Management Group Plc (IPX.L) — Research memo
 
-_Version 2 · Updated 2026-11-17T17:59:04.218472+00:00 · Mode: structured_verdict_update_
+_Version 3 · Updated 2026-11-17T21:44:09.497025+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -18,3 +18,8 @@ RiskTags: cyclical, competitive, customer_concentration, key_person
 Since 28 Sep there is no new Impax RNS or accounts in the refreshed pack; the post-cut-off news batch is mostly options listings.  
 Oct commentary cut third-party fair value to £1.61 on outflow-driven reset assumptions; no corroborating primary disclosure in the pack.  
 Indexed filings are unchanged: H1 FY26 outflows, halved interim dividend and weak cash/dividend cover remain the binding view.
+
+### 2026-11-17T21:44:09.497025+00:00
+No material change since the earlier 17 Nov refresh: the incremental news batch is empty and no new Impax RNS beyond the indexed Q4 AUM update (13 Oct).  
+Filings and snapshots still show H1 FY26 net outflows, the 2.0p interim dividend and operating cash trailing dividend obligations.  
+The strong-buy screen still leans on prior-year FCF/yield while current-period fundamentals in the pack remain weaker.

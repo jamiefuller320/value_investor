@@ -6,7 +6,7 @@
   "owner_note": "Meeting every bar lets the owner consider step 5.5. It does not open live capital by itself.",
   "step": "3.2",
   "status": "built_awaiting_owner_signoff",
-  "generated_at": "2026-11-17T18:02:17.264422+00:00",
+  "generated_at": "2026-11-17T21:47:16.436748+00:00",
   "seal_ok": true,
   "sealed_section_sha256": "4e99e9ad1b741a6fc8816575f1fcf6a9ac717c5693ad0244b9e46f9c7a207349",
   "sealed_section_sha256_expected": "4e99e9ad1b741a6fc8816575f1fcf6a9ac717c5693ad0244b9e46f9c7a207349",
@@ -51,7 +51,7 @@
     "archive": "archive_replay_report_only is the buy-tier-only arm of the committed archive replay. It is survivorship-biased and is not the proof."
   },
   "fx": {
-    "source": "docs/data/library/macro/YYYY-MM-DD.json",
+    "source": "docs/data/library/macro/YYYY-MM-DD.json plus docs/data/strategy_book_fx_rates.json",
     "point_in_time": "Each rate's date is the marker as_of, not the snapshot file name and not a live spot. The converter uses the latest as_of on or before the episode date. fetch_fx_rates is not called.",
     "usd_per_unit_markers": {
       "GBP": "uk.gbp_usd",
@@ -80,16 +80,31 @@
         "first_as_of": "2026-07-18",
         "last_as_of": "2026-11-17",
         "points": 73
+      },
+      "CHF": {
+        "first_as_of": "2026-10-01",
+        "last_as_of": "2026-11-17",
+        "points": 34
+      },
+      "SEK": {
+        "first_as_of": "2026-10-01",
+        "last_as_of": "2026-11-17",
+        "points": 34
+      },
+      "HKD": {
+        "first_as_of": "2026-10-01",
+        "last_as_of": "2026-11-17",
+        "points": 34
+      },
+      "SGD": {
+        "first_as_of": "2026-10-01",
+        "last_as_of": "2026-11-17",
+        "points": 34
       }
     },
     "files_read": 73,
     "unreadable_files": 0,
-    "no_daily_series": [
-      "CHF",
-      "SEK",
-      "HKD",
-      "SGD"
-    ]
+    "no_daily_series": []
   },
   "forward": {
     "label": "forward",
@@ -214,9 +229,9 @@
     "source": {
       "path": "docs/data/strategy_book_observe.json",
       "present": true,
-      "generated_at": "2026-11-17T17:48:39.090863+00:00",
+      "generated_at": "2026-11-17T21:33:57.949870+00:00",
       "scoring_date": "2026-11-17",
-      "data_commit": "730aa3651ba07a7c8bc68130ec0732d580b617cf",
+      "data_commit": "edaaa0f8c8a47f9a346b518170a4286535cfaa88",
       "registration_id": "owner-strategy-book-v0"
     }
   },

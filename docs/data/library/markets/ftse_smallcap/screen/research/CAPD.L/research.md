@@ -1,6 +1,6 @@
 # Capital Limited (CAPD.L) — Research memo
 
-_Version 2 · Updated 2026-11-17T17:57:10.905630+00:00 · Mode: structured_verdict_update_
+_Version 3 · Updated 2026-11-17T21:42:23.004545+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Non-material news leaves filings as the anchor: revenue acceleration and deleveraging support the screen directionally, but thin operational NPAT, investment-driven headline earnings, and missing H1 2026 accounts prevent full strong-buy...
+Rationale: Filings still anchor the case: revenue acceleration and deleveraging support the strong-buy screen directionally, but modest operational NPAT, investment-driven headline earnings, and missing H1 2026 accounts cap alignment.
 RiskTags: cyclical, customer_concentration, accounting, leverage, regulatory, competitive, other
 
 ## Weekly updates
@@ -18,3 +18,8 @@ RiskTags: cyclical, customer_concentration, accounting, leverage, regulatory, co
 News since 9 September is thin: third-party forecast, LSE quote, and market-report mentions only—no new RNS or company disclosures in the indexed batch.
 Filing-backed picture is unchanged: H1 2026 trading momentum and FY2026 guidance stand; H1 2026 accounts body extract remains absent from the pack.
 Strong buy screen unchanged; snapshot now carries Yahoo H1 cash flow but model inputs remain empty and operational earnings-quality concerns persist.
+
+### 2026-11-17T21:42:23.004545+00:00
+Indexed news since the prior refresh is empty—no new RNS or company disclosures in the batch.  
+Filing-backed picture unchanged: H1 2026 trading momentum and FY2026 guidance stand; H1 2026 accounts body extract remains absent from the pack.  
+Strong buy screen unchanged; model inputs still empty and operational earnings-quality concerns persist.
