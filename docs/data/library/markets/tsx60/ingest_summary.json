@@ -1,21 +1,96 @@
 {
-  "run_at": "2026-11-16T16:40:00.586535+00:00",
+  "run_at": "2026-11-17T17:02:46.626906+00:00",
   "market_id": "tsx60",
-  "targets": [],
-  "target_details": [],
-  "results": [],
+  "targets": [
+    "CNQ.TO"
+  ],
+  "target_details": [
+    {
+      "ticker": "CNQ.TO",
+      "priority_score": 17.010399999999997,
+      "filings_total": 41,
+      "filings_with_body": 39,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "CNQ.TO",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 41,
+        "filings_with_body": 39,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 37,
+        "filings_with_body": 36,
+        "indexed_without_body": 1
+      },
+      "improved": false,
+      "regime": "tsx_announcements",
+      "filings_summary": {
+        "total": 37,
+        "annual": 3,
+        "interim": 31,
+        "trading_update": 2,
+        "other": 1,
+        "with_body": 36,
+        "period_coverage": {
+          "annual": {
+            "total": 3,
+            "with_body": 3
+          },
+          "interim": {
+            "total": 31,
+            "with_body": 31
+          },
+          "trading_update": {
+            "total": 2,
+            "with_body": 2
+          },
+          "other": {
+            "total": 1,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 36,
+        "with_body_after": 36,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "retry_cleared": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-16T16:39:43.508697+00:00",
+    "snapshot_at": "2026-11-17T17:02:24.702178+00:00",
     "market_id": "tsx60",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 2,
-    "indexed_without_body": 86,
+    "indexed_without_body": 70,
     "bodies_min": 12,
     "bodies_median": 33,
     "bodies_max": 107,
@@ -29,16 +104,16 @@
     ],
     "indexed_without_body_tickers": [
       "CVE.TO",
-      "CTC-A.TO",
       "GIB-A.TO",
+      "CTC-A.TO",
       "SU.TO",
       "NTR.TO",
       "MFC.TO"
     ],
     "indexed_without_body_by_ticker": {
       "CVE.TO": 4,
-      "CTC-A.TO": 21,
       "GIB-A.TO": 1,
+      "CTC-A.TO": 5,
       "SU.TO": 20,
       "NTR.TO": 10,
       "MFC.TO": 30
@@ -59,13 +134,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-16T16:39:53.592901+00:00",
+    "snapshot_at": "2026-11-17T17:02:40.578380+00:00",
     "market_id": "tsx60",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 2,
-    "indexed_without_body": 70,
+    "indexed_without_body": 72,
     "bodies_min": 12,
     "bodies_median": 33,
     "bodies_max": 107,
@@ -79,21 +154,24 @@
     ],
     "indexed_without_body_tickers": [
       "CVE.TO",
-      "CTC-A.TO",
       "GIB-A.TO",
+      "CTC-A.TO",
       "SU.TO",
+      "CNQ.TO",
       "NTR.TO",
       "MFC.TO"
     ],
     "indexed_without_body_by_ticker": {
       "CVE.TO": 4,
-      "CTC-A.TO": 5,
       "GIB-A.TO": 1,
+      "CTC-A.TO": 5,
       "SU.TO": 20,
+      "CNQ.TO": 1,
       "NTR.TO": 10,
-      "MFC.TO": 30
+      "MFC.TO": 31
     },
     "parked_tickers": [
+      "CNQ.TO",
       "CTC-A.TO",
       "CVE.TO",
       "GIB-A.TO",
@@ -101,7 +179,7 @@
       "NTR.TO",
       "SU.TO"
     ],
-    "parked_count": 6,
+    "parked_count": 7,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -116,9 +194,9 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 17,
-    "hits": 6,
-    "new_rows_total": 7,
-    "curiosity_total": 2,
+    "hits": 8,
+    "new_rows_total": 5,
+    "curiosity_total": 3,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -131,9 +209,9 @@
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
       "MFC.TO",
-      "CTC-A.TO",
       "SU.TO",
       "NTR.TO",
+      "CTC-A.TO",
       "CVE.TO",
       "GIB-A.TO"
     ],
@@ -148,21 +226,15 @@
   },
   "critical_path": {
     "market_id": "tsx60",
-    "assessed_at": "2026-11-16T16:39:44.419157+00:00",
+    "assessed_at": "2026-11-17T17:02:25.341909+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
       {
         "ticker": "MFC.TO",
         "indexed_without_body": 30,
-        "filings_total": 103,
+        "filings_total": 104,
         "filings_with_body": 38
-      },
-      {
-        "ticker": "CTC-A.TO",
-        "indexed_without_body": 21,
-        "filings_total": 34,
-        "filings_with_body": 13
       },
       {
         "ticker": "SU.TO",
@@ -175,6 +247,12 @@
         "indexed_without_body": 10,
         "filings_total": 29,
         "filings_with_body": 19
+      },
+      {
+        "ticker": "CTC-A.TO",
+        "indexed_without_body": 5,
+        "filings_total": 36,
+        "filings_with_body": 13
       },
       {
         "ticker": "CVE.TO",
@@ -198,28 +276,28 @@
     "force_discovery_scan": true,
     "auto_pin_tickers": [
       "MFC.TO",
-      "CTC-A.TO",
       "SU.TO",
       "NTR.TO",
+      "CTC-A.TO",
       "CVE.TO",
       "GIB-A.TO"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (6 tickers, top: MFC.TO(30), CTC-A.TO(21), SU.TO(20), NTR.TO(10), CVE.TO(4))",
+      "Prefer indexed-without-body body refetch (6 tickers, top: MFC.TO(30), SU.TO(20), NTR.TO(10), CTC-A.TO(5), CVE.TO(4))",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 6,
-      "indexed_without_body_rows": 86,
+      "indexed_without_body_rows": 70,
       "thin_need_discovery": 0,
       "thin_need_bodies": 2
     }
   },
-  "used_seconds": 8.254167456999994,
+  "used_seconds": 14.499331871999999,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3591.745832543,
+  "leftover_seconds": 3585.500668128,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -227,9 +305,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "tsx60",
-    "updated_at": "2026-11-16T16:39:53.597937+00:00",
+    "updated_at": "2026-11-17T17:02:40.582804+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 3,
+    "complete_zero_improve_runs": 4,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -293,14 +371,26 @@
         "source_surface": "tsx_announcements"
       },
       {
+        "ticker": "CNQ.TO",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-17T17:02:40.582804+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 37,
+        "filings_with_body": 36,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "tsx_announcements"
+      },
+      {
         "ticker": "MFC.TO",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-11-16T16:39:53.597937+00:00",
+        "parked_at": "2026-11-17T17:02:40.582804+00:00",
         "park_via": "market_wide_zero_improve",
-        "filings_total": 104,
+        "filings_total": 106,
         "filings_with_body": 38,
-        "indexed_without_body": 30,
+        "indexed_without_body": 31,
         "thin": true,
         "source_surface": "tsx_announcements"
       }
@@ -310,6 +400,7 @@
     "straggler_zero_runs": 2,
     "had_complete_targets": true,
     "leftover_tickers": [
+      "CNQ.TO",
       "CTC-A.TO",
       "CVE.TO",
       "GIB-A.TO",
@@ -355,8 +446,8 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 71,
-    "candidate_count": 53,
+    "tried_count": 73,
+    "candidate_count": 56,
     "skipped_resolved_tickers": [
       "ACKB.BR",
       "APAM.AS",
@@ -376,14 +467,18 @@
       "SU.TO",
       "NTR.TO",
       "GIB-A.TO",
+      "CNQ.TO",
       "MFC.TO",
       "BAS.DE",
+      "SAP.DE",
       "PDD",
       "BAS.DE",
       "DTE.DE",
       "DTG.DE",
       "HEN3.DE",
+      "PST.MI",
       "APAM.AS",
+      "ACKB.BR",
       "0285.HK",
       "0857.HK",
       "0288.HK",
