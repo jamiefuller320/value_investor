@@ -30,13 +30,14 @@ def test_merge_news_articles_deduplicates_by_id():
     "value_investor.research.ingest.fetch_annual_financials", return_value={"income_statement": {}}
 )
 @patch("value_investor.research.filings.ingest_filings")
-@patch("value_investor.research.filings.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.filings.refetch_euro_filings_primary_bodies")
 @patch(
-    "value_investor.research.filings.refetch_residual_filing_bodies", return_value={"fetched": 0}
+    "value_investor.research.filings.ensure_ir_allowlist_direct_filings_ingested",
+    return_value={"skipped": True, "reason": "ir_allowlist_sufficient"},
 )
 def test_ingest_euro_updates_summary_when_ir_merge_adds_indexes(
-    _mock_residual,
-    mock_ir_refetch,
+    _mock_ir_ensure,
+    mock_euro_primary,
     mock_ingest_filings,
     _mock_financials,
     _mock_yf_news,
@@ -57,9 +58,13 @@ def test_ingest_euro_updates_summary_when_ir_merge_adds_indexes(
         "filings_summary": {"total": 0, "with_body": 0, "annual": 0},
         "filings_sources": [],
     }
-    mock_ir_refetch.return_value = {
+    mock_euro_primary.return_value = {
         "fetched": 0,
-        "merge": {"added": 2, "total_allowlist": 2},
+        "ir_allowlist": {
+            "fetched": 0,
+            "merge": {"added": 2, "total_allowlist": 2},
+        },
+        "residual": {"fetched": 0},
     }
 
     meta = ingest_research_sources(
@@ -81,13 +86,14 @@ def test_ingest_euro_updates_summary_when_ir_merge_adds_indexes(
     "value_investor.research.ingest.fetch_annual_financials", return_value={"income_statement": {}}
 )
 @patch("value_investor.research.filings.ingest_filings")
-@patch("value_investor.research.filings.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.filings.refetch_euro_filings_primary_bodies")
 @patch(
-    "value_investor.research.filings.refetch_residual_filing_bodies", return_value={"fetched": 0}
+    "value_investor.research.filings.ensure_ir_allowlist_direct_filings_ingested",
+    return_value={"skipped": True, "reason": "ir_allowlist_sufficient"},
 )
 def test_ingest_tsx60_runs_ir_allowlist_refetch_like_euro(
-    _mock_residual,
-    mock_ir_refetch,
+    _mock_ir_ensure,
+    mock_euro_primary,
     mock_ingest_filings,
     _mock_financials,
     _mock_yf_news,
@@ -109,7 +115,7 @@ def test_ingest_tsx60_runs_ir_allowlist_refetch_like_euro(
         "filings_sources": ["sec_edgar"],
     }
 
-    def _ir_refetch_side_effect(filings_dir, ticker, **kwargs):
+    def _euro_primary_side_effect(filings_dir, ticker, **kwargs):
         index_path.write_text(
             '{"summary": {"total": 48, "with_body": 31, "annual": 5}, '
             '"sources_used": ["sec_edgar", "ir_allowlist"], "filings": []}',
@@ -117,10 +123,14 @@ def test_ingest_tsx60_runs_ir_allowlist_refetch_like_euro(
         )
         return {
             "fetched": 5,
-            "merge": {"added": 5, "total_allowlist": 5},
+            "ir_allowlist": {
+                "fetched": 5,
+                "merge": {"added": 5, "total_allowlist": 5},
+            },
+            "residual": {"fetched": 0},
         }
 
-    mock_ir_refetch.side_effect = _ir_refetch_side_effect
+    mock_euro_primary.side_effect = _euro_primary_side_effect
 
     meta = ingest_research_sources(
         ticker="SU.TO",
@@ -131,10 +141,72 @@ def test_ingest_tsx60_runs_ir_allowlist_refetch_like_euro(
         deepen_history=False,
     )
 
-    mock_ir_refetch.assert_called_once()
-    assert mock_ir_refetch.call_args.kwargs["ticker"] == "SU.TO"
+    mock_euro_primary.assert_called_once()
+    assert mock_euro_primary.call_args.kwargs["ticker"] == "SU.TO"
     assert int(meta["filings_summary"]["with_body"]) == 31
     assert "ir_allowlist" in meta["filings_sources"]
+
+
+@patch("value_investor.research.ingest.fetch_google_news_rss", return_value=[])
+@patch("value_investor.research.ingest.fetch_yfinance_news", return_value=[])
+@patch(
+    "value_investor.research.ingest.fetch_annual_financials", return_value={"income_statement": {}}
+)
+@patch("value_investor.research.filings.ingest_filings")
+@patch("value_investor.research.filings.refetch_euro_filings_primary_bodies")
+@patch("value_investor.research.filings.ensure_ir_allowlist_direct_filings_ingested")
+def test_eng_20261117_04_euro_ingest_ensures_ir_allowlist_direct_for_dq7a_ir(
+    mock_ir_ensure,
+    mock_euro_primary,
+    mock_ingest_filings,
+    _mock_financials,
+    _mock_yf_news,
+    _mock_google_news,
+    tmp_path: Path,
+):
+    """eng-20261117-04: DQ7A.IR zero_body — merge Donegal IR allowlist before euro primary refetch."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    mock_ingest_filings.return_value = {
+        "filings_index_path": str(filings_dir / "filings_index.json"),
+        "filings_summary": {"total": 0, "with_body": 0},
+        "filings_sources": ["google_news_euro"],
+        "filings_regime": "euro_filings",
+    }
+    mock_ir_ensure.return_value = {
+        "skipped": False,
+        "merge": {"added": 2, "total_allowlist": 2},
+        "attempted": 2,
+        "fetched": 2,
+        "ir_refetch": {
+            "fetched": 2,
+            "attempted": 2,
+            "retry_cleared": 2,
+            "skipped_unfetchable": 0,
+        },
+    }
+    mock_euro_primary.return_value = {
+        "fetched": 2,
+        "attempted": 2,
+        "with_body_after": 2,
+        "residual": {"fetched": 0, "attempted": 0},
+        "ir_allowlist": {"fetched": 2, "attempted": 2},
+    }
+
+    meta = ingest_research_sources(
+        ticker="DQ7A.IR",
+        company_name="Donegal Investment Group plc",
+        screening_snapshot={"ticker": "DQ7A.IR", "signal": "buy"},
+        sources_dir=tmp_path,
+        market="euro_depth",
+        deepen_history=False,
+    )
+
+    mock_ir_ensure.assert_called_once()
+    assert mock_ir_ensure.call_args.kwargs["ticker"] == "DQ7A.IR"
+    mock_euro_primary.assert_called_once()
+    assert int(meta["ir_refetch"]["fetched"]) == 2
+    assert int(meta["euro_primary_refetch"]["fetched"]) == 2
 
 
 @patch("value_investor.research.ingest.fetch_google_news_rss", return_value=[])

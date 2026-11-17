@@ -12290,8 +12290,9 @@ def ensure_ir_allowlist_direct_filings_ingested(
     """
     Merge builtin IR allowlist rows and refetch bodies when key bodies are still missing.
 
-    Listing-only ``asia_filings`` indexes (google_news_asia only) left sti names such as
-    C6L.SI at zero_body with 0/0 gap-closure refetch before allowlist URLs shipped.
+    Listing-only ``asia_filings`` / ``euro_filings`` indexes (news-only discovery) left names
+    such as C6L.SI or DQ7A.IR at zero_body with 0/0 gap-closure refetch before builtin IR
+    allowlist URLs merge and body refetch run (igc-20260912-01).
     """
     if not ir_allowlist_direct_eligible(ticker):
         return {"skipped": True, "reason": "no_ir_allowlist_direct"}

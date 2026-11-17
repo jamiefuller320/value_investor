@@ -587,6 +587,7 @@ def test_inspect_local_sources_flags_empty_quarterly_income(tmp_path: Path):
 
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.filings.ensure_ir_allowlist_direct_filings_ingested")
 @patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist")
 @patch("value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
@@ -594,6 +595,7 @@ def test_prepare_gap_fill_calls_ir_refetch_for_euro_depth_shell_as(
     mock_refetch,
     mock_primary_refetch,
     mock_ir_rows,
+    mock_ir_ensure,
     mock_ir_refetch,
     mock_news,
     tmp_path: Path,
@@ -619,7 +621,10 @@ def test_prepare_gap_fill_calls_ir_refetch_for_euro_depth_shell_as(
             "url": "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm",
         }
     ]
-    mock_ir_refetch.return_value = {"fetched": 1, "with_body_after": 1}
+    mock_ir_ensure.return_value = {
+        "skipped": False,
+        "ir_refetch": {"fetched": 1, "with_body_after": 1, "attempted": 1},
+    }
 
     pack = prepare_gap_fill_source_pack(
         ticker="SHELL.AS",
@@ -629,9 +634,67 @@ def test_prepare_gap_fill_calls_ir_refetch_for_euro_depth_shell_as(
         market="euro_depth",
     )
 
-    mock_ir_refetch.assert_called_once()
+    mock_ir_ensure.assert_called_once()
+    mock_ir_refetch.assert_not_called()
     assert pack["ir_refetch"]["fetched"] == 1
     assert pack["body_refetch"]["fetched"] == 1
+
+
+@patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.filings.ensure_ir_allowlist_direct_filings_ingested")
+@patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist")
+@patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
+def test_prepare_gap_fill_ensures_ir_allowlist_direct_for_dq7a_ir_eng_20261117_04(
+    mock_refetch,
+    mock_ir_rows,
+    mock_ir_ensure,
+    mock_ir_refetch,
+    mock_news,
+    tmp_path: Path,
+):
+    """eng-20261117-04: gap-fill must bootstrap Donegal IR allowlist before body refetch."""
+    from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"summary": {"with_body": 0, "total": 0}, "filings": []}),
+        encoding="utf-8",
+    )
+    mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_ir_rows.return_value = [
+        {
+            "id": "ir_donegal_ar",
+            "source": "ir_allowlist",
+            "url": "http://www.donegaligroup.com/media/1316/"
+            "donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
+        }
+    ]
+    mock_ir_ensure.return_value = {
+        "skipped": False,
+        "merge": {"added": 2, "total_allowlist": 2},
+        "ir_refetch": {
+            "fetched": 2,
+            "attempted": 2,
+            "with_body_after": 2,
+            "retry_cleared": 2,
+        },
+    }
+
+    pack = prepare_gap_fill_source_pack(
+        ticker="DQ7A.IR",
+        company_name="Donegal Investment Group plc",
+        sources_dir=tmp_path,
+        open_questions=["zero_body"],
+        market="euro_depth",
+    )
+
+    mock_ir_ensure.assert_called_once()
+    assert mock_ir_ensure.call_args.kwargs["ticker"] == "DQ7A.IR"
+    mock_ir_refetch.assert_not_called()
+    assert pack["ir_refetch"]["fetched"] == 2
+    assert pack["body_refetch"]["fetched"] == 2
 
 
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])

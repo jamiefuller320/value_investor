@@ -1641,33 +1641,73 @@ def ingest_research_sources(
             }:
                 from value_investor.library_ingest_budget import deadline_reached
                 from value_investor.research.filings import (
-                    refetch_ir_allowlist_filing_bodies,
-                    refetch_residual_filing_bodies,
+                    ensure_ir_allowlist_direct_filings_ingested,
+                    ir_allowlist_direct_eligible,
+                    refetch_euro_filings_primary_bodies,
                 )
 
                 summary = filings_meta.get("filings_summary") or {}
                 ir_refetch: dict[str, Any] = {}
                 residual_refetch: dict[str, Any] = {}
-                if not deadline_reached(deadline_monotonic):
-                    ir_refetch = refetch_ir_allowlist_filing_bodies(
-                        sources_dir / "filings",
+                euro_primary: dict[str, Any] = {}
+                if not deadline_reached(deadline_monotonic) and ir_allowlist_direct_eligible(
+                    ticker
+                ):
+                    ir_allowlist_ensure = ensure_ir_allowlist_direct_filings_ingested(
+                        sources_dir,
                         ticker=ticker,
                         company_name=company_name,
-                        max_bodies=12,
+                        market=market,
+                        deepen_history=deepen_history,
                         deadline_monotonic=deadline_monotonic,
                     )
+                    filings_meta["ir_allowlist_ensure"] = ir_allowlist_ensure
+                    ir_refetch = dict(ir_allowlist_ensure.get("ir_refetch") or {})
+                    if ir_refetch:
+                        filings_meta["ir_refetch"] = ir_refetch
+                    merge_added = int((ir_allowlist_ensure.get("merge") or {}).get("added") or 0)
+                    if (
+                        int(ir_allowlist_ensure.get("fetched") or 0)
+                        or int(ir_refetch.get("fetched") or 0)
+                        or merge_added > 0
+                    ):
+                        index_path = sources_dir / "filings" / "filings_index.json"
+                        resolved_index = resolve_json_path(index_path)
+                        if resolved_index is not None:
+                            try:
+                                index_payload = read_json(resolved_index)
+                                filings_meta["filings_summary"] = dict(
+                                    index_payload.get("summary")
+                                    or filings_meta.get("filings_summary")
+                                    or {}
+                                )
+                                filings_meta["filings_sources"] = list(
+                                    index_payload.get("sources_used")
+                                    or filings_meta.get("filings_sources")
+                                    or []
+                                )
+                            except (OSError, ValueError, TypeError):
+                                pass
                 if not deadline_reached(deadline_monotonic):
-                    residual_refetch = refetch_residual_filing_bodies(
+                    euro_primary = refetch_euro_filings_primary_bodies(
                         sources_dir / "filings",
                         ticker=ticker,
                         company_name=company_name,
                         max_bodies=12,
                     )
+                    residual_refetch = dict(euro_primary.get("residual") or {})
+                    euro_ir = dict(euro_primary.get("ir_allowlist") or {})
+                    if int(euro_ir.get("fetched") or 0) > int(ir_refetch.get("fetched") or 0):
+                        ir_refetch = euro_ir
+                    elif not ir_refetch:
+                        ir_refetch = euro_ir
+                filings_meta["euro_primary_refetch"] = euro_primary
                 filings_meta["ir_refetch"] = ir_refetch
                 filings_meta["residual_refetch"] = residual_refetch
                 merge_added = int((ir_refetch.get("merge") or {}).get("added") or 0)
                 if (
-                    int(ir_refetch.get("fetched") or 0)
+                    int(euro_primary.get("fetched") or 0)
+                    or int(ir_refetch.get("fetched") or 0)
                     or int(residual_refetch.get("fetched") or 0)
                     or merge_added > 0
                 ):
@@ -1852,6 +1892,7 @@ def ingest_research_sources(
         "filings_summary": filings_meta.get("filings_summary") or {},
         "filings_sources": filings_meta.get("filings_sources") or [],
         "filings_regime": filings_meta.get("filings_regime"),
+        "euro_primary_refetch": filings_meta.get("euro_primary_refetch") or {},
         "ir_refetch": filings_meta.get("ir_refetch") or {},
         "ir_presentation_metrics": filings_meta.get("ir_presentation_metrics") or {},
         "macro_context_path": str(written_macro) if written_macro else None,

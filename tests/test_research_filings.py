@@ -9616,6 +9616,74 @@ def test_ensure_ir_allowlist_direct_merges_before_refetch_c6l_si(
     assert "ir_allowlist" in payload["sources_used"]
 
 
+def test_filing_source_surface_dq7a_ir_ir_allowlist_direct_eng_20261117_04():
+    """eng-20261117-04: DQ7A.IR zero_body must gain euro_filings+ir_allowlist_direct surface."""
+    from value_investor.research.filings import filing_source_surface, ir_allowlist_direct_eligible
+
+    assert ir_allowlist_direct_eligible("DQ7A.IR")
+    assert filing_source_surface("euro_depth", "DQ7A.IR") == "euro_filings+ir_allowlist_direct"
+
+
+@patch("value_investor.research.filings.refetch_ir_presentation_sources")
+def test_ensure_ir_allowlist_direct_merges_before_refetch_dq7a_ir(
+    mock_refetch,
+    tmp_path: Path,
+):
+    """eng-20261117-04: DQ7A.IR zero_body must merge Donegal IR allowlist then attempt refetch."""
+    from value_investor.research.filings import (
+        ensure_ir_allowlist_direct_filings_ingested,
+        filings_index_ir_allowlist_direct_gap,
+    )
+
+    sources_dir = tmp_path / "sources"
+    filings_dir = sources_dir / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 1, "with_body": 0, "annual": 0, "interim": 0},
+                "filings": [
+                    {
+                        "id": "gn1",
+                        "source": "google_news_euro",
+                        "url": "https://news.google.com/foo",
+                        "period": "other",
+                        "has_body": False,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert filings_index_ir_allowlist_direct_gap(
+        json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    )
+
+    mock_refetch.return_value = {
+        "attempted": 2,
+        "fetched": 2,
+        "with_body_after": 2,
+        "allowlist_count": 2,
+    }
+
+    result = ensure_ir_allowlist_direct_filings_ingested(
+        sources_dir,
+        ticker="DQ7A.IR",
+        company_name="Donegal Investment Group plc",
+        market="euro_depth",
+        deepen_history=True,
+    )
+
+    assert result["skipped"] is False
+    assert int(result["merge"]["total_allowlist"]) == 2
+    assert int(result["merge"]["added"]) >= 1
+    assert result["attempted"] == 2
+    mock_refetch.assert_called_once()
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 2
+    assert "ir_allowlist" in payload["sources_used"]
+
+
 def test_refetch_ir_allowlist_retries_c6l_si_sgx_unfetchable_eng_20261116_02(
     tmp_path: Path, monkeypatch
 ):
