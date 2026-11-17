@@ -596,6 +596,14 @@
           "doc_anchor": "go-live"
         },
         {
+          "id": "adhoc-l694-observe-memo-ceiling-review",
+          "title": "Review the L694 observe memo ceiling",
+          "summary": "On 2026-11-30 (Europe/London), read the ops-monitor finding 'Strategy book memo-ranking cost' and the week's observe requests in docs/data/strategy_book_memo_ranking_shadow_memos.jsonl. The observe ceiling is $80 a week (200 memos at $0.40), relaxed from $40 (100 memos) on 2026-11-17. Decide keep, lower, or restore the $40 sampling cap, and log the decision. influences_live stays false. Do not set forward_live. Do not turn on live capital. This is separate from the 2026-12-08 strategy-book memo raise review.",
+          "automated": false,
+          "doc_path": "docs/ops/strategy-book-observe.md",
+          "doc_anchor": "ceiling-review"
+        },
+        {
           "id": "adhoc-memo-model-comparison-blind-review",
           "title": "Rate the memo model comparison calibration sample",
           "summary": "Rule v2 (owner, 2026-11-10): an LLM judge (gpt-5.6-luna) scores every pair blind in both orders; you rate only a calibration sample of at least 4 names, so the judge can be checked against you. When ops shows 'Memo model comparison ready for owner calibration', read docs/data/memo_model_comparison/review.md (sample only, memos labelled A/B). Copy ratings_template.json to ratings.json and rate each memo 1-5 on evidence, thesis break and verdict justified, plus a preferred memo (A, B or tie). Commit ratings.json to main without opening blind_key.json, results.json, judge_results.json, calibration.json, judgements/, judge_status.json or the status.json cost fields, then run gh workflow run memo-model-comparison.yml -f action=decide. Your picks decide whether the judge is trusted, and govern any pair where the two verdicts differ on blocking entry. A switch needs owner approval, an operational_switches row on the registration and its own memo-model PR; otherwise composer-2.5 stays.",

@@ -226,7 +226,9 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "docs/data/strategy_book_ranking_lab.json" in email
     forward = Path(".github/workflows/strategy-book-forward.yml").read_text(encoding="utf-8")
     assert 'cron: "30 21 * * 1-5"' in forward
-    assert "timeout-minutes: 90" in forward
+    # 120 leaves room for observe memo requests inside the $80 ceiling
+    # after the close refresh. The job still has a hard stop.
+    assert "timeout-minutes: 120" in forward
     assert "docs/data/strategy_book_observe.json" in forward
     assert "docs/data/strategy_book_proof_board.json" in forward
     assert "docs/data/strategy_book_fair_value.json" in forward

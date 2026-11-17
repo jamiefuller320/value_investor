@@ -32,7 +32,7 @@ concurrency:
 jobs:
   forward:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v5
 
@@ -75,18 +75,33 @@ jobs:
             ftse-strategy-book-memo-free-shadow --repo-root . --apply
           fi
 
-      # Observe-only L694 ranking. A failure must not stop the forward commit.
-      # Does not spend. See docs/ops/strategy-book-observe.md.
+      # Observe-only L694 ranking. Requests missing or stale memos while this
+      # ISO week is inside the $80 ceiling (relaxed from $40 until 2026-11-30
+      # Europe/London). Does not set influences_live or forward_live.
+      # A failure must not stop the forward commit.
+      # See docs/ops/strategy-book-observe.md.
       - name: Memo-led ranking shadow
         continue-on-error: true
         env:
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
         run: |
           set -euo pipefail
           if [ "${DRY_RUN}" = "true" ]; then
             ftse-strategy-book-memo-ranking-shadow --repo-root .
+            echo 0 > "${RUNNER_TEMP:-/tmp}/l694_observe_spend_usd.txt"
           else
-            ftse-strategy-book-memo-ranking-shadow --repo-root . --apply
+            ftse-strategy-book-memo-ranking-shadow --repo-root . --apply --request-memos \
+              > "${RUNNER_TEMP:-/tmp}/l694_observe_summary.json"
+            python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          root = Path(os.environ.get("RUNNER_TEMP", "/tmp"))
+          summary = json.loads((root / "l694_observe_summary.json").read_text(encoding="utf-8"))
+          amount = summary.get("observe_memo_spend_usd") or 0
+          (root / "l694_observe_spend_usd.txt").write_text(str(amount), encoding="utf-8")
+          PY
           fi
 
       # Practice-account mirror only. Missing demo secrets plan rows and exit 0.
@@ -145,21 +160,78 @@ jobs:
 
       # This workflow is the single writer for the strategy-book JSON stores.
       # Email-report excludes them. Charts stay shared with publish.
+      # policy.json is not in this list: the next step re-applies the observe
+      # increment on latest main so a concurrent writer is not overwritten.
       - name: Commit strategy-book forward artifacts
         env:
           COMMIT_MESSAGE: "chore: strategy book forward [skip ci]"
           GHA_COMMIT_LABEL: "Strategy book forward"
-          GHA_COMMIT_OWNED: |
-            docs/data/strategy_book_observe.json
-            docs/data/strategy_book_replay.json
-            docs/data/strategy_book_replay_episodes.json.gz
-            docs/data/strategy_book_gate_log.jsonl
-            docs/data/strategy_book_closes.json
-            docs/data/strategy_book_forward_status.json
-            docs/data/strategy_book_demo_ledger.json
-            docs/data/strategy_book_proof_board.json
-            docs/data/strategy_book_fair_value.json
-            docs/data/strategy_book_memo_free_shadow.json
-            docs/data/strategy_book_memo_ranking_shadow.json
-            docs/data/charts
-        run: bash scripts/gha_commit_artifacts.sh
+        run: |
+          set -euo pipefail
+          MEMO_WRITTEN="$(python3 - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("docs/data/strategy_book_memo_ranking_shadow.json")
+          try:
+              store = json.loads(path.read_text(encoding="utf-8"))
+          except (OSError, ValueError):
+              store = {}
+          memo_run = store.get("memo_run") if isinstance(store.get("memo_run"), dict) else {}
+          paths = memo_run.get("written_paths") or []
+          print("\n".join(
+              text for text in (str(item) for item in paths)
+              if text.startswith("docs/data/") and "/research/" in text and "/sources/" not in text
+          ))
+          PY
+          )"
+          USAGE_WRITTEN="$(git status --porcelain -- docs/data/agent_usage docs/data/agent_usage_cost_backfill.json | awk '{print $NF}')"
+          export GHA_COMMIT_OWNED="docs/data/strategy_book_observe.json
+          docs/data/strategy_book_replay.json
+          docs/data/strategy_book_replay_episodes.json.gz
+          docs/data/strategy_book_gate_log.jsonl
+          docs/data/strategy_book_closes.json
+          docs/data/strategy_book_forward_status.json
+          docs/data/strategy_book_demo_ledger.json
+          docs/data/strategy_book_proof_board.json
+          docs/data/strategy_book_fair_value.json
+          docs/data/strategy_book_memo_free_shadow.json
+          docs/data/strategy_book_memo_ranking_shadow.json
+          docs/data/strategy_book_memo_ranking_shadow_memos.jsonl
+          docs/data/charts
+          ${MEMO_WRITTEN}
+          ${USAGE_WRITTEN}"
+          bash scripts/gha_commit_artifacts.sh
+
+      # Re-apply this run's observe-memo estimate on origin/main. The shadow
+      # already counted it locally; the artifact commit resets that file.
+      # A zero stamp (dry run, or no memo returned) records nothing.
+      - name: Record observe-memo spend on weekly_ops
+        run: |
+          set -euo pipefail
+          STAMP="${RUNNER_TEMP:-/tmp}/l694_observe_spend_usd.txt"
+          AMOUNT="$(cat "$STAMP" 2>/dev/null || echo 0)"
+          python3 -c 'import sys; raise SystemExit(0 if float(sys.argv[1]) > 0 else 1)' "$AMOUNT" \
+            || { echo "No observe-memo spend to record"; exit 0; }
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git checkout -B main origin/main
+            python3 - "$AMOUNT" <<'PY'
+          import sys
+          from value_investor.agent_model_policy import SPEND_POOL_WEEKLY_OPS, record_estimated_spend
+          record_estimated_spend(float(sys.argv[1]), pool=SPEND_POOL_WEEKLY_OPS)
+          PY
+            git add docs/data/library/policy.json
+            if git diff --cached --quiet; then
+              echo "Observe spend already on main"
+              exit 0
+            fi
+            git commit -m "chore: record L694 observe memo spend [skip ci]"
+            if git push origin HEAD:main; then
+              echo "Observe spend recorded on attempt $attempt"
+              exit 0
+            fi
+            echo "Observe spend push rejected (attempt $attempt); retrying" >&2
+            sleep $((3 * attempt))
+          done
+          echo "::error::Could not record L694 observe memo spend" >&2
+          exit 1

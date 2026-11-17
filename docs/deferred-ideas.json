@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-16T20:45:02+00:00",
+  "updated_at": "2026-11-17T08:11:12+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17920,13 +17920,39 @@
         "l694",
         "spend"
       ],
-      "status": "open",
+      "status": "done",
       "source": "L694 observe shadow",
       "added_at": "2026-11-16T21:32:50+00:00",
       "trigger": {
         "all": [
           {
             "on_or_after": "2026-12-08"
+          }
+        ]
+      },
+      "updated_at": "2026-11-17T08:11:12+00:00",
+      "status_note": "Owner 2026-11-17 accepted the observe-shadow token cost. The weekday job requests memos inside an $80 ceiling (was $40 / 100 memos) until a human review on 2026-11-30 Europe/London. influences_live stays false. This does not set forward_live or turn on live capital."
+    },
+    {
+      "id": "N275",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Review the relaxed L694 observe memo ceiling",
+      "summary": "On 2026-11-17 the owner raised the L694 observe-memo sampling ceiling from $40 a week (100 memos) to $80 a week (200 memos). The weekday forward job requests missing or stale observe memos while the ISO week is inside that ceiling. Above it, l694-memo-sample-v1 still holds names. influences_live stays false and forward_live is unchanged. A person reviews on 30 Nov 2026 (Europe/London) whether to keep, lower, or restore the $40 cap. This does not turn on live capital.",
+      "revisit_when": "2026-11-30 Europe/London. Ops-monitor flags this date. Decide keep, lower, or restore the $40 observe sampling cap.",
+      "tags": [
+        "strategy-book",
+        "memo",
+        "l694",
+        "spend"
+      ],
+      "status": "open",
+      "source": "James Fuller, 2026-11-17, L694 observe ceiling",
+      "added_at": "2026-11-17T08:11:12+00:00",
+      "trigger": {
+        "all": [
+          {
+            "on_or_after": "2026-11-30"
           }
         ]
       }

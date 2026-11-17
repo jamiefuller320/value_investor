@@ -76,6 +76,21 @@ def test_sunday_entry_dca_follows_adoption_plan():
     assert "graduated_allocation" in row["summary"]
 
 
+def test_l694_observe_ceiling_review_is_a_human_task():
+    payload = load_human_tasks_checklist()
+    tasks = [task for section in payload["sections"] for task in section["tasks"]]
+    row = next(task for task in tasks if task["id"] == "adhoc-l694-observe-memo-ceiling-review")
+    assert row["automated"] is False
+    assert row["doc_path"] == "docs/ops/strategy-book-observe.md"
+    assert row["doc_anchor"] == "ceiling-review"
+    assert "2026-11-30" in row["summary"]
+    assert "Europe/London" in row["summary"]
+    assert "$80" in row["summary"]
+    assert "$40" in row["summary"]
+    assert "influences_live" in row["summary"]
+    assert "forward_live" in row["summary"]
+
+
 def test_sunday_shadow_endurance_urgency_policy():
     payload = load_human_tasks_checklist()
     tasks = [task for section in payload["sections"] for task in section["tasks"]]

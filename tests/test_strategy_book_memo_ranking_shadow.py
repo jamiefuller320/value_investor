@@ -12,6 +12,11 @@ from value_investor.ops_monitor import (
     collect_ops_findings,
 )
 from value_investor.strategy_book_memo_ranking_shadow import (
+    OBSERVE_CEILING_MEMOS,
+    OBSERVE_CEILING_REVIEW_ON,
+    OBSERVE_CEILING_USD,
+    REGISTERED_MEMO_RAISE_MEMOS,
+    REGISTERED_MEMO_RAISE_USD,
     RULE_DOC,
     RULE_ID,
     TITLE_COST,
@@ -223,13 +228,32 @@ def test_input_gaps_rank_the_cite_that_unlocks_the_most() -> None:
 
 
 def test_full_width_cost_proposes_sampling_without_spend() -> None:
-    cards = [{"session": "2026-11-16", "disposition": "gate_rejected"} for _ in range(30)]
+    assert OBSERVE_CEILING_USD == 80.0
+    assert OBSERVE_CEILING_MEMOS == 200
+    assert OBSERVE_CEILING_REVIEW_ON == "2026-11-30"
+    assert REGISTERED_MEMO_RAISE_USD == 40.0
+    assert REGISTERED_MEMO_RAISE_MEMOS == 100
+
+    # 30 names is $60 a weekday week: over the old $40 cap, inside the ceiling.
+    relaxed = estimate_cost(
+        [{"session": "2026-11-16", "disposition": "gate_rejected"} for _ in range(30)]
+    )
+    assert relaxed["latest_session_usd"] == 12.0
+    assert relaxed["weekday_week_usd"] == 60.0
+    assert relaxed["over_budget"] is False
+    assert relaxed["sampling"] is None
+    assert relaxed["weekly_budget_usd"] == 80.0
+
+    cards = [{"session": "2026-11-16", "disposition": "gate_rejected"} for _ in range(50)]
     cost = estimate_cost(cards)
     assert cost["usd_per_candidate_per_day"] == 0.40
-    assert cost["latest_session_usd"] == 12.0
-    assert cost["weekday_week_usd"] == 60.0
+    assert cost["latest_session_usd"] == 20.0
+    assert cost["weekday_week_usd"] == 100.0
     assert cost["over_budget"] is True
     assert cost["sampling"]["id"] == "l694-memo-sample-v1"
+    assert cost["sampling"]["weekly_cap_usd"] == 80.0
+    assert cost["sampling"]["relaxed_from_usd"] == 40.0
+    assert cost["sampling"]["review_on"] == "2026-11-30"
     assert cost["sampling"]["turns_spend_on"] is False
     assert cost["sampling"]["priority"] == ["filled", "skipped_no_slot", "gate_rejected"]
     assert cost["spend_enabled"] is False
@@ -385,7 +409,9 @@ def test_ops_monitor_is_observe_only(tmp_path: Path) -> None:
     assert titles == [TITLE_REFRESHED, TITLE_COST, TITLE_GAPS]
     assert all(row["auto_fixable"] is False for row in rows)
     assert all(row["severity"] == "info" for row in rows)
-    assert "Spend is not turned on" in rows[1]["summary"]
+    assert "does not turn on live capital" in rows[1]["summary"]
+    assert "influences_live stays false" in rows[1]["summary"]
+    assert "$80" in rows[1]["summary"]
     assert "No ingest" in rows[2]["summary"]
     assert "check_strategy_book_memo_ranking_shadow" in inspect.getsource(collect_ops_findings)
 
@@ -430,14 +456,25 @@ def test_observe_memo_plan_reuses_fresh_memos_and_keeps_the_raise() -> None:
     plan = plan_observe_memos(
         names,
         now=now,
-        spent_this_week_usd=39.6,
+        spent_this_week_usd=79.6,
         full_width_over_budget=True,
     )
     assert [row["ticker"] for row in plan["selected"]] == ["A.L"]
     assert plan["selected"][0]["disposition"] == "filled"
+    assert plan["cap"] == 1
     assert plan["sampling_applied"] is True
     assert [row["ticker"] for row in plan["held_for_budget"]] == ["B.L"]
     assert plan["reused"][0]["ticker"] == "ZZ"
+
+    inside = plan_observe_memos(
+        names,
+        now=now,
+        spent_this_week_usd=39.6,
+        full_width_over_budget=False,
+    )
+    assert [row["ticker"] for row in inside["selected"]] == ["A.L", "B.L"]
+    assert inside["held_for_budget"] == []
+    assert inside["sampling_applied"] is False
 
 
 def test_observe_memo_request_records_spend_and_stays_observe_only(tmp_path: Path) -> None:
@@ -447,7 +484,14 @@ def test_observe_memo_request_records_spend_and_stays_observe_only(tmp_path: Pat
 
     def runner(**kwargs):
         calls.append(kwargs["ticker"])
-        return {"verdict": "accumulate", "finished_at": "2026-11-17T01:00:00+00:00"}
+        return {
+            "verdict": "accumulate",
+            "finished_at": "2026-11-17T01:00:00+00:00",
+            "written_paths": [
+                "docs/data/research/NEW.L/research.json",
+                "docs/data/research/NEW.L/sources/news.json",
+            ],
+        }
 
     result = request_observe_memos(
         [
@@ -474,6 +518,8 @@ def test_observe_memo_request_records_spend_and_stays_observe_only(tmp_path: Pat
     assert result["influences_live"] is False
     assert result["spend_enabled"] is False
     assert result["names"][0]["action"] == "requested"
+    assert result["written_paths"] == ["docs/data/research/NEW.L/research.json"]
+    assert result["spend_enabled"] is False
     log = (tmp_path / "docs" / "data" / "strategy_book_memo_ranking_shadow_memos.jsonl").read_text(
         encoding="utf-8"
     )

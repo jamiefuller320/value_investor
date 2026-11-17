@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-16T20:45:02+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-17T08:11:12+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -300,7 +300,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | N271 | **Dividend-cut soft check on the UK replay** | The UK replay fetches EODHD dividend history for the screen's dividend yield and does not fire the decline gate's dividend-cut check. A DPS cut rule would be a new threshold and a new registration_id, taken up at a version review rather than inside strategy-book-uk-replay-v0. | The next strategy-book version review (at the thickness gate, then at most every 26 weeks) asks for a dividend-cut soft check. |
 | N272 | **UK replay markets beyond LSE, XETRA and Paris** | Step 3.3 scores an approximate FTSE 350 and, when the fetch finishes, approximate DAX and CAC ranks. Other European exchanges stay out of this registration so the paid month is spent on the three lists. | The UK replay reveal is committed and a version review asks for another European exchange. |
 | N273 | **UK replay: market cap for failed names from Companies House shares** | In UK replay development, collapsed names (Carillion, Thomas Cook, Debenhams, Intu) never entered the universe because EODHD has no fundamentals or outstandingShares for them; mean cap_not_computable share was 51%. A Companies House weighted-shares fallback for the cap would be a rule change, needing a new registration id. | After the UK replay reveal verdict, or if the owner rules the development survivorship gap blocks the reveal stamp |
-| N274 | **Turn on sampled memo spend for the L694 ranking shadow** | The observe shadow estimates full-width memo cost and, above 40 dollars a week, stores sampling proposal l694-memo-sample-v1. It does not call a model. Spending on gate-rejected and slot-skipped names waits until the owner accepts a cap. | The 2026-12-08 strategy-book memo spend review, or when the owner changes budget.strategy_book_memo_raise _(machine-checked)_ |
+| N275 | **Review the relaxed L694 observe memo ceiling** | On 2026-11-17 the owner raised the L694 observe-memo sampling ceiling from $40 a week (100 memos) to $80 a week (200 memos). The weekday forward job requests missing or stale observe memos while the ISO week is inside that ceiling. Above it, l694-memo-sample-v1 still holds names. influences_live stays false and forward_live is unchanged. A person reviews on 30 Nov 2026 (Europe/London) whether to keep, lower, or restore the $40 cap. This does not turn on live capital. | 2026-11-30 Europe/London. Ops-monitor flags this date. Decide keep, lower, or restore the $40 observe sampling cap. _(machine-checked)_ |
 
 ---
 
