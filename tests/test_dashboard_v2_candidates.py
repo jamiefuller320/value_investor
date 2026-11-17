@@ -467,3 +467,58 @@ if (falsePass !== 0 || ftse.length === 0) process.exit(1);
         json.dumps(payload, indent=2) + "\n",
         encoding="utf-8",
     )
+
+
+def test_ftse_screen_buys_use_screen_run_not_inventory_rebuild() -> None:
+    """A later inventory rebuild must not badge an older FTSE screen as fresh."""
+    payload = _node(r"""
+const NOW = Date.parse("2026-11-17T20:47:00Z");
+const helpers = {
+  esc: function (s) { return String(s == null ? "" : s); },
+  parseIsoMs: function (v) {
+    const t = Date.parse(String(v || ""));
+    return Number.isFinite(t) ? t : null;
+  },
+  nowMs: function () { return NOW; },
+  displayDate: function (v) { return String(v); },
+  ageLabelFromMs: function () { return "9.5d"; },
+  freshnessDailyStore: function (msAge) {
+    if (msAge == null || !Number.isFinite(msAge)) return { cls: "v2-badge", label: "unknown" };
+    const h = msAge / 3600000;
+    if (h <= 36) return { cls: "v2-badge v2-badge-fresh", label: "fresh" };
+    if (h <= 72) return { cls: "v2-badge v2-badge-amber", label: "stale" };
+    return { cls: "v2-badge v2-badge-red", label: "old" };
+  },
+};
+const decisionInv = {
+  generated_at: "2026-11-17T10:54:22Z",
+  screen_run_at: "2026-11-08T08:26:03Z",
+  rows: [],
+};
+const html = tab.render({
+  decisionInv: decisionInv,
+  libraryInv: { generated_at: "2026-11-17T10:54:22Z", as_of: "2026-11-17T10:54:22Z", rows: [] },
+  declineGate: { generated_at: "2026-11-17T10:54:56Z", as_of: "2026-11-17" },
+  sectorGate: { generated_at: "2026-11-17T10:54:58Z", as_of: "2026-11-17" },
+}, helpers);
+const screenAt = html.indexOf("FTSE screen buys");
+const qualityAt = html.indexOf("FTSE input quality");
+const screenEnd = screenAt < 0 ? -1 : html.indexOf("</li>", screenAt);
+const screenSlice = screenAt < 0 ? "" : html.slice(screenAt, screenEnd < 0 ? screenAt + 180 : screenEnd);
+console.log(JSON.stringify({
+  iso: api.ftseScreenIso(decisionInv),
+  fallback: api.ftseScreenIso({ generated_at: "2026-11-17T10:54:22Z" }),
+  screenSlice: screenSlice,
+  qualityShown: qualityAt >= 0 && html.slice(qualityAt, qualityAt + 220).includes("2026-11-17T10:54:22Z"),
+  libraryStillToday: html.includes("Library screen buys") && html.includes("2026-11-17T10:54:22Z"),
+}));
+""")
+    if payload.get("skipped"):
+        return
+    assert payload["iso"] == "2026-11-08T08:26:03Z"
+    assert payload["fallback"] == "2026-11-17T10:54:22Z"
+    assert "2026-11-08T08:26:03Z" in payload["screenSlice"]
+    assert "old" in payload["screenSlice"]
+    assert "2026-11-17T10:54:22Z" not in payload["screenSlice"]
+    assert payload["qualityShown"] is True
+    assert payload["libraryStillToday"] is True
