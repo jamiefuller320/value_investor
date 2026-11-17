@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-16T22:27:26.408429+00:00`
+Generated: `2026-11-17T00:57:57.364908+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,10 +33,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `ingest_narrow`/verified PR #1424 `eng-20261116-01` — Close library ingest gaps for sti / C6L.SI (chain 1/3: 0/0 improved, run igc-20261113-03)
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 378
+- Occasion count: 379
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate failed` — 7×
 - `validate check failed` — 6×
