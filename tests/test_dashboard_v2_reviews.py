@@ -163,8 +163,6 @@ console.log(JSON.stringify({
 def test_review_queue_nan_tokens_parse_and_list_companion() -> None:
     """The published queue contains bare NaN. The loader must still show the rows."""
     payload = _node(r"""
-const fs = require("fs");
-const vm = require("vm");
 global.document = { readyState: "loading", addEventListener() {} };
 vm.runInThisContext(fs.readFileSync("docs/v2/v2.js", "utf8"), { filename: "v2.js" });
 const raw = fs.readFileSync("docs/data/strategy_book_review_queue.json", "utf8");
