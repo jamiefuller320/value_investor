@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-16T22:27:26.408429+00:00`
+Generated: `2026-11-17T02:38:36.701956+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,10 +33,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `ingest_narrow`/verified PR #1424 `eng-20261116-01` — Close library ingest gaps for sti / C6L.SI (chain 1/3: 0/0 improved, run igc-20261113-03)
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 378
+- Occasion count: 379
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate failed` — 7×
 - `validate check failed` — 6×
@@ -45,6 +45,22 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `validate job failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `ruff_format` — 2×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 12 (open=12, resolved=0)
+- [open] WARN Dashboard bundle is stale — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Sector headwind gate coverage gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Memo model comparison failed — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Chart highs and lows incomplete — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Strategy-book US rehearsal: licensed data deletion due — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Deferred idea triggers met — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
