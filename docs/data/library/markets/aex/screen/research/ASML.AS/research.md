@@ -1,6 +1,6 @@
 # ASML Holding N.V. (ASML.AS) — Research memo
 
-_Version 2 · Updated 2026-11-17T17:55:49.341175+00:00 · Mode: structured_verdict_update_
+_Version 3 · Updated 2026-11-17T21:41:12.996460+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.68
-Rationale: Indexed FY2025 filings and FCF remain strong, but November US chip-access curbs and China–EU export friction add regulatory overhang that slightly weakens—not overturns—the screen buy case.
+Confidence: 0.67
+Rationale: Indexed cash generation stays strong in the filing pack, but coverage of US BIS licensing and ~20% China revenue exposure keeps regulatory risk salient, so research stays neutral versus the screen buy.
 RiskTags: regulatory, cyclical, customer_concentration, competitive
 
 ## Weekly updates
@@ -18,3 +18,8 @@ RiskTags: regulatory, cyclical, customer_concentration, competitive
 On 17 Nov European semis, including ASML, sold off on new US curbs on overseas AI-chip access and broader AI risk-off ahead of Nvidia results.  
 Reuters linked Dutch equipment export limits to China to EU–China trade friction; coverage cites a sharp three-month share drawdown but no company-specific adverse news in the batch.  
 The sourced financial pack still shows strong FY2025 FCF and filing-aligned EPS growth; the screen’s headline earnings-growth/yield mismatch from the prior verdict is unchanged.
+
+### 2026-11-17T21:41:12.996460+00:00
+Since the earlier 17 Nov run, the news batch adds one headline on US BIS licensing for data-centre hubs and stricter foundry checks, citing China at roughly 20% of 2026 revenue.  
+No new company filings or revisions appear in the supplied library pack; macro and screening inputs are unchanged.  
+Indexed FCF and quarterly earnings in sources remain strong; the quantitative screen buy signal is unchanged.

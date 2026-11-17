@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-17T21:00:25+00:00",
+  "updated_at": "2026-11-17T22:45:55+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17572,7 +17572,7 @@
       "status": "done",
       "source": "plan step 2.4 strategy-book reviews",
       "added_at": "2026-11-11T10:33:59+00:00",
-      "updated_at": "2026-11-17T21:00:25+00:00",
+      "updated_at": "2026-11-17T22:45:55+00:00",
       "status_note": "Reviews tab shows the strategy-book closed-episode queue. Entry-blind and buy+28d stay on the legacy lab queues."
     },
     {
@@ -17656,9 +17656,11 @@
         "fx",
         "proof"
       ],
-      "status": "open",
+      "status": "done",
       "source": "strategy book proof board",
-      "added_at": "2026-11-11T15:22:38+00:00"
+      "added_at": "2026-11-11T15:22:38+00:00",
+      "updated_at": "2026-11-17T10:45:37+00:00",
+      "status_note": "Observe store docs/data/strategy_book_fx_rates.json supplies daily USD closes for CHF, SEK, HKD and SGD. The proof board reads them point in time. The seven sealed bars and the fair-cost formula are unchanged."
     },
     {
       "id": "N268",
@@ -17955,6 +17957,30 @@
         "all": [
           {
             "on_or_after": "2026-11-30"
+          }
+        ]
+      }
+    },
+    {
+      "id": "N276",
+      "category": "not_now",
+      "section": "research",
+      "title": "Strategy-book memos cite decline and sector evidence",
+      "summary": "Plan step 4.2 asks memos to cite evidence for or against operating decline and sector headwinds, and to calibrate confidence on outcomes. The plan named N173 and N210, which are the live LLM sell overlay and the N210 AI-judgment book. This is that step. It does not change the sealed memo filter or the primary exit until the owner says so at a version review.",
+      "revisit_when": "At the strategy-book version review, once the thickness gate is ready (48 counted mature episodes), the owner decides whether memos must cite those gates.",
+      "tags": [
+        "strategy-version-review",
+        "strategy-book"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-647b31ea-6d92-529c-8c6e-bee64657ba7b",
+      "added_at": "2026-11-17T10:45:31+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/strategy_book_forward_status.json",
+            "path": "thickness_ready",
+            "op": "truthy"
           }
         ]
       }

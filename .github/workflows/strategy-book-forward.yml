@@ -130,6 +130,21 @@ jobs:
           fi
           ftse-strategy-book-demo "${args[@]}"
 
+      # Observe-only USD closes for CHF, SEK, HKD and SGD. Written before the
+      # proof board so those bars can see the rates. Does not change fair cost.
+      # A failure here must not block the forward commit.
+      - name: Refresh strategy book FX rates
+        continue-on-error: true
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          set -euo pipefail
+          if [ "${DRY_RUN}" = "true" ]; then
+            ftse-strategy-book-fx-rates --repo-root . --no-write
+          else
+            ftse-strategy-book-fx-rates --repo-root .
+          fi
+
       # Observe-only step 3.2 proof board. A failure here must not block the
       # forward commit. See docs/ops/strategy-book-proof.md.
       - name: Refresh the strategy book proof board
@@ -192,7 +207,8 @@ jobs:
           docs/data/strategy_book_closes.json
           docs/data/strategy_book_forward_status.json
           docs/data/strategy_book_demo_ledger.json
-          docs/data/strategy_book_proof_board.json
+            docs/data/strategy_book_fx_rates.json
+            docs/data/strategy_book_proof_board.json
           docs/data/strategy_book_fair_value.json
           docs/data/strategy_book_memo_free_shadow.json
           docs/data/strategy_book_memo_ranking_shadow.json

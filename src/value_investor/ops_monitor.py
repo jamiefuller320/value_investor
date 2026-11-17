@@ -2938,6 +2938,44 @@ def check_strategy_book_demo_mirror(
     ]
 
 
+def check_strategy_book_fx_rates(
+    *,
+    repo_root: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Read the observe-only CHF/SEK/HKD/SGD closes. Does not fetch or score.
+
+    ``auto_fixable=False``. ``influences_live`` stays false. The forward job
+    writes the store. See docs/ops/strategy-book-proof.md.
+    """
+    from value_investor.strategy_book_fx_rates import findings_for_store
+
+    root = Path(repo_root) if repo_root is not None else Path()
+    moment = now or datetime.now(UTC)
+    try:
+        rows = findings_for_store(root, now=moment)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title="Strategy book FX rates unreadable",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Strategy book FX rates refreshed"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in rows
+    ]
+
+
 def check_strategy_book_proof(
     *,
     repo_root: Path | None = None,
@@ -5466,6 +5504,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_strategy_book_observe))
     findings.extend(_guarded_check(check_strategy_book_reviews))
     findings.extend(_guarded_check(check_strategy_book_demo_mirror))
+    findings.extend(_guarded_check(check_strategy_book_fx_rates))
     findings.extend(_guarded_check(check_strategy_book_proof))
     findings.extend(_guarded_check(check_strategy_book_fair_value))
     findings.extend(_guarded_check(check_eodhd_coverage))

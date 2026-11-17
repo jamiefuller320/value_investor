@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-17T17:33:05.902083+00:00`
+Generated: `2026-11-17T21:16:17.333353+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -37,7 +37,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `parked_hunter`/verified PR #1432 `eng-20261117-02` — Hunt fetchable IR source for parked asx200 leftover HVN.AX
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 381
+- Occasion count: 382
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate failed` — 7×
 - `validate check failed` — 6×
