@@ -926,6 +926,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://announcements.asx.com.au/asxpdf/20260915/pdf/07434xc906mx0p.pdf",
         "https://newhopegroup.com.au/wp-content/uploads/2026/03/New-Hope-Group-Appendix-4D-and-Half-Year-Financial-Report-2026.pdf",
     ],
+    # asx200 buy-tier leftover — eng-20261117-02: HVN.AX no_key_bodies; Markit/latest-five rows
+    # index as period=other; FY26 and 1H26 results presentation PDFs fetch via documentKey paths.
+    "HVN.AX": [
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03127979-2A1693078",
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03062425-2A1656711",
+    ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
     "GIB-A.TO": [
         "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm",
@@ -1530,6 +1536,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "IMD": ("Imdex", "IMDEX Limited", "IMDEX"),
     # asx200 NHC.AX — opaque ASX Appendix 4E hash slugs need issuer tokens for IR title gate.
     "NHC": ("New Hope", "New Hope Corporation", "New Hope Group"),
+    # asx200 HVN.AX Markit allowlist — opaque documentKey URLs need issuer tokens for IR title gate.
+    "HVN": ("Harvey Norman", "Harvey Norman Holdings", "Harvey Norman Holdings Limited"),
     # sti J36.SI SGX allowlist — opaque 877984_JMH.pdf / 853959_JMH.pdf slugs need issuer
     # tokens for _ir_body_title_tokens_match (same pattern as FMG.AX / YAL.AX).
     "J36": ("Jardine Matheson", "Jardine Matheson Holdings"),
@@ -6253,6 +6261,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://wcsecure.weblink.com.au/pdf/IMD/03059253.pdf": "interim",
     # eng-20261115-02: NHC.AX — opaque ASX Appendix 4E hash slug (would classify other).
     "https://announcements.asx.com.au/asxpdf/20260915/pdf/07434xc906mx0p.pdf": "annual",
+    # eng-20261117-02: HVN.AX — opaque Markit documentKey slugs (would classify other).
+    "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03127979-2A1693078": "annual",
+    "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03062425-2A1656711": "interim",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
     # eng-20261009-03: JD.L HY27 slug has no half-year token (would classify other).
