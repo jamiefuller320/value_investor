@@ -113,18 +113,26 @@ date, separately for the currency and for the pound. A later snapshot is never
 used for an earlier day. `fx.fetch_fx_rates` (today's Yahoo spot) is not
 called.
 
-CHF, SEK, HKD and SGD have no daily series in those snapshots. If a counted
-episode is in one of those currencies, the drawdown and sterling bars are
-`insufficient_data` and the reason names the gap. No rate is invented.
+CHF, SEK, HKD and SGD are not in those snapshots. Their daily USD closes
+sit in `docs/data/strategy_book_fx_rates.json`. That store is observe-only:
+`influences_live` is false, and it does not change the fair-cost formula or
+the primary exit. The forward job refreshes it before this board. The same
+`as_of` rule applies, and a quote outside a wide USD-per-unit band is not
+stored. A currency with no point on or before the episode date still leaves
+the drawdown and sterling bars `insufficient_data`. No rate is invented.
 
 ## Schedule and store
 
-`strategy-book-forward.yml` runs `ftse-strategy-book-proof` after the forward
-walk. That step is `continue-on-error`, so a proof failure cannot block the
-forward commit. The job writes `docs/data/strategy_book_proof_board.json` and
-commits it. Email-report excludes that file so it has one writer.
+`strategy-book-forward.yml` runs `ftse-strategy-book-fx-rates` and then
+`ftse-strategy-book-proof` after the forward walk. Both steps are
+`continue-on-error`, so a failure cannot block the forward commit. The job
+writes `docs/data/strategy_book_fx_rates.json` and
+`docs/data/strategy_book_proof_board.json` and commits them. Email-report
+excludes both files so each has one writer.
 
 ```bash
+ftse-strategy-book-fx-rates --repo-root .
+ftse-strategy-book-fx-rates --repo-root . --no-write
 ftse-strategy-book-proof --repo-root .
 ftse-strategy-book-proof --repo-root . --no-write
 ```

@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.fx import currency_for_ticker
+from value_investor.strategy_book_fx_rates import PAIRS, read_store, series_from_store
 from value_investor.strategy_book_observe import _slot_book, entry_week
 from value_investor.strategy_book_rules import (
     COLUMN_PRIMARY,
@@ -50,7 +51,8 @@ MACRO_RELATIVE = Path("docs/data/library/macro")
 
 # Dated macro snapshots quote these as USD per 1 unit of the currency.
 # Same markers as macro_context.DOMAIN_SERIES and ftse_pound_cap._fx_usd_per_unit.
-# The seal does not list currencies. CHF, SEK, HKD and SGD have no daily series here.
+# The seal does not list currencies. CHF, SEK, HKD and SGD are read from the
+# observe store strategy_book_fx_rates.json, not from these snapshots.
 FX_MARKERS: dict[str, tuple[str, str]] = {
     "GBP": ("uk", "gbp_usd"),
     "EUR": ("euro", "eur_usd"),
@@ -267,9 +269,25 @@ class FxHistory:
         series: dict[str, list[tuple[date, float]]] = {key: [] for key in FX_MARKERS}
         for (currency, quote_day), rate in chosen.items():
             series[currency].append((quote_day, rate))
+        try:
+            extra = series_from_store(read_store(repo_root))
+        except (OSError, ValueError, TypeError):
+            extra = {code: [] for code in PAIRS}
+            unreadable += 1
+        for code, points in extra.items():
+            # Macro wins when both name the same session. These four are not in the snapshots.
+            have = {day for day, _rate in series.get(code, [])}
+            merged = list(series.get(code, []))
+            for day, rate in points:
+                if day not in have:
+                    merged.append((day, rate))
+            series[code] = merged
         return cls(
             series,
-            source=str(MACRO_RELATIVE / "YYYY-MM-DD.json"),
+            source=(
+                str(MACRO_RELATIVE / "YYYY-MM-DD.json")
+                + " plus docs/data/strategy_book_fx_rates.json"
+            ),
             files_read=files_read,
             unreadable=unreadable,
         )
@@ -307,10 +325,11 @@ class FxHistory:
             if sterling is None:
                 return None, f"no committed GBPUSD rate on or before {day.isoformat()}"
             return 1.0 / sterling[1], ""
-        if code not in FX_MARKERS:
+        if code not in FX_MARKERS and code not in PAIRS:
             return None, (
                 f"no committed daily FX history for {code or 'unknown currency'} "
-                "(dated macro snapshots price GBP, EUR, AUD and CAD against USD)"
+                "(dated macro snapshots price GBP, EUR, AUD and CAD against USD; "
+                "the observe FX store prices CHF, SEK, HKD and SGD)"
             )
         foreign = self._latest(code, day)
         sterling = self._latest("GBP", day)
@@ -344,7 +363,11 @@ class FxHistory:
             "spans": spans,
             "files_read": self.files_read,
             "unreadable_files": self.unreadable,
-            "no_daily_series": ["CHF", "SEK", "HKD", "SGD"],
+            "no_daily_series": [
+                code
+                for code in ("CHF", "SEK", "HKD", "SGD")
+                if not self.usd_per_unit.get(code)
+            ],
         }
 
 
