@@ -12730,6 +12730,45 @@ def test_fetch_filings_ir_allowlist_nhc_ax_asx200_builtin(tmp_path: Path):
     assert "NHC.AX" not in PARKED_SOURCE_HUNTER_SKIP
 
 
+def test_fetch_filings_ir_allowlist_hvn_ax_asx200_builtin(tmp_path: Path):
+    """eng-20261117-02: HVN.AX buy-tier no_key_bodies — seed FY26 / 1H26 Markit results presentations."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("HVN.AX", path=allowlist_path)
+    periods = {row["period"] for row in rows}
+    urls = {row["url"] for row in rows}
+    assert len(rows) == 2
+    assert periods == {"annual", "interim"}
+    assert any("2A1693078" in url for url in urls)
+    assert any("2A1656711" in url for url in urls)
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert "HVN.AX" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_parked_source_hunter_hvn_ax_asx200_has_fetchable_ir():
+    """eng-20261117-02: HVN.AX leftover — Markit FY26 / 1H26 presentation PDFs live-fetch with issuer text."""
+    from value_investor.research.filings import _ESEF_ENTITY_SEARCH_ALIASES
+
+    assert "HVN.AX" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("HVN.AX")
+    assert len(rows) == 2
+    annual = next(row for row in rows if row["period"] == "annual")
+    interim = next(row for row in rows if row["period"] == "interim")
+    aliases = _ESEF_ENTITY_SEARCH_ALIASES.get("HVN") or ()
+    assert any("Harvey Norman" in a for a in aliases)
+    annual_body = _live_fetch_filing_body(annual["url"])
+    if not annual_body:
+        pytest.skip("HVN FY26 presentation PDF fetch unavailable (network) — retry later")
+    assert len(annual_body) >= 10000
+    assert "harvey norman" in annual_body.lower()
+    interim_body = _live_fetch_filing_body(interim["url"])
+    if not interim_body:
+        pytest.skip("HVN 1H26 presentation PDF fetch unavailable (network) — retry later")
+    assert len(interim_body) >= 10000
+    assert "harvey norman" in interim_body.lower()
+
+
 def test_parked_source_hunter_nhc_ax_asx200_has_fetchable_ir():
     """eng-20261115-02: NHC.AX leftover — ASX / newhopegroup statutory PDFs live-fetch with issuer text."""
     from value_investor.research.filings import _ESEF_ENTITY_SEARCH_ALIASES
