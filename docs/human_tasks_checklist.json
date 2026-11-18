@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-12",
+  "updated_at": "2026-11-18",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -74,6 +74,14 @@
           "automated": false,
           "doc_path": "docs/ops/ops-monitor.md",
           "doc_anchor": "engineering-parked-backlog-clearing"
+        },
+        {
+          "id": "weekday-workflow-dispatch-pat-sprint-2",
+          "title": "Grant Workflows permission for the parked sprint-2 task",
+          "summary": "eng-20261112-02 is parked (parked_policy=workflow_permission) because engineering-agent cannot push .github/workflows without Workflows: Read and write on WORKFLOW_DISPATCH_PAT. The failed run is library-ingest-sprint-2.yml 43460958952 (2026-11-12). Later sprint-2 runs succeed, so this is not a live ingest outage. Grant that permission, or close the parked task by hand. Do not unpark it into another workflow-file push, and do not edit .github/workflows to work around the missing permission.",
+          "automated": false,
+          "doc_path": "docs/ops/engineering-sync.md",
+          "doc_anchor": "pat-setup-one-time"
         },
         {
           "id": "weekday-project-traffic-runs",
