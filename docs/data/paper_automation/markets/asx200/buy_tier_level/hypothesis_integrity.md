@@ -1,17 +1,14 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-17T07:29:31.498910+00:00
+Track: `buy_tier_level` · updated 2026-11-18T00:47:02.355707+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **11** / 29 (38% count, 34% NAV)
+- Losers: **10** / 31 (32% count, 30% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
-
-### 360.AX — broken / exit_candidate (+0.7%)
-- cheapness lost and not in buy tier
 
 ### WHC.AX — weakening / watch_review (-22.3%)
 - research verdict neutral
@@ -69,12 +66,6 @@ Track: `buy_tier_level` · updated 2026-11-17T07:29:31.498910+00:00
 - data_quality 0.95
 - conviction 43%
 
-### CSC.AX — weakening / watch_review (-6.8%)
-- left buy tier (hold)
-- conviction 24% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### WDS.AX — weakening / watch_review (-5.9%)
 - research verdict caution
 - still buy
@@ -124,6 +115,29 @@ Track: `buy_tier_level` · updated 2026-11-17T07:29:31.498910+00:00
 - conviction 17% below intact floor
 - still buy
 - data_quality 0.95
+
+### CLW.AX — weakening / watch_review (+0.0%)
+- research verdict neutral
+- conviction 33% below intact floor
+- still buy
+- cheapness family still passes
+
+### AMC.AX — weakening / watch_review (+0.0%)
+- conviction 33% below intact floor
+- still buy
+- research accumulate
+
+### GMD.AX — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 31% below intact floor
+- still buy
+- cheapness family still passes
+
+### NWS.AX — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 26% below intact floor
+- still buy
+- cheapness family still passes
 
 ### BPT.AX — weakening / watch_review (+1.1%)
 - research verdict caution
