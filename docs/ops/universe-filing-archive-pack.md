@@ -3,7 +3,7 @@
 **Status:** Isolation + miss-rate observe + fail-open hydrate + **thin quiet
 `--apply` writers** shipped (week-first plan, archive budgets). **Stage-2 floor**
 live (`max_units=8`, `max_http_fetches=32`; tickers/bodies still 2/1) with
-**quiet-night auto-widen** up to documented stage 3 (`16`/`64`). Nightly
+**quiet-night auto-widen** up to documented stage 4 (`32`/`128`). Nightly
 22:00 UTC cron (7 days) runs bounded apply under `archive_lane_gate`. Do **not** add a
 second live crawler or a fourth equal sprint stream.
 **Deferred:** **N180** (live crawler / fourth stream); **N181** (eng self-improve);
@@ -81,7 +81,7 @@ This order must **not** drive `euro-ingest-loop` / sprint streams.
 
 The 22:00 UTC job runs under `archive_lane_gate`. `head_needs_fat_slot` and a sprint-mode dispatch do not no-op it. A quiet-window miss, the archive’s own caps, or remaining focus pressure (unmeasured, zero-body, stuck flags) still no-ops with `outcome=suspend` or `quiet_only`, and still refreshes the bottleneck review.
 
-Apply caps resolve from committed `stage_ladder` (floor stage 2 = 8/32; ceiling stage 3 = 16/64): ≤2 tickers/unit, ≤1 body/ticker, archive budget IDs only (`universe_filing_archive:*`), preemptible, `fourth_equal_sprint_stream=false`. Ladder: pilot 2/8 → stage 1 4/16 → stage 2 8/32 → stage 3 16/64.
+Apply caps resolve from committed `stage_ladder` (floor stage 2 = 8/32; ceiling stage 4 = 32/128): ≤2 tickers/unit, ≤1 body/ticker, archive budget IDs only (`universe_filing_archive:*`), preemptible, `fourth_equal_sprint_stream=false`. Ladder: pilot 2/8 → stage 1 4/16 → stage 2 8/32 → stage 3 16/64 → stage 4 32/128.
 
 ## Shipped scaffolds
 
@@ -93,7 +93,7 @@ Apply caps resolve from committed `stage_ladder` (floor stage 2 = 8/32; ceiling 
 | Thin writers | `universe_filing_archive_writer.py` | Bounded fetch + cold `pack_index` / raw / normalized |
 | Miss-rate observe | `universe_filing_archive_miss_rate.py` → `docs/data/universe_filing_archive_miss_rate.json` | Outcome proxy only — **not** a writer start gate |
 | Fail-open hydrate | `universe_filing_archive_hydrate.py` → `try_hydrate_pack` | Pack hit accelerates; miss/error always continues live deepen |
-| Stage ladder + quiet streak | `universe_filing_archive_stage.py` → status `stage_ladder` | Auto-promote one documented stage after 5 clean nights; hard ceiling stage 3; fail-closed streak reset |
+| Stage ladder + quiet streak | `universe_filing_archive_stage.py` → status `stage_ladder` | Auto-promote one documented stage after 5 clean nights; hard ceiling stage 4; fail-closed streak reset |
 | Ops wiring | miss-rate + bottleneck + auto-widen checks in ops-monitor; L460 optional commit for miss-rate; observe-utilization card for miss-rate | Full automation bar for observe instruments |
 | CLI drill-down | `ftse-ingest-audit --archive-miss-rate`; `ftse-universe-archive-pack` | Ad-hoc only |
 
@@ -127,8 +127,11 @@ Miss-rate observe stays wired for learning / dashboard attention — it does **n
 **Quiet-night auto-widen (shipped):** after **5** consecutive clean
 `apply_complete` nights with `capacity_isolation.isolation_ok=true` and no shared
 429 / runner collision / fourth-sprint flag (weekend applies count), promote
-**one** documented stage and reset the streak. Hard ceiling = **stage 3**
-(`max_units=16`, `max_http_fetches=64`) — do not invent stages past the ladder.
+**one** documented stage and reset the streak. Hard ceiling = **stage 4**
+(`max_units=32`, `max_http_fetches=128`) — do not invent stages past the ladder.
+Stage 3 (`16`/`64`) is the rung below that ceiling, same doubling as 8/32 → 16/64.
+The live committed stage stays on `stage_ladder.current_stage` until five clean
+nights promote it; documenting stage 4 does not itself rewrite the status panel.
 Suspend / isolation fail / shared-path / apply errors **fail-closed** (streak → 0);
 they do not auto-rollback the committed stage (manual rollback still available).
 State lives on `docs/data/universe_filing_archive_status.json` → `stage_ladder`.

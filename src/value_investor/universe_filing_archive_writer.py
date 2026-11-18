@@ -41,7 +41,7 @@ SCHEMA_VERSION = 1
 
 # Fallback floor when stage ladder status is missing — stage-2 moderate quiet
 # (was stage-1 4/16; pilot 2/8). Live cron resolves caps from committed
-# ``stage_ladder`` (auto-widen up to documented stage 3). Tickers/bodies stay
+# ``stage_ladder`` (auto-widen up to documented stage 4). Tickers/bodies stay
 # frozen; N180/N181 still parked (no fourth sprint / eng-spray).
 DEFAULT_APPLY_MAX_UNITS = 8
 DEFAULT_MAX_TICKERS_PER_UNIT = 2
