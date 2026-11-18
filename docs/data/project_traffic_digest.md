@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-18T02:36:43.051627+00:00`
+Generated: `2026-11-18T07:59:31.687135+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -25,18 +25,18 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-11-17T10:53:42.728861+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
+- [ok] Ops monitor overall=warn at 2026-11-18T02:32:13.856177+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `human`/human PR #1437 `eng-20261118-01` — Close library ingest gaps for euro_depth / BN.PA (chain 2/3: 0/0 improved, run igc-20260922-01)
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 384
+- Occasion count: 385
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate failed` — 7×
 - `validate check failed` — 6×
@@ -48,7 +48,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 
 ## Ops-monitor email handoff
 - Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 13 (open=13, resolved=0)
+- Findings: 14 (open=14, resolved=0)
 - [open] WARN Dashboard bundle is stale — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Sector headwind gate coverage gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
