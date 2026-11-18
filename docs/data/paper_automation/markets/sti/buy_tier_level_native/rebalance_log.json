@@ -20262,5 +20262,750 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-11-18T14:17:50.124042+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (SGD reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/sti/screen_latest.json",
+      "run_at": "2026-11-17T10:51:55.075641+00:00",
+      "generated_at": "2026-11-18T14:17:49.940523+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-11-18T14:17:50.102890+00:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-11-18T08:00:00+00:00",
+      "settle_at": "2026-11-18T09:15:00+00:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (3 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0003,
+    "candidates": [
+      {
+        "ticker": "J36.SI",
+        "name": "Jardine Matheson Holdings Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.39525,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 58.99,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "Y92.SI",
+        "name": "Thai Beverage Public Company Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7417,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Defensive",
+        "price": 0.425,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "BS6.SI",
+        "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.401115,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 4.32,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "G13.SI",
+        "name": "Genting Singapore Limited",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.29189,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 0.55,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "J36.SI",
+        "name": "Jardine Matheson Holdings Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.39525,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 58.99,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "Y92.SI",
+        "name": "Thai Beverage Public Company Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7417,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Defensive",
+        "price": 0.425,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "BS6.SI",
+        "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.401115,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 4.32,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "G13.SI",
+        "name": "Genting Singapore Limited",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.29189,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 0.55,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 983.1,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 245.76,
+      "targets": [
+        {
+          "ticker": "Y92.SI",
+          "name": "Thai Beverage Public Company Limited",
+          "signal": "buy",
+          "conviction_score": 0.7417,
+          "price": 0.425
+        },
+        {
+          "ticker": "BS6.SI",
+          "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+          "signal": "buy",
+          "conviction_score": 0.401115,
+          "price": 4.32
+        },
+        {
+          "ticker": "J36.SI",
+          "name": "Jardine Matheson Holdings Limited",
+          "signal": "strong_buy",
+          "conviction_score": 0.39525,
+          "price": 58.99
+        },
+        {
+          "ticker": "G13.SI",
+          "name": "Genting Singapore Limited",
+          "signal": "buy",
+          "conviction_score": 0.29189,
+          "price": 0.55
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "N2IU.SI",
+          "name": "Mapletree Pan Asia Commercial Trust",
+          "reason": "No longer in the top conviction target set",
+          "shares": 143.720468,
+          "price": 1.14,
+          "value": 163.84
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "J36.SI",
+          "name": "Jardine Matheson Holdings Limited",
+          "reason": "Top-up to equal weight",
+          "value": 81.88,
+          "price": 58.99,
+          "target_value": 245.76,
+          "conviction_score": 0.39525,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "G13.SI",
+          "name": "Genting Singapore Limited",
+          "reason": "Top-up to equal weight",
+          "value": 81.92,
+          "price": 0.55,
+          "target_value": 245.76,
+          "conviction_score": 0.29189,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "Y92.SI",
+          "name": "Thai Beverage Public Company Limited",
+          "reason": "Already near equal-weight target",
+          "value": 245.76,
+          "target_value": 245.76,
+          "conviction_score": 0.7417,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "BS6.SI",
+          "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+          "reason": "Already near equal-weight target",
+          "value": 245.76,
+          "target_value": 245.76,
+          "conviction_score": 0.401115,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s); leave 2 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "142ad86c-947f-488a-82ea-8177500b871f",
+        "fund_id": "8310904b-74e0-497e-92f0-649dd4d20b80",
+        "acted_at": "2026-11-18T14:17:50.102890+00:00",
+        "ticker": "Y92.SI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 192.75905,
+        "price": 0.425,
+        "gross": 81.92,
+        "cost": 0.02,
+        "net_cash": -81.94,
+        "note": "Automated buy",
+        "name": "Thai Beverage Public Company Limited"
+      },
+      {
+        "id": "164876a9-8b78-47dc-89fe-abb50dac5321",
+        "fund_id": "8310904b-74e0-497e-92f0-649dd4d20b80",
+        "acted_at": "2026-11-18T14:17:50.102890+00:00",
+        "ticker": "BS6.SI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 18.956021,
+        "price": 4.32,
+        "gross": 81.89,
+        "cost": 0.02,
+        "net_cash": -81.91,
+        "note": "Automated buy",
+        "name": "Yangzijiang Shipbuilding (Holdings) Ltd."
+      },
+      {
+        "id": "3b9d2a8f-1694-4def-91aa-0c4fd6771627",
+        "fund_id": "8310904b-74e0-497e-92f0-649dd4d20b80",
+        "acted_at": "2026-11-18T14:17:50.102890+00:00",
+        "ticker": "J36.SI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.000448,
+        "price": 58.99,
+        "gross": 0.03,
+        "cost": 0.0,
+        "net_cash": -0.03,
+        "note": "Automated buy",
+        "name": "Jardine Matheson Holdings Limited"
+      }
+    ],
+    "nav_before": 983.14,
+    "cash_before": 163.88,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "Y92.SI",
+        "shares": 385.508528,
+        "avg_cost": 0.4295,
+        "sector": "Consumer Defensive",
+        "name": "Thai Beverage Public Company Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BS6.SI",
+        "shares": 37.933731,
+        "avg_cost": 4.4898,
+        "sector": "Industrials",
+        "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "J36.SI",
+        "shares": 2.777747,
+        "avg_cost": 59.7893,
+        "sector": "Industrials",
+        "name": "Jardine Matheson Holdings Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "G13.SI",
+        "shares": 297.893333,
+        "avg_cost": 0.55,
+        "sector": "Consumer Cyclical",
+        "name": "Genting Singapore Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "N2IU.SI",
+        "shares": 143.720468,
+        "avg_cost": 1.14,
+        "sector": "Real Estate",
+        "name": "Mapletree Pan Asia Commercial Trust",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "A17U.SI": 1
+      }
+    },
+    "nav_after": 983.1,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "Y92.SI",
+        "shares": 578.267578,
+        "avg_cost": 0.428,
+        "sector": "Consumer Defensive",
+        "name": "Thai Beverage Public Company Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BS6.SI",
+        "shares": 56.889752,
+        "avg_cost": 4.4332,
+        "sector": "Industrials",
+        "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "J36.SI",
+        "shares": 2.778195,
+        "avg_cost": 59.7892,
+        "sector": "Industrials",
+        "name": "Jardine Matheson Holdings Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "G13.SI",
+        "shares": 297.893333,
+        "avg_cost": 0.55,
+        "sector": "Consumer Cyclical",
+        "name": "Genting Singapore Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "N2IU.SI",
+        "shares": 143.720468,
+        "avg_cost": 1.14,
+        "sector": "Real Estate",
+        "name": "Mapletree Pan Asia Commercial Trust",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {
+        "N2IU.SI": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 2,
+        "veto": 0,
+        "abstain": 1
+      },
+      "cards": [
+        {
+          "ticker": "Y92.SI",
+          "name": "Thai Beverage Public Company Limited",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 1
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 1
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.7417
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-18T14:17:50.102890+00:00",
+          "proposal_id": "buy_tier_level_native:Y92.SI:buy:2026-11-18T14:17:50.102890+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "BS6.SI",
+          "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "abstain",
+          "reasons": [
+            "Buy while not buyish \u2014 abstain."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 2
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 2
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.401115
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-18T14:17:50.102890+00:00",
+          "proposal_id": "buy_tier_level_native:BS6.SI:buy:2026-11-18T14:17:50.102890+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "J36.SI",
+          "name": "Jardine Matheson Holdings Limited",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.39525
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-18T14:17:50.102890+00:00",
+          "proposal_id": "buy_tier_level_native:J36.SI:buy:2026-11-18T14:17:50.102890+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        }
+      ]
+    }
   }
 ]

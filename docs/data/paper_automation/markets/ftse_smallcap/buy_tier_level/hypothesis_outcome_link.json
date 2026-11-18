@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-17T07:29:54.859088+00:00",
+  "generated_at": "2026-11-18T14:17:12.513781+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 29,
+    "closed_total": 30,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,13 +27,13 @@
         }
       },
       "broken": {
-        "closed_count": 20,
+        "closed_count": 21,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.033,
-        "mean_trough_unrealized_pct": 0.0277,
+        "mean_peak_unrealized_pct": 0.034,
+        "mean_trough_unrealized_pct": 0.029,
         "outcome_labels": {
-          "recovered": 20
+          "recovered": 21
         }
       },
       "insufficient_data": {
@@ -62,7 +62,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 29,
+    "hold_closed_with_thesis": 30,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -1437,7 +1437,7 @@
       "ticker": "SBRE.L",
       "name": "Sabre Insurance Group plc",
       "started_at": "2026-11-17T07:29:54.844164+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -1469,9 +1469,9 @@
       "peak_unrealized_pct": 0.054,
       "trough_unrealized_pct": 0.054,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-18T14:17:12.487733+00:00",
+      "linked_sell_trade_id": "244eb2df-f1e2-4372-aabc-0359fc7eae12"
     }
   ],
   "swap_rotations": [
@@ -2444,7 +2444,7 @@
         "CARD.L": 0.2203
       },
       "buy_returns_since_rotation": {
-        "ULTP.L": 0.0,
+        "ULTP.L": 0.0547,
         "MER.L": 0.0
       },
       "verdict": null,
@@ -2537,7 +2537,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "ULTP.L": 0.0,
+        "ULTP.L": 0.0547,
         "MER.L": 0.0
       },
       "buy_returns_since_rotation": {
@@ -3984,6 +3984,13 @@
           "avg_sell_return": -0.0335,
           "avg_buy_return": -0.019,
           "replacement_delta": 0.0145
+        },
+        {
+          "scored_at": "2026-11-18T14:17:12.487733+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0335,
+          "avg_buy_return": -0.0179,
+          "replacement_delta": 0.0156
         }
       ],
       "sell_returns_since_rotation": {
@@ -4860,6 +4867,90 @@
       },
       "buy_returns_since_rotation": {
         "CAPD.L": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-18T14:17:12.487733+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-18T14:17:12.487733+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.003,
+      "sells": [
+        {
+          "ticker": "SBRE.L",
+          "price": 183.4,
+          "shares": 1.565096,
+          "gross": 287.04,
+          "cost": 0.14,
+          "avg_cost_at_exit": 174.0,
+          "realized_pct": 0.054,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.054
+        },
+        {
+          "ticker": "CAPD.L",
+          "price": 107.0,
+          "shares": 1.769311,
+          "gross": 189.32,
+          "cost": 0.09,
+          "avg_cost_at_exit": 111.3073,
+          "realized_pct": -0.0387,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0387
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "CARD.L",
+          "price": 85.3,
+          "shares": 1.101788,
+          "gross": 93.98,
+          "cost": 0.52
+        },
+        {
+          "ticker": "ULTP.L",
+          "price": 48.2,
+          "shares": 7.874062,
+          "gross": 379.53,
+          "cost": 2.09
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "SBRE.L": 0.0,
+        "CAPD.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "CARD.L": 0.0,
+        "ULTP.L": 0.0
       },
       "verdict": null,
       "closed_at": null

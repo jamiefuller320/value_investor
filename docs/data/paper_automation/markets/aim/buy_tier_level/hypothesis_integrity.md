@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-17T07:30:53.433582+00:00
+Track: `buy_tier_level` · updated 2026-11-18T14:17:24.597150+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **3** / 14 (21% count, 21% NAV)
+- Losers: **3** / 15 (20% count, 20% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
@@ -12,7 +12,7 @@ Track: `buy_tier_level` · updated 2026-11-17T07:30:53.433582+00:00
 
 ### IPX.L — weakening / watch_review (-19.1%)
 - research verdict caution
-- conviction 27% below intact floor
+- conviction 32% below intact floor
 - still strong_buy
 - cheapness family still passes
 
@@ -37,7 +37,7 @@ Track: `buy_tier_level` · updated 2026-11-17T07:30:53.433582+00:00
 
 ### WJG.L — weakening / watch_review (-3.6%)
 - research verdict caution
-- conviction 12% below intact floor
+- conviction 14% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -69,7 +69,7 @@ Track: `buy_tier_level` · updated 2026-11-17T07:30:53.433582+00:00
 
 ### RWS.L — weakening / watch_review (-1.6%)
 - research verdict caution
-- conviction 15% below intact floor
+- conviction 18% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -85,11 +85,18 @@ Track: `buy_tier_level` · updated 2026-11-17T07:30:53.433582+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 41%
+- conviction 48%
+
+### TFW.L — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 57%
 
 ### CRW.L — weakening / watch_review (+0.6%)
 - research verdict neutral
-- conviction 18% below intact floor
+- conviction 22% below intact floor
 - still buy
 - cheapness family still passes
 

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-17T07:31:15.273702+00:00
+Track: `buy_tier_level` · updated 2026-11-18T14:17:43.263789+00:00
 
 ## Portfolio loser feedback
 
@@ -12,13 +12,12 @@ Track: `buy_tier_level` · updated 2026-11-17T07:31:15.273702+00:00
 
 ### 1024.HK — weakening / watch_review (-14.3%)
 - research verdict caution
-- conviction 32% below intact floor
 - still strong_buy
 - cheapness family still passes
 
 ### 2628.HK — weakening / watch_review (-13.1%)
 - research verdict caution
-- conviction 29% below intact floor
+- conviction 34% below intact floor
 - still strong_buy
 - cheapness family still passes
 
@@ -40,7 +39,13 @@ Track: `buy_tier_level` · updated 2026-11-17T07:31:15.273702+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 35%
+- conviction 41%
+
+### 9961.HK — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 21% below intact floor
+- still buy
+- cheapness family still passes
 
 ### 0101.HK — weakening / watch_review (+0.7%)
 - research verdict caution
@@ -48,14 +53,9 @@ Track: `buy_tier_level` · updated 2026-11-17T07:31:15.273702+00:00
 - still buy
 - cheapness family still passes
 
-### 1099.HK — weakening / watch_review (+1.0%)
-- research verdict neutral
-- still strong_buy
-- cheapness family still passes
-
 ### 2618.HK — weakening / watch_review (+2.7%)
 - research verdict neutral
-- conviction 22% below intact floor
+- conviction 27% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -85,6 +85,6 @@ Track: `buy_tier_level` · updated 2026-11-17T07:31:15.273702+00:00
 
 ### 0291.HK — weakening / watch_review (+12.6%)
 - research verdict caution
-- conviction 18% below intact floor
+- conviction 22% below intact floor
 - still buy
 - cheapness family still passes

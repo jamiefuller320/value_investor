@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-17T07:30:59.757970+00:00",
+  "generated_at": "2026-11-18T14:17:26.019053+00:00",
   "stamped_this_pass": {
-    "hold_episodes": 1,
+    "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 10,
+    "closed_total": 11,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 5,
+    "open_with_thesis": 4,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,13 +27,13 @@
         }
       },
       "broken": {
-        "closed_count": 6,
+        "closed_count": 7,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0313,
-        "mean_trough_unrealized_pct": 0.0295,
+        "mean_peak_unrealized_pct": 0.0175,
+        "mean_trough_unrealized_pct": 0.0159,
         "outcome_labels": {
-          "recovered": 6
+          "recovered": 7
         }
       },
       "insufficient_data": {
@@ -62,7 +62,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 10,
+    "hold_closed_with_thesis": 11,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -702,7 +702,7 @@
       "ticker": "PST.MI",
       "name": "Poste Italiane S.p.A.",
       "started_at": "2026-11-17T07:30:59.731450+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -716,12 +716,12 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": 0.0,
-      "trough_unrealized_pct": 0.0,
+      "peak_unrealized_pct": -0.0658,
+      "trough_unrealized_pct": -0.0658,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-18T14:17:25.995759+00:00",
+      "linked_sell_trade_id": "bf45d454-689c-4e56-962c-7737bc1586ed",
       "thesis_status_at_start": "broken",
       "recommended_action_at_start": "exit_candidate",
       "thesis_reasons_at_start": [
@@ -1553,7 +1553,7 @@
       },
       "buy_returns_since_rotation": {
         "MONC.MI": 0.0199,
-        "PST.MI": 0.0704,
+        "PST.MI": 0.0,
         "UNI.MI": 0.0455,
         "LTMC.MI": 0.0843,
         "FCT.MI": 0.0,
@@ -1619,7 +1619,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "PST.MI": 0.0704
+        "PST.MI": 0.0
       },
       "buy_returns_since_rotation": {
         "MONC.MI": 0.0199,
@@ -2174,7 +2174,7 @@
         "ENI.MI": -0.005,
         "MONC.MI": -0.0192,
         "IG.MI": -0.0089,
-        "PST.MI": 0.0,
+        "PST.MI": -0.0658,
         "BZU.MI": -0.0131
       },
       "verdict": null,
@@ -2305,6 +2305,64 @@
         "BZU.MI": 0.0
       },
       "buy_returns_since_rotation": {
+        "INW.MI": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-18T14:17:25.995759+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-18T14:17:25.995759+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "PST.MI",
+          "price": 25.69,
+          "shares": 8.825903,
+          "gross": 226.74,
+          "cost": 0.4,
+          "avg_cost_at_exit": 25.69,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "LTMC.MI",
+          "price": 27.26,
+          "shares": 6.85764,
+          "gross": 186.94,
+          "cost": 0.33
+        },
+        {
+          "ticker": "INW.MI",
+          "price": 7.37,
+          "shares": 5.292535,
+          "gross": 39.01,
+          "cost": 0.07
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "PST.MI": -0.0658
+      },
+      "buy_returns_since_rotation": {
+        "LTMC.MI": 0.0,
         "INW.MI": 0.0
       },
       "verdict": null,

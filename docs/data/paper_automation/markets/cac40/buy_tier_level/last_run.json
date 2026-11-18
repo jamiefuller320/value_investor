@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-17T07:30:40.497155+00:00",
+    "local_time": "2026-11-18T14:17:13.176874+00:00",
     "trading_day": true,
-    "after_settle": false,
-    "market_open_at": "2026-11-17T08:00:00+00:00",
-    "settle_at": "2026-11-17T09:15:00+00:00",
-    "can_act": false,
-    "reason": "before market open"
+    "after_settle": true,
+    "market_open_at": "2026-11-18T08:00:00+00:00",
+    "settle_at": "2026-11-18T09:15:00+00:00",
+    "can_act": true,
+    "reason": "ok"
   },
   "trades": [],
   "plan": {
@@ -2882,9 +2882,26 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-18T14:17:13.176874+00:00",
+        "portfolio_value": 881.01,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 13,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83327
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-17T07:30:40.497155+00:00",
+    "last_mark_at": "2026-11-18T14:17:13.176874+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -2897,7 +2914,7 @@
     "schema_version": 2,
     "market_id": "cac40",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-17T07:30:40.543780+00:00",
+    "generated_at": "2026-11-18T14:17:13.327931+00:00",
     "observe_only": true,
     "open_count": 9,
     "closed_count": 0,
@@ -2971,12 +2988,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 1
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-17T07:30:40.544988+00:00",
+    "generated_at": "2026-11-18T14:17:13.329023+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -3068,12 +3085,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 1
+      "hold_episodes": 1,
+      "swap_rotations": 0
     }
   },
   "hypothesis_integrity": {
@@ -3081,8 +3098,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-17T07:30:40.546832+00:00",
-    "as_of": "2026-11-17T07:30:40.497155+00:00",
+    "updated_at": "2026-11-18T14:17:13.331092+00:00",
+    "as_of": "2026-11-18T14:17:13.176874+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3667,7 +3684,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-17T07:30:40.549291+00:00",
+    "generated_at": "2026-11-18T14:17:13.333670+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -3740,7 +3757,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-17T07:30:40.554754+00:00",
+    "generated_at": "2026-11-18T14:17:13.339887+00:00",
     "open_count": 2,
     "closed_count": 20,
     "scored_count": 15,
@@ -3809,7 +3826,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-17T07:30:40.497155+00:00",
+    "generated_at": "2026-11-18T14:17:13.176874+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -3866,12 +3883,12 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-17T07:30:40.497155+00:00",
+    "generated_at": "2026-11-18T14:17:13.176874+00:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "llm",
-    "judge_spec_id": "llm.v1",
-    "parent_spec_id": "heuristic.v1",
+    "judge_backend": "evidence_heuristic",
+    "judge_spec_id": "heuristic.v1",
+    "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
     "proposal_count": 2,
@@ -3897,9 +3914,7 @@
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "rebuy_skip is driven by algo_reason (insufficient cash after higher-conviction fills), not a thesis exit",
-          "screen_signal buy and still_buyish true with rank_drop 0 vs entry_rank 8 \u2014 no leave-buy-cohort signal",
-          "research_verdict accumulate with overlay_bound true supports staying in the buyish cohort while deferring size"
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
         ],
         "evidence": [
           {
@@ -3938,10 +3953,22 @@
             "value": "accumulate"
           },
           {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.524
+          },
+          {
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
             "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
           },
           {
             "kind": "overlay_bound",
@@ -3950,13 +3977,13 @@
             "value": true
           }
         ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-17T07:30:40.497155+00:00",
-        "proposal_id": "buy_tier_level:VIE.PA:rebuy_skip:2026-11-17T07:30:40.497155+00:00",
+        "logged_at": "2026-11-18T14:17:13.176874+00:00",
+        "proposal_id": "buy_tier_level:VIE.PA:rebuy_skip:2026-11-18T14:17:13.176874+00:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -3971,18 +3998,9 @@
             "overlay_bound": true,
             "interim_eps_decline_pct": null,
             "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
+          }
         },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
+        "schema_version": 1
       },
       {
         "ticker": "PUB.PA",
@@ -3991,9 +4009,7 @@
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "rebuy_skip matches explicit cash constraint after higher-conviction fills, not a sell/hold downgrade",
-          "buy screen with rank_drop 0 (entry_rank 11) \u2014 insufficient rank_drop for capacity-bump veto on a sell; action is skip-not-sell",
-          "accumulate verdict and still_buyish true align with low-churn deferral of rebuy"
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
         ],
         "evidence": [
           {
@@ -4006,6 +4022,12 @@
             "source": "candidates",
             "detail": "Effective signal at decision time",
             "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 11
           },
           {
             "kind": "entry_rank",
@@ -4026,10 +4048,22 @@
             "value": "accumulate"
           },
           {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.4903
+          },
+          {
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
             "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
           },
           {
             "kind": "overlay_bound",
@@ -4038,13 +4072,13 @@
             "value": true
           }
         ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-17T07:30:40.497155+00:00",
-        "proposal_id": "buy_tier_level:PUB.PA:rebuy_skip:2026-11-17T07:30:40.497155+00:00",
+        "logged_at": "2026-11-18T14:17:13.176874+00:00",
+        "proposal_id": "buy_tier_level:PUB.PA:rebuy_skip:2026-11-18T14:17:13.176874+00:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -4059,36 +4093,21 @@
             "overlay_bound": true,
             "interim_eps_decline_pct": null,
             "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
+          }
         },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
+        "schema_version": 1
       }
     ],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
-    "llm_judge": {
-      "attempted": true,
-      "ok": true,
-      "fallback": null,
-      "llm_card_count": 2
-    },
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-17T07:30:40.497155+00:00",
+      "generated_at": "2026-11-18T14:17:13.176874+00:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "llm",
-      "judge_spec_id": "llm.v1",
-      "parent_spec_id": "heuristic.v1",
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
       "card_count": 2,
       "verdict_counts": {
@@ -4115,10 +4134,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-11-17T07:30:45.323844+00:00",
+  "generated_at": "2026-11-18T14:17:13.349347+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
