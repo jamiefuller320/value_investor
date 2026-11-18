@@ -610,8 +610,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.solvay.com/sites/solvay_solvay/files/2026-05/2026Q1_Financialreport_EN.pdf",
     ],
     # euro_depth critical-path unmeasured — BN.PA / EL.PA (system_gaps thin_memo_counted_as_coverage).
+    # eng-20261118-01: igc-20260922-01 gaps_remain_without_refetch — URD already bodied; add H1 2025
+    # statutory interim so mandatory IR refetch attempts a third filing (thin_memo ≥3 bodies).
     "BN.PA": [
         "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf",
+        "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2025/interimfinancialreport/danoneinterimfinancialreport2025.pdf",
     ],
     "EL.PA": [
         "https://www.essilorluxottica.com/api/getCapContent/?download=true&id=284350",
@@ -6211,6 +6214,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download": "interim",
     # euro_depth thin_memo — opaque issuer CMS/API filenames (system_gaps BN.PA / EL.PA).
     "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf": "annual",
+    # eng-20261118-01: BN.PA danoneinterimfinancialreport2025 slug has no half-year token.
+    "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2025/interimfinancialreport/danoneinterimfinancialreport2025.pdf": "interim",
     "https://www.essilorluxottica.com/api/getCapContent/?download=true&id=284350": "annual",
     # eng-20260930-03: opaque HKEX listconews slugs for hang_seng IR allowlist seeds.
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042400680.pdf": "annual",
