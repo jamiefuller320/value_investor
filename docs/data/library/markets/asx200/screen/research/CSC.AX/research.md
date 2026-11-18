@@ -1,6 +1,6 @@
 # Capstone Copper Corp. (CSC.AX) — Research memo
 
-_Version 7 · Updated 2026-11-18T21:37:08.196537+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-18T23:39:52.251529+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.57
-Rationale: 18 Nov 21:36 news batch empty; Q3 EBITDA strength, low-end output guidance and interim filing gaps unchanged—research stays neutral on the screen hold signal.
+Rationale: 18 Nov 23:39 news batch empty; Q3 EBITDA strength, low-end output guidance and interim filing gaps unchanged—research stays neutral on the screen hold signal.
 RiskTags: cyclical, regulatory, leverage, liquidity, litigation, other
 
 ## Weekly updates
@@ -41,5 +41,10 @@ Screen hold is unchanged; primary interim financial disclosure gaps in the pack 
 
 ### 2026-11-18T21:37:08.196537+00:00
 No new articles in the 18 Nov 21:36 incremental news batch since the 17:51 refresh.  
+Q3 record adjusted-EBITDA, low-end 2026 production guidance, and an unsubstantiated Cozamin divestiture close in indexed filing bodies remain the active narrative.  
+Screen hold is unchanged; primary interim financial disclosure gaps in the pack persist.
+
+### 2026-11-18T23:39:52.251529+00:00
+No new articles in the 18 Nov 23:39 incremental news batch since the 21:37 refresh.  
 Q3 record adjusted-EBITDA, low-end 2026 production guidance, and an unsubstantiated Cozamin divestiture close in indexed filing bodies remain the active narrative.  
 Screen hold is unchanged; primary interim financial disclosure gaps in the pack persist.

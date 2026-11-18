@@ -1,6 +1,6 @@
 # Cummins Inc. (CMI) — Research memo
 
-_Version 7 · Updated 2026-11-18T21:36:01.520755+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-18T23:39:19.275727+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -42,4 +42,9 @@ Peer Eaton and Caterpillar pricing articles are not company-specific; prior Morg
 ### 2026-11-18T21:36:01.520755+00:00
 The 21:35 UTC news batch adds no articles since the 17:50 UTC refresh.
 Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.2bn; the screen remains a buy.
+Prior First Eagle sale, Morgan Stanley target, and Q3 follow-through headlines are unchanged; filing risk themes are unchanged.
+
+### 2026-11-18T23:39:19.275727+00:00
+The 23:38 UTC news batch adds no articles since the 21:36 UTC refresh.  
+Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.2bn; the screen remains a buy.  
 Prior First Eagle sale, Morgan Stanley target, and Q3 follow-through headlines are unchanged; filing risk themes are unchanged.

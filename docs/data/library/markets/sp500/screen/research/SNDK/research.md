@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 10 · Updated 2026-11-18T21:42:41.230885+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-18T23:45:41.721082+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -46,3 +46,6 @@ No material change.
 ### 2026-11-18T21:42:41.230885+00:00
 Press reports another ~3.3% share fall on 18 November, still framed around NAND cycle anxiety ahead of the 19 November split.
 Commentary favours SK Hynix over Micron and Sandisk for 2027; the batch adds no new SNDK filings or company disclosures.
+
+### 2026-11-18T23:45:41.721082+00:00
+No material change.

@@ -1,6 +1,6 @@
 # ASML Holding N.V. (ASML.AS) — Research memo
 
-_Version 7 · Updated 2026-11-18T21:43:23.950685+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-18T23:46:17.493168+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.69
-Rationale: Latest batch adds bullish AI-demand commentary on ASML but choppy post-Nvidia trading; strong sourced cash and earnings and no new filings leave research neutral on the screen buy amid export-rule uncertainty.
+Rationale: No new filings or headlines; strong sourced cash and earnings are unchanged, so research stays neutral on the screen buy amid enduring export-rule and cycle risk.
 RiskTags: regulatory, cyclical, customer_concentration, competitive
 
 ## Weekly updates
@@ -42,4 +42,9 @@ Indexed FCF and quarterly earnings in sources remain strong; the quantitative sc
 ### 2026-11-18T21:43:23.950685+00:00
 Since 17:54 UTC, two headlines cite firmer AI-trade sentiment naming ASML as a buy despite supply-chain noise, alongside choppy global equities after Nvidia results.  
 No new company filings or revisions appear in the supplied library pack; macro and screening inputs are unchanged.  
+Indexed FCF and quarterly earnings in sources remain strong; the quantitative screen buy signal is unchanged.
+
+### 2026-11-18T23:46:17.493168+00:00
+The 23:46 UTC news batch adds no articles since the 21:43 UTC run; regulatory and sentiment headlines in the library are unchanged.  
+No new company filings or revisions appear in the supplied source pack; macro and screening inputs are unchanged.  
 Indexed FCF and quarterly earnings in sources remain strong; the quantitative screen buy signal is unchanged.

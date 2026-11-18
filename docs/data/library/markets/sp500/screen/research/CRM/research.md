@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 8 · Updated 2026-11-18T21:36:24.491403+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-18T23:39:30.933567+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: Filed cash generation still supports the Strong Buy screen, but further unverified workforce cuts and AI-sector selling weaken near-term conviction pending issuer disclosure.
+Rationale: Filed cash generation still supports the Strong Buy screen, but sector-led AI scepticism and unverified layoff reports weaken near-term conviction pending issuer disclosure.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -47,3 +47,8 @@ No new primary filings in the supplied pack; filing-backed FCF and prior leverag
 Follow-on 18 Nov coverage repeats a ~9.5% drop and another reported workforce reduction after the rout, linked to OpenAI model fears and per-seat software pricing.  
 No new primary filings; filing-backed FCF (~$14.4bn) and Strong Buy screen inputs are unchanged.  
 Leverage and competitive AI themes are unchanged; issuer-confirmed layoff scale remains unknown.
+
+### 2026-11-18T23:39:30.933567+00:00
+Late 18 Nov coverage only repeats reported workforce cuts (Barchart) and Anthropic IPO-led AI-sector scepticism; no company-specific filing news.
+Filing-backed FY26 free cash flow (~$14.4bn) and the Strong Buy screen are unchanged in the supplied sources.
+Leverage and competitive AI themes are unchanged; layoff scale remains unverified in primary filings.
