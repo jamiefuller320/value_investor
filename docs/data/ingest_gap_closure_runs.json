@@ -27682,8 +27682,119 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261118-01",
+      "status": "pending_review",
+      "title": "Library ingest gap-closure rerun after engineering",
+      "summary": "Verification rerun for gap-closure run igc-20260922-01",
+      "ticker": "BN.PA",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "BN.PA"
+        ],
+        "market_id": "euro_depth",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260922-01",
+      "chain_attempt": 2,
+      "recorded_at": "2026-11-18T07:49:52.818345+00:00",
+      "completed_at": "2026-11-18T07:52:14.314816+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "BN.PA"
+        ],
+        "results": [
+          {
+            "ticker": "BN.PA",
+            "reason": "thin_bodies",
+            "before": {
+              "filings_total": 2,
+              "filings_with_body": 2,
+              "indexed_without_body": 0
+            },
+            "after": {
+              "filings_total": 9,
+              "filings_with_body": 9,
+              "indexed_without_body": 0
+            },
+            "improved": true,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 9,
+              "annual": 2,
+              "interim": 4,
+              "trading_update": 2,
+              "other": 1,
+              "with_body": 9,
+              "period_coverage": {
+                "annual": {
+                  "total": 2,
+                  "with_body": 2
+                },
+                "interim": {
+                  "total": 4,
+                  "with_body": 4
+                },
+                "trading_update": {
+                  "total": 2,
+                  "with_body": 2
+                },
+                "other": {
+                  "total": 1,
+                  "with_body": 1
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 9,
+              "with_body_after": 9,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "retry_cleared": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 2,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "BN.PA",
+            "with_body_before": 2,
+            "with_body_after": 9,
+            "improved": true
+          }
+        ]
+      },
+      "trigger": "verification_rerun",
+      "parent_run_id": "igc-20260922-01"
     }
   ],
-  "updated_at": "2026-11-17T16:47:46.097073+00:00",
+  "updated_at": "2026-11-18T07:52:14.314825+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
