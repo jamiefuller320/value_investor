@@ -1,6 +1,6 @@
 # Voestalpine AG (VOE.VI) — Research memo
 
-_Version 4 · Updated 2026-11-18T00:10:29.958333+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-18T03:18:23.119066+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: No new headlines since 17 Nov; FY2025/26 filings still back value and lower net debt, while Sep-2026 EPS 0.55 and negative quarterly FCF only partly confirm the unchanged buy screen.
+Rationale: 18 Nov news batch adds no Voestalpine headlines; FY2025/26 filings still back value and lower net debt, while Sep-2026 EPS 0.55 and −€204.5m quarterly FCF only partly confirm the unchanged buy screen.
 RiskTags: cyclical, regulatory, leverage, competitive
 
 ## Weekly updates
@@ -27,4 +27,9 @@ The screen still shows **buy**, with Sep-2026 EPS 0.55 and negative quarterly FC
 ### 2026-11-18T00:10:29.958333+00:00
 18 Nov news batch is empty since the 17 Nov evening refresh; no Voestalpine-specific headlines.  
 Filings pack is unchanged (FY2025/26 annual report and ESEF still the latest set).  
+Screen still shows **buy**, with Sep-2026 diluted EPS 0.55 and quarterly free cash flow about −€204.5m.
+
+### 2026-11-18T03:18:23.119066+00:00
+03:17 UTC news batch since the midnight refresh is empty; no Voestalpine-specific headlines.  
+Filings pack unchanged (FY2025/26 annual report and ESEF still the latest set).  
 Screen still shows **buy**, with Sep-2026 diluted EPS 0.55 and quarterly free cash flow about −€204.5m.

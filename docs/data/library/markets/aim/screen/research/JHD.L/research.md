@@ -1,6 +1,6 @@
 # James Halstead plc (JHD.L) — Research memo
 
-_Version 4 · Updated 2026-11-18T00:09:17.570312+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-18T03:16:22.157094+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -26,3 +26,8 @@ No material change.
 No material change: the 18 Nov news batch since last refresh is empty and no new James Halstead RNS appears in the pack.  
 Indexed FY26 disclosures unchanged—operating cash £49.1m, 8.95p total dividend and PBT £48.2m after the Oct results cycle.  
 The buy screen signal is unchanged while on-file profit pressure still limits conviction versus cash and yield support.
+
+### 2026-11-18T03:16:22.157094+00:00
+News batch since the 00:09 refresh is empty; no new James Halstead RNS in the pack.  
+On-file FY26 metrics unchanged—operating cash £49.1m, PBT £48.2m and 8.95p total dividend after the Oct results cycle.  
+Buy screen unchanged; research still neutral on profit pressure versus cash and yield support.

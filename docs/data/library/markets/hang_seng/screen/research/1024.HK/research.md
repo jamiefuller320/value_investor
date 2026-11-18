@@ -1,6 +1,6 @@
 # Kuaishou Technology (1024.HK) — Research memo
 
-_Version 5 · Updated 2026-11-17T23:59:14.151736+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-18T03:06:02.246428+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.57
-Rationale: Empty incremental news and unchanged softer H1 diluted EPS versus year-earlier quarters, with quarterly cash flow still unverified, continue to weaken the strong-buy case.
+Rationale: No new company news; softer H1 diluted EPS versus year-earlier quarters and unverified quarterly cash flow continue to weaken the strong-buy case.
 RiskTags: regulatory, competitive, leverage, key_person, other
 
 ## Weekly updates
@@ -33,3 +33,8 @@ HKEX index refreshed with no new in-window results announcements.
 No material change: the 23:58 UTC news batch since the evening refresh returned zero Kuaishou articles.  
 Yahoo pack unchanged—H1 2026 diluted EPS still 0.66–0.72 vs 1.02–1.13 year-earlier quarters; FY2025 FCF ~¥11.8bn; quarterly cash flow still empty (TTM cash suppressed).  
 HKEX filing index refreshed at 23:59 UTC with no new in-window results announcements.
+
+### 2026-11-18T03:06:02.246428+00:00
+No material change: the 03:05 UTC news batch since the 23:59 refresh returned zero Kuaishou articles.  
+Yahoo pack refreshed at 03:05 UTC—H1 2026 diluted EPS still 0.66–0.72 vs 1.02–1.13 year-earlier; FY2025 FCF ~¥11.8bn; quarterly cash flow still empty (TTM cash suppressed).  
+HKEX filing index refreshed with no new in-window results; structured annual “year in numbers” extract is still empty.
