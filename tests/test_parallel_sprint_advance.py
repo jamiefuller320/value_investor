@@ -288,6 +288,10 @@ def test_reseed_empty_parallel_sprint_slots_fills_queue_order(tmp_path: Path):
     assert events[0]["screen_refresh"]["refreshed"] is True
     assert saved["ingest_parallel_sprint"] == ["asx200"]
     assert saved["ingest_parallel_sprint_2"] == []
+    assert events[0]["gap_market_id"] == "asx200"
+    assert "gaps_before" in events[0]
+    assert "gaps_after" in events[0]
+    assert "gap_delta" in events[0]
 
 
 def test_reseed_fills_stream_two_when_two_markets_need_sprint(tmp_path: Path):

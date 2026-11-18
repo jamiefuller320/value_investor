@@ -32,8 +32,11 @@ from value_investor.library_ingest_dispatch import (
     sprint_ingest_complete,
 )
 from value_investor.library_ingest_escalation import (
+    SPARE_SPRINT_GAP_WINDOW_DAYS,
+    filing_gap_counts,
     ftse_equivalent_markets,
     resolve_library_ingest_health_log_path,
+    spare_sprint_gap_rollup,
 )
 from value_investor.library_learning_depth import (
     TRAJECTORY_READY_MIN_SPAN_WEEKS,
@@ -64,7 +67,7 @@ BUY_TIER_LEVEL_NATIVE_TRACK = "buy_tier_level_native"
 BUY_TIER_LEVEL_DCA_MARKET_BRANCH = "buy_tier_level_dca_market"
 GBP_FX_WARPED_BRANCH = "buy_tier_level_gbp_fx_warped"
 EXPECTED_ADMITTED_BLOCKER_NEEDLE = "weekly_paper_shard_markets"
-SPRINT_PROGRESS_WINDOW_DAYS = 2
+SPRINT_PROGRESS_WINDOW_DAYS = SPARE_SPRINT_GAP_WINDOW_DAYS
 STALE_SCREEN_AFTER_DAYS = 8
 
 ROLE_LIVE = "live"
@@ -355,6 +358,7 @@ def _classify_ingest(
     sprint_streams: dict[str, int],
     dispatch_mode: str | None,
     parallel_should_run: bool | None = None,
+    spare_gaps_open: bool = False,
 ) -> tuple[str, int | None]:
     if market_id == LIVE_MARKET_ID:
         return INGEST_LIVE, None
@@ -367,9 +371,11 @@ def _classify_ingest(
             return INGEST_MAINTENANCE, None
     if market_id in sprint_markets or market_id in sprint_streams:
         # A spare whose dispatch row says should_run_parallel_ingest false is
-        # not a sprint. Missing or true keeps the sprint badge (sp500 stays
-        # sprint while indexed-without-body names remain).
-        if market_id != focus and parallel_should_run is False:
+        # not a sprint once its cached filing health is actually complete.
+        # Missing health, or health that still has indexed-without-body / thin /
+        # zero-body gaps, keeps the sprint tile so the 2-day rollup is recorded
+        # (a stale dispatch row must not blank stream 1).
+        if market_id != focus and parallel_should_run is False and not spare_gaps_open:
             return INGEST_MAINTENANCE, None
         stream = sprint_streams.get(market_id)
         if market_id == focus:
@@ -878,20 +884,19 @@ def _parse_iso_dt(value: Any) -> datetime | None:
 
 
 def _gap_counts(health: Any) -> dict[str, int]:
-    row = _as_dict(health)
-    unmeasured = _int(row.get("unmeasured_buy_tier"))
-    zero_body = _int(row.get("zero_body_buy_tier"))
-    return {
-        "unmeasured": unmeasured,
-        "zero_body": zero_body,
-        "thin": _int(row.get("thin_body_buy_tier")),
-        "indexed_without_body": _int(row.get("indexed_without_body")),
-        "filing_gaps": unmeasured + zero_body,
-    }
+    return filing_gap_counts(health)
 
 
-def _gap_delta(before: dict[str, int], after: dict[str, int]) -> dict[str, int]:
-    return {key: _int(after.get(key)) - _int(before.get(key)) for key in after}
+def _latest_logged_filing_health(library_root: Path, market_id: str) -> dict[str, Any] | None:
+    """Last health-log ``health_after`` when the dispatch row has not caught up."""
+    latest: dict[str, Any] | None = None
+    for row in _load_ingest_health_entries(library_root, market_id):
+        health = _as_dict(row.get("health_after"))
+        if health:
+            latest = health
+    if not latest:
+        return None
+    return _slim_filing_health(latest)
 
 
 def _admission_warning(
@@ -960,12 +965,19 @@ def _sprint_progress(
                 improved_tickers.append(name)
     cutoff_runs = sum(1 for row in window if row.get("runtime_cutoff") or row.get("partial"))
     error_runs = sum(1 for row in window if _as_list(row.get("errors")))
-    first = window[0] if window else None
     last = window[-1] if window else None
-    remaining = _gap_counts(filing_health or (last.get("health_after") if last else None))
-    gaps_before = _gap_counts(first.get("health_before") if first else remaining)
-    gaps_after = _gap_counts((last.get("health_after") if last else None) or remaining)
-    delta = _gap_delta(gaps_before, gaps_after)
+    rollup = spare_sprint_gap_rollup(
+        market_id,
+        library_root=library_root,
+        fallback_health=_as_dict(filing_health) or None,
+        now=as_of,
+    )
+    gaps_before = rollup["gaps_before"]
+    gaps_after = rollup["gaps_after"]
+    delta = rollup["gap_delta"]
+    remaining = _gap_counts(
+        filing_health or (last.get("health_after") if last else None) or gaps_after
+    )
     gate_health = dict(_as_dict(filing_health))
     if ingest_exhausted:
         gate_health["ingest_exhausted"] = True
@@ -1532,6 +1544,14 @@ def build_market_status(
             parallel_should_run: bool | None = bool(dispatch_row.get("should_run_parallel_ingest"))
         else:
             parallel_should_run = None
+        cached_filing_health = _as_dict(dispatch_row.get("filing_health"))
+        # A cached should_run=false with no health, or with gaps still open,
+        # must not drop the spare tile. Complete health keeps the maintenance badge.
+        spare_gaps_open = False
+        if market_id in sprint_streams and market_id != focus and parallel_should_run is False:
+            spare_gaps_open = not cached_filing_health or not sprint_ingest_complete(
+                cached_filing_health
+            )
         ingest, stream = _classify_ingest(
             market_id,
             focus=focus,
@@ -1542,6 +1562,7 @@ def build_market_status(
             sprint_streams=sprint_streams,
             dispatch_mode=str(dispatch.get("mode") or "") if market_id == focus else None,
             parallel_should_run=parallel_should_run,
+            spare_gaps_open=spare_gaps_open,
         )
         role = _classify_role(
             market_id,
@@ -1616,6 +1637,8 @@ def build_market_status(
             live_ingest_stalled=live_ingest_stalled and market_id == LIVE_MARKET_ID,
         )
         filing_health = dispatch_row.get("filing_health")
+        if not filing_health and market_id in sprint_streams and market_id != focus:
+            filing_health = _latest_logged_filing_health(library_root, market_id)
         ingest_exhausted = bool(
             dispatch_row.get("ingest_exhausted")
             or _as_dict(filing_health).get("ingest_exhausted")

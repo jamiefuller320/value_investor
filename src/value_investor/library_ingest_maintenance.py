@@ -28,6 +28,7 @@ from value_investor.library_ingest_dispatch import (
 from value_investor.library_ingest_escalation import (
     is_ftse_equivalent_market,
     snapshot_library_buy_tier_filing_health,
+    spare_sprint_gap_rollup,
 )
 from value_investor.library_ingest_loop import (
     LibraryIngestLoopResult,
@@ -441,6 +442,21 @@ def _record_parallel_parity_for_maintenance(
     )
 
 
+def _spare_handoff_gap_fields(
+    market_id: str,
+    *,
+    library_root: Path,
+    health_after: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Gap counts for one spare-stream handoff, same shape as the sprint tile."""
+    rollup = spare_sprint_gap_rollup(
+        market_id,
+        library_root=library_root,
+        health_after=health_after if isinstance(health_after, dict) else None,
+    )
+    return {"gap_market_id": market_id, **rollup}
+
+
 def maybe_advance_parallel_sprint_on_parity(
     *,
     market_id: str,
@@ -514,6 +530,7 @@ def maybe_advance_parallel_sprint_on_parity(
         "to_market": nxt,
         "stream_markets_after": list(stream_after),
         "ingest_parity_recorded": bool(parity_event.get("recorded")),
+        **_spare_handoff_gap_fields(market_id, library_root=library_root, health_after=health),
     }
     history.append(event_row)
     policy["parallel_sprint_graduation"] = {
@@ -587,6 +604,11 @@ def reseed_empty_parallel_sprint_slots(
             to_market=nxt,
         )
         changed = True
+        seated_health = snapshot_library_buy_tier_filing_health(
+            nxt,
+            library_root=library_root,
+            policy=policy,
+        )
         event_row: dict[str, Any] = {
             "reseeded": True,
             "market_queue_appended": queue_appended,
@@ -596,6 +618,11 @@ def reseed_empty_parallel_sprint_slots(
             "to_market": nxt,
             "stream_markets_after": list(stream_after),
             "ingest_parity_recorded": False,
+            **_spare_handoff_gap_fields(
+                nxt,
+                library_root=library_root,
+                health_after=seated_health,
+            ),
         }
         history = list((policy.get("parallel_sprint_graduation") or {}).get("history") or [])
         history.append(event_row)
