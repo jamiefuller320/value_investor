@@ -40,6 +40,87 @@ def test_exhausted_focus_is_not_labeled_sprint() -> None:
     assert still_sprint == INGEST_SPRINT
 
 
+def test_spare_should_run_false_is_not_a_sprint_badge() -> None:
+    released, stream = _classify_ingest(
+        "sp500",
+        focus="euro_depth",
+        graduated={"sp500"},
+        queue=set(),
+        sprint_markets={"sp500"},
+        maintenance_markets=set(),
+        sprint_streams={"sp500": 2},
+        dispatch_mode=None,
+        parallel_should_run=False,
+    )
+    assert released == INGEST_MAINTENANCE
+    assert stream is None
+
+    running, running_stream = _classify_ingest(
+        "sp500",
+        focus="euro_depth",
+        graduated={"sp500"},
+        queue=set(),
+        sprint_markets={"sp500"},
+        maintenance_markets=set(),
+        sprint_streams={"sp500": 2},
+        dispatch_mode=None,
+        parallel_should_run=True,
+    )
+    assert running == INGEST_SPRINT
+    assert running_stream == 2
+
+
+def test_spare_should_run_reads_stream_2() -> None:
+    stream2 = build_ingest_occupancy(
+        dispatch={
+            "mode": "exhausted",
+            "focus_market": "euro_depth",
+            "should_run_sprint_ingest": False,
+            "ingest_cascade": {"head_needs_fat_slot": False},
+            "parallel_sprint_markets": [],
+            "parallel_sprint_status": [],
+            "parallel_sprint_2_markets": ["sp500"],
+            "parallel_sprint_2_status": [
+                {"market_id": "sp500", "should_run_parallel_ingest": True}
+            ],
+        },
+        market_status={"markets": []},
+        pack_run={},
+        tasks={"tasks": []},
+    )
+    assert stream2["spare_should_run_parallel_ingest"] is True
+
+    stopped = build_ingest_occupancy(
+        dispatch={
+            "mode": "exhausted",
+            "focus_market": "euro_depth",
+            "ingest_cascade": {"head_needs_fat_slot": False},
+            "parallel_sprint_2_markets": ["sp500"],
+            "parallel_sprint_2_status": [
+                {"market_id": "sp500", "should_run_parallel_ingest": False}
+            ],
+        },
+        market_status={"markets": []},
+        pack_run={},
+        tasks={"tasks": []},
+    )
+    assert stopped["spare_should_run_parallel_ingest"] is False
+
+    missing = build_ingest_occupancy(
+        dispatch={
+            "mode": "exhausted",
+            "focus_market": "euro_depth",
+            "ingest_cascade": {"head_needs_fat_slot": False},
+            "parallel_sprint_markets": [],
+            "parallel_sprint_2_markets": ["sp500"],
+        },
+        market_status={"markets": []},
+        pack_run={},
+        tasks={"tasks": []},
+    )
+    assert missing["spare_should_run_parallel_ingest"] is None
+
+
 def _row(*, badge: str, bit: bool) -> dict:
     return build_ingest_occupancy(
         dispatch={

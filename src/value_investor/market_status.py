@@ -266,6 +266,10 @@ def _filing_health_index(dispatch: dict[str, Any]) -> dict[str, dict[str, Any]]:
                 "current_phase": _optional_int(row.get("current_phase")),
                 "next_phase": _optional_int(row.get("next_phase")),
             }
+            if "should_run_parallel_ingest" in row:
+                indexed[market_id]["should_run_parallel_ingest"] = bool(
+                    row.get("should_run_parallel_ingest")
+                )
     return indexed
 
 
@@ -350,6 +354,7 @@ def _classify_ingest(
     maintenance_markets: set[str],
     sprint_streams: dict[str, int],
     dispatch_mode: str | None,
+    parallel_should_run: bool | None = None,
 ) -> tuple[str, int | None]:
     if market_id == LIVE_MARKET_ID:
         return INGEST_LIVE, None
@@ -361,6 +366,11 @@ def _classify_ingest(
         if mode in {MODE_EXHAUSTED, INGEST_MAINTENANCE}:
             return INGEST_MAINTENANCE, None
     if market_id in sprint_markets or market_id in sprint_streams:
+        # A spare whose dispatch row says should_run_parallel_ingest false is
+        # not a sprint. Missing or true keeps the sprint badge (sp500 stays
+        # sprint while indexed-without-body names remain).
+        if market_id != focus and parallel_should_run is False:
+            return INGEST_MAINTENANCE, None
         stream = sprint_streams.get(market_id)
         if market_id == focus:
             stream = None
@@ -1518,6 +1528,10 @@ def build_market_status(
         )
         dispatch_row = health_by_market.get(market_id) or {}
         cached_phase = _slim_phase(phases_by_market.get(market_id))
+        if "should_run_parallel_ingest" in dispatch_row:
+            parallel_should_run: bool | None = bool(dispatch_row.get("should_run_parallel_ingest"))
+        else:
+            parallel_should_run = None
         ingest, stream = _classify_ingest(
             market_id,
             focus=focus,
@@ -1527,6 +1541,7 @@ def build_market_status(
             maintenance_markets=maintenance_markets,
             sprint_streams=sprint_streams,
             dispatch_mode=str(dispatch.get("mode") or "") if market_id == focus else None,
+            parallel_should_run=parallel_should_run,
         )
         role = _classify_role(
             market_id,
