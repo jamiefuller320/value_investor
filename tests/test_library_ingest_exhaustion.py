@@ -542,12 +542,119 @@ def test_maybe_advance_on_exhaustion_vacates_and_records_maintenance(tmp_path: P
 
     assert event["advanced"] is True
     assert event["to_market"] == "ftse_smallcap"
+    assert event["gap_market_id"] == "sp500"
+    assert event["gaps_after"]["indexed_without_body"] == int(
+        exhausted.get("indexed_without_body") or 0
+    )
+    assert event["gaps_after"]["thin"] == int(exhausted.get("thin_body_buy_tier") or 0)
+    assert event["gaps_after"]["zero_body"] == int(exhausted.get("zero_body_buy_tier") or 0)
+    assert event["gap_delta"]["indexed_without_body"] == (
+        event["gaps_after"]["indexed_without_body"] - event["gaps_before"]["indexed_without_body"]
+    )
     assert event["parity_event"]["reason"] == "ingest_exhausted_leftover_gaps"
     assert event["parity_event"]["recorded"] is False
     assert event["parity_event"]["exhausted_maintenance_recorded"] is True
     assert "sp500" not in saved["ingest_parity_markets"]
     assert saved["ingest_exhausted_markets"] == ["sp500"]
     assert saved["ingest_parallel_sprint"] == ["ftse_smallcap"]
+    history = saved["parallel_sprint_graduation"]["history"]
+    assert history[-1]["gap_market_id"] == "sp500"
+    assert history[-1]["gaps_after"]["zero_body"] == event["gaps_after"]["zero_body"]
+
+
+def test_exhaustion_handoff_records_health_log_movement(tmp_path: Path):
+    """Spare handoffs keep the sprint-tile before/after counts, not only a flag."""
+    from datetime import UTC, datetime
+
+    policy = {
+        "focus_market": "euro_depth",
+        "market_queue": ["sp500", "asx200", "ftse_smallcap"],
+        "ingest_parallel_sprint": ["sp500"],
+        "ingest_parallel_sprint_2": ["asx200"],
+        "ingest_parity_markets": ["euro_depth"],
+        "ftse_equivalent_markets": ["sp500"],
+        "focus_graduation": {"advance_parallel_sprint_on_ingest_parity": True},
+    }
+    exhausted = overlay_exhaustion_on_health(
+        _health(zero_body=0, thin=0, iwb=9),
+        {"exhausted": True, "parked": [{"ticker": "FICO"}]},
+    )
+    sprint_health = _health(unmeasured=2, unmeasured_tickers=["AAA"])
+    saved: dict = {}
+    now = datetime.now(UTC)
+    write_json(
+        tmp_path / "markets" / "sp500" / "ingest_health_log.json",
+        {
+            "entries": [
+                {
+                    "run_at": now.isoformat(),
+                    "market_id": "sp500",
+                    "health_before": _health(zero_body=1, thin=2, iwb=24),
+                    "health_after": _health(iwb=9),
+                    "targets": 6,
+                    "improved": 5,
+                }
+            ]
+        },
+    )
+
+    def _health_for(market_id: str, **_kwargs):
+        if market_id == "sp500":
+            return exhausted
+        return sprint_health
+
+    with (
+        patch(
+            "value_investor.library_ingest_maintenance.load_policy",
+            return_value=dict(policy),
+        ),
+        patch(
+            "value_investor.library_ingest_maintenance.save_policy",
+            side_effect=lambda updated, _path: saved.update(updated),
+        ),
+        patch(
+            "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
+            side_effect=_health_for,
+        ),
+        patch(
+            "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
+            return_value={},
+        ),
+        patch(
+            "value_investor.library_ingest_maintenance.refresh_buy_tier_screen_for_sprint_entry",
+            return_value={"refreshed": True, "market_id": "ftse_smallcap"},
+        ),
+    ):
+        event = maybe_advance_parallel_sprint_on_parity(
+            market_id="sp500",
+            library_root=tmp_path,
+            policy_path=tmp_path / "policy.json",
+            health=exhausted,
+        )
+
+    assert event["to_market"] == "ftse_smallcap"
+    assert event["ingest_parity_recorded"] is False
+    assert event["gap_market_id"] == "sp500"
+    assert event["window_days"] == 2
+    assert event["gaps_before"] == {
+        "unmeasured": 0,
+        "zero_body": 1,
+        "thin": 2,
+        "indexed_without_body": 24,
+        "filing_gaps": 1,
+    }
+    assert event["gaps_after"]["indexed_without_body"] == int(
+        exhausted.get("indexed_without_body") or 0
+    )
+    assert event["gaps_after"]["thin"] == int(exhausted.get("thin_body_buy_tier") or 0)
+    assert event["gaps_after"]["zero_body"] == 0
+    assert event["gap_delta"]["indexed_without_body"] == (
+        event["gaps_after"]["indexed_without_body"] - 24
+    )
+    assert event["gap_delta"]["thin"] == event["gaps_after"]["thin"] - 2
+    assert event["gap_delta"]["zero_body"] == -1
+    assert saved["ingest_parallel_sprint"] == ["ftse_smallcap"]
+    assert "sp400" not in saved.get("market_queue", [])
 
 
 def test_outstanding_gap_closure_ignores_parked_iwb():

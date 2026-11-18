@@ -1023,6 +1023,120 @@ def test_sprint_tiles_include_two_day_ingest_and_admission_flags(tmp_path: Path)
     } >= {"no_ingest_in_window"}
 
 
+def test_stream1_tile_keeps_gap_counts_when_dispatch_lags(tmp_path: Path):
+    """Policy-seated stream 1 still gets the sprint-tile rollup if dispatch is stale."""
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ingest_parallel_sprint"] = ["ftse_smallcap"]
+    policy["ingest_parallel_sprint_2"] = ["sp500"]
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["sprint_markets"] = ["euro_depth"]
+    dispatch["parallel_sprint_markets"] = []
+    dispatch["parallel_sprint_status"] = []
+    dispatch["parallel_sprint_2_markets"] = ["sp500"]
+    dispatch["parallel_sprint_2_status"] = [
+        {
+            "market_id": "sp500",
+            "mode": "sprint",
+            "ingest_parity_met": False,
+            "ingest_exhausted": False,
+            "filing_gaps": 0,
+            "should_run_parallel_ingest": True,
+            "filing_health": _health_snapshot(unmeasured=0, zero_body=0, thin=0, iwb=9),
+        }
+    ]
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+    write_json(
+        library / "markets" / "ftse_smallcap" / "ingest_health_log.json",
+        {
+            "entries": [
+                {
+                    "run_at": "2026-11-17T16:00:00+00:00",
+                    "market_id": "ftse_smallcap",
+                    "health_before": _health_snapshot(unmeasured=0, zero_body=2, thin=3, iwb=11),
+                    "health_after": _health_snapshot(unmeasured=0, zero_body=0, thin=1, iwb=4),
+                    "targets": 4,
+                    "improved": 3,
+                    "errors": [],
+                }
+            ]
+        },
+        compact=False,
+    )
+
+    now = datetime(2026, 11, 18, 8, 0, tzinfo=UTC)
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        **_status_roots(tmp_path),
+        live_signal_counts={"hold": 1},
+        now=now,
+    )
+    assert payload["summary"]["spare_sprint"]["1"] == "ftse_smallcap"
+    assert payload["summary"]["spare_sprint"]["2"] == "sp500"
+    small = _by_id(payload, "ftse_smallcap")
+    assert small["ingest"] == INGEST_SPRINT
+    assert small["ingest_stream"] == 1
+    assert small["filing_health"]["indexed_without_body"] == 4
+    assert small["filing_health"]["thin_body_buy_tier"] == 1
+    assert small["filing_health"]["zero_body_buy_tier"] == 0
+    progress = small["sprint_progress"]
+    assert progress["gaps_before"]["indexed_without_body"] == 11
+    assert progress["gaps_before"]["thin"] == 3
+    assert progress["gaps_before"]["zero_body"] == 2
+    assert progress["gaps_after"]["indexed_without_body"] == 4
+    assert progress["gaps_after"]["thin"] == 1
+    assert progress["gaps_after"]["zero_body"] == 0
+    assert progress["gap_delta"]["indexed_without_body"] == -7
+    assert progress["gap_delta"]["thin"] == -2
+    assert progress["gap_delta"]["zero_body"] == -2
+    sp500 = _by_id(payload, "sp500")
+    assert sp500["ingest_stream"] == 2
+    assert sp500["sprint_progress"]["remaining"]["indexed_without_body"] == 9
+
+
+def test_stale_should_run_false_keeps_stream_tile_while_gaps_remain(tmp_path: Path):
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ingest_parallel_sprint"] = ["ftse_smallcap"]
+    policy["ingest_parallel_sprint_2"] = []
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["parallel_sprint_markets"] = ["ftse_smallcap"]
+    dispatch["parallel_sprint_2_markets"] = []
+    dispatch["parallel_sprint_status"] = [
+        {
+            "market_id": "ftse_smallcap",
+            "mode": "maintenance",
+            "ingest_parity_met": False,
+            "ingest_exhausted": False,
+            "should_run_parallel_ingest": False,
+            "filing_gaps": 0,
+            "filing_health": _health_snapshot(unmeasured=0, zero_body=0, thin=1, iwb=4),
+        }
+    ]
+    dispatch["parallel_sprint_2_status"] = []
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        **_status_roots(tmp_path),
+        live_signal_counts={"hold": 1},
+        now=datetime(2026, 11, 18, 8, 0, tzinfo=UTC),
+    )
+    small = _by_id(payload, "ftse_smallcap")
+    assert small["ingest"] == INGEST_SPRINT
+    assert small["ingest_stream"] == 1
+    assert small["sprint_progress"]["gaps_after"]["indexed_without_body"] == 4
+    assert small["sprint_progress"]["gaps_after"]["thin"] == 1
+    assert small["filing_health"]["zero_body_buy_tier"] == 0
+
+
 def test_day0_sprint_entry_uses_awaiting_first_ingest_flag(tmp_path: Path):
     """Freshly seated spare streams should not raise high-severity no-ingest."""
     library = _seed_library(tmp_path / "library")

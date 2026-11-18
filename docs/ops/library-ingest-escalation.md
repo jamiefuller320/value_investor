@@ -192,7 +192,13 @@ Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, defaul
 thin/IWB ingest is exhausted** (parked after 3 complete 0-improve runs). When both
 stream lists are empty but a queue name regaps, `reseed_empty_parallel_sprint_slots`
 (reconcile + dispatch refresh) assigns the next needing markets in queue order so
-rotation and handoffs resume without manual policy edits. When the committed
+rotation and handoffs resume without manual policy edits. Each advance and reseed
+stores `gap_market_id`, `gaps_before`, `gaps_after`, and `gap_delta` (unmeasured,
+zero-body, thin, indexed-without-body) on `parallel_sprint_graduation.history`,
+using the same 2-day health-log window as the spare sprint tile. The tile
+backfills `filing_health` from that log when the cached dispatch row is missing,
+so stream 1 keeps the same before/after counts as stream 2. Who the streams
+seat does not change. When the committed
 ``market_queue`` is sprint-complete, the same picker walks ``DEFAULT_MARKET_QUEUE``
 so spare streams front-start graduated-but-not-yet-admitted markets. Unmeasured
 and zero-body names are never parked. FTSE-equivalent markets

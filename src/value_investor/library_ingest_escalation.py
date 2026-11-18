@@ -8,7 +8,7 @@ by ``market_id`` so later markets can copy the same weekday loop wiring.
 from __future__ import annotations
 
 import logging
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from statistics import median
 from typing import Any
@@ -31,6 +31,8 @@ from value_investor.storage import read_json, write_json
 logger = logging.getLogger(__name__)
 
 DEFAULT_STALL_RUNS = 2
+# Same window the Overview sprint tile uses for gaps_before / gaps_after.
+SPARE_SPRINT_GAP_WINDOW_DAYS = 2
 DEFAULT_FTSE_EQUIVALENT_MARKETS = ("sp500",)
 LIBRARY_INGEST_STALL_SOURCES = frozenset(
     {"library_ingest_stall", "library_ingest_gap_closure", "ingest_gap_closure", "ingest_trial"}
@@ -65,6 +67,115 @@ def library_ingest_health_log_path(library_root: Path, market_id: str) -> Path:
 
 def library_ingest_summary_path(library_root: Path, market_id: str) -> Path:
     return Path(library_root) / "markets" / market_id / "ingest_summary.json"
+
+
+def _gap_int(value: Any) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
+def filing_gap_counts(health: Any) -> dict[str, int]:
+    """Buy-tier filing gap counts in the sprint-tile shape.
+
+    Accepts a filing-health snapshot (``zero_body_buy_tier``) or an already
+    rolled-up dict (``zero_body``). ``filing_gaps`` is unmeasured + zero-body.
+    """
+    row = health if isinstance(health, dict) else {}
+
+    def _n(*names: str) -> int:
+        for name in names:
+            if name not in row or row.get(name) is None:
+                continue
+            return _gap_int(row.get(name))
+        return 0
+
+    unmeasured = _n("unmeasured_buy_tier", "unmeasured")
+    zero_body = _n("zero_body_buy_tier", "zero_body")
+    return {
+        "unmeasured": unmeasured,
+        "zero_body": zero_body,
+        "thin": _n("thin_body_buy_tier", "thin"),
+        "indexed_without_body": _n("indexed_without_body"),
+        "filing_gaps": unmeasured + zero_body,
+    }
+
+
+def _parse_health_run_at(value: Any) -> datetime | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=UTC)
+    return parsed.astimezone(UTC)
+
+
+def _health_log_entries(library_root: Path, market_id: str) -> list[dict[str, Any]]:
+    path = resolve_library_ingest_health_log_path(library_root, market_id)
+    try:
+        payload = read_json(path)
+    except (OSError, ValueError, TypeError):
+        return []
+    if not isinstance(payload, dict):
+        return []
+    return [row for row in payload.get("entries") or [] if isinstance(row, dict)]
+
+
+def spare_sprint_gap_rollup(
+    market_id: str,
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    health_after: dict[str, Any] | None = None,
+    fallback_health: dict[str, Any] | None = None,
+    now: datetime | None = None,
+    window_days: int = SPARE_SPRINT_GAP_WINDOW_DAYS,
+) -> dict[str, Any]:
+    """Before/after filing counts for a spare-stream seat.
+
+    Matches the Overview sprint tile: the first in-window health-log
+    ``health_before`` through the closing snapshot. ``health_after`` is the
+    handoff snapshot when the caller has one; otherwise the last in-window
+    ``health_after`` is used. With no in-window run, before and after are the
+    closing snapshot (delta 0) so an exhaustion handoff still records the
+    indexed-without-body / thin / zero-body counts it parked.
+    """
+    library_root = Path(library_root)
+    as_of = now or datetime.now(UTC)
+    if as_of.tzinfo is None:
+        as_of = as_of.replace(tzinfo=UTC)
+    window_start = as_of - timedelta(days=int(window_days))
+    window: list[dict[str, Any]] = []
+    for row in _health_log_entries(library_root, market_id):
+        run_at = _parse_health_run_at(row.get("run_at"))
+        if run_at is not None and run_at >= window_start:
+            window.append(row)
+    first = window[0] if window else None
+    last = window[-1] if window else None
+    closing = health_after if isinstance(health_after, dict) and health_after else None
+    if closing is None and last is not None and isinstance(last.get("health_after"), dict):
+        if last.get("health_after"):
+            closing = last["health_after"]
+    if closing is None and isinstance(fallback_health, dict) and fallback_health:
+        closing = fallback_health
+    opening: dict[str, Any] | None
+    before_row = first.get("health_before") if first is not None else None
+    if isinstance(before_row, dict) and before_row:
+        opening = before_row
+    else:
+        opening = closing
+    gaps_before = filing_gap_counts(opening)
+    gaps_after = filing_gap_counts(closing)
+    return {
+        "window_days": int(window_days),
+        "gaps_before": gaps_before,
+        "gaps_after": gaps_after,
+        "gap_delta": {key: gaps_after[key] - gaps_before[key] for key in gaps_after},
+    }
 
 
 def resolve_library_ingest_health_log_path(library_root: Path, market_id: str) -> Path:
@@ -704,6 +815,8 @@ __all__ = [
     "compile_library_ingest_engineering_tasks_micro",
     "compile_parked_source_hunter_task",
     "leftover_no_key_body_hunter_candidates",
+    "SPARE_SPRINT_GAP_WINDOW_DAYS",
+    "filing_gap_counts",
     "ftse_equivalent_markets",
     "has_open_library_ingest_task_for_market",
     "is_ftse_equivalent_market",
@@ -714,5 +827,6 @@ __all__ = [
     "library_ingest_ticker_has_gaps",
     "resolve_library_ingest_health_log_path",
     "snapshot_library_buy_tier_filing_health",
+    "spare_sprint_gap_rollup",
     "snapshot_library_ingest_health",
 ]
