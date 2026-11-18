@@ -643,6 +643,56 @@ def test_cancel_resolved_workflow_failure_task(tmp_path: Path):
     assert updated["tasks"][0].get("cancelled_policy") == "workflow_recovered"
 
 
+def test_cancel_parked_workflow_permission_when_workflow_recovered(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-20261112-02",
+                        "status": "parked",
+                        "source": "workflow_failure",
+                        "parked_policy": "workflow_permission",
+                        "parked_reason": "PAT Workflows permission",
+                        "evidence": {
+                            "workflow": "library-ingest-sprint-2.yml",
+                            "run_id": "43460958952",
+                        },
+                    },
+                    {
+                        "id": "eng-still-parked",
+                        "status": "parked",
+                        "source": "workflow_failure",
+                        "parked_policy": "no_diff_cap",
+                        "evidence": {
+                            "workflow": "library-ingest-sprint-2.yml",
+                            "run_id": "1",
+                        },
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    cancelled = cancel_resolved_workflow_failure_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        latest_success_by_workflow={
+            "library-ingest-sprint-2.yml": {
+                "id": 44202826917,
+                "created_at": "2026-11-17T23:50:24Z",
+            }
+        },
+    )
+    assert [action.task_id for action in cancelled] == ["eng-20261112-02"]
+    updated = load_engineering_tasks(tasks_path)
+    by_id = {row["id"]: row for row in updated["tasks"]}
+    assert by_id["eng-20261112-02"]["status"] == "cancelled"
+    assert by_id["eng-20261112-02"].get("cancelled_policy") == "workflow_recovered"
+    assert by_id["eng-still-parked"]["status"] == "parked"
+
+
 def test_github_repo_falls_back_to_git_remote(monkeypatch):
     from value_investor import engineering_recovery as er
 

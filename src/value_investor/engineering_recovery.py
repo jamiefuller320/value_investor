@@ -845,15 +845,25 @@ def cancel_resolved_workflow_failure_tasks(
     apply: bool = True,
 ) -> list[RecoveryAction]:
     """
-    Cancel open workflow_failure tasks when the named workflow has succeeded
+    Cancel workflow_failure tasks when the named workflow has succeeded
     after the failure run that minted the task (transient / already-healed).
+
+    Open tasks are cancelled. A parked ``workflow_permission`` row is cancelled
+    the same way: that park is the agent's guess that a workflow push needs a
+    PAT scope, and a later success means the failure no longer needs a push.
     """
     data = load_engineering_tasks(tasks_path)
     cancelled: list[RecoveryAction] = []
     success_cache = dict(latest_success_by_workflow or {})
 
     for row in list(data.get("tasks") or []):
-        if str(row.get("status") or "") != "open":
+        status = str(row.get("status") or "")
+        parked_policy = str(row.get("parked_policy") or "").strip()
+        if status == "open":
+            pass
+        elif status == PARKED_STATUS and parked_policy == PARKED_POLICY_WORKFLOW_PERMISSION:
+            pass
+        else:
             continue
         if str(row.get("source") or "") != "workflow_failure":
             continue
@@ -912,7 +922,7 @@ def cancel_resolved_workflow_failure_tasks(
             task_id=task_id,
             action="cancel_resolved_workflow_failure",
             reason=reason,
-            from_status="open",
+            from_status=status,
             to_status="cancelled",
         )
         if apply:
@@ -1735,6 +1745,7 @@ def recover_engineering_queue(
     Run queue self-repair in order:
     1. Mark merged when GitHub shows a merged engineering PR
     2. Cancel workflow_failure tasks whose workflow has already recovered
+       (including a parked workflow_permission mislabel)
     3. Restamp ``open`` → ``pr_open`` when a live eng PR exists (stamp lag)
     4. Reconcile orphaned pr_open → open (after live open-PR augmentation)
     5. Retry cooled-down failed tasks (or park when retries exhausted)

@@ -115,3 +115,19 @@ def test_weekday_parked_backlog_quiet_auto_ack_policy():
     assert "auto-acks" in summary.lower() or "auto-ack" in summary.lower()
     assert "list-parked" in summary
     assert "recover-queue" in summary
+
+
+def test_sprint2_workflow_pat_is_a_human_task():
+    payload = load_human_tasks_checklist()
+    tasks = [task for section in payload["sections"] for task in section["tasks"]]
+    row = next(task for task in tasks if task["id"] == "weekday-workflow-dispatch-pat-sprint-2")
+    assert row["automated"] is True
+    assert row["doc_path"] == "docs/ops/engineering-sync.md"
+    assert row["doc_anchor"] == "pat-setup-one-time"
+    summary = row["summary"]
+    assert "eng-20261112-02" in summary
+    assert "library-ingest-sprint-2.yml" in summary
+    assert "43460958952" in summary
+    assert "library_ingest_sprint_2.json" in summary
+    assert "Do not grant another PAT scope" in summary
+    assert "WORKFLOW_DISPATCH_PAT already has Workflows" in summary
