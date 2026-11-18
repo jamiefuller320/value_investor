@@ -573,6 +573,27 @@ def _name_join_index():
                 "type": "STOCK",
                 "name": "SEB",
             },
+            {
+                "ticker": "BOOHl_EQ",
+                "shortName": "DEBS",
+                "isin": "JE00BG6L7297",
+                "type": "STOCK",
+                "name": "boohoo",
+            },
+            {
+                "ticker": "MCONl_EQ",
+                "shortName": "MCON",
+                "isin": "IE00BD64C665",
+                "type": "STOCK",
+                "name": "Mincon",
+            },
+            {
+                "ticker": "APA_US_EQ",
+                "shortName": "APA",
+                "isin": "US03743Q1085",
+                "type": "STOCK",
+                "name": "APA",
+            },
         ]
     )
 
@@ -612,6 +633,14 @@ def test_company_name_joins_a_different_symbol_and_refuses_namesakes():
     # Same short name, other country: not this listing.
     assert match_catalogue("EQT.ST", index=index, policy=policy, name="EQT") is None
     assert match_catalogue("SEB-A.ST", index=index, policy=policy, name="SEB A") is None
+    # Home-country line, our name only adds a generic word.
+    assert match_catalogue("BOO.L", index=index, policy=policy, name="Boohoo Group plc")[
+        "isin"
+    ] == ("JE00BG6L7297")
+    assert match_catalogue("MIO.IR", index=index, policy=policy, name="Mincon group")["isin"] == (
+        "IE00BD64C665"
+    )
+    assert match_catalogue("APA.AX", index=index, policy=policy, name="APA Group") is None
 
 
 def test_maintenance_drops_unlisted_names_and_keeps_the_ftse_screen(tmp_path: Path):

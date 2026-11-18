@@ -721,7 +721,8 @@ def _match_by_company_name(
     when every extra word is a generic modifier and no second catalogue name
     qualifies. Several different names do not match. A row whose short name is
     already this epic was decided by the short-name rule and is not retried.
-    The joined line's ISIN must be from the ticker's home country.
+    The joined line's ISIN must be from the ticker's home country. The same
+    home-country line also matches when our name only adds generic words.
     """
     key = company_name_tokens(name)
     if not key:
@@ -741,13 +742,41 @@ def _match_by_company_name(
             exact_on_this_symbol = exact_on_this_symbol or tokens == key
             continue
         groups.setdefault(tokens, []).append(row)
+    home = HOME_ISIN_COUNTRIES.get(yahoo_suf, frozenset())
+    chosen: list[dict[str, Any]] | None = None
     if key in groups:
         chosen = groups[key]
-    elif exact_on_this_symbol or len(groups) != 1:
-        return None
-    else:
+    elif not exact_on_this_symbol and len(groups) == 1:
         chosen = next(iter(groups.values()))
-    home = HOME_ISIN_COUNTRIES.get(yahoo_suf, frozenset())
+    if chosen:
+        home_rows = [row for row in chosen if str(row.get("isin") or "")[:2].upper() in home]
+        if home_rows:
+            return _pick_instrument(
+                [str(row.get("ticker") or "") for row in home_rows],
+                by_ticker,
+                yahoo_suf=yahoo_suf,
+                policy=policy,
+                name=name,
+                same_security=True,
+            )
+    # Our name is the catalogue name plus only generic words ("Boohoo Group"
+    # / "boohoo"). Accept that only when one catalogue name qualifies and its
+    # ISIN is from the home country, so APA Group does not become APA Corporation.
+    reverse: dict[tuple[str, ...], list[dict[str, Any]]] = {}
+    for row in by_ticker.values():
+        if not isinstance(row, dict) or str(row.get("type") or "").upper() != "STOCK":
+            continue
+        tokens = company_name_tokens(row.get("name"))
+        if not tokens or not _company_name_extends(tokens, key):
+            continue
+        short = str(row.get("shortName") or "")
+        ticker_id = str(row.get("ticker") or "")
+        if epic and (short == epic or t212_symbol(ticker_id) == epic):
+            continue
+        reverse.setdefault(tokens, []).append(row)
+    if len(reverse) != 1:
+        return None
+    chosen = next(iter(reverse.values()))
     home_rows = [row for row in chosen if str(row.get("isin") or "")[:2].upper() in home]
     if not home_rows:
         return None

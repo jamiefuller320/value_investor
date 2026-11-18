@@ -55,8 +55,9 @@ A Yahoo ticker is a `catalogue_hit` (listed) when one of these holds:
    and no second catalogue name qualifies. A different brand does not
    (`The Lottery Corporation` is not `Brightstar Lottery`). The joined line's ISIN must be
    from the ticker's home country, so a same name incorporated elsewhere is refused
-   (`EQT.ST` is not EQT Corp, `SEB-A.ST` is not Groupe SEB). A repeated venue letter is a
-   second line on that venue (`STMpp_EQ` is Paris).
+   (`EQT.ST` is not EQT Corp, `SEB-A.ST` is not Groupe SEB). The home-country line also
+   matches when our name only adds generic words (`Boohoo Group` is `boohoo`). A repeated
+   venue letter is a second line on that venue (`STMpp_EQ` is Paris).
 
 A short-name hit on a foreign venue without that confirmation is not a hit. The ticker falls
 through to the venue allowlist (`exchange_allowlist`, assumed), which the strategy book does
