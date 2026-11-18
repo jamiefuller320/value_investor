@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 5 · Updated 2026-11-18T00:10:00.251430+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-18T03:17:20.332118+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,8 +9,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.57
-Rationale: Thin news keeps NAND glut fears and weak sentiment against strong filing-backed profits and cash, so research still weakens the strong-buy screen; cyclical pricing risk remains unresolved.
-RiskTags: cyclical, competitive, customer_concentration, governance
+Rationale: No new headlines since the last run; filing-backed profits and cash still sit against unresolved NAND cyclical and sentiment risks, so research keeps weakening the strong-buy screen.
+RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
 
@@ -27,4 +27,10 @@ Press contrasts brisk AI data-centre NAND sales with falling shares and politica
 After-hours chip names firmed on Nvidia’s earnings beat; the batch adds no new SNDK filings or company disclosures.
 
 ### 2026-11-18T00:10:00.251430+00:00
+No material change.
+
+### 2026-11-18T03:10:35.452827+00:00
+No material change.
+
+### 2026-11-18T03:17:20.332118+00:00
 No material change.

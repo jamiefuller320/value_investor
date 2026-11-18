@@ -1,6 +1,6 @@
 # ASML Holding N.V. (ASML.AS) — Research memo
 
-_Version 4 · Updated 2026-11-18T00:05:54.726925+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-18T03:12:26.069131+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.67
-Rationale: Empty 18 Nov news adds nothing new; filing-indexed cash and earnings stay strong, but unresolved US BIS licensing and ~20% China revenue in coverage keep research neutral on the screen buy.
+Rationale: No new headlines since 00:05 UTC; filing-indexed cash and earnings stay strong, but unresolved US export curbs and China revenue exposure keep research neutral on the screen buy.
 RiskTags: regulatory, cyclical, customer_concentration, competitive
 
 ## Weekly updates
@@ -26,5 +26,10 @@ Indexed FCF and quarterly earnings in sources remain strong; the quantitative sc
 
 ### 2026-11-18T00:05:54.726925+00:00
 The 18 Nov news batch has no articles since the 21:41 UTC 17 Nov run; regulatory headlines in the library are unchanged.  
+No new company filings or revisions appear in the supplied source pack; macro and screening inputs are unchanged.  
+Indexed FCF and quarterly earnings in sources remain strong; the quantitative screen buy signal is unchanged.
+
+### 2026-11-18T03:12:26.069131+00:00
+The 03:11 UTC news batch adds no articles since the 00:05 UTC run; regulatory headlines in the library are unchanged.  
 No new company filings or revisions appear in the supplied source pack; macro and screening inputs are unchanged.  
 Indexed FCF and quarterly earnings in sources remain strong; the quantitative screen buy signal is unchanged.

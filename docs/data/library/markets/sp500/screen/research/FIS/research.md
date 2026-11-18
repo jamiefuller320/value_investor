@@ -1,6 +1,6 @@
 # Fidelity National Information Services, Inc. (FIS) — Research memo
 
-_Version 5 · Updated 2026-11-18T00:02:15.672919+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-18T03:08:05.356021+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.70
-Rationale: No new filings since 4 Nov; one sector listicle adds no issuer facts, so Q3 leverage, trimmed outlook and governance or legal overhang still weaken the strong buy case.
+Rationale: No new filings since 4 Nov; one Yahoo forecasts link adds no issuer facts, so Q3 leverage, trimmed outlook and governance or legal overhang still weaken the strong buy case.
 RiskTags: leverage, governance, litigation, competitive
 
 ## Weekly updates
@@ -32,3 +32,8 @@ No material change versus the earlier 17 Nov update; Q3 leverage, trimmed outloo
 No new SEC filings after the 4 Nov Q3 8-K/10-Q.  
 The incremental news batch is one generic IT-services “best stocks” listicle with no FIS-specific disclosure.  
 Q3 leverage, trimmed outlook, leadership turnover and legal overhang remain unresolved versus the prior refresh.
+
+### 2026-11-18T03:08:05.356021+00:00
+No new SEC filings after the 4 Nov Q3 8-K/10-Q.  
+The incremental batch is one Yahoo Finance stock-forecasts item with no new issuer-specific disclosure.  
+Q3 leverage, trimmed outlook, leadership turnover and legal overhang are unchanged versus the prior refresh.

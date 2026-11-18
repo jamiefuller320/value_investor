@@ -1,6 +1,6 @@
 # Alphabet Inc. (GOOG) — Research memo
 
-_Version 3 · Updated 2026-11-18T00:08:15.612959+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-18T03:15:03.529270+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.58
-Rationale: Buy-screen quality and FY2025 cash hold, but TTM FCF strain and Anthropic-linked capex headlines still modestly temper GARP; thin incremental news leaves regulatory and litigation risks unchanged.
+Rationale: Buy-screen quality and FY2025 filing cash still support the case, but unchanged TTM FCF strain and unresolved regulatory risks leave research modestly short of the screen buy—no new disclosures in this batch.
 RiskTags: regulatory, competitive, litigation, accounting
 
 ## Weekly updates
@@ -23,3 +23,8 @@ No new company filings in this batch; spend and return timing remain unresolved.
 Thin post-memo news: Anthropic’s updated prospectus caps disclosed Google/Amazon ownership at up to 37.5%, reinforcing the AI-investment theme already in headlines.  
 Screening snapshot still shows TTM FCF ~$19.7bn with negative FCF in Q2–Q3 2026; SEC FY2025 figures unchanged and no new company filings in this batch.  
 No material change to the prior accumulate view.
+
+### 2026-11-18T03:15:03.529270+00:00
+No incremental headlines since the prior verdict pass; the news batch is empty.  
+Screening snapshot and filings index are unchanged (TTM FCF ~$19.7bn; FY2025 SEC FCF ~$73bn).  
+No material change.
