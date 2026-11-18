@@ -55,27 +55,42 @@ def _euro_badge(status: dict[str, Any], focus: str) -> tuple[str | None, str | N
 
 
 def _spare_should_run(dispatch: dict[str, Any]) -> bool | None:
-    markets = [
-        str(item).strip()
-        for item in (dispatch.get("parallel_sprint_markets") or [])
-        if str(item).strip()
-    ]
-    stream1 = markets[0] if markets else ""
-    rows = dispatch.get("parallel_sprint_status") or []
-    if not isinstance(rows, list):
-        return None
-    chosen: dict[str, Any] | None = None
-    for row in rows:
-        if not isinstance(row, dict):
+    """True when any assigned spare stream should run.
+
+    Stream 2 (``parallel_sprint_2_*``) counts. Reading only stream 1 left this
+    null while sp500 was on stream 2 with ``should_run_parallel_ingest`` true.
+    Null only when no status row carries the flag.
+    """
+    assigned: list[str] = []
+    for key in ("parallel_sprint_markets", "parallel_sprint_2_markets"):
+        raw = dispatch.get(key) or []
+        if not isinstance(raw, list):
             continue
-        if stream1 and str(row.get("market_id") or "") == stream1:
-            chosen = row
-            break
-        if chosen is None:
-            chosen = row
-    if chosen is None or "should_run_parallel_ingest" not in chosen:
+        for item in raw:
+            name = str(item).strip()
+            if name and name not in assigned:
+                assigned.append(name)
+    rows_by_market: dict[str, dict[str, Any]] = {}
+    for key in ("parallel_sprint_status", "parallel_sprint_2_status"):
+        rows = dispatch.get(key) or []
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            market_id = str(row.get("market_id") or "").strip()
+            if market_id:
+                rows_by_market[market_id] = row
+    flags: list[bool] = []
+    targets = assigned or list(rows_by_market)
+    for market_id in targets:
+        row = rows_by_market.get(market_id)
+        if row is None or "should_run_parallel_ingest" not in row:
+            continue
+        flags.append(bool(row.get("should_run_parallel_ingest")))
+    if not flags:
         return None
-    return bool(chosen.get("should_run_parallel_ingest"))
+    return any(flags)
 
 
 def _eng_open_count(tasks: dict[str, Any]) -> int:
