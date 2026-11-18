@@ -1,6 +1,6 @@
 # Impax Asset Management Group Plc (IPX.L) — Research memo
 
-_Version 3 · Updated 2026-11-17T21:44:09.497025+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-18T00:08:44.140152+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -23,3 +23,8 @@ Indexed filings are unchanged: H1 FY26 outflows, halved interim dividend and wea
 No material change since the earlier 17 Nov refresh: the incremental news batch is empty and no new Impax RNS beyond the indexed Q4 AUM update (13 Oct).  
 Filings and snapshots still show H1 FY26 net outflows, the 2.0p interim dividend and operating cash trailing dividend obligations.  
 The strong-buy screen still leans on prior-year FCF/yield while current-period fundamentals in the pack remain weaker.
+
+### 2026-11-18T00:08:44.140152+00:00
+No material change: the 18 Nov news batch since last refresh is empty and no new Impax RNS appears in the pack.  
+Indexed H1 FY26 disclosures still show net outflows, a 2.0p interim dividend and TTM operating cash well below FY25 levels.  
+The strong-buy screen signal is unchanged while on-file current-period fundamentals still weaken the case.

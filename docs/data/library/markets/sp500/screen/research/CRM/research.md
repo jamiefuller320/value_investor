@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 4 · Updated 2026-11-17T21:36:15.031569+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-18T00:00:31.271889+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Filed cash and screen metrics still support Strong Buy, but intensified 17 Nov sector selling on AI headlines keeps competitive pressure high without fresh disclosure on Agentforce or leverage.
+Rationale: Screen cash metrics and filed FCF still support Strong Buy, but 17 Nov sector-led selling on AI fears leaves competitive risk high with no new issuer disclosure.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -27,3 +27,8 @@ No new primary filings in the supplied pack; prior leverage and rating-downgrade
 Later 17 Nov headlines add a new OpenAI model and inflation jitters to the software rout; follow-on pieces still show CRM down roughly 6–7%, sector-led ahead of Anthropic’s expected IPO.  
 A crypto-scam supply-chain story names Salesforce-associated websites among affected sites; filing-confirmed company impact is unknown.  
 No new primary filings in the supplied pack; prior leverage and competitive AI themes are unchanged.
+
+### 2026-11-18T00:00:31.271889+00:00
+The incremental batch adds only follow-on 17 Nov pieces: CRM closed about 9.5% lower in a sector rout tied to AI displacement fears, with Nvidia’s after-the-bell beat noted in market wrap coverage.  
+Refreshed sources still show FY26 free cash flow about $14.4bn and a Strong Buy screen; no new primary filings.  
+Leverage, competitive AI sentiment and prior rating-downgrade context are unchanged.

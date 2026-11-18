@@ -1,6 +1,6 @@
 # Cummins Inc. (CMI) — Research memo
 
-_Version 3 · Updated 2026-11-17T21:35:44.157427+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-18T00:00:12.322960+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: Filed quarters still show strong EPS and about $3.2bn TTM free cash flow, supporting the screen buy; sentiment and a lower Morgan Stanley target keep conviction measured.
+Rationale: Filed quarters still show strong EPS and about $3.5bn TTM free cash flow, supporting the screen buy; with no fresh news, prior sentiment keeps conviction measured.
 RiskTags: regulatory, cyclical, customer_concentration, litigation, leverage
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Institutional flow headlines are mixed; sentiment pieces do not add new fundamen
 No new articles in the incremental news batch since the prior refresh; the story is unchanged.
 Refreshed financials still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.2bn.
 Prior headlines on Morgan Stanley’s $588 target, share-price weakness, and Q3 guidance remain the active sentiment overlay.
+
+### 2026-11-18T00:00:12.322960+00:00
+The incremental news batch as of 18 Nov contains no new articles since the prior refresh.
+Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.5bn; screen conviction remains a buy.
+Earlier headlines on Morgan Stanley’s $588 target, share-price weakness, and Q3 follow-through remain the sentiment overlay; filing risk themes are unchanged.

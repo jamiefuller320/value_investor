@@ -1,6 +1,6 @@
 # Diamondback Energy, Inc. (FANG) — Research memo
 
-_Version 3 · Updated 2026-11-17T21:42:35.464002+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-18T00:07:29.200584+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -21,4 +21,9 @@ KKR water-infrastructure co-ownership (10 Nov) and mixed sell-side revisions app
 ### 2026-11-17T21:42:35.464002+00:00
 No material change.
 The 21:42 news batch added no articles since the 17:57 refresh.
+Double Eagle (~$5bn), leverage, and absent deal filing detail remain the active overlay.
+
+### 2026-11-18T00:07:29.200584+00:00
+No material change.  
+The 00:07 news batch added no articles since the 21:42 refresh.  
 Double Eagle (~$5bn), leverage, and absent deal filing detail remain the active overlay.

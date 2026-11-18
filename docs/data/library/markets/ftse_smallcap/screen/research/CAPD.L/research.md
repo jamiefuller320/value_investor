@@ -1,6 +1,6 @@
 # Capital Limited (CAPD.L) — Research memo
 
-_Version 3 · Updated 2026-11-17T21:42:23.004545+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-18T00:07:09.946619+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: Filings still anchor the case: revenue acceleration and deleveraging support the strong-buy screen directionally, but modest operational NPAT, investment-driven headline earnings, and missing H1 2026 accounts cap alignment.
+Confidence: 0.71
+Rationale: H1 2026 interim filings confirm operational acceleration, raised guidance and covenant compliance, supporting the strong-buy screen; investment-book earnings and cyclical concentration risks still limit full alignment.
 RiskTags: cyclical, customer_concentration, accounting, leverage, regulatory, competitive, other
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Strong buy screen unchanged; snapshot now carries Yahoo H1 cash flow but model i
 Indexed news since the prior refresh is empty—no new RNS or company disclosures in the batch.  
 Filing-backed picture unchanged: H1 2026 trading momentum and FY2026 guidance stand; H1 2026 accounts body extract remains absent from the pack.  
 Strong buy screen unchanged; model inputs still empty and operational earnings-quality concerns persist.
+
+### 2026-11-18T00:07:09.946619+00:00
+No new indexed news since the prior refresh—empty news batch.  
+H1 2026 unaudited results body is now in the filing pack (previously absent), confirming stronger operational NPAT, raised FY2026 revenue guidance and H1 covenant compliance.  
+Strong buy screen unchanged; quantitative model inputs remain unpopulated despite operational filing uplift.
