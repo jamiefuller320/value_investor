@@ -1529,9 +1529,7 @@ def build_market_status(
         dispatch_row = health_by_market.get(market_id) or {}
         cached_phase = _slim_phase(phases_by_market.get(market_id))
         if "should_run_parallel_ingest" in dispatch_row:
-            parallel_should_run: bool | None = bool(
-                dispatch_row.get("should_run_parallel_ingest")
-            )
+            parallel_should_run: bool | None = bool(dispatch_row.get("should_run_parallel_ingest"))
         else:
             parallel_should_run = None
         ingest, stream = _classify_ingest(
