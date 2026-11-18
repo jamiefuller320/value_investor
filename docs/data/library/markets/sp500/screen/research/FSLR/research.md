@@ -1,6 +1,6 @@
 # First Solar, Inc. (FSLR) — Research memo
 
-_Version 4 · Updated 2026-11-18T03:14:37.993403+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-18T17:56:08.276457+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: high
-Confidence: 0.69
-Rationale: Q3 10-Q MD&A corroborates negative nine-month operating cash and ample stated liquidity, partly confirming the buy screen while sector macro and TTM FCF optics still weaken conviction.
+Confidence: 0.68
+Rationale: Headlines extend the rout to a seven-day ~24% drop, weakening near-term conviction, while unchanged Q3 cash and liquidity themes still partly support the buy screen.
 RiskTags: regulatory, cyclical, competitive, litigation, customer_concentration, liquidity
 
 ## Weekly updates
@@ -27,3 +27,8 @@ No new SEC body extracts in this refresh—Q3 10-Q filing verification remains o
 ### 2026-11-18T03:14:37.993403+00:00
 One Yahoo piece frames a sector rebound after the recent solar rout; Treasury yields, demand, policy/tax-credit shifts, and peer earnings pressure remain cited headwinds.
 The Q3 2026 10-Q body extract in this refresh’s filing pull confirms nine-month operating cash use of about $403m, cash near $1.6bn, and 2026 capex guided to $0.6–0.8bn—aligned with lumpy cash-flow themes; consolidated P&L tables are still thin in the extract.
+
+### 2026-11-18T17:56:08.276457+00:00
+Trefis/Yahoo report a seven-day losing streak and ~24% drawdown; commentary asks whether the market misread fundamentals after the lowered outlook.
+Zacks notes heightened attention amid the selloff; no new SEC body extracts in this batch.
+Prior Q3 themes—nine-month operating cash use ~$403m, cash ~$1.6bn, depressed TTM FCF—are unchanged.

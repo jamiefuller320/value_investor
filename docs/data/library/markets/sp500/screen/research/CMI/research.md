@@ -1,6 +1,6 @@
 # Cummins Inc. (CMI) — Research memo
 
-_Version 5 · Updated 2026-11-18T03:07:02.088217+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-18T17:50:49.209282+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: Filed quarters show Q3 diluted EPS of $8.25 and about $3.2bn TTM free cash flow, supporting the screen buy; an empty incremental news batch leaves prior sentiment and filing risks unchanged.
+Rationale: Refreshed quarters still show Q3 diluted EPS of $8.25 and about $3.5bn TTM free cash flow, supporting the buy; a First Eagle sale headline is mixed flow only and filing risks are unchanged.
 RiskTags: regulatory, cyclical, customer_concentration, litigation, leverage
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Earlier headlines on Morgan Stanley’s $588 target, share-price weakness, and Q
 No new articles in the 18 Nov 03:06 UTC news batch since the midnight refresh.
 Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.2bn; the screen remains a buy.
 Earlier Morgan Stanley target, share-price weakness, and Q3 follow-through headlines are unchanged; filing risk themes are unchanged.
+
+### 2026-11-18T17:50:49.209282+00:00
+The 17:50 UTC news batch adds four items since 03:07 UTC; the only CMI-specific piece reports First Eagle selling 589,109 shares.  
+Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.5bn; the screen remains a buy.  
+Peer Eaton and Caterpillar pricing articles are not company-specific; prior Morgan Stanley and Q3 themes are unchanged.

@@ -1,6 +1,6 @@
 # Fortescue Ltd (FMG.AX) — Research memo
 
-_Version 5 · Updated 2026-11-18T03:09:32.980035+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-18T17:53:28.068151+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.64
-Rationale: 18 Nov batch adds peer iron-ore/China diplomacy and generic FMG coverage; cheapness and yield still support the screen while Q1 miss, softer ore and unresolved CMRG talks partly offset Strong Buy.
+Rationale: 18 Nov 17:51 batch adds only duplicate generic Kalkine FMG coverage; cheapness and yield still support the screen while Q1 miss, softer ore and CMRG overhang partly offset Strong Buy.
 RiskTags: cyclical, regulatory, governance, litigation, key_person, customer_concentration, competitive, accounting
 
 ## Weekly updates
@@ -33,3 +33,8 @@ No material change.
 Two articles since the 00:04 refresh: BHP/Rio executives due in Beijing on iron ore pricing tensions, plus generic Kalkine FMG attention—no company-specific disclosure.  
 Q1 FY27 shipment miss, iron-ore softness, CMRG negotiation overhang and US$1.5bn note issue remain the active narrative.  
 No new indexed filing bodies in the pack.
+
+### 2026-11-18T17:53:28.068151+00:00
+One article since the 03:09 refresh: duplicate Kalkine “shares in focus” piece—no company-specific disclosure.  
+Q1 FY27 shipment miss, iron-ore softness, CMRG negotiation overhang and US$1.5bn note issue remain the active narrative from the pack.  
+No material change; no new indexed filing bodies in the pack.

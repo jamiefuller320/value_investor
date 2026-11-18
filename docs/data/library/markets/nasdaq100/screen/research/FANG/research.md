@@ -1,6 +1,6 @@
 # Diamondback Energy, Inc. (FANG) — Research memo
 
-_Version 5 · Updated 2026-11-18T03:14:22.893832+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-18T17:55:48.219871+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -31,4 +31,9 @@ Double Eagle (~$5bn), leverage, and absent deal filing detail remain the active 
 ### 2026-11-18T03:14:22.893832+00:00
 No material change.  
 The 03:13 news batch added no articles since the 00:07 refresh.  
+Double Eagle (~$5bn), leverage, and absent deal filing detail remain the active overlay.
+
+### 2026-11-18T17:55:48.219871+00:00
+No material FANG-specific change.  
+The 17:55 batch adds only sector-peer headlines (Occidental, TC Energy pipelines, Permian Resources capex); no new company filings in the supplied set.  
 Double Eagle (~$5bn), leverage, and absent deal filing detail remain the active overlay.
