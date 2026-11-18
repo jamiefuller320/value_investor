@@ -17885,6 +17885,86 @@ def test_refetch_euro_filings_primary_bodies_merges_allowlist(mock_fetch, tmp_pa
     assert any(row.get("has_body") for row in payload.get("filings") or [])
 
 
+def test_fetch_filings_ir_allowlist_bn_pa_eng_20261118_01(tmp_path: Path):
+    """eng-20261118-01: BN.PA thin_memo — IR allowlist must include FY URD + H1 2025 interim."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("BN.PA", path=allowlist_path)
+    assert len(rows) >= 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert any(row["period"] == "annual" for row in rows)
+    assert any(row["period"] == "interim" for row in rows)
+    assert any("danoneurdaccessible.pdf" in row["url"] for row in rows)
+    assert any("danoneinterimfinancialreport2025.pdf" in row["url"] for row in rows)
+    assert "BN.PA" in _BUILTIN_IR_URLS
+
+
+def test_fetch_filings_ir_allowlist_bn_pa_h1_live_eng_20261118_01():
+    """eng-20261118-01: BN.PA H1 2025 statutory interim PDF passes IR allowlist validation."""
+    rows = fetch_filings_ir_allowlist("BN.PA")
+    interim = next(
+        row
+        for row in rows
+        if row["period"] == "interim" and "interimfinancialreport2025" in row["url"]
+    )
+    body = fetch_filing_body(interim["url"])
+    assert body and len(body) > 5000
+    assert "danone" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(interim, body, ticker="BN.PA")
+    assert valid, reason
+
+
+@patch("value_investor.research.filings.fetch_filing_body")
+def test_refetch_euro_filings_primary_bodies_bn_pa_thin_memo_eng_20261118_01(
+    mock_fetch, tmp_path: Path
+):
+    """eng-20261118-01: euro primary merges new interim allowlist row on thin two-body index."""
+    from value_investor.research.filings import refetch_euro_filings_primary_bodies
+
+    mock_fetch.return_value = (
+        "Danone interim financial report consolidated sales recurring operating margin "
+        "free cash flow half year " * 35
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "e09b7f4dd6257be5",
+                        "source": "esef_direct",
+                        "period": "annual",
+                        "has_body": True,
+                    },
+                    {
+                        "id": "ir_urd",
+                        "source": "ir_allowlist",
+                        "url": "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf",
+                        "period": "annual",
+                        "has_body": True,
+                    },
+                ],
+                "summary": {"with_body": 2, "total": 2},
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = refetch_euro_filings_primary_bodies(
+        filings_dir,
+        ticker="BN.PA",
+        company_name="Danone S.A.",
+        max_bodies=5,
+    )
+    assert result["ir_allowlist"].get("attempted", 0) >= 1
+    assert result["fetched"] >= 1
+    assert result["with_body_after"] >= 3
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 3
+    assert any(row.get("period") == "interim" and row.get("has_body") for row in payload["filings"])
+
+
 def test_eng_20260927_03_fetch_filings_ir_allowlist_fgp_includes_fy2026_annual_report():
     """FGP IR allowlist seeds FY2026 statutory annual report for APM glossary fetch."""
     urls = _BUILTIN_IR_URLS["FGP.L"]
