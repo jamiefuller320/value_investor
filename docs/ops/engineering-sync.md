@@ -237,13 +237,18 @@ When the PAT lacks **Workflows** permission, the agent drops workflow-file
 changes from the branch and parks the task (`parked_policy=workflow_permission`)
 instead of retrying forever.
 
-`eng-20261112-02` is that case: `library-ingest-sprint-2.yml` run
+`eng-20261112-02` was parked with that policy, but the PAT already has
+**Workflows: Read and write**. The failed run
 [43460958952](https://github.com/jamiefuller320/value_investor/actions/runs/43460958952)
-(2026-11-12) parked because the agent cannot push `.github/workflows`. Later
-sprint-2 runs succeed, so this is not a live ingest outage. Grant **Workflows:
-Read and write** on `WORKFLOW_DISPATCH_PAT`, or close the parked task by hand.
-Do not unpark it into another workflow-file push, and do not edit
-`.github/workflows` to work around the missing permission. Checklist:
+did not stop on a permission error. After
+`wait_for_workflow_idle: still busy after 2400s — skip spare slot`, the
+gap-closure step exited 1 with
+`Could not read ingest-loop JSON at /tmp/library_ingest_sprint_2.json`
+because the ingest step had been skipped and never wrote that file. Main
+already yields that slot cleanly (`9db2980e5b`, 2026-11-13) and later
+sprint-2 runs succeed. recover-queue cancels this park when a later success
+run exists. Do not grant another PAT scope, and do not edit
+`.github/workflows` for this task. Checklist:
 `weekday-workflow-dispatch-pat-sprint-2`.
 
 Email reuses Sunday report SMTP secrets (`SMTP_*`, `EMAIL_TO`).

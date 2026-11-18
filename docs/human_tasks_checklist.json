@@ -77,9 +77,9 @@
         },
         {
           "id": "weekday-workflow-dispatch-pat-sprint-2",
-          "title": "Grant Workflows permission for the parked sprint-2 task",
-          "summary": "eng-20261112-02 is parked (parked_policy=workflow_permission) because engineering-agent cannot push .github/workflows without Workflows: Read and write on WORKFLOW_DISPATCH_PAT. The failed run is library-ingest-sprint-2.yml 43460958952 (2026-11-12). Later sprint-2 runs succeed, so this is not a live ingest outage. Grant that permission, or close the parked task by hand. Do not unpark it into another workflow-file push, and do not edit .github/workflows to work around the missing permission.",
-          "automated": false,
+          "title": "Stale sprint-2 park is not a missing PAT scope",
+          "summary": "eng-20261112-02 is parked as workflow_permission, but WORKFLOW_DISPATCH_PAT already has Workflows read and write. library-ingest-sprint-2.yml run 43460958952 exited 1 on 'Could not read ingest-loop JSON at /tmp/library_ingest_sprint_2.json' after the spare slot yielded ('still busy after 2400s'). That yield bug is already fixed on main (9db2980e5b) and later sprint-2 runs succeed. recover-queue cancels this park when a later success exists. Do not grant another PAT scope and do not edit .github/workflows for this task.",
+          "automated": true,
           "doc_path": "docs/ops/engineering-sync.md",
           "doc_anchor": "pat-setup-one-time"
         },
