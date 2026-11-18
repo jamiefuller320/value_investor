@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-17T07:30:24.838502+00:00
+Track: `buy_tier_level` · updated 2026-11-18T15:17:14.480216+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **14** / 31 (45% count, 45% NAV)
+- Losers: **14** / 32 (44% count, 44% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -126,6 +126,20 @@ Track: `buy_tier_level` · updated 2026-11-17T07:30:24.838502+00:00
 - still buy
 - data_quality 0.90
 
+### KDP — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 57%
+
+### INTU — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 51%
+
 ### CSX — weakening / watch_review (+0.1%)
 - conviction 26% below intact floor
 - still buy
@@ -193,11 +207,6 @@ Track: `buy_tier_level` · updated 2026-11-17T07:30:24.838502+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 82%
-
-### PYPL — weakening / watch_review (+11.6%)
-- research verdict neutral
-- still strong_buy
-- cheapness family still passes
 
 ### NXPI — intact / hold_tolerate (+16.1%)
 - still strong_buy
