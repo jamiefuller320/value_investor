@@ -18,6 +18,12 @@
 # overlay. That stops long dashboard jobs from resurrecting stale foreign-owned
 # artifacts (progress-report, ops-monitor, etc.) without listing every path.
 #
+# docs/data/latest.json is the screen bundle. Its run_at is the screen clock
+# and outranks generated_at: a queue refresh can stamp generated_at on a stale
+# checkout and would otherwise drop Sunday's new screen (email-report
+# 2026-11-15). A newer local run_at always lands. An older local run_at never
+# overwrites a newer screen, even when the snapshot's generated_at is later.
+#
 # Usage:
 #   GHA_COMMIT_OWNED='docs/data/foo.json docs/data/bar' \
 #   COMMIT_MESSAGE='chore: …' \
@@ -89,9 +95,10 @@ blob_at() {
   git rev-parse --verify --quiet "${rev}:${path}" 2>/dev/null || true
 }
 
-# Extract top-level JSON generated_at (ISO-8601). Empty if missing/unparseable.
-json_generated_at() {
+# Extract a top-level JSON string field (ISO-8601). Empty if missing/unparseable.
+json_top_string() {
   local path="$1"
+  local key="$2"
   if [ ! -f "$path" ]; then
     return 0
   fi
@@ -99,7 +106,7 @@ json_generated_at() {
     *.json) ;;
     *) return 0 ;;
   esac
-  python3 - "$path" <<'PY' 2>/dev/null || true
+  python3 - "$path" "$key" <<'PY' 2>/dev/null || true
 import json, sys
 from pathlib import Path
 try:
@@ -107,10 +114,14 @@ try:
 except Exception:
     raise SystemExit(0)
 if isinstance(data, dict):
-    value = data.get("generated_at")
+    value = data.get(sys.argv[2])
     if isinstance(value, str) and value.strip():
         print(value.strip())
 PY
+}
+
+json_generated_at() {
+  json_top_string "$1" generated_at
 }
 
 # Return 0 when remote_iso is strictly newer than local_iso (both ISO-8601).
@@ -150,17 +161,34 @@ should_skip_stale_json_overlay() {
     *) return 1 ;;
   esac
   local local_iso remote_file remote_iso
-  local_iso="$(json_generated_at "$WORKDIR/$path")"
-  if [ -z "$local_iso" ]; then
-    return 1
-  fi
   remote_file="$(mktemp "$WORKDIR/remote_json.XXXXXX.json")"
   if ! git show "${remote_rev}:${path}" >"$remote_file" 2>/dev/null; then
     rm -f "$remote_file"
     return 1
   fi
+  if [ "$path" = "docs/data/latest.json" ]; then
+    local local_run remote_run
+    local_run="$(json_top_string "$WORKDIR/$path" run_at)"
+    remote_run="$(json_top_string "$remote_file" run_at)"
+    if [ -n "$local_run" ] && [ -n "$remote_run" ]; then
+      if remote_generated_at_is_newer "$remote_run" "$local_run"; then
+        # Job snapshot screen is newer than origin. Land it.
+        rm -f "$remote_file"
+        return 1
+      fi
+      if remote_generated_at_is_newer "$local_run" "$remote_run"; then
+        # Origin already has a newer screen. Do not put the stale bundle back.
+        rm -f "$remote_file"
+        return 0
+      fi
+    fi
+  fi
+  local_iso="$(json_generated_at "$WORKDIR/$path")"
   remote_iso="$(json_generated_at "$remote_file")"
   rm -f "$remote_file"
+  if [ -z "$local_iso" ]; then
+    return 1
+  fi
   if remote_generated_at_is_newer "$local_iso" "$remote_iso"; then
     return 0
   fi

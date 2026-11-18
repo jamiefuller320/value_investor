@@ -347,6 +347,111 @@ def test_artifact_commit_preserves_newer_generated_at(tmp_path: Path):
     assert progress["defer"] == []
 
 
+def test_artifact_commit_lands_newer_screen_run_at(tmp_path: Path):
+    """A newer screen run_at lands even when origin's generated_at is later.
+
+    Queue refresh used to stamp generated_at on a stale checkout while Sunday's
+    email job was still running, and the generated_at guard then dropped the
+    new screen (email-report 2026-11-15).
+    """
+    remote, work = _seed_repo(tmp_path)
+    _write(
+        work / "docs" / "data" / "latest.json",
+        json.dumps(
+            {
+                "generated_at": "2026-11-08T08:26:03+00:00",
+                "run_at": "2026-11-08T08:26:03+00:00",
+                "n": 1,
+            }
+        )
+        + "\n",
+    )
+    _git(work, "add", "docs/data/latest.json")
+    _git(work, "commit", "-m", "seed screen")
+    _git(work, "push", "origin", "main")
+
+    other = tmp_path / "other"
+    _git(tmp_path, "clone", str(remote), str(other))
+    _git(other, "config", "user.email", "other@example.com")
+    _git(other, "config", "user.name", "other")
+    _write(
+        other / "docs" / "data" / "latest.json",
+        json.dumps(
+            {
+                "generated_at": "2026-11-18T07:17:55+00:00",
+                "run_at": "2026-11-08T08:26:03+00:00",
+                "n": 1,
+                "automation": {"generated_at": "2026-11-18T07:17:55+00:00"},
+            }
+        )
+        + "\n",
+    )
+    _git(other, "add", "docs/data/latest.json")
+    _git(other, "commit", "-m", "queue stamp")
+    _git(other, "push", "origin", "main")
+
+    _write(
+        work / "docs" / "data" / "latest.json",
+        json.dumps(
+            {
+                "generated_at": "2026-11-15T12:05:46+00:00",
+                "run_at": "2026-11-15T12:05:46+00:00",
+                "n": 2,
+            }
+        )
+        + "\n",
+    )
+    result = _run_script(work, owned="docs/data/latest.json")
+    assert result.returncode == 0, result.stderr
+    assert "Preserving newer origin/main docs/data/latest.json" not in result.stderr
+
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    bundle = json.loads((latest / "docs" / "data" / "latest.json").read_text(encoding="utf-8"))
+    assert bundle["run_at"] == "2026-11-15T12:05:46+00:00"
+    assert bundle["n"] == 2
+
+
+def test_artifact_commit_keeps_newer_screen_run_at(tmp_path: Path):
+    """A stale checkout must not rewind a newer screen, even with a later stamp."""
+    remote, work = _seed_repo(tmp_path)
+    _write(
+        work / "docs" / "data" / "latest.json",
+        json.dumps(
+            {
+                "generated_at": "2026-11-15T12:05:46+00:00",
+                "run_at": "2026-11-15T12:05:46+00:00",
+                "n": 2,
+            }
+        )
+        + "\n",
+    )
+    _git(work, "add", "docs/data/latest.json")
+    _git(work, "commit", "-m", "seed screen")
+    _git(work, "push", "origin", "main")
+
+    _write(
+        work / "docs" / "data" / "latest.json",
+        json.dumps(
+            {
+                "generated_at": "2026-11-18T07:17:55+00:00",
+                "run_at": "2026-11-08T08:26:03+00:00",
+                "n": 1,
+            }
+        )
+        + "\n",
+    )
+    result = _run_script(work, owned="docs/data/latest.json")
+    assert result.returncode == 0, result.stderr
+    assert "Preserving newer origin/main docs/data/latest.json" in result.stderr
+
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    bundle = json.loads((latest / "docs" / "data" / "latest.json").read_text(encoding="utf-8"))
+    assert bundle["run_at"] == "2026-11-15T12:05:46+00:00"
+    assert bundle["n"] == 2
+
+
 def test_artifact_commit_exclude_skips_stale_progress_report(tmp_path: Path):
     """Explicit progress-report excludes match email-report GHA_COMMIT_EXCLUDE (L484)."""
     remote, work = _seed_repo(tmp_path)

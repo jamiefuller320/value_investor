@@ -816,7 +816,10 @@ def refresh_engineering_queue_ui(
                     "engineering_queue": dashboard_slice,
                     "generated_at": now,
                 }
-            latest["generated_at"] = now
+            # Do not stamp the bundle's top-level generated_at. That field is
+            # the screen publish clock. Bumping it from a queue refresh makes
+            # gha_commit_artifacts treat a stale checkout as newer than Sunday's
+            # screen and drop the new run_at (email-report 2026-11-15).
             write_json(latest_path, latest, compact=True, compress=False)
 
     from value_investor.queue_health import refresh_queue_health_ui
