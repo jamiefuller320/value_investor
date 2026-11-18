@@ -463,3 +463,114 @@ def test_default_overlay_covers_ftse350_from_screen_snapshot(tmp_path: Path):
     assert stats["ticker_count"] == 2
     assert stats["catalogue_hit_count"] == 1
     assert (t212 / "by_market" / "ftse350.json").exists()
+
+
+def test_cross_listing_name_matches_without_a_local_venue():
+    from value_investor.t212_coverage import DEFAULT_SUFFIX_EXCHANGES
+
+    index = build_catalogue_index(
+        [
+            {
+                "ticker": "HSBAl_EQ",
+                "shortName": "HSBA",
+                "isin": "GB0005405286",
+                "type": "STOCK",
+                "name": "HSBC",
+            },
+            {
+                "ticker": "BABA_US_EQ",
+                "shortName": "BABA",
+                "isin": "US01609W1027",
+                "type": "STOCK",
+                "name": "Alibaba",
+            },
+            {
+                "ticker": "TWYd_EQ",
+                "shortName": "TWY",
+                "isin": "BMG0171K1018",
+                "type": "STOCK",
+                "name": "Alibaba Health Information Technology",
+            },
+            {
+                "ticker": "APA_US_EQ",
+                "shortName": "APA",
+                "isin": "US03743Q1085",
+                "type": "STOCK",
+                "name": "APA",
+            },
+            {
+                "ticker": "WWRd_EQ",
+                "shortName": "WWR",
+                "isin": "AU000000WOW2",
+                "type": "STOCK",
+                "name": "Woolworths",
+            },
+            {
+                "ticker": "RACE_US_EQ",
+                "shortName": "RACE",
+                "isin": "NL0011585146",
+                "type": "STOCK",
+                "name": "Ferrari",
+            },
+            {
+                "ticker": "FERGRa_EQ",
+                "shortName": "FERGR",
+                "isin": "GB00BN0VZ646",
+                "type": "STOCK",
+                "name": "Ferrari Group",
+            },
+            {
+                "ticker": "BRSTd_EQ",
+                "shortName": "BRST",
+                "isin": "US1111111111",
+                "type": "STOCK",
+                "name": "Brightstar Lottery",
+            },
+            {
+                "ticker": "EQT_US_EQ",
+                "shortName": "EQT",
+                "isin": "US26884L1098",
+                "type": "STOCK",
+                "name": "EQT",
+            },
+            {
+                "ticker": "HRB_US_EQ",
+                "shortName": "HRB",
+                "isin": "US0936711052",
+                "type": "STOCK",
+                "name": "H&R Block",
+            },
+            {
+                "ticker": "SQ_US_EQ",
+                "shortName": "XYZ",
+                "isin": "US8522341036",
+                "type": "STOCK",
+                "name": "Block",
+            },
+        ]
+    )
+    policy = {"yahoo_suffix_to_t212_exchanges": DEFAULT_SUFFIX_EXCHANGES}
+    assert (
+        match_catalogue("0005.HK", index=index, policy=policy, name="HSBC Holdings plc")["ticker"]
+        == "HSBAl_EQ"
+    )
+    assert (
+        match_catalogue("9988.HK", index=index, policy=policy, name="Alibaba Group")["isin"]
+        == "US01609W1027"
+    )
+    assert match_catalogue("APA.AX", index=index, policy=policy, name="APA Group") is None
+    assert (
+        match_catalogue("WOW.AX", index=index, policy=policy, name="Woolworths Group")["isin"]
+        == "AU000000WOW2"
+    )
+    assert match_catalogue("RACE.MI", index=index, policy=policy, name="Ferrari")["isin"] == (
+        "NL0011585146"
+    )
+    assert (
+        match_catalogue("TLC.AX", index=index, policy=policy, name="The Lottery Corporation")
+        is None
+    )
+    assert match_catalogue("EQT.ST", index=index, policy=policy, name="EQT") is None
+    assert match_catalogue("XYX.AX", index=index, policy=policy, name="Block, Inc.")["isin"] == (
+        "US8522341036"
+    )

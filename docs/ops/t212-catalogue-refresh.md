@@ -52,8 +52,15 @@ A Yahoo ticker is a `catalogue_hit` (listed) when one of these holds:
 
 A short-name hit on a foreign venue without that confirmation is not a hit. The ticker falls
 through to the venue allowlist (`exchange_allowlist`, assumed), which the strategy book does
-not count as listed. Trading 212 has no ASX, Hong Kong or Singapore venue, so names there are
-listed only through a confirmed line elsewhere.
+not count as listed.
+
+The stock catalogue has no HKD, AUD, or SGD line, and only a token Milan line. A Hong Kong,
+Australian, Singapore, or Milan constituent is listed when its company name matches a stock
+on another venue. Legal words are ignored. One longer name matches only when every extra
+word is a generic modifier and no second catalogue name qualifies. `HSBC Holdings` matches
+`HSBC`, and `Alibaba Group` matches `Alibaba`. `APA Group` does not match APA Corporation,
+and `The Lottery Corporation` does not match Brightstar Lottery. Other Yahoo markets still
+need a home-country ISIN before a foreign short name counts, so `EQT.ST` is not EQT Corp.
 
 Committed paths (only when changed):
 

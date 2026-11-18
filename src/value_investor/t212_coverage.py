@@ -588,6 +588,160 @@ def _pick_instrument(
     return None
 
 
+# Yahoo markets with no local currency in the Trading 212 stock catalogue
+# (no HKD, AUD, SGD, or a Milan line). A company there is listed only as a
+# USD/EUR/GBP/CAD/CHF cross-listing, under a different symbol.
+_CROSS_LISTING_SUFFIXES = frozenset({".HK", ".AX", ".SI", ".MI"})
+_CROSS_LISTING_LEGAL = frozenset(
+    {
+        "the",
+        "of",
+        "and",
+        "plc",
+        "ltd",
+        "limited",
+        "inc",
+        "corp",
+        "corporation",
+        "co",
+        "company",
+        "sa",
+        "ag",
+        "nv",
+        "se",
+        "spa",
+        "asa",
+        "ab",
+        "oyj",
+        "oy",
+        "lp",
+        "publ",
+        "pjsc",
+        "jsc",
+        "holding",
+        "holdings",
+        "abp",
+        "gmbh",
+        "bv",
+    }
+)
+_CROSS_LISTING_CLASS = frozenset({"class", "series", "ord", "ordinary"})
+_CROSS_LISTING_EXTRA = frozenset(
+    {
+        "bank",
+        "group",
+        "international",
+        "insurance",
+        "technology",
+        "products",
+        "steel",
+        "industries",
+        "australia",
+        "cayman",
+        "islands",
+        "information",
+        "svenska",
+        "banking",
+        "airways",
+    }
+)
+
+
+def _cross_listing_tokens(name: str | None) -> tuple[str, ...]:
+    """Distinctive words. A trailing share-class letter is dropped; H&R is kept."""
+    words = re.findall(r"[a-z0-9]+", str(name or "").lower())
+    out = [
+        word
+        for word in words
+        if word not in _CROSS_LISTING_LEGAL
+        and word not in _CROSS_LISTING_CLASS
+        and (len(word) > 1 or word.isalpha())
+    ]
+    # Drop only a trailing single letter (News Corp Class B). Keep H&R.
+    if len(out) > 1 and len(out[-1]) == 1:
+        out = out[:-1]
+    return tuple(word for word in out if len(word) > 1 or (len(out) > 1 and len(word) == 1))
+
+
+def _cross_listing_extends(shorter: tuple[str, ...], longer: tuple[str, ...]) -> bool:
+    if not shorter or len(longer) <= len(shorter):
+        return False
+    index = 0
+    extras: list[str] = []
+    for word in longer:
+        if index < len(shorter) and word == shorter[index]:
+            index += 1
+        else:
+            extras.append(word)
+    return index == len(shorter) and all(word in _CROSS_LISTING_EXTRA for word in extras)
+
+
+def _match_cross_listed_company(
+    ticker: str,
+    name: str | None,
+    *,
+    index: dict[str, Any],
+    yahoo_suf: str,
+    policy: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Match a Hong Kong, Australian, Singapore, or Milan name to a cross-listing.
+
+    The catalogue has no local line for these markets. An exact normalised name
+    matches on any currency. A longer catalogue name matches only when every
+    extra word is generic and only one catalogue name qualifies. The reverse
+    (our name adds a generic word) does not attach a one-token foreign namesake
+    such as APA Group to APA Corporation.
+    """
+    if yahoo_suf not in _CROSS_LISTING_SUFFIXES:
+        return None
+    key = _cross_listing_tokens(name)
+    if not key:
+        return None
+    by_ticker = index.get("by_ticker") or {}
+    groups: dict[tuple[str, ...], list[dict[str, Any]]] = {}
+    for row in by_ticker.values():
+        if not isinstance(row, dict) or str(row.get("type") or "").upper() != "STOCK":
+            continue
+        tokens = _cross_listing_tokens(row.get("name"))
+        if not tokens:
+            continue
+        if (
+            tokens == key
+            or _cross_listing_extends(key, tokens)
+            or _cross_listing_extends(tokens, key)
+        ):
+            groups.setdefault(tokens, []).append(row)
+    if key in groups:
+        chosen = groups[key]
+    else:
+        longer = [tok for tok in groups if _cross_listing_extends(key, tok)]
+        shorter = [tok for tok in groups if _cross_listing_extends(tok, key)]
+        if len(longer) == 1 and not shorter:
+            chosen = groups[longer[0]]
+        elif len(shorter) == 1 and not longer:
+            cat_key = shorter[0]
+            home = HOME_ISIN_COUNTRIES.get(yahoo_suf, frozenset())
+            rows = groups[cat_key]
+            home_rows = [row for row in rows if str(row.get("isin") or "")[:2].upper() in home]
+            distinctive = len(cat_key) >= 2 or (len(cat_key) == 1 and len(cat_key[0]) >= 6)
+            if not home_rows and not distinctive:
+                return None
+            chosen = home_rows or rows
+        else:
+            return None
+    home = HOME_ISIN_COUNTRIES.get(yahoo_suf, frozenset())
+    home_rows = [row for row in chosen if str(row.get("isin") or "")[:2].upper() in home]
+    pool = home_rows or chosen
+    return _pick_instrument(
+        [str(row.get("ticker") or "") for row in pool],
+        by_ticker,
+        yahoo_suf=yahoo_suf,
+        policy=policy,
+        name=name,
+        same_security=True,
+    )
+
+
 def match_catalogue(
     ticker: str,
     *,
@@ -654,7 +808,13 @@ def match_catalogue(
                 )
                 if picked:
                     return picked
-    return None
+    return _match_cross_listed_company(
+        ticker,
+        name,
+        index=index,
+        yahoo_suf=yahoo_suf,
+        policy=policy,
+    )
 
 
 def _exception_tradable_flag(exc: dict[str, Any]) -> bool:
