@@ -14,6 +14,7 @@ from value_investor.universe_filing_archive_stage import (
     advance_stage_ladder,
     caps_for_stage,
     classify_quiet_night,
+    load_stage_ladder_state,
     ops_finding_from_stage_ladder,
     resolve_apply_caps,
 )
@@ -119,6 +120,53 @@ def test_advance_resets_on_suspend_mid_streak() -> None:
     assert state["current_stage"] == 2
     assert state["promoted"] is False
     assert state["last_reset_reason"] == "outcome=suspend"
+
+
+def test_stage_3_documents_next_double_without_promoting() -> None:
+    """Stage 3 is a rung. Caps stay 16/64 until the quiet-night streak promotes."""
+    assert MAX_DOCUMENTED_STAGE == 4
+    assert caps_for_stage(4) == {
+        "max_units": 32,
+        "max_http_fetches": 128,
+        "max_tickers_per_unit": 2,
+        "max_bodies_per_ticker": 1,
+    }
+    state = load_stage_ladder_state(
+        status={"stage_ladder": {"current_stage": 3, "quiet_isolation_ok_streak": 3}}
+    )
+    assert state["current_stage"] == 3
+    assert state["at_ceiling"] is False
+    assert state["current_caps"]["max_units"] == 16
+    assert state["current_caps"]["max_http_fetches"] == 64
+    assert state["next_stage"] == 4
+    assert state["next_stage_caps"]["max_units"] == 32
+    assert state["next_stage_caps"]["max_http_fetches"] == 128
+    assert state["quiet_isolation_ok_streak"] == 3
+
+
+def test_advance_promotes_stage_3_to_32_128() -> None:
+    state = advance_stage_ladder(
+        {
+            "stage_ladder": {
+                "current_stage": 3,
+                "quiet_isolation_ok_streak": QUIET_NIGHTS_REQUIRED - 1,
+            }
+        },
+        outcome="apply_complete",
+        dry_run=False,
+        isolation=_clean_iso(),
+        run_id="run-stage-4",
+    )
+    assert state["promoted"] is True
+    assert state["current_stage"] == 4
+    assert state["quiet_isolation_ok_streak"] == 0
+    assert state["current_caps"] == caps_for_stage(4)
+    assert state["at_ceiling"] is True
+    assert state["next_stage"] is None
+    assert state["last_auto_widen"]["from_stage"] == 3
+    assert state["last_auto_widen"]["to_stage"] == 4
+    assert state["last_auto_widen"]["to_caps"]["max_units"] == 32
+    assert state["last_auto_widen"]["to_caps"]["max_http_fetches"] == 128
 
 
 def test_advance_does_not_pass_ceiling() -> None:

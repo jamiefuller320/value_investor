@@ -1,10 +1,12 @@
 """Documented cold-store archive pack stage ladder + quiet-night auto-widen.
 
-Extends the runbook stage table (pilot → thin → moderate → thick) with a
-committed quiet ``isolation_ok`` streak. After ``QUIET_NIGHTS_REQUIRED`` clean
-apply nights at the current stage, promote **one** documented step (hard ceiling
-at stage 3). Isolation / suspend / shared-path failures fail-closed and reset
-the streak — they do **not** invent stages past the ladder or eng-spray.
+Extends the runbook stage table (pilot → thin → moderate → thick → broad)
+with a committed quiet ``isolation_ok`` streak. After ``QUIET_NIGHTS_REQUIRED``
+clean apply nights at the current stage, promote **one** documented step (hard
+ceiling at stage 4). Isolation / suspend / shared-path failures fail-closed and
+reset the streak — they do **not** invent stages past the ladder or eng-spray.
+Stage 3 (16/64) is a rung, not a stop: the next documented double is stage 4
+(32/128). The quiet-night streak still gates that promote.
 
 Persisted on ``universe_filing_archive_status.json`` → ``stage_ladder``.
 """
@@ -53,9 +55,17 @@ ARCHIVE_STAGE_LADDER: tuple[dict[str, Any], ...] = (
         "max_tickers_per_unit": 2,
         "max_bodies_per_ticker": 1,
     },
+    {
+        "stage": 4,
+        "name": "broad",
+        "max_units": 32,
+        "max_http_fetches": 128,
+        "max_tickers_per_unit": 2,
+        "max_bodies_per_ticker": 1,
+    },
 )
 
-MAX_DOCUMENTED_STAGE = 3
+MAX_DOCUMENTED_STAGE = 4
 # Default pace / post-stage-2 runbook: 5 quiet isolation_ok apply nights.
 QUIET_NIGHTS_REQUIRED = 5
 # Shipped floor after #1351 (stage-2 moderate quiet).

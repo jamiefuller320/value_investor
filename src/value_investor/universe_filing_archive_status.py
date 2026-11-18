@@ -2,7 +2,7 @@
 
 Derives a low-distraction Ops panel payload from the last pack run + bottleneck
 review. Observe-only for eng-spray / deepen; stage ladder auto-widen is the
-documented quiet-night promote (hard ceiling stage 3) — not N181 eng-spray.
+documented quiet-night promote (hard ceiling stage 4) — not N181 eng-spray.
 """
 
 from __future__ import annotations
