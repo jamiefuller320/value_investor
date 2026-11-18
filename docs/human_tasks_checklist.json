@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-12",
+  "updated_at": "2026-11-18",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -653,7 +653,7 @@
         {
           "id": "adhoc-strategy-uk-replay-reveal",
           "title": "Run the UK/Europe replay and stamp the reveal",
-          "summary": "DONE 2026-11-15 (owner): revealed under v1 (single holdout write; v0 is never revealed). Result: primary inconclusive, recorded in plan step 3.3. Remaining human step: adhoc-strategy-uk-replay-delete-licensed. Plan step 3.3. The registration was sealed on 2026-11-12 (owner accepted the defaults). The fetch completed on 2026-11-13; development was committed the same day but is superseded by change marker prior-year-visible-v1: after that fix merges, dispatch the strategy-book-uk-replay workflow with phase=development-amendment, and read the amended block, not the first one. The encrypted cache is evicted after 7 days unused: if neither development nor reveal is dispatched for 6 days, re-dispatch phase=fetch (no EODHD calls once complete) to keep it. Do not give the v0 reveal stamp while the v1 draft (Companies House shares for the cap, N273) is pending: once v1 is sealed, the reveal happens under v1 and v0 is never revealed. Otherwise, after the development aggregates are committed, read them and give the second stamp (stamp-reveal) that authorises the single holdout reveal (target 2026-12-03). The stamp changes no sealed number. Last EODHD call day is 2026-12-10.",
+          "summary": "DONE 2026-11-15 (owner): revealed under v1 (single holdout write; v0 is never revealed). Result: primary inconclusive, recorded in plan step 3.3. Remaining human steps: adhoc-strategy-uk-replay-delete-caches and adhoc-strategy-uk-replay-confirm-deleted. EODHD subscription cancellation is adhoc-eodhd-subscription-cancel, done 2026-11-18 (Europe/London). Plan step 3.3. The registration was sealed on 2026-11-12 (owner accepted the defaults). The fetch completed on 2026-11-13; development was committed the same day but is superseded by change marker prior-year-visible-v1: after that fix merges, dispatch the strategy-book-uk-replay workflow with phase=development-amendment, and read the amended block, not the first one. The encrypted cache is evicted after 7 days unused: if neither development nor reveal is dispatched for 6 days, re-dispatch phase=fetch (no EODHD calls once complete) to keep it. Do not give the v0 reveal stamp while the v1 draft (Companies House shares for the cap, N273) is pending: once v1 is sealed, the reveal happens under v1 and v0 is never revealed. Otherwise, after the development aggregates are committed, read them and give the second stamp (stamp-reveal) that authorises the single holdout reveal (target 2026-12-03). The stamp changes no sealed number. Last EODHD call day is 2026-12-10.",
           "automated": false,
           "doc_path": "docs/ops/strategy-book-uk-replay-registration-draft.md",
           "doc_anchor": "owner-sign-off"
@@ -667,9 +667,25 @@
           "doc_anchor": "2-pre-seal-conditions"
         },
         {
-          "id": "adhoc-strategy-uk-replay-delete-licensed",
-          "title": "Delete the UK replay's licensed EODHD data by 2026-12-10 and confirm",
-          "summary": "Plan step 3.3, after the v1 reveal (2026-11-15). The reveal removed the raw prices and statements from the working cache, but older encrypted GitHub Actions caches (keys strategy-book-uk-replay-*, about 560 MB each) still hold them until evicted. By 2026-12-10: delete every strategy-book-uk-replay-* cache under Actions > Caches (or gh cache delete <key> for each), cancel the EODHD subscription and remove the EODHD_API_TOKEN secret, then stamp deleted_at on both stores with ftse-strategy-book-uk-replay confirm-deleted and ftse-strategy-book-uk-replay --registration v1 confirm-deleted, and commit the two store files. Aggregate stores stay committed; no licensed numbers are in git.",
+          "id": "adhoc-eodhd-subscription-cancel",
+          "title": "Cancel the EODHD subscription",
+          "summary": "DONE 2026-11-18 (Europe/London): James Fuller cancelled the EODHD subscription. This does not delete Actions caches and does not stamp licensed_data.deleted_at. Still open, due 2026-12-10: adhoc-strategy-uk-replay-delete-caches and adhoc-strategy-uk-replay-confirm-deleted. Removing the GitHub secret EODHD_API_TOKEN was not reported with the cancellation and stays open on the cache-deletion task.",
+          "automated": false,
+          "doc_path": "docs/ops/strategy-book-uk-replay-runbook.md",
+          "doc_anchor": "licensed-data-deletion"
+        },
+        {
+          "id": "adhoc-strategy-uk-replay-delete-caches",
+          "title": "Delete the UK replay's licensed EODHD caches by 2026-12-10",
+          "summary": "Plan step 3.3, still open, due 2026-12-10. The EODHD subscription was cancelled 2026-11-18 (Europe/London, James Fuller); that does not delete these caches. The reveal removed the raw prices and statements from the working cache, but older encrypted GitHub Actions caches (keys strategy-book-uk-replay-*, about 560 MB each) still hold them until evicted. Delete every strategy-book-uk-replay-* cache under Actions > Caches (or gh cache delete <key> for each). Also remove the GitHub secret EODHD_API_TOKEN if it is still set. Do not stamp deleted_at (that is adhoc-strategy-uk-replay-confirm-deleted). Do not commit licensed numbers.",
+          "automated": false,
+          "doc_path": "docs/ops/strategy-book-uk-replay-runbook.md",
+          "doc_anchor": "licensed-data-deletion"
+        },
+        {
+          "id": "adhoc-strategy-uk-replay-confirm-deleted",
+          "title": "Confirm the UK replay licensed data is deleted by 2026-12-10",
+          "summary": "Plan step 3.3, still open, due 2026-12-10, after the caches are deleted. Stamp licensed_data.deleted_at on both stores with ftse-strategy-book-uk-replay confirm-deleted and ftse-strategy-book-uk-replay --registration v1 confirm-deleted, and commit the two store files. Aggregate stores stay committed; no licensed numbers are in git. deleted_at stays unset until that command is run. The 2026-11-18 subscription cancellation does not stamp it.",
           "automated": false,
           "doc_path": "docs/ops/strategy-book-uk-replay-runbook.md",
           "doc_anchor": "licensed-data-deletion"

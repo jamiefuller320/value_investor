@@ -162,17 +162,21 @@ the newest `strategy-book-uk-replay-*` Actions cache is small. Older encrypted
 caches from earlier runs (about 560 MB each) still hold licensed prices and
 statements until GitHub evicts them. By the last call day, 2026-12-10:
 
-1. Delete every `strategy-book-uk-replay-*` cache under Actions > Caches (or
-   `gh cache delete <key>` for each).
-2. Cancel the EODHD subscription and remove the `EODHD_API_TOKEN` secret.
-3. Stamp `licensed_data.deleted_at` on both stores and commit them:
+1. **Still open.** Delete every `strategy-book-uk-replay-*` cache under
+   Actions > Caches (or `gh cache delete <key>` for each).
+2. **Subscription cancelled 2026-11-18 (Europe/London).** James Fuller cancelled
+   the EODHD subscription. That does not delete the caches and does not stamp
+   `deleted_at`. Still open: remove the `EODHD_API_TOKEN` secret if it is still
+   set.
+3. **Still open.** After the caches are gone, stamp `licensed_data.deleted_at`
+   on both stores and commit them:
 
 ```bash
 ftse-strategy-book-uk-replay confirm-deleted
 ftse-strategy-book-uk-replay --registration v1 confirm-deleted
 ```
 
-After step 2 every phase of the workflow exits 0 and commits nothing.
+After the secret is removed, every phase of the workflow exits 0 and commits nothing.
 
 ## Memory and run time
 
