@@ -97,6 +97,34 @@ def test_refresh_queue_health_writes_sidecar(tmp_path: Path, monkeypatch):
     assert auto["queue_health"]["overall"] == "idle"
 
 
+def test_refresh_queue_health_does_not_restamp_screen_bundle(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    _write_tasks(tasks_path, {"tasks": []})
+    automation_path = tmp_path / "automation.json"
+    write_json(automation_path, {"settings": {}})
+    latest_path = tmp_path / "latest.json"
+    write_json(
+        latest_path,
+        {
+            "generated_at": "2026-11-08T08:26:03+00:00",
+            "run_at": "2026-11-08T08:26:03+00:00",
+            "reports": [],
+        },
+    )
+    refresh_queue_health_ui(
+        automation_path=automation_path,
+        latest_path=latest_path,
+        queue_health_path=tmp_path / "queue_health.json",
+        tasks_path=tasks_path,
+        ops_status_path=tmp_path / "ops_status.json",
+        open_prs=[],
+    )
+    latest = json.loads(latest_path.read_text(encoding="utf-8"))
+    assert latest["generated_at"] == "2026-11-08T08:26:03+00:00"
+    assert latest["run_at"] == "2026-11-08T08:26:03+00:00"
+    assert latest["automation"]["queue_health"]["overall"] == "idle"
+
+
 def test_queue_health_embeds_n200_pipeline_health(tmp_path: Path, monkeypatch):
     tasks_path = tmp_path / "engineering_tasks.json"
     _write_tasks(tasks_path, {"tasks": []})

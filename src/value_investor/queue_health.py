@@ -481,7 +481,10 @@ def refresh_queue_health_ui(
                 automation["generated_at"] = now
             else:
                 latest["automation"] = {"queue_health": snapshot, "generated_at": now}
-            latest["generated_at"] = now
+            # Leave the bundle generated_at / run_at alone. Queue health lives
+            # on automation.json (dashboard sidecar) and under automation here.
+            # A top-level stamp made Sunday's newer screen look stale and the
+            # commit helper skipped docs/data/latest.json.
             write_json(latest_path, latest, compact=True, compress=False)
 
     return {

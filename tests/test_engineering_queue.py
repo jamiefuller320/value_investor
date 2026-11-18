@@ -289,7 +289,16 @@ def test_refresh_engineering_queue_ui_updates_automation(tmp_path: Path):
         json.dumps({"schema_version": 1, "settings": {}}),
         encoding="utf-8",
     )
-    latest_path.write_text(json.dumps({"reports": []}), encoding="utf-8")
+    latest_path.write_text(
+        json.dumps(
+            {
+                "reports": [],
+                "generated_at": "2026-11-08T08:26:03+00:00",
+                "run_at": "2026-11-08T08:26:03+00:00",
+            }
+        ),
+        encoding="utf-8",
+    )
 
     result = refresh_engineering_queue_ui(
         automation_path=automation_path,
@@ -300,6 +309,8 @@ def test_refresh_engineering_queue_ui_updates_automation(tmp_path: Path):
     latest = json.loads(latest_path.read_text(encoding="utf-8"))
     assert auto["engineering_queue"]["status"]["open_count"] == 1
     assert latest["automation"]["engineering_queue"]["status"]["open_count"] == 1
+    assert latest["generated_at"] == "2026-11-08T08:26:03+00:00"
+    assert latest["run_at"] == "2026-11-08T08:26:03+00:00"
     assert result["open_count"] == 1
 
 
