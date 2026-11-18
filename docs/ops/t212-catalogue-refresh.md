@@ -49,6 +49,14 @@ A Yahoo ticker is a `catalogue_hit` (listed) when one of these holds:
    Bank of Ireland (London) and BHP (London) while refusing namesakes: `CSL.AX` is not
    Carlisle Companies, `T.TO` is not AT&T, `ALL.AX` is not the Australian-registered
    Atlantic Lithium in London.
+4. **Company name,** when the symbols differ. Legal and share-class words are ignored.
+   An exact name matches (`Enel` on Xetra is `ENL`, not `ENEL`). One longer catalogue
+   name matches only when every extra word is a generic modifier (`Nordea` / `Nordea Bank`)
+   and no second catalogue name qualifies. A different brand does not
+   (`The Lottery Corporation` is not `Brightstar Lottery`). The joined line's ISIN must be
+   from the ticker's home country, so a same name incorporated elsewhere is refused
+   (`EQT.ST` is not EQT Corp, `SEB-A.ST` is not Groupe SEB). A repeated venue letter is a
+   second line on that venue (`STMpp_EQ` is Paris).
 
 A short-name hit on a foreign venue without that confirmation is not a hit. The ticker falls
 through to the venue allowlist (`exchange_allowlist`, assumed), which the strategy book does

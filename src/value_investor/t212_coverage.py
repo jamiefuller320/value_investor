@@ -164,6 +164,10 @@ T212_LOWERCASE_VENUES: dict[str, str] = {
     "e": "MC",
     "es": "MC",
     "o": "OL",
+    # A repeated letter is a second line on that venue (``STMpp_EQ`` Paris,
+    # ``GAZpl_EQ`` London), not part of the symbol.
+    "pp": "PA",
+    "pl": "LSE",
 }
 # ISIN country prefixes of companies at home on each Yahoo venue. A short-name
 # hit on another venue counts only when the instrument's ISIN is from here
@@ -588,6 +592,145 @@ def _pick_instrument(
     return None
 
 
+# Legal and share-class words dropped before a company-name compare.
+_COMPANY_LEGAL_WORDS = frozenset(
+    {
+        "the",
+        "of",
+        "and",
+        "plc",
+        "ltd",
+        "limited",
+        "inc",
+        "corp",
+        "corporation",
+        "co",
+        "company",
+        "sa",
+        "ag",
+        "nv",
+        "se",
+        "spa",
+        "asa",
+        "ab",
+        "oyj",
+        "oy",
+        "lp",
+        "publ",
+        "pjsc",
+        "jsc",
+        "holding",
+        "holdings",
+        "abp",
+        "gmbh",
+        "bv",
+    }
+)
+_COMPANY_CLASS_WORDS = frozenset({"class", "series", "ord", "ordinary"})
+# Catalogue-only modifiers that still name the same company ("Nordea" /
+# "Nordea Bank", "Lenovo" / "Lenovo Group"). Brand words are not included:
+# "The Lottery Corporation" is not "Brightstar Lottery".
+_COMPANY_EXTRA_WORDS = frozenset(
+    {
+        "bank",
+        "group",
+        "international",
+        "insurance",
+        "technology",
+        "products",
+        "steel",
+        "industries",
+        "australia",
+        "cayman",
+        "islands",
+        "information",
+        "svenska",
+    }
+)
+
+
+def company_name_tokens(name: str | None) -> tuple[str, ...]:
+    """Distinctive words of a company name, without legal or class markers."""
+    words = re.findall(r"[a-z0-9]+", str(name or "").lower())
+    return tuple(
+        word
+        for word in words
+        if word not in _COMPANY_LEGAL_WORDS and word not in _COMPANY_CLASS_WORDS and len(word) > 1
+    )
+
+
+def _company_name_extends(ours: tuple[str, ...], theirs: tuple[str, ...]) -> bool:
+    """True when ``theirs`` is ``ours`` plus only generic modifiers, in order."""
+    if not ours or len(theirs) <= len(ours):
+        return False
+    index = 0
+    extras: list[str] = []
+    for word in theirs:
+        if index < len(ours) and word == ours[index]:
+            index += 1
+        else:
+            extras.append(word)
+    return index == len(ours) and all(word in _COMPANY_EXTRA_WORDS for word in extras)
+
+
+def _match_by_company_name(
+    name: str | None,
+    *,
+    index: dict[str, Any],
+    yahoo_suf: str,
+    policy: dict[str, Any],
+    epic: str,
+) -> dict[str, Any] | None:
+    """Match a catalogue stock by company name when the ticker symbols differ.
+
+    An exact normalised name wins. One longer catalogue name is accepted only
+    when every extra word is a generic modifier and no second catalogue name
+    qualifies. Several different names do not match. A row whose short name is
+    already this epic was decided by the short-name rule and is not retried.
+    """
+    key = company_name_tokens(name)
+    if not key:
+        return None
+    by_ticker = index.get("by_ticker") or {}
+    groups: dict[tuple[str, ...], list[dict[str, Any]]] = {}
+    exact_on_this_symbol = False
+    for row in by_ticker.values():
+        if not isinstance(row, dict) or str(row.get("type") or "").upper() != "STOCK":
+            continue
+        tokens = company_name_tokens(row.get("name"))
+        if not tokens or not (tokens == key or _company_name_extends(key, tokens)):
+            continue
+        short = str(row.get("shortName") or "")
+        ticker_id = str(row.get("ticker") or "")
+        if epic and (short == epic or t212_symbol(ticker_id) == epic):
+            # Already decided by the short-name rule. Do not fall through to
+            # a longer namesake such as Ferrari Group.
+            exact_on_this_symbol = exact_on_this_symbol or tokens == key
+            continue
+        groups.setdefault(tokens, []).append(row)
+    if key in groups:
+        chosen = groups[key]
+    elif exact_on_this_symbol or len(groups) != 1:
+        return None
+    else:
+        chosen = next(iter(groups.values()))
+    home = HOME_ISIN_COUNTRIES.get(yahoo_suf, frozenset())
+    # A foreign ISIN with the same name is a different company often enough
+    # (Swedish EQT is not EQT Corp) that a company-name join requires a
+    # home-country line. ADR-only listings stay unmatched.
+    home_rows = [row for row in chosen if str(row.get("isin") or "")[:2].upper() in home]
+    if not home_rows:
+        return None
+    return _pick_instrument(
+        [str(row.get("ticker") or "") for row in home_rows],
+        by_ticker,
+        yahoo_suf=yahoo_suf,
+        policy=policy,
+        name=name,
+        same_security=True,
+    )
+
+
 def match_catalogue(
     ticker: str,
     *,
@@ -654,7 +797,60 @@ def match_catalogue(
                 )
                 if picked:
                     return picked
-    return None
+    return _match_by_company_name(
+        name,
+        index=index,
+        yahoo_suf=yahoo_suf,
+        policy=policy,
+        epic=epic,
+    )
+
+
+def drop_unlisted_for_maintenance(
+    reports: list[Any],
+    *,
+    market_id: str,
+    library_root: Path,
+) -> tuple[list[Any], list[str]]:
+    """Drop library names the catalogue does not list.
+
+    Used by maintenance ingest only. A missing catalogue keeps every name.
+    The live FTSE 350 screen is never filtered here.
+    """
+    if market_id == FTSE350_MARKET_ID:
+        return list(reports), []
+    index = load_catalogue_index(library_root)
+    if not index:
+        return list(reports), []
+    try:
+        policy = load_t212_policy(t212_coverage_root(library_root))
+    except FileNotFoundError:
+        return list(reports), []
+    kept: list[Any] = []
+    skipped: list[str] = []
+    constituent_names = _names_for_market(library_root, market_id)
+    names_by_upper = {key.upper(): value for key, value in constituent_names.items()}
+    for report in reports:
+        ticker = str(getattr(report, "ticker", "") or "").strip()
+        if not ticker:
+            kept.append(report)
+            continue
+        name = (
+            constituent_names.get(ticker)
+            or names_by_upper.get(ticker.upper())
+            or getattr(report, "name", None)
+        )
+        hit = match_catalogue(
+            ticker,
+            index=index,
+            policy=policy,
+            name=name,
+        )
+        if hit is None:
+            skipped.append(ticker)
+        else:
+            kept.append(report)
+    return kept, skipped
 
 
 def _exception_tradable_flag(exc: dict[str, Any]) -> bool:

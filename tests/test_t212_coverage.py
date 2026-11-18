@@ -463,3 +463,190 @@ def test_default_overlay_covers_ftse350_from_screen_snapshot(tmp_path: Path):
     assert stats["ticker_count"] == 2
     assert stats["catalogue_hit_count"] == 1
     assert (t212 / "by_market" / "ftse350.json").exists()
+
+
+def _name_join_index():
+    return build_catalogue_index(
+        [
+            {
+                "ticker": "ENL1d_EQ",
+                "shortName": "ENL",
+                "isin": "IT0003128367",
+                "type": "STOCK",
+                "name": "Enel",
+            },
+            {
+                "ticker": "ENIC_US_EQ",
+                "shortName": "ENIC",
+                "isin": "US29278D1054",
+                "type": "STOCK",
+                "name": "Enel Chile",
+            },
+            {
+                "ticker": "RACE_US_EQ",
+                "shortName": "RACE",
+                "isin": "NL0011585146",
+                "type": "STOCK",
+                "name": "Ferrari",
+            },
+            {
+                "ticker": "FERGRa_EQ",
+                "shortName": "FERGR",
+                "isin": "GB00BN0VZ646",
+                "type": "STOCK",
+                "name": "Ferrari Group",
+            },
+            {
+                "ticker": "04Qd_EQ",
+                "shortName": "04Q",
+                "isin": "FI4000297767",
+                "type": "STOCK",
+                "name": "Nordea Bank",
+            },
+            {
+                "ticker": "NRDBY_US_EQ",
+                "shortName": "NRDBY",
+                "isin": "US65558R1095",
+                "type": "STOCK",
+                "name": "Nordea Bank",
+            },
+            {
+                "ticker": "STMpp_EQ",
+                "shortName": "STMPA",
+                "isin": "NL0000226223",
+                "type": "STOCK",
+                "name": "STMicroelectronics",
+            },
+            {
+                "ticker": "STMd_EQ",
+                "shortName": "STM",
+                "isin": "DE000STAB1L8",
+                "type": "STOCK",
+                "name": "Stabilus",
+            },
+            {
+                "ticker": "SGJHd_EQ",
+                "shortName": "SGJH",
+                "isin": "CNE1000004C8",
+                "type": "STOCK",
+                "name": "Sinopec Shanghai Petrochemical",
+            },
+            {
+                "ticker": "BRSTd_EQ",
+                "shortName": "BRST",
+                "isin": "US1111111111",
+                "type": "STOCK",
+                "name": "Brightstar Lottery",
+            },
+            {
+                "ticker": "IRRl_EQ",
+                "shortName": "ALL",
+                "isin": "AU0000237554",
+                "type": "STOCK",
+                "name": "Atlantic Lithium",
+            },
+            {
+                "ticker": "SVHHd_EQ",
+                "shortName": "SVHH",
+                "isin": "SE0007100599",
+                "type": "STOCK",
+                "name": "Svenska Handelsbanken (Class A)",
+            },
+            {
+                "ticker": "EQT_US_EQ",
+                "shortName": "EQT",
+                "isin": "US26884L1098",
+                "type": "STOCK",
+                "name": "EQT",
+            },
+            {
+                "ticker": "EQ6d_EQ",
+                "shortName": "EQ6",
+                "isin": "US26884L1098",
+                "type": "STOCK",
+                "name": "EQT",
+            },
+            {
+                "ticker": "SKp_EQ",
+                "shortName": "SK",
+                "isin": "FR0000121709",
+                "type": "STOCK",
+                "name": "SEB",
+            },
+        ]
+    )
+
+
+def test_company_name_joins_a_different_symbol_and_refuses_namesakes():
+    from value_investor.t212_coverage import DEFAULT_SUFFIX_EXCHANGES
+
+    index = _name_join_index()
+    policy = {"yahoo_suffix_to_t212_exchanges": DEFAULT_SUFFIX_EXCHANGES}
+    enel = match_catalogue("ENEL.MI", index=index, policy=policy, name="Enel")
+    assert enel["ticker"] == "ENL1d_EQ"
+    # Enel Chile is a US ISIN. An Italian ticker does not inherit it.
+    assert match_catalogue("ENEL.MI", index=index, policy=policy, name="Enel Chile") is None
+    # Same short name on a foreign line stays a miss. Company name does not retry it.
+    assert match_catalogue("RACE.MI", index=index, policy=policy, name="Ferrari") is None
+    nordea = match_catalogue("NDA-FI.HE", index=index, policy=policy, name="Nordea")
+    assert nordea["isin"] == "FI4000297767"
+    assert (
+        match_catalogue("SHB-A.ST", index=index, policy=policy, name="Handelsbanken A")["ticker"]
+        == "SVHHd_EQ"
+    )
+    assert match_catalogue("STMPA.PA", index=index, policy=policy)["ticker"] == "STMpp_EQ"
+    assert (
+        match_catalogue("STM.DE", index=index, policy=policy, name="Stabilus")["ticker"]
+        == "STMd_EQ"
+    )
+    assert match_catalogue("0386.HK", index=index, policy=policy, name="Sinopec Corp") is None
+    assert (
+        match_catalogue("TLC.AX", index=index, policy=policy, name="The Lottery Corporation")
+        is None
+    )
+    assert match_catalogue("ALL.AX", index=index, policy=policy, name="Aristocrat Leisure") is None
+    assert match_catalogue("ENEL.MI", index=index, policy=policy) is None
+    # Same short name, other country: not this listing.
+    assert match_catalogue("EQT.ST", index=index, policy=policy, name="EQT") is None
+    assert match_catalogue("SEB-A.ST", index=index, policy=policy, name="SEB A") is None
+
+
+def test_maintenance_drops_unlisted_names_and_keeps_the_ftse_screen(tmp_path: Path):
+    from types import SimpleNamespace
+
+    from value_investor.t212_coverage import drop_unlisted_for_maintenance
+
+    root = tmp_path / "library"
+    t212 = root / "t212_coverage"
+    t212.mkdir(parents=True)
+    write_json(
+        t212 / "policy.json",
+        {"schema_version": 2, "exchanges": [], "yahoo_suffix_to_t212_exchanges": {}},
+        compact=False,
+    )
+    save_catalogue(
+        [
+            {
+                "ticker": "ENL1d_EQ",
+                "shortName": "ENL",
+                "isin": "IT0003128367",
+                "type": "STOCK",
+                "name": "Enel",
+            }
+        ],
+        library_root=root,
+        env="demo",
+        source="fixture",
+    )
+    reports = [
+        SimpleNamespace(ticker="ENEL.MI", name="Enel"),
+        SimpleNamespace(ticker="A2A.MI", name="A2A"),
+    ]
+    kept, skipped = drop_unlisted_for_maintenance(reports, market_id="ftse_mib", library_root=root)
+    assert [row.ticker for row in kept] == ["ENEL.MI"]
+    assert skipped == ["A2A.MI"]
+    ftse_kept, ftse_skipped = drop_unlisted_for_maintenance(
+        reports, market_id="ftse350", library_root=root
+    )
+    assert [row.ticker for row in ftse_kept] == ["ENEL.MI", "A2A.MI"]
+    assert ftse_skipped == []
