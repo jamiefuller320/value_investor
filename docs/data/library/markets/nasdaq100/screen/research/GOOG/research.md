@@ -1,6 +1,6 @@
 # Alphabet Inc. (GOOG) — Research memo
 
-_Version 5 · Updated 2026-11-18T17:56:46.551315+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-18T21:44:38.632675+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.58
-Rationale: Anthropic and cloud-growth headlines support the AI case, but unchanged TTM FCF strain and added Waymo regulatory noise leave research modestly short of the screen buy—no new company disclosures.
+Rationale: IPO-day headlines cite more Anthropic buying and record cloud growth, but unchanged TTM FCF strain and no new Alphabet filings leave research modestly short of the screen buy.
 RiskTags: regulatory, competitive, litigation, accounting
 
 ## Weekly updates
@@ -33,3 +33,8 @@ No material change.
 Anthropic IPO-day headlines reiterate Alphabet’s large disclosed stake (28%+ ownership) and the AI/datacentre spend theme already in the memo.  
 Commentary cites strong Google Cloud growth; Waymo reportedly withdrew highway robotaxis after a California ban—incremental autonomous regulatory friction, not a new filing.  
 Screening snapshot and SEC filings index are unchanged (TTM FCF ~$19.7bn; FY2025 SEC FCF ~$73bn).
+
+### 2026-11-18T21:44:38.632675+00:00
+Post-verdict news adds IPO-day reports of further Anthropic share purchases (~$10bn) and combined Google/Amazon stakes above 35%; commentary still ties weak share reaction to AI capex versus cloud growth.  
+Screening snapshot and SEC filings index unchanged (TTM FCF ~$19.7bn; FY2025 SEC FCF ~$73bn).  
+No new company filings—spend timing remains unresolved.
