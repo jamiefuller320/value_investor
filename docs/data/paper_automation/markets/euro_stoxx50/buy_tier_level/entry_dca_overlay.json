@@ -5342,7 +5342,7 @@
       "track_id": "buy_tier_level",
       "ticker": "SAP.DE",
       "started_at": "2026-11-16T08:26:27.623117+01:00",
-      "status": "open",
+      "status": "closed",
       "lifecycle_stage": "recommit",
       "entry_kind": "recommit",
       "entry_price": 213.45,
@@ -5361,8 +5361,144 @@
         {
           "as_of": "2026-11-17T08:30:12.398324+01:00",
           "price": 213.45
+        },
+        {
+          "as_of": "2026-11-18T09:47:01.031926+01:00",
+          "price": 213.4
         }
-      ]
+      ],
+      "cadence_scores": [
+        {
+          "id": "lump_sum",
+          "label": "100% at decision",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 1,
+          "avg_fill": 213.45,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -0.03,
+          "peak_deployed_return": -0.0002,
+          "end_value": 121.47,
+          "end_value_delta": 0.0,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-16T08:26:27.623117+01:00",
+              "price": 213.45
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_2x_weekly",
+          "label": "50/50 over 1 week",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 213.45,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 60.75,
+          "peak_loss_gbp": -0.01,
+          "peak_deployed_return": -0.0002,
+          "end_value": 121.49,
+          "end_value_delta": 0.01,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-16T08:26:27.623117+01:00",
+              "price": 213.45
+            }
+          ],
+          "de_risk_gbp": 0.02
+        },
+        {
+          "id": "dca_4x_weekly",
+          "label": "25% weekly \u00d7 4",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 4,
+          "avg_fill": 213.45,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 91.12,
+          "peak_loss_gbp": -0.01,
+          "peak_deployed_return": -0.0002,
+          "end_value": 121.49,
+          "end_value_delta": 0.02,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-16T08:26:27.623117+01:00",
+              "price": 213.45
+            }
+          ],
+          "de_risk_gbp": 0.02
+        },
+        {
+          "id": "dca_2x_biweekly",
+          "label": "50/50 over 2 weeks",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 213.45,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 60.75,
+          "peak_loss_gbp": -0.01,
+          "peak_deployed_return": -0.0002,
+          "end_value": 121.49,
+          "end_value_delta": 0.01,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-16T08:26:27.623117+01:00",
+              "price": 213.45
+            }
+          ],
+          "de_risk_gbp": 0.02
+        },
+        {
+          "id": "dca_5x_weekday",
+          "label": "20% over 5 weekday marks",
+          "scored": true,
+          "tranches_filled": 3,
+          "tranches_target": 5,
+          "avg_fill": 213.4333,
+          "fill_advantage_pct": 0.0001,
+          "extra_cost": 0.09,
+          "leftover_cash": 48.6,
+          "peak_loss_gbp": -0.01,
+          "peak_deployed_return": -0.0002,
+          "end_value": 121.4,
+          "end_value_delta": -0.07,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-16T08:26:27.623117+01:00",
+              "price": 213.45
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-11-17T08:30:12.398324+01:00",
+              "price": 213.45
+            },
+            {
+              "tranche": 3,
+              "as_of": "2026-11-18T09:47:01.031926+01:00",
+              "price": 213.4
+            }
+          ],
+          "de_risk_gbp": 0.02
+        }
+      ],
+      "winning_cadence": "dca_4x_weekly",
+      "winning_end_value_delta": 0.02,
+      "any_de_risk": true,
+      "closed_at": "2026-11-18T09:47:01.031926+01:00",
+      "close_reason": "sold_before_window"
     }
   ]
 }
