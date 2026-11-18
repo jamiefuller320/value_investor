@@ -161,7 +161,12 @@ console.log(JSON.stringify({
 
 
 def test_review_queue_nan_tokens_parse_and_list_companion() -> None:
-    """The published queue contains bare NaN. The loader must still show the rows."""
+    """The published queue contains bare NaN. The loader must still show the rows.
+
+    Companion length follows the published file. An inline two-row queue locks
+    the list contract so a later queue refresh does not fail CI. influences_live
+    stays false.
+    """
     payload = _node(r"""
 global.document = { readyState: "loading", addEventListener() {} };
 vm.runInThisContext(fs.readFileSync("docs/v2/v2.js", "utf8"), { filename: "v2.js" });
@@ -175,20 +180,34 @@ try {
 }
 const view = parsed ? api.reviewView(parsed) : null;
 const kept = global.window.__dashboardV2ParseJson('{"note":"NaN is a word","value": NaN}');
+const fixtureRaw = '{"influences_live":false,"counts":{"companion":2,"active":0},"active":[],"companion":[{"review_id":"a","ticker":"AAA","fair_cost_return_pct":NaN},{"review_id":"b","ticker":"BBB","fair_cost_return_pct":1.5}]}';
+const fixture = global.window.__dashboardV2ParseJson(fixtureRaw);
+const fixtureView = api.reviewView(fixture);
 console.log(JSON.stringify({
   error: error,
   companion: view ? view.companion.length : null,
+  rawCount: parsed && Array.isArray(parsed.companion) ? parsed.companion.length : null,
+  counted: parsed && parsed.counts ? parsed.counts.companion : null,
   active: view ? view.counts.active : null,
+  activeCount: parsed && parsed.counts ? parsed.counts.active : null,
   influences: parsed ? parsed.influences_live : null,
   keptNote: kept.note,
   keptValue: kept.value,
+  fixtureCompanion: fixtureView.companion.length,
+  fixtureInfluences: fixture.influences_live,
+  fixtureNan: fixture.companion[0].fair_cost_return_pct,
 }));
 """)
     if payload.get("skipped"):
         return
     assert payload["error"] == ""
-    assert payload["companion"] == 4
-    assert payload["active"] == 0
+    assert payload["rawCount"] >= 1
+    assert payload["companion"] == payload["rawCount"]
+    assert payload["companion"] == payload["counted"]
+    assert payload["active"] == payload["activeCount"]
     assert payload["influences"] is False
     assert payload["keptNote"] == "NaN is a word"
     assert payload["keptValue"] is None
+    assert payload["fixtureCompanion"] == 2
+    assert payload["fixtureInfluences"] is False
+    assert payload["fixtureNan"] is None
