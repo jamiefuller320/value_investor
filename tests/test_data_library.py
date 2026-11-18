@@ -90,6 +90,56 @@ def test_refresh_constituents_writes_latest_and_dated(tmp_path: Path, monkeypatc
     assert len(latest) == 3
     dated = list((root / "markets" / "sp500" / "constituents").glob("20*.json"))
     assert len(dated) == 1
+    assert manifest["t212_admission_refused"] == []
+
+
+def test_refresh_admits_only_new_catalogue_hits(tmp_path: Path, monkeypatch):
+    from value_investor import data_library as dl
+    from value_investor.t212_coverage import save_catalogue
+
+    root = tmp_path / "library"
+    write_json(
+        root / "t212_coverage" / "policy.json",
+        {"yahoo_suffix_to_t212_exchanges": {".DE": ["DE", "GY", "XE"]}},
+        compact=False,
+    )
+    save_catalogue(
+        [
+            {
+                "ticker": "NEWd_EQ",
+                "shortName": "NEW",
+                "isin": "DE0000000001",
+                "type": "STOCK",
+                "name": "New Co",
+            }
+        ],
+        library_root=root,
+        env="demo",
+        source="fixture",
+    )
+    constituents = root / "markets" / "dax" / "constituents"
+    constituents.mkdir(parents=True)
+    write_json(
+        constituents / "latest.json",
+        [{"ticker": "OLD.DE", "name": "Old Co", "sector": "Tech", "epic": "OLD"}],
+        compact=False,
+    )
+
+    def fetched() -> pd.DataFrame:
+        return pd.DataFrame(
+            [
+                {"ticker": "OLD.DE", "name": "Old Co", "sector": "Tech", "epic": "OLD"},
+                {"ticker": "NEW.DE", "name": "New Co", "sector": "Tech", "epic": "NEW"},
+                {"ticker": "MISS.DE", "name": "Missing Co", "sector": "Tech", "epic": "MISS"},
+            ]
+        )
+
+    monkeypatch.setitem(dl.CONSTITUENT_FETCHERS, "dax", fetched)
+    manifest = refresh_constituents(root, "dax")
+    assert manifest["tickers"] == ["OLD.DE", "NEW.DE"]
+    assert manifest["t212_admission_refused"] == ["MISS.DE"]
+    latest = read_json(constituents / "latest.json")
+    assert [row["ticker"] for row in latest] == ["OLD.DE", "NEW.DE"]
 
 
 def test_progressive_metrics_grow_and_status(tmp_path: Path, monkeypatch):

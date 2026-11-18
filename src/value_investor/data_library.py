@@ -1085,6 +1085,75 @@ def save_manifest(root: Path, market_id: str, manifest: dict[str, Any]) -> Path:
     return write_json(manifest_path(root, market_id), manifest, compact=False)
 
 
+def _stored_constituent_tickers(root: Path, market_id: str) -> set[str]:
+    """Tickers already on the chase list. Used so a refresh does not relitigate them."""
+    found: set[str] = set()
+    latest = market_dir(root, market_id) / "constituents" / "latest.json"
+    if latest.exists():
+        raw = read_json(latest)
+        rows = raw if isinstance(raw, list) else []
+        for row in rows:
+            if isinstance(row, dict) and row.get("ticker"):
+                found.add(str(row["ticker"]).strip().upper())
+    path = manifest_path(root, market_id)
+    if path.exists():
+        manifest = read_json(path)
+        if isinstance(manifest, dict):
+            for ticker in manifest.get("tickers") or []:
+                if ticker:
+                    found.add(str(ticker).strip().upper())
+    return found
+
+
+def gate_new_constituents_for_t212(
+    records: list[dict[str, Any]],
+    *,
+    existing_tickers: set[str],
+    library_root: Path,
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Keep stored names. Admit a new name only when the Trading 212 catalogue lists it.
+
+    A missing catalogue or policy leaves the fetched rows unchanged. This does not
+    delete names already on the list.
+    """
+    from value_investor.t212_coverage import (
+        load_catalogue_index,
+        load_t212_policy,
+        match_catalogue,
+        t212_coverage_root,
+    )
+
+    index = load_catalogue_index(library_root)
+    if not index:
+        return list(records), []
+    try:
+        policy = load_t212_policy(t212_coverage_root(library_root))
+    except FileNotFoundError:
+        return list(records), []
+    kept: list[dict[str, Any]] = []
+    refused: list[str] = []
+    for row in records:
+        if not isinstance(row, dict):
+            continue
+        ticker = str(row.get("ticker") or "").strip()
+        if not ticker:
+            continue
+        if ticker.upper() in existing_tickers:
+            kept.append(row)
+            continue
+        hit = match_catalogue(
+            ticker,
+            index=index,
+            policy=policy,
+            name=row.get("name"),
+        )
+        if hit is None:
+            refused.append(ticker)
+        else:
+            kept.append(row)
+    return kept, refused
+
+
 def refresh_constituents(root: Path, market_id: str) -> dict[str, Any]:
     if market_id not in MARKET_REGISTRY:
         raise ValueError(f"Unknown market {market_id!r}; known: {', '.join(MARKET_REGISTRY)}")
@@ -1093,7 +1162,13 @@ def refresh_constituents(root: Path, market_id: str) -> dict[str, Any]:
     frame = fetcher()
     as_of = datetime.now(UTC).date().isoformat()
     base = market_dir(root, market_id)
-    records = frame.to_dict(orient="records")
+    fetched = frame.to_dict(orient="records")
+    existing = _stored_constituent_tickers(root, market_id)
+    records, refused = gate_new_constituents_for_t212(
+        fetched,
+        existing_tickers=existing,
+        library_root=root,
+    )
     write_json(base / "constituents" / "latest.json", records, compact=False)
     write_json(base / "constituents" / f"{as_of}.json", records, compact=False)
 
@@ -1107,6 +1182,7 @@ def refresh_constituents(root: Path, market_id: str) -> dict[str, Any]:
             "label": spec.label,
             "exchange": spec.exchange,
             "currency": spec.currency,
+            "t212_admission_refused": refused,
         }
     )
     # Drop state for names that left the index (survivorship: keep dated constituent files).

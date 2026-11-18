@@ -55,6 +55,15 @@ through to the venue allowlist (`exchange_allowlist`, assumed), which the strate
 not count as listed. Trading 212 has no ASX, Hong Kong or Singapore venue, so names there are
 listed only through a confirmed line elsewhere.
 
+## New constituents
+
+`refresh_constituents` keeps names already on `constituents/latest.json` or the market
+manifest. A ticker the Wikipedia (or curated) fetch adds on a later run is written only
+when `match_catalogue` hits. An allowlist assumption is not enough. If the catalogue or
+`policy.json` is missing, the refresh keeps the fetched list rather than guessing. The
+live FTSE 350 screen does not use this path. Stored constituent files are not rewritten
+except by a later refresh, and that refresh still retains names that were already stored.
+
 Committed paths (only when changed):
 
 - `docs/data/library/t212_coverage/catalogue/**`
