@@ -306,6 +306,81 @@ def explore_one(
     return {"action": "ran", **record}
 
 
+def _slim_ingest(result: dict[str, Any], *, seconds: float) -> dict[str, Any]:
+    summary = (
+        result.get("filings_summary") if isinstance(result.get("filings_summary"), dict) else {}
+    )
+    return {
+        "seconds": seconds,
+        "financial_years": result.get("financial_years"),
+        "filings_summary": summary,
+        "snapshot_path": result.get("snapshot_path"),
+        "error": result.get("error"),
+    }
+
+
+def default_full_ingest(
+    instrument: dict[str, Any],
+    screen: dict[str, Any],
+    library_root: Path,
+) -> dict[str, Any]:
+    """Research ingest for one name already queued as a buy or strong buy."""
+    from value_investor.research.ingest import ingest_research_sources
+
+    ticker = str(instrument.get("ticker") or "")
+    yahoo = yahoo_ticker(ticker) or ticker
+    company = str(instrument.get("shortName") or instrument.get("name") or yahoo)
+    safe = _SAFE.sub("_", yahoo)
+    sources = Path(library_root) / "catalogue_explorer" / "research" / safe / "sources"
+    return ingest_research_sources(
+        ticker=yahoo,
+        company_name=company,
+        screening_snapshot={
+            "ticker": yahoo,
+            "signal": screen.get("signal"),
+            "fits": True,
+        },
+        sources_dir=sources,
+        include_filings=True,
+    )
+
+
+def run_one_handoff(
+    library_root: Path | None = None,
+    *,
+    ingest: Callable[[dict[str, Any], dict[str, Any], Path], dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Ingest one pending buy. Stops after that name."""
+    root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
+    state = load_state(root)
+    handoffs = [row for row in (state.get("handoffs") or []) if isinstance(row, dict)]
+    pending = next((row for row in handoffs if row.get("status") == "pending"), None)
+    if pending is None:
+        return {"action": "idle", "reason": "no_handoff", "pending": 0}
+    instrument = {
+        "ticker": pending.get("t212_ticker"),
+        "shortName": pending.get("name"),
+    }
+    screen = {"signal": pending.get("signal"), "fits": True}
+    started = time.perf_counter()
+    try:
+        runner = ingest or default_full_ingest
+        raw = runner(instrument, screen, root)
+        pending["ingest"] = _slim_ingest(raw if isinstance(raw, dict) else {}, seconds=0.0)
+        pending["status"] = "done"
+        pending.pop("error", None)
+    except Exception as exc:  # noqa: BLE001 — a failed handoff stays visible and is not retried here
+        pending["status"] = "error"
+        pending["error"] = str(exc)
+        pending["ingest"] = {"error": str(exc)}
+    pending["ingest"]["seconds"] = round(time.perf_counter() - started, 3)
+    pending["finished_at"] = datetime.now(UTC).isoformat()
+    state["handoffs"] = handoffs
+    state["updated_at"] = pending["finished_at"]
+    save_state(state, root)
+    return {"action": "ran", **pending}
+
+
 def finding_summary(state: dict[str, Any] | None) -> str:
     if not state:
         return (
