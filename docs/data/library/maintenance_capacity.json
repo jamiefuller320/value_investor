@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-19T14:30:59.140642+00:00",
-  "max_markets_when_crowded": 2,
+  "updated_at": "2026-11-19T17:32:00.733955+00:00",
+  "max_markets_when_crowded": 1,
   "matrix_parallel": {
     "enabled": false,
     "proposed": true,
@@ -9,26 +9,6 @@
     "reason": "sequential_cap_still_crowded"
   },
   "samples": [
-    {
-      "run_at": "2026-11-16T10:38:57.322130+00:00",
-      "configured_count": 22,
-      "selected": [
-        "ibex35",
-        "iseq20",
-        "nasdaq100"
-      ],
-      "selected_count": 3,
-      "deferred_count": 19,
-      "width": 3,
-      "staggered": true,
-      "error_count": 0,
-      "runtime_cutoff_count": 0,
-      "used_seconds_total": 27.2,
-      "used_seconds_max": 11.8,
-      "target_count_total": 0,
-      "target_count_max": 0,
-      "name_cap_hit": false
-    },
     {
       "run_at": "2026-11-16T13:39:15.009557+00:00",
       "configured_count": 22,
@@ -484,23 +464,39 @@
       "target_count_total": 10,
       "target_count_max": 1,
       "name_cap_hit": false
+    },
+    {
+      "run_at": "2026-11-19T17:32:00.732657+00:00",
+      "configured_count": 2,
+      "selected": [],
+      "selected_count": 0,
+      "deferred_count": 0,
+      "width": 2,
+      "staggered": true,
+      "error_count": 0,
+      "runtime_cutoff_count": 1,
+      "used_seconds_total": 2947.8,
+      "used_seconds_max": 350.8,
+      "target_count_total": 10,
+      "target_count_max": 1,
+      "name_cap_hit": false
     }
   ],
   "last_review": {
     "schema_version": 1,
-    "assessed_at": "2026-11-19T14:30:59.140390+00:00",
+    "assessed_at": "2026-11-19T17:32:00.733692+00:00",
     "path": "docs/data/library/maintenance_capacity.json",
-    "current_width": 3,
-    "proposed_width": 2,
+    "current_width": 2,
+    "proposed_width": 1,
     "decision": "step_down",
     "reason": "runtime_cutoff_or_errors",
-    "sample_count": 4,
+    "sample_count": 1,
     "sample_count_total": 24,
-    "median_used_seconds": 227.14999999999998,
+    "median_used_seconds": 2947.8,
     "runtime_cutoff_count": 1,
     "error_count": 0,
     "name_cap_hits": 0,
-    "configured_markets_peak": 22,
+    "configured_markets_peak": 2,
     "matrix_parallel_proposed": true,
     "matrix_parallel_enabled": false,
     "thresholds": {
@@ -513,9 +509,9 @@
     },
     "apply_safe": true,
     "note": "Name cap (62 targets) hits are informational — usually not binding. Matrix stays a proposal flag until a separate workflow is wired.",
-    "applied_at": "2026-11-19T14:30:59.140642+00:00",
-    "width_before": 3,
-    "width_after": 2
+    "applied_at": "2026-11-19T17:32:00.733955+00:00",
+    "width_before": 2,
+    "width_after": 1
   },
   "note": "Crowded maintenance slot width (L323/L454). Default 2 markets per cron; reviewer may step 1–3 sequential or propose matrix (flag only)."
 }
