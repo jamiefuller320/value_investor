@@ -684,6 +684,233 @@ def test_maintenance_drops_unlisted_names_and_keeps_the_ftse_screen(tmp_path: Pa
     assert ftse_skipped == []
 
 
+def test_maintenance_closed_list_keeps_one_isin_and_refuses_a_choice(tmp_path: Path):
+    from types import SimpleNamespace
+
+    from value_investor.t212_coverage import (
+        _CLOSED_MAINTENANCE_ISIN,
+        drop_unlisted_for_maintenance,
+    )
+
+    assert _CLOSED_MAINTENANCE_ISIN == {
+        "SLN.L": "US82686Q1013",
+        "NEXN.L": "IL0012165630",
+        "AZN.ST": "GB0009895292",
+        "HMSO.IR": "GB00BRJQ8J25",
+        "BOL.ST": "US09752V1026",
+        "EPI-A.ST": "US29429L4023",
+        "MB.MI": "US58502K1060",
+        "TRN.MI": "US88088L1035",
+        "O39.SI": "US6903331097",
+        "0388.HK": "US43858F1093",
+        "0285.HK": "HK0285041858",
+        "0960.HK": "US54303R1014",
+        "1177.HK": "KYG8167W1380",
+        "6690.HK": "CNE1000031C1",
+        "0386.HK": "CNE1000002Q2",
+        "FLT.AX": "AU000000FLT9",
+        "LTR.AX": "AU000000LTR4",
+        "SGM.AX": "US8291601008",
+        "MTS.MC": "LU1598757687",
+        "ABB.ST": "CH0012221716",
+        "ERIC-B.ST": "SE0000108656",
+        "NDA-SE.ST": "FI4000297767",
+        "0175.HK": "KYG3777B1032",
+    }
+
+    root = tmp_path / "library"
+    t212 = root / "t212_coverage"
+    t212.mkdir(parents=True)
+    write_json(
+        t212 / "policy.json",
+        {"schema_version": 2, "exchanges": [], "yahoo_suffix_to_t212_exchanges": {}},
+        compact=False,
+    )
+    save_catalogue(
+        [
+            {
+                "ticker": "SLN_US_EQ",
+                "shortName": "SLN",
+                "isin": "US82686Q1013",
+                "type": "STOCK",
+                "name": "Silence Therapeutics",
+            },
+            {
+                "ticker": "FLT_US_EQ",
+                "shortName": "FLT",
+                "isin": "CA92865M1023",
+                "type": "STOCK",
+                "name": "Volatus Aerospace",
+            },
+            {
+                "ticker": "FLId_EQ",
+                "shortName": "FLI",
+                "isin": "AU000000FLT9",
+                "type": "STOCK",
+                "name": "Flight Centre",
+            },
+            {
+                "ticker": "MTd_EQ",
+                "shortName": "MT",
+                "isin": "LU1598757687",
+                "type": "STOCK",
+                "name": "ArcelorMittal",
+            },
+            {
+                "ticker": "MT_US_EQ",
+                "shortName": "MT",
+                "isin": "US03938L2034",
+                "type": "STOCK",
+                "name": "ArcelorMittal",
+            },
+            {
+                "ticker": "ERCBd_EQ",
+                "shortName": "ERCB",
+                "isin": "SE0000108656",
+                "type": "STOCK",
+                "name": "Telefonaktiebolaget LM Ericsson (Class B)",
+            },
+            {
+                "ticker": "ERCGd_EQ",
+                "shortName": "ERCG",
+                "isin": "SE0000108649",
+                "type": "STOCK",
+                "name": "Telefonaktiebolaget LM Ericsson (Class A)",
+            },
+            {
+                "ticker": "ERIC_US_EQ",
+                "shortName": "ERIC",
+                "isin": "US2948216088",
+                "type": "STOCK",
+                "name": "Ericsson",
+            },
+            {
+                "ticker": "ATLCY_US_EQ",
+                "shortName": "ATLCY",
+                "isin": "US0492558053",
+                "type": "STOCK",
+                "name": "Atlas Copco",
+            },
+            {
+                "ticker": "ATLKY_US_EQ",
+                "shortName": "ATLKY",
+                "isin": "US0492557063",
+                "type": "STOCK",
+                "name": "Atlas Copco",
+            },
+            {
+                "ticker": "EQT_US_EQ",
+                "shortName": "EQT",
+                "isin": "US26884L1098",
+                "type": "STOCK",
+                "name": "EQT",
+            },
+            {
+                "ticker": "SK_US_EQ",
+                "shortName": "SK",
+                "isin": "FR0000121709",
+                "type": "STOCK",
+                "name": "SEB",
+            },
+            {
+                "ticker": "APA_US_EQ",
+                "shortName": "APA",
+                "isin": "US03743Q1085",
+                "type": "STOCK",
+                "name": "APA",
+            },
+            {
+                "ticker": "BRSTd_EQ",
+                "shortName": "BRST",
+                "isin": "US1111111111",
+                "type": "STOCK",
+                "name": "Brightstar Lottery",
+            },
+            {
+                "ticker": "ENL1d_EQ",
+                "shortName": "ENL",
+                "isin": "IT0003128367",
+                "type": "STOCK",
+                "name": "Enel",
+            },
+        ],
+        library_root=root,
+        env="demo",
+        source="fixture",
+    )
+    # The closed list is not a name-match rule.
+    assert match_catalogue("SLN.L", index=build_catalogue_index([]), policy={}) is None
+    index = build_catalogue_index(
+        [
+            {
+                "ticker": "SLN_US_EQ",
+                "shortName": "SLN",
+                "isin": "US82686Q1013",
+                "type": "STOCK",
+                "name": "Silence Therapeutics",
+            }
+        ]
+    )
+    assert match_catalogue("SLN.L", index=index, policy={}, name="Silence Therapeutics") is None
+    reports = [
+        SimpleNamespace(ticker="SLN.L", name="Silence Therapeutics"),
+        SimpleNamespace(ticker="FLT.AX", name="Flight Centre"),
+        SimpleNamespace(ticker="MTS.MC", name="ArcelorMittal"),
+        SimpleNamespace(ticker="ERIC-B.ST", name="Ericsson B"),
+        SimpleNamespace(ticker="ATCO-A.ST", name="Atlas Copco A"),
+        SimpleNamespace(ticker="EQT.ST", name="EQT"),
+        SimpleNamespace(ticker="SEB-A.ST", name="SEB A"),
+        SimpleNamespace(ticker="APA.AX", name="APA Group"),
+        SimpleNamespace(ticker="TLC.AX", name="The Lottery Corporation"),
+        SimpleNamespace(ticker="ENEL.MI", name="Enel"),
+        SimpleNamespace(ticker="A2A.MI", name="A2A"),
+    ]
+    kept, skipped = drop_unlisted_for_maintenance(
+        reports, market_id="omx_stockholm", library_root=root
+    )
+    assert [row.ticker for row in kept] == ["SLN.L", "FLT.AX", "MTS.MC", "ERIC-B.ST", "ENEL.MI"]
+    assert skipped == ["ATCO-A.ST", "EQT.ST", "SEB-A.ST", "APA.AX", "TLC.AX", "A2A.MI"]
+    # Only the ADR is present, so the Madrid ordinary stays off.
+    save_catalogue(
+        [
+            {
+                "ticker": "MT_US_EQ",
+                "shortName": "MT",
+                "isin": "US03938L2034",
+                "type": "STOCK",
+                "name": "ArcelorMittal",
+            },
+            {
+                "ticker": "ENL1d_EQ",
+                "shortName": "ENL",
+                "isin": "IT0003128367",
+                "type": "STOCK",
+                "name": "Enel",
+            },
+        ],
+        library_root=root,
+        env="demo",
+        source="fixture",
+    )
+    adr_kept, adr_skipped = drop_unlisted_for_maintenance(
+        [
+            SimpleNamespace(ticker="MTS.MC", name="ArcelorMittal"),
+            SimpleNamespace(ticker="ENEL.MI", name="Enel"),
+        ],
+        market_id="ibex",
+        library_root=root,
+    )
+    assert [row.ticker for row in adr_kept] == ["ENEL.MI"]
+    assert adr_skipped == ["MTS.MC"]
+    bare = tmp_path / "empty"
+    bare.mkdir()
+    missing_kept, missing_skipped = drop_unlisted_for_maintenance(
+        reports, market_id="omx_stockholm", library_root=bare
+    )
+    assert [row.ticker for row in missing_kept] == [row.ticker for row in reports]
+    assert missing_skipped == []
+
+
 def test_cross_listing_name_matches_without_a_local_venue():
     from value_investor.t212_coverage import DEFAULT_SUFFIX_EXCHANGES
 

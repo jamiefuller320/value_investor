@@ -71,6 +71,10 @@ word is a generic modifier and no second catalogue name qualifies. `HSBC Holding
 and `The Lottery Corporation` does not match Brightstar Lottery. Other Yahoo markets still
 need a home-country ISIN before a foreign short name counts, so `EQT.ST` is not EQT Corp.
 
+## Maintenance closed list
+
+Maintenance ingest also keeps a name when a closed ticker-to-ISIN list points at one catalogue ISIN and that ISIN is present as a stock. The name matcher does not read the list. A ticker whose ISIN is absent stays off. A missing catalogue still drops nothing, and the live FTSE 350 screen is not filtered. Namesakes such as `EQT.ST`, `SEB-A.ST`, `APA.AX`, and `TLC.AX` are not on the list. `ATCO-A.ST` is not on it either: the catalogue has two US ADRs and no Swedish ordinary.
+
 ## New constituents
 
 `refresh_constituents` keeps names already on `constituents/latest.json` or the market
