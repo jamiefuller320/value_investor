@@ -1,6 +1,6 @@
 # Kuaishou Technology (1024.HK) — Research memo
 
-_Version 11 · Updated 2026-11-19T17:49:39.560315+00:00 · Mode: structured_verdict_update_
+_Version 12 · Updated 2026-11-19T21:34:23.237569+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.68
-Rationale: HKEX Q3 2026 results show 11.1% revenue decline and a quarterly loss amid competition and higher AI spend, weakening the strong-buy case despite still-positive nine-month profit.
+Rationale: Filed Q3/nine-month results to 30 Sep 2026 confirm weaker revenue and a quarterly loss amid competition and Kling spend, weakening the strong-buy case despite positive nine-month profit.
 RiskTags: regulatory, competitive, leverage, key_person, other
 
 ## Weekly updates
@@ -63,3 +63,8 @@ HKEX filing index refreshed at 02:45 UTC with no new in-window results; structur
 HKEX published Q3 and nine-month results to 30 Sep 2026: Q3 revenue −11.1% YoY with an operating loss of RMB635m; the news batch added earnings headlines only.
 The filing cites competition and higher Kling AI investment; nine-month profit for the period is still down 61.9% YoY.
 Yahoo quarterly data still ends Jun 2026; quarterly cash flow remains empty (TTM cash suppressed).
+
+### 2026-11-19T21:34:23.237569+00:00
+No material change: the 21:33 UTC news batch since the 17:49 refresh returned zero Kuaishou articles.  
+HKEX filing index refreshed at 21:34 UTC with the Q3/nine-month results body indexed; figures match the morning refresh.  
+Yahoo pack unchanged—quarterly income still ends Jun 2026; quarterly cash flow empty (TTM cash suppressed).

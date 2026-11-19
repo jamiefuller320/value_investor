@@ -1,6 +1,6 @@
 # Barrick Mining Corporation (ABX.TO) — Research memo
 
-_Version 5 · Updated 2026-11-19T17:57:00.235025+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-19T21:35:58.223830+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -33,3 +33,8 @@ No new company-specific disclosures in this pull.
 The incremental batch adds three items: gold’s sharp drop dragging ABX lower, a Druckenmiller gold-miner stake story amid recent share weakness, and third-party undervaluation commentary despite American Barrick IPO plans.  
 Verified Q2 MD&A, filing bodies, and Yahoo Q3 diluted EPS ($0.80) are unchanged.  
 No new Barrick regulatory disclosures in this pull.
+
+### 2026-11-19T21:35:58.223830+00:00
+No material change: the 21:35 news batch since the prior refresh returned zero Barrick articles.  
+Verified Q2 MD&A, filing bodies, and Yahoo Q3 diluted EPS ($0.80) are unchanged.  
+No new company-specific disclosures in this pull.

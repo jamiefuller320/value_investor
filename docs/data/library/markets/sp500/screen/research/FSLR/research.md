@@ -1,6 +1,6 @@
 # First Solar, Inc. (FSLR) — Research memo
 
-_Version 5 · Updated 2026-11-18T17:56:08.276457+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-19T21:51:19.710342+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.68
-Rationale: Headlines extend the rout to a seven-day ~24% drop, weakening near-term conviction, while unchanged Q3 cash and liquidity themes still partly support the buy screen.
+Rationale: A modest post-rout bounce does not offset the lowered-outlook overhang or lumpy 2026 cash optics, so research still partly supports rather than reinforces the buy screen.
 RiskTags: regulatory, cyclical, competitive, litigation, customer_concentration, liquidity
 
 ## Weekly updates
@@ -32,3 +32,8 @@ The Q3 2026 10-Q body extract in this refresh’s filing pull confirms nine-mont
 Trefis/Yahoo report a seven-day losing streak and ~24% drawdown; commentary asks whether the market misread fundamentals after the lowered outlook.
 Zacks notes heightened attention amid the selloff; no new SEC body extracts in this batch.
 Prior Q3 themes—nine-month operating cash use ~$403m, cash ~$1.6bn, depressed TTM FCF—are unchanged.
+
+### 2026-11-19T21:51:19.710342+00:00
+MarketBeat flags a ~5.2% rebound after the recent ~24% seven-day drawdown; no new FSLR fundamentals or SEC extracts in this batch.
+Yahoo peer piece (T1 Energy order book) is incremental competitive context for US solar manufacturing, not a First Solar datapoint.
+Lowered 2026 outlook, Q3 revenue/EPS snapshot, and nine-month operating cash use ~$403m themes are unchanged.

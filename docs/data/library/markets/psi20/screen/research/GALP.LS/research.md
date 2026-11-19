@@ -1,6 +1,6 @@
 # Galp Energia, SGPS, S.A. (GALP.LS) — Research memo
 
-_Version 2 · Updated 2026-11-19T17:59:50.786503+00:00 · Mode: structured_verdict_update_
+_Version 3 · Updated 2026-11-19T21:51:40.190413+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -18,3 +18,8 @@ RiskTags: cyclical, accounting, governance, competitive
 Q3 2026 news flow cites raised full-year EBITDA (~€5.0bn) and operating cash flow (~€3.9bn) on strong quarterly cash, with reported Q3 net income (~€201m) softer versus cash.
 Galp and Moeve ended downstream merger talks over commercial differences; press reports a sharp share drop after the deal collapsed.
 Yahoo quarterly cash (Q3 OCF €911m, TTM FCF ~€1.7bn) remains stronger than the FY FCF snapshot (~€353m); Moeve outcome leaves buyback timing unclear.
+
+### 2026-11-19T21:51:40.190413+00:00
+No material change.
+The indexed news batch since the prior refresh returned zero articles.
+Prior Q3 cash guidance, collapsed Moeve talks and Yahoo–IR FCF divergence remain the active research themes.
