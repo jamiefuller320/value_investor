@@ -8,7 +8,7 @@ every market that produces a signal. A missing or stale cite is no score.
 every card and fail-closes. The default path does not call a model and does
 not read or write ``forward_live``. ``--request-memos`` asks for missing or
 stale observe memos while this ISO week is inside the relaxed observe
-ceiling ($80, 200 memos), reviewed on 2026-11-30 Europe/London. Above that
+ceiling ($160, 400 memos), reviewed on 2026-11-30 Europe/London. Above that
 ceiling the sampling rule still holds names back. A memo dated after the
 candidate session still does not score that session. This does not turn on
 live capital.
@@ -91,10 +91,12 @@ NOISE_BAND = 0.015
 # Registered strategy-book memo raise. This shadow does not change it.
 REGISTERED_MEMO_RAISE_USD = 40.0
 REGISTERED_MEMO_RAISE_MEMOS = 100
-# Owner 2026-11-17: the observe-shadow token cost is acceptable until a human
-# review on 30 Nov 2026 (Europe/London). Sampling applies only above this.
-OBSERVE_CEILING_USD = 80.0
-OBSERVE_CEILING_MEMOS = 200
+# Owner 2026-11-17 accepted the observe-shadow token cost. On 2026-11-19 the
+# owner doubled the ceiling to $160 (400 memos) because Cursor credit is not
+# being hit hard. Sampling applies only above this. Human review stays
+# 30 Nov 2026 (Europe/London). influences_live stays false.
+OBSERVE_CEILING_USD = 160.0
+OBSERVE_CEILING_MEMOS = 400
 OBSERVE_CEILING_REVIEW_ON = "2026-11-30"
 WEEKLY_BUDGET_USD = OBSERVE_CEILING_USD
 WEEKLY_CAP_MEMOS = OBSERVE_CEILING_MEMOS

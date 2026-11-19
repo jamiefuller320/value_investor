@@ -228,30 +228,38 @@ def test_input_gaps_rank_the_cite_that_unlocks_the_most() -> None:
 
 
 def test_full_width_cost_proposes_sampling_without_spend() -> None:
-    assert OBSERVE_CEILING_USD == 80.0
-    assert OBSERVE_CEILING_MEMOS == 200
+    assert OBSERVE_CEILING_USD == 160.0
+    assert OBSERVE_CEILING_MEMOS == 400
     assert OBSERVE_CEILING_REVIEW_ON == "2026-11-30"
     assert REGISTERED_MEMO_RAISE_USD == 40.0
     assert REGISTERED_MEMO_RAISE_MEMOS == 100
 
-    # 30 names is $60 a weekday week: over the old $40 cap, inside the ceiling.
+    # 50 names is $100 a weekday week: over the old $80 cap, inside $160.
     relaxed = estimate_cost(
-        [{"session": "2026-11-16", "disposition": "gate_rejected"} for _ in range(30)]
+        [{"session": "2026-11-16", "disposition": "gate_rejected"} for _ in range(50)]
     )
-    assert relaxed["latest_session_usd"] == 12.0
-    assert relaxed["weekday_week_usd"] == 60.0
+    assert relaxed["latest_session_usd"] == 20.0
+    assert relaxed["weekday_week_usd"] == 100.0
     assert relaxed["over_budget"] is False
     assert relaxed["sampling"] is None
-    assert relaxed["weekly_budget_usd"] == 80.0
+    assert relaxed["weekly_budget_usd"] == 160.0
 
-    cards = [{"session": "2026-11-16", "disposition": "gate_rejected"} for _ in range(50)]
+    # Exactly $160 (80 names × five weekdays × $0.40) does not sample.
+    at_ceiling = estimate_cost([{"session": "2026-11-16"} for _ in range(80)])
+    assert at_ceiling["weekday_week_usd"] == 160.0
+    assert at_ceiling["over_budget"] is False
+    assert at_ceiling["sampling"] is None
+
+    # 81 names is $162 a weekday week. Sampling bites only above $160.
+    cards = [{"session": "2026-11-16", "disposition": "gate_rejected"} for _ in range(81)]
     cost = estimate_cost(cards)
     assert cost["usd_per_candidate_per_day"] == 0.40
-    assert cost["latest_session_usd"] == 20.0
-    assert cost["weekday_week_usd"] == 100.0
+    assert cost["latest_session_usd"] == 32.4
+    assert cost["weekday_week_usd"] == 162.0
     assert cost["over_budget"] is True
     assert cost["sampling"]["id"] == "l694-memo-sample-v1"
-    assert cost["sampling"]["weekly_cap_usd"] == 80.0
+    assert cost["sampling"]["weekly_cap_usd"] == 160.0
+    assert cost["sampling"]["weekly_cap_memos"] == 400
     assert cost["sampling"]["relaxed_from_usd"] == 40.0
     assert cost["sampling"]["review_on"] == "2026-11-30"
     assert cost["sampling"]["turns_spend_on"] is False
@@ -411,7 +419,7 @@ def test_ops_monitor_is_observe_only(tmp_path: Path) -> None:
     assert all(row["severity"] == "info" for row in rows)
     assert "does not turn on live capital" in rows[1]["summary"]
     assert "influences_live stays false" in rows[1]["summary"]
-    assert "$80" in rows[1]["summary"]
+    assert "$160" in rows[1]["summary"]
     assert "No ingest" in rows[2]["summary"]
     assert "check_strategy_book_memo_ranking_shadow" in inspect.getsource(collect_ops_findings)
 
@@ -456,7 +464,7 @@ def test_observe_memo_plan_reuses_fresh_memos_and_keeps_the_raise() -> None:
     plan = plan_observe_memos(
         names,
         now=now,
-        spent_this_week_usd=79.6,
+        spent_this_week_usd=159.6,
         full_width_over_budget=True,
     )
     assert [row["ticker"] for row in plan["selected"]] == ["A.L"]
@@ -469,7 +477,7 @@ def test_observe_memo_plan_reuses_fresh_memos_and_keeps_the_raise() -> None:
     inside = plan_observe_memos(
         names,
         now=now,
-        spent_this_week_usd=39.6,
+        spent_this_week_usd=79.6,
         full_width_over_budget=False,
     )
     assert [row["ticker"] for row in inside["selected"]] == ["A.L", "B.L"]
