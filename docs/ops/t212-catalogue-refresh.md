@@ -71,6 +71,15 @@ word is a generic modifier and no second catalogue name qualifies. `HSBC Holding
 and `The Lottery Corporation` does not match Brightstar Lottery. Other Yahoo markets still
 need a home-country ISIN before a foreign short name counts, so `EQT.ST` is not EQT Corp.
 
+## New constituents
+
+`refresh_constituents` keeps names already on `constituents/latest.json` or the market
+manifest. A ticker the Wikipedia (or curated) fetch adds on a later run is written only
+when `match_catalogue` hits. An allowlist assumption is not enough. If the catalogue or
+`policy.json` is missing, the refresh keeps the fetched list rather than guessing. The
+live FTSE 350 screen does not use this path. Stored constituent files are not rewritten
+except by a later refresh, and that refresh still retains names that were already stored.
+
 Committed paths (only when changed):
 
 - `docs/data/library/t212_coverage/catalogue/**`
