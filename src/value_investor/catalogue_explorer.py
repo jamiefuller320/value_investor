@@ -308,7 +308,9 @@ def screen_metrics_row(row: dict[str, Any]) -> dict[str, Any]:
 
 
 def _slim_ingest(result: dict[str, Any], *, seconds: float) -> dict[str, Any]:
-    summary = result.get("filings_summary") if isinstance(result.get("filings_summary"), dict) else {}
+    summary = (
+        result.get("filings_summary") if isinstance(result.get("filings_summary"), dict) else {}
+    )
     return {
         "seconds": seconds,
         "financial_years": result.get("financial_years"),
