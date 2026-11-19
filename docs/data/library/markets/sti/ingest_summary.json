@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-18T16:35:23.558914+00:00",
+  "run_at": "2026-11-19T14:01:38.306516+00:00",
   "market_id": "sti",
   "targets": [],
   "target_details": [],
@@ -9,13 +9,13 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-18T16:35:12.435167+00:00",
+    "snapshot_at": "2026-11-19T14:01:29.459463+00:00",
     "market_id": "sti",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 9,
+    "indexed_without_body": 8,
     "bodies_min": 3,
     "bodies_median": 6.5,
     "bodies_max": 14,
@@ -33,7 +33,7 @@
     "indexed_without_body_by_ticker": {
       "U14.SI": 4,
       "ME8U.SI": 2,
-      "C6L.SI": 2,
+      "C6L.SI": 1,
       "N2IU.SI": 1
     },
     "parked_tickers": [
@@ -50,7 +50,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-18T16:35:17.833675+00:00",
+    "snapshot_at": "2026-11-19T14:01:31.536950+00:00",
     "market_id": "sti",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
@@ -96,29 +96,7 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 8,
-    "hits": 8,
-    "new_rows_total": 0,
-    "curiosity_total": 8,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "U14.SI",
-      "C6L.SI",
-      "ME8U.SI",
-      "N2IU.SI"
-    ],
-    "runtime_cutoff": false
-  },
+  "discovery_scan": null,
   "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
@@ -128,60 +106,30 @@
   },
   "critical_path": {
     "market_id": "sti",
-    "assessed_at": "2026-11-18T16:35:12.852199+00:00",
+    "assessed_at": "2026-11-19T14:01:30.910877+00:00",
     "unmeasured": [],
     "zero_body": [],
-    "indexed_without_body": [
-      {
-        "ticker": "U14.SI",
-        "indexed_without_body": 4,
-        "filings_total": 14,
-        "filings_with_body": 10
-      },
-      {
-        "ticker": "C6L.SI",
-        "indexed_without_body": 2,
-        "filings_total": 7,
-        "filings_with_body": 3
-      },
-      {
-        "ticker": "ME8U.SI",
-        "indexed_without_body": 2,
-        "filings_total": 16,
-        "filings_with_body": 14
-      },
-      {
-        "ticker": "N2IU.SI",
-        "indexed_without_body": 1,
-        "filings_total": 14,
-        "filings_with_body": 12
-      }
-    ],
+    "indexed_without_body": [],
     "thin_need_discovery": [],
     "thin_need_bodies": [],
-    "primary_blocker": "indexed_without_body",
+    "primary_blocker": "none",
     "force_discovery_scan": false,
-    "auto_pin_tickers": [
-      "U14.SI",
-      "C6L.SI",
-      "ME8U.SI",
-      "N2IU.SI"
-    ],
+    "auto_pin_tickers": [],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (4 tickers, top: U14.SI(4), C6L.SI(2), ME8U.SI(2), N2IU.SI(1))"
+      "Filing critical path clear — maintenance deepen only"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 4,
-      "indexed_without_body_rows": 9,
+      "indexed_without_body_tickers": 0,
+      "indexed_without_body_rows": 0,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 4.573396845000005,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3595.426603155,
+  "used_seconds": 0.008469704999924943,
+  "budget_seconds": 1970.152892589569,
+  "leftover_seconds": 1970.1444228845692,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -189,9 +137,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sti",
-    "updated_at": "2026-11-18T16:35:17.843300+00:00",
+    "updated_at": "2026-11-19T14:01:31.549210+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 6,
+    "complete_zero_improve_runs": 7,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -309,10 +257,10 @@
       "FOXT.L",
       "APTD.L",
       "DFS.L",
+      "ULTP.L",
       "SU.TO",
       "NTR.TO",
       "GIB-A.TO",
-      "CNQ.TO",
       "MFC.TO",
       "BAS.DE",
       "PDD",
@@ -330,5 +278,14 @@
       "EVN.VI"
     ],
     "wait_behind_task_id": ""
-  }
+  },
+  "not_on_t212_skipped": [
+    "Y92.SI",
+    "U14.SI",
+    "BS6.SI",
+    "ME8U.SI",
+    "C6L.SI",
+    "N2IU.SI",
+    "G13.SI"
+  ]
 }
