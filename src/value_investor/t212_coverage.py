@@ -937,6 +937,55 @@ def match_catalogue(
     )
 
 
+# Maintenance only. Each Yahoo ticker points at the one catalogue ISIN for that
+# issuer. The name matcher does not read this. A ticker is kept only when that
+# ISIN is present as a stock. Atlas Copco A (ATCO-A.ST) is absent: the catalogue
+# has two US ADRs and no Swedish ordinary, so there is no home listing to point at.
+_CLOSED_MAINTENANCE_ISIN: dict[str, str] = {
+    # One catalogue ISIN for the issuer.
+    "SLN.L": "US82686Q1013",
+    "NEXN.L": "IL0012165630",
+    "AZN.ST": "GB0009895292",
+    "HMSO.IR": "GB00BRJQ8J25",
+    "BOL.ST": "US09752V1026",
+    "EPI-A.ST": "US29429L4023",
+    "MB.MI": "US58502K1060",
+    "TRN.MI": "US88088L1035",
+    "O39.SI": "US6903331097",
+    "0388.HK": "US43858F1093",
+    "0285.HK": "HK0285041858",
+    "0960.HK": "US54303R1014",
+    "1177.HK": "KYG8167W1380",
+    "6690.HK": "CNE1000031C1",
+    "0386.HK": "CNE1000002Q2",
+    "FLT.AX": "AU000000FLT9",
+    "LTR.AX": "AU000000LTR4",
+    "SGM.AX": "US8291601008",
+    # Home ordinary, not the ADR or the other share class.
+    "MTS.MC": "LU1598757687",
+    "ABB.ST": "CH0012221716",
+    "ERIC-B.ST": "SE0000108656",
+    "NDA-SE.ST": "FI4000297767",
+    "0175.HK": "KYG3777B1032",
+}
+
+
+def _closed_isin_is_listed(ticker: str, index: dict[str, Any]) -> bool:
+    """True when this ticker's closed-list ISIN is a stock in the catalogue."""
+    isin = _CLOSED_MAINTENANCE_ISIN.get(ticker.strip().upper())
+    if not isin:
+        return False
+    by_ticker = index.get("by_ticker") or {}
+    for t212 in (index.get("by_isin") or {}).get(isin) or []:
+        row = by_ticker.get(t212) or {}
+        if (
+            str(row.get("type") or "").upper() == "STOCK"
+            and str(row.get("isin") or "").upper() == isin
+        ):
+            return True
+    return False
+
+
 def drop_unlisted_for_maintenance(
     reports: list[Any],
     *,
@@ -947,7 +996,9 @@ def drop_unlisted_for_maintenance(
 
     Used by maintenance ingest only. A missing catalogue keeps every name.
     The live FTSE 350 screen is never filtered here. A cross-listing that
-    ``match_catalogue`` hits stays on the run.
+    ``match_catalogue`` hits stays on the run. A closed ticker-to-ISIN list
+    also keeps a name when that one ISIN is in the catalogue. It does not
+    change the name matcher, and it does not drop any other name.
     """
     if market_id == FTSE350_MARKET_ID:
         return list(reports), []
@@ -978,7 +1029,7 @@ def drop_unlisted_for_maintenance(
             policy=policy,
             name=name,
         )
-        if hit is None:
+        if hit is None and not _closed_isin_is_listed(ticker, index):
             skipped.append(ticker)
         else:
             kept.append(report)
