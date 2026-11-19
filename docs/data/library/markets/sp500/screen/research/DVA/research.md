@@ -1,6 +1,6 @@
 # DaVita Inc. (DVA) — Research memo
 
-_Version 3 · Updated 2026-11-18T23:40:41.656300+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-19T02:49:48.583703+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.65
-Rationale: Filing-backed cash yield still supports the screen, but HHS kidney-care reform scrutiny, a Pomerantz probe, leverage and 2027 reimbursement headwinds weaken full alignment with strong_buy.
+Rationale: Filing-backed cash yield still supports the screen, but HHS kidney-care reform scrutiny, Pomerantz litigation headlines, leverage and 2027 reimbursement risk weaken full alignment with strong_buy.
 RiskTags: regulatory, leverage, litigation
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Advanced dialysis therapy rolled out to all US centres; quantitative screen is n
 No material change.  
 This batch adds only a generic stock-forecasts headline; prior regulatory, leverage and litigation overlays are unchanged.  
 Screen remains **strong_buy**; filing pack unchanged.
+
+### 2026-11-19T02:49:48.583703+00:00
+No material change since the prior run.  
+This batch adds only a GuruFocus headline on a 6.5% share move and third-party “undervalued” scoring; regulatory, leverage and litigation overlays are unchanged.  
+The quantitative screen remains **strong_buy**; the filing pack is unchanged.

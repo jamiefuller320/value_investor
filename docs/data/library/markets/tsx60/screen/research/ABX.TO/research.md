@@ -1,6 +1,6 @@
 # Barrick Mining Corporation (ABX.TO) — Research memo
 
-_Version 3 · Updated 2026-11-18T23:38:41.190267+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-19T02:47:28.534188+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -23,3 +23,8 @@ Valuation coverage still frames ABX as cheap vs peers, but near-term sentiment t
 No material change to verified Q2 MD&A, Yahoo Q3 diluted EPS ($0.80), or filing coverage since the prior refresh.
 The incremental news batch adds one headline (18 Nov) on a precious-metals rout hitting gold equities, including sector peers.
 No new Barrick-specific disclosures in this pull.
+
+### 2026-11-19T02:47:28.534188+00:00
+No material change: the 19 Nov news batch since the prior refresh returned zero Barrick articles.  
+Verified Q2 MD&A, three filing bodies, and Yahoo Q3 diluted EPS ($0.80) are unchanged.  
+No new company-specific disclosures in this pull.

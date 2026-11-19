@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 10 · Updated 2026-11-19T02:34:30.993285+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-19T02:48:43.000733+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -57,3 +57,6 @@ Leverage and competitive AI themes are unchanged; layoff scale remains unverifie
 The 19 Nov news batch adds no articles since the prior refresh.  
 Refreshed sources still show FY26 free cash flow about $14.4bn and a Strong Buy screen; no new primary filings.  
 Leverage and competitive AI-sector sentiment are unchanged; layoff scale remains unverified in primary filings.
+
+### 2026-11-19T02:48:43.000733+00:00
+No material change.

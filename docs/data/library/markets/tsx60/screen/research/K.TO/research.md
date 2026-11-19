@@ -1,6 +1,6 @@
 # Kinross Gold Corporation (K.TO) — Research memo
 
-_Version 3 · Updated 2026-11-18T23:43:57.101726+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-19T02:53:13.087326+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.44
-Rationale: Refreshed Yahoo metrics still match the screen’s FCF and deleveraging story, but unverified Kinross issuer filings and unresolved November production-guidance litigation leave the strong-buy case only partly corroborated.
+Rationale: Refreshed Yahoo metrics still support the screen’s FCF and deleveraging story, but unverified Kinross filings and unresolved production-guidance litigation leave research only partly aligned with the strong-buy signal.
 RiskTags: cyclical, regulatory, litigation, other
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Screen conviction stays strong_buy (~0.83); filing and litigation gaps limit how
 No material change since the earlier 18 Nov refresh; the incremental news batch is empty.  
 Re-fetched screening snapshot and Yahoo financials still imply ~$2.6bn annual FCF, lower leverage, and strong_buy conviction (~0.83).  
 Filing-verification gaps and the US class action over production outlook and Round Mountain Phase S are unchanged.
+
+### 2026-11-19T02:53:13.087326+00:00
+Since the 18 Nov refresh, the incremental batch adds only two generic Kalkine pieces on rates and Canadian gold peers—no Kinross-specific developments.  
+Re-fetched screening snapshot and Yahoo financials still imply ~$2.57bn annual FCF, lower leverage, and strong_buy conviction (~0.83).  
+Unverified Kinross issuer filings in the pack and the unresolved US class action over production outlook and Round Mountain Phase S are unchanged.

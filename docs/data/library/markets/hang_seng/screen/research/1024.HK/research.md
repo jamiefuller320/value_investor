@@ -1,6 +1,6 @@
 # Kuaishou Technology (1024.HK) — Research memo
 
-_Version 9 · Updated 2026-11-18T23:37:22.376607+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-19T02:46:13.745839+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -53,3 +53,8 @@ HKEX filing index refreshed at 21:34 UTC with no new in-window results; structur
 No material change: the 23:36 UTC news batch since the 21:34 refresh returned zero Kuaishou articles.  
 Yahoo pack refreshed at 23:36 UTC—H1 2026 diluted EPS still 0.66–0.72 vs 1.02–1.13 year-earlier; FY2025 FCF ~¥11.8bn; quarterly cash flow still empty (TTM suppressed).  
 HKEX filing index refreshed at 23:36 UTC with no new in-window results; structured annual “year in numbers” extract is still empty.
+
+### 2026-11-19T02:46:13.745839+00:00
+No material change: the 02:45 UTC news batch since the 23:37 refresh returned zero Kuaishou articles.  
+Yahoo pack refreshed at 02:45 UTC—H1 2026 diluted EPS still 0.66–0.72 vs 1.02–1.13 year-earlier; FY2025 FCF ~¥11.8bn; quarterly cash flow still empty (TTM suppressed).  
+HKEX filing index refreshed at 02:45 UTC with no new in-window results; structured annual “year in numbers” extract is still empty.

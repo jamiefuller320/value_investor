@@ -1,6 +1,6 @@
 # Boliden AB (publ) (BOL.ST) — Research memo
 
-_Version 4 · Updated 2026-11-18T23:46:46.865048+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-19T02:56:23.252943+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -27,4 +27,9 @@ No material change.
 ### 2026-11-18T23:46:46.865048+00:00
 No new articles in the news batch since the 21:43 UTC refresh; filing and financial sources are unchanged.  
 Q3 interim, Nexa leverage and thin nine-month FCF themes stand as before.  
+No material change.
+
+### 2026-11-19T02:56:23.252943+00:00
+No new articles in the news batch since the 23:46 UTC refresh; filings and Yahoo financials were re-fetched without changing the in-file narrative.  
+Q3 interim, Nexa-linked leverage and capex-heavy FCF themes stand as before.  
 No material change.
