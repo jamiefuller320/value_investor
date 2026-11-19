@@ -114,6 +114,7 @@ class LibraryIngestLoopResult:
     exhaustion: dict[str, Any] | None = None
     exhausted_maintenance: dict[str, Any] | None = None
     parked_hunter_compile: dict[str, Any] | None = None
+    not_on_t212_skipped: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -158,6 +159,7 @@ class LibraryIngestLoopResult:
             "exhaustion": self.exhaustion,
             "exhausted_maintenance": self.exhausted_maintenance,
             "parked_hunter_compile": self.parked_hunter_compile,
+            "not_on_t212_skipped": list(self.not_on_t212_skipped),
         }
 
 
@@ -752,6 +754,20 @@ def run_library_ingest_loop(
         library_root=library_root,
         market_id=market_id,
     )
+    not_on_t212: set[str] = set()
+    if maintenance_mode:
+        from value_investor.t212_coverage import drop_unlisted_for_maintenance
+
+        reports, skipped = drop_unlisted_for_maintenance(
+            reports,
+            market_id=market_id,
+            library_root=library_root,
+        )
+        result.not_on_t212_skipped = skipped
+        not_on_t212 = {ticker.upper() for ticker in skipped}
+        if not_on_t212 and pin_tickers:
+            pin_tickers = [ticker for ticker in pin_tickers if ticker.upper() not in not_on_t212]
+            result.pin_tickers = list(pin_tickers)
 
     from value_investor.ingest_critical_path import (
         apply_critical_path_to_target_order,
@@ -776,6 +792,8 @@ def run_library_ingest_loop(
         unmeasured=critical.unmeasured,
         zero_body=critical.zero_body,
     )
+    if not_on_t212:
+        pin_tickers = [ticker for ticker in pin_tickers or [] if ticker.upper() not in not_on_t212]
     result.pin_tickers = list(pin_tickers or [])
 
     # Sprint + maintenance: run discovery whenever critical path says so (or explicit).
