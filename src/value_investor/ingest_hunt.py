@@ -775,7 +775,7 @@ def sprint_slice(
         payload = _common(
             state,
             action="idle",
-            explore=int(stream) == 2 and code in EXPLORE_SKIP_CODES,
+            explore=int(stream) in (1, 2) and code in EXPLORE_SKIP_CODES,
             reason=code,
         )
         payload["targets_ceiling"] = ceiling
