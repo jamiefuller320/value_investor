@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-19T18:00:20.007858+00:00",
+  "generated_at": "2026-11-19T18:29:44.796165+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -196,9 +196,9 @@
           },
           {
             "date": "2026-09-14",
-            "held": 977.15,
-            "nav": 977.15,
-            "held_stock": 977.15,
+            "held": 977.14,
+            "nav": 977.14,
+            "held_stock": 977.14,
             "cash": 0.0,
             "positions": 63,
             "contributed_capital": null,
@@ -273,9 +273,9 @@
           },
           {
             "date": "2026-09-23",
-            "held": 1003.99,
-            "nav": 1037.49,
-            "held_stock": 1003.99,
+            "held": 1003.98,
+            "nav": 1037.48,
+            "held_stock": 1003.98,
             "cash": 33.5,
             "positions": 63,
             "contributed_capital": null,
@@ -312,9 +312,9 @@
           },
           {
             "date": "2026-09-28",
-            "held": 1009.45,
-            "nav": 1074.6,
-            "held_stock": 1009.45,
+            "held": 1009.44,
+            "nav": 1074.59,
+            "held_stock": 1009.44,
             "cash": 65.15,
             "positions": 63,
             "contributed_capital": null,
@@ -368,9 +368,9 @@
           },
           {
             "date": "2026-10-02",
-            "held": 990.74,
-            "nav": 1055.08,
-            "held_stock": 990.74,
+            "held": 990.73,
+            "nav": 1055.07,
+            "held_stock": 990.73,
             "cash": 64.34,
             "positions": 63,
             "contributed_capital": null,
@@ -703,9 +703,9 @@
           },
           {
             "date": "2026-11-05",
-            "held": 1018.2,
-            "nav": 1018.2,
-            "held_stock": 1018.2,
+            "held": 1018.19,
+            "nav": 1018.19,
+            "held_stock": 1018.19,
             "cash": 0.0,
             "positions": 63,
             "contributed_capital": null,
@@ -837,6 +837,19 @@
               "buy_tier_level_dca_market": 2032.11
             },
             "market": 1022.53
+          },
+          {
+            "date": "2026-11-19",
+            "held": 980.67,
+            "nav": 980.67,
+            "held_stock": 980.67,
+            "cash": 0.0,
+            "positions": 63,
+            "contributed_capital": null,
+            "branches": {
+              "buy_tier_level_dca_market": 1968.1
+            },
+            "market": 990.32
           }
         ],
         "series": [
@@ -896,16 +909,16 @@
               "monthly_deposit": 500.0,
               "kind": "deposit_matched_index"
             },
-            "point_count": 40
+            "point_count": 41
           }
         ],
         "last": {
-          "date": "2026-11-18",
-          "held": 989.71,
-          "market": 1022.53,
-          "nav": 989.71,
+          "date": "2026-11-19",
+          "held": 980.67,
+          "market": 990.32,
+          "nav": 980.67,
           "positions": 63,
-          "excess_pct": -0.032097
+          "excess_pct": -0.009744
         }
       },
       "learning_depth": null,
@@ -993,8 +1006,8 @@
       "is_ftse_equivalent": false,
       "ingest": "maintenance",
       "ingest_stream": null,
-      "ingest_reason": null,
-      "ingest_parity_met": null,
+      "ingest_reason": "Ingest avenues exhausted — parked 7 leftover thin/IWB name(s) (ACKB.BR, APAM.AS, BAS.DE, DQ7A.IR, ESSITY-B.ST, EVN.VI, UCB.BR); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
+      "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
       "shared_maintenance": true,
@@ -1043,8 +1056,38 @@
           "min_weekly_batches": 4
         }
       },
-      "filing_health": null,
-      "filing_gaps": null,
+      "filing_health": {
+        "buy_tier_count": 40,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 6,
+        "indexed_without_body": 3,
+        "bodies_median": 5.0,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "ingest_exhausted": true,
+        "parked_count": 7,
+        "zero_body_tickers": [],
+        "thin_body_tickers": [
+          "ACKB.BR",
+          "APAM.AS",
+          "BAS.DE",
+          "UCB.BR",
+          "EVN.VI",
+          "DQ7A.IR"
+        ],
+        "unmeasured_tickers": [],
+        "parked_tickers": [
+          "ACKB.BR",
+          "APAM.AS",
+          "BAS.DE",
+          "DQ7A.IR",
+          "ESSITY-B.ST",
+          "EVN.VI",
+          "UCB.BR"
+        ]
+      },
+      "filing_gaps": 0,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -1820,7 +1863,7 @@
         "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 0,
+        "leftover": 9,
         "steps": [
           {
             "id": "start",
@@ -17833,8 +17876,8 @@
       "is_ftse_equivalent": false,
       "ingest": "maintenance",
       "ingest_stream": null,
-      "ingest_reason": "Ingest avenues exhausted — parked 4 leftover thin/IWB name(s) (C6L.SI, ME8U.SI, N2IU.SI, U14.SI); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
-      "ingest_parity_met": false,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
       "ingest_exhausted": true,
       "queue_rank": 15,
       "shared_maintenance": true,
@@ -17870,41 +17913,21 @@
         "phase2_ready": false,
         "phase3_ready": false,
         "weekly_paper_enabled": false,
-        "weekday_paper_enabled": false,
+        "weekday_paper_enabled": true,
         "blockers": [
           "no benchmark configured for sti"
         ],
         "phase1": {
-          "screen_archives": 0,
+          "screen_archives": 55,
           "observe_snapshot_count": 0
         },
         "phase2": {
           "weekly_batch_count": 0,
-          "min_weekly_batches": 0
+          "min_weekly_batches": 4
         }
       },
-      "filing_health": {
-        "buy_tier_count": 8,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 8,
-        "bodies_median": 6.5,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
-        "ingest_exhausted": true,
-        "parked_count": 4,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [],
-        "unmeasured_tickers": [],
-        "parked_tickers": [
-          "C6L.SI",
-          "ME8U.SI",
-          "N2IU.SI",
-          "U14.SI"
-        ]
-      },
-      "filing_gaps": 0,
+      "filing_health": null,
+      "filing_gaps": null,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -18583,7 +18606,7 @@
         "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 8,
+        "leftover": 0,
         "steps": [
           {
             "id": "start",
