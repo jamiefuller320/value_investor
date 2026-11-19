@@ -1,6 +1,6 @@
 # Prosus N.V. (PRX.AS) — Research memo
 
-_Version 3 · Updated 2026-11-19T02:54:37.228905+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-19T17:56:07.249101+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: medium
-Confidence: 0.63
-Rationale: Screen cheapness remains, but Tencent-linked weakness and unverified TTM FCF with earnings-quality gaps still weaken the buy case; nothing in this refresh resolves those flags.
+Confidence: 0.62
+Rationale: Cheapness and reiterated sell-side buys persist, but Tencent-linked weakness, investment drag on near-term earnings and unverified TTM FCF still weaken the screen buy case.
 RiskTags: governance, customer_concentration, accounting, leverage
 
 ## Weekly updates
@@ -23,3 +23,8 @@ No new filing metrics in the pack; Yahoo quarterly cash flow remains empty, so s
 No new articles in the incremental news batch since the earlier 19 Nov refresh.  
 Tencent-driven weakness and Citi’s reiterated buy remain the latest items in the manifest.  
 Yahoo quarterly cash flow is still empty; screen TTM FCF remains unverified.
+
+### 2026-11-19T17:56:07.249101+00:00
+The incremental batch adds a REG trading-statement headline and a TradingView note that investment weighed on near-term results while adjusted and headline EPS were forecast to rise.  
+Deutsche Bank reiterated a Buy rating on 19 Nov.  
+No new filing bodies in the pack; Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.

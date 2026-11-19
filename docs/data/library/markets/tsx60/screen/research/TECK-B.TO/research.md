@@ -1,6 +1,6 @@
 # Teck Resources Limited (TECK-B.TO) — Research memo
 
-_Version 3 · Updated 2026-11-18T23:52:23.159856+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-19T18:04:00.398811+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -22,4 +22,9 @@ Copper miners sold off on 18 Nov 2026 as LME copper hit a seven-month low; cover
 ### 2026-11-18T23:52:23.159856+00:00
 The 18 Nov evening news batch adds no articles since the 21:51 UTC refresh.  
 Q3 earnings, merger-approval and copper sell-off themes in the pack are unchanged.  
+No material change.
+
+### 2026-11-19T18:04:00.398811+00:00
+The 19 Nov news batch has no Teck-specific articles since the 18 Nov evening refresh (only copper-peer Freeport commentary).  
+Q3 Yahoo metrics, the filings pack, and strong-buy screen inputs are unchanged.  
 No material change.

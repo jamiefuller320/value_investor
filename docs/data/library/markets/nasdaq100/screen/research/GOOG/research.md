@@ -1,6 +1,6 @@
 # Alphabet Inc. (GOOG) — Research memo
 
-_Version 8 · Updated 2026-11-19T02:57:20.909167+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-19T18:00:20.963483+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.58
-Rationale: Anthropic’s record IPO and a Quaise geothermal PPA for future datacentre power extend AI-infrastructure spend, but unchanged TTM FCF ~$19.7bn and no new filings leave research only modestly aligned with the buy screen.
+Rationale: Anthropic IPO-day stake marks and added ~$10bn commitment extend known AI spend, while unchanged TTM FCF and no new filings keep research only modestly aligned with the buy screen.
 RiskTags: regulatory, competitive, litigation, accounting
 
 ## Weekly updates
@@ -48,3 +48,8 @@ Screening snapshot and SEC filings index unchanged (TTM FCF ~$19.7bn; FY2025 SEC
 Headlines since the prior pass repeat Anthropic’s $83 IPO (~$81bn raise) and add a 50MW Oregon geothermal deal with Quaise for datacentre power from the early 2030s.  
 Warby Parker’s Google/Samsung smart-glasses launch is incremental wearables coverage, not a company filing; generic “buy now” commentary is uncorroborated.  
 Screening snapshot and SEC filings index unchanged (TTM FCF ~$19.7bn; FY2025 SEC FCF ~$73bn).
+
+### 2026-11-19T18:00:20.963483+00:00
+Headlines since the prior pass centre on Anthropic’s Nasdaq debut: reports of a further ~$10bn purchase at $83 and a marked 13.4% stake lifted GOOG, alongside broad AI-IPO peer flow.  
+Commentary still flags a higher 2026 capex outlook; 13F-style reports note Lone Pine/Viking adds and Tiger cuts, plus a shareholder litigation alert and a Blue Origin AI-satellite launch tie-up—not new SEC disclosures.  
+Screening snapshot and filings index are unchanged (TTM FCF ~$19.7bn; FY2025 SEC FCF ~$73bn).

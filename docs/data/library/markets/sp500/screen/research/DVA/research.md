@@ -1,6 +1,6 @@
 # DaVita Inc. (DVA) — Research memo
 
-_Version 4 · Updated 2026-11-19T02:49:48.583703+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-19T17:59:26.290783+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -27,4 +27,9 @@ Screen remains **strong_buy**; filing pack unchanged.
 ### 2026-11-19T02:49:48.583703+00:00
 No material change since the prior run.  
 This batch adds only a GuruFocus headline on a 6.5% share move and third-party “undervalued” scoring; regulatory, leverage and litigation overlays are unchanged.  
+The quantitative screen remains **strong_buy**; the filing pack is unchanged.
+
+### 2026-11-19T17:59:26.290783+00:00
+No material change since the 02:49 UTC refresh.  
+The 17:59 UTC news batch adds no articles; regulatory, leverage and litigation overlays are unchanged.  
 The quantitative screen remains **strong_buy**; the filing pack is unchanged.

@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 11 · Updated 2026-11-19T02:48:43.000733+00:00 · Mode: structured_verdict_update_
+_Version 12 · Updated 2026-11-19T17:51:14.201421+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: Filed FY26 free cash flow (~$14.4bn) still supports the Strong Buy screen, but sector-led AI scepticism and unverified layoff reports leave conviction unchanged pending issuer disclosure.
+Rationale: Filed FY26 FCF (~$14.4bn) still supports the Strong Buy screen; Jefferies cites pre-earnings growth upside while CRM lags peers—sector AI and leverage risks are unchanged.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -60,3 +60,8 @@ Leverage and competitive AI-sector sentiment are unchanged; layoff scale remains
 
 ### 2026-11-19T02:48:43.000733+00:00
 No material change.
+
+### 2026-11-19T17:51:14.201421+00:00
+Barron’s (19 Nov) cites Jefferies expecting organic growth to accelerate ahead of 2 Dec earnings, while CRM has lagged a broader software rally.  
+ETF commentary shows net selling on 17 Nov (~$142m); other pieces cite mixed institutional trim/boost flow—none are issuer filings.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.
