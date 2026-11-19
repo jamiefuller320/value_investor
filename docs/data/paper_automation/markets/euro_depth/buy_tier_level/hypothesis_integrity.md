@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-18T08:46:59.385359+00:00
+Track: `buy_tier_level` · updated 2026-11-19T08:47:20.772053+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **5** / 32 (16% count, 16% NAV)
+- Losers: **5** / 28 (18% count, 18% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
@@ -99,13 +99,6 @@ Track: `buy_tier_level` · updated 2026-11-18T08:46:59.385359+00:00
 - data_quality 1.00
 - conviction 52%
 
-### C5H.IR — intact / hold_tolerate (+0.5%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 76%
-
 ### ANDR.VI — intact / hold_tolerate (+0.6%)
 - still strong_buy
 - research accumulate
@@ -127,13 +120,6 @@ Track: `buy_tier_level` · updated 2026-11-18T08:46:59.385359+00:00
 - data_quality 0.95
 - conviction 76%
 
-### SAN.PA — intact / hold_tolerate (+2.8%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 69%
-
 ### MC.PA — intact / hold_tolerate (+2.9%)
 - still buy
 - research accumulate
@@ -154,13 +140,6 @@ Track: `buy_tier_level` · updated 2026-11-18T08:46:59.385359+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 55%
-
-### ALC.SW — weakening / watch_review (+4.5%)
-- research verdict caution
-- cheapness family no longer passes
-- conviction 20% below intact floor
-- still buy
-- data_quality 1.00
 
 ### OIZ.IR — intact / hold_tolerate (+5.0%)
 - still strong_buy
@@ -224,10 +203,3 @@ Track: `buy_tier_level` · updated 2026-11-18T08:46:59.385359+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 69%
-
-### SKA-B.ST — intact / hold_tolerate (+16.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 67%
