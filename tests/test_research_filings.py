@@ -7394,6 +7394,51 @@ def test_builtin_ir_allowlist_includes_una_as_eng_20261011_01():
     assert len(fetch_filings_ir_allowlist("UNA")) >= 3
 
 
+def test_fetch_filings_ir_allowlist_una_as_periods_eng_20261119_01():
+    """eng-20261119-01: UNA.AS allowlist rows must classify annual + interim periods."""
+    rows = fetch_filings_ir_allowlist("UNA.AS")
+    assert len(rows) >= 4
+    periods = {row["period"] for row in rows}
+    assert "annual" in periods
+    assert "interim" in periods
+    q4 = next(row for row in rows if "ir-q4-2025-full-announcement" in row["url"])
+    assert q4["period"] == "annual"
+
+
+@patch("value_investor.research.filings._fetch_ir_allowlist_body")
+def test_refetch_euro_filings_primary_bodies_una_as_unmeasured_eng_20261119_01(
+    mock_fetch_body, tmp_path: Path
+):
+    """eng-20261119-01: euro primary bootstraps UNA.AS from zero filings via IR allowlist merge."""
+    from value_investor.research.filings import refetch_euro_filings_primary_bodies
+
+    body_text = (
+        "Unilever PLC consolidated turnover operating profit free cash flow "
+        "underlying earnings per share dividend " * 40
+    )
+    mock_fetch_body.return_value = (body_text, "pdf")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    result = refetch_euro_filings_primary_bodies(
+        filings_dir,
+        ticker="UNA.AS",
+        company_name="Unilever PLC",
+        max_bodies=5,
+    )
+    ir = result.get("ir_allowlist") or {}
+    merge = ir.get("merge") or {}
+    assert merge.get("total_allowlist", 0) >= 4
+    assert merge.get("added", 0) >= 4
+    assert ir.get("attempted", 0) >= 1
+    assert result.get("fetched", 0) >= 1
+    assert result.get("with_body_after", 0) >= 1
+    index_path = filings_dir / "filings_index.json"
+    assert index_path.is_file()
+    payload = json.loads(index_path.read_text(encoding="utf-8"))
+    assert int(payload.get("summary", {}).get("total") or 0) >= 4
+    assert any(row.get("has_body") for row in payload.get("filings") or [])
+
+
 def test_sanitize_investegate_announcement_url_strips_br_suffix_eng_20261009_03():
     """eng-20261009-03: JD.L index row had %3Cbr%3E in Investegate href — refetch 0/3."""
     dirty = (

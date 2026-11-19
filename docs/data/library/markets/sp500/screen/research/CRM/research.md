@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 7 · Updated 2026-11-18T17:51:13.863663+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-19T02:48:43.000733+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: Filed cash generation still matches the Strong Buy screen, but repeated unverified layoff reports and sector-wide AI selling weaken near-term conviction pending issuer disclosure.
+Rationale: Filed FY26 free cash flow (~$14.4bn) still supports the Strong Buy screen, but sector-led AI scepticism and unverified layoff reports leave conviction unchanged pending issuer disclosure.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -42,3 +42,21 @@ No new primary filings appear in the supplied pack.
 18 Nov coverage extends layoff-linked selling and a sharp weekly drawdown; BTIG cut its price target to $250 but kept Buy.  
 Anthropic IPO–led AI-sector scepticism still dominates; CRM weakness reads sector-led in the batch.  
 No new primary filings in the supplied pack; filing-backed FCF and prior leverage themes are unchanged.
+
+### 2026-11-18T21:36:24.491403+00:00
+Follow-on 18 Nov coverage repeats a ~9.5% drop and another reported workforce reduction after the rout, linked to OpenAI model fears and per-seat software pricing.  
+No new primary filings; filing-backed FCF (~$14.4bn) and Strong Buy screen inputs are unchanged.  
+Leverage and competitive AI themes are unchanged; issuer-confirmed layoff scale remains unknown.
+
+### 2026-11-18T23:39:30.933567+00:00
+Late 18 Nov coverage only repeats reported workforce cuts (Barchart) and Anthropic IPO-led AI-sector scepticism; no company-specific filing news.
+Filing-backed FY26 free cash flow (~$14.4bn) and the Strong Buy screen are unchanged in the supplied sources.
+Leverage and competitive AI themes are unchanged; layoff scale remains unverified in primary filings.
+
+### 2026-11-19T02:34:30.993285+00:00
+The 19 Nov news batch adds no articles since the prior refresh.  
+Refreshed sources still show FY26 free cash flow about $14.4bn and a Strong Buy screen; no new primary filings.  
+Leverage and competitive AI-sector sentiment are unchanged; layoff scale remains unverified in primary filings.
+
+### 2026-11-19T02:48:43.000733+00:00
+No material change.

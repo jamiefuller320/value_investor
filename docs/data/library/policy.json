@@ -367,15 +367,15 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 247.9,
-    "estimated_spend_usd_this_week": 57.2,
+    "estimated_spend_usd_this_cycle": 279.9,
+    "estimated_spend_usd_this_week": 89.2,
     "week_id": "2026-W47",
     "cycle_id": "2026-11-d8",
     "weekly_ops_cap_usd": 124.5,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "token_usage_weekly_warning_raw_usd": null,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 44.0,
+    "estimated_spend_weekly_ops_usd_this_week": 74.8,
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
@@ -567,7 +567,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-11-18T18:01:09.718624+00:00",
+  "updated_at": "2026-11-19T02:59:28.794224+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -580,7 +580,7 @@
     "psi20"
   ],
   "ingest_parallel_sprint": [
-    "ftse_smallcap"
+    "asx200"
   ],
   "ingest_parallel_sprint_2": [
     "hang_seng"
@@ -851,16 +851,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-11-06T18:00:31.684058+00:00",
-        "parallel_stream": 2,
-        "from_market": "sp500",
-        "to_market": "asx200",
-        "stream_markets_after": [
-          "asx200"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-11-06T20:13:36.054146+00:00",
         "parallel_stream": 1,
@@ -1491,6 +1481,39 @@
           "zero_body": 0,
           "thin": 0,
           "indexed_without_body": -15,
+          "filing_gaps": 0
+        }
+      },
+      {
+        "at": "2026-11-18T21:42:42.212459+00:00",
+        "parallel_stream": 1,
+        "from_market": "ftse_smallcap",
+        "to_market": "asx200",
+        "stream_markets_after": [
+          "asx200"
+        ],
+        "ingest_parity_recorded": false,
+        "gap_market_id": "ftse_smallcap",
+        "window_days": 2,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 43,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 40,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": -3,
           "filing_gaps": 0
         }
       }

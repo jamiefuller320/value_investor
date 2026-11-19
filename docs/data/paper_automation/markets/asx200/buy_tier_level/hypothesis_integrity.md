@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-18T00:47:02.355707+00:00
+Track: `buy_tier_level` · updated 2026-11-19T00:47:46.160326+00:00
 
 ## Portfolio loser feedback
 
@@ -112,30 +112,30 @@ Track: `buy_tier_level` · updated 2026-11-18T00:47:02.355707+00:00
 ### REH.AX — weakening / watch_review (+0.0%)
 - research verdict caution
 - cheapness family no longer passes
-- conviction 17% below intact floor
+- conviction 20% below intact floor
 - still buy
 - data_quality 0.95
 
 ### CLW.AX — weakening / watch_review (+0.0%)
 - research verdict neutral
-- conviction 33% below intact floor
 - still buy
 - cheapness family still passes
 
-### AMC.AX — weakening / watch_review (+0.0%)
-- conviction 33% below intact floor
+### AMC.AX — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 39%
 
 ### GMD.AX — weakening / watch_review (+0.0%)
 - research verdict caution
-- conviction 31% below intact floor
 - still buy
 - cheapness family still passes
 
 ### NWS.AX — weakening / watch_review (+0.0%)
 - research verdict caution
-- conviction 26% below intact floor
+- conviction 32% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -150,7 +150,7 @@ Track: `buy_tier_level` · updated 2026-11-18T00:47:02.355707+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 35%
+- conviction 41%
 
 ### ARB.AX — weakening / watch_review (+2.1%)
 - research verdict caution

@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-18T07:59:30.918009+00:00",
+  "generated_at": "2026-11-19T02:39:49.648603+00:00",
   "observe_only": true,
-  "headline": "Observe utilization quiet; trajectory improving.",
+  "headline": "1 warn instrument(s); trajectory worsening on 1.",
   "surface_freshness": "fresh",
-  "ops_run_at": "2026-11-18T07:46:51.091758+00:00",
-  "warn_instrument_count": 0,
+  "ops_run_at": "2026-11-19T02:32:06.550509+00:00",
+  "warn_instrument_count": 1,
   "trajectory_summary": {
-    "improving": 1,
-    "worsening": 0,
+    "improving": 0,
+    "worsening": 1,
     "flat": 7,
     "unknown": 0,
     "history_points": 28,
@@ -26,8 +26,8 @@
       "metrics": {
         "warn_not_usable": 0,
         "open_not_usable": 11,
-        "cohort_count": 199,
-        "usable_in_window": 188,
+        "cohort_count": 198,
+        "usable_in_window": 187,
         "market_count": 23,
         "blocking_stage_counts": {
           "no_accumulate_verdict": 11
@@ -41,7 +41,7 @@
             "blocking_stage": "no_accumulate_verdict",
             "has_memo": true,
             "memo_home_market": "ftse350",
-            "hours_since_flip": 463.87
+            "hours_since_flip": 482.54
           },
           {
             "ticker": "JMAT.L",
@@ -49,7 +49,7 @@
             "blocking_stage": "no_accumulate_verdict",
             "has_memo": true,
             "memo_home_market": "ftse350",
-            "hours_since_flip": 463.87
+            "hours_since_flip": 482.54
           },
           {
             "ticker": "KIE.L",
@@ -57,7 +57,7 @@
             "blocking_stage": "no_accumulate_verdict",
             "has_memo": true,
             "memo_home_market": "ftse350",
-            "hours_since_flip": 463.87
+            "hours_since_flip": 482.54
           },
           {
             "ticker": "RNK.L",
@@ -65,7 +65,7 @@
             "blocking_stage": "no_accumulate_verdict",
             "has_memo": true,
             "memo_home_market": "ftse350",
-            "hours_since_flip": 463.87
+            "hours_since_flip": 482.54
           },
           {
             "ticker": "BT-A.L",
@@ -73,7 +73,7 @@
             "blocking_stage": "no_accumulate_verdict",
             "has_memo": true,
             "memo_home_market": "ftse350",
-            "hours_since_flip": 271.87
+            "hours_since_flip": 290.54
           },
           {
             "ticker": "CKN.L",
@@ -81,7 +81,7 @@
             "blocking_stage": "no_accumulate_verdict",
             "has_memo": true,
             "memo_home_market": "ftse350",
-            "hours_since_flip": 271.87
+            "hours_since_flip": 290.54
           },
           {
             "ticker": "GCP.L",
@@ -89,7 +89,7 @@
             "blocking_stage": "no_accumulate_verdict",
             "has_memo": true,
             "memo_home_market": "ftse350",
-            "hours_since_flip": 271.87
+            "hours_since_flip": 290.54
           },
           {
             "ticker": "GFTU.L",
@@ -97,7 +97,7 @@
             "blocking_stage": "no_accumulate_verdict",
             "has_memo": true,
             "memo_home_market": "ftse350",
-            "hours_since_flip": 271.87
+            "hours_since_flip": 290.54
           }
         ]
       },
@@ -108,8 +108,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-18T07:52:10.789930+00:00",
-        "age_hours": 0.12,
+        "as_of": "2026-11-19T02:32:08.948086+00:00",
+        "age_hours": 0.13,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -118,7 +118,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-11-17T11:01:28.605235+00:00"
+        "prior_at": "2026-11-18T02:36:41.083762+00:00"
       }
     },
     {
@@ -126,41 +126,41 @@
       "title": "FTSE decision-input inventory",
       "finding_title": "FTSE decision-input utilization gap",
       "observe_only": true,
-      "warn_active": false,
-      "severity": "ok",
-      "finding_summary": null,
+      "warn_active": true,
+      "severity": "warn",
+      "finding_summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 5/70 names (e.g. ALFA.L, FGP.L, HIK.L, INCH.L, MGNS.L). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
       "metrics": {
         "inventory_count": 70,
-        "fully_ready_count": 69,
-        "names_with_any_gap": 1,
+        "fully_ready_count": 65,
+        "names_with_any_gap": 5,
         "dominant_gap_field": "memo_recent",
-        "dominant_gap_count": 1,
+        "dominant_gap_count": 5,
         "gap_counts": {
           "key_filing_bodies": 0,
           "fcf_basis_bound": 0,
           "overlay_bound": 0,
-          "memo_recent": 1
+          "memo_recent": 5
         },
-        "verdict": "P1 green-enough"
+        "verdict": "memo_recent"
       },
       "primary_metric": "dominant_gap_count",
-      "primary_value": 1,
+      "primary_value": 5,
       "primary_label": "Dominant gap (memo_recent)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-18T07:52:47.764755+00:00",
-        "age_hours": 0.11,
+        "as_of": "2026-11-19T02:32:32.856281+00:00",
+        "age_hours": 0.12,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 0,
-        "direction": "flat",
-        "label": "Unchanged vs last cycle",
+        "delta": 4,
+        "direction": "worsening",
+        "label": "Worse since last cycle",
         "prior_value": 1,
-        "prior_at": "2026-11-17T11:01:28.605235+00:00"
+        "prior_at": "2026-11-18T02:36:41.083762+00:00"
       }
     },
     {
@@ -172,8 +172,8 @@
       "severity": "ok",
       "finding_summary": null,
       "metrics": {
-        "miss_rate": 0.3152,
-        "enter_body_miss_count": 156,
+        "miss_rate": 0.3131,
+        "enter_body_miss_count": 155,
         "cohort_count": 495,
         "open_still_missing_bodies": 12,
         "by_market": {
@@ -257,9 +257,9 @@
           },
           "hang_seng": {
             "cohort_count": 23,
-            "enter_body_miss_count": 12,
+            "enter_body_miss_count": 11,
             "open_still_missing_bodies": 2,
-            "miss_rate": 0.5217
+            "miss_rate": 0.4783
           },
           "us_adr_asia": {
             "cohort_count": 3,
@@ -324,17 +324,17 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-18T07:52:48.470219+00:00",
-        "age_hours": 0.11,
+        "as_of": "2026-11-19T02:32:33.339968+00:00",
+        "age_hours": 0.12,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": -1,
-        "direction": "improving",
-        "label": "Better since last cycle",
-        "prior_value": 13,
-        "prior_at": "2026-11-17T11:01:28.605235+00:00"
+        "delta": 0,
+        "direction": "flat",
+        "label": "Unchanged vs last cycle",
+        "prior_value": 12,
+        "prior_at": "2026-11-18T02:36:41.083762+00:00"
       }
     },
     {
@@ -360,8 +360,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-18T07:52:48.515657+00:00",
-        "age_hours": 0.11,
+        "as_of": "2026-11-19T02:32:33.575211+00:00",
+        "age_hours": 0.12,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -370,7 +370,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-11-17T11:01:28.605235+00:00"
+        "prior_at": "2026-11-18T02:36:41.083762+00:00"
       }
     },
     {
@@ -383,7 +383,7 @@
       "finding_summary": null,
       "metrics": {
         "market_count": 23,
-        "open_count": 1414,
+        "open_count": 1429,
         "closed_count": 0,
         "first_episode_closed_count": 0,
         "source_records_missing_market_id": 0,
@@ -396,8 +396,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-18T07:52:48.516538+00:00",
-        "age_hours": 0.11,
+        "as_of": "2026-11-19T02:32:33.578635+00:00",
+        "age_hours": 0.12,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -406,7 +406,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-11-17T11:01:28.605235+00:00"
+        "prior_at": "2026-11-18T02:36:41.083762+00:00"
       }
     },
     {
@@ -471,8 +471,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-18T07:52:58.584902+00:00",
-        "age_hours": 0.11,
+        "as_of": "2026-11-19T02:32:53.549693+00:00",
+        "age_hours": 0.12,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -482,7 +482,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 42,
-        "prior_at": "2026-11-17T11:01:28.605235+00:00"
+        "prior_at": "2026-11-18T02:36:41.083762+00:00"
       }
     },
     {
@@ -512,8 +512,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-18T07:52:58.923699+00:00",
-        "age_hours": 0.11,
+        "as_of": "2026-11-19T02:32:53.854101+00:00",
+        "age_hours": 0.12,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -523,7 +523,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 48,
-        "prior_at": "2026-11-17T11:01:28.605235+00:00"
+        "prior_at": "2026-11-18T02:36:41.083762+00:00"
       }
     },
     {
@@ -617,8 +617,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-18T07:52:58.584902+00:00",
-        "age_hours": 0.11,
+        "as_of": "2026-11-19T02:32:53.549693+00:00",
+        "age_hours": 0.12,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -628,54 +628,11 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 172,
-        "prior_at": "2026-11-17T11:01:28.605235+00:00"
+        "prior_at": "2026-11-18T02:36:41.083762+00:00"
       }
     }
   ],
   "history": [
-    {
-      "at": "2026-11-02T02:39:15.938755+00:00",
-      "buy_tier_flip_lag": {
-        "primary_value": 24,
-        "warn_active": true,
-        "freshness_state": "fresh"
-      },
-      "decision_input_inventory": {
-        "primary_value": 8,
-        "warn_active": true,
-        "freshness_state": "fresh"
-      },
-      "universe_filing_archive_miss_rate": {
-        "primary_value": 17,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "shard_nav_fx_warp": {
-        "primary_value": 0,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "combined_tagged_learning": {
-        "primary_value": 0,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "cue_consumer_mft": {
-        "primary_value": 40,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "parallel_timing_lenses": {
-        "primary_value": 50,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "lab_learning_progress": {
-        "primary_value": 161,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      }
-    },
     {
       "at": "2026-11-02T07:51:06.535077+00:00",
       "buy_tier_flip_lag": {
@@ -1804,6 +1761,49 @@
       "decision_input_inventory": {
         "primary_value": 1,
         "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "universe_filing_archive_miss_rate": {
+        "primary_value": 12,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "shard_nav_fx_warp": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "combined_tagged_learning": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "cue_consumer_mft": {
+        "primary_value": 42,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "parallel_timing_lenses": {
+        "primary_value": 48,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "lab_learning_progress": {
+        "primary_value": 172,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      }
+    },
+    {
+      "at": "2026-11-19T02:39:46.876584+00:00",
+      "buy_tier_flip_lag": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "decision_input_inventory": {
+        "primary_value": 5,
+        "warn_active": true,
         "freshness_state": "fresh"
       },
       "universe_filing_archive_miss_rate": {

@@ -1,6 +1,6 @@
 # Alphabet Inc. (GOOG) — Research memo
 
-_Version 5 · Updated 2026-11-18T17:56:46.551315+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-19T02:57:20.909167+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.58
-Rationale: Anthropic and cloud-growth headlines support the AI case, but unchanged TTM FCF strain and added Waymo regulatory noise leave research modestly short of the screen buy—no new company disclosures.
+Rationale: Anthropic’s record IPO and a Quaise geothermal PPA for future datacentre power extend AI-infrastructure spend, but unchanged TTM FCF ~$19.7bn and no new filings leave research only modestly aligned with the buy screen.
 RiskTags: regulatory, competitive, litigation, accounting
 
 ## Weekly updates
@@ -33,3 +33,18 @@ No material change.
 Anthropic IPO-day headlines reiterate Alphabet’s large disclosed stake (28%+ ownership) and the AI/datacentre spend theme already in the memo.  
 Commentary cites strong Google Cloud growth; Waymo reportedly withdrew highway robotaxis after a California ban—incremental autonomous regulatory friction, not a new filing.  
 Screening snapshot and SEC filings index are unchanged (TTM FCF ~$19.7bn; FY2025 SEC FCF ~$73bn).
+
+### 2026-11-18T21:44:38.632675+00:00
+Post-verdict news adds IPO-day reports of further Anthropic share purchases (~$10bn) and combined Google/Amazon stakes above 35%; commentary still ties weak share reaction to AI capex versus cloud growth.  
+Screening snapshot and SEC filings index unchanged (TTM FCF ~$19.7bn; FY2025 SEC FCF ~$73bn).  
+No new company filings—spend timing remains unresolved.
+
+### 2026-11-18T23:47:37.269107+00:00
+Anthropic’s IPO priced at $83 on strong demand reiterates Alphabet’s AI-stake theme; Morgan Stanley still cites ~$1.6tn aggregate AI infra spend in 2027.  
+Sell-side and peer commentary (Nadella on agents vs ads, Ives on capex) adds competitive noise, not new company disclosures.  
+Screening snapshot and SEC filings index unchanged (TTM FCF ~$19.7bn; FY2025 SEC FCF ~$73bn).
+
+### 2026-11-19T02:57:20.909167+00:00
+Headlines since the prior pass repeat Anthropic’s $83 IPO (~$81bn raise) and add a 50MW Oregon geothermal deal with Quaise for datacentre power from the early 2030s.  
+Warby Parker’s Google/Samsung smart-glasses launch is incremental wearables coverage, not a company filing; generic “buy now” commentary is uncorroborated.  
+Screening snapshot and SEC filings index unchanged (TTM FCF ~$19.7bn; FY2025 SEC FCF ~$73bn).
