@@ -790,6 +790,49 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ingest_sprint_p.set_defaults(func=cmd_library_ingest_sprint)
 
+    hunt_slice_p = sub.add_parser(
+        "ingest-hunt-slice",
+        parents=[common],
+        help="Fetch one maintenance or spare name inside the existing time ceiling",
+    )
+    hunt_slice_p.add_argument("--lane", required=True, choices=["maintenance", "sprint"])
+    hunt_slice_p.add_argument("--stream", type=int, default=1, choices=[1, 2])
+    hunt_slice_p.add_argument("--state-path", type=Path, default=None)
+    hunt_slice_p.add_argument("--deadline-epoch", type=float, default=None)
+    hunt_slice_p.add_argument("--markets", default="")
+    hunt_slice_p.add_argument("--max-targets", type=int, default=24)
+    hunt_slice_p.add_argument("--max-runtime-seconds", type=float, default=2100.0)
+    hunt_slice_p.add_argument("--max-bodies", type=int, default=20)
+    hunt_slice_p.add_argument("--head-idle", action="store_true")
+    hunt_slice_p.add_argument("--json", action="store_true")
+    hunt_slice_p.add_argument("--json-path", type=Path, default=None)
+    hunt_slice_p.set_defaults(func=cmd_ingest_hunt_slice)
+
+    hunt_finish_p = sub.add_parser(
+        "ingest-hunt-finish",
+        parents=[common],
+        help="Record a maintenance hunt slot without enabling matrix parallel",
+    )
+    hunt_finish_p.add_argument("--lane", required=True, choices=["maintenance", "sprint"])
+    hunt_finish_p.add_argument("--state-path", type=Path, default=None)
+    hunt_finish_p.add_argument("--json", action="store_true")
+    hunt_finish_p.add_argument("--json-path", type=Path, default=None)
+    hunt_finish_p.set_defaults(func=cmd_ingest_hunt_finish)
+
+    catalogue_p = sub.add_parser(
+        "catalogue-explore",
+        parents=[common],
+        help="Fetch one unheld Trading 212 stock and record how long it took",
+    )
+    catalogue_p.add_argument(
+        "--one",
+        action="store_true",
+        help="Fetch a single catalogue name (the only mode)",
+    )
+    catalogue_p.add_argument("--json", action="store_true")
+    catalogue_p.add_argument("--json-path", type=Path, default=None)
+    catalogue_p.set_defaults(func=cmd_catalogue_explore)
+
     ingest_sched_p = sub.add_parser(
         "ingest-schedule",
         parents=[common],
@@ -2445,6 +2488,94 @@ def cmd_library_ingest_schedule(args: argparse.Namespace) -> int:
             f"targets={decision.max_targets}"
         )
         print(f"  {decision.reason}")
+    return 0
+
+
+def _hunt_state(args: argparse.Namespace) -> tuple[Path, dict[str, Any]]:
+    if getattr(args, "state_path", None):
+        path = Path(args.state_path)
+    else:
+        path = Path("/tmp/ingest_hunt_state.json")
+    if path.exists():
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            payload = {}
+    else:
+        payload = {}
+    if not isinstance(payload, dict):
+        payload = {}
+    return path, payload
+
+
+def _save_hunt_state(path: Path, state: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(state, indent=2, default=str) + "\n", encoding="utf-8")
+
+
+def cmd_ingest_hunt_slice(args: argparse.Namespace) -> int:
+    from value_investor.ingest_hunt import maintenance_slice, sprint_slice
+    from value_investor.ingest_loop import DEFAULT_DATA_DIR
+
+    path, state = _hunt_state(args)
+    markets = [item.strip() for item in str(args.markets or "").split(",") if item.strip()] or None
+    if args.lane == "maintenance":
+        payload = maintenance_slice(
+            state,
+            library_root=args.root,
+            policy_path=args.policy,
+            data_dir=DEFAULT_DATA_DIR,
+            markets=markets,
+            max_bodies=int(args.max_bodies),
+            slot_runtime=float(args.max_runtime_seconds),
+            deadline_epoch=args.deadline_epoch,
+        )
+    else:
+        payload = sprint_slice(
+            state,
+            library_root=args.root,
+            policy_path=args.policy,
+            stream=int(args.stream),
+            markets=markets,
+            max_targets=int(args.max_targets),
+            max_runtime_seconds=float(args.max_runtime_seconds),
+            max_bodies=int(args.max_bodies),
+            head_idle=bool(args.head_idle),
+            deadline_epoch=args.deadline_epoch,
+        )
+    _save_hunt_state(path, state)
+    if args.json or args.json_path is not None:
+        _emit_cli_json(payload, args)
+    else:
+        print(
+            f"hunt {payload.get('lane')} {payload.get('action')} "
+            f"{payload.get('ticker') or payload.get('reason')}"
+        )
+    return 0
+
+
+def cmd_ingest_hunt_finish(args: argparse.Namespace) -> int:
+    _path, state = _hunt_state(args)
+    if args.lane == "maintenance":
+        from value_investor.ingest_hunt import finish_maintenance_hunt
+
+        payload = finish_maintenance_hunt(state, library_root=args.root)
+    else:
+        payload = {"lane": args.lane, "finished": True, "matrix_parallel_enabled": False}
+    payload["lane"] = args.lane
+    if args.json or args.json_path is not None:
+        _emit_cli_json(payload, args)
+    return 0
+
+
+def cmd_catalogue_explore(args: argparse.Namespace) -> int:
+    from value_investor.catalogue_explorer import explore_one
+
+    payload = explore_one(args.root)
+    if args.json or args.json_path is not None:
+        _emit_cli_json(payload, args)
+    else:
+        print(payload.get("action"), payload.get("t212_ticker") or payload.get("reason"))
     return 0
 
 

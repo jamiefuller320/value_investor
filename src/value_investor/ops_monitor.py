@@ -1834,6 +1834,44 @@ def check_ingest_occupancy_mismatch(
     ]
 
 
+def check_catalogue_explorer(
+    *,
+    library_root: Path | None = None,
+    state_path: Path | None = None,
+) -> list[OpsFinding]:
+    """Observe-only timing record for the one-name Trading 212 catalogue explorer.
+
+    The scheduled spare stream writes ``docs/data/library/catalogue_explorer.json``.
+    This check reads it. It does not fetch, parallelise, or open an engineering task.
+    """
+    from value_investor import catalogue_explorer as explorer
+    from value_investor.data_library import DEFAULT_LIBRARY_ROOT
+
+    if state_path is not None:
+        path = Path(state_path)
+        if path.exists():
+            try:
+                payload = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError, TypeError):
+                payload = None
+            state = payload if isinstance(payload, dict) else None
+        else:
+            state = None
+    else:
+        root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
+        path = explorer.state_path(root)
+        state = explorer.load_state(root) if path.exists() else None
+    return [
+        OpsFinding(
+            severity="info",
+            category="ingest",
+            title=explorer.EXPLORER_TITLE,
+            summary=explorer.finding_summary(state),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_decision_input_inventory(
     *,
     latest_path: Path = DEFAULT_LATEST_PATH,
@@ -5481,6 +5519,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_universe_filing_archive_pack_bottleneck))
     findings.extend(_guarded_check(check_universe_filing_archive_auto_widen))
     findings.extend(_guarded_check(check_ingest_occupancy_mismatch))
+    findings.extend(_guarded_check(check_catalogue_explorer))
     findings.extend(_guarded_check(check_shard_nav_fx_warp))
     findings.extend(_guarded_check(check_combined_tagged_learning))
     findings.extend(_guarded_check(check_track_statistics))

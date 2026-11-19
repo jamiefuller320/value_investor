@@ -13,6 +13,27 @@ pass moves on. Hitting the slot cap, or `SIGTERM` from the workflow's
 ticker stays deferred. A per-ticker abort is recorded as done for this pass so
 the same chain does not start it again.
 
+## Library spare and maintenance slices
+
+The FTSE loop above commits because the Python budget ends before
+`timeout-minutes`, and the commit step still runs. The library sprint and
+maintenance workflows used to commit once, after every name in the slot. A
+GitHub job timeout at `timeout-minutes` cancelled that step and dropped the
+pass. That is the failure a per-name commit matches.
+
+Spare streams and maintenance now fetch one name, commit the library
+artifacts, and fetch the next name until the same ceiling or an idle queue.
+Ceilings are unchanged: spare streams 24 names and 2100 seconds, maintenance
+one shared 3600-second slot (not 3600 seconds per market), predecessor wait
+2400 seconds. `timeout-minutes` stays 110 on the sprint workflows and 120 on
+maintenance. A timeout can drop only the name still in progress.
+
+Stream 2 waits on euro and stream 1 only while one of those runs is actually
+fetching. A later wave that is queued is not, by itself, a reason to skip.
+When stream 2's seated backlog is idle, that same slot takes one unheld
+Trading 212 stock and records the seconds. It does not start a second name
+in the same slot, and it does not add a stream.
+
 ## Runtime budget
 
 | Setting | Default | GHA limit |
