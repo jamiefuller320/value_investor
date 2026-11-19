@@ -4,8 +4,9 @@ Phase E. After the seated backlog has nothing left to fetch, stream 2 takes
 the next STOCK the library does not already hold. Venue order is US, then
 Xetra (DE), then LSE. One name is fetched to completion and the seconds are
 stored on ``docs/data/library/catalogue_explorer.json``. Fundamentals are
-screened on that same walk. A buy or strong-buy signal gets the research
-ingest for that name before the cursor moves on. A later pass can see
+screened on that same walk. The stream stops once the filing list and the
+buy signal are saved. A buy or strong buy is queued for a separate research
+ingest and is not downloaded inside the stream. A later pass can see
 where a parallel fetch would help. This module does not parallelise, and it
 does not add the name to an index or an investment book.
 
@@ -349,13 +350,13 @@ def default_full_ingest(
 def default_walk(
     instrument: dict[str, Any],
     *,
-    library_root: Path,
+    library_root: Path | None = None,
     filings_fetch: FetchFn | None = None,
     metrics_fetch: Callable[[str, str], Any] | None = None,
     screen: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
-    ingest: Callable[[dict[str, Any], dict[str, Any], Path], dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Filings, then a fundamentals screen. A buy screen hit is ingested before return."""
+    """Filing list and a buy signal. Research ingest is a later handoff."""
+    del library_root
     fetch_rows = filings_fetch or default_fetch
     filings = list(fetch_rows(instrument) or [])
     screen_started = time.perf_counter()
@@ -376,17 +377,7 @@ def default_walk(
     except Exception as exc:  # noqa: BLE001 — the cursor still records the screen miss
         screen_result = {"signal": None, "fits": False, "error": str(exc)}
     screen_result["seconds"] = round(time.perf_counter() - screen_started, 3)
-    full: dict[str, Any] | None = None
-    if screen_result.get("fits"):
-        ingest_started = time.perf_counter()
-        try:
-            runner = ingest or default_full_ingest
-            raw = runner(instrument, screen_result, library_root)
-            full = _slim_ingest(raw if isinstance(raw, dict) else {}, seconds=0.0)
-        except Exception as exc:  # noqa: BLE001 — a failed ingest is still a recorded hit
-            full = {"error": str(exc)}
-        full["seconds"] = round(time.perf_counter() - ingest_started, 3)
-    return {"filings": filings, "screen": screen_result, "full_ingest": full}
+    return {"filings": filings, "screen": screen_result}
 
 
 def _instrument_rows(index: dict[str, Any]) -> list[dict[str, Any]]:
@@ -447,9 +438,83 @@ def explore_one(
         }
     walker = fetch or (lambda instrument: default_walk(instrument, library_root=root))
     record = complete_one(state, chosen, fetch=walker)
+    queued = queue_handoff(state, record)
     save_state(state, root)
     write_name_artifact(root, record)
+    if queued is not None:
+        record["handoff_saved"] = True
     return {"action": "ran", **record}
+
+
+def queue_handoff(state: dict[str, Any], record: dict[str, Any]) -> dict[str, Any] | None:
+    """Record a buy or strong buy for the separate ingest routine."""
+    screen = record.get("screen")
+    if not isinstance(screen, dict) or not screen.get("fits"):
+        return None
+    signal = str(screen.get("signal") or "")
+    if signal not in BUY_SIGNALS:
+        return None
+    ticker = str(record.get("t212_ticker") or "").strip()
+    if not ticker:
+        return None
+    handoffs = [row for row in (state.get("handoffs") or []) if isinstance(row, dict)]
+    for row in handoffs:
+        if str(row.get("t212_ticker") or "").upper() == ticker.upper():
+            record["handoff"] = {
+                "status": row.get("status") or "pending",
+                "signal": row.get("signal") or signal,
+                "t212_ticker": ticker,
+            }
+            return row
+    item = {
+        "t212_ticker": ticker,
+        "yahoo": record.get("yahoo"),
+        "name": record.get("name"),
+        "signal": signal,
+        "status": "pending",
+        "queued_at": record.get("at"),
+    }
+    handoffs.append(item)
+    state["handoffs"] = handoffs
+    record["handoff"] = {"status": "pending", "signal": signal, "t212_ticker": ticker}
+    state["last"] = record
+    return item
+
+
+def run_one_handoff(
+    library_root: Path | None = None,
+    *,
+    ingest: Callable[[dict[str, Any], dict[str, Any], Path], dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Ingest one queued buy. The spare stream does not call this."""
+    root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
+    state = load_state(root)
+    handoffs = [row for row in (state.get("handoffs") or []) if isinstance(row, dict)]
+    pending = next((row for row in handoffs if row.get("status") == "pending"), None)
+    if pending is None:
+        return {"action": "idle", "reason": "no_handoff", "pending": 0}
+    instrument = {
+        "ticker": pending.get("t212_ticker"),
+        "shortName": pending.get("name"),
+    }
+    screen = {"signal": pending.get("signal"), "fits": True}
+    started = time.perf_counter()
+    try:
+        runner = ingest or default_full_ingest
+        raw = runner(instrument, screen, root)
+        pending["ingest"] = _slim_ingest(raw if isinstance(raw, dict) else {}, seconds=0.0)
+        pending["status"] = "done"
+        pending.pop("error", None)
+    except Exception as exc:  # noqa: BLE001 — a failed handoff stays visible and is not retried here
+        pending["status"] = "error"
+        pending["error"] = str(exc)
+        pending["ingest"] = {"error": str(exc)}
+    pending["ingest"]["seconds"] = round(time.perf_counter() - started, 3)
+    pending["finished_at"] = datetime.now(UTC).isoformat()
+    state["handoffs"] = handoffs
+    state["updated_at"] = pending["finished_at"]
+    save_state(state, root)
+    return {"action": "ran", **pending}
 
 
 def finding_summary(state: dict[str, Any] | None) -> str:

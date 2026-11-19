@@ -12,6 +12,7 @@ from value_investor.catalogue_explorer import (
     explore_one,
     finding_summary,
     next_unheld,
+    run_one_handoff,
     yahoo_ticker,
 )
 from value_investor.ops_monitor import check_catalogue_explorer
@@ -87,7 +88,7 @@ def test_explore_one_writes_the_timing_record(tmp_path: Path):
     assert again["t212_ticker"] == "BBB_US_EQ"
 
 
-def test_buy_screen_hit_is_ingested_before_the_next_name(tmp_path: Path):
+def test_buy_screen_hit_is_handed_off_before_the_next_name(tmp_path: Path):
     ingested: list[str] = []
 
     def filings(_instrument: dict) -> list:
@@ -114,25 +115,33 @@ def test_buy_screen_hit_is_ingested_before_the_next_name(tmp_path: Path):
             library_root=tmp_path,
             filings_fetch=filings,
             screen=screen,
-            ingest=ingest,
         )
 
     first = explore_one(tmp_path, fetch=walk, instruments=_rows(), held=set())
     assert first["t212_ticker"] == "AAA_US_EQ"
     assert first["screen"]["signal"] == "buy"
-    assert first["screen"]["fits"] is True
     assert first["screen"]["seconds"] >= 0
-    assert first["full_ingest"]["financial_years"] == 4
-    assert first["full_ingest"]["seconds"] >= 0
-    assert ingested == ["AAA_US_EQ"]
-    saved = tmp_path / "catalogue_explorer" / "names" / "AAA_US_EQ.json"
-    assert saved.exists()
-    assert "buy" in saved.read_text(encoding="utf-8")
+    assert first["handoff"]["status"] == "pending"
+    assert first["handoff_saved"] is True
+    assert "full_ingest" not in first
+    assert ingested == []
+    saved = (tmp_path / "catalogue_explorer.json").read_text(encoding="utf-8")
+    assert "pending" in saved
 
     second = explore_one(tmp_path, fetch=walk, instruments=_rows(), held=set())
     assert second["t212_ticker"] == "BBB_US_EQ"
     assert second["screen"]["signal"] == "hold"
-    assert second["full_ingest"] is None
+    assert "handoff" not in second
+    assert ingested == []
+
+    done = run_one_handoff(tmp_path, ingest=ingest)
+    assert done["action"] == "ran"
+    assert done["t212_ticker"] == "AAA_US_EQ"
+    assert done["status"] == "done"
+    assert done["ingest"]["financial_years"] == 4
+    assert ingested == ["AAA_US_EQ"]
+    idle = run_one_handoff(tmp_path, ingest=ingest)
+    assert idle["action"] == "idle"
     assert ingested == ["AAA_US_EQ"]
 
 
