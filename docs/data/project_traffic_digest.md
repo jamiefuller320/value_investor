@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-19T17:32:44.108804+00:00`
+Generated: `2026-11-19T20:56:05.841292+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,6 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `parked_hunter`/verified PR #1453 `eng-20261119-02` — Hunt fetchable IR source for parked tsx60 leftover K.TO
 - `ingest_narrow`/verified PR #1448 `eng-20261119-01` — Close library ingest gaps for euro_depth / UNA.AS (chain 1/3: 0/0 improved, run igc-20261005-02)
 
 ## PR fix occasions — common failure reasons
