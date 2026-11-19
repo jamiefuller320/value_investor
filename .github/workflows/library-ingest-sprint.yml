@@ -162,22 +162,29 @@ jobs:
           require_safe max_targets "${MAX_TARGETS:-}" '^[0-9]+$'
           require_safe max_runtime_seconds "${MAX_RUNTIME_SECONDS:-}" '^[0-9]+$'
           require_safe max_bodies "${MAX_BODIES:-}" '^[0-9]+$'
-          ARGS=(ingest-sprint --head-idle --json --json-path /tmp/library_ingest_sprint.json)
-          if [ -n "${MARKETS:-}" ]; then
-            ARGS+=(--markets "$MARKETS")
-          fi
-          if [ -n "${MAX_TARGETS:-}" ]; then
-            ARGS+=(--max-targets "$MAX_TARGETS")
-          fi
           RUNTIME="${MAX_RUNTIME_SECONDS:-}"
           if [ -z "$RUNTIME" ]; then
             RUNTIME="2100"
           fi
-          ARGS+=(--max-runtime-seconds "$RUNTIME")
-          if [ -n "${MAX_BODIES:-}" ]; then
-            ARGS+=(--max-bodies "$MAX_BODIES")
+          TARGETS="${MAX_TARGETS:-24}"
+          HUNT=(
+            --lane sprint
+            --budget "$RUNTIME"
+            --stream 1
+            --loop-json /tmp/library_ingest_sprint.json
+            --commit-message "chore: library ingest sprint (parallel) [skip ci]"
+            --
+            --head-idle
+            --max-targets "$TARGETS"
+            --max-runtime-seconds "$RUNTIME"
+          )
+          if [ -n "${MARKETS:-}" ]; then
+            HUNT+=(--markets "$MARKETS")
           fi
-          ftse-library "${ARGS[@]}"
+          if [ -n "${MAX_BODIES:-}" ]; then
+            HUNT+=(--max-bodies "$MAX_BODIES")
+          fi
+          bash scripts/ingest_hunt_commit.sh "${HUNT[@]}"
 
       - name: Evaluate library gap-closure follow-up
         id: gap_followup

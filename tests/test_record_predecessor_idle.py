@@ -114,6 +114,13 @@ def test_spare_workflows_skip_followup_when_predecessor_stays_busy():
             assert "if: steps.wait_head.outputs.idle == 'true'" in block, (path, step)
     sprint_2 = Path(".github/workflows/library-ingest-sprint-2.yml").read_text(encoding="utf-8")
     assert "euro-ingest-loop.yml library-ingest-sprint.yml" in sprint_2
+    assert "PREDECESSOR_WAIT_SCRIPT: scripts/wait_for_fetch_idle.sh" in sprint_2
+    sprint_1 = Path(".github/workflows/library-ingest-sprint.yml").read_text(encoding="utf-8")
+    maintenance = Path(".github/workflows/library-ingest-maintenance.yml").read_text(
+        encoding="utf-8"
+    )
+    assert "PREDECESSOR_WAIT_SCRIPT" not in sprint_1
+    assert "PREDECESSOR_WAIT_SCRIPT" not in maintenance
     maintenance = Path(".github/workflows/library-ingest-maintenance.yml").read_text(
         encoding="utf-8"
     )
