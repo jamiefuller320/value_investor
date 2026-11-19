@@ -3791,8 +3791,16 @@ def _extract_pdf_text(raw: bytes) -> str | None:
     try:
         reader = PdfReader(BytesIO(raw))
         pages: list[str] = []
+        from value_investor.library_ingest_budget import active_hang_watch
+
+        watch = active_hang_watch()
+        if watch is not None:
+            watch.begin_parse()
         for index, page in enumerate(reader.pages):
             if index >= _PDF_EXTRACT_MAX_PAGES:
+                break
+            if watch is not None and watch.parse_stall():
+                logger.warning("PDF parse stopped (%s) after %s pages", watch.stop_reason, index)
                 break
             try:
                 page_text = page.extract_text() or ""
@@ -3800,6 +3808,8 @@ def _extract_pdf_text(raw: bytes) -> str | None:
                 continue
             if page_text.strip():
                 pages.append(page_text)
+            if watch is not None:
+                watch.note_parse_progress()
         return _compose_pdf_body_text(pages)
     except Exception as exc:  # noqa: BLE001
         logger.debug("PDF extract failed: %s", exc)

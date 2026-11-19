@@ -22,6 +22,8 @@ from value_investor.library_ingest_budget import (
     deadline_reached,
     select_blocker_ticker,
     should_start_next_ticker,
+    IngestHangWatch,
+    bind_hang_watch,
     ticker_deadline,
     weekday_per_ticker_max_seconds,
 )
@@ -606,6 +608,7 @@ def _ingest_single_library_target(
     max_bodies: int = 20,
     canonical_only: bool | None = None,
     deadline_monotonic: float | None = None,
+    hang_watch: IngestHangWatch | None = None,
 ) -> dict[str, Any]:
     screen_dir = screen_dir_for(library_root, market_id)
     store = ResearchStore(screen_dir)
@@ -622,48 +625,72 @@ def _ingest_single_library_target(
         canonical_only=canonical_only,
     )
 
-    ticker_budget_hit = deadline_reached(deadline_monotonic)
+    def _stalled() -> bool:
+        if hang_watch is None:
+            return False
+        if hang_watch.allow_continuing():
+            return False
+        return True
+
+    ticker_budget_hit = deadline_reached(deadline_monotonic) or _stalled()
     ir_meta: dict[str, Any] = {}
     meta: dict[str, Any] = {}
-    if not ticker_budget_hit:
-        meta = ingest_research_sources(
-            ticker=target.ticker,
-            company_name=target.name,
-            screening_snapshot={
-                "ticker": target.ticker,
-                "name": target.name,
-                "signal": target.signal,
-                "market": market_id,
-            },
-            sources_dir=sources_dir,
-            since=None,
-            market=market_id,
-            deepen_history=deepen_history,
-            deadline_monotonic=deadline_monotonic,
-        )
-        ticker_budget_hit = deadline_reached(deadline_monotonic)
-    filings_dir = sources_dir / "filings"
-    if not ticker_budget_hit:
-        residual_meta = refetch_residual_filing_bodies(
-            filings_dir,
-            ticker=target.ticker,
-            company_name=target.name,
-            max_bodies=max_bodies,
-            deadline_monotonic=deadline_monotonic,
-        )
-        ticker_budget_hit = bool(residual_meta.get("deadline_hit")) or deadline_reached(
-            deadline_monotonic
-        )
-    if not ticker_budget_hit:
-        ir_meta = refetch_ir_allowlist_filing_bodies(
-            filings_dir,
-            ticker=target.ticker,
-            max_bodies=max_bodies,
-            deadline_monotonic=deadline_monotonic,
-        )
-        ticker_budget_hit = bool(ir_meta.get("deadline_hit")) or deadline_reached(
-            deadline_monotonic
-        )
+    if hang_watch is not None:
+        bind_hang_watch(hang_watch)
+        hang_watch.note_progress()
+    try:
+        if not ticker_budget_hit:
+            meta = ingest_research_sources(
+                ticker=target.ticker,
+                company_name=target.name,
+                screening_snapshot={
+                    "ticker": target.ticker,
+                    "name": target.name,
+                    "signal": target.signal,
+                    "market": market_id,
+                },
+                sources_dir=sources_dir,
+                since=None,
+                market=market_id,
+                deepen_history=deepen_history,
+                deadline_monotonic=deadline_monotonic,
+            )
+            if hang_watch is not None:
+                hang_watch.note_progress()
+            ticker_budget_hit = deadline_reached(deadline_monotonic) or _stalled()
+        filings_dir = sources_dir / "filings"
+        if not ticker_budget_hit:
+            residual_meta = refetch_residual_filing_bodies(
+                filings_dir,
+                ticker=target.ticker,
+                company_name=target.name,
+                max_bodies=max_bodies,
+                deadline_monotonic=deadline_monotonic,
+            )
+            if hang_watch is not None:
+                hang_watch.note_progress()
+            ticker_budget_hit = (
+                bool(residual_meta.get("deadline_hit"))
+                or deadline_reached(deadline_monotonic)
+                or _stalled()
+            )
+        if not ticker_budget_hit:
+            ir_meta = refetch_ir_allowlist_filing_bodies(
+                filings_dir,
+                ticker=target.ticker,
+                max_bodies=max_bodies,
+                deadline_monotonic=deadline_monotonic,
+            )
+            if hang_watch is not None:
+                hang_watch.note_progress()
+            ticker_budget_hit = (
+                bool(ir_meta.get("deadline_hit"))
+                or deadline_reached(deadline_monotonic)
+                or _stalled()
+            )
+    finally:
+        if hang_watch is not None:
+            bind_hang_watch(None)
     after = _filing_coverage_for_ticker(
         target.ticker,
         library_root=library_root,
@@ -686,6 +713,7 @@ def _ingest_single_library_target(
         "regime": meta.get("filings_regime"),
         "filings_summary": filings_summary,
         "ticker_budget_hit": ticker_budget_hit,
+        "hang_stop": None if hang_watch is None else hang_watch.stop_reason,
         "ir_exhausted": ir_exhausted,
         "ir_refetch": ir_meta or None,
     }
@@ -947,11 +975,20 @@ def run_library_ingest_loop(
             result.runtime_cutoff = True
             result.partial = True
             break
+        # Maintenance keeps the shared slot as the hard stop. 320s is a
+        # no-progress hang window, so a PDF that is still parsing continues.
+        name_cap = None if maintenance_mode else ticker_cap
         deadline = ticker_deadline(
             slot_started=started,
             max_runtime_seconds=max_runtime_seconds,
-            per_ticker_max_seconds=ticker_cap,
+            per_ticker_max_seconds=name_cap,
         )
+        hang_watch = None
+        if maintenance_mode and ticker_cap is not None:
+            hang_watch = IngestHangWatch(
+                stall_seconds=ticker_cap,
+                slot_deadline=deadline,
+            )
         try:
             row = _ingest_single_library_target(
                 target,
@@ -960,6 +997,7 @@ def run_library_ingest_loop(
                 deepen_history=deepen_history,
                 max_bodies=max_bodies,
                 deadline_monotonic=deadline,
+                hang_watch=hang_watch,
             )
             result.results.append(row)
             if row.get("improved"):
