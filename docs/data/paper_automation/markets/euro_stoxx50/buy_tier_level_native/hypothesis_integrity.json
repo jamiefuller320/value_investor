@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "updated_at": "2026-11-17T07:30:18.426622+00:00",
-  "as_of": "2026-11-17T08:30:18.417849+01:00",
+  "updated_at": "2026-11-19T08:40:42.990369+00:00",
+  "as_of": "2026-11-19T09:40:42.978878+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -17,22 +17,22 @@
     "skip_underwater_urgency_when_intact": true
   },
   "holding_count": 9,
-  "underwater_count": 0,
+  "underwater_count": 1,
   "thesis_status_counts": {
-    "intact": 8,
+    "intact": 9,
     "weakening": 0,
-    "broken": 1,
+    "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
     "holding_count": 9,
-    "loser_count": 0,
-    "loser_share": 0.0,
-    "loser_nav_share": 0.0,
+    "loser_count": 1,
+    "loser_share": 0.1111,
+    "loser_nav_share": 0.1142,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
-    "intact_loser_count": 0,
+    "intact_loser_count": 1,
     "weakening_loser_count": 0,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
@@ -43,62 +43,30 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.1111,
-      "quality": 0.1111,
-      "dividend": 0.1111,
-      "garp": 0.4444,
-      "risk": 0.1111
+      "cheapness": 0.0,
+      "quality": 0.0,
+      "dividend": 0.0,
+      "garp": 0.5,
+      "risk": 0.0
     },
     "selection_feedback_flags": [],
-    "balancing_hint": "maintain",
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
-    {
-      "ticker": "SAP.DE",
-      "name": "SAP.DE",
-      "thesis_status": "broken",
-      "recommended_action": "exit_candidate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 213.45,
-      "avg_cost": 213.45,
-      "signal": null,
-      "timing_signal": null,
-      "conviction_score": null,
-      "data_quality_score": null,
-      "passed_families": [],
-      "failed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "research_verdict": null,
-      "reasons": [
-        "cheapness lost and not in buy tier"
-      ],
-      "intact_reasons": [],
-      "weaken_reasons": [],
-      "broken_reasons": [
-        "cheapness lost and not in buy tier"
-      ]
-    },
     {
       "ticker": "ENI.MI",
       "name": "Eni S.p.A.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0449,
-      "mark": 25.845,
-      "avg_cost": 27.0611,
+      "unrealized_pct": -0.0733,
+      "mark": 24.955,
+      "avg_cost": 26.9281,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7871,
+      "conviction_score": 0.7801,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -110,18 +78,19 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 79%"
+        "conviction 78%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 79%"
+        "conviction 78%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -133,9 +102,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0165,
-      "mark": 27.0,
-      "avg_cost": 26.5619,
+      "unrealized_pct": -0.0104,
+      "mark": 26.33,
+      "avg_cost": 26.6059,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.7642,
@@ -167,58 +136,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "TTE.PA",
-      "name": "TotalEnergies SE",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0409,
-      "mark": 81.96,
-      "avg_cost": 78.7376,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8633,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 86%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 86%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "MC.PA",
       "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0454,
-      "mark": 404.0,
-      "avg_cost": 386.445,
+      "unrealized_pct": -0.0024,
+      "mark": 388.1,
+      "avg_cost": 389.0219,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5125,
+      "conviction_score": 0.5325,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -235,14 +164,95 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 51%"
+        "conviction 53%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 51%"
+        "conviction 53%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "SAN.PA",
+      "name": "Sanofi",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 86.25,
+      "avg_cost": 86.25,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6217,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 62%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 62%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "TTE.PA",
+      "name": "TotalEnergies SE",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.009,
+      "mark": 79.81,
+      "avg_cost": 79.1005,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8507,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 85%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 85%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -254,9 +264,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0496,
-      "mark": 115.25,
-      "avg_cost": 109.799,
+      "unrealized_pct": 0.0235,
+      "mark": 112.95,
+      "avg_cost": 110.3573,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.9278,
@@ -294,9 +304,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.066,
-      "mark": 61.0,
-      "avg_cost": 57.2252,
+      "unrealized_pct": 0.0411,
+      "mark": 59.94,
+      "avg_cost": 57.5741,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.6211,
@@ -329,15 +339,55 @@
       "broken_reasons": []
     },
     {
+      "ticker": "AD.AS",
+      "name": "Koninklijke Ahold Delhaize N.V.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0636,
+      "mark": 34.79,
+      "avg_cost": 32.7111,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8562,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 86%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 86%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "SGO.PA",
       "name": "Compagnie de Saint-Gobain S.A.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.1035,
-      "mark": 75.02,
-      "avg_cost": 67.9853,
+      "unrealized_pct": 0.073,
+      "mark": 73.9,
+      "avg_cost": 68.872,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.6789,
@@ -365,46 +415,6 @@
         "cheapness family still passes",
         "data_quality 1.00",
         "conviction 68%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "AD.AS",
-      "name": "Koninklijke Ahold Delhaize N.V.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.1038,
-      "mark": 35.74,
-      "avg_cost": 32.3804,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8562,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 86%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 86%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []

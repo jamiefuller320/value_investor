@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-17T07:31:34.689588+00:00
+Track: `buy_tier_level_native` · updated 2026-11-19T08:41:29.288329+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level_native` · updated 2026-11-17T07:31:34.689588+00:00
 
 ## Holding reviews
 
-### SONY — intact / hold_tolerate (+4.0%)
+### SONY — intact / hold_tolerate (+2.6%)
 - still buy
 - research accumulate
 - cheapness family still passes

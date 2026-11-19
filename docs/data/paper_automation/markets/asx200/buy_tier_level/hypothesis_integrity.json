@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-11-19T00:47:46.160326+00:00",
-  "as_of": "2026-11-19T11:47:45.961441+11:00",
+  "updated_at": "2026-11-19T08:39:48.668288+00:00",
+  "as_of": "2026-11-19T19:39:48.560558+11:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -17,7 +17,7 @@
     "skip_underwater_urgency_when_intact": true
   },
   "holding_count": 31,
-  "underwater_count": 10,
+  "underwater_count": 15,
   "thesis_status_counts": {
     "intact": 17,
     "weakening": 14,
@@ -26,34 +26,76 @@
   },
   "portfolio_feedback": {
     "holding_count": 31,
-    "loser_count": 10,
-    "loser_share": 0.3226,
-    "loser_nav_share": 0.3025,
+    "loser_count": 15,
+    "loser_share": 0.4839,
+    "loser_nav_share": 0.4595,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
-    "within_tolerance": true,
-    "intact_loser_count": 5,
-    "weakening_loser_count": 5,
+    "within_tolerance": false,
+    "intact_loser_count": 7,
+    "weakening_loser_count": 8,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
-      "quality": 0.3,
-      "dividend": 0.5,
-      "garp": 0.4,
+      "quality": 0.3333,
+      "dividend": 0.6,
+      "garp": 0.3333,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0476,
-      "quality": 0.3333,
-      "dividend": 0.2857,
-      "garp": 0.381,
+      "cheapness": 0.0,
+      "quality": 0.25,
+      "dividend": 0.1875,
+      "garp": 0.4375,
       "risk": 0.0
     },
-    "selection_feedback_flags": [],
-    "balancing_hint": "tolerate_intact_losers",
+    "selection_feedback_flags": [
+      "dividend fails more often among losers (60% vs 19%)"
+    ],
+    "balancing_hint": "trim_weakening_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
+    {
+      "ticker": "AAI.AX",
+      "name": "Alcoa Corporation",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": true,
+      "deep_underwater": true,
+      "unrealized_pct": -0.2369,
+      "mark": 53.27,
+      "avg_cost": 69.81,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.492,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "still strong_buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 49%"
+      ],
+      "weaken_reasons": [
+        "research verdict caution"
+      ],
+      "broken_reasons": []
+    },
     {
       "ticker": "WHC.AX",
       "name": "Whitehaven Coal Limited",
@@ -61,8 +103,8 @@
       "recommended_action": "watch_review",
       "underwater": true,
       "deep_underwater": true,
-      "unrealized_pct": -0.2233,
-      "mark": 6.68,
+      "unrealized_pct": -0.2128,
+      "mark": 6.77,
       "avg_cost": 8.6,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -96,58 +138,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "AAI.AX",
-      "name": "Alcoa Corporation",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": true,
-      "deep_underwater": true,
-      "unrealized_pct": -0.1898,
-      "mark": 56.56,
-      "avg_cost": 69.81,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4875,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "still strong_buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 49%"
-      ],
-      "weaken_reasons": [
-        "research verdict caution"
-      ],
-      "broken_reasons": []
-    },
-    {
       "ticker": "WAF.AX",
       "name": "West African Resources Limited",
       "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "recommended_action": "watch_review",
       "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.1328,
-      "mark": 3.33,
+      "deep_underwater": true,
+      "unrealized_pct": -0.1849,
+      "mark": 3.13,
       "avg_cost": 3.84,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5979,
+      "conviction_score": 0.5958,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -160,12 +162,12 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
+        "deep drawdown (-18.5%) \u2014 re-check facts; thesis still intact",
         "price drawdown alone does not invalidate value thesis",
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 60%"
+        "data_quality 0.95"
       ],
       "intact_reasons": [
         "still strong_buy",
@@ -173,6 +175,131 @@
         "cheapness family still passes",
         "data_quality 0.95",
         "conviction 60%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "RRL.AX",
+      "name": "Regis Resources Limited",
+      "thesis_status": "intact",
+      "recommended_action": "watch_review",
+      "underwater": true,
+      "deep_underwater": true,
+      "unrealized_pct": -0.1782,
+      "mark": 6.04,
+      "avg_cost": 7.3493,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8116,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "deep drawdown (-17.8%) \u2014 re-check facts; thesis still intact",
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 81%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "GGP.AX",
+      "name": "Greatland Resources Limited",
+      "thesis_status": "intact",
+      "recommended_action": "watch_review",
+      "underwater": true,
+      "deep_underwater": true,
+      "unrealized_pct": -0.1728,
+      "mark": 9.02,
+      "avg_cost": 10.9047,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4915,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "deep drawdown (-17.3%) \u2014 re-check facts; thesis still intact",
+        "price drawdown alone does not invalidate value thesis",
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 49%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "WGX.AX",
+      "name": "Westgold Resources Limited",
+      "thesis_status": "intact",
+      "recommended_action": "watch_review",
+      "underwater": true,
+      "deep_underwater": true,
+      "unrealized_pct": -0.1546,
+      "mark": 5.16,
+      "avg_cost": 6.1036,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4375,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "deep drawdown (-15.5%) \u2014 re-check facts; thesis still intact",
+        "price drawdown alone does not invalidate value thesis",
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 44%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -184,12 +311,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0932,
-      "mark": 13.62,
+      "unrealized_pct": -0.1238,
+      "mark": 13.16,
       "avg_cost": 15.02,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.6296,
+      "conviction_score": 0.6313,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -220,98 +347,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "RRL.AX",
-      "name": "Regis Resources Limited",
+      "ticker": "ALK.AX",
+      "name": "Alkane Resources Ltd",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0924,
-      "mark": 6.67,
-      "avg_cost": 7.3493,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8074,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 81%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 81%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CDA.AX",
-      "name": "Codan Limited",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0912,
-      "mark": 49.52,
-      "avg_cost": 54.49,
+      "unrealized_pct": -0.1133,
+      "mark": 1.605,
+      "avg_cost": 1.81,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.6132,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "neutral",
-      "reasons": [
-        "research verdict neutral",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 61%"
-      ],
-      "weaken_reasons": [
-        "research verdict neutral"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "GGP.AX",
-      "name": "Greatland Resources Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0866,
-      "mark": 9.96,
-      "avg_cost": 10.9047,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.48,
+      "conviction_score": 0.5774,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -329,220 +376,16 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 48%"
+        "conviction 58%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 48%"
+        "conviction 58%"
       ],
       "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "WGX.AX",
-      "name": "Westgold Resources Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.076,
-      "mark": 5.64,
-      "avg_cost": 6.1036,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4314,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 43%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 43%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "WDS.AX",
-      "name": "Woodside Energy Group Ltd",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0585,
-      "mark": 30.44,
-      "avg_cost": 32.33,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4125,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 41%"
-      ],
-      "weaken_reasons": [
-        "research verdict caution"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "YAL.AX",
-      "name": "Yancoal Australia Ltd",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0511,
-      "mark": 5.39,
-      "avg_cost": 5.68,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.2772,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "quality",
-        "garp"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "conviction 28% below intact floor",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 0.95"
-      ],
-      "weaken_reasons": [
-        "research verdict caution",
-        "conviction 28% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "ZIM.AX",
-      "name": "Zimplats Holdings Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0482,
-      "mark": 13.22,
-      "avg_cost": 13.89,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5115,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 51%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 51%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "PXA.AX",
-      "name": "PEXA Group Limited",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0311,
-      "mark": 6.86,
-      "avg_cost": 7.08,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.299,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "risk"
-      ],
-      "failed_families": [
-        "quality",
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 30% below intact floor",
-        "still buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95"
-      ],
-      "weaken_reasons": [
-        "conviction 30% below intact floor"
-      ],
       "broken_reasons": []
     },
     {
@@ -550,10 +393,10 @@
       "name": "Tuas Limited",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.029,
-      "mark": 1.47,
+      "unrealized_pct": -0.0917,
+      "mark": 1.375,
       "avg_cost": 1.5139,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -587,142 +430,19 @@
       "broken_reasons": []
     },
     {
-      "ticker": "ALK.AX",
-      "name": "Alkane Resources Ltd",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0221,
-      "mark": 1.77,
-      "avg_cost": 1.81,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.571,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 57%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 57%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CQR.AX",
-      "name": "Charter Hall Retail REIT",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 3.95,
-      "avg_cost": 3.95,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.799,
-      "data_quality_score": 0.9,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 80%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 80%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "REH.AX",
-      "name": "Reece Limited",
+      "ticker": "CDA.AX",
+      "name": "Codan Limited",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 18.86,
-      "avg_cost": 18.86,
-      "signal": "buy",
-      "timing_signal": "wait",
-      "conviction_score": 0.2025,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "cheapness",
-        "quality"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "cheapness family no longer passes",
-        "conviction 20% below intact floor",
-        "still buy",
-        "data_quality 0.95"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "data_quality 0.95"
-      ],
-      "weaken_reasons": [
-        "research verdict caution",
-        "cheapness family no longer passes",
-        "conviction 20% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CLW.AX",
-      "name": "Charter Hall Long WALE REIT",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 3.56,
-      "avg_cost": 3.56,
+      "unrealized_pct": -0.0831,
+      "mark": 49.96,
+      "avg_cost": 54.49,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.3993,
-      "data_quality_score": 0.9,
+      "conviction_score": 0.5984,
+      "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
         "quality",
@@ -740,8 +460,8 @@
       "intact_reasons": [
         "still buy",
         "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 40%"
+        "data_quality 0.95",
+        "conviction 60%"
       ],
       "weaken_reasons": [
         "research verdict neutral"
@@ -749,42 +469,43 @@
       "broken_reasons": []
     },
     {
-      "ticker": "AMC.AX",
-      "name": "Amcor plc",
+      "ticker": "ZIM.AX",
+      "name": "Zimplats Holdings Limited",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 64.79,
-      "avg_cost": 64.79,
+      "unrealized_pct": -0.0785,
+      "mark": 12.8,
+      "avg_cost": 13.89,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.3885,
-      "data_quality_score": 1.0,
+      "conviction_score": 0.5115,
+      "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
         "quality",
-        "dividend",
+        "garp",
         "risk"
       ],
       "failed_families": [
-        "garp"
+        "dividend"
       ],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 39%"
+        "data_quality 0.95",
+        "conviction 51%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 39%"
+        "data_quality 0.95",
+        "conviction 51%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -794,14 +515,14 @@
       "name": "Genesis Minerals Limited",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 6.64,
+      "unrealized_pct": -0.0663,
+      "mark": 6.2,
       "avg_cost": 6.64,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.3664,
+      "conviction_score": 0.4288,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -821,7 +542,7 @@
         "still buy",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 37%"
+        "conviction 43%"
       ],
       "weaken_reasons": [
         "research verdict caution"
@@ -829,18 +550,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "NWS.AX",
-      "name": "News Corporation",
+      "ticker": "WDS.AX",
+      "name": "Woodside Energy Group Ltd",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 43.6,
-      "avg_cost": 43.6,
+      "unrealized_pct": -0.0662,
+      "mark": 30.19,
+      "avg_cost": 32.33,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.3159,
+      "conviction_score": 0.4125,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -854,18 +575,98 @@
       "research_verdict": "caution",
       "reasons": [
         "research verdict caution",
-        "conviction 32% below intact floor",
         "still buy",
         "cheapness family still passes"
       ],
       "intact_reasons": [
         "still buy",
         "cheapness family still passes",
-        "data_quality 1.00"
+        "data_quality 1.00",
+        "conviction 41%"
+      ],
+      "weaken_reasons": [
+        "research verdict caution"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "PXA.AX",
+      "name": "PEXA Group Limited",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0537,
+      "mark": 6.7,
+      "avg_cost": 7.08,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.299,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "risk"
+      ],
+      "failed_families": [
+        "quality",
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "conviction 30% below intact floor",
+        "still buy",
+        "research accumulate"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95"
+      ],
+      "weaken_reasons": [
+        "conviction 30% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "YAL.AX",
+      "name": "Yancoal Australia Ltd",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0528,
+      "mark": 5.38,
+      "avg_cost": 5.68,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.2772,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "quality",
+        "garp"
+      ],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "conviction 28% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 0.95"
       ],
       "weaken_reasons": [
         "research verdict caution",
-        "conviction 32% below intact floor"
+        "conviction 28% below intact floor"
       ],
       "broken_reasons": []
     },
@@ -876,8 +677,8 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0115,
-      "mark": 0.88,
+      "unrealized_pct": -0.0172,
+      "mark": 0.855,
       "avg_cost": 0.87,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -911,44 +712,203 @@
       "broken_reasons": []
     },
     {
-      "ticker": "HVN.AX",
-      "name": "Harvey Norman Holdings Limited",
+      "ticker": "NEM.AX",
+      "name": "Newmont Corporation",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0208,
-      "mark": 4.41,
-      "avg_cost": 4.32,
-      "signal": "strong_buy",
+      "unrealized_pct": -0.0114,
+      "mark": 153.27,
+      "avg_cost": 155.03,
+      "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4127,
-      "data_quality_score": 0.95,
+      "conviction_score": 0.6285,
+      "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
+        "quality",
         "dividend",
+        "garp",
         "risk"
       ],
-      "failed_families": [
-        "quality",
-        "garp"
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 63%"
       ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 63%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CQR.AX",
+      "name": "Charter Hall Retail REIT",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0051,
+      "mark": 3.93,
+      "avg_cost": 3.95,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.799,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 41%"
+        "data_quality 0.90",
+        "conviction 80%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 41%"
+        "data_quality 0.90",
+        "conviction 80%"
       ],
       "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "IMD.AX",
+      "name": "Imdex Limited",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 3.09,
+      "avg_cost": 3.09,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.2666,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "neutral",
+      "reasons": [
+        "research verdict neutral",
+        "conviction 27% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 0.95"
+      ],
+      "weaken_reasons": [
+        "research verdict neutral",
+        "conviction 27% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "NWS.AX",
+      "name": "News Corporation",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0005,
+      "mark": 43.83,
+      "avg_cost": 43.8076,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3686,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 37%"
+      ],
+      "weaken_reasons": [
+        "research verdict caution"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CLW.AX",
+      "name": "Charter Hall Long WALE REIT",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0028,
+      "mark": 3.57,
+      "avg_cost": 3.56,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4552,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "neutral",
+      "reasons": [
+        "research verdict neutral",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 46%"
+      ],
+      "weaken_reasons": [
+        "research verdict neutral"
+      ],
       "broken_reasons": []
     },
     {
@@ -958,8 +918,8 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.021,
-      "mark": 17.99,
+      "unrealized_pct": 0.0051,
+      "mark": 17.71,
       "avg_cost": 17.62,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -992,17 +952,140 @@
       "broken_reasons": []
     },
     {
+      "ticker": "AMC.AX",
+      "name": "Amcor plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.008,
+      "mark": 65.31,
+      "avg_cost": 64.79,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4398,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 44%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 44%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "HVN.AX",
+      "name": "Harvey Norman Holdings Limited",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0116,
+      "mark": 4.37,
+      "avg_cost": 4.32,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4732,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "quality",
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 47%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 47%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CYL.AX",
+      "name": "Catalyst Metals Limited",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0147,
+      "mark": 3.81,
+      "avg_cost": 3.7549,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4902,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 49%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 49%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "ANN.AX",
       "name": "Ansell Limited",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.034,
-      "mark": 46.49,
+      "unrealized_pct": 0.0251,
+      "mark": 46.09,
       "avg_cost": 44.96,
       "signal": "buy",
-      "timing_signal": "wait",
+      "timing_signal": "neutral",
       "conviction_score": 0.6903,
       "data_quality_score": 0.95,
       "passed_families": [
@@ -1032,54 +1115,14 @@
       "broken_reasons": []
     },
     {
-      "ticker": "NEM.AX",
-      "name": "Newmont Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0535,
-      "mark": 163.33,
-      "avg_cost": 155.03,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6308,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 63%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 63%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "PMV.AX",
       "name": "Premier Investments Limited",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0649,
-      "mark": 14.24,
+      "unrealized_pct": 0.0395,
+      "mark": 13.9,
       "avg_cost": 13.372,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -1119,12 +1162,12 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0651,
-      "mark": 18.0,
+      "unrealized_pct": 0.0586,
+      "mark": 17.89,
       "avg_cost": 16.9,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4397,
+      "conviction_score": 0.4442,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -1159,8 +1202,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0688,
-      "mark": 3.73,
+      "unrealized_pct": 0.0602,
+      "mark": 3.7,
       "avg_cost": 3.49,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -1193,59 +1236,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "CYL.AX",
-      "name": "Catalyst Metals Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.1159,
-      "mark": 4.19,
-      "avg_cost": 3.7549,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.488,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 49%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 49%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "JBH.AX",
       "name": "JB Hi-Fi Limited",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.121,
-      "mark": 75.77,
+      "unrealized_pct": 0.1296,
+      "mark": 76.35,
       "avg_cost": 67.59,
       "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.514,
+      "timing_signal": "wait",
+      "conviction_score": 0.5021,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -1262,14 +1264,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 51%"
+        "conviction 50%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 51%"
+        "conviction 50%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -1281,12 +1283,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.1338,
-      "mark": 35.59,
+      "unrealized_pct": 0.1599,
+      "mark": 36.41,
       "avg_cost": 31.39,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5292,
+      "conviction_score": 0.5205,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -1303,14 +1305,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 53%"
+        "conviction 52%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 53%"
+        "conviction 52%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []

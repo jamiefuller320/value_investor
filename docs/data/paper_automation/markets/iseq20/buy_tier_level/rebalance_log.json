@@ -16921,5 +16921,359 @@
       },
       "cards": []
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-11-19T08:42:12.269369+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/iseq20/screen_latest.json",
+      "run_at": "2026-11-19T06:53:22.841007+00:00",
+      "generated_at": "2026-11-19T08:42:12.202217+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-11-19T08:42:12.210214+00:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-11-19T08:00:00+00:00",
+      "settle_at": "2026-11-19T09:15:00+00:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (0 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "OIZ.IR",
+        "name": "Origin Enterprises plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.3981,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 4.28,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "C5H.IR",
+        "name": "Cairn Homes plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7022,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 2.735,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "GL9.IR",
+        "name": "Glanbia plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6167,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Consumer Defensive",
+        "price": 19.97,
+        "research_verdict": "neutral",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "MIO.IR",
+        "name": "Mincon Group plc",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.223125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 0.9,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "OIZ.IR",
+        "name": "Origin Enterprises plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.3981,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 4.28,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "C5H.IR",
+        "name": "Cairn Homes plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7022,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 2.735,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "GL9.IR",
+        "name": "Glanbia plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6167,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Consumer Defensive",
+        "price": 19.97,
+        "research_verdict": "neutral",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "MIO.IR",
+        "name": "Mincon Group plc",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.223125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 0.9,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1068.27,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 533.51,
+      "targets": [
+        {
+          "ticker": "C5H.IR",
+          "name": "Cairn Homes plc",
+          "signal": "buy",
+          "conviction_score": 0.7022,
+          "price": 2.735
+        },
+        {
+          "ticker": "OIZ.IR",
+          "name": "Origin Enterprises plc",
+          "signal": "buy",
+          "conviction_score": 0.3981,
+          "price": 4.28
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "GL9.IR",
+          "name": "Glanbia plc",
+          "reason": "No longer in the top conviction target set",
+          "shares": 17.251637,
+          "price": 19.97,
+          "value": 344.52
+        },
+        {
+          "action": "sell",
+          "ticker": "MIO.IR",
+          "name": "Mincon Group plc",
+          "reason": "No longer in the top conviction target set",
+          "shares": 409.613419,
+          "price": 0.9,
+          "value": 368.65
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "C5H.IR",
+          "name": "Cairn Homes plc",
+          "reason": "New sleeve",
+          "value": 533.51,
+          "price": 2.735,
+          "target_value": 533.51,
+          "conviction_score": 0.7022,
+          "signal": "buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "OIZ.IR",
+          "name": "Origin Enterprises plc",
+          "reason": "Top-up to equal weight",
+          "value": 178.41,
+          "price": 4.28,
+          "target_value": 533.51,
+          "conviction_score": 0.3981,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [],
+      "skipped": [],
+      "waitlisted": [
+        {
+          "ticker": "GL9.IR",
+          "name": "Glanbia plc",
+          "signal": "buy",
+          "conviction_score": 0.6167,
+          "reason": "timing_signal=wait \u2014 skipped until timing improves"
+        }
+      ],
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 2 buy(s)."
+    },
+    "trades": [],
+    "nav_before": 1068.27,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "OIZ.IR",
+        "shares": 82.968313,
+        "avg_cost": 3.9931,
+        "sector": "Basic Materials",
+        "name": "Origin Enterprises plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "GL9.IR",
+        "shares": 17.251637,
+        "avg_cost": 20.7722,
+        "sector": "Consumer Defensive",
+        "name": "Glanbia plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "MIO.IR",
+        "shares": 409.613419,
+        "avg_cost": 0.85,
+        "sector": "Industrials",
+        "name": "Mincon Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 1068.27,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "OIZ.IR",
+        "shares": 82.968313,
+        "avg_cost": 3.9931,
+        "sector": "Basic Materials",
+        "name": "Origin Enterprises plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "GL9.IR",
+        "shares": 17.251637,
+        "avg_cost": 20.7722,
+        "sector": "Consumer Defensive",
+        "name": "Glanbia plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "MIO.IR",
+        "shares": 409.613419,
+        "avg_cost": 0.85,
+        "sector": "Industrials",
+        "name": "Mincon Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {
+        "GL9.IR": 1,
+        "MIO.IR": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": []
+    }
   }
 ]

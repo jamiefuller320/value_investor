@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-18T14:17:52.396706+00:00
+Track: `buy_tier_level` · updated 2026-11-19T08:42:12.258247+00:00
 
 ## Portfolio loser feedback
 
@@ -10,20 +10,17 @@ Track: `buy_tier_level` · updated 2026-11-18T14:17:52.396706+00:00
 
 ## Holding reviews
 
-### GL9.IR — weakening / watch_review (-2.8%)
+### MIO.IR — broken / exit_candidate (+5.9%)
+- cheapness lost and not in buy tier
+
+### GL9.IR — weakening / watch_review (-3.9%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### MIO.IR — weakening / watch_review (+0.0%)
-- research verdict caution
-- conviction 31% below intact floor
+### OIZ.IR — intact / hold_tolerate (+7.2%)
 - still buy
-- cheapness family still passes
-
-### OIZ.IR — intact / hold_tolerate (+5.2%)
-- still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 62%
+- conviction 40%

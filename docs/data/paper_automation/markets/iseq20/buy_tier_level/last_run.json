@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-18T14:17:52.379303+00:00",
+    "local_time": "2026-11-19T08:42:12.210214+00:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-11-18T08:00:00+00:00",
-    "settle_at": "2026-11-18T09:15:00+00:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-11-19T08:00:00+00:00",
+    "settle_at": "2026-11-19T09:15:00+00:00",
+    "can_act": false,
+    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [],
   "plan": {
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1045.12,
+    "nav": 1068.27,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,77 +36,81 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 348.37,
+    "target_sleeve_value": 533.51,
     "targets": [
-      {
-        "ticker": "GL9.IR",
-        "name": "Glanbia plc",
-        "signal": "buy",
-        "conviction_score": 0.6167,
-        "price": 20.2
-      },
-      {
-        "ticker": "OIZ.IR",
-        "name": "Origin Enterprises plc",
-        "signal": "strong_buy",
-        "conviction_score": 0.615,
-        "price": 4.2
-      },
-      {
-        "ticker": "MIO.IR",
-        "name": "Mincon Group plc",
-        "signal": "buy",
-        "conviction_score": 0.30549,
-        "price": 0.85
-      }
-    ],
-    "anticipated_exits": [],
-    "anticipated_grace_holds": [],
-    "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
-      {
-        "action": "hold",
-        "ticker": "GL9.IR",
-        "name": "Glanbia plc",
-        "reason": "Already near equal-weight target",
-        "value": 348.48,
-        "target_value": 348.37,
-        "conviction_score": 0.6167,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "OIZ.IR",
-        "name": "Origin Enterprises plc",
-        "reason": "Already near equal-weight target",
-        "value": 348.47,
-        "target_value": 348.37,
-        "conviction_score": 0.615,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "MIO.IR",
-        "name": "Mincon Group plc",
-        "reason": "Already near equal-weight target",
-        "value": 348.17,
-        "target_value": 348.37,
-        "conviction_score": 0.30549,
-        "signal": "buy"
-      }
-    ],
-    "skipped": [],
-    "waitlisted": [
       {
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
         "signal": "buy",
         "conviction_score": 0.7022,
+        "price": 2.735
+      },
+      {
+        "ticker": "OIZ.IR",
+        "name": "Origin Enterprises plc",
+        "signal": "buy",
+        "conviction_score": 0.3981,
+        "price": 4.28
+      }
+    ],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "GL9.IR",
+        "name": "Glanbia plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 17.251637,
+        "price": 19.97,
+        "value": 344.52
+      },
+      {
+        "action": "sell",
+        "ticker": "MIO.IR",
+        "name": "Mincon Group plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 409.613419,
+        "price": 0.9,
+        "value": 368.65
+      }
+    ],
+    "anticipated_grace_holds": [],
+    "anticipated_trims": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "C5H.IR",
+        "name": "Cairn Homes plc",
+        "reason": "New sleeve",
+        "value": 533.51,
+        "price": 2.735,
+        "target_value": 533.51,
+        "conviction_score": 0.7022,
+        "signal": "buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "OIZ.IR",
+        "name": "Origin Enterprises plc",
+        "reason": "Top-up to equal weight",
+        "value": 178.41,
+        "price": 4.28,
+        "target_value": 533.51,
+        "conviction_score": 0.3981,
+        "signal": "buy"
+      }
+    ],
+    "anticipated_holds": [],
+    "skipped": [],
+    "waitlisted": [
+      {
+        "ticker": "GL9.IR",
+        "name": "Glanbia plc",
+        "signal": "buy",
+        "conviction_score": 0.6167,
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 2 buy(s)."
   },
   "alerts": [
     {
@@ -115,7 +119,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 4.2,
+      "mark": 4.28,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -124,20 +128,20 @@
       "ticker": "GL9.IR",
       "name": "Glanbia plc",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 20.2,
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
+      "mark": 19.97,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
     },
     {
       "ticker": "MIO.IR",
       "name": "Mincon Group plc",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 0.85,
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 0.9,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -1602,11 +1606,31 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-19T08:42:12.210214+00:00",
+        "portfolio_value": 892.21,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83519
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-18T14:17:52.379303+00:00",
+    "last_mark_at": "2026-11-19T08:42:12.210214+00:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "GL9.IR": 1,
+        "MIO.IR": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
@@ -1617,7 +1641,7 @@
     "schema_version": 2,
     "market_id": "iseq20",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-18T14:17:52.394834+00:00",
+    "generated_at": "2026-11-19T08:42:12.256540+00:00",
     "observe_only": true,
     "open_count": 6,
     "closed_count": 0,
@@ -1691,12 +1715,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 1
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-18T14:17:52.395589+00:00",
+    "generated_at": "2026-11-19T08:42:12.257215+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1794,7 +1818,7 @@
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     }
   },
   "hypothesis_integrity": {
@@ -1802,8 +1826,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-18T14:17:52.396706+00:00",
-    "as_of": "2026-11-18T14:17:52.379303+00:00",
+    "updated_at": "2026-11-19T08:42:12.258247+00:00",
+    "as_of": "2026-11-19T08:42:12.210214+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1819,8 +1843,8 @@
     "underwater_count": 0,
     "thesis_status_counts": {
       "intact": 1,
-      "weakening": 2,
-      "broken": 0,
+      "weakening": 1,
+      "broken": 1,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
@@ -1842,7 +1866,7 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.0,
+        "cheapness": 0.3333,
         "quality": 0.3333,
         "dividend": 0.0,
         "garp": 0.0,
@@ -1854,17 +1878,56 @@
     },
     "holdings": [
       {
+        "ticker": "MIO.IR",
+        "name": "Mincon Group plc",
+        "thesis_status": "broken",
+        "recommended_action": "exit_candidate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0588,
+        "mark": 0.9,
+        "avg_cost": 0.85,
+        "signal": "hold",
+        "timing_signal": "neutral",
+        "conviction_score": 0.2231,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "cheapness"
+        ],
+        "research_verdict": "caution",
+        "reasons": [
+          "cheapness lost and not in buy tier"
+        ],
+        "intact_reasons": [
+          "data_quality 1.00"
+        ],
+        "weaken_reasons": [
+          "left buy tier (hold)",
+          "research verdict caution",
+          "conviction 22% below intact floor"
+        ],
+        "broken_reasons": [
+          "cheapness lost and not in buy tier"
+        ]
+      },
+      {
         "ticker": "GL9.IR",
         "name": "Glanbia plc",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0275,
-        "mark": 20.2,
+        "unrealized_pct": -0.0386,
+        "mark": 19.97,
         "avg_cost": 20.7722,
         "signal": "buy",
-        "timing_signal": "neutral",
+        "timing_signal": "wait",
         "conviction_score": 0.6167,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -1893,58 +1956,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "MIO.IR",
-        "name": "Mincon Group plc",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 0.85,
-        "avg_cost": 0.85,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.3055,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "caution",
-        "reasons": [
-          "research verdict caution",
-          "conviction 31% below intact floor",
-          "still buy",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "cheapness family still passes",
-          "data_quality 1.00"
-        ],
-        "weaken_reasons": [
-          "research verdict caution",
-          "conviction 31% below intact floor"
-        ],
-        "broken_reasons": []
-      },
-      {
         "ticker": "OIZ.IR",
         "name": "Origin Enterprises plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0518,
-        "mark": 4.2,
+        "unrealized_pct": 0.0718,
+        "mark": 4.28,
         "avg_cost": 3.9931,
-        "signal": "strong_buy",
+        "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.615,
+        "conviction_score": 0.3981,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1957,18 +1980,18 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 62%"
+          "conviction 40%"
         ],
         "intact_reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 62%"
+          "conviction 40%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1981,7 +2004,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-18T14:17:52.397999+00:00",
+    "generated_at": "2026-11-19T08:42:12.259531+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2056,7 +2079,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-18T14:17:52.400467+00:00",
+    "generated_at": "2026-11-19T08:42:12.262019+00:00",
     "open_count": 2,
     "closed_count": 7,
     "scored_count": 6,
@@ -2124,7 +2147,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-18T14:17:52.379303+00:00",
+    "generated_at": "2026-11-19T08:42:12.210214+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2181,12 +2204,12 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-18T14:17:52.379303+00:00",
+    "generated_at": "2026-11-19T08:42:12.210214+00:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "evidence_heuristic",
-    "judge_spec_id": "heuristic.v1",
-    "parent_spec_id": null,
+    "judge_backend": "llm",
+    "judge_spec_id": "llm.v1",
+    "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
     "proposal_count": 0,
@@ -2199,16 +2222,21 @@
     "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
     "cards": [],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
+    "llm_judge": {
+      "attempted": true,
+      "ok": true,
+      "fallback": null
+    },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-18T14:17:52.379303+00:00",
+      "generated_at": "2026-11-19T08:42:12.210214+00:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "evidence_heuristic",
-      "judge_spec_id": "heuristic.v1",
-      "parent_spec_id": null,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
       "card_count": 0,
       "verdict_counts": {
@@ -2229,10 +2257,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-18T14:17:52.404577+00:00",
+  "generated_at": "2026-11-19T08:42:12.266134+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `still_in_buy_set` · updated 2026-11-17T07:33:25.872350+00:00
+Track: `still_in_buy_set` · updated 2026-11-19T08:43:03.033201+00:00
 
 ## Portfolio loser feedback
 
@@ -10,21 +10,21 @@ Track: `still_in_buy_set` · updated 2026-11-17T07:33:25.872350+00:00
 
 ## Holding reviews
 
-### OIZ.IR — intact / hold_tolerate (-2.4%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 69%
-
-### DTE.DE — intact / hold_tolerate (+2.6%)
+### DTE.DE — intact / hold_tolerate (+1.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 75%
 
-### DG.PA — intact / hold_tolerate (+8.2%)
+### OIZ.IR — intact / hold_tolerate (+2.6%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 68%
+
+### DG.PA — intact / hold_tolerate (+6.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
