@@ -61,7 +61,7 @@ def test_workflow_ceilings_and_timeouts_are_unchanged():
     assert "library-ingest-sprint-3" not in sprint_1
     assert "library-ingest-sprint-3" not in sprint_2
     assert "--explore" in sprint_2
-    assert "--explore" not in sprint_1
+    assert "--explore" in sprint_1
     assert "ingest_hunt_commit.sh" in maintenance
 
 
@@ -253,7 +253,9 @@ def test_sprint_explores_only_when_the_seated_backlog_is_idle():
         deadline_epoch=None,
         planner=planner_empty,
     )
-    assert stream_1["explore"] is False
+    assert stream_1["action"] == "idle"
+    assert stream_1["explore"] is True
+    assert stream_1["reason"] == "no_gaps"
 
 
 def test_a_spent_clock_does_not_start_the_catalogue():

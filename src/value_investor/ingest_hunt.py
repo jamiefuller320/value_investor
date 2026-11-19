@@ -12,8 +12,8 @@ filing body, then the rotating sample. A name that already has its bodies is
 counted as visited and is not downloaded again. Rememo is not part of this
 module.
 
-Stream 2 sets ``explore`` only when the seated backlog is idle. Hitting the
-clock or the 24-name ceiling leaves the catalogue for a later slot.
+Either spare stream sets ``explore`` only when the seated backlog is idle.
+Hitting the clock or the 24-name ceiling leaves the catalogue for a later slot.
 """
 
 from __future__ import annotations
@@ -802,7 +802,7 @@ def sprint_slice(
         runtime_ceiling=runtime_ceiling,
         runner=runner,
         deadline_epoch=deadline_epoch,
-        explore_when_empty=int(stream) == 2,
+        explore_when_empty=int(stream) in (1, 2),
     )
     payload["lane"] = "sprint"
     return payload

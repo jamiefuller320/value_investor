@@ -1,7 +1,7 @@
 """One Trading 212 catalogue name per idle spare slot.
 
-Phase E. After the seated backlog has nothing left to fetch, stream 2 takes
-the next STOCK the library does not already hold. Venue order is US, then
+Phase E. After the seated backlog has nothing left to fetch, either spare
+stream takes the next STOCK the library does not already hold. Venue order is US, then
 Xetra (DE), then LSE. One name is fetched to completion and the seconds are
 stored on ``docs/data/library/catalogue_explorer.json``. A later pass can see
 where a parallel fetch would help. This module does not parallelise, and it
@@ -309,7 +309,7 @@ def explore_one(
 def finding_summary(state: dict[str, Any] | None) -> str:
     if not state:
         return (
-            "Catalogue explorer has not started. An idle spare stream 2 slot "
+            "Catalogue explorer has not started. An idle spare stream slot "
             "takes one unheld Trading 212 stock, US then Xetra then LSE, and "
             "records how many seconds that one name took."
         )
