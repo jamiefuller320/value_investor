@@ -1485,6 +1485,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
         "Origin Enterprises plc",
         "Origin Enterprises Public Limited Company",
     ),
+    # eng-20261119-01: UNA.AS — unilever.com slugs lack issuer tokens for IR title gate.
+    "UNA": ("Unilever", "Unilever PLC", "Unilever N.V."),
+    "UNA.AS": ("Unilever", "Unilever PLC", "Unilever N.V."),
     "G1A": (
         "GEA Group",
         "GEA Group AG",
@@ -6216,6 +6219,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf": "annual",
     # eng-20261118-01: BN.PA danoneinterimfinancialreport2025 slug has no half-year token.
     "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2025/interimfinancialreport/danoneinterimfinancialreport2025.pdf": "interim",
+    # eng-20261119-01: UNA.AS — ir-q4* slug has no annual/interim token (igc-20261005-02).
+    "https://www.unilever.com/files/ir-q4-2025-full-announcement.pdf": "annual",
     "https://www.essilorluxottica.com/api/getCapContent/?download=true&id=284350": "annual",
     # eng-20260930-03: opaque HKEX listconews slugs for hang_seng IR allowlist seeds.
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042400680.pdf": "annual",
@@ -6368,6 +6373,11 @@ def _ir_allowlist_period_from_url(url: str) -> str:
         return "annual"
     if any(token in lower for token in ("trading",)):
         return "trading_update"
+    # Q4 full-year results packs (e.g. unilever.com ir-q4-*-full-announcement).
+    if re.search(r"ir-q4[-_]", lower) and any(
+        token in lower for token in ("announcement", "results", "full")
+    ):
+        return "annual"
     if any(token in lower for token in ("interim", "half", "h1", "q1", "q2", "q3", "10-q", "10q")):
         return "interim"
     # Roche half-year CDN slugs (e.g. hy25e.pdf) — eng-20261003-02 smi RO.SW IR allowlist.
