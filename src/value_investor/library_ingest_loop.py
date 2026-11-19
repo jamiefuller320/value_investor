@@ -19,11 +19,11 @@ from value_investor.ingest_loop import has_open_ingest_engineering_tasks
 from value_investor.library_ingest_budget import (
     DEFAULT_BLOCKER_COOLDOWN_HOURS,
     DEFAULT_PER_TICKER_MAX_SECONDS,
+    IngestHangWatch,
+    bind_hang_watch,
     deadline_reached,
     select_blocker_ticker,
     should_start_next_ticker,
-    IngestHangWatch,
-    bind_hang_watch,
     ticker_deadline,
     weekday_per_ticker_max_seconds,
 )
