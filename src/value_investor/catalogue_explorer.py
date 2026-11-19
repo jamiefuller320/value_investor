@@ -3,7 +3,9 @@
 Phase E. After the seated backlog has nothing left to fetch, stream 2 takes
 the next STOCK the library does not already hold. Venue order is US, then
 Xetra (DE), then LSE. One name is fetched to completion and the seconds are
-stored on ``docs/data/library/catalogue_explorer.json``. A later pass can see
+stored on ``docs/data/library/catalogue_explorer.json``. Fundamentals are
+screened on that same walk. A buy or strong-buy signal gets the research
+ingest for that name before the cursor moves on. A later pass can see
 where a parallel fetch would help. This module does not parallelise, and it
 does not add the name to an index or an investment book.
 
@@ -29,9 +31,10 @@ VENUE_ORDER = ("US", "DE", "LSE")
 STATE_NAME = "catalogue_explorer.json"
 EXPLORER_TITLE = "Catalogue explorer"
 BODY_CAP = 4
+BUY_SIGNALS = frozenset({"buy", "strong_buy"})
 _SAFE = re.compile(r"[^A-Za-z0-9._-]+")
 
-FetchFn = Callable[[dict[str, Any]], list[Any]]
+FetchFn = Callable[[dict[str, Any]], Any]
 
 
 def state_path(library_root: Path | None = None) -> Path:
@@ -172,11 +175,11 @@ def complete_one(
     started = time.perf_counter()
     outcome = "miss"
     detail: dict[str, Any] = {"rows": 0}
-    fetched: list[Any] = []
     try:
-        fetched = list(fetch(instrument) or [])
-        outcome = "saved" if fetched else "miss"
-        detail = {"rows": len(fetched), "filings": _slim_rows(fetched)}
+        payload = fetch(instrument)
+        filings, extra = _unpack_fetch(payload)
+        outcome = "saved" if filings else "miss"
+        detail = {"rows": len(filings), "filings": _slim_rows(filings), **extra}
     except Exception as exc:  # noqa: BLE001 — a failed name must still move the cursor
         outcome = "error"
         detail = {"rows": 0, "error": str(exc)}
@@ -244,6 +247,146 @@ def default_fetch(instrument: dict[str, Any]) -> list[dict[str, Any]]:
     return rows
 
 
+def _unpack_fetch(payload: Any) -> tuple[list[Any], dict[str, Any]]:
+    if isinstance(payload, dict) and "filings" in payload:
+        filings = list(payload.get("filings") or [])
+        extra: dict[str, Any] = {}
+        if payload.get("screen") is not None:
+            extra["screen"] = payload["screen"]
+        if payload.get("full_ingest") is not None:
+            extra["full_ingest"] = payload["full_ingest"]
+        return filings, extra
+    if payload is None:
+        return [], {}
+    return list(payload), {}
+
+
+def screen_metrics_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Score one fundamentals row with the same buy signals as the library screen."""
+    import pandas as pd
+
+    from value_investor.data_quality import add_data_quality_scores
+    from value_investor.models.ranking import compute_derived_columns
+    from value_investor.scoring import evaluate_universe, summarize_by_ticker
+    from value_investor.sector_scoring import add_sector_scores
+    from value_investor.signals import build_signals
+
+    frame = pd.DataFrame([row])
+    if "ticker" not in frame.columns:
+        frame["ticker"] = ""
+    frame = compute_derived_columns(frame)
+    for col in (
+        "roic_proxy",
+        "fcf_yield",
+        "ev_ebitda",
+        "ev_ebit",
+        "earnings_yield_ebit",
+        "earnings_yield_pe",
+        "ncav_to_market",
+        "asset_turnover",
+        "total_assets",
+        "total_current_liabilities",
+        "ncav",
+    ):
+        if col not in frame.columns:
+            frame[col] = pd.NA
+    frame = add_data_quality_scores(frame)
+    frame = add_sector_scores(frame)
+    model_results = evaluate_universe(frame)
+    summary = summarize_by_ticker(model_results)
+    signals = build_signals(frame, model_results, summary)
+    if signals.empty:
+        return {"signal": None, "fits": False, "data_quality_score": None}
+    signal = str(signals.iloc[0].get("signal") or "")
+    quality = signals.iloc[0].get("data_quality_score")
+    quality_value = None if quality is None or pd.isna(quality) else float(quality)
+    return {
+        "signal": signal or None,
+        "fits": signal in BUY_SIGNALS,
+        "data_quality_score": quality_value,
+    }
+
+
+def _slim_ingest(result: dict[str, Any], *, seconds: float) -> dict[str, Any]:
+    summary = result.get("filings_summary") if isinstance(result.get("filings_summary"), dict) else {}
+    return {
+        "seconds": seconds,
+        "financial_years": result.get("financial_years"),
+        "filings_summary": summary,
+        "snapshot_path": result.get("snapshot_path"),
+        "error": result.get("error"),
+    }
+
+
+def default_full_ingest(
+    instrument: dict[str, Any],
+    screen: dict[str, Any],
+    library_root: Path,
+) -> dict[str, Any]:
+    """Research ingest for one name that already fits the buy screen."""
+    from value_investor.research.ingest import ingest_research_sources
+
+    ticker = str(instrument.get("ticker") or "")
+    yahoo = yahoo_ticker(ticker) or ticker
+    company = str(instrument.get("shortName") or instrument.get("name") or yahoo)
+    safe = _SAFE.sub("_", yahoo)
+    sources = Path(library_root) / "catalogue_explorer" / "research" / safe / "sources"
+    return ingest_research_sources(
+        ticker=yahoo,
+        company_name=company,
+        screening_snapshot={
+            "ticker": yahoo,
+            "signal": screen.get("signal"),
+            "fits": True,
+        },
+        sources_dir=sources,
+        include_filings=True,
+    )
+
+
+def default_walk(
+    instrument: dict[str, Any],
+    *,
+    library_root: Path,
+    filings_fetch: FetchFn | None = None,
+    metrics_fetch: Callable[[str, str], Any] | None = None,
+    screen: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
+    ingest: Callable[[dict[str, Any], dict[str, Any], Path], dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Filings, then a fundamentals screen. A buy screen hit is ingested before return."""
+    fetch_rows = filings_fetch or default_fetch
+    filings = list(fetch_rows(instrument) or [])
+    screen_started = time.perf_counter()
+    screen_result: dict[str, Any]
+    try:
+        if screen is not None:
+            screen_result = dict(screen(instrument))
+        else:
+            from value_investor.fetch import fetch_company_metrics
+
+            yahoo = yahoo_ticker(str(instrument.get("ticker") or "")) or ""
+            company = str(instrument.get("shortName") or instrument.get("name") or yahoo)
+            loader = metrics_fetch or fetch_company_metrics
+            metrics = loader(yahoo, company)
+            row = metrics.to_dict() if hasattr(metrics, "to_dict") else dict(metrics)
+            row.setdefault("ticker", yahoo)
+            screen_result = screen_metrics_row(row)
+    except Exception as exc:  # noqa: BLE001 — the cursor still records the screen miss
+        screen_result = {"signal": None, "fits": False, "error": str(exc)}
+    screen_result["seconds"] = round(time.perf_counter() - screen_started, 3)
+    full: dict[str, Any] | None = None
+    if screen_result.get("fits"):
+        ingest_started = time.perf_counter()
+        try:
+            runner = ingest or default_full_ingest
+            raw = runner(instrument, screen_result, library_root)
+            full = _slim_ingest(raw if isinstance(raw, dict) else {}, seconds=0.0)
+        except Exception as exc:  # noqa: BLE001 — a failed ingest is still a recorded hit
+            full = {"error": str(exc)}
+        full["seconds"] = round(time.perf_counter() - ingest_started, 3)
+    return {"filings": filings, "screen": screen_result, "full_ingest": full}
+
+
 def _instrument_rows(index: dict[str, Any]) -> list[dict[str, Any]]:
     by_ticker = index.get("by_ticker") if isinstance(index, dict) else None
     if not isinstance(by_ticker, dict):
@@ -300,7 +443,8 @@ def explore_one(
             "completed": len(completed),
             "venues": list(VENUE_ORDER),
         }
-    record = complete_one(state, chosen, fetch=fetch or default_fetch)
+    walker = fetch or (lambda instrument: default_walk(instrument, library_root=root))
+    record = complete_one(state, chosen, fetch=walker)
     save_state(state, root)
     write_name_artifact(root, record)
     return {"action": "ran", **record}
@@ -321,5 +465,10 @@ def finding_summary(state: dict[str, Any] | None) -> str:
     return (
         f"Completed {count} catalogue names, one at a time. "
         f"Last {last.get('t212_ticker')} ({last.get('venue')}) took "
-        f"{last.get('seconds')}s, outcome {last.get('outcome')}."
+        f"{last.get('seconds')}s, outcome {last.get('outcome')}"
+        + (
+            f", screen {last['screen'].get('signal')}."
+            if isinstance(last.get("screen"), dict)
+            else "."
+        )
     )
