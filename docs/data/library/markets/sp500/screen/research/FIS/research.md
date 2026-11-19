@@ -1,6 +1,6 @@
 # Fidelity National Information Services, Inc. (FIS) — Research memo
 
-_Version 9 · Updated 2026-11-18T23:41:08.384279+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-19T02:34:41.696487+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.70
-Rationale: Splitit–Chartis commentary adds no filings; Q3 leverage, trimmed outlook, leadership turnover and legal overhang still weaken the strong buy case.
+Rationale: Filings still end at 4 Nov Q3; empty news adds no offset—leverage, trimmed outlook, leadership turnover and litigation continue to weaken the strong buy case.
 RiskTags: leverage, governance, litigation, competitive
 
 ## Weekly updates
@@ -51,4 +51,9 @@ Q3 leverage, trimmed outlook, leadership turnover and legal overhang remain unre
 ### 2026-11-18T23:41:08.384279+00:00
 No new SEC filings after the 4 Nov Q3 8-K/10-Q.  
 Incremental news is one Yahoo piece on the Splitit partnership and Chartis credit-risk accolades, without new issuer-specific disclosure.  
+Q3 leverage, trimmed outlook, leadership turnover and legal overhang remain unresolved.
+
+### 2026-11-19T02:34:41.696487+00:00
+No new SEC filings after the 4 Nov Q3 8-K/10-Q; the incremental news batch since the prior refresh has no articles.  
+No material change versus the 18 Nov update.  
 Q3 leverage, trimmed outlook, leadership turnover and legal overhang remain unresolved.
