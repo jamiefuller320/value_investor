@@ -567,7 +567,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-11-19T13:50:31.804836+00:00",
+  "updated_at": "2026-11-19T14:21:54.287524+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -583,7 +583,7 @@
     "tsx60"
   ],
   "ingest_parallel_sprint_2": [
-    "ftse_smallcap"
+    "aim"
   ],
   "ladder": {
     "enabled": true,
@@ -863,16 +863,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-11-07T13:38:36.952611+00:00",
-        "parallel_stream": 1,
-        "from_market": "sp500",
-        "to_market": "ftse_smallcap",
-        "stream_markets_after": [
-          "ftse_smallcap"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-11-07T14:24:40.085645+00:00",
         "parallel_stream": 1,
@@ -1572,6 +1562,39 @@
           "zero_body": 0,
           "thin": 0,
           "indexed_without_body": 2,
+          "filing_gaps": 0
+        }
+      },
+      {
+        "at": "2026-11-19T14:21:54.286285+00:00",
+        "parallel_stream": 2,
+        "from_market": "ftse_smallcap",
+        "to_market": "aim",
+        "stream_markets_after": [
+          "aim"
+        ],
+        "ingest_parity_recorded": false,
+        "gap_market_id": "ftse_smallcap",
+        "window_days": 2,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 44,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 45,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 1,
           "filing_gaps": 0
         }
       }
