@@ -1091,6 +1091,21 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://s201.q4cdn.com/326551073/files/doc_financials/2025/ar/2025-Annual-Report-to-Shareholders-ENG-AODA-File_FINAL.pdf",
         "https://s201.q4cdn.com/326551073/files/doc_financials/2025/ar/AIF-EN.pdf",
     ],
+    # tsx60 IWB blocker — eng-20261119-02: K.TO parked unfetchable_iwb; SEC FY2025 40-F
+    # EX-99.2 annual MD&A + Q2 2026 interim 6-K EX-99.1 HTML (live-fetchable; indexed 6-K
+    # primaries below the substantiveness gate).
+    "K.TO": [
+        "https://www.sec.gov/Archives/edgar/data/701818/000110465926035268/kgc-20251231xex99d2.htm",
+        "https://www.sec.gov/Archives/edgar/data/701818/000110465926088237/tm2621038d1_ex99-1.htm",
+    ],
+    "K": [
+        "https://www.sec.gov/Archives/edgar/data/701818/000110465926035268/kgc-20251231xex99d2.htm",
+        "https://www.sec.gov/Archives/edgar/data/701818/000110465926088237/tm2621038d1_ex99-1.htm",
+    ],
+    "KGC": [
+        "https://www.sec.gov/Archives/edgar/data/701818/000110465926035268/kgc-20251231xex99d2.htm",
+        "https://www.sec.gov/Archives/edgar/data/701818/000110465926088237/tm2621038d1_ex99-1.htm",
+    ],
     # hang_seng buy-tier deepen — eng-20260930-03: asia_filings Google News miss / zero-body;
     # seed HKEX statutory PDFs and issuer IR mirrors for stalled buy-tier names.
     "1099.HK": [
@@ -1529,6 +1544,10 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # tsx60 AEM.TO — aem-* / tm2619289* SEC slugs lack issuer tokens for IR title gate.
     "AEM": ("Agnico", "Agnico Eagle", "Agnico Eagle Mines"),
     "AEM.TO": ("Agnico", "Agnico Eagle", "Agnico Eagle Mines"),
+    # tsx60 K.TO — kgc-* / tm2621038* SEC slugs lack issuer tokens for IR title gate.
+    "K": ("Kinross", "Kinross Gold", "Kinross Gold Corporation"),
+    "KGC": ("Kinross", "Kinross Gold", "Kinross Gold Corporation"),
+    "K.TO": ("Kinross", "Kinross Gold", "Kinross Gold Corporation"),
     # tsx60 CVE.TO — a2025annualinformationform / q32026managementsdiscussio SEC slugs
     # are run-together words, so the IR title gate needs the issuer name.
     "CVE": ("Cenovus", "Cenovus Energy", "Cenovus Energy Inc."),
@@ -6327,6 +6346,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # eng-20261112-04: AEM.TO — FY2025 40-F EX-99.3 + Q2 2026 6-K EX-99.1 slugs lack period tokens.
     "https://www.sec.gov/Archives/edgar/data/2809/000110465926032153/aem-20251231xex99d3.htm": "annual",
     "https://www.sec.gov/Archives/edgar/data/2809/000110465926088216/tm2619289d3_ex99-1.htm": "interim",
+    # eng-20261119-02: K.TO — FY2025 40-F EX-99.2 + Q2 2026 6-K EX-99.1 slugs lack period tokens.
+    "https://www.sec.gov/Archives/edgar/data/701818/000110465926035268/kgc-20251231xex99d2.htm": "annual",
+    "https://www.sec.gov/Archives/edgar/data/701818/000110465926088237/tm2621038d1_ex99-1.htm": "interim",
     # eng-20261107-02: AZM.MI — emarketstorage CONSOB comunicati slugs are date_hash only.
     "https://www.emarketstorage.it/sites/default/files/comunicati/2026-04/20260402_181268.pdf": "annual",
     "https://www.emarketstorage.it/sites/default/files/comunicati/2025-07/20250731_170567.pdf": "interim",
