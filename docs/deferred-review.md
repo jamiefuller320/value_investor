@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-18T18:55:41+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-19T07:45:08+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -481,6 +481,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L718 | **Point-in-time sector labels for the UK/Europe replay** | The UK replay applies EODHD General.Sector from the download on every historical date. That is look-ahead, the same limitation as the US rehearsal's tickers.sector. A historical sector feed would let sector_label_basis move off eodhd_general_current. | A point-in-time sector history for LSE, XETRA, or Paris listings is licensed. |
 | L724 | **Widen coverage into other stock groupings once this library stays maintainable** | Once the current cascade can be kept on maintenance, consider other Trading 212 stock groupings beyond these index slices. Do not seat that by taking a spare stream: both spare streams stay on admitted books that still have filing gaps, a missing sp400 library tree counts as sprint-complete, and seating sp400 would take a stream. Leave dispatch unchanged. Do not drop this interest. | The existing library (focus, maintenance, and both spare streams) is being maintained without a spare stream held by an admitted book that still has filing gaps, so a new grouping would not take a stream. |
 | L725 | **Join an issuer's own Trading 212 ADR without attaching a namesake** | Company-name matching requires a home-country ISIN, so a real ADR such as Ericsson or Ferrari stays off maintenance together with namesakes such as EQT Corp and Groupe SEB. Revisit when a join can accept the issuer's own foreign line and still refuse those two. | A committed join accepts an issuer's own ADR or foreign ISIN and still refuses EQT.ST against EQT Corp and SEB-A.ST against Groupe SEB. |
+| L726 | **Build chase lists from Trading 212 venue and currency slices** | Trading 212 groups stocks by instrument type, exchange code, and currency, not by index. A later chase list could follow those catalogue slices instead of Wikipedia membership. That does not join the 24 index names that are already on the catalogue under another legal name. Investment books stay index-based until this is taken up. | The owner asks to build a chase list from the Trading 212 stock catalogue instead of an index. |
 
 ### Research & portfolio product
 
