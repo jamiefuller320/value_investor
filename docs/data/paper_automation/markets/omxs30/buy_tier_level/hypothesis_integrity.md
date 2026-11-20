@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-19T08:42:11.836873+00:00
+Track: `buy_tier_level` · updated 2026-11-20T14:17:51.985796+00:00
 
 ## Portfolio loser feedback
 
@@ -27,6 +27,13 @@ Track: `buy_tier_level` · updated 2026-11-19T08:42:11.836873+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 55%
+
+### NIBE-B.ST — weakening / watch_review (+0.0%)
+- research verdict caution
+- cheapness family no longer passes
+- conviction 26% below intact floor
+- still buy
+- data_quality 1.00
 
 ### SKF-B.ST — intact / hold_tolerate (+0.5%)
 - still strong_buy
@@ -69,10 +76,3 @@ Track: `buy_tier_level` · updated 2026-11-19T08:42:11.836873+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 59%
-
-### HM-B.ST — intact / hold_tolerate (+8.4%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 62%

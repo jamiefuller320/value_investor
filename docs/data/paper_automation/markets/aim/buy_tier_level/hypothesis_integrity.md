@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-19T08:41:02.750570+00:00
+Track: `buy_tier_level` · updated 2026-11-20T14:17:41.278014+00:00
 
 ## Portfolio loser feedback
 
@@ -27,7 +27,7 @@ Track: `buy_tier_level` · updated 2026-11-19T08:41:02.750570+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 55%
+- conviction 62%
 
 ### MPE.L — intact / hold_tolerate (-7.9%)
 - price drawdown alone does not invalidate value thesis
@@ -57,13 +57,13 @@ Track: `buy_tier_level` · updated 2026-11-19T08:41:02.750570+00:00
 
 ### RWS.L — weakening / watch_review (-3.9%)
 - research verdict caution
-- conviction 21% below intact floor
+- conviction 24% below intact floor
 - still buy
 - cheapness family still passes
 
 ### WJG.L — weakening / watch_review (-3.4%)
 - research verdict caution
-- conviction 16% below intact floor
+- conviction 18% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -98,7 +98,7 @@ Track: `buy_tier_level` · updated 2026-11-19T08:41:02.750570+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 58%
 
 ### YNGN.L — weakening / watch_review (+19.2%)
 - research verdict caution

@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-19T08:41:09.347288+00:00",
+  "generated_at": "2026-11-20T14:17:43.176068+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 11,
+    "closed_total": 12,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 5,
+    "open_with_thesis": 4,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 4,
+        "closed_count": 5,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0359,
-        "mean_trough_unrealized_pct": -0.0052,
+        "mean_peak_unrealized_pct": 0.0279,
+        "mean_trough_unrealized_pct": -0.005,
         "outcome_labels": {
-          "recovered": 4
+          "recovered": 5
         }
       },
       "broken": {
@@ -62,7 +62,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 11,
+    "hold_closed_with_thesis": 12,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -743,7 +743,7 @@
       "ticker": "INW.MI",
       "name": "Infrastrutture Wireless Italiane S.p.A.",
       "started_at": "2026-11-17T07:30:59.731450+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -777,9 +777,9 @@
       "peak_unrealized_pct": -0.0041,
       "trough_unrealized_pct": -0.0041,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-20T14:17:43.128759+00:00",
+      "linked_sell_trade_id": "1085b1d5-86be-4cd5-8b23-d729acad7d40"
     },
     {
       "episode_id": "buy_tier_level:LTMC.MI:2026-11-19T08:41:09.317842+00:00",
@@ -2102,7 +2102,15 @@
           "cost": 0.04
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-20T14:17:43.128759+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0373,
+          "avg_buy_return": -0.0334,
+          "replacement_delta": 0.0039
+        }
+      ],
       "sell_returns_since_rotation": {
         "UNI.MI": -0.0373
       },
@@ -2407,6 +2415,88 @@
       "buy_returns_since_rotation": {
         "LTMC.MI": -0.0455,
         "INW.MI": -0.0041
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-20T14:17:43.128759+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-20T14:17:43.128759+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "INW.MI",
+          "price": 7.34,
+          "shares": 25.352469,
+          "gross": 186.09,
+          "cost": 0.33,
+          "avg_cost_at_exit": 7.37,
+          "realized_pct": -0.0041,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": -0.0041
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "ENI.MI",
+          "price": 24.955,
+          "shares": 1.491809,
+          "gross": 37.23,
+          "cost": 0.07
+        },
+        {
+          "ticker": "MONC.MI",
+          "price": 41.32,
+          "shares": 0.972795,
+          "gross": 40.2,
+          "cost": 0.07
+        },
+        {
+          "ticker": "IG.MI",
+          "price": 9.01,
+          "shares": 4.07281,
+          "gross": 36.7,
+          "cost": 0.06
+        },
+        {
+          "ticker": "BZU.MI",
+          "price": 44.08,
+          "shares": 0.717541,
+          "gross": 31.63,
+          "cost": 0.06
+        },
+        {
+          "ticker": "LTMC.MI",
+          "price": 26.02,
+          "shares": 1.525279,
+          "gross": 39.69,
+          "cost": 0.07
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "INW.MI": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "ENI.MI": 0.0,
+        "MONC.MI": 0.0,
+        "IG.MI": 0.0,
+        "BZU.MI": 0.0,
+        "LTMC.MI": 0.0
       },
       "verdict": null,
       "closed_at": null

@@ -5117,6 +5117,10 @@
         {
           "as_of": "2026-11-19T08:40:25.533674+00:00",
           "price": 85.8
+        },
+        {
+          "as_of": "2026-11-20T14:17:21.576632+00:00",
+          "price": 85.8
         }
       ]
     },
@@ -5288,7 +5292,7 @@
       "track_id": "buy_tier_level",
       "ticker": "ULTP.L",
       "started_at": "2026-11-18T14:17:12.487733+00:00",
-      "status": "open",
+      "status": "closed",
       "lifecycle_stage": "recommit",
       "entry_kind": "recommit",
       "entry_price": 48.2,
@@ -5307,8 +5311,144 @@
         {
           "as_of": "2026-11-19T08:40:25.533674+00:00",
           "price": 48.2
+        },
+        {
+          "as_of": "2026-11-20T14:17:21.576632+00:00",
+          "price": 45.7
         }
-      ]
+      ],
+      "cadence_scores": [
+        {
+          "id": "lump_sum",
+          "label": "100% at decision",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 1,
+          "avg_fill": 48.2,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -19.69,
+          "peak_deployed_return": -0.0519,
+          "end_value": 359.84,
+          "end_value_delta": 0.0,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-18T14:17:12.487733+00:00",
+              "price": 48.2
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_2x_weekly",
+          "label": "50/50 over 1 week",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 48.2,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 189.76,
+          "peak_loss_gbp": -9.84,
+          "peak_deployed_return": -0.0519,
+          "end_value": 369.69,
+          "end_value_delta": 9.84,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-18T14:17:12.487733+00:00",
+              "price": 48.2
+            }
+          ],
+          "de_risk_gbp": 9.85
+        },
+        {
+          "id": "dca_4x_weekly",
+          "label": "25% weekly \u00d7 4",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 4,
+          "avg_fill": 48.2,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 284.65,
+          "peak_loss_gbp": -4.92,
+          "peak_deployed_return": -0.0519,
+          "end_value": 374.61,
+          "end_value_delta": 14.76,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-18T14:17:12.487733+00:00",
+              "price": 48.2
+            }
+          ],
+          "de_risk_gbp": 14.77
+        },
+        {
+          "id": "dca_2x_biweekly",
+          "label": "50/50 over 2 weeks",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 48.2,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 189.76,
+          "peak_loss_gbp": -9.84,
+          "peak_deployed_return": -0.0519,
+          "end_value": 369.69,
+          "end_value_delta": 9.84,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-18T14:17:12.487733+00:00",
+              "price": 48.2
+            }
+          ],
+          "de_risk_gbp": 9.85
+        },
+        {
+          "id": "dca_5x_weekday",
+          "label": "20% over 5 weekday marks",
+          "scored": true,
+          "tranches_filled": 3,
+          "tranches_target": 5,
+          "avg_fill": 47.3368,
+          "fill_advantage_pct": 0.0179,
+          "extra_cost": 0.83,
+          "leftover_cash": 151.81,
+          "peak_loss_gbp": -7.87,
+          "peak_deployed_return": -0.0346,
+          "end_value": 370.82,
+          "end_value_delta": 10.98,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-11-18T14:17:12.487733+00:00",
+              "price": 48.2
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-11-19T08:40:25.533674+00:00",
+              "price": 48.2
+            },
+            {
+              "tranche": 3,
+              "as_of": "2026-11-20T14:17:21.576632+00:00",
+              "price": 45.7
+            }
+          ],
+          "de_risk_gbp": 11.82
+        }
+      ],
+      "winning_cadence": "dca_4x_weekly",
+      "winning_end_value_delta": 14.76,
+      "any_de_risk": true,
+      "closed_at": "2026-11-20T14:17:21.576632+00:00",
+      "close_reason": "sold_before_window"
     },
     {
       "id": "buy_tier_level:REC.L:2026-11-19T08:40:25.533674+00:00",
@@ -5329,6 +5469,10 @@
       "marks": [
         {
           "as_of": "2026-11-19T08:40:25.533674+00:00",
+          "price": 50.4
+        },
+        {
+          "as_of": "2026-11-20T14:17:21.576632+00:00",
           "price": 50.4
         }
       ]
@@ -5353,6 +5497,10 @@
         {
           "as_of": "2026-11-19T08:40:25.533674+00:00",
           "price": 265.0
+        },
+        {
+          "as_of": "2026-11-20T14:17:21.576632+00:00",
+          "price": 265.0
         }
       ]
     },
@@ -5376,6 +5524,33 @@
         {
           "as_of": "2026-11-19T08:40:25.533674+00:00",
           "price": 70.0
+        },
+        {
+          "as_of": "2026-11-20T14:17:21.576632+00:00",
+          "price": 70.0
+        }
+      ]
+    },
+    {
+      "id": "buy_tier_level:SBRE.L:2026-11-20T14:17:21.576632+00:00",
+      "track_id": "buy_tier_level",
+      "ticker": "SBRE.L",
+      "started_at": "2026-11-20T14:17:21.576632+00:00",
+      "status": "open",
+      "lifecycle_stage": "recommit",
+      "entry_kind": "recommit",
+      "entry_price": 180.6,
+      "notional": 226.78,
+      "shares": 1.255698,
+      "buy_cost_pct": 0.0055,
+      "screen_signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3308,
+      "data_quality_score": 0.85,
+      "marks": [
+        {
+          "as_of": "2026-11-20T14:17:21.576632+00:00",
+          "price": 180.6
         }
       ]
     }

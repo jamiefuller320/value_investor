@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-19T08:40:54.104646+00:00
+Track: `buy_tier_level` · updated 2026-11-20T14:17:22.971816+00:00
 
 ## Portfolio loser feedback
 
@@ -36,6 +36,13 @@ Track: `buy_tier_level` · updated 2026-11-19T08:40:54.104646+00:00
 - data_quality 1.00
 - conviction 49%
 
+### SAN.PA — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 66%
+
 ### TTE.PA — intact / hold_tolerate (+1.8%)
 - still strong_buy
 - research accumulate
@@ -68,12 +75,6 @@ Track: `buy_tier_level` · updated 2026-11-19T08:40:54.104646+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 56%
-
-### RI.PA — weakening / watch_review (+4.2%)
-- research verdict caution
-- conviction 32% below intact floor
-- still buy
-- cheapness family still passes
 
 ### EN.PA — weakening / watch_review (+5.6%)
 - research verdict neutral

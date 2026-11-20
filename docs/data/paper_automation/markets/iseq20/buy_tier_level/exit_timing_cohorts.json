@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-11-19T08:42:12.257112+00:00",
+  "updated_at": "2026-11-20T14:17:52.708809+00:00",
   "hold_episodes": [
     {
       "episode_id": "buy_tier_level:MIO.IR:2026-10-05T15:16:43.437649+01:00",
@@ -401,7 +401,7 @@
       "ticker": "GL9.IR",
       "name": "Glanbia plc",
       "started_at": "2026-11-07T12:50:49.994130+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -444,9 +444,9 @@
       "peak_unrealized_pct": -0.0446,
       "trough_unrealized_pct": -0.0815,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-11-20T14:17:52.619250+00:00",
+      "linked_sell_trade_id": "1a9587ab-002d-452e-97d5-85c676a78152"
     },
     {
       "episode_id": "buy_tier_level:MIO.IR:2026-11-17T07:32:25.081678+00:00",
@@ -454,7 +454,7 @@
       "ticker": "MIO.IR",
       "name": "Mincon Group plc",
       "started_at": "2026-11-17T07:32:25.081678+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -488,9 +488,9 @@
       "peak_unrealized_pct": 0.0588,
       "trough_unrealized_pct": 0.0588,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-20T14:17:52.619250+00:00",
+      "linked_sell_trade_id": "05dc4996-eaa5-4419-b4ec-75f5bd898552"
     }
   ],
   "swap_rotations": [
@@ -939,6 +939,13 @@
           "avg_sell_return": -0.025,
           "avg_buy_return": -0.0155,
           "replacement_delta": 0.0095
+        },
+        {
+          "scored_at": "2026-11-20T14:17:52.619250+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.019,
+          "avg_buy_return": -0.0306,
+          "replacement_delta": -0.0496
         }
       ],
       "sell_returns_since_rotation": {
@@ -1300,7 +1307,92 @@
       },
       "verdict": null,
       "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-20T14:17:52.619250+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-20T14:17:52.619250+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "GL9.IR",
+          "price": 19.97,
+          "shares": 17.251637,
+          "gross": 344.52,
+          "cost": 0.6,
+          "avg_cost_at_exit": 20.7722,
+          "realized_pct": -0.0386,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "research verdict neutral",
+            "cheapness family no longer passes",
+            "still buy",
+            "data_quality 1.00"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "neutral",
+          "unrealized_pct_at_thesis": -0.0386
+        },
+        {
+          "ticker": "MIO.IR",
+          "price": 0.9,
+          "shares": 409.613419,
+          "gross": 368.65,
+          "cost": 0.65,
+          "avg_cost_at_exit": 0.85,
+          "realized_pct": 0.0588,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.0588
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.735,
+          "shares": 194.727528,
+          "gross": 532.58,
+          "cost": 0.93
+        },
+        {
+          "ticker": "OIZ.IR",
+          "price": 4.28,
+          "shares": 41.611158,
+          "gross": 178.1,
+          "cost": 0.31
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "GL9.IR": 0.0,
+        "MIO.IR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0,
+        "OIZ.IR": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
     }
   ],
-  "hypothesis_outcome_link_updated_at": "2026-11-19T08:42:12.210214+00:00"
+  "hypothesis_outcome_link_updated_at": "2026-11-20T14:17:52.619250+00:00"
 }

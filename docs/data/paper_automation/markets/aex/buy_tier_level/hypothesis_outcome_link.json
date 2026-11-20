@@ -3,28 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-19T08:41:09.873873+00:00",
+  "generated_at": "2026-11-20T14:17:44.110616+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 16,
+    "closed_total": 17,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 6,
+    "open_with_thesis": 5,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 13,
-        "recovery_rate": 0.8462,
-        "sold_underwater_rate": 0.1538,
-        "mean_peak_unrealized_pct": 0.0636,
-        "mean_trough_unrealized_pct": -0.0335,
+        "closed_count": 14,
+        "recovery_rate": 0.7857,
+        "sold_underwater_rate": 0.2143,
+        "mean_peak_unrealized_pct": 0.0579,
+        "mean_trough_unrealized_pct": -0.0333,
         "outcome_labels": {
           "recovered": 11,
-          "sold_underwater": 2
+          "sold_underwater": 3
         }
       },
       "broken": {
@@ -63,7 +63,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 16,
+    "hold_closed_with_thesis": 17,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -915,7 +915,7 @@
       "ticker": "RAND.AS",
       "name": "Randstad N.V.",
       "started_at": "2026-11-17T07:31:13.675037+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -948,9 +948,9 @@
       "peak_unrealized_pct": -0.0173,
       "trough_unrealized_pct": -0.0311,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-11-20T14:17:44.062244+00:00",
+      "linked_sell_trade_id": "b66d4479-9322-421e-96aa-4e08ab2d404b"
     },
     {
       "episode_id": "buy_tier_level:ASML.AS:2026-11-17T07:31:13.675037+00:00",
@@ -3263,7 +3263,15 @@
           "cost": 0.4
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-20T14:17:44.062244+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0512,
+          "avg_buy_return": -0.0364,
+          "replacement_delta": 0.0147
+        }
+      ],
       "sell_returns_since_rotation": {
         "RAND.AS": -0.0295,
         "ASM.AS": -0.0434,
@@ -3276,6 +3284,114 @@
         "KPN.AS": -0.0154,
         "PRX.AS": -0.099,
         "ADYEN.AS": -0.0364
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-20T14:17:44.062244+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-20T14:17:44.062244+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "RAND.AS",
+          "price": 41.41,
+          "shares": 2.976018,
+          "gross": 123.24,
+          "cost": 0.22,
+          "avg_cost_at_exit": 42.74,
+          "realized_pct": -0.0311,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0311
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "AD.AS",
+          "price": 34.79,
+          "shares": 0.415666,
+          "gross": 14.46,
+          "cost": 0.03
+        },
+        {
+          "ticker": "WKL.AS",
+          "price": 85.26,
+          "shares": 0.215234,
+          "gross": 18.35,
+          "cost": 0.03
+        },
+        {
+          "ticker": "AKZA.AS",
+          "price": 62.48,
+          "shares": 0.180108,
+          "gross": 11.25,
+          "cost": 0.02
+        },
+        {
+          "ticker": "ASML.AS",
+          "price": 1260.8,
+          "shares": 0.014236,
+          "gross": 17.95,
+          "cost": 0.03
+        },
+        {
+          "ticker": "KPN.AS",
+          "price": 4.345,
+          "shares": 3.067233,
+          "gross": 13.33,
+          "cost": 0.02
+        },
+        {
+          "ticker": "ASM.AS",
+          "price": 692.8,
+          "shares": 0.015705,
+          "gross": 10.88,
+          "cost": 0.02
+        },
+        {
+          "ticker": "PRX.AS",
+          "price": 32.525,
+          "shares": 0.666471,
+          "gross": 21.68,
+          "cost": 0.04
+        },
+        {
+          "ticker": "ADYEN.AS",
+          "price": 836.4,
+          "shares": 0.017824,
+          "gross": 14.91,
+          "cost": 0.03
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "RAND.AS": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "AD.AS": 0.0,
+        "WKL.AS": 0.0,
+        "AKZA.AS": 0.0,
+        "ASML.AS": 0.0,
+        "KPN.AS": 0.0,
+        "ASM.AS": 0.0,
+        "PRX.AS": 0.0,
+        "ADYEN.AS": 0.0
       },
       "verdict": null,
       "closed_at": null
