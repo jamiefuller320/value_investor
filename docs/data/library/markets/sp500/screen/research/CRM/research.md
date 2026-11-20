@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 12 · Updated 2026-11-19T17:51:14.201421+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-19T23:54:22.619406+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: Filed FY26 FCF (~$14.4bn) still supports the Strong Buy screen; Jefferies cites pre-earnings growth upside while CRM lags peers—sector AI and leverage risks are unchanged.
+Rationale: No new filings or headlines in this batch; filed FY26 FCF still supports Strong Buy, but leverage and competitive AI risks keep research one notch below the screen.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -65,3 +65,13 @@ No material change.
 Barron’s (19 Nov) cites Jefferies expecting organic growth to accelerate ahead of 2 Dec earnings, while CRM has lagged a broader software rally.  
 ETF commentary shows net selling on 17 Nov (~$142m); other pieces cite mixed institutional trim/boost flow—none are issuer filings.  
 No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.
+
+### 2026-11-19T21:39:11.822960+00:00
+19 Nov headlines add Commerce Department backing for Salesforce to lead a U.S. Super Intelligence export consortium, alongside further ~3.5% share weakness and Palantir comparison pieces.  
+Prior Jefferies pre-earnings growth commentary and filing-backed FY26 FCF (~$14.4bn) are unchanged; no new primary filings.  
+Leverage and competitive AI-sector themes are unchanged.
+
+### 2026-11-19T23:54:22.619406+00:00
+The 19 Nov 23:54 news batch adds no articles since the prior refresh at 21:39 UTC.  
+Filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged; no new primary filings.  
+Leverage and competitive AI-sector themes are unchanged.

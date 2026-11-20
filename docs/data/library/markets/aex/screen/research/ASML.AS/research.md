@@ -1,6 +1,6 @@
 # ASML Holding N.V. (ASML.AS) — Research memo
 
-_Version 10 · Updated 2026-11-19T17:58:17.696189+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-19T21:50:41.108727+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.70
-Rationale: 19 Nov batch adds Anthropic IPO–led chip rally and EUV-advantage sentiment naming ASML; no new filings—sourced cash and earnings unchanged, so research stays neutral on the screen buy amid export and cycle risk.
+Rationale: The 21:50 UTC batch adds only a Fisher-holdings headline citing a sold-out order book; no new filings, so research stays neutral on the screen buy amid export control and cycle risk.
 RiskTags: regulatory, cyclical, customer_concentration, competitive
 
 ## Weekly updates
@@ -56,5 +56,10 @@ Indexed FCF and quarterly earnings in sources remain strong; the quantitative sc
 
 ### 2026-11-19T17:58:17.696189+00:00
 Since 02:56 UTC, coverage cites a European tech rebound and global chip rally after Anthropic’s IPO, with ASML among gainers and in a favourable EUV monopoly piece.  
+No new company filings or revisions appear in the supplied library pack; macro and screening inputs are unchanged.  
+Indexed FCF and quarterly earnings in sources remain strong; the quantitative screen buy signal is unchanged.
+
+### 2026-11-19T21:50:41.108727+00:00
+Since 17:58 UTC, one headline cites Ken Fisher’s fund adding to ASML and a sold-out order book in a billionaire stock-picks list.  
 No new company filings or revisions appear in the supplied library pack; macro and screening inputs are unchanged.  
 Indexed FCF and quarterly earnings in sources remain strong; the quantitative screen buy signal is unchanged.

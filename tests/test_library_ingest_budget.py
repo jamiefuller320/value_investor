@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from value_investor.library_ingest_budget import (
+    IngestHangWatch,
     deadline_reached,
     discovery_prefer_tickers,
     discovery_runtime_budget,
@@ -99,6 +100,35 @@ def test_ticker_deadline_is_min_of_slot_and_per_ticker_cap():
         )
         is False
     )
+
+
+def test_progress_continues_past_320s():
+    watch = IngestHangWatch(stall_seconds=320, fetch_timeout_seconds=60, slot_deadline=5000)
+    watch.note_progress(now=0)
+    watch.note_progress(now=300)
+    assert watch.allow_continuing(now=600) is True
+    watch.begin_parse(now=600)
+    watch.note_parse_progress(now=900)
+    assert watch.parse_stall(now=1000) is None
+
+
+def test_hung_fetch_is_stopped():
+    watch = IngestHangWatch(stall_seconds=320, fetch_timeout_seconds=60, slot_deadline=5000)
+    watch.note_progress(now=0)
+    assert watch.hung_fetch(59, now=59) is None
+    assert watch.hung_fetch(60, now=60) == "hung_fetch"
+
+
+def test_parse_with_no_progress_is_stopped():
+    watch = IngestHangWatch(stall_seconds=320, slot_deadline=10_000)
+    watch.begin_parse(now=0)
+    watch.note_parse_progress(now=10)
+    assert watch.parse_stall(now=329) is None
+    assert watch.parse_stall(now=330) == "parse_no_progress"
+    bounded = IngestHangWatch(stall_seconds=320, slot_deadline=10_000)
+    bounded.note_progress(now=9_900)
+    assert bounded.allow_continuing(now=9_999) is True
+    assert bounded.allow_continuing(now=10_000) is False
 
 
 def test_select_blocker_ticker_prefers_first_failed_budget_or_ir():

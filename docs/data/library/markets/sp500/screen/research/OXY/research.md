@@ -1,6 +1,6 @@
 # Occidental Petroleum Corporation (OXY) — Research memo
 
-_Version 4 · Updated 2026-11-19T18:01:49.992790+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-19T21:52:20.896236+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -26,3 +26,7 @@ Q3 2026 10-Q, principal debt at ~$10.0bn, and the 18 Nov senior-notes tender 8-K
 ### 2026-11-19T18:01:49.992790+00:00
 19 Nov news highlights a softer E&P commodity backdrop (WTI cited down ~15% over one month); an OXY cash-flow headline adds no new disclosed figures.  
 No new SEC filings since the 18 Nov senior-notes tender 8-K; Q3 10-Q and ~$10.0bn principal debt remain the latest inputs.
+
+### 2026-11-19T21:52:20.896236+00:00
+No material change since the 19 Nov 18:01 UTC pass: the `news_batch_20261119_215204` pull returned no new articles.  
+Q3 2026 10-Q, principal debt ~$10.0bn, and the 18 Nov senior-notes tender 8-K remain the latest filing inputs.

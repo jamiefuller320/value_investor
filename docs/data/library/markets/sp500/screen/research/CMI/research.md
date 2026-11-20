@@ -1,6 +1,6 @@
 # Cummins Inc. (CMI) — Research memo
 
-_Version 9 · Updated 2026-11-19T02:48:20.843353+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-19T23:54:13.020944+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.67
-Rationale: Refreshed quarters still show Q3 diluted EPS of $8.25 and about $3.5bn TTM free cash flow, supporting the buy; empty 19 Nov news and unchanged filing risks do not weaken the case.
+Confidence: 0.68
+Rationale: Q3 diluted EPS of $8.25 and about $3.2bn TTM free cash flow still anchor the case; no Cummins-specific news since the prior refresh confirms the strong buy screen at unchanged filing risks.
 RiskTags: regulatory, cyclical, customer_concentration, litigation, leverage
 
 ## Weekly updates
@@ -53,3 +53,13 @@ Prior First Eagle sale, Morgan Stanley target, and Q3 follow-through headlines a
 The 02:47 UTC news batch adds no articles since the 23:39 UTC refresh.  
 Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.5bn; the screen remains a buy.  
 Prior First Eagle sale, Morgan Stanley target, and Q3 follow-through headlines are unchanged; filing risk themes are unchanged.
+
+### 2026-11-19T21:38:48.092426+00:00
+The 21:38 UTC news batch adds eleven items since 02:48 UTC, including Argus maintaining coverage with a $609 target cut, Boston Partners raising holdings, and S29 mining-engine coverage.  
+Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.5bn; the screen is a strong buy.  
+Caterpillar peer pieces and a mis-tagged TSXV ticker are not Cummins-specific; prior First Eagle sale and Morgan Stanley themes remain in the backdrop.
+
+### 2026-11-19T23:54:13.020944+00:00
+The 23:53 UTC news batch adds one mis-tagged Johnson Controls item since 21:38 UTC; no Cummins-specific headlines.  
+Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.2bn; the screen remains a strong buy.  
+Prior Argus, Boston Partners, First Eagle, and Morgan Stanley themes are unchanged; filing risk themes are unchanged.
