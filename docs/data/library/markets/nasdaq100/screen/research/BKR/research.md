@@ -1,6 +1,6 @@
 # Baker Hughes Company (BKR) — Research memo
 
-_Version 2 · Updated 2026-11-19T21:37:32.409176+00:00 · Mode: structured_verdict_update_
+_Version 3 · Updated 2026-11-19T23:53:12.019412+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: INPEX LNG and geothermal headlines plus Q3 2026 revenue in screening data broadly support the strong-buy screen, though Chart-deal leverage and absent new filings cap conviction at accumulate.
+Rationale: Q3 revenue and TTM FCF in screening data support the strong-buy screen, but pending Chart leverage and no new filings keep research at accumulate rather than full alignment.
 RiskTags: cyclical, leverage, competitive, regulatory
 
 ## Weekly updates
@@ -17,4 +17,9 @@ RiskTags: cyclical, leverage, competitive, regulatory
 ### 2026-11-19T21:37:32.409176+00:00
 INPEX Ichthys LNG consortium and TPAO geothermal partnership headlines (18–19 Nov) add incremental IET/LNG commercial momentum; MAIRE/Nextchem’s reported $220m Chart LNG-technology purchase is adjacent M&A noise, not a BKR filing update.
 Screening snapshot shows Q3 2026 revenue ~$8.0bn and TTM FCF ~$3.2bn; no new SEC filing bodies since the July memo.
+Chart close timing and normalised post-portfolio earnings remain unverified in supplied sources.
+
+### 2026-11-19T23:53:12.019412+00:00
+No incremental headlines in the 19 Nov evening news batch since the earlier same-day refresh.  
+Strong-buy screen unchanged; screening snapshot still shows Q3 2026 revenue ~$8.0bn and TTM FCF ~$3.2bn.  
 Chart close timing and normalised post-portfolio earnings remain unverified in supplied sources.
