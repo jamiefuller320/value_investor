@@ -7725,6 +7725,20 @@ def test_builtin_ir_allowlist_includes_cne_l():
     assert periods == {"annual", "interim"}
 
 
+def test_builtin_ir_allowlist_includes_lsl_l():
+    """eng-20261120-02: ftse_smallcap LSL.L buy-tier no_key_bodies — lslps.co.uk statutory AR PDFs."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("LSL.L") or []
+    assert any("Annual%20Report%202025.pdf" in url for url in urls)
+    assert any("Annual%20report%202024.pdf" in url for url in urls)
+    assert all("lslps.co.uk/uploads/media_file" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("LSL.L")
+    assert len(rows) == 2
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    assert all(row.get("period") == "annual" for row in rows)
+
+
 def test_enq_l_fy_results_headline_classified_as_annual():
     """eng-20261025-05: Investegate FY RNS uses 'Results for the year ended' without 'full year'."""
     from value_investor.research.filings import classify_filing_period
@@ -12887,6 +12901,33 @@ def test_parked_source_hunter_cne_l_ftse_smallcap_has_fetchable_ir():
     urls = [row["url"] for row in rows]
     assert all("capricornenergy.com" in url for url in urls)
     assert any("capricorn_ar25_final.pdf" in url for url in urls)
+    _first_fetchable_allowlist_body(urls)
+
+
+def test_fetch_filings_ir_allowlist_ftse_smallcap_lsl_l_builtins(tmp_path: Path):
+    """eng-20261120-02: LSL.L buy-tier no_key_bodies — lslps.co.uk FY2025/2024 statutory AR PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("LSL.L", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert all(row["period"] == "annual" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("Annual%20Report%202025.pdf" in url for url in urls)
+    assert any("Annual%20report%202024.pdf" in url for url in urls)
+    assert all("lslps.co.uk/uploads/media_file" in url for url in urls)
+    assert "LSL.L" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_parked_source_hunter_lsl_l_ftse_smallcap_has_fetchable_ir():
+    """eng-20261120-02: LSL.L has live lslps.co.uk FY2025/2024 annual report statutory PDFs."""
+    assert "LSL.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("LSL.L")
+    assert len(rows) == 2
+    urls = [row["url"] for row in rows]
+    assert all("lslps.co.uk" in url for url in urls)
+    assert any("Annual%20Report%202025.pdf" in url for url in urls)
     _first_fetchable_allowlist_body(urls)
 
 
