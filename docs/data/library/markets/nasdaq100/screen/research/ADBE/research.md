@@ -1,6 +1,6 @@
 # Adobe Inc. (ADBE) — Research memo
 
-_Version 5 · Updated 2026-11-20T02:33:31.274975+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-20T07:48:25.155386+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: Q3 FY2026 filings show double-digit revenue and ARR with strong cash generation, partly confirming the screen's strong buy; AI-disruption and buyback-led EPS keep research at accumulate versus full alignment.
+Rationale: Q3 FY2026 filings show double-digit revenue and ARR with strong cash generation, partly confirming the screen buy; AI-disruption and buyback-led EPS keep research at accumulate versus full alignment.
 RiskTags: competitive, regulatory, litigation, leverage
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Quantitative screen signal remains **strong buy**; filing-backed fundamentals ar
 No material change since the prior refresh at 23:52 UTC.  
 The 02:33 news batch returned zero articles; no new SEC filings beyond the existing Q3 FY2026 10-Q pack.  
 Quantitative screen signal remains **strong buy**; filing-backed fundamentals are unchanged.
+
+### 2026-11-20T07:48:25.155386+00:00
+No material change since the 02:33 UTC refresh on 20 Nov 2026.  
+The 07:48 news batch returned zero articles; the filing set is unchanged, with Q3 FY2026 10-Q still the latest interim.  
+Quantitative screen signal remains **buy**; filing-backed fundamentals are unchanged.

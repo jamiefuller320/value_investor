@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-11-20T02:40:24.981902+00:00",
+  "compiled_at": "2026-11-20T07:54:22.916757+00:00",
   "run_at": null,
-  "task_count": 299,
+  "task_count": 300,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -4647,10 +4647,10 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
-      "id": "eng-20261120-01",
+      "id": "eng-20261120-03",
       "area": "ingest",
-      "title": "Close library ingest gaps for euro_depth / UNA.AS (chain 2/3: 0/0 improved, run igc-20261005-02)",
-      "summary": "Ingest gap-closure run igc-20261005-02 (chain root igc-20261005-02, round 2) targeted UNA.AS with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "title": "Close library ingest gaps for euro_depth / UNA.AS (chain 3/3: 0/0 improved, run igc-20261005-02)",
+      "summary": "Ingest gap-closure run igc-20261005-02 (chain root igc-20261005-02, round 3) targeted UNA.AS with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
       "priority": "high",
       "priority_score": 88.0,
       "source": "ingest_gap_closure",
@@ -4658,7 +4658,7 @@
         "gap_closure_run_id": "igc-20261005-02",
         "trial_id": "igc-20261005-02",
         "chain_root_id": "igc-20261005-02",
-        "chain_round": 2,
+        "chain_round": 3,
         "tickers": [
           "UNA.AS"
         ],
@@ -4697,8 +4697,7 @@
           "universe": "library",
           "critical_path_blocker": "unmeasured"
         },
-        "compile_reason": "gaps_remain_without_refetch",
-        "merge_class": "ingest_narrow"
+        "compile_reason": "gaps_remain_without_refetch"
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for UNA.AS",
@@ -4726,14 +4725,7 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "merged",
-      "branch_name": "cursor/eng-20261120-01-1de3",
-      "pr_number": 1457,
-      "no_diff_count": 0,
-      "completed_at": "2026-11-20T02:49:18.372563+00:00",
-      "merge_class": "ingest_narrow",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1457",
-      "merged_at": "2026-11-20T03:02:08.673778+00:00"
+      "status": "open"
     },
     {
       "id": "eng-20261117-04",
@@ -4910,6 +4902,95 @@
       "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261111-01",
       "cancelled_at": "2026-11-12T03:17:31.862476+00:00",
       "cancelled_policy": "superseded_gap_closure"
+    },
+    {
+      "id": "eng-20261120-01",
+      "area": "ingest",
+      "title": "Close library ingest gaps for euro_depth / UNA.AS (chain 2/3: 0/0 improved, run igc-20261005-02)",
+      "summary": "Ingest gap-closure run igc-20261005-02 (chain root igc-20261005-02, round 2) targeted UNA.AS with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20261005-02",
+        "trial_id": "igc-20261005-02",
+        "chain_root_id": "igc-20261005-02",
+        "chain_round": 2,
+        "tickers": [
+          "UNA.AS"
+        ],
+        "ticker": "UNA.AS",
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "UNA.AS"
+          ],
+          "market_id": "euro_depth",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "UNA.AS"
+          ],
+          "market_id": "euro_depth",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "compile_reason": "gaps_remain_without_refetch",
+        "merge_class": "ingest_narrow"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for UNA.AS",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "branch_name": "cursor/eng-20261120-01-1de3",
+      "pr_number": 1457,
+      "no_diff_count": 0,
+      "completed_at": "2026-11-20T02:49:18.372563+00:00",
+      "merge_class": "ingest_narrow",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1457",
+      "merged_at": "2026-11-20T03:02:08.673778+00:00"
     },
     {
       "id": "eng-20261119-01",
@@ -19436,7 +19517,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-11-20T02:35:47.843713+00:00",
+    "evaluated_at": "2026-11-20T07:51:56.555047+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -19497,7 +19578,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 2,
-    "evaluated_at": "2026-11-20T07:17:55.714415+00:00",
+    "evaluated_at": "2026-11-20T07:51:56.501427+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -19505,7 +19586,7 @@
     },
     "resumed_at": "2026-10-14T07:12:50.922751+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "ingest_gap_closure",
   "library_market_id": "ftse_smallcap",
   "hunter_ticker": "LSL.L",
   "source_gap_closure_run_id": "igc-20261005-02",

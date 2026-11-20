@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-20T02:37:32.076436+00:00`
+Generated: `2026-11-20T07:54:24.964091+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -26,14 +26,15 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
 - [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-11-19T07:46:59.861210+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Ops monitor overall=warn at 2026-11-20T02:32:02.142846+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `parked_hunter`/verified PR #1458 `eng-20261120-02` — Hunt fetchable IR source for parked ftse_smallcap leftover LSL.L
+- `ingest_narrow`/verified PR #1457 `eng-20261120-01` — Close library ingest gaps for euro_depth / UNA.AS (chain 2/3: 0/0 improved, run igc-20261005-02)
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 394
@@ -48,8 +49,9 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 
 ## Ops-monitor email handoff
 - Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 15 (open=15, resolved=0)
+- Findings: 16 (open=16, resolved=0)
 - [open] WARN Dashboard bundle is stale — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Weekly ops budget nearly exhausted — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
@@ -60,7 +62,6 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [open] WARN SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Chart highs and lows incomplete — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Strategy-book US rehearsal: licensed data deletion due — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Paper-auto last_run is pre-settle only — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
