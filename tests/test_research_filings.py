@@ -7491,6 +7491,58 @@ def test_refetch_ir_allowlist_retries_una_as_unilever_unfetchable(mock_fetch_bod
     assert sum(1 for row in saved["filings"] if row.get("has_body")) >= 1
 
 
+def test_builtin_ir_allowlist_una_as_sec_interim_eng_20261120_03():
+    """eng-20261120-03: UNA.AS uses SEC half-year 6-K when unilever.com PDFs 403 (igc-20261005-02)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("UNA.AS") or []
+    assert any("ul-20250630.htm" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("UNA.AS")
+    assert len(rows) >= 5
+    interim = next(row for row in rows if "ul-20250630.htm" in row["url"])
+    assert interim["period"] == "interim"
+
+
+def test_validate_ir_allowlist_sec_alias_title_gate_una_as_eng_20261120_03():
+    """eng-20261120-03: SEC ul-* bodies pass title gate via issuer alias + extended sample."""
+    from value_investor.research.filings import _validate_ir_allowlist_body_content
+
+    url = "https://www.sec.gov/Archives/edgar/data/217410/000021741025000041/ul-20250630.htm"
+    prefix = ("x" * 5900) + "Unilever PLC consolidated turnover operating profit "
+    body = prefix + (" free cash flow earnings per share " * 80)
+    row = {
+        "id": "ir_86789d34ecfc20e1",
+        "url": url,
+        "period": "interim",
+        "headline": "IR allowlist document — ul-20250630.htm",
+    }
+    valid, reason = _validate_ir_allowlist_body_content(row, body, ticker="UNA.AS")
+    assert valid, reason
+
+
+def test_ir_allowlist_unfetchable_may_retry_sec_una_as_eng_20261120_03():
+    """eng-20261120-03: stale SEC unfetchable flags on UNA.AS allowlist rows must retry."""
+    from value_investor.research.filings import (
+        _ir_allowlist_unfetchable_may_retry,
+        fetch_filings_ir_allowlist,
+    )
+
+    allowlist_urls = {row["url"] for row in fetch_filings_ir_allowlist("UNA.AS")}
+    sec_url = "https://www.sec.gov/Archives/edgar/data/217410/000021741025000041/ul-20250630.htm"
+    row = {
+        "source": "ir_allowlist",
+        "url": sec_url,
+        "has_body": False,
+        "unfetchable": True,
+        "unfetchable_reason": "ir_allowlist_fetch_failed",
+    }
+    assert _ir_allowlist_unfetchable_may_retry(
+        row,
+        allowlist_urls=allowlist_urls,
+        ticker="UNA.AS",
+    )
+
+
 def test_sanitize_investegate_announcement_url_strips_br_suffix_eng_20261009_03():
     """eng-20261009-03: JD.L index row had %3Cbr%3E in Investegate href — refetch 0/3."""
     dirty = (

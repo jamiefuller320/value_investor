@@ -386,19 +386,21 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "APAM.AS": [
         "https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf",
     ],
-    # euro_depth unmeasured stuck — UNA.AS (Unilever N.V.): ESEF/news discovery
-    # repeatedly 0-improve with empty IR allowlist (igc-20261005-02). Seed unilever.com IR PDFs.
+    # euro_depth unmeasured stuck — UNA.AS (Unilever N.V.): unilever.com PDFs 403 from datacenter
+    # ingest (igc-20261005-02); SEC 20-F / half-year 6-K fetch like SHELL.AS (eng-20261120-03).
     "UNA.AS": [
         "https://www.unilever.com/files/unilever-annual-report-and-accounts-2025.pdf",
         "https://www.unilever.com/files/ir-q2-2025-full-announcement.pdf",
         "https://www.unilever.com/files/ir-q4-2025-full-announcement.pdf",
         "https://www.sec.gov/Archives/edgar/data/217410/000021741026000007/ul-20251231.htm",
+        "https://www.sec.gov/Archives/edgar/data/217410/000021741025000041/ul-20250630.htm",
     ],
     "UNA": [
         "https://www.unilever.com/files/unilever-annual-report-and-accounts-2025.pdf",
         "https://www.unilever.com/files/ir-q2-2025-full-announcement.pdf",
         "https://www.unilever.com/files/ir-q4-2025-full-announcement.pdf",
         "https://www.sec.gov/Archives/edgar/data/217410/000021741026000007/ul-20251231.htm",
+        "https://www.sec.gov/Archives/edgar/data/217410/000021741025000041/ul-20250630.htm",
     ],
     # euro_depth leftover awaiting_periodic_report — ADYEN.AS thin ESEF-only; brand.adyen.com PDFs.
     "ADYEN.AS": [
@@ -6126,6 +6128,9 @@ def _ir_allowlist_unfetchable_may_retry(
     # ir_allowlist_fetch_failed (issuer title gate fixed in eng-20261119-01; igc-20261005-02).
     if host.endswith("unilever.com"):
         return True
+    # eng-20261120-03: UNA.AS SEC rows stayed skipped_unfetchable with has_body (stale flags).
+    if host.endswith("sec.gov"):
+        return True
     if reason != "ir_allowlist_fetch_failed":
         return False
     # Canonical / scheme rewrites since the last failure (e.g. https→http Donegal IR PDFs).
@@ -6260,6 +6265,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2025/interimfinancialreport/danoneinterimfinancialreport2025.pdf": "interim",
     # eng-20261119-01: UNA.AS — ir-q4* slug has no annual/interim token (igc-20261005-02).
     "https://www.unilever.com/files/ir-q4-2025-full-announcement.pdf": "annual",
+    # eng-20261120-03: UNA.AS — ul-20250630.htm slug has no interim token (igc-20261005-02).
+    "https://www.sec.gov/Archives/edgar/data/217410/000021741025000041/ul-20250630.htm": "interim",
     "https://www.essilorluxottica.com/api/getCapContent/?download=true&id=284350": "annual",
     # eng-20260930-03: opaque HKEX listconews slugs for hang_seng IR allowlist seeds.
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042400680.pdf": "annual",
@@ -6401,6 +6408,9 @@ def _ir_allowlist_period_from_url(url: str) -> str:
         )
     ) or re.search(r"-\d{4}1231\.(htm|html|pdf)(?:$|\?)", lower):
         return "annual"
+    # SEC / dual-listed half-year 6-K slugs (e.g. Unilever ul-20250630.htm).
+    if re.search(r"-\d{4}0630\.(htm|html)(?:$|\?)", lower):
+        return "interim"
     # Belgian / Benelux annual report packs (e.g. AEDIFICA-RA25_EN).
     if re.search(r"[-_/]ra\d{2}(?:[_\-]|\.|$)", lower):
         return "annual"
@@ -6578,7 +6588,15 @@ def _ir_body_title_tokens_match(row: dict[str, Any], body: str, *, ticker: str =
                         tokens.add(tok)
     if not tokens:
         return True
-    sample = (body or "")[:4000].lower()
+    sample_cap = 4000
+    url_lower = str(row.get("url") or "").lower()
+    if "sec.gov" in url_lower and ticker:
+        upper = ticker.strip().upper()
+        base = _base_symbol(ticker)
+        if any(_ESEF_ENTITY_SEARCH_ALIASES.get(k) for k in dict.fromkeys((upper, base))):
+            # ul-* slugs lack issuer tokens; Unilever name appears after auditor boilerplate.
+            sample_cap = 16000
+    sample = (body or "")[:sample_cap].lower()
     meaningful = [t for t in tokens if len(t) >= 4 or re.fullmatch(r"20\d{2}", t)]
     if not meaningful:
         return True
