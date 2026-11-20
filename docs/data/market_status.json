@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-20T14:37:39.523167+00:00",
+  "generated_at": "2026-11-20T16:46:06.702843+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -70,7 +70,7 @@
       "us_adr_asia"
     ],
     "spare_sprint": {},
-    "equal_support_generated_at": "2026-11-20T14:17:57.231011+00:00"
+    "equal_support_generated_at": "2026-11-20T15:17:42.521008+00:00"
   },
   "markets": [
     {
@@ -1006,8 +1006,8 @@
       "is_ftse_equivalent": false,
       "ingest": "maintenance",
       "ingest_stream": null,
-      "ingest_reason": "Ingest avenues exhausted — parked 7 leftover thin/IWB name(s) (ACKB.BR, APAM.AS, BAS.DE, DQ7A.IR, ESSITY-B.ST, EVN.VI, UCB.BR); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
-      "ingest_parity_met": false,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
       "ingest_exhausted": true,
       "queue_rank": null,
       "shared_maintenance": true,
@@ -1056,38 +1056,8 @@
           "min_weekly_batches": 4
         }
       },
-      "filing_health": {
-        "buy_tier_count": 40,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 6,
-        "indexed_without_body": 3,
-        "bodies_median": 5.0,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
-        "ingest_exhausted": true,
-        "parked_count": 7,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "ACKB.BR",
-          "APAM.AS",
-          "BAS.DE",
-          "UCB.BR",
-          "EVN.VI",
-          "DQ7A.IR"
-        ],
-        "unmeasured_tickers": [],
-        "parked_tickers": [
-          "ACKB.BR",
-          "APAM.AS",
-          "BAS.DE",
-          "DQ7A.IR",
-          "ESSITY-B.ST",
-          "EVN.VI",
-          "UCB.BR"
-        ]
-      },
-      "filing_gaps": 0,
+      "filing_health": null,
+      "filing_gaps": null,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -1876,7 +1846,7 @@
         "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 9,
+        "leftover": 0,
         "steps": [
           {
             "id": "start",
@@ -2871,7 +2841,7 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 2,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 9,
         "not_buy_tier_count": 41,
         "never_buy_tier_count": 36,
@@ -2880,18 +2850,15 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 2,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 9,
         "not_buy_tier_count": 41,
         "never_buy_tier_count": 36,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "YNGN.L",
-          "ASY.L"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "DATA.L",
           "POLR.L",
@@ -8871,7 +8838,7 @@
         "hold_near_buy_count": 13,
         "not_buy_tier_count": 63,
         "never_buy_tier_count": 57,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -12263,12 +12230,12 @@
         "knob_apply": false,
         "acted": true,
         "last_run_at": "2026-11-19T08:40:53.503429+00:00",
-        "holdings": 32,
-        "nav": 770.74,
-        "cash": 0.0,
+        "holdings": 30,
+        "nav": 785.97,
+        "cash": 56.24,
         "contributed_capital": 1000.0,
         "weekday_batch_count": 52,
-        "epoch0_batch_count": 36
+        "epoch0_batch_count": 35
       },
       "equal_support": {
         "present": true,
@@ -12937,6 +12904,19 @@
               "buy_tier_level_gbp_fx_warped": 770.74
             },
             "market": 945.55
+          },
+          {
+            "date": "2026-11-20",
+            "held": 987.91,
+            "nav": 1033.33,
+            "held_stock": 987.91,
+            "cash": 45.42,
+            "positions": 30,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 729.73
+            },
+            "market": 945.55
           }
         ],
         "series": [
@@ -12976,16 +12956,16 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 54
+            "point_count": 55
           }
         ],
         "last": {
-          "date": "2026-11-19",
-          "held": 1033.4,
+          "date": "2026-11-20",
+          "held": 987.91,
           "market": 945.55,
-          "nav": 1033.4,
-          "positions": 32,
-          "excess_pct": 0.092909
+          "nav": 1033.33,
+          "positions": 30,
+          "excess_pct": 0.044799
         }
       },
       "learning_depth": null,
@@ -14719,11 +14699,11 @@
         "acted": true,
         "last_run_at": "2026-11-19T08:39:46.472732+00:00",
         "holdings": 120,
-        "nav": 765.89,
-        "cash": 28.58,
+        "nav": 769.05,
+        "cash": 33.52,
         "contributed_capital": 1000.0,
         "weekday_batch_count": 52,
-        "epoch0_batch_count": 36
+        "epoch0_batch_count": 35
       },
       "equal_support": {
         "present": true,
@@ -15394,6 +15374,19 @@
               "buy_tier_level_gbp_fx_warped": 737.31
             },
             "market": 945.55
+          },
+          {
+            "date": "2026-11-20",
+            "held": 1030.74,
+            "nav": 1064.55,
+            "held_stock": 1030.74,
+            "cash": 33.81,
+            "positions": 120,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 735.53
+            },
+            "market": 945.55
           }
         ],
         "series": [
@@ -15433,16 +15426,16 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 62
+            "point_count": 63
           }
         ],
         "last": {
-          "date": "2026-11-19",
-          "held": 1036.21,
+          "date": "2026-11-20",
+          "held": 1030.74,
           "market": 945.55,
-          "nav": 1064.61,
+          "nav": 1064.55,
           "positions": 120,
-          "excess_pct": 0.095881
+          "excess_pct": 0.090096
         }
       },
       "learning_depth": {
@@ -16446,8 +16439,8 @@
       "is_ftse_equivalent": false,
       "ingest": "maintenance",
       "ingest_stream": null,
-      "ingest_reason": null,
-      "ingest_parity_met": null,
+      "ingest_reason": "Ingest avenues exhausted — parked 8 leftover thin/IWB name(s) (CNQ.TO, CTC-A.TO, CVE.TO, GIB-A.TO, K.TO, MFC.TO, NTR.TO, SU.TO); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
+      "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 4,
       "shared_maintenance": true,
@@ -16498,8 +16491,35 @@
           "min_weekly_batches": 4
         }
       },
-      "filing_health": null,
-      "filing_gaps": null,
+      "filing_health": {
+        "buy_tier_count": 17,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 2,
+        "indexed_without_body": 117,
+        "bodies_median": 33.0,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "ingest_exhausted": true,
+        "parked_count": 8,
+        "zero_body_tickers": [],
+        "thin_body_tickers": [
+          "CTC-A.TO",
+          "MFC.TO"
+        ],
+        "unmeasured_tickers": [],
+        "parked_tickers": [
+          "CNQ.TO",
+          "CTC-A.TO",
+          "CVE.TO",
+          "GIB-A.TO",
+          "K.TO",
+          "MFC.TO",
+          "NTR.TO",
+          "SU.TO"
+        ]
+      },
+      "filing_gaps": 0,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -16510,12 +16530,12 @@
         "knob_apply": false,
         "acted": true,
         "last_run_at": "2026-11-19T08:40:31.624477+00:00",
-        "holdings": 11,
-        "nav": 499.02,
+        "holdings": 10,
+        "nav": 521.68,
         "cash": 0.0,
         "contributed_capital": 1000.0,
         "weekday_batch_count": 52,
-        "epoch0_batch_count": 36
+        "epoch0_batch_count": 35
       },
       "equal_support": {
         "present": true,
@@ -16523,7 +16543,7 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 0,
+        "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 13,
         "not_buy_tier_count": 42,
         "never_buy_tier_count": 35,
@@ -16532,15 +16552,17 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 0,
+        "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 13,
         "not_buy_tier_count": 42,
         "never_buy_tier_count": 35,
-        "timing_signal_present": false,
+        "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [],
+        "buy_tier_not_now_sample": [
+          "SAP.TO"
+        ],
         "hold_near_buy_sample": [
           "FFH.TO",
           "PPL.TO",
@@ -17177,6 +17199,19 @@
               "buy_tier_level_gbp_fx_warped": 499.02
             },
             "market": 965.6
+          },
+          {
+            "date": "2026-11-20",
+            "held": 1015.57,
+            "nav": 1015.57,
+            "held_stock": 1015.57,
+            "cash": 0.0,
+            "positions": 10,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 521.68
+            },
+            "market": 965.6
           }
         ],
         "series": [
@@ -17216,16 +17251,16 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 60
+            "point_count": 61
           }
         ],
         "last": {
-          "date": "2026-11-19",
-          "held": 986.14,
+          "date": "2026-11-20",
+          "held": 1015.57,
           "market": 965.6,
-          "nav": 986.14,
-          "positions": 11,
-          "excess_pct": 0.021272
+          "nav": 1015.57,
+          "positions": 10,
+          "excess_pct": 0.05175
         }
       },
       "learning_depth": null,
@@ -17244,7 +17279,7 @@
         "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 0,
+        "leftover": 119,
         "steps": [
           {
             "id": "start",
