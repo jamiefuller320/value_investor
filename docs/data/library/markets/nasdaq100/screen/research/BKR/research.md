@@ -1,6 +1,6 @@
 # Baker Hughes Company (BKR) — Research memo
 
-_Version 3 · Updated 2026-11-19T23:53:12.019412+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-20T02:33:49.919045+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Q3 revenue and TTM FCF in screening data support the strong-buy screen, but pending Chart leverage and no new filings keep research at accumulate rather than full alignment.
+Rationale: Ichthys LNG subsea work with McDermott adds commercial momentum and Q3 revenue with TTM FCF support the strong-buy screen, but pending Chart leverage and no new filings keep research at accumulate.
 RiskTags: cyclical, leverage, competitive, regulatory
 
 ## Weekly updates
@@ -22,4 +22,9 @@ Chart close timing and normalised post-portfolio earnings remain unverified in s
 ### 2026-11-19T23:53:12.019412+00:00
 No incremental headlines in the 19 Nov evening news batch since the earlier same-day refresh.  
 Strong-buy screen unchanged; screening snapshot still shows Q3 2026 revenue ~$8.0bn and TTM FCF ~$3.2bn.  
+Chart close timing and normalised post-portfolio earnings remain unverified in supplied sources.
+
+### 2026-11-20T02:33:49.919045+00:00
+Headlines report Baker Hughes and McDermott securing Ichthys LNG subsea infrastructure work for the next development phase (20 Nov).  
+Strong-buy screen unchanged; screening snapshot still shows Q3 2026 revenue ~$8.0bn and TTM FCF ~$3.2bn; no new SEC filing bodies.  
 Chart close timing and normalised post-portfolio earnings remain unverified in supplied sources.

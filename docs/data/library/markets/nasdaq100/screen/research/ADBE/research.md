@@ -1,6 +1,6 @@
 # Adobe Inc. (ADBE) — Research memo
 
-_Version 4 · Updated 2026-11-19T23:52:59.034446+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-20T02:33:31.274975+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -27,4 +27,9 @@ Screen signal is now **buy**; Q3 FY2026 10-Q and the filing set are unchanged.
 ### 2026-11-19T23:52:59.034446+00:00
 No material change since the prior refresh at 21:50 UTC.  
 The 23:52 news batch returned zero articles; no new SEC filings beyond the existing Q3 FY2026 10-Q pack.  
+Quantitative screen signal remains **strong buy**; filing-backed fundamentals are unchanged.
+
+### 2026-11-20T02:33:31.274975+00:00
+No material change since the prior refresh at 23:52 UTC.  
+The 02:33 news batch returned zero articles; no new SEC filings beyond the existing Q3 FY2026 10-Q pack.  
 Quantitative screen signal remains **strong buy**; filing-backed fundamentals are unchanged.
