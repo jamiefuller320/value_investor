@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-20T00:16:32.144597+00:00",
+  "generated_at": "2026-11-20T08:00:29.790998+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -70,7 +70,7 @@
       "us_adr_asia"
     ],
     "spare_sprint": {},
-    "equal_support_generated_at": "2026-11-19T22:41:53.460884+00:00"
+    "equal_support_generated_at": "2026-11-20T00:47:04.206462+00:00"
   },
   "markets": [
     {
@@ -1006,8 +1006,8 @@
       "is_ftse_equivalent": false,
       "ingest": "maintenance",
       "ingest_stream": null,
-      "ingest_reason": "Ingest avenues exhausted — parked 7 leftover thin/IWB name(s) (ACKB.BR, APAM.AS, BAS.DE, DQ7A.IR, ESSITY-B.ST, EVN.VI, UCB.BR); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
-      "ingest_parity_met": false,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
       "ingest_exhausted": true,
       "queue_rank": null,
       "shared_maintenance": true,
@@ -1056,38 +1056,8 @@
           "min_weekly_batches": 4
         }
       },
-      "filing_health": {
-        "buy_tier_count": 40,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 6,
-        "indexed_without_body": 3,
-        "bodies_median": 5.0,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
-        "ingest_exhausted": true,
-        "parked_count": 7,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "ACKB.BR",
-          "APAM.AS",
-          "BAS.DE",
-          "UCB.BR",
-          "EVN.VI",
-          "DQ7A.IR"
-        ],
-        "unmeasured_tickers": [],
-        "parked_tickers": [
-          "ACKB.BR",
-          "APAM.AS",
-          "BAS.DE",
-          "DQ7A.IR",
-          "ESSITY-B.ST",
-          "EVN.VI",
-          "UCB.BR"
-        ]
-      },
-      "filing_gaps": 0,
+      "filing_health": null,
+      "filing_gaps": null,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -1863,7 +1833,7 @@
         "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 9,
+        "leftover": 0,
         "steps": [
           {
             "id": "start",
@@ -15408,8 +15378,8 @@
         "knob_apply": false,
         "acted": true,
         "last_run_at": "2026-11-19T08:40:00.925040+00:00",
-        "holdings": 31,
-        "nav": 481.04,
+        "holdings": 32,
+        "nav": 481.57,
         "cash": 0.0,
         "contributed_capital": 1000.0,
         "weekday_batch_count": 52,
@@ -16103,6 +16073,19 @@
               "buy_tier_level_gbp_fx_warped": 481.04
             },
             "market": 992.75
+          },
+          {
+            "date": "2026-11-20",
+            "held": 985.25,
+            "nav": 985.25,
+            "held_stock": 985.25,
+            "cash": 0.0,
+            "positions": 31,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 481.57
+            },
+            "market": 992.75
           }
         ],
         "series": [
@@ -16142,16 +16125,16 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 64
+            "point_count": 65
           }
         ],
         "last": {
-          "date": "2026-11-19",
-          "held": 981.32,
+          "date": "2026-11-20",
+          "held": 985.25,
           "market": 992.75,
-          "nav": 981.32,
+          "nav": 985.25,
           "positions": 31,
-          "excess_pct": -0.011513
+          "excess_pct": -0.007555
         }
       },
       "learning_depth": null,
@@ -16239,8 +16222,8 @@
       "is_ftse_equivalent": false,
       "ingest": "maintenance",
       "ingest_stream": null,
-      "ingest_reason": null,
-      "ingest_parity_met": null,
+      "ingest_reason": "Ingest avenues exhausted — parked 8 leftover thin/IWB name(s) (CNQ.TO, CTC-A.TO, CVE.TO, GIB-A.TO, K.TO, MFC.TO, NTR.TO, SU.TO); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
+      "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 4,
       "shared_maintenance": true,
@@ -16291,8 +16274,35 @@
           "min_weekly_batches": 4
         }
       },
-      "filing_health": null,
-      "filing_gaps": null,
+      "filing_health": {
+        "buy_tier_count": 17,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 2,
+        "indexed_without_body": 117,
+        "bodies_median": 33.0,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "ingest_exhausted": true,
+        "parked_count": 8,
+        "zero_body_tickers": [],
+        "thin_body_tickers": [
+          "CTC-A.TO",
+          "MFC.TO"
+        ],
+        "unmeasured_tickers": [],
+        "parked_tickers": [
+          "CNQ.TO",
+          "CTC-A.TO",
+          "CVE.TO",
+          "GIB-A.TO",
+          "K.TO",
+          "MFC.TO",
+          "NTR.TO",
+          "SU.TO"
+        ]
+      },
+      "filing_gaps": 0,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -16320,7 +16330,7 @@
         "hold_near_buy_count": 13,
         "not_buy_tier_count": 42,
         "never_buy_tier_count": 35,
-        "rememo_eligible_count": 3,
+        "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
         "exclusion_ready_for_priors": null
       },
@@ -17037,7 +17047,7 @@
         "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 0,
+        "leftover": 119,
         "steps": [
           {
             "id": "start",
