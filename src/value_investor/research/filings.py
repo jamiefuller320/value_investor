@@ -6116,6 +6116,10 @@ def _ir_allowlist_unfetchable_may_retry(
     # transient ir_allowlist_fetch_failed; links.sgx.com rows must retry like Donegal IR.
     if host.endswith("links.sgx.com"):
         return True
+    # eng-20261120-01: UNA.AS unilever.com IR PDFs stayed skipped_unfetchable after prior
+    # ir_allowlist_fetch_failed (issuer title gate fixed in eng-20261119-01; igc-20261005-02).
+    if host.endswith("unilever.com"):
+        return True
     if reason != "ir_allowlist_fetch_failed":
         return False
     # Canonical / scheme rewrites since the last failure (e.g. https→http Donegal IR PDFs).

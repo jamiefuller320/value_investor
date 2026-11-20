@@ -7439,6 +7439,58 @@ def test_refetch_euro_filings_primary_bodies_una_as_unmeasured_eng_20261119_01(
     assert any(row.get("has_body") for row in payload.get("filings") or [])
 
 
+@patch("value_investor.research.filings._fetch_ir_allowlist_body")
+def test_refetch_ir_allowlist_retries_una_as_unilever_unfetchable(mock_fetch_body, tmp_path: Path):
+    """eng-20261120-01: UNA.AS unilever.com rows retry after prior ir_allowlist_fetch_failed."""
+    from value_investor.research.filings import (
+        _BUILTIN_IR_URLS,
+        refetch_ir_allowlist_filing_bodies,
+    )
+
+    body_text = (
+        "Unilever PLC consolidated turnover operating profit free cash flow "
+        "underlying earnings per share dividend " * 40
+    )
+    mock_fetch_body.return_value = (body_text, "pdf")
+    unilever_urls = [u for u in _BUILTIN_IR_URLS["UNA.AS"] if "unilever.com" in u]
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    filings: list[dict] = []
+    for url in unilever_urls:
+        digest = __import__("hashlib").sha256(url.encode("utf-8")).hexdigest()[:16]
+        filings.append(
+            {
+                "id": f"ir_{digest}",
+                "source": "ir_allowlist",
+                "headline": f"IR allowlist document — {url.rsplit('/', 1)[-1]}",
+                "url": url,
+                "period": "interim",
+                "has_body": False,
+                "unfetchable": True,
+                "unfetchable_reason": "ir_allowlist_fetch_failed",
+            }
+        )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": filings, "summary": {"with_body": 0, "total": len(filings)}}),
+        encoding="utf-8",
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "UNA.AS",
+        company_name="Unilever PLC",
+        max_bodies=5,
+    )
+    assert result["skipped_unfetchable"] == 0
+    assert int(result.get("retry_cleared") or 0) == len(unilever_urls)
+    assert result["attempted"] >= 1
+    assert result["fetched"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    q4 = next(row for row in saved["filings"] if "ir-q4-2025-full-announcement" in row["url"])
+    assert q4["period"] == "annual"
+    assert all(row.get("unfetchable") is not True for row in saved["filings"])
+    assert sum(1 for row in saved["filings"] if row.get("has_body")) >= 1
+
+
 def test_sanitize_investegate_announcement_url_strips_br_suffix_eng_20261009_03():
     """eng-20261009-03: JD.L index row had %3Cbr%3E in Investegate href — refetch 0/3."""
     dirty = (
