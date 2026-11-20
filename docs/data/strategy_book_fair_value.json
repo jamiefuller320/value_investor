@@ -2,9 +2,9 @@
   "schema_version": 1,
   "influences_live": false,
   "registration_id": "owner-strategy-book-v0",
-  "generated_at": "2026-11-19T21:52:32.159274+00:00",
-  "observe_data_commit": "0faed63be875daa4769cf3a3438003cc3d7047e8",
-  "observe_generated_at": "2026-11-19T21:33:24.379946+00:00",
+  "generated_at": "2026-11-19T23:59:45.745079+00:00",
+  "observe_data_commit": "edc9f3a2f9066f3f9c8eeb532543c00ae5cb188b",
+  "observe_generated_at": "2026-11-19T23:50:32.015133+00:00",
   "observe_store": "docs/data/strategy_book_observe.json",
   "observe_error": null,
   "constants": {
@@ -121,18 +121,18 @@
     "no_daily_series": []
   },
   "coverage": {
-    "episodes": 201,
-    "with_range": 41,
-    "insufficient_data": 160,
+    "episodes": 205,
+    "with_range": 44,
+    "insufficient_data": 161,
     "reasons": {
       "currency_sources_disagree": 15,
-      "financials_after_signal": 118,
+      "financials_after_signal": 114,
       "implausible_multiple": 1,
-      "reporting_currency_unstated": 26
+      "reporting_currency_unstated": 31
     },
-    "primary_episodes": 24,
+    "primary_episodes": 25,
     "primary_with_range": 4,
-    "primary_insufficient_data": 20,
+    "primary_insufficient_data": 21,
     "primary_margin_median": 0.194405
   },
   "scoring": {
@@ -229,15 +229,15 @@
       },
       "decline_rejected_shadow": {
         "population": "mature or closed episodes with a range",
-        "n": 2,
-        "n_with_range": 4,
+        "n": 3,
+        "n_with_range": 6,
         "verdict": "insufficient_data",
         "minimum_n": 12,
         "buckets": [
           {
             "id": "below_0",
             "rule": "margin < 0",
-            "n": 0,
+            "n": 1,
             "verdict": "insufficient_data",
             "median_fair_cost_return": null,
             "median_matched_excess": null,
@@ -264,9 +264,9 @@
         ],
         "recovery": {
           "verdict": "insufficient_data",
-          "n_closed_with_range": 2,
+          "n_closed_with_range": 3,
           "minimum_n": 12,
-          "reached_mid": 0,
+          "reached_mid": 1,
           "reached_low_only": 1,
           "not_reached": 1,
           "no_closes_in_window": 0
@@ -455,7 +455,7 @@
       "sector_rejected_shadow": {
         "population": "mature or closed episodes with a range",
         "n": 1,
-        "n_with_range": 1,
+        "n_with_range": 2,
         "verdict": "insufficient_data",
         "minimum_n": 12,
         "buckets": [
@@ -509,8 +509,8 @@
       "signal_session": "2026-11-16",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.012050825082508185,
-      "matched_excess": 0.0022702419735751347,
+      "fair_cost_return": -0.053304950495049436,
+      "matched_excess": -0.026241700524921644,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-16.",
@@ -546,6 +546,58 @@
       }
     },
     {
+      "episode_id": "hang_seng:1378.HK:primary:2026-11-18",
+      "market": "hang_seng",
+      "ticker": "1378.HK",
+      "column": "primary",
+      "status": "open",
+      "signal_session": "2026-11-18",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0038,
+      "matched_excess": 0.0,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-18.",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 17.97,
+      "entry_reference_unit": "HKD",
+      "price_unit": "HKD",
+      "major_currency": "HKD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/hang_seng/screen/research/1378.HK/sources/filings/bodies/823c08d048be9589.txt",
+            "published_at": "2026-04-24",
+            "headline": "2025 Annual Report",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": null,
+      "inputs": {
+        "financials_path": "docs/data/library/markets/hang_seng/screen/research/1378.HK/sources/financials_annual.json",
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-19",
+        "eps_label": null,
+        "years": [],
+        "chart_path": "docs/data/charts/1378.HK.json"
+      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      }
+    },
+    {
       "episode_id": "hang_seng:2628.HK:primary:2026-11-13",
       "market": "hang_seng",
       "ticker": "2628.HK",
@@ -554,8 +606,8 @@
       "signal_session": "2026-11-13",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.02631082251082259,
-      "matched_excess": -0.009017895968239866,
+      "fair_cost_return": -0.05834545454545456,
+      "matched_excess": -0.03010900998146519,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-13.",
@@ -703,8 +755,8 @@
       "signal_session": "2026-11-13",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.012529345372460473,
-      "matched_excess": -0.0010625658236899753,
+      "fair_cost_return": -0.019301354401805748,
+      "matched_excess": -0.004175972553740359,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-13.",
@@ -1429,7 +1481,7 @@
       "matched_excess": 0.01476433433432215,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-18 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 103.4,
       "entry_reference_unit": "GBX",
@@ -1452,7 +1504,7 @@
       "inputs": {
         "financials_path": "docs/data/research/MEGP.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
+        "fetched_at": "2026-11-18",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/MEGP.L.json"
@@ -1584,11 +1636,18 @@
       "entry_reference_unit": "CAD",
       "price_unit": "CAD",
       "major_currency": "CAD",
-      "statement_currency": null,
+      "statement_currency": "USD",
       "currency": {
-        "reason": "reporting_currency_unstated",
-        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
-        "sources": []
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/tsx60/screen/research/OTEX.TO/sources/filings/bodies/4a5b738b580a7572.txt",
+            "published_at": "2026-11-05",
+            "headline": "10-Q: 10-Q",
+            "currency": "USD"
+          }
+        ]
       },
       "method": null,
       "inputs": {
@@ -1901,8 +1960,8 @@
       "fair_cost_return": -0.01655637982195862,
       "matched_excess": 0.006096140616947188,
       "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-16.",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 17.21,
       "entry_reference_unit": "EUR",
@@ -1917,8 +1976,8 @@
       "method": null,
       "inputs": {
         "financials_path": "docs/data/library/markets/bel20/screen/research/UMI.BR/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
+        "financials_state": "file",
+        "fetched_at": "2026-09-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/UMI.BR.json"
@@ -1943,8 +2002,8 @@
       "signal_session": "2026-11-12",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.006042519685039352,
-      "matched_excess": 0.01633064854472001,
+      "fair_cost_return": 0.024743307086614125,
+      "matched_excess": 0.04670782618665663,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2067,8 +2126,8 @@
       "signal_session": "2026-11-12",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": 0.04017705544933062,
-      "matched_excess": 0.05046518430901127,
+      "fair_cost_return": 0.06694569789674934,
+      "matched_excess": 0.08891021699679184,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2943,8 +3002,8 @@
       "signal_session": "2026-11-17",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.010333712984054551,
+      "matched_excess": -0.0030079187385567254,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-17.",
@@ -5611,7 +5670,7 @@
       "matched_excess": 0.01476433433432215,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-18 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 103.4,
       "entry_reference_unit": "GBX",
@@ -5634,7 +5693,7 @@
       "inputs": {
         "financials_path": "docs/data/research/MEGP.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
+        "fetched_at": "2026-11-18",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/MEGP.L.json"
@@ -7855,9 +7914,9 @@
       "mature": false,
       "fair_cost_return": 0.0029246920121870947,
       "matched_excess": 0.022585811795290955,
-      "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-17.",
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 152.97,
       "entry_reference_unit": "USD",
@@ -7873,28 +7932,103 @@
             "published_at": "2026-04-30",
             "headline": "10-Q: 10-Q",
             "currency": "USD"
+          },
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/FSLR/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-02-24",
+            "currency": "USD"
           }
         ]
       },
-      "method": null,
+      "method": "normalised_earnings",
       "inputs": {
         "financials_path": "docs/data/library/markets/sp500/screen/research/FSLR/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
-        "eps_label": null,
-        "years": [],
+        "financials_state": "file",
+        "fetched_at": "2026-10-30",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2022,
+            "eps": -0.41,
+            "fcf": -30236000.0,
+            "shares": 106551000.0,
+            "fcf_per_share": -0.28377
+          },
+          {
+            "year": 2023,
+            "eps": 7.74,
+            "fcf": -784515000.0,
+            "shares": 107372000.0,
+            "fcf_per_share": -7.306514
+          },
+          {
+            "year": 2024,
+            "eps": 12.02,
+            "fcf": -308077000.0,
+            "shares": 107525000.0,
+            "fcf_per_share": -2.865166
+          },
+          {
+            "year": 2025,
+            "eps": 14.21,
+            "fcf": 1187230000.0,
+            "shares": 107537000.0,
+            "fcf_per_share": 11.0402
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 8.39,
+        "latest_per_share": 14.21,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 10.765,
+        "implied_trailing_pe_close": 152.97,
+        "implied_trailing_pe_eps": 14.21,
+        "implied_trailing_pe_currency": "USD",
+        "fx": null,
+        "normalised_per_share_price_units": 8.39,
         "chart_path": "docs/data/charts/FSLR.json"
       },
-      "range": null,
-      "margin_of_safety": null,
-      "reverse_dcf": null,
-      "fcf_per_share_cross_check": null,
+      "range": {
+        "low": 83.9,
+        "mid": 125.85,
+        "high": 167.8,
+        "unit": "USD"
+      },
+      "margin_of_safety": -0.215495,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 14.21,
+        "low": 142.1,
+        "mid": 177.625,
+        "high": 236.8333,
+        "cross_check": "outside_band",
+        "implied_earnings_yield": 0.054847
+      },
+      "fcf_per_share_cross_check": {
+        "method": "fcf_per_share",
+        "normalised_per_share": 0.146187,
+        "range": {
+          "low": 1.4619,
+          "mid": 2.1928,
+          "high": 2.9237
+        },
+        "cross_check": "outside_band"
+      },
       "recovery": {
-        "label": "no_range",
-        "reached_low": null,
-        "reached_mid": null,
-        "closes_used": 0
-      }
+        "label": "reached_mid",
+        "reached_low": true,
+        "reached_mid": true,
+        "closes_used": 2
+      },
+      "entry_vs_range": "between_mid_and_high"
     },
     {
       "episode_id": "sti:G13.SI:decline_rejected_shadow:2026-11-16",
@@ -8117,39 +8251,114 @@
       "mature": false,
       "fair_cost_return": -0.0035,
       "matched_excess": 0.0,
-      "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-18.",
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 53.76,
       "entry_reference_unit": "USD",
       "price_unit": "USD",
       "major_currency": "USD",
-      "statement_currency": null,
+      "statement_currency": "USD",
       "currency": {
-        "reason": "reporting_currency_unstated",
-        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
-        "sources": []
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/OXY/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-02-18",
+            "currency": "USD"
+          }
+        ]
       },
-      "method": null,
+      "method": "normalised_earnings",
       "inputs": {
         "financials_path": "docs/data/library/markets/sp500/screen/research/OXY/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
-        "eps_label": null,
-        "years": [],
+        "financials_state": "file",
+        "fetched_at": "2026-11-18",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2022,
+            "eps": 12.4,
+            "fcf": 12313000000.0,
+            "shares": 1002000000.0,
+            "fcf_per_share": 12.288423
+          },
+          {
+            "year": 2023,
+            "eps": 3.9,
+            "fcf": 6612000000.0,
+            "shares": 960900000.0,
+            "fcf_per_share": 6.881049
+          },
+          {
+            "year": 2024,
+            "eps": 2.44,
+            "fcf": 5176000000.0,
+            "shares": 967100000.0,
+            "fcf_per_share": 5.352084
+          },
+          {
+            "year": 2025,
+            "eps": 1.61,
+            "fcf": 4105000000.0,
+            "shares": 1000100000.0,
+            "fcf_per_share": 4.10459
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 5.0875,
+        "latest_per_share": 1.61,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 33.3913,
+        "implied_trailing_pe_close": 53.76,
+        "implied_trailing_pe_eps": 1.61,
+        "implied_trailing_pe_currency": "USD",
+        "fx": null,
+        "normalised_per_share_price_units": 5.0875,
         "chart_path": "docs/data/charts/OXY.json"
       },
-      "range": null,
-      "margin_of_safety": null,
-      "reverse_dcf": null,
-      "fcf_per_share_cross_check": null,
+      "range": {
+        "low": 50.875,
+        "mid": 76.3125,
+        "high": 101.75,
+        "unit": "USD"
+      },
+      "margin_of_safety": 0.295528,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 1.61,
+        "low": 16.1,
+        "mid": 20.125,
+        "high": 26.8333,
+        "cross_check": "outside_band",
+        "implied_earnings_yield": 0.094634
+      },
+      "fcf_per_share_cross_check": {
+        "method": "fcf_per_share",
+        "normalised_per_share": 7.156536,
+        "range": {
+          "low": 71.5654,
+          "mid": 107.348,
+          "high": 143.1307
+        },
+        "cross_check": "outside_band"
+      },
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      }
+      },
+      "entry_vs_range": "between_low_and_mid"
     },
     {
       "episode_id": "omxs30:SAND.ST:decline_rejected_shadow:2026-11-18",
@@ -8526,8 +8735,8 @@
       "signal_session": "2026-11-16",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.012050825082508185,
-      "matched_excess": 0.0022702419735751347,
+      "fair_cost_return": -0.053304950495049436,
+      "matched_excess": -0.026241700524921644,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-16.",
@@ -8563,6 +8772,58 @@
       }
     },
     {
+      "episode_id": "hang_seng:1378.HK:draft_v0_exit:2026-11-18",
+      "market": "hang_seng",
+      "ticker": "1378.HK",
+      "column": "draft_v0_exit",
+      "status": "open",
+      "signal_session": "2026-11-18",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0038,
+      "matched_excess": 0.0,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-18.",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 17.97,
+      "entry_reference_unit": "HKD",
+      "price_unit": "HKD",
+      "major_currency": "HKD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/hang_seng/screen/research/1378.HK/sources/filings/bodies/823c08d048be9589.txt",
+            "published_at": "2026-04-24",
+            "headline": "2025 Annual Report",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": null,
+      "inputs": {
+        "financials_path": "docs/data/library/markets/hang_seng/screen/research/1378.HK/sources/financials_annual.json",
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-19",
+        "eps_label": null,
+        "years": [],
+        "chart_path": "docs/data/charts/1378.HK.json"
+      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      }
+    },
+    {
       "episode_id": "hang_seng:2628.HK:draft_v0_exit:2026-11-13",
       "market": "hang_seng",
       "ticker": "2628.HK",
@@ -8571,8 +8832,8 @@
       "signal_session": "2026-11-13",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.02631082251082259,
-      "matched_excess": -0.009017895968239866,
+      "fair_cost_return": -0.05834545454545456,
+      "matched_excess": -0.03010900998146519,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-13.",
@@ -8720,8 +8981,8 @@
       "signal_session": "2026-11-13",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.012529345372460473,
-      "matched_excess": -0.0010625658236899753,
+      "fair_cost_return": -0.019301354401805748,
+      "matched_excess": -0.004175972553740359,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-13.",
@@ -9446,7 +9707,7 @@
       "matched_excess": 0.01476433433432215,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-18 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 103.4,
       "entry_reference_unit": "GBX",
@@ -9469,7 +9730,7 @@
       "inputs": {
         "financials_path": "docs/data/research/MEGP.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
+        "fetched_at": "2026-11-18",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/MEGP.L.json"
@@ -9601,11 +9862,18 @@
       "entry_reference_unit": "CAD",
       "price_unit": "CAD",
       "major_currency": "CAD",
-      "statement_currency": null,
+      "statement_currency": "USD",
       "currency": {
-        "reason": "reporting_currency_unstated",
-        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
-        "sources": []
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/tsx60/screen/research/OTEX.TO/sources/filings/bodies/4a5b738b580a7572.txt",
+            "published_at": "2026-11-05",
+            "headline": "10-Q: 10-Q",
+            "currency": "USD"
+          }
+        ]
       },
       "method": null,
       "inputs": {
@@ -9918,8 +10186,8 @@
       "fair_cost_return": -0.01655637982195862,
       "matched_excess": 0.006096140616947188,
       "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-16.",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 17.21,
       "entry_reference_unit": "EUR",
@@ -9934,8 +10202,8 @@
       "method": null,
       "inputs": {
         "financials_path": "docs/data/library/markets/bel20/screen/research/UMI.BR/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
+        "financials_state": "file",
+        "fetched_at": "2026-09-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/UMI.BR.json"
@@ -9960,8 +10228,8 @@
       "signal_session": "2026-11-16",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.012050825082508185,
-      "matched_excess": 0.0022702419735751347,
+      "fair_cost_return": -0.053304950495049436,
+      "matched_excess": -0.026241700524921644,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-16.",
@@ -9997,6 +10265,58 @@
       }
     },
     {
+      "episode_id": "hang_seng:1378.HK:ladder_no_deadline:2026-11-18",
+      "market": "hang_seng",
+      "ticker": "1378.HK",
+      "column": "ladder_no_deadline",
+      "status": "open",
+      "signal_session": "2026-11-18",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0038,
+      "matched_excess": 0.0,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-18.",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 17.97,
+      "entry_reference_unit": "HKD",
+      "price_unit": "HKD",
+      "major_currency": "HKD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/hang_seng/screen/research/1378.HK/sources/filings/bodies/823c08d048be9589.txt",
+            "published_at": "2026-04-24",
+            "headline": "2025 Annual Report",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": null,
+      "inputs": {
+        "financials_path": "docs/data/library/markets/hang_seng/screen/research/1378.HK/sources/financials_annual.json",
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-19",
+        "eps_label": null,
+        "years": [],
+        "chart_path": "docs/data/charts/1378.HK.json"
+      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      }
+    },
+    {
       "episode_id": "hang_seng:2628.HK:ladder_no_deadline:2026-11-13",
       "market": "hang_seng",
       "ticker": "2628.HK",
@@ -10005,8 +10325,8 @@
       "signal_session": "2026-11-13",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.02631082251082259,
-      "matched_excess": -0.009017895968239866,
+      "fair_cost_return": -0.05834545454545456,
+      "matched_excess": -0.03010900998146519,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-13.",
@@ -10154,8 +10474,8 @@
       "signal_session": "2026-11-13",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.012529345372460473,
-      "matched_excess": -0.0010625658236899753,
+      "fair_cost_return": -0.019301354401805748,
+      "matched_excess": -0.004175972553740359,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-13.",
@@ -10880,7 +11200,7 @@
       "matched_excess": 0.01476433433432215,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-18 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 103.4,
       "entry_reference_unit": "GBX",
@@ -10903,7 +11223,7 @@
       "inputs": {
         "financials_path": "docs/data/research/MEGP.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
+        "fetched_at": "2026-11-18",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/MEGP.L.json"
@@ -11035,11 +11355,18 @@
       "entry_reference_unit": "CAD",
       "price_unit": "CAD",
       "major_currency": "CAD",
-      "statement_currency": null,
+      "statement_currency": "USD",
       "currency": {
-        "reason": "reporting_currency_unstated",
-        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
-        "sources": []
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/tsx60/screen/research/OTEX.TO/sources/filings/bodies/4a5b738b580a7572.txt",
+            "published_at": "2026-11-05",
+            "headline": "10-Q: 10-Q",
+            "currency": "USD"
+          }
+        ]
       },
       "method": null,
       "inputs": {
@@ -11352,8 +11679,8 @@
       "fair_cost_return": -0.01655637982195862,
       "matched_excess": 0.006096140616947188,
       "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-16.",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 17.21,
       "entry_reference_unit": "EUR",
@@ -11368,8 +11695,8 @@
       "method": null,
       "inputs": {
         "financials_path": "docs/data/library/markets/bel20/screen/research/UMI.BR/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
+        "financials_state": "file",
+        "fetched_at": "2026-09-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/UMI.BR.json"
@@ -11394,8 +11721,8 @@
       "signal_session": "2026-11-16",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.012050825082508185,
-      "matched_excess": 0.0022702419735751347,
+      "fair_cost_return": -0.053304950495049436,
+      "matched_excess": -0.026241700524921644,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-16.",
@@ -11431,6 +11758,58 @@
       }
     },
     {
+      "episode_id": "hang_seng:1378.HK:leave_tier:2026-11-18",
+      "market": "hang_seng",
+      "ticker": "1378.HK",
+      "column": "leave_tier",
+      "status": "open",
+      "signal_session": "2026-11-18",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0038,
+      "matched_excess": 0.0,
+      "verdict": "insufficient_data",
+      "reason": "financials_after_signal",
+      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-18.",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 17.97,
+      "entry_reference_unit": "HKD",
+      "price_unit": "HKD",
+      "major_currency": "HKD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/hang_seng/screen/research/1378.HK/sources/filings/bodies/823c08d048be9589.txt",
+            "published_at": "2026-04-24",
+            "headline": "2025 Annual Report",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": null,
+      "inputs": {
+        "financials_path": "docs/data/library/markets/hang_seng/screen/research/1378.HK/sources/financials_annual.json",
+        "financials_state": "file_after_signal",
+        "fetched_at": "2026-11-19",
+        "eps_label": null,
+        "years": [],
+        "chart_path": "docs/data/charts/1378.HK.json"
+      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      }
+    },
+    {
       "episode_id": "hang_seng:2628.HK:leave_tier:2026-11-13",
       "market": "hang_seng",
       "ticker": "2628.HK",
@@ -11439,8 +11818,8 @@
       "signal_session": "2026-11-13",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.02631082251082259,
-      "matched_excess": -0.009017895968239866,
+      "fair_cost_return": -0.05834545454545456,
+      "matched_excess": -0.03010900998146519,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-13.",
@@ -11588,8 +11967,8 @@
       "signal_session": "2026-11-13",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.012529345372460473,
-      "matched_excess": -0.0010625658236899753,
+      "fair_cost_return": -0.019301354401805748,
+      "matched_excess": -0.004175972553740359,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
       "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-13.",
@@ -12314,7 +12693,7 @@
       "matched_excess": 0.01476433433432215,
       "verdict": "insufficient_data",
       "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-10.",
+      "reason_detail": "financials fetched_at 2026-11-18 is after the signal session 2026-11-10.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 103.4,
       "entry_reference_unit": "GBX",
@@ -12337,7 +12716,7 @@
       "inputs": {
         "financials_path": "docs/data/research/MEGP.L/sources/financials_annual.json",
         "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
+        "fetched_at": "2026-11-18",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/MEGP.L.json"
@@ -12469,11 +12848,18 @@
       "entry_reference_unit": "CAD",
       "price_unit": "CAD",
       "major_currency": "CAD",
-      "statement_currency": null,
+      "statement_currency": "USD",
       "currency": {
-        "reason": "reporting_currency_unstated",
-        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
-        "sources": []
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/tsx60/screen/research/OTEX.TO/sources/filings/bodies/4a5b738b580a7572.txt",
+            "published_at": "2026-11-05",
+            "headline": "10-Q: 10-Q",
+            "currency": "USD"
+          }
+        ]
       },
       "method": null,
       "inputs": {
@@ -12786,8 +13172,8 @@
       "fair_cost_return": -0.01655637982195862,
       "matched_excess": 0.006096140616947188,
       "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-16.",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 17.21,
       "entry_reference_unit": "EUR",
@@ -12802,8 +13188,8 @@
       "method": null,
       "inputs": {
         "financials_path": "docs/data/library/markets/bel20/screen/research/UMI.BR/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
+        "financials_state": "file",
+        "fetched_at": "2026-09-15",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/UMI.BR.json"
@@ -12831,8 +13217,8 @@
       "fair_cost_return": 0.018232233502538053,
       "matched_excess": 0.028859000047830523,
       "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-17.",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 1236.8,
       "entry_reference_unit": "EUR",
@@ -12847,8 +13233,8 @@
       "method": null,
       "inputs": {
         "financials_path": "docs/data/library/markets/aex/screen/research/ASML.AS/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
+        "financials_state": "file",
+        "fetched_at": "2026-11-01",
         "eps_label": null,
         "years": [],
         "chart_path": "docs/data/charts/ASML.AS.json"
@@ -13100,39 +13486,114 @@
       "mature": false,
       "fair_cost_return": -0.0035,
       "matched_excess": 0.0,
-      "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-19 is after the signal session 2026-11-18.",
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 53.76,
       "entry_reference_unit": "USD",
       "price_unit": "USD",
       "major_currency": "USD",
-      "statement_currency": null,
+      "statement_currency": "USD",
       "currency": {
-        "reason": "reporting_currency_unstated",
-        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
-        "sources": []
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/OXY/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-02-18",
+            "currency": "USD"
+          }
+        ]
       },
-      "method": null,
+      "method": "normalised_earnings",
       "inputs": {
         "financials_path": "docs/data/library/markets/sp500/screen/research/OXY/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-19",
-        "eps_label": null,
-        "years": [],
+        "financials_state": "file",
+        "fetched_at": "2026-11-18",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2022,
+            "eps": 12.4,
+            "fcf": 12313000000.0,
+            "shares": 1002000000.0,
+            "fcf_per_share": 12.288423
+          },
+          {
+            "year": 2023,
+            "eps": 3.9,
+            "fcf": 6612000000.0,
+            "shares": 960900000.0,
+            "fcf_per_share": 6.881049
+          },
+          {
+            "year": 2024,
+            "eps": 2.44,
+            "fcf": 5176000000.0,
+            "shares": 967100000.0,
+            "fcf_per_share": 5.352084
+          },
+          {
+            "year": 2025,
+            "eps": 1.61,
+            "fcf": 4105000000.0,
+            "shares": 1000100000.0,
+            "fcf_per_share": 4.10459
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 5.0875,
+        "latest_per_share": 1.61,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 33.3913,
+        "implied_trailing_pe_close": 53.76,
+        "implied_trailing_pe_eps": 1.61,
+        "implied_trailing_pe_currency": "USD",
+        "fx": null,
+        "normalised_per_share_price_units": 5.0875,
         "chart_path": "docs/data/charts/OXY.json"
       },
-      "range": null,
-      "margin_of_safety": null,
-      "reverse_dcf": null,
-      "fcf_per_share_cross_check": null,
+      "range": {
+        "low": 50.875,
+        "mid": 76.3125,
+        "high": 101.75,
+        "unit": "USD"
+      },
+      "margin_of_safety": 0.295528,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 1.61,
+        "low": 16.1,
+        "mid": 20.125,
+        "high": 26.8333,
+        "cross_check": "outside_band",
+        "implied_earnings_yield": 0.094634
+      },
+      "fcf_per_share_cross_check": {
+        "method": "fcf_per_share",
+        "normalised_per_share": 7.156536,
+        "range": {
+          "low": 71.5654,
+          "mid": 107.348,
+          "high": 143.1307
+        },
+        "cross_check": "outside_band"
+      },
       "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
-      }
+      },
+      "entry_vs_range": "between_low_and_mid"
     },
     {
       "episode_id": "asx200:WHC.AX:sector_rejected_shadow:2026-11-17",

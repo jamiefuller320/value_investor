@@ -1,6 +1,6 @@
 # Fidelity National Information Services, Inc. (FIS) — Research memo
 
-_Version 13 · Updated 2026-11-19T21:43:05.143494+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-19T23:56:35.910117+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -71,4 +71,9 @@ Q3 leverage, trimmed outlook, leadership turnover and legal overhang remain unre
 ### 2026-11-19T21:43:05.143494+00:00
 No new SEC filings after the 4 Nov Q3 8-K/10-Q; the incremental news batch since the prior refresh has no articles.  
 No material change versus the 17:52 UTC update.  
+Q3 leverage, trimmed outlook, leadership turnover and legal overhang remain unresolved.
+
+### 2026-11-19T23:56:35.910117+00:00
+No new SEC filings after the 4 Nov Q3 8-K/10-Q; the incremental news batch has no articles.  
+No material change versus the 21:43 UTC update.  
 Q3 leverage, trimmed outlook, leadership turnover and legal overhang remain unresolved.

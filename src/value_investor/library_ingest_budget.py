@@ -18,6 +18,11 @@ DEFAULT_MIN_DEEPEN_SECONDS_CAP = 1200.0
 DEFAULT_PER_TICKER_MAX_SECONDS = 320.0
 DEFAULT_MIN_TICKER_START_SECONDS = 45.0
 DEFAULT_BLOCKER_COOLDOWN_HOURS = 6.0
+# Maintenance names are not killed at 320s of wall clock. 320s is how long a
+# fetch or a PDF parse may sit with no progress before that name stops.
+# A single network read still uses its own shorter timeout.
+DEFAULT_NO_PROGRESS_SECONDS = DEFAULT_PER_TICKER_MAX_SECONDS
+DEFAULT_FETCH_TIMEOUT_SECONDS = 60.0
 
 
 def discovery_runtime_budget(max_runtime_seconds: float) -> float:
@@ -103,6 +108,100 @@ def ticker_deadline(
     return min(slot_end, ticker_end)
 
 
+class IngestHangWatch:
+    """Stop a maintenance name when work stops, not when the clock hits 320s.
+
+    ``note_progress`` keeps a long PDF parse alive. ``hung_fetch`` stops a
+    network read that exceeds the fetch timeout. ``parse_stall`` stops a parse
+    that has started and then produced nothing. The shared slot deadline still
+    ends the name so one parse cannot use the whole job.
+    """
+
+    def __init__(
+        self,
+        *,
+        stall_seconds: float = DEFAULT_NO_PROGRESS_SECONDS,
+        fetch_timeout_seconds: float = DEFAULT_FETCH_TIMEOUT_SECONDS,
+        slot_deadline: float | None = None,
+        now: float | None = None,
+    ) -> None:
+        self.stall_seconds = float(stall_seconds)
+        self.fetch_timeout_seconds = float(fetch_timeout_seconds)
+        self.slot_deadline = slot_deadline
+        current = time.monotonic() if now is None else float(now)
+        self.last_progress = current
+        self.parse_started: float | None = None
+        self.stop_reason: str | None = None
+
+    def note_progress(self, *, now: float | None = None) -> None:
+        current = time.monotonic() if now is None else float(now)
+        self.last_progress = current
+        self.parse_started = None
+        self.stop_reason = None
+
+    def begin_parse(self, *, now: float | None = None) -> None:
+        current = time.monotonic() if now is None else float(now)
+        self.parse_started = current
+        self.last_progress = current
+        self.stop_reason = None
+
+    def note_parse_progress(self, *, now: float | None = None) -> None:
+        current = time.monotonic() if now is None else float(now)
+        self.last_progress = current
+
+    def _slot_expired(self, current: float) -> bool:
+        return self.slot_deadline is not None and current >= float(self.slot_deadline)
+
+    def hung_fetch(self, elapsed_seconds: float, *, now: float | None = None) -> str | None:
+        """Stop a fetch that has not returned within the network timeout."""
+        current = time.monotonic() if now is None else float(now)
+        if self._slot_expired(current):
+            self.stop_reason = "runtime_budget"
+            return self.stop_reason
+        if float(elapsed_seconds) >= self.fetch_timeout_seconds:
+            self.stop_reason = "hung_fetch"
+            return self.stop_reason
+        return None
+
+    def parse_stall(self, *, now: float | None = None) -> str | None:
+        """Stop a parse that has made no progress for ``stall_seconds``."""
+        current = time.monotonic() if now is None else float(now)
+        if self._slot_expired(current):
+            self.stop_reason = "runtime_budget"
+            return self.stop_reason
+        if self.parse_started is None:
+            return None
+        if current - self.last_progress >= self.stall_seconds:
+            self.stop_reason = "parse_no_progress"
+            return self.stop_reason
+        return None
+
+    def allow_continuing(self, *, now: float | None = None) -> bool:
+        """True while progress is recent and the shared slot is still open."""
+        current = time.monotonic() if now is None else float(now)
+        if self._slot_expired(current):
+            self.stop_reason = "runtime_budget"
+            return False
+        if current - self.last_progress >= self.stall_seconds:
+            self.stop_reason = "no_progress"
+            return False
+        self.stop_reason = None
+        return True
+
+
+_ACTIVE_HANG_WATCH: IngestHangWatch | None = None
+
+
+def bind_hang_watch(watch: IngestHangWatch | None) -> None:
+    """Install the maintenance watch so a PDF parse can see it."""
+    global _ACTIVE_HANG_WATCH
+    _ACTIVE_HANG_WATCH = watch
+
+
+def active_hang_watch() -> IngestHangWatch | None:
+    return _ACTIVE_HANG_WATCH
+
+
 def should_start_next_ticker(
     *,
     slot_started: float,
@@ -138,6 +237,11 @@ __all__ = [
     "DEFAULT_MIN_DEEPEN_SECONDS_CAP",
     "DEFAULT_MIN_TICKER_START_SECONDS",
     "DEFAULT_PER_TICKER_MAX_SECONDS",
+    "DEFAULT_FETCH_TIMEOUT_SECONDS",
+    "DEFAULT_NO_PROGRESS_SECONDS",
+    "IngestHangWatch",
+    "active_hang_watch",
+    "bind_hang_watch",
     "deadline_reached",
     "discovery_prefer_tickers",
     "discovery_runtime_budget",
