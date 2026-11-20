@@ -97,7 +97,7 @@ if [ "$EXPLORE" = "1" ] && [ "$explore" = "true" ]; then
   ftse-library catalogue-explore --one --json-path /tmp/catalogue_explore.json
   bash "$ROOT/scripts/push_library_ingest_artifacts.sh" \
     "chore: catalogue explorer one name [skip ci]"
-  # One pending buy, after the name record is already saved. Then stop.
+  # One pending buy, after the filing list and the buy signal are saved. Then stop.
   ftse-library catalogue-handoff --one --json-path /tmp/catalogue_handoff.json
   bash "$ROOT/scripts/push_library_ingest_artifacts.sh" \
     "chore: catalogue explorer handoff ingest [skip ci]"

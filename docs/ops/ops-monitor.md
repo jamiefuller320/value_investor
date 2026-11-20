@@ -199,8 +199,10 @@ lane change and readiness gate (see N152 / P1 pin rules).
   `docs/data/library/catalogue_explorer.json` and files an info finding
   (`auto_fixable=false`) with the last name, venue, and seconds. An idle spare
   stream 2 slot writes that file after its seated backlog is idle: one unheld
-  Trading 212 stock, US then Xetra then LSE. Manual drill-down is
-  `ftse-library catalogue-explore --one`. The check does not fetch.
+  Trading 212 stock, US then Xetra then LSE. The stream stops once the filing
+  list and the buy signal are saved. A buy or strong buy is queued, then
+  `ftse-library catalogue-handoff --one` runs the research ingest. Manual
+  drill-down is `ftse-library catalogue-explore --one`. The check does not fetch.
 - **Missing-IR allowlist stall** — ops finding when focus **or spare sprint**
   `unmeasured_stuck` / `zero_body_stuck` tickers still have empty IR allowlist
   after ≥2 intensive 0-improve pins (`check_missing_ir_allowlist_stall`,
@@ -517,7 +519,7 @@ They do **not** deepen ingest or rememo.
 | `check_universe_filing_archive_pack_bottleneck` | **Universe archive pack bottleneck review stale** / **… processing bottleneck** | Bottleneck review missing/stale (>36h) or dominant stage / errors on an allowed dry pass; suspend/quiet_only outcomes do **not** warn. `head_needs_fat_slot` is not an archive suspend | `docs/data/universe_filing_archive_bottleneck_review.json` (owned by `universe-filing-archive-pack.yml` @ 22:00 UTC nightly) | Gated dry lane live |
 | `check_universe_filing_archive_auto_widen` | **Cold-store archive pack auto-widened** | Info when quiet-night auto-widen recently promoted one documented stage (≤36h). Hard ceiling stage 4 (32/128); streak resets on suspend/isolation fail. `auto_fixable=false` — no eng-spray / fourth sprint (N180/N181). See [universe-filing-archive-pack.md](universe-filing-archive-pack.md#scale--revisit) | `docs/data/universe_filing_archive_status.json` → `stage_ladder` | Live |
 | `check_ingest_occupancy_mismatch` | **Ingest occupancy mismatch** | Euro market-status `ingest` badge says `sprint` while dispatch `ingest_cascade.head_needs_fat_slot` is false. Observe-only (`auto_fixable=false`). Does not turn sprint back on, clear a park, or add a stream. The row also records dispatch mode, `should_run_sprint_ingest`, euro `ingest_reason`, cold-store gate time vs dispatch `evaluated_at`, spare `should_run_parallel_ingest`, and eng open count. | `docs/data/ingest_occupancy.json` (ops-monitor `GHA_COMMIT_OPTIONAL`); also `queue_health.ingest_occupancy` | Live |
-| `check_catalogue_explorer` | **Catalogue explorer** | Info each ops-monitor run. Reports how many catalogue names are done and how many seconds the last one took (venue US, then Xetra, then LSE). Missing state means the explorer has not started. `auto_fixable=false`. Does not fetch, add a stream, or seat a market. | `docs/data/library/catalogue_explorer.json` (written by the spare stream 2 hunt when the seated backlog is idle) | Live |
+| `check_catalogue_explorer` | **Catalogue explorer** | Info each ops-monitor run. Reports how many catalogue names are done and how many seconds the last one took (venue US, then Xetra, then LSE). A buy or strong buy is saved as a handoff; research ingest is `catalogue-handoff --one`, not part of the name walk. Missing state means the explorer has not started. `auto_fixable=false`. Does not fetch, add a stream, or seat a market. | `docs/data/library/catalogue_explorer.json` (written by the spare stream 2 hunt when the seated backlog is idle) | Live |
 
 Thin **L521** Ops panel: `docs/data/universe_filing_archive_status.json` (last outcome,
 dry/apply, clash/`capacity_isolation` flags, `stage_ladder` streak/stage, next widen step). Written by the
