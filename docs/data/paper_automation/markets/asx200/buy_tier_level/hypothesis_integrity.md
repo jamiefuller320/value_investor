@@ -1,16 +1,20 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-19T08:39:48.668288+00:00
+Track: `buy_tier_level` · updated 2026-11-20T00:46:59.381828+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **15** / 31 (48% count, 46% NAV)
+- Losers: **14** / 32 (44% count, 43% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
-- Selection feedback:
-  - dividend fails more often among losers (60% vs 19%)
 
 ## Holding reviews
+
+### ALK.AX — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### IMD.AX — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### AAI.AX — weakening / watch_review (-23.7%)
 - research verdict caution
@@ -62,14 +66,6 @@ Track: `buy_tier_level` · updated 2026-11-19T08:39:48.668288+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 63%
-
-### ALK.AX — intact / hold_tolerate (-11.3%)
-- price drawdown alone does not invalidate value thesis
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 58%
 
 ### TUA.AX — weakening / watch_review (-9.2%)
 - research verdict caution
@@ -131,9 +127,14 @@ Track: `buy_tier_level` · updated 2026-11-19T08:39:48.668288+00:00
 - data_quality 0.90
 - conviction 80%
 
-### IMD.AX — weakening / watch_review (+0.0%)
-- research verdict neutral
-- conviction 27% below intact floor
+### PRN.AX — weakening / watch_review (+0.0%)
+- conviction 25% below intact floor
+- still buy
+- research accumulate
+
+### PLS.AX — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 24% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -198,13 +199,6 @@ Track: `buy_tier_level` · updated 2026-11-19T08:39:48.668288+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 58%
-
-### JBH.AX — intact / hold_tolerate (+13.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 50%
 
 ### RMD.AX — intact / hold_tolerate (+16.0%)
 - still buy
