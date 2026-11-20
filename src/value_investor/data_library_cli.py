@@ -833,6 +833,20 @@ def build_parser() -> argparse.ArgumentParser:
     catalogue_p.add_argument("--json-path", type=Path, default=None)
     catalogue_p.set_defaults(func=cmd_catalogue_explore)
 
+    handoff_p = sub.add_parser(
+        "catalogue-handoff",
+        parents=[common],
+        help="Ingest one catalogue name already queued as a buy or strong buy",
+    )
+    handoff_p.add_argument(
+        "--one",
+        action="store_true",
+        help="Ingest a single queued name (the only mode)",
+    )
+    handoff_p.add_argument("--json", action="store_true")
+    handoff_p.add_argument("--json-path", type=Path, default=None)
+    handoff_p.set_defaults(func=cmd_catalogue_handoff)
+
     ingest_sched_p = sub.add_parser(
         "ingest-schedule",
         parents=[common],
@@ -2572,6 +2586,17 @@ def cmd_catalogue_explore(args: argparse.Namespace) -> int:
     from value_investor.catalogue_explorer import explore_one
 
     payload = explore_one(args.root)
+    if args.json or args.json_path is not None:
+        _emit_cli_json(payload, args)
+    else:
+        print(payload.get("action"), payload.get("t212_ticker") or payload.get("reason"))
+    return 0
+
+
+def cmd_catalogue_handoff(args: argparse.Namespace) -> int:
+    from value_investor.catalogue_explorer import run_one_handoff
+
+    payload = run_one_handoff(args.root)
     if args.json or args.json_path is not None:
         _emit_cli_json(payload, args)
     else:

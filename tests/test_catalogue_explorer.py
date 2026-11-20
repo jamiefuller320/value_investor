@@ -8,9 +8,11 @@ from pathlib import Path
 from value_investor.catalogue_explorer import (
     VENUE_ORDER,
     complete_one,
+    default_walk,
     explore_one,
     finding_summary,
     next_unheld,
+    run_one_handoff,
     yahoo_ticker,
 )
 from value_investor.ops_monitor import check_catalogue_explorer
@@ -84,6 +86,63 @@ def test_explore_one_writes_the_timing_record(tmp_path: Path):
     assert state_path.exists()
     again = explore_one(tmp_path, fetch=fetch, instruments=_rows(), held=set())
     assert again["t212_ticker"] == "BBB_US_EQ"
+
+
+def test_buy_screen_hit_is_handed_off_before_the_next_name(tmp_path: Path):
+    ingested: list[str] = []
+
+    def filings(_instrument: dict) -> list:
+        return [{"title": "10-K", "url": "https://example.test/10k"}]
+
+    def screen(instrument: dict) -> dict:
+        fits = instrument["ticker"] == "AAA_US_EQ"
+        return {"signal": "buy" if fits else "hold", "fits": fits}
+
+    def ingest(instrument: dict, _screen: dict, root: Path) -> dict:
+        ingested.append(instrument["ticker"])
+        target = root / "catalogue_explorer" / "research" / "AAA" / "sources"
+        target.mkdir(parents=True, exist_ok=True)
+        (target / "screening_snapshot.json").write_text("{}", encoding="utf-8")
+        return {
+            "financial_years": 4,
+            "filings_summary": {"with_body": 2},
+            "snapshot_path": str(target / "screening_snapshot.json"),
+        }
+
+    def walk(instrument: dict) -> dict:
+        return default_walk(
+            instrument,
+            library_root=tmp_path,
+            filings_fetch=filings,
+            screen=screen,
+        )
+
+    first = explore_one(tmp_path, fetch=walk, instruments=_rows(), held=set())
+    assert first["t212_ticker"] == "AAA_US_EQ"
+    assert first["screen"]["signal"] == "buy"
+    assert first["screen"]["seconds"] >= 0
+    assert first["handoff"]["status"] == "pending"
+    assert first["handoff_saved"] is True
+    assert "full_ingest" not in first
+    assert ingested == []
+    saved = (tmp_path / "catalogue_explorer.json").read_text(encoding="utf-8")
+    assert "pending" in saved
+
+    second = explore_one(tmp_path, fetch=walk, instruments=_rows(), held=set())
+    assert second["t212_ticker"] == "BBB_US_EQ"
+    assert second["screen"]["signal"] == "hold"
+    assert "handoff" not in second
+    assert ingested == []
+
+    done = run_one_handoff(tmp_path, ingest=ingest)
+    assert done["action"] == "ran"
+    assert done["t212_ticker"] == "AAA_US_EQ"
+    assert done["status"] == "done"
+    assert done["ingest"]["financial_years"] == 4
+    assert ingested == ["AAA_US_EQ"]
+    idle = run_one_handoff(tmp_path, ingest=ingest)
+    assert idle["action"] == "idle"
+    assert ingested == ["AAA_US_EQ"]
 
 
 def test_ops_finding_is_info_and_not_auto_fixable(tmp_path: Path):
