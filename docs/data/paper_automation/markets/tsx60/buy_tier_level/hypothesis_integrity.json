@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-11-19T08:40:31.423000+00:00",
-  "as_of": "2026-11-19T03:40:31.327299-05:00",
+  "updated_at": "2026-11-20T15:17:34.124087+00:00",
+  "as_of": "2026-11-20T10:17:33.888300-05:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,164 +16,107 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 11,
-  "underwater_count": 4,
+  "holding_count": 10,
+  "underwater_count": 2,
   "thesis_status_counts": {
-    "intact": 7,
-    "weakening": 4,
-    "broken": 0,
+    "intact": 5,
+    "weakening": 3,
+    "broken": 2,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 11,
-    "loser_count": 4,
-    "loser_share": 0.3636,
-    "loser_nav_share": 0.3566,
+    "holding_count": 10,
+    "loser_count": 2,
+    "loser_share": 0.2,
+    "loser_nav_share": 0.2035,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
-    "within_tolerance": false,
-    "intact_loser_count": 3,
-    "weakening_loser_count": 1,
+    "within_tolerance": true,
+    "intact_loser_count": 2,
+    "weakening_loser_count": 0,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
       "quality": 0.0,
       "dividend": 0.0,
-      "garp": 0.25,
+      "garp": 0.5,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.1429,
-      "quality": 0.0,
-      "dividend": 0.2857,
-      "garp": 0.1429,
-      "risk": 0.0
+      "cheapness": 0.375,
+      "quality": 0.25,
+      "dividend": 0.375,
+      "garp": 0.375,
+      "risk": 0.25
     },
     "selection_feedback_flags": [],
-    "balancing_hint": "trim_weakening_losers",
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
     {
       "ticker": "K.TO",
-      "name": "Kinross Gold Corporation",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": true,
-      "deep_underwater": true,
-      "unrealized_pct": -0.2338,
-      "mark": 27.15,
+      "name": "K.TO",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 35.4343,
       "avg_cost": 35.4343,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8312,
-      "data_quality_score": 1.0,
-      "passed_families": [
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
         "cheapness",
         "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [],
-      "research_verdict": "neutral",
+      "research_verdict": null,
       "reasons": [
-        "research verdict neutral",
-        "still strong_buy",
-        "cheapness family still passes"
+        "cheapness lost and not in buy tier"
       ],
-      "intact_reasons": [
-        "still strong_buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 83%"
-      ],
-      "weaken_reasons": [
-        "research verdict neutral"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "TECK-B.TO",
-      "name": "Teck Resources Limited",
-      "thesis_status": "intact",
-      "recommended_action": "watch_review",
-      "underwater": true,
-      "deep_underwater": true,
-      "unrealized_pct": -0.16,
-      "mark": 75.15,
-      "avg_cost": 89.4615,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7844,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "deep drawdown (-16.0%) \u2014 re-check facts; thesis still intact",
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 78%"
-      ],
+      "intact_reasons": [],
       "weaken_reasons": [],
-      "broken_reasons": []
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
     },
     {
       "ticker": "CNQ.TO",
-      "name": "Canadian Natural Resources Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
+      "name": "CNQ.TO",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.1354,
-      "mark": 65.26,
+      "unrealized_pct": 0.0,
+      "mark": 75.4764,
       "avg_cost": 75.4764,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7104,
-      "data_quality_score": 1.0,
-      "passed_families": [
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
         "cheapness",
         "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
+      "research_verdict": null,
       "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 71%"
+        "cheapness lost and not in buy tier"
       ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 71%"
-      ],
+      "intact_reasons": [],
       "weaken_reasons": [],
-      "broken_reasons": []
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
     },
     {
       "ticker": "ABX.TO",
@@ -187,7 +130,7 @@
       "avg_cost": 56.8343,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4512,
+      "conviction_score": 0.5181,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -205,31 +148,31 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 45%"
+        "conviction 52%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 45%"
+        "conviction 52%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
     },
     {
-      "ticker": "OTEX.TO",
-      "name": "Open Text Corporation",
+      "ticker": "TECK-B.TO",
+      "name": "Teck Resources Limited",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0184,
-      "mark": 32.95,
-      "avg_cost": 33.5672,
+      "unrealized_pct": -0.1219,
+      "mark": 75.15,
+      "avg_cost": 85.5818,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.855,
+      "conviction_score": 0.7844,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -241,20 +184,60 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 86%"
+        "conviction 78%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 86%"
+        "conviction 78%"
       ],
       "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "OTEX.TO",
+      "name": "Open Text Corporation",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0158,
+      "mark": 32.95,
+      "avg_cost": 33.4791,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6843,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "still strong_buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 68%"
+      ],
+      "weaken_reasons": [
+        "research verdict caution"
+      ],
       "broken_reasons": []
     },
     {
@@ -303,9 +286,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0137,
+      "unrealized_pct": 0.01,
       "mark": 181.9,
-      "avg_cost": 179.4342,
+      "avg_cost": 180.103,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.8833,
@@ -456,47 +439,6 @@
         "conviction 42%"
       ],
       "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "SAP.TO",
-      "name": "Saputo Inc.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.1145,
-      "mark": 45.52,
-      "avg_cost": 40.8437,
-      "signal": "buy",
-      "timing_signal": "wait",
-      "conviction_score": 0.2907,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "conviction 29% below intact floor",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "research verdict caution",
-        "conviction 29% below intact floor"
-      ],
       "broken_reasons": []
     }
   ],

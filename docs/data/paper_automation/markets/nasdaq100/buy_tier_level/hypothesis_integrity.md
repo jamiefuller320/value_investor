@@ -1,17 +1,14 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-19T08:40:53.127950+00:00
+Track: `buy_tier_level` · updated 2026-11-20T15:17:37.210427+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **15** / 32 (47% count, 47% NAV)
+- Losers: **15** / 30 (50% count, 50% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
 ## Holding reviews
-
-### AMAT — broken / exit_candidate (+0.6%)
-- cheapness lost and not in buy tier
 
 ### SNDK — weakening / watch_review (-36.3%)
 - research verdict caution
@@ -140,11 +137,23 @@ Track: `buy_tier_level` · updated 2026-11-19T08:40:53.127950+00:00
 - data_quality 1.00
 - conviction 57%
 
-### CSX — weakening / watch_review (-1.3%)
-- left buy tier (hold)
-- conviction 25% below intact floor
+### PYPL — weakening / watch_review (+0.0%)
+- research verdict neutral
+- still strong_buy
+- cheapness family still passes
+
+### MSFT — intact / hold_tolerate (+0.0%)
+- still buy
 - research accumulate
 - cheapness family still passes
+- data_quality 1.00
+- conviction 50%
+
+### AMGN — weakening / watch_review (+0.0%)
+- cheapness family no longer passes
+- conviction 31% below intact floor
+- still buy
+- research accumulate
 
 ### HON — weakening / watch_review (+1.1%)
 - research verdict neutral
@@ -157,27 +166,6 @@ Track: `buy_tier_level` · updated 2026-11-19T08:40:53.127950+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 63%
-
-### CPRT — intact / hold_tolerate (+2.1%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 43%
-
-### GEHC — intact / hold_tolerate (+2.2%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 88%
-
-### ADP — intact / hold_tolerate (+4.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 52%
 
 ### PEP — intact / hold_tolerate (+5.6%)
 - still strong_buy
