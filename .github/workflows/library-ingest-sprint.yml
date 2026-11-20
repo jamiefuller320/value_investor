@@ -2,7 +2,9 @@ name: Library ingest sprint (parallel)
 
 # High-tempo buy-tier filing deepen for parallel queue markets (e.g. sp500 while
 # euro_depth remains focus). Focus market sprint stays on euro-ingest-loop.yml.
-# Cadence mirrors euro focus: Mon–Sat peak + daily off-peak (incl. Sunday after quiet bundle).
+# An empty seated backlog still runs this slot so catalogue explore and
+# catalogue-handoff can take one name. Cadence mirrors euro focus: Mon–Sat peak
+# + daily off-peak (incl. Sunday after quiet bundle).
 on:
   schedule:
     - cron: "45 7 * * 1-6"
@@ -28,7 +30,7 @@ on:
         type: string
         default: "20"
       force:
-        description: "Run even if no parallel sprint markets need ingest"
+        description: "Accepted for older dispatch callers. The slot runs either way, including an empty backlog."
         type: boolean
         default: false
 
@@ -81,7 +83,7 @@ jobs:
           )
           PY
 
-      - name: Skip when no parallel sprint work
+      - name: Run spare slot even when the backlog is empty
         id: gate
         uses: actions/github-script@v8
         env:
@@ -89,18 +91,17 @@ jobs:
           NEEDING: ${{ steps.dispatch.outputs.needing_sprint }}
         with:
           script: |
+            const needing = (process.env.NEEDING || '').split(',').filter(Boolean);
+            core.setOutput('should_run', 'true');
             if (process.env.FORCE === 'true') {
-              core.setOutput('should_run', 'true');
               core.info('force=true — running parallel library ingest sprint');
               return;
             }
-            const needing = (process.env.NEEDING || '').split(',').filter(Boolean);
             if (needing.length === 0) {
-              core.setOutput('should_run', 'false');
-              core.info('No parallel sprint markets with filing gaps');
+              core.info('Empty spare backlog — slot still runs so catalogue explore can take one name');
               return;
             }
-            core.setOutput('should_run', 'true');
+            core.info('Parallel sprint markets with filing gaps: ' + needing.join(','));
 
   library-ingest-sprint:
     needs: check

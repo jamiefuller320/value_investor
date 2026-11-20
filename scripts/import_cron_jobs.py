@@ -633,37 +633,21 @@ def _seed_known_jobs(specs: list[CronJobSpec]) -> dict[str, dict[str, Any]]:
 def _all_selected_have_known_ids(specs: list[CronJobSpec]) -> bool:
     return bool(specs) and all(spec.key in KNOWN_JOB_IDS for spec in specs)
 
-def _parallel_sprint_dispatch_enabled(*, parallel_stream: int = 1) -> bool:
-    """True when any parallel sprint market in ``parallel_stream`` still needs ingest."""
-    from value_investor.agent_model_policy import load_policy
-    from value_investor.library_ingest_dispatch import (
-        list_library_ingest_parallel_sprint_markets,
-        should_run_parallel_sprint_ingest,
-    )
-    from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
+def _spare_sprint_job(spec: CronJobSpec) -> bool:
+    """Spare-stream cron keys stay enabled when the seated backlog is empty.
 
-    policy = load_policy()
-    parallel = list_library_ingest_parallel_sprint_markets(
-        policy=policy,
-        parallel_stream=parallel_stream,
+    An idle slot is the catalogue-explore / catalogue-handoff walk. Turning the
+    cron-job.org job off because ``ingest_parallel_sprint`` / ``_2`` is empty
+    skips that walk. Euro and maintenance gates are unchanged.
+    """
+    return spec.key.startswith("library-ingest-sprint-2-") or spec.key.startswith(
+        "library-ingest-sprint-"
     )
-    for market_id in parallel:
-        health = snapshot_library_buy_tier_filing_health(market_id)
-        if should_run_parallel_sprint_ingest(
-            market_id,
-            health,
-            policy=policy,
-            parallel_stream=parallel_stream,
-        ):
-            return True
-    return False
 
 
 def _job_enabled(spec: CronJobSpec) -> bool:
-    if spec.key.startswith("library-ingest-sprint-2-"):
-        return _parallel_sprint_dispatch_enabled(parallel_stream=2)
-    if spec.key.startswith("library-ingest-sprint-"):
-        return _parallel_sprint_dispatch_enabled(parallel_stream=1)
+    if _spare_sprint_job(spec):
+        return True
     euro_keys = {
         "euro-ingest-loop-morning": "morning",
         "euro-ingest-loop-afternoon": "afternoon",
@@ -740,13 +724,23 @@ def import_job(
             api_key=api_key,
             payload=payload,
         )
-        return {"action": "updated", "title": spec.title, "jobId": current["jobId"]}
+        return {
+            "action": "updated",
+            "title": spec.title,
+            "jobId": current["jobId"],
+            "enabled": bool(payload["job"]["enabled"]),
+        }
 
     created = _cronjob_request("PUT", "/jobs", api_key=api_key, payload=payload)
     job_id = created.get("jobId")
     if job_id is not None:
         existing[spec.title] = {"title": spec.title, "jobId": job_id}
-    return {"action": "created", "title": spec.title, "jobId": job_id}
+    return {
+        "action": "created",
+        "title": spec.title,
+        "jobId": job_id,
+        "enabled": bool(payload["job"]["enabled"]),
+    }
 
 
 def disable_legacy_ingest_jobs(
@@ -893,7 +887,9 @@ def main(argv: list[str] | None = None) -> int:
     else:
         for row in results:
             title = row.get("title", "?")
-            print(f"{row['action']}: {title} (jobId={row.get('jobId', '?')})")
+            enabled = row.get("enabled")
+            enabled_bit = "" if enabled is None else f" enabled={str(bool(enabled)).lower()}"
+            print(f"{row['action']}: {title} (jobId={row.get('jobId', '?')}{enabled_bit})")
     return 0
 
 

@@ -1,8 +1,10 @@
 name: Library ingest sprint 2 (parallel)
 
 # Spare-capacity buy-tier filing deepen for the second parallel queue stream
-# (e.g. asx200). Waits on euro + stream 1, then spends leftover / spare fraction
-# or fill-down. Hour skip is a local fallback only. Cadence: focus +60 min.
+# (e.g. asx200). An empty seated backlog still runs this slot so catalogue
+# explore and catalogue-handoff can take one name. Waits on euro + stream 1,
+# then spends leftover / spare fraction or fill-down. Hour skip is a local
+# fallback only. Cadence: focus +60 min.
 # A predecessor that stays queued or running through the wait yields this slot
 # (idle=false): ingest, gap-closure follow-up, and the artifact push are skipped
 # and the job succeeds. Follow-up needs the loop JSON only the ingest step writes.
@@ -31,7 +33,7 @@ on:
         type: string
         default: "20"
       force:
-        description: "Run even if no parallel sprint 2 markets need ingest"
+        description: "Accepted for older dispatch callers. The slot runs either way, including an empty backlog."
         type: boolean
         default: false
 
@@ -84,7 +86,7 @@ jobs:
           )
           PY
 
-      - name: Skip when no parallel sprint 2 work
+      - name: Run spare slot even when the backlog is empty
         id: gate
         uses: actions/github-script@v8
         env:
@@ -92,18 +94,17 @@ jobs:
           NEEDING: ${{ steps.dispatch.outputs.needing_sprint }}
         with:
           script: |
+            const needing = (process.env.NEEDING || '').split(',').filter(Boolean);
+            core.setOutput('should_run', 'true');
             if (process.env.FORCE === 'true') {
-              core.setOutput('should_run', 'true');
               core.info('force=true — running parallel library ingest sprint 2');
               return;
             }
-            const needing = (process.env.NEEDING || '').split(',').filter(Boolean);
             if (needing.length === 0) {
-              core.setOutput('should_run', 'false');
-              core.info('No parallel sprint 2 markets with filing gaps');
+              core.info('Empty spare backlog — slot still runs so catalogue explore can take one name');
               return;
             }
-            core.setOutput('should_run', 'true');
+            core.info('Parallel sprint markets with filing gaps: ' + needing.join(','));
 
   library-ingest-sprint-2:
     needs: check
