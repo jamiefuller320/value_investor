@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-19T07:51:56.223931+00:00",
+  "generated_at": "2026-11-20T02:37:31.502577+00:00",
   "observe_only": true,
-  "headline": "1 warn instrument(s); trajectory worsening on 1.",
+  "headline": "2 warn instrument(s); trajectory worsening on 2.",
   "surface_freshness": "fresh",
-  "ops_run_at": "2026-11-19T07:46:59.861210+00:00",
-  "warn_instrument_count": 1,
+  "ops_run_at": "2026-11-20T02:32:02.142846+00:00",
+  "warn_instrument_count": 2,
   "trajectory_summary": {
-    "improving": 0,
-    "worsening": 1,
-    "flat": 7,
+    "improving": 1,
+    "worsening": 2,
+    "flat": 5,
     "unknown": 0,
     "history_points": 28,
     "note": "Deltas vs prior dashboard cycle (warn/gap counts; lower is better). Raw instrument stores commit with ops-monitor (L460)."
@@ -20,105 +20,58 @@
       "title": "Buy-tier flip → usable",
       "finding_title": "New buy-tier not yet usable",
       "observe_only": true,
-      "warn_active": false,
-      "severity": "ok",
-      "finding_summary": null,
+      "warn_active": true,
+      "severity": "warn",
+      "finding_summary": "2 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth, ftse_smallcap: euro_depth/POST.VI (no_key_bodies, 26.53h since flip), ftse_smallcap/LSL.L (no_key_bodies, 26.53h since flip). Blocking: no_key_bodies=2.",
       "metrics": {
-        "warn_not_usable": 0,
-        "open_not_usable": 11,
-        "cohort_count": 198,
-        "usable_in_window": 187,
+        "warn_not_usable": 2,
+        "open_not_usable": 13,
+        "cohort_count": 184,
+        "usable_in_window": 171,
         "market_count": 23,
         "blocking_stage_counts": {
-          "no_accumulate_verdict": 11
+          "no_accumulate_verdict": 11,
+          "no_key_bodies": 2
         },
         "sibling_home_open_count": 0,
         "true_no_memo_open_count": 0,
         "warn_sample": [
           {
-            "ticker": "HFD.L",
-            "market_id": "ftse350",
-            "blocking_stage": "no_accumulate_verdict",
+            "ticker": "POST.VI",
+            "market_id": "euro_depth",
+            "blocking_stage": "no_key_bodies",
             "has_memo": true,
-            "memo_home_market": "ftse350",
-            "hours_since_flip": 487.78
+            "memo_home_market": "euro_depth",
+            "hours_since_flip": 26.53
           },
           {
-            "ticker": "JMAT.L",
-            "market_id": "ftse350",
-            "blocking_stage": "no_accumulate_verdict",
+            "ticker": "LSL.L",
+            "market_id": "ftse_smallcap",
+            "blocking_stage": "no_key_bodies",
             "has_memo": true,
-            "memo_home_market": "ftse350",
-            "hours_since_flip": 487.78
-          },
-          {
-            "ticker": "KIE.L",
-            "market_id": "ftse350",
-            "blocking_stage": "no_accumulate_verdict",
-            "has_memo": true,
-            "memo_home_market": "ftse350",
-            "hours_since_flip": 487.78
-          },
-          {
-            "ticker": "RNK.L",
-            "market_id": "ftse350",
-            "blocking_stage": "no_accumulate_verdict",
-            "has_memo": true,
-            "memo_home_market": "ftse350",
-            "hours_since_flip": 487.78
-          },
-          {
-            "ticker": "BT-A.L",
-            "market_id": "ftse350",
-            "blocking_stage": "no_accumulate_verdict",
-            "has_memo": true,
-            "memo_home_market": "ftse350",
-            "hours_since_flip": 295.78
-          },
-          {
-            "ticker": "CKN.L",
-            "market_id": "ftse350",
-            "blocking_stage": "no_accumulate_verdict",
-            "has_memo": true,
-            "memo_home_market": "ftse350",
-            "hours_since_flip": 295.78
-          },
-          {
-            "ticker": "GCP.L",
-            "market_id": "ftse350",
-            "blocking_stage": "no_accumulate_verdict",
-            "has_memo": true,
-            "memo_home_market": "ftse350",
-            "hours_since_flip": 295.78
-          },
-          {
-            "ticker": "GFTU.L",
-            "market_id": "ftse350",
-            "blocking_stage": "no_accumulate_verdict",
-            "has_memo": true,
-            "memo_home_market": "ftse350",
-            "hours_since_flip": 295.78
+            "memo_home_market": "ftse_smallcap",
+            "hours_since_flip": 26.53
           }
         ]
       },
       "primary_metric": "warn_not_usable",
-      "primary_value": 0,
+      "primary_value": 2,
       "primary_label": "Warn cohort (≥24h path-incomplete)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-19T07:47:02.397811+00:00",
-        "age_hours": 0.08,
+        "as_of": "2026-11-20T02:32:04.739309+00:00",
+        "age_hours": 0.09,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 0,
-        "direction": "flat",
-        "label": "Unchanged vs last cycle",
+        "delta": 2,
+        "direction": "worsening",
+        "label": "Worse since last cycle",
         "prior_value": 0,
-        "prior_at": "2026-11-18T02:36:41.083762+00:00"
+        "prior_at": "2026-11-19T02:39:46.876584+00:00"
       }
     },
     {
@@ -150,17 +103,17 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-19T07:47:23.102998+00:00",
+        "as_of": "2026-11-20T02:32:26.046754+00:00",
         "age_hours": 0.08,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 4,
-        "direction": "worsening",
-        "label": "Worse since last cycle",
-        "prior_value": 1,
-        "prior_at": "2026-11-18T02:36:41.083762+00:00"
+        "delta": 0,
+        "direction": "flat",
+        "label": "Unchanged vs last cycle",
+        "prior_value": 5,
+        "prior_at": "2026-11-19T02:39:46.876584+00:00"
       }
     },
     {
@@ -172,10 +125,10 @@
       "severity": "ok",
       "finding_summary": null,
       "metrics": {
-        "miss_rate": 0.3131,
-        "enter_body_miss_count": 155,
-        "cohort_count": 495,
-        "open_still_missing_bodies": 12,
+        "miss_rate": 0.3126,
+        "enter_body_miss_count": 156,
+        "cohort_count": 499,
+        "open_still_missing_bodies": 14,
         "by_market": {
           "ftse350": {
             "cohort_count": 72,
@@ -184,10 +137,10 @@
             "miss_rate": 0.1667
           },
           "sp500": {
-            "cohort_count": 153,
+            "cohort_count": 154,
             "enter_body_miss_count": 50,
             "open_still_missing_bodies": 0,
-            "miss_rate": 0.3268
+            "miss_rate": 0.3247
           },
           "asx200": {
             "cohort_count": 36,
@@ -196,16 +149,16 @@
             "miss_rate": 0.4167
           },
           "euro_depth": {
-            "cohort_count": 43,
-            "enter_body_miss_count": 14,
-            "open_still_missing_bodies": 4,
-            "miss_rate": 0.3256
+            "cohort_count": 45,
+            "enter_body_miss_count": 15,
+            "open_still_missing_bodies": 5,
+            "miss_rate": 0.3333
           },
           "ftse_smallcap": {
-            "cohort_count": 10,
+            "cohort_count": 11,
             "enter_body_miss_count": 5,
-            "open_still_missing_bodies": 2,
-            "miss_rate": 0.5
+            "open_still_missing_bodies": 3,
+            "miss_rate": 0.4545
           },
           "tsx60": {
             "cohort_count": 15,
@@ -318,23 +271,23 @@
         }
       },
       "primary_metric": "open_still_missing_bodies",
-      "primary_value": 12,
+      "primary_value": 14,
       "primary_label": "Open flips still missing key bodies (archive-miss proxy)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-19T07:47:23.638171+00:00",
+        "as_of": "2026-11-20T02:32:26.513631+00:00",
         "age_hours": 0.08,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 0,
-        "direction": "flat",
-        "label": "Unchanged vs last cycle",
+        "delta": 2,
+        "direction": "worsening",
+        "label": "Worse since last cycle",
         "prior_value": 12,
-        "prior_at": "2026-11-18T02:36:41.083762+00:00"
+        "prior_at": "2026-11-19T02:39:46.876584+00:00"
       }
     },
     {
@@ -360,7 +313,7 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-19T07:47:23.811733+00:00",
+        "as_of": "2026-11-20T02:32:26.714549+00:00",
         "age_hours": 0.08,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
@@ -370,7 +323,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-11-18T02:36:41.083762+00:00"
+        "prior_at": "2026-11-19T02:39:46.876584+00:00"
       }
     },
     {
@@ -383,7 +336,7 @@
       "finding_summary": null,
       "metrics": {
         "market_count": 23,
-        "open_count": 1429,
+        "open_count": 1452,
         "closed_count": 0,
         "first_episode_closed_count": 0,
         "source_records_missing_market_id": 0,
@@ -396,7 +349,7 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-19T07:47:23.814972+00:00",
+        "as_of": "2026-11-20T02:32:26.717347+00:00",
         "age_hours": 0.08,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
@@ -406,7 +359,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-11-18T02:36:41.083762+00:00"
+        "prior_at": "2026-11-19T02:39:46.876584+00:00"
       }
     },
     {
@@ -471,8 +424,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-19T07:47:45.308483+00:00",
-        "age_hours": 0.07,
+        "as_of": "2026-11-20T02:32:55.854293+00:00",
+        "age_hours": 0.08,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -482,7 +435,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 42,
-        "prior_at": "2026-11-18T02:36:41.083762+00:00"
+        "prior_at": "2026-11-19T02:39:46.876584+00:00"
       }
     },
     {
@@ -493,37 +446,37 @@
       "influences_live": false,
       "warn_active": false,
       "severity": "info",
-      "finding_summary": "L652 parallel timing lenses: candidates=38 (buy=24 sell=14); looking=48 entered=43 abandoned=47; concurrence_mean=1.132; buy_watch_armed=0. Observe-only fixed-stake v0; concurrence companion only (N241 not_now); no Package L / no sealed zoo. See docs/ops/parallel-timing-lenses.md.",
+      "finding_summary": "L652 parallel timing lenses: candidates=38 (buy=24 sell=14); looking=40 entered=43 abandoned=55; concurrence_mean=1.132; buy_watch_armed=0. Observe-only fixed-stake v0; concurrence companion only (N241 not_now); no Package L / no sealed zoo. See docs/ops/parallel-timing-lenses.md.",
       "metrics": {
         "candidate_count": 38,
         "buy_candidates": 24,
         "sell_candidates": 14,
-        "lenses_looking": 48,
+        "lenses_looking": 40,
         "lenses_entered": 43,
-        "lenses_abandoned": 47,
+        "lenses_abandoned": 55,
         "concurrence_mean": 1.132,
         "buy_watch_armed": 0,
         "package": "M"
       },
       "primary_metric": "lenses_looking",
-      "primary_value": 48,
-      "primary_label": "Lenses looking (entered=43; abandoned=47)",
+      "primary_value": 40,
+      "primary_label": "Lenses looking (entered=43; abandoned=55)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-19T07:47:45.533067+00:00",
-        "age_hours": 0.07,
+        "as_of": "2026-11-20T02:32:56.069202+00:00",
+        "age_hours": 0.08,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory_note": "Activity delta vs prior cycle — looking→entered/abandoned is expected; not a P1 gap instrument.",
       "trajectory": {
-        "delta": 0,
-        "direction": "flat",
-        "label": "Unchanged vs last cycle",
+        "delta": -8,
+        "direction": "improving",
+        "label": "Better since last cycle",
         "prior_value": 48,
-        "prior_at": "2026-11-18T02:36:41.083762+00:00"
+        "prior_at": "2026-11-19T02:39:46.876584+00:00"
       }
     },
     {
@@ -535,7 +488,7 @@
       "package": "M",
       "warn_active": false,
       "severity": "info",
-      "finding_summary": "Lab learning progress: MFT open/closed=42 / 158; median fair-cost=0.0046; shadows_eligible=True; L652 looking/entered/abandoned=48/43/47; concurrence_mean=1.132; learning_marks=172; gaps=had_themes=2 miss_themes=2 scored_reviews=50. Package M observe strip; influences_live=false; never Package L / N241. Dashboard: Automation → Observe utilization.",
+      "finding_summary": "Lab learning progress: MFT open/closed=42 / 158; median fair-cost=0.0046; shadows_eligible=True; L652 looking/entered/abandoned=40/43/55; concurrence_mean=1.132; learning_marks=172; gaps=had_themes=2 miss_themes=2 scored_reviews=58. Package M observe strip; influences_live=false; never Package L / N241. Dashboard: Automation → Observe utilization.",
       "metrics": {
         "lab_open": 42,
         "lab_closed": 158,
@@ -574,9 +527,9 @@
         "lab_knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
         "lab_tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
         "lab_epoch_history_n": 1,
-        "lenses_looking": 48,
+        "lenses_looking": 40,
         "lenses_entered": 43,
-        "lenses_abandoned": 47,
+        "lenses_abandoned": 55,
         "concurrence_mean": 1.132,
         "entered_by_lens": {
           "buy_cheap_trend_confirm": 10,
@@ -598,14 +551,14 @@
         ],
         "concurrence_outcome_note": "Thin fair-cost×concurrence join (single band) — show concurrence mean; thick LQ dashboard parked.",
         "had_but_ignored_theme_counts": {
-          "B1_cheapness": 150,
-          "B2_technical": 100
+          "B1_cheapness": 174,
+          "B2_technical": 116
         },
         "missing_that_might_help_theme_counts": {
-          "news_polarity": 50,
-          "sma_level": 12
+          "news_polarity": 58,
+          "sma_level": 20
         },
-        "scored_outcome_reviews": 50,
+        "scored_outcome_reviews": 58,
         "outcome_gap_note": null,
         "lens_fair_cost_n": 14,
         "learning_marks_n": 172
@@ -617,8 +570,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-11-19T07:47:45.308483+00:00",
-        "age_hours": 0.07,
+        "as_of": "2026-11-20T02:32:55.854293+00:00",
+        "age_hours": 0.08,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -628,54 +581,11 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 172,
-        "prior_at": "2026-11-18T02:36:41.083762+00:00"
+        "prior_at": "2026-11-19T02:39:46.876584+00:00"
       }
     }
   ],
   "history": [
-    {
-      "at": "2026-11-02T07:51:06.535077+00:00",
-      "buy_tier_flip_lag": {
-        "primary_value": 24,
-        "warn_active": true,
-        "freshness_state": "fresh"
-      },
-      "decision_input_inventory": {
-        "primary_value": 8,
-        "warn_active": true,
-        "freshness_state": "fresh"
-      },
-      "universe_filing_archive_miss_rate": {
-        "primary_value": 17,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "shard_nav_fx_warp": {
-        "primary_value": 0,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "combined_tagged_learning": {
-        "primary_value": 0,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "cue_consumer_mft": {
-        "primary_value": 40,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "parallel_timing_lenses": {
-        "primary_value": 48,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "lab_learning_progress": {
-        "primary_value": 161,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      }
-    },
     {
       "at": "2026-11-03T02:36:54.506837+00:00",
       "buy_tier_flip_lag": {
@@ -1828,6 +1738,49 @@
       },
       "parallel_timing_lenses": {
         "primary_value": 48,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "lab_learning_progress": {
+        "primary_value": 172,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      }
+    },
+    {
+      "at": "2026-11-20T02:37:29.891647+00:00",
+      "buy_tier_flip_lag": {
+        "primary_value": 2,
+        "warn_active": true,
+        "freshness_state": "fresh"
+      },
+      "decision_input_inventory": {
+        "primary_value": 5,
+        "warn_active": true,
+        "freshness_state": "fresh"
+      },
+      "universe_filing_archive_miss_rate": {
+        "primary_value": 14,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "shard_nav_fx_warp": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "combined_tagged_learning": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "cue_consumer_mft": {
+        "primary_value": 42,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "parallel_timing_lenses": {
+        "primary_value": 40,
         "warn_active": false,
         "freshness_state": "fresh"
       },

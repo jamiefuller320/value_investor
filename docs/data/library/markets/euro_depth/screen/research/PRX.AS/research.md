@@ -1,6 +1,6 @@
 # Prosus N.V. (PRX.AS) — Research memo
 
-_Version 5 · Updated 2026-11-19T21:49:28.332872+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-20T02:33:33.142852+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.62
-Rationale: Sell-side Buy headlines and consolidated earnings guidance add colour, but Tencent-linked weakness, investment drag and unverified screen TTM FCF still weaken the buy case.
+Rationale: Sell-side Buy reiterations and trading-statement headlines add colour, but Tencent-linked weakness, investment drag and unverified screen TTM FCF still weaken the buy case.
 RiskTags: governance, customer_concentration, accounting, leverage
 
 ## Weekly updates
@@ -32,4 +32,9 @@ No new filing bodies in the pack; Yahoo quarterly cash flow is still empty, so s
 ### 2026-11-19T21:49:28.332872+00:00
 The incremental batch adds consolidated earnings guidance (to Sept 2026) and a JP Morgan Buy headline; guidance detail is not in the pack.  
 Tencent-driven weakness, the trading-statement flow and Deutsche/Citi buys remain in the manifest.  
+Yahoo quarterly cash flow is still empty; screen TTM FCF remains unverified.
+
+### 2026-11-20T02:33:33.142852+00:00
+No new articles in the incremental news batch since the 19 Nov refresh.  
+Tencent weakness, the trading statement, sell-side Buys and consolidated guidance headlines remain the latest manifest items.  
 Yahoo quarterly cash flow is still empty; screen TTM FCF remains unverified.

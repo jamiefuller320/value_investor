@@ -2,8 +2,8 @@
   "schema_version": 1,
   "instrument_id": "parallel_timing_lenses",
   "deferred_id": "L652",
-  "generated_at": "2026-11-19T07:47:45.533067+00:00",
-  "asof": "2026-11-19",
+  "generated_at": "2026-11-20T02:32:56.069202+00:00",
+  "asof": "2026-11-20",
   "observe_only": true,
   "influences_live": false,
   "package": "M",
@@ -107,9 +107,9 @@
     "candidate_count": 38,
     "buy_candidates": 24,
     "sell_candidates": 14,
-    "lenses_looking": 48,
+    "lenses_looking": 40,
     "lenses_entered": 43,
-    "lenses_abandoned": 47,
+    "lenses_abandoned": 55,
     "buy_watch_armed": 0,
     "concurrence_mean": 1.132,
     "concurrence_samples": 38
@@ -2097,7 +2097,7 @@
           "side": "sell",
           "role": "peer",
           "catalog_role": "learning",
-          "status": "looking",
+          "status": "abandoned",
           "rule_kind": "stub_tech_exit",
           "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
           "trail": [
@@ -2247,6 +2247,13 @@
               "cites": [],
               "note": "stub_tech_break_wait",
               "influences_live": false
+            },
+            {
+              "day": "2026-11-20",
+              "action": "abandon",
+              "cites": [],
+              "note": "look_timeout_21d",
+              "influences_live": false
             }
           ],
           "episode": {
@@ -2263,15 +2270,26 @@
           },
           "outcome_review": {
             "had_but_ignored": {
-              "text": null,
-              "cites": []
+              "text": "PIT info available but not weighted by sell_tech_break: B1:models_passed=11.0; B1:weighted_model_score=0.6577227272727273; B1:data_quality_score=0.9",
+              "cites": [
+                "B1:models_passed=11.0",
+                "B1:weighted_model_score=0.6577227272727273",
+                "B1:data_quality_score=0.9",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
             },
             "missing_that_might_help": {
-              "text": null,
-              "cites": []
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650); no marked SMA/support level",
+              "cites": [
+                "entry_news_polarity=no_usable_news",
+                "price_vs_sma200_pct=missing"
+              ]
             },
-            "scored_at": null,
-            "influences_live": false
+            "scored_at": "2026-11-20",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
           },
           "buy_watch": null,
           "influences_live": false
@@ -2282,7 +2300,7 @@
           "side": "sell",
           "role": "peer",
           "catalog_role": "learning",
-          "status": "looking",
+          "status": "abandoned",
           "rule_kind": "stub_failed_breakout",
           "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
           "trail": [
@@ -2432,6 +2450,13 @@
               "cites": [],
               "note": "stub_failed_breakout_wait",
               "influences_live": false
+            },
+            {
+              "day": "2026-11-20",
+              "action": "abandon",
+              "cites": [],
+              "note": "look_timeout_21d",
+              "influences_live": false
             }
           ],
           "episode": {
@@ -2448,15 +2473,26 @@
           },
           "outcome_review": {
             "had_but_ignored": {
-              "text": null,
-              "cites": []
+              "text": "PIT info available but not weighted by sell_failed_breakout: B1:models_passed=11.0; B1:weighted_model_score=0.6577227272727273; B1:data_quality_score=0.9",
+              "cites": [
+                "B1:models_passed=11.0",
+                "B1:weighted_model_score=0.6577227272727273",
+                "B1:data_quality_score=0.9",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
             },
             "missing_that_might_help": {
-              "text": null,
-              "cites": []
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650); no marked SMA/support level",
+              "cites": [
+                "entry_news_polarity=no_usable_news",
+                "price_vs_sma200_pct=missing"
+              ]
             },
-            "scored_at": null,
-            "influences_live": false
+            "scored_at": "2026-11-20",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
           },
           "buy_watch": null,
           "influences_live": false
@@ -3336,7 +3372,7 @@
           "side": "sell",
           "role": "peer",
           "catalog_role": "learning",
-          "status": "looking",
+          "status": "abandoned",
           "rule_kind": "stub_tech_exit",
           "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
           "trail": [
@@ -3486,6 +3522,13 @@
               "cites": [],
               "note": "stub_tech_break_wait",
               "influences_live": false
+            },
+            {
+              "day": "2026-11-20",
+              "action": "abandon",
+              "cites": [],
+              "note": "look_timeout_21d",
+              "influences_live": false
             }
           ],
           "episode": {
@@ -3502,15 +3545,26 @@
           },
           "outcome_review": {
             "had_but_ignored": {
-              "text": null,
-              "cites": []
+              "text": "PIT info available but not weighted by sell_tech_break: B1:models_passed=10.0; B1:weighted_model_score=0.5929090909090908; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=10.0",
+                "B1:weighted_model_score=0.5929090909090908",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.625"
+              ]
             },
             "missing_that_might_help": {
-              "text": null,
-              "cites": []
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650); no marked SMA/support level",
+              "cites": [
+                "entry_news_polarity=no_usable_news",
+                "price_vs_sma200_pct=missing"
+              ]
             },
-            "scored_at": null,
-            "influences_live": false
+            "scored_at": "2026-11-20",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
           },
           "buy_watch": null,
           "influences_live": false
@@ -3521,7 +3575,7 @@
           "side": "sell",
           "role": "peer",
           "catalog_role": "learning",
-          "status": "looking",
+          "status": "abandoned",
           "rule_kind": "stub_failed_breakout",
           "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
           "trail": [
@@ -3671,6 +3725,13 @@
               "cites": [],
               "note": "stub_failed_breakout_wait",
               "influences_live": false
+            },
+            {
+              "day": "2026-11-20",
+              "action": "abandon",
+              "cites": [],
+              "note": "look_timeout_21d",
+              "influences_live": false
             }
           ],
           "episode": {
@@ -3687,15 +3748,26 @@
           },
           "outcome_review": {
             "had_but_ignored": {
-              "text": null,
-              "cites": []
+              "text": "PIT info available but not weighted by sell_failed_breakout: B1:models_passed=10.0; B1:weighted_model_score=0.5929090909090908; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=10.0",
+                "B1:weighted_model_score=0.5929090909090908",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.625"
+              ]
             },
             "missing_that_might_help": {
-              "text": null,
-              "cites": []
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650); no marked SMA/support level",
+              "cites": [
+                "entry_news_polarity=no_usable_news",
+                "price_vs_sma200_pct=missing"
+              ]
             },
-            "scored_at": null,
-            "influences_live": false
+            "scored_at": "2026-11-20",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
           },
           "buy_watch": null,
           "influences_live": false
@@ -4241,7 +4313,7 @@
           "side": "sell",
           "role": "peer",
           "catalog_role": "learning",
-          "status": "looking",
+          "status": "abandoned",
           "rule_kind": "stub_tech_exit",
           "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
           "trail": [
@@ -4391,6 +4463,13 @@
               "cites": [],
               "note": "stub_tech_break_wait",
               "influences_live": false
+            },
+            {
+              "day": "2026-11-20",
+              "action": "abandon",
+              "cites": [],
+              "note": "look_timeout_21d",
+              "influences_live": false
             }
           ],
           "episode": {
@@ -4407,15 +4486,26 @@
           },
           "outcome_review": {
             "had_but_ignored": {
-              "text": null,
-              "cites": []
+              "text": "PIT info available but not weighted by sell_tech_break: B1:models_passed=12.0; B1:weighted_model_score=0.5968500000000001; B1:data_quality_score=0.9",
+              "cites": [
+                "B1:models_passed=12.0",
+                "B1:weighted_model_score=0.5968500000000001",
+                "B1:data_quality_score=0.9",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
             },
             "missing_that_might_help": {
-              "text": null,
-              "cites": []
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650); no marked SMA/support level",
+              "cites": [
+                "entry_news_polarity=no_usable_news",
+                "price_vs_sma200_pct=missing"
+              ]
             },
-            "scored_at": null,
-            "influences_live": false
+            "scored_at": "2026-11-20",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
           },
           "buy_watch": null,
           "influences_live": false
@@ -4426,7 +4516,7 @@
           "side": "sell",
           "role": "peer",
           "catalog_role": "learning",
-          "status": "looking",
+          "status": "abandoned",
           "rule_kind": "stub_failed_breakout",
           "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
           "trail": [
@@ -4576,6 +4666,13 @@
               "cites": [],
               "note": "stub_failed_breakout_wait",
               "influences_live": false
+            },
+            {
+              "day": "2026-11-20",
+              "action": "abandon",
+              "cites": [],
+              "note": "look_timeout_21d",
+              "influences_live": false
             }
           ],
           "episode": {
@@ -4592,15 +4689,26 @@
           },
           "outcome_review": {
             "had_but_ignored": {
-              "text": null,
-              "cites": []
+              "text": "PIT info available but not weighted by sell_failed_breakout: B1:models_passed=12.0; B1:weighted_model_score=0.5968500000000001; B1:data_quality_score=0.9",
+              "cites": [
+                "B1:models_passed=12.0",
+                "B1:weighted_model_score=0.5968500000000001",
+                "B1:data_quality_score=0.9",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
             },
             "missing_that_might_help": {
-              "text": null,
-              "cites": []
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650); no marked SMA/support level",
+              "cites": [
+                "entry_news_polarity=no_usable_news",
+                "price_vs_sma200_pct=missing"
+              ]
             },
-            "scored_at": null,
-            "influences_live": false
+            "scored_at": "2026-11-20",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
           },
           "buy_watch": null,
           "influences_live": false
@@ -5146,7 +5254,7 @@
           "side": "sell",
           "role": "peer",
           "catalog_role": "learning",
-          "status": "looking",
+          "status": "abandoned",
           "rule_kind": "stub_tech_exit",
           "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
           "trail": [
@@ -5296,6 +5404,13 @@
               "cites": [],
               "note": "stub_tech_break_wait",
               "influences_live": false
+            },
+            {
+              "day": "2026-11-20",
+              "action": "abandon",
+              "cites": [],
+              "note": "look_timeout_21d",
+              "influences_live": false
             }
           ],
           "episode": {
@@ -5312,15 +5427,26 @@
           },
           "outcome_review": {
             "had_but_ignored": {
-              "text": null,
-              "cites": []
+              "text": "PIT info available but not weighted by sell_tech_break: B1:models_passed=8.0; B1:weighted_model_score=0.5546727272727272; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=8.0",
+                "B1:weighted_model_score=0.5546727272727272",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.375"
+              ]
             },
             "missing_that_might_help": {
-              "text": null,
-              "cites": []
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650); no marked SMA/support level",
+              "cites": [
+                "entry_news_polarity=no_usable_news",
+                "price_vs_sma200_pct=missing"
+              ]
             },
-            "scored_at": null,
-            "influences_live": false
+            "scored_at": "2026-11-20",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
           },
           "buy_watch": null,
           "influences_live": false
@@ -5331,7 +5457,7 @@
           "side": "sell",
           "role": "peer",
           "catalog_role": "learning",
-          "status": "looking",
+          "status": "abandoned",
           "rule_kind": "stub_failed_breakout",
           "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
           "trail": [
@@ -5481,6 +5607,13 @@
               "cites": [],
               "note": "stub_failed_breakout_wait",
               "influences_live": false
+            },
+            {
+              "day": "2026-11-20",
+              "action": "abandon",
+              "cites": [],
+              "note": "look_timeout_21d",
+              "influences_live": false
             }
           ],
           "episode": {
@@ -5497,15 +5630,26 @@
           },
           "outcome_review": {
             "had_but_ignored": {
-              "text": null,
-              "cites": []
+              "text": "PIT info available but not weighted by sell_failed_breakout: B1:models_passed=8.0; B1:weighted_model_score=0.5546727272727272; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=8.0",
+                "B1:weighted_model_score=0.5546727272727272",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.375"
+              ]
             },
             "missing_that_might_help": {
-              "text": null,
-              "cites": []
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650); no marked SMA/support level",
+              "cites": [
+                "entry_news_polarity=no_usable_news",
+                "price_vs_sma200_pct=missing"
+              ]
             },
-            "scored_at": null,
-            "influences_live": false
+            "scored_at": "2026-11-20",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
           },
           "buy_watch": null,
           "influences_live": false
