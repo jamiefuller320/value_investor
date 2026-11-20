@@ -215,6 +215,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.capricornenergy.com/media/qqogvtdy/capricorn-energy-ar-2024.pdf",
         "https://www.capricornenergy.com/media/cgoiklie/capricorn-energy-plc-interim-results-2026.pdf",
     ],
+    # eng-20261120-02: ftse_smallcap LSL.L buy-tier no_key_bodies — Investegate has H1 RNS bodies but
+    # zero annual rows; lslps.co.uk /uploads/media_file/ statutory AR PDFs fetch (interim via RNS).
+    "LSL.L": [
+        "https://www.lslps.co.uk/uploads/media_file/Annual%20Report%202025.pdf",
+        "https://www.lslps.co.uk/uploads/media_file/Annual%20report%202024.pdf",
+    ],
     # eng-20261102-01: ftse350 EZJ.L gap-closure had empty IR allowlist (0 refetch); Q4 CDN issuer PDFs.
     "EZJ.L": [
         "https://s203.q4cdn.com/522538739/files/doc_financials/2025/ar/easyJetARA25_DIGITAL_sm.pdf",
