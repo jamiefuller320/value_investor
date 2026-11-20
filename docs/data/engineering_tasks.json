@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-11-20T07:54:22.916757+00:00",
+  "compiled_at": "2026-11-20T09:53:59.258636+00:00",
   "run_at": null,
-  "task_count": 300,
+  "task_count": 301,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -4430,6 +4430,46 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/674",
       "pr_number": 674,
       "merged_at": "2026-09-16T16:11:25.884730+00:00"
+    },
+    {
+      "id": "eng-20261120-04",
+      "area": "ops",
+      "title": "Workflow fix: automation orchestrator failure",
+      "summary": "GitHub workflow automation-orchestrator.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/44690653873",
+      "priority": "high",
+      "priority_score": 90.0,
+      "source": "workflow_failure",
+      "evidence": {
+        "workflow": "automation-orchestrator.yml",
+        "run_id": "44690653873",
+        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/44690653873",
+        "signature": [
+          "orchestrator",
+          "dispatch_github_workflow",
+          "workflow_dispatch",
+          "automation.orchestrator"
+        ]
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        ".github/workflows/automation-orchestrator.yml",
+        "scripts/dispatch_orchestrator.sh",
+        "scripts/dispatch_github_workflow.sh",
+        "src/value_investor/automation_status.py",
+        "tests/test_import_cron_jobs.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20261112-02",
@@ -19618,5 +19658,6 @@
     "last_fingerprint": "clash_blocked|no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
     "last_sent_at": "2026-11-20T02:49:40.775519+00:00",
     "cooldown_hours": 12.0
-  }
+  },
+  "workflow_failure_compiled": true
 }
