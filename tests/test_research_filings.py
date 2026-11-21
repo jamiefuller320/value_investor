@@ -14658,6 +14658,103 @@ def test_parked_source_hunter_andr_vi_euro_depth_has_fetchable_ir():
     assert "annual-report-2025" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_evn_vi_builtins(tmp_path: Path):
+    """eng-20261121-02: EVN.VI IWB — evn.at FY2024-25 Jahresfinanzbericht + H1 2025-26 interim PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("EVN.VI", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) == 1
+    assert len(interim) == 1
+    assert "Jahresfinanzbericht-2024-25" in annual[0]["url"]
+    assert "1-HJ-2025-26" in interim[0]["url"]
+
+
+def test_load_ir_url_allowlist_canonicalizes_evn_vi_dead_publications_url(tmp_path: Path):
+    """Dead /en/investor-relations/publications/ URL maps to live Jahresfinanzbericht PDF."""
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    live = _BUILTIN_IR_URLS["EVN.VI"][0]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"EVN.VI": [dead]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["EVN.VI"]
+    assert dead not in mapping["EVN.VI"]
+    rows = fetch_filings_ir_allowlist("EVN.VI", path=path)
+    annual = [row for row in rows if row["period"] == "annual"]
+    assert len(annual) == 1
+    assert annual[0]["url"] == live
+
+
+def test_refetch_ir_allowlist_migrates_evn_vi_dead_publications_url(tmp_path: Path, monkeypatch):
+    """Indexed unfetchable EVN.VI IR row is rewritten to the live Jahresfinanzbericht URL."""
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    live = _BUILTIN_IR_URLS["EVN.VI"][0]
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(json.dumps({"urls": {"EVN.VI": [dead]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_07bb52dd9c03b279",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — publications/",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "ir_allowlist_fetch_failed",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return "EVN AG consolidated income statement revenue earnings " * 20, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "EVN.VI",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    migrated = [row for row in saved["filings"] if row.get("url") == live]
+    assert migrated
+    assert migrated[0].get("unfetchable") is not True
+    assert migrated[0]["has_body"] is True
+
+
+def test_parked_source_hunter_evn_vi_euro_depth_has_fetchable_ir():
+    """eng-20261121-02: EVN.VI evn.at statutory PDFs fetch and validate (hunter confirmed)."""
+    assert "EVN.VI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("EVN.VI")
+    assert len(rows) == 2
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) == 1
+    assert len(interim) == 1
+    annual_body = _live_fetch_filing_body(annual[0]["url"])
+    if not annual_body:
+        pytest.skip("EVN.VI annual body fetch unavailable (rate-limit / network) — retry later")
+    assert len(annual_body) >= 10000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], annual_body, ticker="EVN.VI")
+    assert valid, reason
+
+
 def test_parked_source_hunter_cai_vi_atx_has_fetchable_ir():
     """eng-20261021-08: CAI.VI caimmo.com FY2025 annual + H1 2026 interim PDFs fetch and validate."""
     assert "CAI.VI" not in PARKED_SOURCE_HUNTER_SKIP

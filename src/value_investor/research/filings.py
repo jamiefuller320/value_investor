@@ -788,8 +788,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "C5H": [
         "https://cdn.prod.website-files.com/69b7ef256b857dda4aea6179/69c2b338210820632d00ff19_2a0d98224d9897df732ad96934d79ca9_Cairn%20Homes%20AR25%20Financial%20statementspdf.pdf",
     ],
+    # euro_depth IWB blocker — eng-20261121-02: /en/investor-relations/publications/ 404s;
+    # evn.at getmedia Jahresfinanzbericht FY2024-25 + H1 2025-26 interim PDFs fetch.
     "EVN.VI": [
-        "https://www.evn.at/en/investor-relations/publications/",
+        "https://www.evn.at/getmedia/cf5d1356-1622-4d84-ae5a-5cb5c7dbecb6/EVN_Jahresfinanzbericht-2024-25.pdf",
+        "https://www.evn.at/getmedia/0c27139b-a913-4269-9f01-93da1382a10d/EVN-Ergebnis-1-HJ-2025-26.pdf",
     ],
     "WIE.VI": [
         "https://www.wienerberger.com/en/investors/reports-presentations.html",
@@ -5941,6 +5944,10 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     "https://www.andritz.com/resource/blob/520884/andritz-annual-financial-report-2025-en.pdf": (
         "https://www.andritz.com/resource/blob/689306/6ad9400073c46323b95b1be977870245/andritz-annual-report-2025-data.pdf"
     ),
+    # eng-20261121-02: EVN.VI dead publications hub 404s; FY2024-25 Jahresfinanzbericht PDF serves.
+    "https://www.evn.at/en/investor-relations/publications/": (
+        "https://www.evn.at/getmedia/cf5d1356-1622-4d84-ae5a-5cb5c7dbecb6/EVN_Jahresfinanzbericht-2024-25.pdf"
+    ),
     # eng-20260908-24: /en/investors 404s; 2025 integrated report PDF still serves.
     "https://www.azelis.com/en/investors": (
         "https://www.azelis.com/sites/default/files/uploads/Azelis%20Group%20NV%20-%20Integrated%20report%202025%20(2).pdf"
@@ -6130,6 +6137,9 @@ def _ir_allowlist_unfetchable_may_retry(
         return True
     # eng-20261120-03: UNA.AS SEC rows stayed skipped_unfetchable with has_body (stale flags).
     if host.endswith("sec.gov"):
+        return True
+    # eng-20261121-02: EVN.VI evn.at getmedia PDFs stayed skipped_unfetchable after publications hub 404.
+    if host.endswith("evn.at"):
         return True
     if reason != "ir_allowlist_fetch_failed":
         return False
@@ -6376,6 +6386,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # eng-20261119-02: K.TO — FY2025 40-F EX-99.2 + Q2 2026 6-K EX-99.1 slugs lack period tokens.
     "https://www.sec.gov/Archives/edgar/data/701818/000110465926035268/kgc-20251231xex99d2.htm": "annual",
     "https://www.sec.gov/Archives/edgar/data/701818/000110465926088237/tm2621038d1_ex99-1.htm": "interim",
+    # eng-20261121-02: EVN.VI evn.at getmedia slugs lack annual/interim tokens.
+    "https://www.evn.at/getmedia/cf5d1356-1622-4d84-ae5a-5cb5c7dbecb6/EVN_Jahresfinanzbericht-2024-25.pdf": "annual",
+    "https://www.evn.at/getmedia/0c27139b-a913-4269-9f01-93da1382a10d/EVN-Ergebnis-1-HJ-2025-26.pdf": "interim",
     # eng-20261107-02: AZM.MI — emarketstorage CONSOB comunicati slugs are date_hash only.
     "https://www.emarketstorage.it/sites/default/files/comunicati/2026-04/20260402_181268.pdf": "annual",
     "https://www.emarketstorage.it/sites/default/files/comunicati/2025-07/20250731_170567.pdf": "interim",
