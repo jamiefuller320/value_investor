@@ -6093,6 +6093,18 @@ def _migrate_ir_allowlist_row_url(
     return item, True
 
 
+def _strip_ir_allowlist_stale_unfetchable(row: dict[str, Any]) -> tuple[dict[str, Any], bool]:
+    """Drop contradictory ``unfetchable`` flags on IR rows that already have bodies."""
+    item = dict(row)
+    if not _is_ir_allowlist_row(item):
+        return item, False
+    if not item.get("has_body") or not item.get("unfetchable"):
+        return item, False
+    for key in ("unfetchable", "unfetchable_reason", "unfetchable_at"):
+        item.pop(key, None)
+    return item, True
+
+
 def _ir_allowlist_unfetchable_may_retry(
     row: dict[str, Any],
     *,
@@ -7186,6 +7198,7 @@ def refetch_ir_allowlist_filing_bodies(
         filings = refreshed
 
     retry_cleared = 0
+    stale_unfetchable_cleared = 0
     if allowlist_urls:
         refreshed: list[dict[str, Any]] = []
         for row in filings:
@@ -7198,9 +7211,12 @@ def refetch_ir_allowlist_filing_bodies(
                 for key in ("unfetchable", "unfetchable_reason", "unfetchable_at"):
                     item.pop(key, None)
                 retry_cleared += 1
+            item, stripped = _strip_ir_allowlist_stale_unfetchable(item)
+            if stripped:
+                stale_unfetchable_cleared += 1
             refreshed.append(item)
         filings = refreshed
-        if retry_cleared:
+        if retry_cleared or stale_unfetchable_cleared:
             payload["filings"] = filings
             payload["summary"] = summarize_filings(filings)
             index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
@@ -7416,6 +7432,8 @@ def refetch_ir_allowlist_filing_bodies(
                     item["has_body"] = True
                     item["body_path"] = str(path)
                     item["body_content_hash"] = content_hash
+                    for key in ("unfetchable", "unfetchable_reason", "unfetchable_at"):
+                        item.pop(key, None)
                     item = _apply_headline_period(item, body_snippet=body[:4000])
                     known_body_hashes[content_hash] = row_id
                     if fetch_source and fetch_source.startswith("pdf_"):
@@ -7442,6 +7460,7 @@ def refetch_ir_allowlist_filing_bodies(
         "investegate_fallbacks": investegate_fallbacks,
         "skipped_unfetchable": skipped_unfetchable,
         "retry_cleared": retry_cleared,
+        "stale_unfetchable_cleared": stale_unfetchable_cleared,
         "pre_merge_migrated": pre_merge_migrated,
         "deadline_hit": deadline_hit,
         "merge": merge_meta,

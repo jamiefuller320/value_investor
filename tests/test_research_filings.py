@@ -7543,6 +7543,71 @@ def test_ir_allowlist_unfetchable_may_retry_sec_una_as_eng_20261120_03():
     )
 
 
+@patch("value_investor.research.filings._fetch_ir_allowlist_body")
+def test_refetch_ir_allowlist_una_as_clears_stale_unfetchable_eng_20261121_01(
+    mock_fetch_body, tmp_path: Path
+):
+    """eng-20261121-01: UNA.AS SEC annual row must not stay unfetchable after body reconcile (igc-20261007-01)."""
+    from value_investor.research.filings import refetch_ir_allowlist_filing_bodies
+
+    mock_fetch_body.return_value = (None, None)
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    sec_annual_url = (
+        "https://www.sec.gov/Archives/edgar/data/217410/000021741026000007/ul-20251231.htm"
+    )
+    filings = [
+        {
+            "id": "ir_1cf6b4b53a71449c",
+            "source": "ir_allowlist",
+            "headline": "IR allowlist document — ul-20251231.htm",
+            "url": sec_annual_url,
+            "period": "annual",
+            "has_body": True,
+            "body_path": str(filings_dir / "bodies" / "ir_1cf6b4b53a71449c.txt"),
+            "unfetchable": True,
+            "unfetchable_reason": "ir_allowlist_fetch_failed",
+        },
+        {
+            "id": "ir_bc9aacbb180ec244",
+            "source": "ir_allowlist",
+            "headline": "IR allowlist document — ir-q2-2025-full-announcement.pdf",
+            "url": "https://www.unilever.com/files/ir-q2-2025-full-announcement.pdf",
+            "period": "interim",
+            "has_body": False,
+            "unfetchable": True,
+            "unfetchable_reason": "ir_allowlist_fetch_failed",
+        },
+    ]
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir()
+    (bodies_dir / "ir_1cf6b4b53a71449c.txt").write_text(
+        "Unilever PLC consolidated turnover operating profit " * 50,
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": filings,
+                "summary": {"total": 2, "with_body": 1, "annual": 1, "interim": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "UNA.AS",
+        company_name="Unilever PLC",
+        max_bodies=5,
+    )
+    assert int(result.get("stale_unfetchable_cleared") or 0) >= 1
+    assert result["attempted"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    annual = next(row for row in saved["filings"] if sec_annual_url in row["url"])
+    assert annual.get("has_body") is True
+    assert annual.get("unfetchable") is not True
+
+
 def test_sanitize_investegate_announcement_url_strips_br_suffix_eng_20261009_03():
     """eng-20261009-03: JD.L index row had %3Cbr%3E in Investegate href — refetch 0/3."""
     dirty = (
