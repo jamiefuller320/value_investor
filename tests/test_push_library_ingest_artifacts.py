@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import textwrap
@@ -222,3 +223,115 @@ def test_ingest_and_action_workflows_dispatch_pages_after_skip_ci() -> None:
     grow = (workflows / "library-grow.yml").read_text(encoding="utf-8")
     assert "market-status" in grow
     assert "docs/data/market_status.json" in grow
+
+
+def test_push_merges_catalogue_cursor_with_a_finished_handoff(tmp_path: Path):
+    """A screen commit must not put a finished ingest back to pending."""
+    remote = tmp_path / "remote.git"
+    work = tmp_path / "work"
+    _git(tmp_path, "init", "--bare", str(remote))
+    _git(tmp_path, "-C", str(remote), "symbolic-ref", "HEAD", "refs/heads/main")
+    _git(tmp_path, "clone", str(remote), str(work))
+    _git(work, "config", "user.email", "test@example.com")
+    _git(work, "config", "user.name", "test")
+    library = work / "docs" / "data" / "library"
+    library.mkdir(parents=True)
+    state = library / "catalogue_explorer.json"
+    state.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "completed": ["AAA_US_EQ"],
+                "runs": [],
+                "handoffs": [{"t212_ticker": "AAA_US_EQ", "status": "pending", "signal": "buy"}],
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    _git(work, "add", "docs/data/library/catalogue_explorer.json")
+    _git(work, "commit", "-m", "seed")
+    _git(work, "branch", "-M", "main")
+    _git(work, "push", "-u", "origin", "main")
+
+    other = tmp_path / "other"
+    _git(tmp_path, "clone", str(remote), str(other))
+    _git(other, "config", "user.email", "test@example.com")
+    _git(other, "config", "user.name", "test")
+    other_state = other / "docs" / "data" / "library" / "catalogue_explorer.json"
+    other_state.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "completed": ["AAA_US_EQ", "CCC_US_EQ"],
+                "runs": [],
+                "handoffs": [
+                    {
+                        "t212_ticker": "AAA_US_EQ",
+                        "status": "done",
+                        "signal": "buy",
+                        "ingest": {"seconds": 4},
+                    }
+                ],
+                "updated_at": "2026-11-21T01:00:00+00:00",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    _git(other, "add", "docs/data/library/catalogue_explorer.json")
+    _git(other, "commit", "-m", "handoff done")
+    _git(other, "push", "origin", "main")
+
+    state.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "completed": ["AAA_US_EQ", "BBB_US_EQ"],
+                "runs": [
+                    {
+                        "t212_ticker": "BBB_US_EQ",
+                        "at": "2026-11-21T02:00:00+00:00",
+                        "signal": "hold",
+                        "screen_seconds": 2.0,
+                        "venue": "US",
+                        "seconds": 2.5,
+                        "outcome": "miss",
+                    }
+                ],
+                "handoffs": [{"t212_ticker": "AAA_US_EQ", "status": "pending", "signal": "buy"}],
+                "last": {
+                    "t212_ticker": "BBB_US_EQ",
+                    "at": "2026-11-21T02:00:00+00:00",
+                    "seconds": 2.5,
+                },
+                "updated_at": "2026-11-21T02:00:00+00:00",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    script = Path(__file__).resolve().parents[1] / "scripts" / "push_library_ingest_artifacts.sh"
+    result = subprocess.run(
+        ["bash", str(script), "chore: catalogue explorer one name [skip ci]"],
+        cwd=work,
+        env={**os.environ, "MAX_ATTEMPTS": "2"},
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, textwrap.dedent(
+        f"""
+        push script failed
+        stdout: {result.stdout}
+        stderr: {result.stderr}
+        """
+    )
+    _git(work, "fetch", "origin")
+    raw = _git(work, "show", "origin/main:docs/data/library/catalogue_explorer.json").stdout
+    merged = json.loads(raw)
+    assert merged["completed"] == ["AAA_US_EQ", "CCC_US_EQ", "BBB_US_EQ"]
+    saved = {row["t212_ticker"]: row for row in merged["handoffs"]}
+    assert saved["AAA_US_EQ"]["status"] == "done"
+    assert saved["AAA_US_EQ"]["ingest"]["seconds"] == 4
+    assert merged["last"]["t212_ticker"] == "BBB_US_EQ"

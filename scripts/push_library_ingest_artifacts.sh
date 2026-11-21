@@ -53,6 +53,43 @@ path_is_allowed() {
   return 1
 }
 
+# Two lanes commit catalogue_explorer.json. Restoring one copy wholesale would
+# drop the other lane's cursor or a finished ingest. Merge the origin file
+# (already checked out) with the stashed copy.
+CATALOGUE_STATE="docs/data/library/catalogue_explorer.json"
+
+restore_artifact() {
+  local path="$1" ref="$2"
+  if [ "$path" != "$CATALOGUE_STATE" ]; then
+    git checkout "$ref" -- "$path" 2>/dev/null || true
+    return
+  fi
+  local base_tmp incoming_tmp src_root
+  base_tmp="$(mktemp)"
+  incoming_tmp="$(mktemp)"
+  if [ -f "$path" ]; then
+    cp "$path" "$base_tmp"
+  else
+    printf '%s\n' '{"schema_version":1,"completed":[],"runs":[],"handoffs":[]}' > "$base_tmp"
+  fi
+  if git cat-file -e "$ref:$path" 2>/dev/null; then
+    git show "$ref:$path" > "$incoming_tmp"
+  else
+    cp "$base_tmp" "$incoming_tmp"
+  fi
+  src_root="$(cd "$(dirname "$0")/.." && pwd)"
+  PYTHONPATH="${src_root}/src${PYTHONPATH:+:$PYTHONPATH}" \
+    python3 - "$base_tmp" "$incoming_tmp" "$path" <<'PY'
+import sys
+from pathlib import Path
+
+from value_investor.catalogue_explorer import merge_state_files
+
+merge_state_files(Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3]))
+PY
+  rm -f "$base_tmp" "$incoming_tmp"
+}
+
 stage_library_ingest_artifacts() {
   local path
   for path in "${LIBRARY_INGEST_ARTIFACT_PATHS[@]}"; do
@@ -103,7 +140,7 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
     while IFS= read -r path; do
       [ -z "$path" ] && continue
       if path_is_allowed "$path"; then
-        git checkout "$ref" -- "$path" 2>/dev/null || true
+        restore_artifact "$path" "$ref"
       fi
     done < "$DIRTY_LIST"
   fi

@@ -1,18 +1,21 @@
-"""One Trading 212 catalogue name per idle spare slot.
+"""Trading 212 catalogue walk for the two spare slots.
 
-Phase E. After the seated backlog has nothing left to fetch, either spare
-stream takes the next STOCK the library does not already hold. Venue order is US, then
-Xetra (DE), then LSE. One name is fetched to completion and the seconds are
-stored on ``docs/data/library/catalogue_explorer.json``. Fundamentals are
-screened on that same walk. The stream stops once the filing list and the
-buy signal are saved. A buy or strong buy is queued for a separate research
-ingest and is not downloaded inside the stream. A later pass can see
-where a parallel fetch would help. This module does not parallelise, and it
-does not add the name to an index or an investment book.
+After the seated backlog has nothing left to fetch, stream 1 screens the next
+STOCK the library does not already hold, commits, and takes another, until the
+job must stop so that commit can finish. Venue order is US, then Xetra (DE),
+then LSE. Stream 2 does not take catalogue names. It ingests the buy queue one
+name at a time and commits each one. An empty queue exits.
 
-The name match stays the catalogue's own ticker, ISIN, and symbol. Held
-overlay rows are skipped. A miss is still marked completed so the cursor
-cannot sit on the same line.
+Each new row stores the ticker, venue, total seconds, screen seconds, signal,
+and outcome on ``docs/data/library/catalogue_explorer.json``. A buy or strong
+buy is queued. The research ingest is stream 2's handoff, not part of the
+screen. Both lanes reload that file before they write, and a push merges the
+two copies, so a handoff commit does not wipe the cursor and a screen commit
+does not wipe a finished ingest.
+
+This module does not add a third screener, and it does not add the name to an
+index or an investment book. Held overlay rows are skipped. A miss is still
+marked completed so the cursor cannot sit on the same line.
 """
 
 from __future__ import annotations
@@ -105,6 +108,22 @@ def load_held_keys(library_root: Path | None = None) -> set[str]:
     return keys
 
 
+def count_skipped_held(instruments: list[dict[str, Any]], held: set[str]) -> int:
+    """Held STOCK lines on US, Xetra, and LSE. A count, not a second queue."""
+    skipped = 0
+    for row in instruments:
+        if not isinstance(row, dict):
+            continue
+        if str(row.get("type") or "").upper() != "STOCK":
+            continue
+        ticker = str(row.get("ticker") or "").strip()
+        if t212_venue(ticker) not in VENUE_ORDER:
+            continue
+        if _held(row, held):
+            skipped += 1
+    return skipped
+
+
 def _held(row: dict[str, Any], held: set[str]) -> bool:
     raw = str(row.get("ticker") or "").strip()
     ticker = raw.upper()
@@ -164,14 +183,13 @@ def _slim_rows(rows: list[Any]) -> list[dict[str, Any]]:
     return slim
 
 
-def complete_one(
-    state: dict[str, Any],
+def _fetch_record(
     instrument: dict[str, Any],
     *,
     fetch: FetchFn,
     now: datetime | None = None,
 ) -> dict[str, Any]:
-    """Fetch one catalogue name and record it, including a miss or an error."""
+    """Time one catalogue fetch. Does not write the shared state file."""
     ticker = str(instrument.get("ticker") or "").strip()
     started = time.perf_counter()
     outcome = "miss"
@@ -184,30 +202,31 @@ def complete_one(
     except Exception as exc:  # noqa: BLE001 — a failed name must still move the cursor
         outcome = "error"
         detail = {"rows": 0, "error": str(exc)}
-    seconds = round(time.perf_counter() - started, 3)
-    stamp = (now or datetime.now(UTC)).isoformat()
     record = {
         "t212_ticker": ticker,
         "venue": t212_venue(ticker),
         "yahoo": yahoo_ticker(ticker),
         "isin": instrument.get("isin"),
         "name": instrument.get("shortName") or instrument.get("name"),
-        "seconds": seconds,
+        "seconds": round(time.perf_counter() - started, 3),
         "outcome": outcome,
-        "at": stamp,
+        "at": (now or datetime.now(UTC)).isoformat(),
         **detail,
     }
-    completed = [str(item).upper() for item in (state.get("completed") or [])]
-    token = ticker.upper()
-    if token and token not in completed:
-        completed.append(token)
-    state["completed"] = completed
-    runs = [row for row in (state.get("runs") or []) if isinstance(row, dict)]
-    runs.append({key: value for key, value in record.items() if key != "filings"})
-    state["runs"] = runs[-40:]
-    state["last"] = record
-    state["updated_at"] = stamp
-    state["schema_version"] = 1
+    _stamp_screen_fields(record)
+    return record
+
+
+def complete_one(
+    state: dict[str, Any],
+    instrument: dict[str, Any],
+    *,
+    fetch: FetchFn,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Fetch one catalogue name and record it, including a miss or an error."""
+    record = _fetch_record(instrument, fetch=fetch, now=now)
+    apply_completion(state, record)
     return record
 
 
@@ -412,7 +431,11 @@ def explore_one(
     instruments: list[dict[str, Any]] | None = None,
     held: set[str] | None = None,
 ) -> dict[str, Any]:
-    """Take one unheld STOCK, or report that the three venues are covered."""
+    """Take one unheld STOCK, or report that the three venues are covered.
+
+    The fetch runs before the state file is reloaded, so a handoff that finished
+    while this name was screening is still there when the screen is saved.
+    """
     root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
     state = load_state(root)
     if instruments is None:
@@ -437,9 +460,14 @@ def explore_one(
             "venues": list(VENUE_ORDER),
         }
     walker = fetch or (lambda instrument: default_walk(instrument, library_root=root))
-    record = complete_one(state, chosen, fetch=walker)
-    queued = queue_handoff(state, record)
-    save_state(state, root)
+    record = _fetch_record(chosen, fetch=walker)
+    fresh = load_state(root)
+    queued = apply_completion(
+        fresh,
+        record,
+        skipped_held=count_skipped_held(instruments, held_keys),
+    )
+    save_state(fresh, root)
     write_name_artifact(root, record)
     if queued is not None:
         record["handoff_saved"] = True
@@ -481,61 +509,492 @@ def queue_handoff(state: dict[str, Any], record: dict[str, Any]) -> dict[str, An
     return item
 
 
+def _stamp_screen_fields(record: dict[str, Any]) -> None:
+    """Every new row keeps ticker, venue, total seconds, screen seconds, signal, outcome."""
+    screen = record.get("screen") if isinstance(record.get("screen"), dict) else None
+    if screen is None:
+        record["screen_seconds"] = None
+        record["signal"] = None
+        return
+    record["screen_seconds"] = screen.get("seconds")
+    record["signal"] = screen.get("signal")
+
+
+def _row_screen_seconds(row: dict[str, Any]) -> float | None:
+    if row.get("screen_seconds") is not None:
+        try:
+            return float(row["screen_seconds"])
+        except (TypeError, ValueError):
+            return None
+    screen = row.get("screen")
+    if isinstance(screen, dict) and screen.get("seconds") is not None:
+        try:
+            return float(screen["seconds"])
+        except (TypeError, ValueError):
+            return None
+    return None
+
+
+def _row_signal(row: dict[str, Any]) -> str | None:
+    if row.get("signal") is not None:
+        return str(row["signal"])
+    screen = row.get("screen")
+    if isinstance(screen, dict) and screen.get("signal") is not None:
+        return str(screen["signal"])
+    return None
+
+
+def _empty_totals() -> dict[str, Any]:
+    return {
+        "screened": 0,
+        "signals": {},
+        "signals_n": 0,
+        "screen_seconds_sum": 0.0,
+        "screen_seconds_n": 0,
+        "outcomes": {},
+    }
+
+
+def _add_row_to_totals(state: dict[str, Any], record: dict[str, Any]) -> None:
+    totals = state.get("totals")
+    if not isinstance(totals, dict):
+        totals = _empty_totals()
+    signals = totals.get("signals")
+    if not isinstance(signals, dict):
+        signals = {}
+    signal = _row_signal(record)
+    key = signal if signal else "none"
+    signals[key] = int(signals.get(key) or 0) + 1
+    totals["signals"] = signals
+    totals["signals_n"] = int(totals.get("signals_n") or 0) + 1
+    seconds = _row_screen_seconds(record)
+    if seconds is not None:
+        totals["screen_seconds_sum"] = float(totals.get("screen_seconds_sum") or 0.0) + seconds
+        totals["screen_seconds_n"] = int(totals.get("screen_seconds_n") or 0) + 1
+    outcomes = totals.get("outcomes")
+    if not isinstance(outcomes, dict):
+        outcomes = {}
+    outcome = str(record.get("outcome") or "unknown")
+    outcomes[outcome] = int(outcomes.get(outcome) or 0) + 1
+    totals["outcomes"] = outcomes
+    state["totals"] = totals
+
+
+def _backfill_totals_from_runs(state: dict[str, Any]) -> None:
+    """Count rows already on file once, when the saved runs still cover them."""
+    totals = state.get("totals") if isinstance(state.get("totals"), dict) else None
+    completed = [str(item).upper() for item in (state.get("completed") or []) if str(item).strip()]
+    already = int((totals or {}).get("signals_n") or 0)
+    if totals is not None and already == len(completed):
+        return
+    if already > 0:
+        return
+    by_ticker: dict[str, dict[str, Any]] = {}
+    for row in state.get("runs") or []:
+        if not isinstance(row, dict):
+            continue
+        token = str(row.get("t212_ticker") or "").upper()
+        if token:
+            by_ticker[token] = row
+    if any(token not in by_ticker for token in completed):
+        return
+    state["totals"] = _empty_totals()
+    for token in completed:
+        _add_row_to_totals(state, by_ticker[token])
+    state["totals"]["screened"] = len(completed)
+
+
+def apply_completion(
+    state: dict[str, Any],
+    record: dict[str, Any],
+    *,
+    skipped_held: int | None = None,
+) -> dict[str, Any] | None:
+    """Merge one screen onto ``state``. Does not drop a handoff it did not queue."""
+    _backfill_totals_from_runs(state)
+    ticker = str(record.get("t212_ticker") or "").strip()
+    token = ticker.upper()
+    completed = [str(item).upper() for item in (state.get("completed") or []) if str(item).strip()]
+    if token and token not in completed:
+        completed.append(token)
+        _add_row_to_totals(state, record)
+    state["completed"] = completed
+    if isinstance(state.get("totals"), dict):
+        state["totals"]["screened"] = len(completed)
+    runs = [row for row in (state.get("runs") or []) if isinstance(row, dict)]
+    slim = {key: value for key, value in record.items() if key != "filings"}
+    stamp = str(record.get("at") or "")
+    if not any(
+        str(row.get("t212_ticker") or "") == ticker and str(row.get("at") or "") == stamp
+        for row in runs
+    ):
+        runs.append(slim)
+    state["runs"] = runs[-40:]
+    queued = queue_handoff(state, record)
+    state["last"] = record
+    state["updated_at"] = record.get("at")
+    state["schema_version"] = 1
+    if skipped_held is not None:
+        state["skipped_held"] = int(skipped_held)
+    return queued
+
+
 def run_one_handoff(
     library_root: Path | None = None,
     *,
     ingest: Callable[[dict[str, Any], dict[str, Any], Path], dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Ingest one queued buy. The spare stream does not call this."""
+    """Ingest one queued buy. Stream 2 loops this. Stream 1 does not call it.
+
+    The ingest runs before the state file is reloaded, so a screen saved during
+    the parse stays on the cursor.
+    """
     root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
     state = load_state(root)
     handoffs = [row for row in (state.get("handoffs") or []) if isinstance(row, dict)]
     pending = next((row for row in handoffs if row.get("status") == "pending"), None)
     if pending is None:
         return {"action": "idle", "reason": "no_handoff", "pending": 0}
+    ticker = str(pending.get("t212_ticker") or "")
     instrument = {
         "ticker": pending.get("t212_ticker"),
         "shortName": pending.get("name"),
     }
     screen = {"signal": pending.get("signal"), "fits": True}
     started = time.perf_counter()
+    update: dict[str, Any]
     try:
         runner = ingest or default_full_ingest
         raw = runner(instrument, screen, root)
-        pending["ingest"] = _slim_ingest(raw if isinstance(raw, dict) else {}, seconds=0.0)
-        pending["status"] = "done"
-        pending.pop("error", None)
+        update = {
+            "status": "done",
+            "ingest": _slim_ingest(raw if isinstance(raw, dict) else {}, seconds=0.0),
+        }
     except Exception as exc:  # noqa: BLE001 — a failed handoff stays visible and is not retried here
-        pending["status"] = "error"
-        pending["error"] = str(exc)
-        pending["ingest"] = {"error": str(exc)}
-    pending["ingest"]["seconds"] = round(time.perf_counter() - started, 3)
-    pending["finished_at"] = datetime.now(UTC).isoformat()
+        update = {
+            "status": "error",
+            "error": str(exc),
+            "ingest": {"error": str(exc)},
+        }
+    ingest_row = update.get("ingest")
+    if not isinstance(ingest_row, dict):
+        ingest_row = {}
+        update["ingest"] = ingest_row
+    ingest_row["seconds"] = round(time.perf_counter() - started, 3)
+    update["finished_at"] = datetime.now(UTC).isoformat()
+    fresh = load_state(root)
+    row, changed = _apply_handoff_update(fresh, ticker, update)
+    if row is None:
+        return {"action": "idle", "reason": "no_handoff", "pending": 0}
+    if not changed:
+        idle = {key: value for key, value in row.items() if key != "_unchanged"}
+        return {"action": "idle", "reason": "already_finished", **idle}
+    save_state(fresh, root)
+    return {"action": "ran", **row}
+
+
+def _apply_handoff_update(
+    state: dict[str, Any],
+    ticker: str,
+    update: dict[str, Any],
+) -> tuple[dict[str, Any] | None, bool]:
+    handoffs = [row for row in (state.get("handoffs") or []) if isinstance(row, dict)]
+    row = next(
+        (item for item in handoffs if str(item.get("t212_ticker") or "").upper() == ticker.upper()),
+        None,
+    )
+    if row is None:
+        return None, False
+    if row.get("status") != "pending":
+        return row, False
+    row.update(update)
+    if update.get("status") != "error":
+        row.pop("error", None)
     state["handoffs"] = handoffs
-    state["updated_at"] = pending["finished_at"]
-    save_state(state, root)
-    return {"action": "ran", **pending}
+    state["updated_at"] = update.get("finished_at")
+    return row, True
+
+
+_HANDOFF_RANK = {"pending": 0, "error": 1, "done": 2}
+
+
+def _prefer_handoff(current: dict[str, Any], other: dict[str, Any]) -> dict[str, Any]:
+    current_rank = _HANDOFF_RANK.get(str(current.get("status") or ""), 0)
+    other_rank = _HANDOFF_RANK.get(str(other.get("status") or ""), 0)
+    if other_rank > current_rank:
+        winner, loser = other, current
+    elif other_rank < current_rank:
+        winner, loser = current, other
+    else:
+        other_at = str(other.get("finished_at") or other.get("queued_at") or "")
+        current_at = str(current.get("finished_at") or current.get("queued_at") or "")
+        winner, loser = (other, current) if other_at >= current_at else (current, other)
+    merged = dict(loser)
+    merged.update({key: value for key, value in winner.items() if value is not None})
+    if isinstance(winner.get("ingest"), dict):
+        merged["ingest"] = winner["ingest"]
+    elif isinstance(loser.get("ingest"), dict):
+        merged["ingest"] = loser["ingest"]
+    if loser.get("queued_at") and not merged.get("queued_at"):
+        merged["queued_at"] = loser["queued_at"]
+    return merged
+
+
+def _row_for(state: dict[str, Any], ticker: str) -> dict[str, Any] | None:
+    token = ticker.upper()
+    matches: list[dict[str, Any]] = []
+    last = state.get("last")
+    if isinstance(last, dict) and str(last.get("t212_ticker") or "").upper() == token:
+        matches.append(last)
+    for row in state.get("runs") or []:
+        if isinstance(row, dict) and str(row.get("t212_ticker") or "").upper() == token:
+            matches.append(row)
+    if not matches:
+        return None
+    with_seconds = [row for row in matches if _row_screen_seconds(row) is not None]
+    return with_seconds[-1] if with_seconds else matches[-1]
+
+
+def merge_states(base: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
+    """Union two catalogue states. A finished ingest wins over a stale pending row."""
+    completed: list[str] = []
+    seen: set[str] = set()
+    for source in (base, incoming):
+        for item in source.get("completed") or []:
+            token = str(item).upper()
+            if token and token not in seen:
+                seen.add(token)
+                completed.append(token)
+    by_ticker: dict[str, dict[str, Any]] = {}
+    order: list[str] = []
+    for source in (base, incoming):
+        for row in source.get("handoffs") or []:
+            if not isinstance(row, dict):
+                continue
+            key = str(row.get("t212_ticker") or "").upper()
+            if not key:
+                continue
+            if key not in by_ticker:
+                order.append(key)
+                by_ticker[key] = dict(row)
+            else:
+                by_ticker[key] = _prefer_handoff(by_ticker[key], row)
+    runs: list[dict[str, Any]] = []
+    seen_runs: set[tuple[str, str]] = set()
+    for source in (base, incoming):
+        for row in source.get("runs") or []:
+            if not isinstance(row, dict):
+                continue
+            key = (str(row.get("t212_ticker") or ""), str(row.get("at") or ""))
+            if key in seen_runs:
+                continue
+            seen_runs.add(key)
+            runs.append(row)
+    runs.sort(key=lambda row: str(row.get("at") or ""))
+    lasts = [row for row in (base.get("last"), incoming.get("last")) if isinstance(row, dict)]
+    skipped = base.get("skipped_held")
+    incoming_skipped = incoming.get("skipped_held")
+    if str(incoming.get("updated_at") or "") >= str(base.get("updated_at") or ""):
+        if incoming_skipped is not None:
+            skipped = incoming_skipped
+    elif skipped is None:
+        skipped = incoming_skipped
+    merged: dict[str, Any] = {
+        "schema_version": 1,
+        "completed": completed,
+        "runs": runs[-40:],
+        "handoffs": [by_ticker[key] for key in order],
+        "last": max(lasts, key=lambda row: str(row.get("at") or "")) if lasts else None,
+        "updated_at": max(
+            str(base.get("updated_at") or ""),
+            str(incoming.get("updated_at") or ""),
+        )
+        or None,
+        "totals": _merge_totals(base, incoming, completed),
+    }
+    if skipped is not None:
+        merged["skipped_held"] = skipped
+    return merged
+
+
+def _merge_totals(
+    base: dict[str, Any],
+    incoming: dict[str, Any],
+    completed: list[str],
+) -> dict[str, Any]:
+    base_completed = {str(item).upper() for item in (base.get("completed") or [])}
+    incoming_completed = {str(item).upper() for item in (incoming.get("completed") or [])}
+    base_totals = base.get("totals") if isinstance(base.get("totals"), dict) else None
+    incoming_totals = incoming.get("totals") if isinstance(incoming.get("totals"), dict) else None
+    if base_totals is not None:
+        totals = {
+            "screened": int(base_totals.get("screened") or 0),
+            "signals": dict(base_totals.get("signals") or {}),
+            "signals_n": int(base_totals.get("signals_n") or 0),
+            "screen_seconds_sum": float(base_totals.get("screen_seconds_sum") or 0.0),
+            "screen_seconds_n": int(base_totals.get("screen_seconds_n") or 0),
+            "outcomes": dict(base_totals.get("outcomes") or {}),
+        }
+        newcomers = [token for token in completed if token not in base_completed]
+        source = incoming
+    elif incoming_totals is not None:
+        totals = {
+            "screened": int(incoming_totals.get("screened") or 0),
+            "signals": dict(incoming_totals.get("signals") or {}),
+            "signals_n": int(incoming_totals.get("signals_n") or 0),
+            "screen_seconds_sum": float(incoming_totals.get("screen_seconds_sum") or 0.0),
+            "screen_seconds_n": int(incoming_totals.get("screen_seconds_n") or 0),
+            "outcomes": dict(incoming_totals.get("outcomes") or {}),
+        }
+        newcomers = [token for token in completed if token not in incoming_completed]
+        source = base
+    else:
+        totals = _empty_totals()
+        newcomers = []
+        source = incoming
+    holder = {"totals": totals}
+    for token in newcomers:
+        row = _row_for(source, token) or _row_for(base, token)
+        if row is None:
+            continue
+        _add_row_to_totals(holder, row)
+    totals = holder["totals"]
+    totals["screened"] = len(completed)
+    return totals
+
+
+def merge_state_files(base_path: Path, incoming_path: Path, dest_path: Path) -> dict[str, Any]:
+    """Read two state files and write their union. Used when two lanes commit."""
+    base = _read_state_file(base_path)
+    incoming = _read_state_file(incoming_path)
+    merged = merge_states(base, incoming)
+    dest = Path(dest_path)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    write_json(dest, merged, compact=False)
+    return merged
+
+
+def _read_state_file(path: Path) -> dict[str, Any]:
+    file = Path(path)
+    if not file.exists():
+        return {"schema_version": 1, "completed": [], "runs": [], "handoffs": []}
+    try:
+        payload = read_json(file)
+    except (OSError, ValueError, TypeError):
+        return {"schema_version": 1, "completed": [], "runs": [], "handoffs": []}
+    if not isinstance(payload, dict):
+        return {"schema_version": 1, "completed": [], "runs": [], "handoffs": []}
+    return payload
+
+
+def _timing_rows(state: dict[str, Any]) -> list[dict[str, Any]]:
+    rows = [row for row in (state.get("runs") or []) if isinstance(row, dict)]
+    last = state.get("last")
+    if isinstance(last, dict):
+        key = (last.get("t212_ticker"), last.get("at"))
+        if not any((row.get("t212_ticker"), row.get("at")) == key for row in rows):
+            rows.append(last)
+    return rows
+
+
+def _covered_totals(state: dict[str, Any]) -> dict[str, Any] | None:
+    totals = state.get("totals")
+    completed = state.get("completed") or []
+    count = len(completed) if isinstance(completed, list) else 0
+    if not isinstance(totals, dict):
+        return None
+    if int(totals.get("signals_n") or 0) != count:
+        return None
+    return totals
+
+
+def _format_signals(signals: dict[str, Any]) -> str:
+    pairs = [(str(key), int(value)) for key, value in signals.items() if int(value or 0) > 0]
+    if not pairs:
+        return "Signals: none yet."
+    pairs.sort(key=lambda item: item[0])
+    body = ", ".join(f"{key} {value}" for key, value in pairs)
+    return f"Signals: {body}."
+
+
+def _rate_lines(state: dict[str, Any]) -> tuple[str, str]:
+    totals = _covered_totals(state)
+    if totals is not None:
+        timed = int(totals.get("screen_seconds_n") or 0)
+        if timed:
+            mean = round(float(totals.get("screen_seconds_sum") or 0.0) / timed, 3)
+            seconds_line = f"Seconds per screen {mean} over {timed}."
+        else:
+            seconds_line = "Seconds per screen not recorded yet."
+        signals = totals.get("signals") if isinstance(totals.get("signals"), dict) else {}
+        return seconds_line, _format_signals(signals)
+    rows = _timing_rows(state)
+    timed_values = [
+        seconds for seconds in (_row_screen_seconds(row) for row in rows) if seconds is not None
+    ]
+    if timed_values:
+        mean = round(sum(timed_values) / len(timed_values), 3)
+        seconds_line = f"Seconds per screen {mean} over {len(timed_values)} saved rows."
+    else:
+        seconds_line = "Seconds per screen not recorded yet."
+    signals: dict[str, int] = {}
+    for row in rows:
+        if (
+            _row_signal(row) is None
+            and _row_screen_seconds(row) is None
+            and not isinstance(row.get("screen"), dict)
+            and "signal" not in row
+        ):
+            continue
+        key = _row_signal(row) or "none"
+        signals[key] = signals.get(key, 0) + 1
+    note = " from the latest saved rows" if rows else ""
+    line = _format_signals(signals)
+    if note and line != "Signals: none yet.":
+        line = line[:-1] + note + "."
+    return seconds_line, line
 
 
 def finding_summary(state: dict[str, Any] | None) -> str:
     if not state:
         return (
-            "Catalogue explorer has not started. An idle spare stream slot "
-            "takes one unheld Trading 212 stock, US then Xetra then LSE, and "
-            "records how many seconds that one name took."
+            "Catalogue explorer has not started. Stream 1 screens one unheld "
+            "Trading 212 stock at a time, US then Xetra then LSE, and stops "
+            "while the job can still commit. Stream 2 ingests queued buys. "
+            "This check does not fetch."
         )
     completed = state.get("completed") or []
+    screened = len(completed) if isinstance(completed, list) else 0
+    noun = "name" if screened == 1 else "names"
+    parts = [f"Screened {screened} catalogue {noun}, one at a time."]
     last = state.get("last") if isinstance(state.get("last"), dict) else None
-    count = len(completed) if isinstance(completed, list) else 0
     if not last:
-        return f"Catalogue explorer has {count} completed names and no last timing record."
-    return (
-        f"Completed {count} catalogue names, one at a time. "
-        f"Last {last.get('t212_ticker')} ({last.get('venue')}) took "
-        f"{last.get('seconds')}s, outcome {last.get('outcome')}"
-        + (
-            f", screen {last['screen'].get('signal')}."
-            if isinstance(last.get("screen"), dict)
-            else "."
+        parts.append("No last timing record.")
+    else:
+        detail = f"Last {last.get('t212_ticker')} ({last.get('venue')}) took {last.get('seconds')}s"
+        screen_seconds = _row_screen_seconds(last)
+        if screen_seconds is not None:
+            detail += f", screen {screen_seconds}s"
+        signal = _row_signal(last)
+        if signal:
+            detail += f", signal {signal}"
+        detail += f", outcome {last.get('outcome')}."
+        parts.append(detail)
+    seconds_line, signals_line = _rate_lines(state)
+    parts.append(seconds_line)
+    parts.append(signals_line)
+    handoffs = [row for row in (state.get("handoffs") or []) if isinstance(row, dict)]
+    ingested = sum(1 for row in handoffs if row.get("status") == "done")
+    errors = sum(1 for row in handoffs if row.get("status") == "error")
+    handoff_line = f"Buys handed off {len(handoffs)}, ingested {ingested}."
+    if errors:
+        handoff_line = (
+            f"Buys handed off {len(handoffs)}, ingested {ingested}, ingest errors {errors}."
         )
-    )
+    parts.append(handoff_line)
+    skipped = state.get("skipped_held")
+    if skipped is None:
+        parts.append("Skips not recorded yet.")
+    else:
+        parts.append(f"Skips {int(skipped)}.")
+    return " ".join(parts)
