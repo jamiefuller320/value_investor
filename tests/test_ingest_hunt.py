@@ -63,8 +63,12 @@ def test_workflow_ceilings_and_timeouts_are_unchanged():
     assert "--explore" in sprint_2
     assert "--explore" in sprint_1
     assert "ingest_hunt_commit.sh" in maintenance
-    assert "Empty spare backlog — slot still runs so catalogue explore can take one name" in sprint_1
-    assert "Empty spare backlog — slot still runs so catalogue explore can take one name" in sprint_2
+    assert (
+        "Empty spare backlog — slot still runs so catalogue explore can take one name" in sprint_1
+    )
+    assert (
+        "Empty spare backlog — slot still runs so catalogue explore can take one name" in sprint_2
+    )
     assert "No parallel sprint markets with filing gaps" not in sprint_1
     assert "No parallel sprint 2 markets with filing gaps" not in sprint_2
     assert "should_run', 'false'" not in sprint_1
