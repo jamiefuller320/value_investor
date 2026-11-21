@@ -500,28 +500,10 @@
     "ASPC1_US_EQ",
     "ASPC_US_EQ",
     "ASPE_US_EQ",
-    "ASPI1_US_EQ"
+    "ASPI1_US_EQ",
+    "ASPL_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ARVN_US_EQ",
-      "venue": "US",
-      "yahoo": "ARVN",
-      "isin": "US04335A1051",
-      "name": "ARVN",
-      "seconds": 88.413,
-      "outcome": "saved",
-      "at": "2026-11-21T18:38:49.423697+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.758
-      },
-      "screen_seconds": 85.758,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "ARWR_US_EQ",
       "venue": "US",
@@ -1262,6 +1244,25 @@
       },
       "screen_seconds": 4.327,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "ASPL_US_EQ",
+      "venue": "US",
+      "yahoo": "ASPL",
+      "isin": "US96328L3042",
+      "name": "UP",
+      "seconds": 0.845,
+      "outcome": "miss",
+      "at": "2026-11-21T19:18:57.498718+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.9,
+        "seconds": 0.805
+      },
+      "screen_seconds": 0.805,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -1477,43 +1478,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-21T18:29:30.123910+00:00"
+    },
+    {
+      "t212_ticker": "ASPL_US_EQ",
+      "yahoo": "ASPL",
+      "name": "UP",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-21T19:18:57.498718+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ASPI1_US_EQ",
+    "t212_ticker": "ASPL_US_EQ",
     "venue": "US",
-    "yahoo": "ASPI1",
-    "isin": "US00218A1051",
-    "name": "ASPI",
-    "seconds": 4.386,
+    "yahoo": "ASPL",
+    "isin": "US96328L3042",
+    "name": "UP",
+    "seconds": 0.845,
     "outcome": "miss",
-    "at": "2026-11-21T19:18:51.029624+00:00",
+    "at": "2026-11-21T19:18:57.498718+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.327
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.9,
+      "seconds": 0.805
     },
-    "screen_seconds": 4.327,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.805,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ASPL_US_EQ"
+    }
   },
-  "updated_at": "2026-11-21T19:18:51.029624+00:00",
+  "updated_at": "2026-11-21T19:18:57.498718+00:00",
   "totals": {
-    "screened": 500,
+    "screened": 501,
     "signals": {
       "none": 3,
       "insufficient_data": 482,
       "avoid": 7,
-      "buy": 6,
+      "buy": 7,
       "hold": 2
     },
-    "signals_n": 500,
-    "screen_seconds_sum": 22014.47500000001,
-    "screen_seconds_n": 497,
+    "signals_n": 501,
+    "screen_seconds_sum": 22015.28000000001,
+    "screen_seconds_n": 498,
     "outcomes": {
-      "miss": 210,
+      "miss": 211,
       "saved": 290
     }
   },
