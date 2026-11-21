@@ -499,3 +499,36 @@ def test_main_exits_3_on_rate_limited_list(monkeypatch):
     monkeypatch.setattr(mod, "_list_jobs", boom_list)
     rc = mod.main(["--job", "ops-monitor"])
     assert rc == mod.EXIT_RATE_LIMITED
+
+
+def test_spare_sprint_crons_stay_enabled_when_backlog_is_empty(monkeypatch):
+    mod = _load_import_cron_jobs_module("import_cron_jobs_spare_enabled_test")
+    specs = {row.key: row for row in mod._job_specs()}
+    spare_keys = (
+        "library-ingest-sprint-morning",
+        "library-ingest-sprint-afternoon",
+        "library-ingest-sprint-midafternoon",
+        "library-ingest-sprint-evening",
+        "library-ingest-sprint-2-morning",
+        "library-ingest-sprint-2-afternoon",
+        "library-ingest-sprint-2-midafternoon",
+        "library-ingest-sprint-2-evening",
+    )
+
+    def spare_must_not_read_the_euro_gate():
+        raise AssertionError("spare enablement must not consult the euro ingest gate")
+
+    monkeypatch.setattr(mod, "_euro_dispatch_enabled", spare_must_not_read_the_euro_gate)
+    for key in spare_keys:
+        assert mod._job_enabled(specs[key]) is True
+        payload = mod._build_job_payload(specs[key], "github_pat_dry_run_placeholder")
+        assert payload["job"]["enabled"] is True
+
+    monkeypatch.setattr(
+        mod,
+        "_euro_dispatch_enabled",
+        lambda: {"morning": False, "maintenance": True, "maintenance_evening": True},
+    )
+    assert mod._job_enabled(specs["euro-ingest-loop-morning"]) is False
+    assert mod._job_enabled(specs["library-ingest-maintenance"]) is True
+    assert mod._job_enabled(specs["library-ingest-maintenance-evening"]) is True
