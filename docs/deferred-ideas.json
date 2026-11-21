@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-19T10:26:55+00:00",
+  "updated_at": "2026-11-21T08:38:50+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -18035,6 +18035,36 @@
       "added_at": "2026-11-19T07:45:08+00:00",
       "updated_at": "2026-11-19T10:26:55+00:00",
       "status_note": "Catalogue explorer started: one T212 name per idle spare stream 2 slot, US then Xetra then LSE, timing recorded, no parallelism."
+    },
+    {
+      "id": "N277",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Third catalogue screener after screened seconds show room",
+      "summary": "Add another catalogue screen slot only after catalogue_explorer.json has screened seconds per name and any 429 or SEC refusals still sit under the written source limits. SEC fair access is 10 requests a second and the companyfacts client sleeps 0.2 seconds. Companies House sleeps 0.6 seconds. Yahoo retries three times, starting at 2 seconds, on a 429.",
+      "revisit_when": "The state file has screened seconds per name and source-limit refusals still leave room under those written ceilings",
+      "tags": [
+        "catalogue",
+        "screener"
+      ],
+      "status": "open",
+      "source": "catalogue walk plan approved 2026-11-21",
+      "added_at": "2026-11-21T08:38:50+00:00"
+    },
+    {
+      "id": "L727",
+      "category": "later",
+      "section": "universe",
+      "title": "Catalogue walk other stock lines after US Xetra and LSE",
+      "summary": "After the US, Xetra, and LSE stock lines on this walk, look at the other stock lines only where a filing source already exists. Leave ETFs and warrants off the walk.",
+      "revisit_when": "The US, Xetra, and LSE catalogue cursor is exhausted",
+      "tags": [
+        "catalogue",
+        "filings"
+      ],
+      "status": "open",
+      "source": "catalogue walk plan approved 2026-11-21",
+      "added_at": "2026-11-21T08:38:50+00:00"
     }
   ],
   "fragments": [

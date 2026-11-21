@@ -636,9 +636,10 @@ def _all_selected_have_known_ids(specs: list[CronJobSpec]) -> bool:
 def _spare_sprint_job(spec: CronJobSpec) -> bool:
     """Spare-stream cron keys stay enabled when the seated backlog is empty.
 
-    An idle slot is the catalogue-explore / catalogue-handoff walk. Turning the
-    cron-job.org job off because ``ingest_parallel_sprint`` / ``_2`` is empty
-    skips that walk. Euro and maintenance gates are unchanged.
+    Stream 1 uses the idle slot to screen catalogue names. Stream 2 uses it to
+    ingest queued buys. Turning the cron-job.org job off because
+    ``ingest_parallel_sprint`` / ``_2`` is empty skips that walk. Euro and
+    maintenance gates are unchanged.
     """
     return spec.key.startswith("library-ingest-sprint-2-") or spec.key.startswith(
         "library-ingest-sprint-"

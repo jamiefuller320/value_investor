@@ -1839,10 +1839,10 @@ def check_catalogue_explorer(
     library_root: Path | None = None,
     state_path: Path | None = None,
 ) -> list[OpsFinding]:
-    """Observe-only timing record for the one-name Trading 212 catalogue explorer.
+    """Observe-only progress for the Trading 212 catalogue walk.
 
-    The scheduled spare stream writes ``docs/data/library/catalogue_explorer.json``.
-    This check reads it. It does not fetch, parallelise, or open an engineering task.
+    Stream 1 and stream 2 write ``docs/data/library/catalogue_explorer.json``.
+    This check reads it. It does not fetch, ingest, add a screener, or open a task.
     """
     from value_investor import catalogue_explorer as explorer
     from value_investor.data_library import DEFAULT_LIBRARY_ROOT

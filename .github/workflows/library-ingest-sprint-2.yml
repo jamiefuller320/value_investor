@@ -1,13 +1,16 @@
 name: Library ingest sprint 2 (parallel)
 
 # Spare-capacity buy-tier filing deepen for the second parallel queue stream
-# (e.g. asx200). An empty seated backlog still runs this slot so catalogue
-# explore and catalogue-handoff can take one name. Waits on euro + stream 1,
-# then spends leftover / spare fraction or fill-down. Hour skip is a local
-# fallback only. Cadence: focus +60 min.
-# A predecessor that stays queued or running through the wait yields this slot
-# (idle=false): ingest, gap-closure follow-up, and the artifact push are skipped
-# and the job succeeds. Follow-up needs the loop JSON only the ingest step writes.
+# (e.g. asx200). An empty seated backlog still runs this slot. This stream does
+# not take catalogue names. It ingests the buy queue: one buy, commit, next
+# buy. An empty queue exits. The 2400s wait is for a real euro fetch or a real
+# stream-1 index fetch. A stream-1 catalogue screen is not that wait. Hour
+# skip is a local fallback only. Cadence: focus +60 min.
+# A euro fetch or a stream-1 index fetch that is still going after the wait
+# yields this slot (idle=false): ingest, the handoff loop, gap-closure
+# follow-up, and the artifact push are skipped and the job succeeds. A
+# stream-1 catalogue screen does not. Follow-up needs the loop JSON only the
+# ingest step writes.
 on:
   schedule:
     - cron: "15 8 * * 1-6"
@@ -101,7 +104,7 @@ jobs:
               return;
             }
             if (needing.length === 0) {
-              core.info('Empty spare backlog — slot still runs so catalogue explore can take one name');
+              core.info('Empty spare backlog — slot still runs so the catalogue handoff queue can be ingested');
               return;
             }
             core.info('Parallel sprint markets with filing gaps: ' + needing.join(','));
@@ -112,6 +115,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 110
     steps:
+      - name: Note job start
+        run: echo "JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+
       - uses: actions/checkout@v5
 
       - uses: actions/setup-python@v6
@@ -177,7 +183,6 @@ jobs:
             --stream 2
             --loop-json /tmp/library_ingest_sprint_2.json
             --commit-message "chore: library ingest sprint 2 (parallel) [skip ci]"
-            --explore
             --
             --head-idle
             --max-targets "$TARGETS"
@@ -218,6 +223,17 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: bash scripts/dispatch_library_gap_closure_followups.sh /tmp/gap_followup.json
+
+      - name: Ingest catalogue handoffs
+        if: steps.wait_head.outputs.idle == 'true'
+        run: |
+          set -euo pipefail
+          # 6600s is the 110-minute job. Leave 300s so the commit can finish.
+          bash scripts/ingest_hunt_commit.sh \
+            --catalogue handoff \
+            --job-seconds 6600 \
+            --commit-reserve 300 \
+            --commit-message "chore: catalogue explorer handoff ingest [skip ci]"
 
       - name: Commit and push library ingest artifacts
         if: steps.wait_head.outputs.idle == 'true'

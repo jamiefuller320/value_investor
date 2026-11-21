@@ -17,6 +17,8 @@ from typing import Any
 
 EURO_WORKFLOW = "euro-ingest-loop.yml"
 SPRINT_WORKFLOW = "library-ingest-sprint.yml"
+# Index fetch only. "Screen catalogue names" is a later step and must stay out
+# of this check: a catalogue screen is not a reason for stream 2 to wait.
 FETCH_STEP = "Run parallel library ingest sprint"
 
 

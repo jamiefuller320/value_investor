@@ -66,9 +66,19 @@ def test_stream_1_wait_step_is_not_a_fetch():
             {"name": "Commit and push library ingest artifacts", "status": "in_progress"},
         ],
     }
+    screening = {
+        "name": "library-ingest-sprint",
+        "status": "in_progress",
+        "steps": [
+            {"name": "Wait for euro_depth fat slot", "status": "completed"},
+            {"name": FETCH, "status": "completed"},
+            {"name": "Screen catalogue names", "status": "in_progress"},
+        ],
+    }
     assert sprint_jobs_fetching([waiting]) is False
     assert sprint_jobs_fetching([fetching]) is True
     assert sprint_jobs_fetching([finished]) is False
+    assert sprint_jobs_fetching([screening]) is False
     assert jobs_are_fetching("library-ingest-sprint.yml", []) is True
 
 

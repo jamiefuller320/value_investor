@@ -204,9 +204,10 @@ Job keys: `euro-ingest-loop-morning|afternoon|midafternoon|evening`,
 
 Spare-stream cron-job.org jobs (`library-ingest-sprint-*` and
 `library-ingest-sprint-2-*`) stay enabled when `ingest_parallel_sprint` and
-`ingest_parallel_sprint_2` are empty. An idle slot still runs so catalogue
-explore and catalogue-handoff can take one name. Euro slots still follow the
-ingest gate, and maintenance stays on whenever maintenance markets need it.
+`ingest_parallel_sprint_2` are empty. An idle slot still runs. Stream 1 screens
+catalogue names. Stream 2 ingests queued buys and does not take catalogue
+names. Euro slots still follow the ingest gate, and maintenance stays on
+whenever maintenance markets need it.
 
 After merge of a cadence change, **`import-ingest-crons.yml`** re-imports the euro /
 library ingest + epoch-0 slots on cron-job.org (path filter on

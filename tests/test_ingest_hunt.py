@@ -60,14 +60,22 @@ def test_workflow_ceilings_and_timeouts_are_unchanged():
     assert 'RUNTIME="3600"' in maintenance
     assert "library-ingest-sprint-3" not in sprint_1
     assert "library-ingest-sprint-3" not in sprint_2
-    assert "--explore" in sprint_2
     assert "--explore" in sprint_1
+    assert "--explore" not in sprint_2
+    assert "--catalogue screen" in sprint_1
+    assert "--catalogue handoff" in sprint_2
+    assert "Screen catalogue names" in sprint_1
+    assert "Ingest catalogue handoffs" in sprint_2
+    assert "catalogue-handoff" not in sprint_1
+    assert "catalogue-explore" not in sprint_2
+    assert "--catalogue" not in maintenance
+    assert "Screen catalogue names" not in maintenance
+    assert not Path(".github/workflows/library-ingest-sprint-3.yml").exists()
     assert "ingest_hunt_commit.sh" in maintenance
+    assert "Empty spare backlog — slot still runs so catalogue screens can walk names" in sprint_1
     assert (
-        "Empty spare backlog — slot still runs so catalogue explore can take one name" in sprint_1
-    )
-    assert (
-        "Empty spare backlog — slot still runs so catalogue explore can take one name" in sprint_2
+        "Empty spare backlog — slot still runs so the catalogue handoff queue can be ingested"
+        in sprint_2
     )
     assert "No parallel sprint markets with filing gaps" not in sprint_1
     assert "No parallel sprint 2 markets with filing gaps" not in sprint_2

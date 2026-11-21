@@ -2,9 +2,10 @@ name: Library ingest sprint (parallel)
 
 # High-tempo buy-tier filing deepen for parallel queue markets (e.g. sp500 while
 # euro_depth remains focus). Focus market sprint stays on euro-ingest-loop.yml.
-# An empty seated backlog still runs this slot so catalogue explore and
-# catalogue-handoff can take one name. Cadence mirrors euro focus: Mon–Sat peak
-# + daily off-peak (incl. Sunday after quiet bundle).
+# An empty seated backlog still runs this slot. Stream 1 then screens catalogue
+# names until this 110-minute job must stop for the commit. It does not ingest
+# the buy. Cadence mirrors euro focus: Mon–Sat peak + daily off-peak (incl.
+# Sunday after quiet bundle).
 on:
   schedule:
     - cron: "45 7 * * 1-6"
@@ -98,7 +99,7 @@ jobs:
               return;
             }
             if (needing.length === 0) {
-              core.info('Empty spare backlog — slot still runs so catalogue explore can take one name');
+              core.info('Empty spare backlog — slot still runs so catalogue screens can walk names');
               return;
             }
             core.info('Parallel sprint markets with filing gaps: ' + needing.join(','));
@@ -107,9 +108,12 @@ jobs:
     needs: check
     if: needs.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-    # Wait-for-head (up to 40m) + per-market budget (2100s) + setup + commit.
+    # Wait-for-head (up to 40m) + per-market budget (2100s) + catalogue screens + commit.
     timeout-minutes: 110
     steps:
+      - name: Note job start
+        run: echo "JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+
       - uses: actions/checkout@v5
 
       - uses: actions/setup-python@v6
@@ -142,6 +146,7 @@ jobs:
           git checkout origin/main -- docs/data/library
 
       - name: Run parallel library ingest sprint
+        id: hunt
         if: steps.wait_head.outputs.idle == 'true'
         env:
           MARKETS: ${{ github.event.inputs.markets }}
@@ -215,6 +220,17 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: bash scripts/dispatch_library_gap_closure_followups.sh /tmp/gap_followup.json
+
+      - name: Screen catalogue names
+        if: steps.wait_head.outputs.idle == 'true' && steps.hunt.outputs.catalogue_explore == 'true'
+        run: |
+          set -euo pipefail
+          # 6600s is the 110-minute job. Leave 300s so the commit can finish.
+          bash scripts/ingest_hunt_commit.sh \
+            --catalogue screen \
+            --job-seconds 6600 \
+            --commit-reserve 300 \
+            --commit-message "chore: catalogue explorer one name [skip ci]"
 
       - name: Commit and push library ingest artifacts
         if: steps.wait_head.outputs.idle == 'true'
