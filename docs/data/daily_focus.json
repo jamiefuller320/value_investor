@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "local_date": "2026-11-20",
+  "local_date": "2026-11-21",
   "timezone": "Europe/London",
-  "generated_at": "2026-11-20T07:54:24.826283Z",
+  "generated_at": "2026-11-21T02:39:30.741039Z",
   "refresh_deadline_local": "04:00",
   "stale_for_local_date": false,
   "focus_lines": [
@@ -30,7 +30,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Absolute availability on the serve order — no rememo/ingest spray on a green set; do not steal P1 for N201 or seal D.",
@@ -99,7 +99,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Fat sprint empty — maintenance + spare auto-advance only; no fourth equal sprint; no parallel eng spray from hub ambers.",
@@ -146,7 +146,7 @@
   ],
   "status_report": {
     "schema_version": 1,
-    "local_date": "2026-11-20",
+    "local_date": "2026-11-21",
     "ops_overall": "warn",
     "ops_findings": [
       {
@@ -172,6 +172,18 @@
         "title": "FTSE decision-input utilization gap",
         "auto_fixable": false,
         "category": "ingest"
+      },
+      {
+        "severity": "warn",
+        "title": "Learning-track verdict not statistically supported",
+        "auto_fixable": false,
+        "category": "paper"
+      },
+      {
+        "severity": "warn",
+        "title": "Price-only excess misstates track performance",
+        "auto_fixable": false,
+        "category": "paper"
       },
       {
         "severity": "warn",
@@ -208,30 +220,18 @@
         "title": "SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier",
         "auto_fixable": false,
         "category": "research"
-      },
-      {
-        "severity": "warn",
-        "title": "Chart highs and lows incomplete",
-        "auto_fixable": false,
-        "category": "research"
-      },
-      {
-        "severity": "warn",
-        "title": "Strategy-book US rehearsal: licensed data deletion due",
-        "auto_fixable": false,
-        "category": "backtest"
       }
     ],
-    "scoreboard_headline": "ai_judgment_matched30_fair: total return -0.5% vs FTAL.L +1.8% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+    "scoreboard_headline": "ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
     "primary_track": "ai_judgment_matched30_fair",
     "control_track": "buy_tier_matched30_fair",
     "primary_vs_control": {
       "primary": "ai_judgment_matched30_fair",
       "control": "buy_tier_matched30_fair",
       "start": "2026-10-15T10:03:40.485384+00:00",
-      "primary_total_return": 0.0006,
-      "control_total_return": -0.0106,
-      "difference": 0.0112,
+      "primary_total_return": -0.0569,
+      "control_total_return": -0.0692,
+      "difference": 0.0123,
       "note": "Common window, total return. Positive means the primary's filter added value over the unfiltered buy tier. Not yet tested for significance."
     },
     "engineering_open": [
@@ -241,9 +241,9 @@
         "title": "Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)"
       },
       {
-        "id": "eng-20261120-03",
+        "id": "eng-20261121-01",
         "status": "open",
-        "title": "Close library ingest gaps for euro_depth / UNA.AS (chain 3/3: 0/0 improved, run igc-20261005-02)"
+        "title": "Close library ingest gaps for euro_depth / UNA.AS (chain 1/3: 0/0 improved, run igc-20261007-01)"
       },
       {
         "id": "eng-20261104-01",
@@ -264,8 +264,8 @@
       "should_dispatch_engineering": true
     },
     "deferred_triggers": {
-      "met_count": 5,
-      "unmet_count": 31,
+      "met_count": 6,
+      "unmet_count": 30,
       "met": [
         {
           "id": "N220",
@@ -309,7 +309,22 @@
                 "value": 8
               },
               "state": "met",
-              "actual": 32
+              "actual": 16
+            }
+          ]
+        },
+        {
+          "id": "N259",
+          "title": "Exit challenger scored on capital-days return, with trend-led exits and no fixed time cap",
+          "status": "open",
+          "first_met_at": "2026-11-21T02:36:59.502577+00:00",
+          "conditions": [
+            {
+              "condition": {
+                "on_or_after": "2026-11-21"
+              },
+              "state": "met",
+              "actual": "2026-11-21"
             }
           ]
         },
@@ -333,7 +348,7 @@
                 "on_or_after": "2026-12-08"
               },
               "state": "unmet",
-              "actual": "2026-11-20"
+              "actual": "2026-11-21"
             }
           ]
         },
@@ -351,7 +366,7 @@
                 "value": 30
               },
               "state": "met",
-              "actual": 79
+              "actual": 143
             }
           ]
         },
@@ -369,17 +384,17 @@
                 "value": 1
               },
               "state": "met",
-              "actual": 12
+              "actual": 22
             }
           ]
         }
       ],
-      "generated_at": "2026-11-20T07:51:42.077602+00:00"
+      "generated_at": "2026-11-21T02:36:59.502577+00:00"
     },
     "focus_relevant": true,
     "post_sell_cue_digest": {
       "present": true,
-      "generated_at": "2026-11-20T07:47:51.702572+00:00",
+      "generated_at": "2026-11-21T02:33:20.519333+00:00",
       "item_count": 6,
       "timing_cue_count": 4,
       "selection_cue_count": 2,
@@ -392,17 +407,17 @@
       {
         "id": "ops",
         "label": "Ops",
-        "value": "overall=warn; warn:Dashboard bundle is stale; warn:Weekly ops budget nearly exhausted; warn:New buy-tier not yet usable; warn:FTSE decision-input utilization gap; warn:Longer holds beat live exit buffer in replay"
+        "value": "overall=warn; warn:Dashboard bundle is stale; warn:Weekly ops budget nearly exhausted; warn:New buy-tier not yet usable; warn:FTSE decision-input utilization gap; warn:Learning-track verdict not statistically supported"
       },
       {
         "id": "scoreboard",
         "label": "Scoreboard",
-        "value": "ai_judgment_matched30_fair: total return -0.5% vs FTAL.L +1.8% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73)."
+        "value": "ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73)."
       },
       {
         "id": "eng",
         "label": "Eng queue",
-        "value": "parked:eng-20261018-03, open:eng-20261120-03, parked:eng-20261104-01"
+        "value": "parked:eng-20261018-03, open:eng-20261121-01, parked:eng-20261104-01"
       },
       {
         "id": "post_run",
@@ -412,7 +427,7 @@
       {
         "id": "defer",
         "label": "Deferred triggers",
-        "value": "met=5"
+        "value": "met=6"
       },
       {
         "id": "focus_relevance",
@@ -557,15 +572,15 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "euro_depth · ingest_deviation (focus/priority-slot head) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
           "stage_label": "warn:dismiss",
           "stage_state": "ready",
           "stage_since": "2026-10-27T10:46:58.731148+00:00",
-          "days_in_stage": 24,
-          "stage_duration": "24 days in stage",
+          "days_in_stage": 25,
+          "stage_duration": "25 days in stage",
           "waiting_for": "operator Accept on observe-safe triage",
           "how_achieved": "Accept park/dismiss triage for today",
           "provenance": [
@@ -601,8 +616,8 @@
         "stage_label": "warn:dismiss",
         "stage_state": "ready",
         "stage_since": "2026-10-27T10:46:58.731148+00:00",
-        "days_in_stage": 24,
-        "stage_duration": "24 days in stage",
+        "days_in_stage": 25,
+        "stage_duration": "25 days in stage",
         "waiting_for": "operator Accept on observe-safe triage",
         "how_achieved": "Accept park/dismiss triage for today",
         "provenance": [
@@ -680,15 +695,15 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "hang_seng · ingest_deviation (ingest_deviation) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
           "stage_label": "warn:dismiss",
           "stage_state": "ready",
           "stage_since": "2026-10-06T21:33:21.615298+00:00",
-          "days_in_stage": 45,
-          "stage_duration": "45 days in stage",
+          "days_in_stage": 46,
+          "stage_duration": "46 days in stage",
           "waiting_for": "operator Accept on observe-safe triage",
           "how_achieved": "Accept park/dismiss triage for today",
           "provenance": [
@@ -724,8 +739,8 @@
         "stage_label": "warn:dismiss",
         "stage_state": "ready",
         "stage_since": "2026-10-06T21:33:21.615298+00:00",
-        "days_in_stage": 45,
-        "stage_duration": "45 days in stage",
+        "days_in_stage": 46,
+        "stage_duration": "46 days in stage",
         "waiting_for": "operator Accept on observe-safe triage",
         "how_achieved": "Accept park/dismiss triage for today",
         "provenance": [
@@ -803,7 +818,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: 2 attention-parked eng tasks",
@@ -831,11 +846,11 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "2 attention-parked eng tasks",
-          "updated_at": "2026-11-20T07:51:56.501427+00:00",
+          "updated_at": "2026-11-21T02:37:16.842507+00:00",
           "fingerprint": "0a2dad58594e26e2",
           "bullets": [
             "Parked tasks: 3 (attention ~2)",
-            "Queue-clearing pause active: False — evaluated 2026-11-20T07:51:56.501427+00:00",
+            "Queue-clearing pause active: False — evaluated 2026-11-21T02:37:16.842507+00:00",
             "Traffic pause active: False",
             "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
             "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
@@ -862,11 +877,11 @@
       "closed": false,
       "review_detail": {
         "headline": "2 attention-parked eng tasks",
-        "updated_at": "2026-11-20T07:51:56.501427+00:00",
+        "updated_at": "2026-11-21T02:37:16.842507+00:00",
         "fingerprint": "0a2dad58594e26e2",
         "bullets": [
           "Parked tasks: 3 (attention ~2)",
-          "Queue-clearing pause active: False — evaluated 2026-11-20T07:51:56.501427+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-11-21T02:37:16.842507+00:00",
           "Traffic pause active: False",
           "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
           "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
@@ -903,7 +918,7 @@
         "id": "rec-55ae47791364",
         "task_id": "human:weekday-engineering-parked-backlog-clear",
         "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-20T07:51:56.501427+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-21T02:37:16.842507+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
@@ -912,7 +927,7 @@
             "finding_fingerprint": "0a2dad58594e26e2"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-55ae47791364` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-20T07:51:56.501427+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 3 (attention ~2)\n- Queue-clearing pause active: False — evaluated 2026-11-20T07:51:56.501427+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-55ae47791364` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "discuss_prompt": "Discuss daily recommendation `rec-55ae47791364` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-21T02:37:16.842507+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 3 (attention ~2)\n- Queue-clearing pause active: False — evaluated 2026-11-21T02:37:16.842507+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-55ae47791364` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
         "priority": 12,
         "options": [
           {
@@ -994,7 +1009,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Assessment scoreboard · primary indistinguishable_from_noise",
@@ -1022,15 +1037,15 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Assessment scoreboard · primary indistinguishable_from_noise",
-          "updated_at": "2026-11-20T07:51:42.023623+00:00",
+          "updated_at": "2026-11-21T02:36:59.456035+00:00",
           "fingerprint": "653b9f9ca8ea3ac7",
           "bullets": [
-            "ai_judgment_matched30_fair: total return -0.5% vs FTAL.L +1.8% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-            "Primary verdict: indistinguishable_from_noise · 90% interval [-1.163, 0.6521] · excess at 3% stress -0.1044",
-            "vs control buy_tier_matched30_fair: difference 0.0112 (common window, not significance)",
+            "ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+            "Primary verdict: indistinguishable_from_noise · 90% interval [-1.3359, 0.5508] · excess at 3% stress -0.1223",
+            "vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance)",
             "AI gate binds: False (N189 while it never binds)",
             "twin ai_judgment_matched30_fair: difference -0.0158 over 10 days",
-            "twin buy_tier_matched30_fair: difference -0.0342 over 20 days",
+            "twin buy_tier_matched30_fair: difference -0.0444 over 21 days",
             "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15), stop_ai_judgment_fair_3name_v1 (2026-10-31)"
           ],
           "source_keys": [
@@ -1051,15 +1066,15 @@
       "closed": false,
       "review_detail": {
         "headline": "Assessment scoreboard · primary indistinguishable_from_noise",
-        "updated_at": "2026-11-20T07:51:42.023623+00:00",
+        "updated_at": "2026-11-21T02:36:59.456035+00:00",
         "fingerprint": "653b9f9ca8ea3ac7",
         "bullets": [
-          "ai_judgment_matched30_fair: total return -0.5% vs FTAL.L +1.8% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-          "Primary verdict: indistinguishable_from_noise · 90% interval [-1.163, 0.6521] · excess at 3% stress -0.1044",
-          "vs control buy_tier_matched30_fair: difference 0.0112 (common window, not significance)",
+          "ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: indistinguishable_from_noise · 90% interval [-1.3359, 0.5508] · excess at 3% stress -0.1223",
+          "vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance)",
           "AI gate binds: False (N189 while it never binds)",
           "twin ai_judgment_matched30_fair: difference -0.0158 over 10 days",
-          "twin buy_tier_matched30_fair: difference -0.0342 over 20 days",
+          "twin buy_tier_matched30_fair: difference -0.0444 over 21 days",
           "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15), stop_ai_judgment_fair_3name_v1 (2026-10-31)"
         ],
         "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard",
@@ -1093,7 +1108,7 @@
         "id": "rec-f278fa3e5852",
         "task_id": "human:sunday-assessment-scoreboard",
         "summary": "Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary indistinguishable_from_noise detail: ai_judgment_matched30_fair: total return -0.5% vs FTAL.L +1.8% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: indistinguishable_from_noise · 90% interval [-1.163, 0.6521] · excess at 3% stress -0.1044; vs control buy_tier_matched30_fair: difference 0.0112 (common window, not significance); AI gate binds: False (N189 while it never binds)",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary indistinguishable_from_noise detail: ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: indistinguishable_from_noise · 90% interval [-1.3359, 0.5508] · excess at 3% stress -0.1223; vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance); AI gate binds: False (N189 while it never binds)",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
@@ -1102,7 +1117,7 @@
             "finding_fingerprint": "653b9f9ca8ea3ac7"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-f278fa3e5852` (human task `sunday-assessment-scoreboard`):\nTitle: Read the assessment scoreboard (primary vs control; promotion gate)\nSummary: Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary indistinguishable_from_noise detail: ai_judgment_matched30_fair: total return -0.5% vs FTAL.L +1.8% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: indistinguishable_from_noise · 90% interval [-1.163, 0.6521] · excess at 3% stress -0.1044; vs control buy_tier_matched30_fair: difference 0.0112 (common window, not significance); AI gate binds: False (N189 while it never binds)\nReview detail:\n- ai_judgment_matched30_fair: total return -0.5% vs FTAL.L +1.8% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).\n- Primary verdict: indistinguishable_from_noise · 90% interval [-1.163, 0.6521] · excess at 3% stress -0.1044\n- vs control buy_tier_matched30_fair: difference 0.0112 (common window, not significance)\n- AI gate binds: False (N189 while it never binds)\n- twin ai_judgment_matched30_fair: difference -0.0158 over 10 days\n- twin buy_tier_matched30_fair: difference -0.0342 over 20 days\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Approve gate (observe-only)\n3) Defer / rewrite runbook expectation\n4) Open runbook\n5) Discuss in Project chat\nSay: discuss daily recommendation `rec-f278fa3e5852` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "discuss_prompt": "Discuss daily recommendation `rec-f278fa3e5852` (human task `sunday-assessment-scoreboard`):\nTitle: Read the assessment scoreboard (primary vs control; promotion gate)\nSummary: Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary indistinguishable_from_noise detail: ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: indistinguishable_from_noise · 90% interval [-1.3359, 0.5508] · excess at 3% stress -0.1223; vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance); AI gate binds: False (N189 while it never binds)\nReview detail:\n- ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).\n- Primary verdict: indistinguishable_from_noise · 90% interval [-1.3359, 0.5508] · excess at 3% stress -0.1223\n- vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance)\n- AI gate binds: False (N189 while it never binds)\n- twin ai_judgment_matched30_fair: difference -0.0158 over 10 days\n- twin buy_tier_matched30_fair: difference -0.0444 over 21 days\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Approve gate (observe-only)\n3) Defer / rewrite runbook expectation\n4) Open runbook\n5) Discuss in Project chat\nSay: discuss daily recommendation `rec-f278fa3e5852` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
         "priority": 13,
         "options": [
           {
@@ -1176,10 +1191,10 @@
       "close_payload": {
         "task_id": "monthly-pr-fix-common-issues",
         "decision": "ack_observe",
-        "finding_fingerprint": "56544467e176471b"
+        "finding_fingerprint": "38edacdd805f65e1"
       },
       "href": "#automation/human",
-      "recommendation_id": "rec-c6b95f5932bb",
+      "recommendation_id": "rec-204191d7d2d4",
       "status": {
         "state": "ready",
         "label": "Proposed",
@@ -1196,7 +1211,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: PR fix common issues",
@@ -1224,10 +1239,10 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "PR fix common issues",
-          "updated_at": "2026-11-20T00:29:56.996514+00:00",
-          "fingerprint": "56544467e176471b",
+          "updated_at": "2026-11-21T00:00:13.377006+00:00",
+          "fingerprint": "38edacdd805f65e1",
           "bullets": [
-            "Occasions logged: 394",
+            "Occasions logged: 395",
             "validate failed: 9",
             "PR mergeable=CONFLICTING against main: 7",
             "validate check failed: 6",
@@ -1253,10 +1268,10 @@
       "closed": false,
       "review_detail": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-11-20T00:29:56.996514+00:00",
-        "fingerprint": "56544467e176471b",
+        "updated_at": "2026-11-21T00:00:13.377006+00:00",
+        "fingerprint": "38edacdd805f65e1",
         "bullets": [
-          "Occasions logged: 394",
+          "Occasions logged: 395",
           "validate failed: 9",
           "PR mergeable=CONFLICTING against main: 7",
           "validate check failed: 6",
@@ -1292,19 +1307,19 @@
         "observe_only": true
       },
       "recommendation": {
-        "id": "rec-c6b95f5932bb",
+        "id": "rec-204191d7d2d4",
         "task_id": "human:monthly-pr-fix-common-issues",
         "summary": "Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 394; validate failed: 9; PR mergeable=CONFLICTING against main: 7; validate check failed: 6",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 395; validate failed: 9; PR mergeable=CONFLICTING against main: 7; validate check failed: 6",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
             "task_id": "monthly-pr-fix-common-issues",
             "decision": "ack_observe",
-            "finding_fingerprint": "56544467e176471b"
+            "finding_fingerprint": "38edacdd805f65e1"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-c6b95f5932bb` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 394; validate failed: 9; PR mergeable=CONFLICTING against main: 7; validate check failed: 6\nReview detail:\n- Occasions logged: 394\n- validate failed: 9\n- PR mergeable=CONFLICTING against main: 7\n- validate check failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-c6b95f5932bb` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "discuss_prompt": "Discuss daily recommendation `rec-204191d7d2d4` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 395; validate failed: 9; PR mergeable=CONFLICTING against main: 7; validate check failed: 6\nReview detail:\n- Occasions logged: 395\n- validate failed: 9\n- PR mergeable=CONFLICTING against main: 7\n- validate check failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-204191d7d2d4` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
         "priority": 14,
         "options": [
           {
@@ -1315,7 +1330,7 @@
               "payload": {
                 "task_id": "monthly-pr-fix-common-issues",
                 "decision": "ack_observe",
-                "finding_fingerprint": "56544467e176471b"
+                "finding_fingerprint": "38edacdd805f65e1"
               }
             }
           },
@@ -1327,7 +1342,7 @@
               "payload": {
                 "task_id": "monthly-pr-fix-common-issues",
                 "decision": "defer",
-                "finding_fingerprint": "56544467e176471b"
+                "finding_fingerprint": "38edacdd805f65e1"
               }
             }
           },
@@ -1386,7 +1401,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Ingest deviations · 2 open",
@@ -1414,7 +1429,7 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Ingest deviations · 2 open",
-          "updated_at": "2026-11-20T00:10:09.097117+00:00",
+          "updated_at": "2026-11-20T23:41:25.210570+00:00",
           "fingerprint": "6dda3808006c2a3a",
           "bullets": [
             "Open deviations: 2",
@@ -1439,7 +1454,7 @@
       "closed": false,
       "review_detail": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-11-20T00:10:09.097117+00:00",
+        "updated_at": "2026-11-20T23:41:25.210570+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -1568,7 +1583,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Triage queue · 12 open",
@@ -1756,7 +1771,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Triage queue · 3 open",
@@ -1940,7 +1955,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2110,7 +2125,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2280,7 +2295,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2450,7 +2465,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2620,7 +2635,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2790,7 +2805,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2960,7 +2975,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3130,7 +3145,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3300,7 +3315,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3470,7 +3485,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3640,7 +3655,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3810,7 +3825,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3980,7 +3995,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4150,7 +4165,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4320,7 +4335,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4490,7 +4505,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4660,7 +4675,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4830,7 +4845,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5000,7 +5015,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5170,7 +5185,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5340,7 +5355,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5510,7 +5525,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5680,7 +5695,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5850,7 +5865,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -6020,7 +6035,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -6190,7 +6205,7 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "ops finding (warn): Deferred idea triggers met",
@@ -6326,7 +6341,7 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "ops finding (warn): Parked engineering tasks need manual review",
@@ -6463,7 +6478,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite — Falsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply",
@@ -6597,7 +6612,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-11-20T07:54:24.826283Z",
+        "updated_at": "2026-11-21T02:39:30.741039Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Live hold/swap probability stays parked until closed cohorts mature — Falsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)",
@@ -6763,7 +6778,7 @@
       "id": "rec-55ae47791364",
       "task_id": "human:weekday-engineering-parked-backlog-clear",
       "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-20T07:51:56.501427+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-21T02:37:16.842507+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
@@ -6772,7 +6787,7 @@
           "finding_fingerprint": "0a2dad58594e26e2"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-55ae47791364` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-20T07:51:56.501427+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 3 (attention ~2)\n- Queue-clearing pause active: False — evaluated 2026-11-20T07:51:56.501427+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-55ae47791364` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "discuss_prompt": "Discuss daily recommendation `rec-55ae47791364` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-21T02:37:16.842507+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 3 (attention ~2)\n- Queue-clearing pause active: False — evaluated 2026-11-21T02:37:16.842507+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-55ae47791364` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
       "priority": 12,
       "options": [
         {
@@ -6823,7 +6838,7 @@
       "id": "rec-f278fa3e5852",
       "task_id": "human:sunday-assessment-scoreboard",
       "summary": "Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary indistinguishable_from_noise detail: ai_judgment_matched30_fair: total return -0.5% vs FTAL.L +1.8% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: indistinguishable_from_noise · 90% interval [-1.163, 0.6521] · excess at 3% stress -0.1044; vs control buy_tier_matched30_fair: difference 0.0112 (common window, not significance); AI gate binds: False (N189 while it never binds)",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary indistinguishable_from_noise detail: ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: indistinguishable_from_noise · 90% interval [-1.3359, 0.5508] · excess at 3% stress -0.1223; vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance); AI gate binds: False (N189 while it never binds)",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
@@ -6832,7 +6847,7 @@
           "finding_fingerprint": "653b9f9ca8ea3ac7"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-f278fa3e5852` (human task `sunday-assessment-scoreboard`):\nTitle: Read the assessment scoreboard (primary vs control; promotion gate)\nSummary: Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary indistinguishable_from_noise detail: ai_judgment_matched30_fair: total return -0.5% vs FTAL.L +1.8% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: indistinguishable_from_noise · 90% interval [-1.163, 0.6521] · excess at 3% stress -0.1044; vs control buy_tier_matched30_fair: difference 0.0112 (common window, not significance); AI gate binds: False (N189 while it never binds)\nReview detail:\n- ai_judgment_matched30_fair: total return -0.5% vs FTAL.L +1.8% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).\n- Primary verdict: indistinguishable_from_noise · 90% interval [-1.163, 0.6521] · excess at 3% stress -0.1044\n- vs control buy_tier_matched30_fair: difference 0.0112 (common window, not significance)\n- AI gate binds: False (N189 while it never binds)\n- twin ai_judgment_matched30_fair: difference -0.0158 over 10 days\n- twin buy_tier_matched30_fair: difference -0.0342 over 20 days\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Approve gate (observe-only)\n3) Defer / rewrite runbook expectation\n4) Open runbook\n5) Discuss in Project chat\nSay: discuss daily recommendation `rec-f278fa3e5852` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "discuss_prompt": "Discuss daily recommendation `rec-f278fa3e5852` (human task `sunday-assessment-scoreboard`):\nTitle: Read the assessment scoreboard (primary vs control; promotion gate)\nSummary: Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary indistinguishable_from_noise detail: ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: indistinguishable_from_noise · 90% interval [-1.3359, 0.5508] · excess at 3% stress -0.1223; vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance); AI gate binds: False (N189 while it never binds)\nReview detail:\n- ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).\n- Primary verdict: indistinguishable_from_noise · 90% interval [-1.3359, 0.5508] · excess at 3% stress -0.1223\n- vs control buy_tier_matched30_fair: difference 0.0123 (common window, not significance)\n- AI gate binds: False (N189 while it never binds)\n- twin ai_judgment_matched30_fair: difference -0.0158 over 10 days\n- twin buy_tier_matched30_fair: difference -0.0444 over 21 days\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Approve gate (observe-only)\n3) Defer / rewrite runbook expectation\n4) Open runbook\n5) Discuss in Project chat\nSay: discuss daily recommendation `rec-f278fa3e5852` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
       "priority": 13,
       "options": [
         {
@@ -6892,19 +6907,19 @@
       ]
     },
     {
-      "id": "rec-c6b95f5932bb",
+      "id": "rec-204191d7d2d4",
       "task_id": "human:monthly-pr-fix-common-issues",
       "summary": "Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 394; validate failed: 9; PR mergeable=CONFLICTING against main: 7; validate check failed: 6",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 395; validate failed: 9; PR mergeable=CONFLICTING against main: 7; validate check failed: 6",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
           "task_id": "monthly-pr-fix-common-issues",
           "decision": "ack_observe",
-          "finding_fingerprint": "56544467e176471b"
+          "finding_fingerprint": "38edacdd805f65e1"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-c6b95f5932bb` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 394; validate failed: 9; PR mergeable=CONFLICTING against main: 7; validate check failed: 6\nReview detail:\n- Occasions logged: 394\n- validate failed: 9\n- PR mergeable=CONFLICTING against main: 7\n- validate check failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-c6b95f5932bb` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "discuss_prompt": "Discuss daily recommendation `rec-204191d7d2d4` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 395; validate failed: 9; PR mergeable=CONFLICTING against main: 7; validate check failed: 6\nReview detail:\n- Occasions logged: 395\n- validate failed: 9\n- PR mergeable=CONFLICTING against main: 7\n- validate check failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-204191d7d2d4` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
       "priority": 14,
       "options": [
         {
@@ -6915,7 +6930,7 @@
             "payload": {
               "task_id": "monthly-pr-fix-common-issues",
               "decision": "ack_observe",
-              "finding_fingerprint": "56544467e176471b"
+              "finding_fingerprint": "38edacdd805f65e1"
             }
           }
         },
@@ -6927,7 +6942,7 @@
             "payload": {
               "task_id": "monthly-pr-fix-common-issues",
               "decision": "defer",
-              "finding_fingerprint": "56544467e176471b"
+              "finding_fingerprint": "38edacdd805f65e1"
             }
           }
         },
@@ -8817,7 +8832,7 @@
   },
   "project_sync": {
     "notes_fingerprint": null,
-    "synced_at": "2026-11-20T07:54:24.826283Z",
+    "synced_at": "2026-11-21T02:39:30.741039Z",
     "method": "morning_builder_reads_committed_export_or_manual"
   },
   "illumination_hints": {

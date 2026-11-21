@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-20T23:16:27.783332+00:00`
+Generated: `2026-11-21T02:39:30.880298+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,12 +33,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `ingest_narrow`/verified PR #1459 `eng-20261120-03` — Close library ingest gaps for euro_depth / UNA.AS (chain 3/3: 0/0 improved, run igc-20261005-02)
-- `parked_hunter`/verified PR #1458 `eng-20261120-02` — Hunt fetchable IR source for parked ftse_smallcap leftover LSL.L
-- `ingest_narrow`/verified PR #1457 `eng-20261120-01` — Close library ingest gaps for euro_depth / UNA.AS (chain 2/3: 0/0 improved, run igc-20261005-02)
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 394
+- Occasion count: 395
 - `validate failed` — 9×
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate check failed` — 6×
@@ -47,6 +45,22 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `validate job failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `ruff_format` — 2×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 17 (open=17, resolved=0)
+- [open] WARN Dashboard bundle is stale — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Weekly ops budget nearly exhausted — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Learning-track verdict not statistically supported — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Price-only excess misstates track performance — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Sector headwind gate coverage gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Memo model comparison failed — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
