@@ -2,9 +2,9 @@
   "schema_version": 1,
   "influences_live": false,
   "registration_id": "owner-strategy-book-v0",
-  "generated_at": "2026-11-20T23:22:50.551414+00:00",
-  "observe_data_commit": "a3ec0be8e55927a598c7bafc1634a8374dead744",
-  "observe_generated_at": "2026-11-20T23:21:56.818926+00:00",
+  "generated_at": "2026-11-21T02:43:13.671568+00:00",
+  "observe_data_commit": "4b013544e79557ffc73fc505b2d607bf4b5c1ca2",
+  "observe_generated_at": "2026-11-21T02:42:44.313643+00:00",
   "observe_store": "docs/data/strategy_book_observe.json",
   "observe_error": null,
   "constants": {
@@ -126,8 +126,8 @@
     "insufficient_data": 164,
     "reasons": {
       "currency_sources_disagree": 29,
-      "financials_after_signal": 77,
-      "implausible_multiple": 5,
+      "financials_after_signal": 73,
+      "implausible_multiple": 9,
       "reporting_currency_unstated": 53
     },
     "primary_episodes": 40,
@@ -512,26 +512,70 @@
       "fair_cost_return": -0.1613907590759075,
       "matched_excess": -0.10815514440475639,
       "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-20 is after the signal session 2026-11-16.",
+      "reason": "implausible_multiple",
+      "reason_detail": "Implied trailing P/E 0.76 is outside 2 to 200 (close 3.2249 USD / latest EPS 4.2300 USD). This is a unit and currency guard, not a valuation view.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 25.3,
       "entry_reference_unit": "HKD",
       "price_unit": "HKD",
       "major_currency": "HKD",
-      "statement_currency": null,
+      "statement_currency": "USD",
       "currency": {
-        "reason": "reporting_currency_unstated",
-        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
-        "sources": []
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/hang_seng/screen/research/1024.HK/sources/filings/bodies/5fa65f3b81575271.txt",
+            "published_at": "2025-08-21",
+            "headline": "Kuaishou to pay first dividend since Hong Kong IPO as AI tools lift quarterly results - finance.yahoo.com",
+            "currency": "USD"
+          }
+        ]
       },
-      "method": null,
+      "method": "normalised_earnings",
       "inputs": {
         "financials_path": "docs/data/library/markets/hang_seng/screen/research/1024.HK/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-20",
-        "eps_label": null,
-        "years": [],
+        "financials_state": "file",
+        "fetched_at": "2026-10-07",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2022,
+            "eps": -3.22,
+            "fcf": -4305000000.0,
+            "shares": 4254000000.0,
+            "fcf_per_share": -1.011989
+          },
+          {
+            "year": 2023,
+            "eps": 1.44,
+            "fcf": 15884000000.0,
+            "shares": 4441000000.0,
+            "fcf_per_share": 3.576672
+          },
+          {
+            "year": 2024,
+            "eps": 3.48,
+            "fcf": 21724000000.0,
+            "shares": 4406000000.0,
+            "fcf_per_share": 4.930549
+          },
+          {
+            "year": 2025,
+            "eps": 4.23,
+            "fcf": 11774000000.0,
+            "shares": 4402000000.0,
+            "fcf_per_share": 2.674693
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 1.4825,
+        "latest_per_share": 4.23,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 0.7624,
+        "implied_trailing_pe_close": 3.2249,
+        "implied_trailing_pe_eps": 4.23,
+        "implied_trailing_pe_currency": "USD",
         "chart_path": "docs/data/charts/1024.HK.json"
       },
       "range": null,
@@ -10778,26 +10822,70 @@
       "fair_cost_return": -0.1613907590759075,
       "matched_excess": -0.10815514440475639,
       "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-20 is after the signal session 2026-11-16.",
+      "reason": "implausible_multiple",
+      "reason_detail": "Implied trailing P/E 0.76 is outside 2 to 200 (close 3.2249 USD / latest EPS 4.2300 USD). This is a unit and currency guard, not a valuation view.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 25.3,
       "entry_reference_unit": "HKD",
       "price_unit": "HKD",
       "major_currency": "HKD",
-      "statement_currency": null,
+      "statement_currency": "USD",
       "currency": {
-        "reason": "reporting_currency_unstated",
-        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
-        "sources": []
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/hang_seng/screen/research/1024.HK/sources/filings/bodies/5fa65f3b81575271.txt",
+            "published_at": "2025-08-21",
+            "headline": "Kuaishou to pay first dividend since Hong Kong IPO as AI tools lift quarterly results - finance.yahoo.com",
+            "currency": "USD"
+          }
+        ]
       },
-      "method": null,
+      "method": "normalised_earnings",
       "inputs": {
         "financials_path": "docs/data/library/markets/hang_seng/screen/research/1024.HK/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-20",
-        "eps_label": null,
-        "years": [],
+        "financials_state": "file",
+        "fetched_at": "2026-10-07",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2022,
+            "eps": -3.22,
+            "fcf": -4305000000.0,
+            "shares": 4254000000.0,
+            "fcf_per_share": -1.011989
+          },
+          {
+            "year": 2023,
+            "eps": 1.44,
+            "fcf": 15884000000.0,
+            "shares": 4441000000.0,
+            "fcf_per_share": 3.576672
+          },
+          {
+            "year": 2024,
+            "eps": 3.48,
+            "fcf": 21724000000.0,
+            "shares": 4406000000.0,
+            "fcf_per_share": 4.930549
+          },
+          {
+            "year": 2025,
+            "eps": 4.23,
+            "fcf": 11774000000.0,
+            "shares": 4402000000.0,
+            "fcf_per_share": 2.674693
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 1.4825,
+        "latest_per_share": 4.23,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 0.7624,
+        "implied_trailing_pe_close": 3.2249,
+        "implied_trailing_pe_eps": 4.23,
+        "implied_trailing_pe_currency": "USD",
         "chart_path": "docs/data/charts/1024.HK.json"
       },
       "range": null,
@@ -14132,26 +14220,70 @@
       "fair_cost_return": -0.1613907590759075,
       "matched_excess": -0.10815514440475639,
       "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-20 is after the signal session 2026-11-16.",
+      "reason": "implausible_multiple",
+      "reason_detail": "Implied trailing P/E 0.76 is outside 2 to 200 (close 3.2249 USD / latest EPS 4.2300 USD). This is a unit and currency guard, not a valuation view.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 25.3,
       "entry_reference_unit": "HKD",
       "price_unit": "HKD",
       "major_currency": "HKD",
-      "statement_currency": null,
+      "statement_currency": "USD",
       "currency": {
-        "reason": "reporting_currency_unstated",
-        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
-        "sources": []
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/hang_seng/screen/research/1024.HK/sources/filings/bodies/5fa65f3b81575271.txt",
+            "published_at": "2025-08-21",
+            "headline": "Kuaishou to pay first dividend since Hong Kong IPO as AI tools lift quarterly results - finance.yahoo.com",
+            "currency": "USD"
+          }
+        ]
       },
-      "method": null,
+      "method": "normalised_earnings",
       "inputs": {
         "financials_path": "docs/data/library/markets/hang_seng/screen/research/1024.HK/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-20",
-        "eps_label": null,
-        "years": [],
+        "financials_state": "file",
+        "fetched_at": "2026-10-07",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2022,
+            "eps": -3.22,
+            "fcf": -4305000000.0,
+            "shares": 4254000000.0,
+            "fcf_per_share": -1.011989
+          },
+          {
+            "year": 2023,
+            "eps": 1.44,
+            "fcf": 15884000000.0,
+            "shares": 4441000000.0,
+            "fcf_per_share": 3.576672
+          },
+          {
+            "year": 2024,
+            "eps": 3.48,
+            "fcf": 21724000000.0,
+            "shares": 4406000000.0,
+            "fcf_per_share": 4.930549
+          },
+          {
+            "year": 2025,
+            "eps": 4.23,
+            "fcf": 11774000000.0,
+            "shares": 4402000000.0,
+            "fcf_per_share": 2.674693
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 1.4825,
+        "latest_per_share": 4.23,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 0.7624,
+        "implied_trailing_pe_close": 3.2249,
+        "implied_trailing_pe_eps": 4.23,
+        "implied_trailing_pe_currency": "USD",
         "chart_path": "docs/data/charts/1024.HK.json"
       },
       "range": null,
@@ -17486,26 +17618,70 @@
       "fair_cost_return": -0.1613907590759075,
       "matched_excess": -0.10815514440475639,
       "verdict": "insufficient_data",
-      "reason": "financials_after_signal",
-      "reason_detail": "financials fetched_at 2026-11-20 is after the signal session 2026-11-16.",
+      "reason": "implausible_multiple",
+      "reason_detail": "Implied trailing P/E 0.76 is outside 2 to 200 (close 3.2249 USD / latest EPS 4.2300 USD). This is a unit and currency guard, not a valuation view.",
       "entry_reference": "signal_session_close",
       "entry_reference_price": 25.3,
       "entry_reference_unit": "HKD",
       "price_unit": "HKD",
       "major_currency": "HKD",
-      "statement_currency": null,
+      "statement_currency": "USD",
       "currency": {
-        "reason": "reporting_currency_unstated",
-        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
-        "sources": []
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/hang_seng/screen/research/1024.HK/sources/filings/bodies/5fa65f3b81575271.txt",
+            "published_at": "2025-08-21",
+            "headline": "Kuaishou to pay first dividend since Hong Kong IPO as AI tools lift quarterly results - finance.yahoo.com",
+            "currency": "USD"
+          }
+        ]
       },
-      "method": null,
+      "method": "normalised_earnings",
       "inputs": {
         "financials_path": "docs/data/library/markets/hang_seng/screen/research/1024.HK/sources/financials_annual.json",
-        "financials_state": "file_after_signal",
-        "fetched_at": "2026-11-20",
-        "eps_label": null,
-        "years": [],
+        "financials_state": "file",
+        "fetched_at": "2026-10-07",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2022,
+            "eps": -3.22,
+            "fcf": -4305000000.0,
+            "shares": 4254000000.0,
+            "fcf_per_share": -1.011989
+          },
+          {
+            "year": 2023,
+            "eps": 1.44,
+            "fcf": 15884000000.0,
+            "shares": 4441000000.0,
+            "fcf_per_share": 3.576672
+          },
+          {
+            "year": 2024,
+            "eps": 3.48,
+            "fcf": 21724000000.0,
+            "shares": 4406000000.0,
+            "fcf_per_share": 4.930549
+          },
+          {
+            "year": 2025,
+            "eps": 4.23,
+            "fcf": 11774000000.0,
+            "shares": 4402000000.0,
+            "fcf_per_share": 2.674693
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 1.4825,
+        "latest_per_share": 4.23,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 0.7624,
+        "implied_trailing_pe_close": 3.2249,
+        "implied_trailing_pe_eps": 4.23,
+        "implied_trailing_pe_currency": "USD",
         "chart_path": "docs/data/charts/1024.HK.json"
       },
       "range": null,
