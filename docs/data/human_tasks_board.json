@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-22T02:36:16.470983+00:00",
+  "generated_at": "2026-11-22T07:54:04.695087+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -14,49 +14,6 @@
     "human": 67
   },
   "tasks": [
-    {
-      "id": "weekday-engineering-parked-backlog-clear",
-      "title": "Clear engineering parked backlog when dispatch pauses",
-      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
-      "automated": false,
-      "cadence": "weekday",
-      "section_id": "weekday",
-      "section_title": "Weekday (Mon–Fri)",
-      "doc_path": "docs/ops/ops-monitor.md",
-      "doc_anchor": "engineering-parked-backlog-clearing",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "2 attention-parked eng tasks",
-        "updated_at": "2026-11-22T02:34:55.516496+00:00",
-        "fingerprint": "0a2dad58594e26e2",
-        "bullets": [
-          "Parked tasks: 3 (attention ~2)",
-          "Queue-clearing pause active: False — evaluated 2026-11-22T02:34:55.516496+00:00",
-          "Traffic pause active: False",
-          "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
-          "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
-          "eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX"
-        ],
-        "source_keys": [
-          "engineering_tasks"
-        ],
-        "ack_sufficient": false,
-        "auto_ackable": false,
-        "ack_reason": "attention_parked_remaining"
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-26T02:39:50.092299+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "463c1c358411298f"
-      },
-      "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
     {
       "id": "sunday-assessment-scoreboard",
       "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
@@ -72,7 +29,7 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary indistinguishable_from_noise",
-        "updated_at": "2026-11-22T02:34:34.458997+00:00",
+        "updated_at": "2026-11-22T07:52:23.031103+00:00",
         "fingerprint": "653b9f9ca8ea3ac7",
         "bullets": [
           "ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -93,6 +50,49 @@
         "acked_at": "2026-10-09T15:43:43.187966+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "782b2addb6782b0b"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "weekday-engineering-parked-backlog-clear",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+      "automated": false,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "engineering-parked-backlog-clearing",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "2 attention-parked eng tasks",
+        "updated_at": "2026-11-22T07:49:46.079226+00:00",
+        "fingerprint": "0a2dad58594e26e2",
+        "bullets": [
+          "Parked tasks: 3 (attention ~2)",
+          "Queue-clearing pause active: False — evaluated 2026-11-22T07:49:46.079226+00:00",
+          "Traffic pause active: False",
+          "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
+          "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
+          "eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX"
+        ],
+        "source_keys": [
+          "engineering_tasks"
+        ],
+        "ack_sufficient": false,
+        "auto_ackable": false,
+        "ack_reason": "attention_parked_remaining"
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-26T02:39:50.092299+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "463c1c358411298f"
       },
       "sort_bucket": "new_info",
       "auto_ackable": false,

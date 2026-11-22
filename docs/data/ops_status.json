@@ -1,21 +1,12 @@
 {
-  "run_at": "2026-11-22T02:31:58.422893+00:00",
+  "run_at": "2026-11-22T07:46:49.018261+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
-      "category": "ingest",
-      "title": "Ingest loop hit runtime cutoff",
-      "summary": "Last run deferred 23 ticker(s) after completing 15 (per_ticker_budget) — backlog resume or chained chunk should drain remainder.",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
       "category": "dashboard",
       "title": "Dashboard bundle is stale",
-      "summary": "latest.json updated 2026-11-08T08:26:03.098701+00:00 (330h ago; threshold 168h).",
+      "summary": "latest.json updated 2026-11-08T08:26:03.098701+00:00 (335h ago; threshold 168h).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -33,7 +24,7 @@
       "severity": "info",
       "category": "budget",
       "title": "Agent token usage (measuring)",
-      "summary": "Week 2026-W47: raw $0.0000, charged $0.0000, tokens 0 (in 0 / out 0 / cache_read 0 / cache_write 0). Top jobs: research_memo $0.0000 (322 runs), llm_agree_veto_shadow $0.0000 (110 runs), engineering $0.0000 (20 runs). Research memo raw median n/a / p90 n/a vs ledger estimate $0.40 (0 of 322 runs with cost). Estimated-USD ledger this week $136.80. Measuring mode (token_usage_weekly_warning_raw_usd is null).",
+      "summary": "Week 2026-W47: raw $0.0000, charged $0.0000, tokens 0 (in 0 / out 0 / cache_read 0 / cache_write 0). Top jobs: research_memo $0.0000 (322 runs), llm_agree_veto_shadow $0.0000 (110 runs), engineering $0.0000 (21 runs). Research memo raw median n/a / p90 n/a vs ledger estimate $0.40 (0 of 322 runs with cost). Estimated-USD ledger this week $138.00. Measuring mode (token_usage_weekly_warning_raw_usd is null).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -42,7 +33,7 @@
       "severity": "info",
       "category": "budget",
       "title": "Agent token usage coverage gap",
-      "summary": "Week 2026-W47: 452 of 452 rows (100%) have usage_error or are still cost-pending after 48h (usage_error 452, pending after 48h 431). Coverage gap only — the estimated-USD cap is unchanged.",
+      "summary": "Week 2026-W47: 453 of 453 rows (100%) have usage_error or are still cost-pending after 48h (usage_error 453, pending after 48h 442). Coverage gap only — the estimated-USD cap is unchanged.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -60,7 +51,7 @@
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "2 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth, ftse_smallcap: euro_depth/POST.VI (no_key_bodies, 74.53h since flip), ftse_smallcap/LSL.L (no_key_bodies, 74.53h since flip). Blocking: no_key_bodies=2.",
+      "summary": "2 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth, ftse_smallcap: euro_depth/POST.VI (no_key_bodies, 79.83h since flip), ftse_smallcap/LSL.L (no_key_bodies, 79.83h since flip). Blocking: no_key_bodies=2.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -78,7 +69,7 @@
       "severity": "info",
       "category": "research",
       "title": "Library decision-input binds (observe)",
-      "summary": "Graduated library buy-tier names: 376; all four binds true: 80. Gaps: key_filing_bodies=4, fcf_basis_bound=1, overlay_bound=47, memo_recent=293. Largest gap: memo_recent. Observe-only — do not rememo, ingest, or open an engineering task from this finding. See docs/data/library_decision_input_inventory.json.",
+      "summary": "Graduated library buy-tier names: 376; all four binds true: 74. Gaps: key_filing_bodies=4, fcf_basis_bound=1, overlay_bound=47, memo_recent=299. Largest gap: memo_recent. Observe-only — do not rememo, ingest, or open an engineering task from this finding. See docs/data/library_decision_input_inventory.json.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -132,7 +123,7 @@
       "severity": "info",
       "category": "research",
       "title": "Post-sale review queue (observe)",
-      "summary": "Active uncommented post-sale reviews: 160; actioned history=139; candidates sealed+control=513. Accept/Comment/Duplicate observe-only (influences_live=false).",
+      "summary": "Active uncommented post-sale reviews: 158; actioned history=139; candidates sealed+control=513. Accept/Comment/Duplicate observe-only (influences_live=false).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -195,7 +186,7 @@
       "severity": "info",
       "category": "research",
       "title": "Entry-blind review queue (observe)",
-      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=18; candidates=47. PIT-only; influences_live=false.",
+      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=18; candidates=43. PIT-only; influences_live=false.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -546,7 +537,7 @@
       "severity": "info",
       "category": "research",
       "title": "Trading 212 catalogue fresh",
-      "summary": "Catalogue age 5.55 days (fetched 2026-11-16T13:28:55.523368+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
+      "summary": "Catalogue age 5.77 days (fetched 2026-11-16T13:28:55.523368+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -653,12 +644,16 @@
   ],
   "auto_fixes": [
     {
+      "action": "housekeep_parked_task",
+      "detail": "cancel_superseded_gap_closure eng-20261122-01: tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261121-02 (of eng-20261121-02)"
+    },
+    {
       "action": "market_eng_gap_burndown",
-      "detail": "gap_closure_compile for euro_depth → eng-20261122-01"
+      "detail": "gap_closure_compile for euro_depth → eng-20261122-02"
     }
   ],
   "drafted_task_ids": [
-    "eng-20261122-01"
+    "eng-20261122-02"
   ],
   "workflow_checks": [
     {
@@ -667,9 +662,9 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-11-22T01:08:09+00:00",
-      "last_success_run_id": 44970002620,
-      "age_hours": 1.4,
+      "last_success_at": "2026-11-22T03:48:35+00:00",
+      "last_success_run_id": 44982287949,
+      "age_hours": 4.1,
       "stale": false,
       "recent_failures_24h": 1,
       "unresolved_failures_12h": 0
@@ -678,11 +673,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": false,
+      "past_email_ready": true,
       "max_age_hours": 28,
       "last_success_at": "2026-11-21T13:39:17+00:00",
       "last_success_run_id": 44909932038,
-      "age_hours": 12.9,
+      "age_hours": 18.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -693,9 +688,9 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 26,
-      "last_success_at": "2026-11-21T22:31:13+00:00",
-      "last_success_run_id": 44957161743,
-      "age_hours": 4.1,
+      "last_success_at": "2026-11-22T02:36:29+00:00",
+      "last_success_run_id": 44976881428,
+      "age_hours": 5.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -706,9 +701,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-11-22T02:30:49+00:00",
-      "last_success_run_id": 44976442241,
-      "age_hours": 0.1,
+      "last_success_at": "2026-11-22T07:50:33+00:00",
+      "last_success_run_id": 45000051072,
+      "age_hours": 0.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -719,9 +714,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-21T15:28:41+00:00",
-      "last_success_run_id": 44919375012,
-      "age_hours": 11.1,
+      "last_success_at": "2026-11-22T07:30:49+00:00",
+      "last_success_run_id": 44998566174,
+      "age_hours": 0.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -734,7 +729,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-15T15:44:15+00:00",
       "last_success_run_id": 43731534332,
-      "age_hours": 154.8,
+      "age_hours": 160.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -747,7 +742,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-19T06:52:00+00:00",
       "last_success_run_id": 44475297742,
-      "age_hours": 67.7,
+      "age_hours": 73.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -760,7 +755,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-15T07:28:05+00:00",
       "last_success_run_id": 43690066817,
-      "age_hours": 163.1,
+      "age_hours": 168.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -773,7 +768,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-15T07:28:06+00:00",
       "last_success_run_id": 43690068558,
-      "age_hours": 163.1,
+      "age_hours": 168.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -786,7 +781,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-15T18:58:37+00:00",
       "last_success_run_id": 43749757146,
-      "age_hours": 151.6,
+      "age_hours": 156.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -799,7 +794,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-11-20T09:53:51+00:00",
       "last_success_run_id": 44714573987,
-      "age_hours": 40.7,
+      "age_hours": 46.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -810,9 +805,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-21T20:04:12+00:00",
-      "last_success_run_id": 44944281609,
-      "age_hours": 6.5,
+      "last_success_at": "2026-11-22T02:30:46+00:00",
+      "last_success_run_id": 44976437168,
+      "age_hours": 5.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
