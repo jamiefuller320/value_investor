@@ -1,6 +1,6 @@
 # Loser snapshot cards
 
-Generated: 2026-11-08T10:36:41.053152+00:00
+Generated: 2026-11-22T10:38:08.778376+00:00
 Scope: Avoid-tier screen names + failed-buy alumni (memo present, no longer buy-tier). Hold tier and full index excluded.
 Card count: 91
 
@@ -69,7 +69,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes cheapness family (currently failed)
 
 ## BAG.L — A.G. BARR p.l.c.
-- HOLD | conviction 18% | timing neutral | 4w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 4w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,risk | failed: quality, dividend, garp
 - Sector Consumer Defensive: 5/20 avoid
@@ -77,7 +77,7 @@ Card count: 91
 - Opinion-flip triggers: conviction >= 0.35; passes quality family (currently failed)
 
 ## BBY.L — Balfour Beatty plc
-- HOLD | conviction 15% | timing neutral | 18w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 18w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: quality,risk | failed: cheapness, dividend, garp
 - Sector Industrials: 13/51 avoid
@@ -93,7 +93,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes cheapness family (currently failed)
 
 ## BME.L — B&M European Value Retail plc
-- HOLD | conviction 25% | timing wait | 14w at signal (stable)
+- HOLD | conviction 1% | timing wait | 14w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,risk | failed: dividend, garp
 - Sector Consumer Defensive: 5/20 avoid
@@ -101,7 +101,7 @@ Card count: 91
 - Opinion-flip triggers: conviction >= 0.35; timing_signal != wait; passes dividend family (currently failed)
 
 ## BP.L — BP p.l.c.
-- HOLD | conviction 15% | timing neutral | 2w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 2w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,risk | failed: dividend, garp
 - Sector Energy: 2/8 avoid
@@ -125,7 +125,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes dividend family (currently failed)
 
 ## BTRW.L — Barratt Redrow plc
-- HOLD | conviction 23% | timing neutral | 9w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 9w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,risk | failed: dividend, garp
 - Sector Consumer Cyclical: 12/45 avoid
@@ -141,7 +141,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes cheapness family (currently failed); data_quality_score >= 0.8
 
 ## CCC.L — Computacenter plc
-- HOLD | conviction 38% | timing neutral | 5w at signal (stable)
+- HOLD | conviction 100% | timing neutral | 5w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,risk | failed: dividend, garp
 - Sector Technology: 2/13 avoid
@@ -229,7 +229,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes cheapness family (currently failed)
 
 ## DRX.L — Drax Group plc
-- AVOID | conviction 8% | timing neutral | 2w at signal (stable)
+- AVOID | conviction 0% | timing neutral | 2w at signal (stable)
 - Cohorts: avoid, failed_buy_alumni
 - Families passed: cheapness,risk | failed: quality, dividend, garp
 - Sector Utilities: 4/9 avoid
@@ -237,15 +237,15 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes quality family (currently failed); research_verdict accumulate
 
 ## DSCV.L — discoverIE Group plc
-- HOLD | conviction 28% | timing neutral | 4w at signal (stable)
+- HOLD | conviction 38% | timing neutral | 4w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: quality,risk | failed: cheapness, dividend, garp
 - Sector Technology: 2/13 avoid
 - Action note: Hold — neutral timing | Earnings growth basis divergence >300 bps: statutory 18.0% vs filing core 5.0% | Adjusted EPS growth mismatch: screen 24.2% vs latest fi
-- Opinion-flip triggers: conviction >= 0.35; passes cheapness family (currently failed)
+- Opinion-flip triggers: passes cheapness family (currently failed); research_verdict accumulate
 
 ## EDV.L — Endeavour Mining plc
-- HOLD | conviction 29% | timing neutral | 7w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 7w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,garp,risk | failed: dividend
 - Sector Basic Materials: 3/18 avoid
@@ -261,7 +261,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes quality family (currently failed)
 
 ## ENQ.L — EnQuest PLC
-- HOLD | conviction 20% | timing neutral | 5w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 5w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality | failed: dividend, garp, risk
 - Sector Energy: 2/8 avoid
@@ -269,7 +269,7 @@ Card count: 91
 - Opinion-flip triggers: conviction >= 0.35; passes dividend family (currently failed); research_verdict accumulate
 
 ## EWG.L — W.A.G payment solutions plc
-- HOLD | conviction 21% | timing neutral | 9w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 9w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,risk | failed: dividend, garp
 - Sector Technology: 2/13 avoid
@@ -285,7 +285,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes quality family (currently failed)
 
 ## GAMA.L — Gamma Communications plc
-- HOLD | conviction 20% | timing neutral | 3w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 3w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,risk | failed: dividend, garp
 - Sector Communication Services: 4/16 avoid
@@ -301,7 +301,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; timing_signal != wait; passes quality family (currently failed)
 
 ## HLN.L — Haleon plc
-- HOLD | conviction 27% | timing neutral | 15w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 15w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,risk | failed: dividend, garp
 - Sector Healthcare: 4/11 avoid
@@ -317,7 +317,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes dividend family (currently failed)
 
 ## ICG.L — ICG plc
-- HOLD | conviction 40% | timing neutral | 5w at signal (stable)
+- HOLD | conviction 100% | timing neutral | 5w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,dividend,risk | failed: garp
 - Sector Financial Services: 12/49 avoid
@@ -389,7 +389,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes cheapness family (currently failed)
 
 ## MOON.L — Moonpig Group PLC
-- HOLD | conviction 14% | timing neutral | 8w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 8w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,risk | failed: quality, dividend, garp
 - Sector Consumer Cyclical: 12/45 avoid
@@ -429,7 +429,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes cheapness family (currently failed); data_quality_score >= 0.8
 
 ## N91.L — Ninety One Group
-- HOLD | conviction 46% | timing neutral | 20w at signal (stable)
+- HOLD | conviction 100% | timing neutral | 20w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,dividend,risk | failed: garp
 - Sector Financial Services: 12/49 avoid
@@ -469,7 +469,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes cheapness family (currently failed)
 
 ## PETS.L — Pets at Home Group Plc
-- HOLD | conviction 15% | timing wait | 16w at signal (stable)
+- HOLD | conviction 1% | timing wait | 16w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,risk | failed: quality, dividend, garp
 - Sector Consumer Cyclical: 12/45 avoid
@@ -501,7 +501,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes cheapness family (currently failed)
 
 ## PTEC.L — Playtech plc
-- AVOID | conviction 6% | timing neutral | 19w at signal (stable)
+- AVOID | conviction 0% | timing neutral | 19w at signal (stable)
 - Cohorts: avoid, failed_buy_alumni
 - Families passed: cheapness,risk | failed: quality, dividend, garp
 - Sector Consumer Cyclical: 12/45 avoid
@@ -509,7 +509,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes quality family (currently failed)
 
 ## RAT.L — Rathbones Group Plc
-- HOLD | conviction 13% | timing neutral | 7w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 7w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,risk | failed: quality, dividend, garp
 - Sector Financial Services: 12/49 avoid
@@ -517,7 +517,7 @@ Card count: 91
 - Opinion-flip triggers: conviction >= 0.35; passes quality family (currently failed); research_verdict accumulate
 
 ## RHIM.L — RHI Magnesita N.V.
-- HOLD | conviction 24% | timing neutral | 15w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 15w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,risk | failed: quality, dividend, garp
 - Sector Industrials: 13/51 avoid
@@ -541,7 +541,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes cheapness family (currently failed)
 
 ## RS1.L — RS Group plc
-- HOLD | conviction 24% | timing neutral | 5w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 5w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,risk | failed: dividend, garp
 - Sector Industrials: 13/51 avoid
@@ -557,7 +557,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; timing_signal != wait; passes quality family (currently failed)
 
 ## SBRY.L — J Sainsbury plc
-- HOLD | conviction 18% | timing neutral | 15w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 15w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,risk | failed: quality, dividend, garp
 - Sector Consumer Defensive: 5/20 avoid
@@ -565,7 +565,7 @@ Card count: 91
 - Opinion-flip triggers: conviction >= 0.35; passes quality family (currently failed)
 
 ## SGE.L — The Sage Group plc
-- AVOID | conviction 16% | timing wait | 7w at signal (stable)
+- AVOID | conviction 1% | timing wait | 7w at signal (stable)
 - Cohorts: avoid, failed_buy_alumni
 - Families passed: cheapness,quality,risk | failed: dividend, garp
 - Sector Technology: 2/13 avoid
@@ -581,7 +581,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes cheapness family (currently failed)
 
 ## SRP.L — Serco Group plc
-- HOLD | conviction 7% | timing wait | 15w at signal (stable)
+- HOLD | conviction 0% | timing wait | 15w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: risk | failed: cheapness, quality, dividend, garp
 - Sector Industrials: 13/51 avoid
@@ -637,7 +637,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; timing_signal != wait; passes cheapness family (currently failed)
 
 ## TPK.L — Travis Perkins plc
-- HOLD | conviction 17% | timing neutral | 15w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 15w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,risk | failed: quality, dividend, garp
 - Sector Industrials: 13/51 avoid
@@ -645,7 +645,7 @@ Card count: 91
 - Opinion-flip triggers: conviction >= 0.35; passes quality family (currently failed)
 
 ## TRN.L — Trainline plc
-- HOLD | conviction 29% | timing neutral | 9w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 9w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,garp,risk | failed: dividend
 - Sector Consumer Cyclical: 12/45 avoid
@@ -653,7 +653,7 @@ Card count: 91
 - Opinion-flip triggers: conviction >= 0.35; passes dividend family (currently failed); research_verdict accumulate
 
 ## TRST.L — Trustpilot Group plc
-- HOLD | conviction 18% | timing neutral | 9w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 9w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,risk | failed: dividend, garp
 - Sector Technology: 2/13 avoid
@@ -661,7 +661,7 @@ Card count: 91
 - Opinion-flip triggers: conviction >= 0.35; passes dividend family (currently failed); research_verdict accumulate
 
 ## TSCO.L — Tesco PLC
-- HOLD | conviction 28% | timing neutral | 20w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 20w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,dividend,risk | failed: garp
 - Sector Consumer Defensive: 5/20 avoid
@@ -669,15 +669,15 @@ Card count: 91
 - Opinion-flip triggers: conviction >= 0.35; passes garp family (currently failed); research_verdict accumulate
 
 ## VSVS.L — Vesuvius plc
-- HOLD | conviction 11% | timing neutral | 15w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 15w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,risk | failed: quality, dividend, garp
 - Sector Basic Materials: 3/18 avoid
 - Action note: Hold — neutral timing | FCF basis mismatch: filing £26.2M | screen TTM £88.2M | company-adj £36M | FCF definition divergence: statutory 0.45× vs management -1.4
-- Opinion-flip triggers: conviction >= 0.35; passes quality family (currently failed)
+- Opinion-flip triggers: conviction >= 0.35; passes quality family (currently failed); research_verdict accumulate
 
 ## VTY.L — Vistry Group PLC
-- HOLD | conviction 20% | timing neutral | 9w at signal (stable)
+- HOLD | conviction 1% | timing neutral | 9w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: cheapness,quality,risk | failed: dividend, garp
 - Sector Consumer Cyclical: 12/45 avoid
@@ -693,7 +693,7 @@ Card count: 91
 - Opinion-flip triggers: screen signal upgrades above avoid; conviction >= 0.35; passes cheapness family (currently failed)
 
 ## WIX.L — Wickes Group plc
-- HOLD | conviction 17% | timing wait | 9w at signal (stable)
+- HOLD | conviction 1% | timing wait | 9w at signal (stable)
 - Cohorts: failed_buy_alumni
 - Families passed: quality,risk | failed: cheapness, dividend, garp
 - Sector Consumer Cyclical: 12/45 avoid
