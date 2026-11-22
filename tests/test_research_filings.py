@@ -14755,6 +14755,98 @@ def test_parked_source_hunter_evn_vi_euro_depth_has_fetchable_ir():
     assert valid, reason
 
 
+def test_ir_allowlist_unfetchable_may_retry_evn_vi_allowlist_removed_eng_20261122_01():
+    """eng-20261122-01: dead EVN hub allowlist_removed must retry via canonical Jahresfinanzbericht URL."""
+    from value_investor.research.filings import (
+        _ir_allowlist_unfetchable_may_retry,
+        fetch_filings_ir_allowlist,
+    )
+
+    allowlist_urls = {row["url"] for row in fetch_filings_ir_allowlist("EVN.VI")}
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    row = {
+        "source": "ir_allowlist",
+        "url": dead,
+        "has_body": False,
+        "unfetchable": True,
+        "unfetchable_reason": "allowlist_removed",
+    }
+    assert _ir_allowlist_unfetchable_may_retry(
+        row,
+        allowlist_urls=allowlist_urls,
+        ticker="EVN.VI",
+    )
+
+
+def test_load_ir_url_allowlist_canonicalizes_evn_vi_publications_without_trailing_slash(
+    tmp_path: Path,
+):
+    """eng-20261122-01: publications hub without trailing slash maps to live statutory PDF."""
+    dead = "https://www.evn.at/en/investor-relations/publications"
+    live = _BUILTIN_IR_URLS["EVN.VI"][0]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"EVN.VI": [dead]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["EVN.VI"]
+    assert dead not in mapping["EVN.VI"]
+
+
+@patch("value_investor.research.filings.fetch_filing_body")
+def test_refetch_euro_filings_primary_bodies_evn_vi_eng_20261122_01(mock_fetch, tmp_path: Path):
+    """eng-20261122-01: euro primary pipeline fetches EVN.VI after dead hub allowlist_removed."""
+    from value_investor.research.filings import refetch_euro_filings_primary_bodies
+
+    mock_fetch.return_value = (
+        "EVN AG Jahresfinanzbericht consolidated revenue operating result "
+        "earnings per share cash flow " * 40
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_07bb52dd9c03b279",
+                        "source": "ir_allowlist",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "allowlist_removed",
+                    },
+                    {
+                        "id": "esef1",
+                        "source": "esef_direct",
+                        "period": "interim",
+                        "has_body": True,
+                    },
+                    {
+                        "id": "esef2",
+                        "source": "esef_direct",
+                        "period": "interim",
+                        "has_body": True,
+                    },
+                ],
+                "summary": {"with_body": 2, "total": 3},
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = refetch_euro_filings_primary_bodies(
+        filings_dir,
+        ticker="EVN.VI",
+        company_name="EVN AG",
+        max_bodies=5,
+    )
+    assert int(result["ir_allowlist"].get("attempted") or 0) >= 1
+    assert result["with_body_after"] > result["with_body_before"]
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ir_rows = [row for row in payload["filings"] if row.get("source") == "ir_allowlist"]
+    assert any(row.get("has_body") for row in ir_rows)
+
+
 def test_parked_source_hunter_cai_vi_atx_has_fetchable_ir():
     """eng-20261021-08: CAI.VI caimmo.com FY2025 annual + H1 2026 interim PDFs fetch and validate."""
     assert "CAI.VI" not in PARKED_SOURCE_HUNTER_SKIP

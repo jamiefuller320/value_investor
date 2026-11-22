@@ -5948,6 +5948,10 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     "https://www.evn.at/en/investor-relations/publications/": (
         "https://www.evn.at/getmedia/cf5d1356-1622-4d84-ae5a-5cb5c7dbecb6/EVN_Jahresfinanzbericht-2024-25.pdf"
     ),
+    # eng-20261122-01: trailing-slash variant of the same dead EVN publications hub.
+    "https://www.evn.at/en/investor-relations/publications": (
+        "https://www.evn.at/getmedia/cf5d1356-1622-4d84-ae5a-5cb5c7dbecb6/EVN_Jahresfinanzbericht-2024-25.pdf"
+    ),
     # eng-20260908-24: /en/investors 404s; 2025 integrated report PDF still serves.
     "https://www.azelis.com/en/investors": (
         "https://www.azelis.com/sites/default/files/uploads/Azelis%20Group%20NV%20-%20Integrated%20report%202025%20(2).pdf"
@@ -6100,6 +6104,21 @@ def _migrate_ir_allowlist_row_url(
     return item, True
 
 
+def _ir_allowlist_url_still_listed(
+    url: str,
+    *,
+    allowlist_urls: set[str],
+    ticker: str,
+) -> bool:
+    """True when the row URL or its canonical replacement is on the live IR allowlist."""
+    cleaned = str(url or "").strip()
+    if not cleaned:
+        return False
+    canon = _resolve_ir_allowlist_canonical(cleaned, ticker)
+    fetch_url = _resolve_ir_allowlist_fetch_url(canon)
+    return any(candidate in allowlist_urls for candidate in {cleaned, canon, fetch_url})
+
+
 def _ir_allowlist_unfetchable_may_retry(
     row: dict[str, Any],
     *,
@@ -6112,16 +6131,17 @@ def _ir_allowlist_unfetchable_may_retry(
     if row.get("has_body"):
         return False
     reason = str(row.get("unfetchable_reason") or "").strip()
-    if reason == "allowlist_removed":
-        return False
     url = str(row.get("url") or "").strip()
     if not url:
         return False
     canon = _resolve_ir_allowlist_canonical(url, ticker)
     fetch_url = _resolve_ir_allowlist_fetch_url(canon)
-    on_allowlist = any(candidate in allowlist_urls for candidate in {url, canon, fetch_url})
+    on_allowlist = _ir_allowlist_url_still_listed(url, allowlist_urls=allowlist_urls, ticker=ticker)
     if not on_allowlist:
         return False
+    # eng-20261122-01: EVN.VI dead hub rows were allowlist_removed before URL migration.
+    if reason == "allowlist_removed":
+        return canon != url or fetch_url != url
     host = urllib.parse.urlparse(canon).netloc.lower()
     # eng-20261115-01: Donegal IR PDFs stayed skipped_unfetchable under legacy reasons during
     # igc-20260912-01; any live allowlisted donegaligroup row should retry before 0/0 refetch.
@@ -7190,7 +7210,14 @@ def refetch_ir_allowlist_filing_bodies(
         for row in filings:
             item = dict(row)
             url = str(item.get("url") or "").strip()
-            if _is_ir_allowlist_row(item) and url and url not in allowlist_urls:
+            # eng-20261122-01: dead hub slugs (EVN.VI publications/) canonicalize to live PDFs.
+            if (
+                _is_ir_allowlist_row(item)
+                and url
+                and not _ir_allowlist_url_still_listed(
+                    url, allowlist_urls=allowlist_urls, ticker=ticker
+                )
+            ):
                 item["unfetchable"] = True
                 item["unfetchable_reason"] = "allowlist_removed"
                 item["unfetchable_at"] = datetime.now(UTC).isoformat()
