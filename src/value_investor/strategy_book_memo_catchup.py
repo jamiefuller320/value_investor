@@ -84,9 +84,7 @@ def plan_budget_skip_catchup(rows: list[dict[str, Any]]) -> dict[str, Any]:
         bucket = sessions.setdefault(market, [])
         if session not in bucket:
             bucket.append(session)
-        pending.append(
-            {"market": market, "ticker": ticker, "kind": kind, "session": session}
-        )
+        pending.append({"market": market, "ticker": ticker, "kind": kind, "session": session})
         commit = str(row.get("data_commit") or "").strip().lower()
         for item in row.get("inputs") or []:
             if not isinstance(item, dict):
@@ -105,9 +103,7 @@ def plan_budget_skip_catchup(rows: list[dict[str, Any]]) -> dict[str, Any]:
     pending.sort(key=lambda item: (item["market"], item["session"], item["ticker"]))
     return {
         "sessions_by_market": sessions,
-        "screen_snapshots": [
-            {"path": path, "commit": screens[path]} for path in sorted(screens)
-        ],
+        "screen_snapshots": [{"path": path, "commit": screens[path]} for path in sorted(screens)],
         "pending": pending,
     }
 
@@ -172,7 +168,9 @@ def appended_suffix(before: bytes, after: bytes) -> bytes | None:
     return after[len(before) :]
 
 
-def _git(repo_root: Path, args: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
+def _git(
+    repo_root: Path, args: list[str], *, check: bool = True
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         ["git", *args],
         cwd=repo_root,

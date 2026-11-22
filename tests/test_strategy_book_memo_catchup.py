@@ -18,7 +18,9 @@ COMMIT_A = "a" * 40
 COMMIT_B = "b" * 40
 
 
-def _skip(ticker: str, *, market: str = "sp500", session: str = "2026-11-20", commit: str = COMMIT_A) -> dict:
+def _skip(
+    ticker: str, *, market: str = "sp500", session: str = "2026-11-20", commit: str = COMMIT_A
+) -> dict:
     return {
         "ticker": ticker,
         "market": market,
@@ -104,19 +106,40 @@ def test_publishable_paths_are_memos_and_usage_shards() -> None:
     assert not is_publishable_artifact(
         "docs/data/library/markets/sp500/screen/research/WDC/sources/sec_companyfacts.json"
     )
-    assert not is_publishable_artifact(
-        "docs/data/library/markets/sp500/screen/latest_signals.csv"
-    )
+    assert not is_publishable_artifact("docs/data/library/markets/sp500/screen/latest_signals.csv")
     assert not is_publishable_artifact("docs/data/library/policy.json")
     assert not is_publishable_artifact("docs/data/charts/WDC.json")
     assert not is_publishable_artifact("docs/data/eodhd/WDC.json")
 
 
 def test_merge_log_appends_only_new_rows() -> None:
-    existing = json.dumps({"ticker": "WDC", "market": "sp500", "kind": "signal_day", "session": "2026-11-20", "action": "skipped"}) + "\n"
+    existing = (
+        json.dumps(
+            {
+                "ticker": "WDC",
+                "market": "sp500",
+                "kind": "signal_day",
+                "session": "2026-11-20",
+                "action": "skipped",
+            }
+        )
+        + "\n"
+    )
     new_rows = [
-        {"ticker": "WDC", "market": "sp500", "kind": "signal_day", "session": "2026-11-20", "action": "skipped"},
-        {"ticker": "WDC", "market": "sp500", "kind": "signal_day", "session": "2026-11-20", "action": "requested"},
+        {
+            "ticker": "WDC",
+            "market": "sp500",
+            "kind": "signal_day",
+            "session": "2026-11-20",
+            "action": "skipped",
+        },
+        {
+            "ticker": "WDC",
+            "market": "sp500",
+            "kind": "signal_day",
+            "session": "2026-11-20",
+            "action": "requested",
+        },
     ]
     merged = merge_log_text(existing, new_rows)
     assert merged.count("\n") == 2
@@ -162,7 +185,10 @@ def test_apply_saved_artifacts_appends_the_log_and_skips_vendor_paths(tmp_path) 
     repo = tmp_path / "repo"
     log = repo / "docs/data/strategy_book_memo_log.jsonl"
     log.parent.mkdir(parents=True)
-    log.write_text('{"ticker":"OLD","market":"sp500","kind":"signal_day","session":"2026-11-18","action":"requested"}\n', encoding="utf-8")
+    log.write_text(
+        '{"ticker":"OLD","market":"sp500","kind":"signal_day","session":"2026-11-18","action":"requested"}\n',
+        encoding="utf-8",
+    )
     changed = apply_saved_artifacts(repo, workdir)
     text = log.read_text(encoding="utf-8")
     assert "OLD" in text
