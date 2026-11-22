@@ -1081,28 +1081,10 @@
     "CCEL_US_EQ",
     "CCHGY_US_EQ",
     "CCHH_US_EQ",
-    "CCHWF_US_EQ"
+    "CCHWF_US_EQ",
+    "CCH_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CAST_US_EQ",
-      "venue": "US",
-      "yahoo": "CAST",
-      "isin": "US35632L3033",
-      "name": "CAST",
-      "seconds": 91.522,
-      "outcome": "saved",
-      "at": "2026-11-22T17:33:03.026565+00:00",
-      "rows": 15,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 86.04
-      },
-      "screen_seconds": 86.04,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "CATO_US_EQ",
       "venue": "US",
@@ -1843,6 +1825,25 @@
       },
       "screen_seconds": 85.441,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CCH_US_EQ",
+      "venue": "US",
+      "yahoo": "CCH",
+      "isin": "US9180901012",
+      "name": "UTZ",
+      "seconds": 1.505,
+      "outcome": "miss",
+      "at": "2026-11-22T18:31:44.362273+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.299
+      },
+      "screen_seconds": 1.299,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -2599,43 +2600,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-22T18:25:30.265982+00:00"
+    },
+    {
+      "t212_ticker": "CCH_US_EQ",
+      "yahoo": "CCH",
+      "name": "UTZ",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-22T18:31:44.362273+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CCHWF_US_EQ",
+    "t212_ticker": "CCH_US_EQ",
     "venue": "US",
-    "yahoo": "CCHWF",
-    "isin": "CA13765Y1034",
-    "name": "CBSTQ",
-    "seconds": 85.804,
+    "yahoo": "CCH",
+    "isin": "US9180901012",
+    "name": "UTZ",
+    "seconds": 1.505,
     "outcome": "miss",
-    "at": "2026-11-22T18:31:38.130846+00:00",
+    "at": "2026-11-22T18:31:44.362273+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.441
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.299
     },
-    "screen_seconds": 85.441,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.299,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CCH_US_EQ"
+    }
   },
-  "updated_at": "2026-11-22T18:31:38.130846+00:00",
+  "updated_at": "2026-11-22T18:31:44.362273+00:00",
   "totals": {
-    "screened": 1081,
+    "screened": 1082,
     "signals": {
       "none": 3,
       "insufficient_data": 1042,
       "avoid": 11,
-      "buy": 20,
+      "buy": 21,
       "hold": 5
     },
-    "signals_n": 1081,
-    "screen_seconds_sum": 48421.92299999996,
-    "screen_seconds_n": 1078,
+    "signals_n": 1082,
+    "screen_seconds_sum": 48423.22199999996,
+    "screen_seconds_n": 1079,
     "outcomes": {
-      "miss": 416,
+      "miss": 417,
       "saved": 665
     }
   },
