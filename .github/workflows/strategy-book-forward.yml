@@ -76,8 +76,10 @@ jobs:
           fi
 
       # Observe-only L694 ranking. Requests missing or stale memos while this
-      # ISO week is inside the $160 ceiling (400 memos; relaxed from $40 until
-      # 2026-11-30 Europe/London). l694-memo-sample-v1 applies only above $160.
+      # ISO week is inside the $640 safety ceiling (1600 memos). On 2026-11-22
+      # the practical cap was lifted because Composer credit is spare. Review
+      # remains 2026-11-30 Europe/London. l694-memo-sample-v1 applies only
+      # above $640.
       # Does not set influences_live or forward_live.
       # A failure must not stop the forward commit.
       # See docs/ops/strategy-book-observe.md.

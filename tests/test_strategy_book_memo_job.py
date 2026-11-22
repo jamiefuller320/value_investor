@@ -485,6 +485,54 @@ def test_budget_headroom_skip_does_not_call_the_runner(tmp_path: Path) -> None:
     assert summary["logged"][0]["skip_reason"] == "memo_not_ready_budget"
 
 
+def test_budget_skip_is_retried_when_headroom_returns(tmp_path: Path) -> None:
+    _green(tmp_path)
+    _write_json(
+        tmp_path / "docs" / "data" / "strategy_book_registration.json",
+        {"signed": True, "spend_enabled": True},
+    )
+    calls: list[str] = []
+
+    def runner(**kwargs):
+        calls.append(kwargs["ticker"])
+        return {
+            "verdict": "accumulate",
+            "finished_at": "2026-11-20T18:00:00+00:00",
+            "written_paths": [],
+        }
+
+    common = {
+        "repo_root": tmp_path,
+        "markets": ["ftse350"],
+        "sessions_by_market": {"ftse350": [SESSION.isoformat()]},
+        "persist": True,
+        "runner": runner,
+        "record_spend": lambda _amount: None,
+    }
+    skipped = run_strategy_book_memo_job(
+        now=datetime(2026, 11, 20, 18, tzinfo=UTC),
+        budget_status=lambda: {"constraining": True, "remaining_weekly_ops_usd": 0.0},
+        **common,
+    )
+    assert calls == []
+    assert skipped["logged"][0]["skip_reason"] == "memo_not_ready_budget"
+    retried = run_strategy_book_memo_job(
+        now=datetime(2026, 11, 20, 19, tzinfo=UTC),
+        budget_status=lambda: {"constraining": False, "remaining_weekly_ops_usd": 640.0},
+        **common,
+    )
+    assert calls == [TICKER]
+    assert retried["logged"][0]["action"] == "requested"
+    assert retried["logged"][0]["skip_reason"] is None
+    again = run_strategy_book_memo_job(
+        now=datetime(2026, 11, 20, 20, tzinfo=UTC),
+        budget_status=lambda: {"constraining": False, "remaining_weekly_ops_usd": 640.0},
+        **common,
+    )
+    assert again["logged"] == []
+    assert calls == [TICKER]
+
+
 def test_rerun_for_the_same_close_does_not_duplicate_rows(tmp_path: Path) -> None:
     _green(tmp_path)
     kwargs = {

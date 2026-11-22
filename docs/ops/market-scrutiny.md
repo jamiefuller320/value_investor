@@ -101,12 +101,11 @@ python3 -c "from value_investor.library_grow_health import snapshot_focus_market
 
 | Knob | Value | Effect |
 |------|-------|--------|
-| `weekly_ops_cap_usd` | **80** | Operational Sunday envelope; 15% ($30) is a warning only |
+| `weekly_ops_cap_usd` | **640** | Safety ceiling from 2026-11-22 (Composer credit is spare). 15% ($30) stays a warning only. Current memo volume cannot reach $640 |
 | `research_hard_cap` | **100** | Max memos per ladder run |
 | `observe_sim_markets` | `euro_depth` + ingest profile | Per-market observe sim after screen-lite — see [`market-sharded-learning.md`](market-sharded-learning.md) |
 
-At $0.40/memo and ~$35–45 Sunday email burn, **$80 weekly_ops** supports roughly
-**~40–60 selective memos/week** across graduated markets. Estimated spend at or
+At $0.40/memo the $640 safety ceiling is far above current memo volume, so routine Composer memos are not skipped for spend. Estimated spend at or
 over **$30** (15% of listed Ultra) is a warning only — see
 [cycle-budget-surplus.md](cycle-budget-surplus.md#weekly-ops-plan-credit-warning-15-estimated-usd).
 
