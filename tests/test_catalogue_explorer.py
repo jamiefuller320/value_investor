@@ -7,6 +7,7 @@ import time
 from pathlib import Path
 
 from value_investor.catalogue_explorer import (
+    CURSOR_EPOCH,
     VENUE_ORDER,
     complete_one,
     count_skipped_held,
@@ -252,6 +253,7 @@ def test_screen_reload_keeps_a_finished_handoff(tmp_path: Path):
         json.dumps(
             {
                 "schema_version": 1,
+                "cursor_epoch": CURSOR_EPOCH,
                 "completed": ["OLD_US_EQ"],
                 "runs": [],
                 "handoffs": [
@@ -291,6 +293,7 @@ def test_handoff_reload_keeps_a_screen_saved_during_the_ingest(tmp_path: Path):
         json.dumps(
             {
                 "schema_version": 1,
+                "cursor_epoch": CURSOR_EPOCH,
                 "completed": ["AAA_US_EQ"],
                 "runs": [],
                 "handoffs": [
@@ -334,6 +337,162 @@ def test_handoff_reload_keeps_a_screen_saved_during_the_ingest(tmp_path: Path):
     assert done["t212_ticker"] == "AAA_US_EQ"
     assert "BBB_US_EQ" in saved["completed"]
     assert saved["handoffs"][0]["status"] == "done"
+
+
+def test_wrong_symbol_cursor_is_dropped_and_the_walk_starts_again(tmp_path: Path):
+    (tmp_path / "catalogue_explorer.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "completed": ["CGBD_US_EQ", "CCC_US_EQ"],
+                "runs": [
+                    {
+                        "t212_ticker": "CGBD_US_EQ",
+                        "at": "2026-11-22T18:00:00+00:00",
+                        "signal": "insufficient_data",
+                    }
+                ],
+                "handoffs": [
+                    {
+                        "t212_ticker": "CCC_US_EQ",
+                        "status": "pending",
+                        "signal": "buy",
+                        "name": "London namesake",
+                    }
+                ],
+                "last": {
+                    "t212_ticker": "CCC_US_EQ",
+                    "at": "2026-11-22T21:00:00+00:00",
+                    "signal": "buy",
+                },
+                "totals": {
+                    "screened": 2,
+                    "signals": {"insufficient_data": 1, "buy": 1},
+                    "signals_n": 2,
+                    "screen_seconds_sum": 10.0,
+                    "screen_seconds_n": 2,
+                    "outcomes": {"saved": 2},
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    payload = explore_one(
+        tmp_path,
+        fetch=lambda _row: {
+            "filings": [],
+            "screen": {"signal": "hold", "fits": False, "seconds": 0.2},
+        },
+        instruments=_rows(),
+        held=set(),
+    )
+    saved = json.loads((tmp_path / "catalogue_explorer.json").read_text(encoding="utf-8"))
+    assert payload["t212_ticker"] == "AAA_US_EQ"
+    assert payload["screen"]["signal"] == "hold"
+    assert saved["cursor_epoch"] == CURSOR_EPOCH
+    assert saved["completed"] == ["AAA_US_EQ"]
+    assert saved["handoffs"] == []
+    assert "CGBD_US_EQ" not in saved["completed"]
+    assert "wrong Yahoo symbol" in saved["cursor_reset_reason"]
+
+
+def test_pre_reset_buy_is_not_ingested(tmp_path: Path):
+    ingested: list[str] = []
+
+    def ingest(instrument: dict, _screen: dict, root: Path) -> dict:
+        del root
+        ingested.append(str(instrument.get("ticker")))
+        return {"financial_years": 1, "filings_summary": {}}
+
+    (tmp_path / "catalogue_explorer.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "completed": ["CCC_US_EQ"],
+                "handoffs": [
+                    {
+                        "t212_ticker": "CCC_US_EQ",
+                        "status": "pending",
+                        "signal": "buy",
+                        "name": "London namesake",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = run_one_handoff(tmp_path, ingest=ingest)
+    saved = json.loads((tmp_path / "catalogue_explorer.json").read_text(encoding="utf-8"))
+    assert result["action"] == "idle"
+    assert ingested == []
+    assert saved["handoffs"] == []
+    assert saved["cursor_epoch"] == CURSOR_EPOCH
+    assert saved["completed"] == []
+
+
+def test_newer_epoch_is_not_unioned_with_the_wrong_symbol_cursor():
+    old = {
+        "completed": ["CGBD_US_EQ", "AAA_US_EQ"],
+        "handoffs": [{"t212_ticker": "CCC_US_EQ", "status": "pending", "signal": "buy"}],
+        "runs": [
+            {
+                "t212_ticker": "CGBD_US_EQ",
+                "at": "2026-11-22T18:00:00+00:00",
+                "signal": "insufficient_data",
+            }
+        ],
+        "last": {"t212_ticker": "AAA_US_EQ", "at": "2026-11-22T21:00:00+00:00"},
+        "updated_at": "2026-11-22T21:36:00+00:00",
+        "totals": {
+            "screened": 2,
+            "signals": {"buy": 1, "insufficient_data": 1},
+            "signals_n": 2,
+            "screen_seconds_sum": 4.0,
+            "screen_seconds_n": 2,
+            "outcomes": {"saved": 2},
+        },
+    }
+    restarted = {
+        "cursor_epoch": CURSOR_EPOCH,
+        "cursor_reset_reason": "Rescreen US, Xetra, and LSE.",
+        "completed": ["BBB_US_EQ"],
+        "handoffs": [],
+        "runs": [
+            {
+                "t212_ticker": "BBB_US_EQ",
+                "at": "2026-11-22T22:05:00+00:00",
+                "signal": "hold",
+            }
+        ],
+        "last": {"t212_ticker": "BBB_US_EQ", "at": "2026-11-22T22:05:00+00:00"},
+        "updated_at": "2026-11-22T22:05:00+00:00",
+        "totals": {
+            "screened": 1,
+            "signals": {"hold": 1},
+            "signals_n": 1,
+            "screen_seconds_sum": 1.0,
+            "screen_seconds_n": 1,
+            "outcomes": {"miss": 1},
+        },
+    }
+    merged = merge_states(old, restarted)
+    assert merged["cursor_epoch"] == CURSOR_EPOCH
+    assert merged["completed"] == ["BBB_US_EQ"]
+    assert merged["handoffs"] == []
+    assert merged["last"]["t212_ticker"] == "BBB_US_EQ"
+    assert merged["totals"]["signals"] == {"hold": 1}
+    again = merge_states(
+        restarted,
+        {
+            "cursor_epoch": CURSOR_EPOCH,
+            "completed": ["BBB_US_EQ", "ZZZd_EQ"],
+            "handoffs": [{"t212_ticker": "BBB_US_EQ", "status": "pending", "signal": "buy"}],
+            "updated_at": "2026-11-22T22:10:00+00:00",
+        },
+    )
+    assert again["completed"] == ["BBB_US_EQ", "ZZZD_EQ"]
+    assert again["handoffs"][0]["t212_ticker"] == "BBB_US_EQ"
 
 
 def test_merge_keeps_the_cursor_and_a_finished_ingest():
