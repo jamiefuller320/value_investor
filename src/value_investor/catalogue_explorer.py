@@ -32,6 +32,9 @@ from value_investor.storage import read_json, write_json
 from value_investor.t212_coverage import t212_symbol, t212_venue
 
 VENUE_ORDER = ("US", "DE", "LSE")
+# Yahoo market ids for the three catalogue venues. A bare US symbol is rewritten
+# to ``.L`` when the quote is fetched with no market.
+_VENUE_QUOTE_MARKET = {"US": "us", "DE": "dax", "LSE": "lse"}
 STATE_NAME = "catalogue_explorer.json"
 EXPLORER_TITLE = "Catalogue explorer"
 BODY_CAP = 4
@@ -386,10 +389,14 @@ def default_walk(
         else:
             from value_investor.fetch import fetch_company_metrics
 
-            yahoo = yahoo_ticker(str(instrument.get("ticker") or "")) or ""
+            raw_ticker = str(instrument.get("ticker") or "")
+            yahoo = yahoo_ticker(raw_ticker) or ""
             company = str(instrument.get("shortName") or instrument.get("name") or yahoo)
-            loader = metrics_fetch or fetch_company_metrics
-            metrics = loader(yahoo, company)
+            market = _VENUE_QUOTE_MARKET.get(t212_venue(raw_ticker) or "")
+            if metrics_fetch is not None:
+                metrics = metrics_fetch(yahoo, company)
+            else:
+                metrics = fetch_company_metrics(yahoo, company, market=market)
             row = metrics.to_dict() if hasattr(metrics, "to_dict") else dict(metrics)
             row.setdefault("ticker", yahoo)
             screen_result = screen_metrics_row(row)

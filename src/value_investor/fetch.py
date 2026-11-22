@@ -441,14 +441,16 @@ def fetch_company_metrics(
         logger.warning("Failed to fetch %s: %s", resolved, exc)
         metrics.errors.append(str(exc))
 
-    _apply_metric_fallbacks(metrics)
+    _apply_metric_fallbacks(metrics, market=market)
     return metrics
 
 
-def _apply_metric_fallbacks(metrics: CompanyMetrics) -> None:
+def _apply_metric_fallbacks(metrics: CompanyMetrics, *, market: str | None = None) -> None:
     """Fill gaps from curated alternate providers when primary data is incomplete."""
     payload = metrics.to_dict()
-    updated, source_map, provider_errors = apply_fallback_providers(metrics.ticker, payload)
+    updated, source_map, provider_errors = apply_fallback_providers(
+        metrics.ticker, payload, market=market
+    )
     for key, value in updated.items():
         if key in ("errors", "data_sources"):
             continue

@@ -31,6 +31,46 @@ def _rows() -> list[dict]:
     ]
 
 
+def test_us_catalogue_ticker_is_not_fetched_as_london(monkeypatch):
+    """Quote the catalogue line. A bare US ticker must not be fetched as ``.L``."""
+    from value_investor.providers import ProviderResult
+
+    fetched: list[str] = []
+
+    def fake_load(ticker: str):
+        fetched.append(ticker)
+        raise RuntimeError("no quote")
+
+    class Recording:
+        name = "recording"
+
+        def fetch(self, ticker: str) -> ProviderResult:
+            fetched.append(ticker)
+            return ProviderResult(source=self.name, errors=["miss"])
+
+    monkeypatch.setattr("value_investor.fetch._load_ticker_payload", fake_load)
+    monkeypatch.setattr(
+        "value_investor.providers.DEFAULT_FALLBACK_PROVIDERS",
+        (Recording(),),
+    )
+
+    cases = (
+        ("CGBD_US_EQ", "CGBD"),
+        ("ZZZd_EQ", "ZZZ.DE"),
+        ("VODl_EQ", "VOD.L"),
+    )
+    for ticker, expected in cases:
+        fetched.clear()
+        result = default_walk(
+            {"ticker": ticker, "type": "STOCK", "shortName": ticker},
+            filings_fetch=lambda _row: [],
+        )
+        assert fetched, ticker
+        assert set(fetched) == {expected}
+        assert result["screen"]["signal"] == "insufficient_data"
+        assert result["screen"]["fits"] is False
+
+
 def test_venue_order_is_us_then_xetra_then_lse_and_one_name_at_a_time():
     assert VENUE_ORDER == ("US", "DE", "LSE")
     first = next_unheld(_rows(), held=set(), completed=set())
