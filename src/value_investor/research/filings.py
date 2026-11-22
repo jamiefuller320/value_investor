@@ -7191,6 +7191,15 @@ def refetch_ir_allowlist_filing_bodies(
             item = dict(row)
             url = str(item.get("url") or "").strip()
             if _is_ir_allowlist_row(item) and url and url not in allowlist_urls:
+                # eng-20261122-02: EVN.VI dead publications hub was marked allowlist_removed
+                # while live Jahresfinanzbericht PDFs stayed on builtins — migrate instead of
+                # parking skip_unfetchable rows so ingest-improvement does not report 0/0 refetch.
+                canon = _resolve_ir_allowlist_canonical(url, ticker)
+                if canon != url and canon in allowlist_urls:
+                    item, migrated = _migrate_ir_allowlist_row_url(item, ticker)
+                    if migrated:
+                        refreshed.append(item)
+                        continue
                 item["unfetchable"] = True
                 item["unfetchable_reason"] = "allowlist_removed"
                 item["unfetchable_at"] = datetime.now(UTC).isoformat()
