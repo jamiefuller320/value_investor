@@ -1153,28 +1153,10 @@
     "CFR_US_EQ",
     "CFST_US_EQ",
     "CFVI_US_EQ",
-    "CFV_US_EQ"
+    "CFV_US_EQ",
+    "CFX_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CDZI_US_EQ",
-      "venue": "US",
-      "yahoo": "CDZI",
-      "isin": "US1275372076",
-      "name": "CDZI",
-      "seconds": 6.126,
-      "outcome": "saved",
-      "at": "2026-11-22T20:39:44.119351+00:00",
-      "rows": 20,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.736
-      },
-      "screen_seconds": 4.736,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "CECE_US_EQ",
       "venue": "US",
@@ -1915,6 +1897,25 @@
       },
       "screen_seconds": 85.722,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CFX_US_EQ",
+      "venue": "US",
+      "yahoo": "CFX",
+      "isin": "US1940145022",
+      "name": "ENOV",
+      "seconds": 1.069,
+      "outcome": "miss",
+      "at": "2026-11-22T21:19:35.211405+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.88
+      },
+      "screen_seconds": 0.88,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -2778,43 +2779,56 @@
         "error": null
       },
       "finished_at": "2026-11-22T20:47:21.826752+00:00"
+    },
+    {
+      "t212_ticker": "CFX_US_EQ",
+      "yahoo": "CFX",
+      "name": "ENOV",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-22T21:19:35.211405+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CFV_US_EQ",
+    "t212_ticker": "CFX_US_EQ",
     "venue": "US",
-    "yahoo": "CFV",
-    "isin": "US80401C1009",
-    "name": "SATL",
-    "seconds": 85.896,
+    "yahoo": "CFX",
+    "isin": "US1940145022",
+    "name": "ENOV",
+    "seconds": 1.069,
     "outcome": "miss",
-    "at": "2026-11-22T21:19:28.282659+00:00",
+    "at": "2026-11-22T21:19:35.211405+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.722
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.88
     },
-    "screen_seconds": 85.722,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.88,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CFX_US_EQ"
+    }
   },
-  "updated_at": "2026-11-22T21:19:28.282659+00:00",
+  "updated_at": "2026-11-22T21:19:35.211405+00:00",
   "totals": {
-    "screened": 1153,
+    "screened": 1154,
     "signals": {
       "none": 3,
       "insufficient_data": 1113,
       "avoid": 11,
-      "buy": 21,
+      "buy": 22,
       "hold": 5
     },
-    "signals_n": 1153,
-    "screen_seconds_sum": 50778.874999999935,
-    "screen_seconds_n": 1150,
+    "signals_n": 1154,
+    "screen_seconds_sum": 50779.75499999993,
+    "screen_seconds_n": 1151,
     "outcomes": {
-      "miss": 449,
+      "miss": 450,
       "saved": 704
     }
   },
