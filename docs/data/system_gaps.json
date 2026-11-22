@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "assessed_at": "2026-11-08T10:37:24.855133+00:00",
+  "assessed_at": "2026-11-22T10:38:36.372727+00:00",
   "purpose": "Latent learning-path gaps that healthy ops counters hide. Split produce / persist / publish / apply, and filing parity vs learning clock. Existence is not quality; unused budget is not demand met.",
   "probe_questions": [
     "Is the learning consumer seeing the research we already paid for?",
@@ -10,51 +10,24 @@
     "Are observe-sim / paper clocks accumulating on markets that look ingest-healthy?",
     "Did Sunday rememo include admitted buy-tier, or only the focus book?"
   ],
-  "flag_count": 2,
-  "high_flag_count": 1,
-  "flags": [
-    {
-      "id": "research_skipped_already_done",
-      "severity": "high",
-      "layer": "produce",
-      "title": "Research skipped as already-done while the learning path may still be hungry",
-      "summary": "Last ladder executed 0 memos and skipped 547 as already researched. That is not proof the overlay or rememo path is fed.",
-      "evidence": {
-        "executed": 0,
-        "already_researched_count": 547,
-        "dedupe_skipped_count": 404,
-        "allow_research": true,
-        "budget_flag": "enforced"
-      }
-    },
-    {
-      "id": "unused_budget_zero_research",
-      "severity": "medium",
-      "layer": "produce",
-      "title": "Weekly ops budget is unused while research executed nothing",
-      "summary": "$66.10 remains on weekly_ops and last research executed=0. Unused budget is not evidence that learning needs are met.",
-      "evidence": {
-        "remaining_weekly_ops_usd": 66.1,
-        "executed": 0,
-        "budget_flag": "enforced"
-      }
-    }
-  ],
+  "flag_count": 0,
+  "high_flag_count": 0,
+  "flags": [],
   "layers": {
     "produce": {
       "ladder_research": {
-        "run_at": "2026-11-08T06:23:16.355562+00:00",
+        "run_at": "2026-11-22T06:23:16.911480+00:00",
         "focus_market": "euro_depth",
         "allow_research": true,
-        "executed": 0,
-        "created": 0,
+        "executed": 2,
+        "created": 2,
         "updated": 0,
         "skipped": false,
-        "budget_flag": "enforced",
+        "budget_flag": "near_limit",
         "constraining": false,
-        "remaining_usd_before": 76.5,
-        "already_researched_count": 547,
-        "dedupe_skipped_count": 404,
+        "remaining_usd_before": 8.1,
+        "already_researched_count": 561,
+        "dedupe_skipped_count": 310,
         "rememo_eligible_count": 0,
         "research_markets": [
           "euro_depth",
@@ -85,17 +58,12 @@
         "skipped_sample": [
           {
             "market": "euro_depth",
-            "ticker": "DG.PA",
-            "reason": "fresh_memo"
-          },
-          {
-            "market": "euro_depth",
             "ticker": "UMI.BR",
             "reason": "fresh_memo"
           },
           {
             "market": "euro_depth",
-            "ticker": "STR.VI",
+            "ticker": "DG.PA",
             "reason": "fresh_memo"
           },
           {
@@ -105,7 +73,7 @@
           },
           {
             "market": "euro_depth",
-            "ticker": "MELE.BR",
+            "ticker": "STR.VI",
             "reason": "fresh_memo"
           },
           {
@@ -122,14 +90,19 @@
             "market": "euro_depth",
             "ticker": "ERIC-B.ST",
             "reason": "fresh_memo"
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "SGO.PA",
+            "reason": "fresh_memo"
           }
         ]
       },
       "weekly_ops": {
-        "remaining_weekly_ops_usd": 66.1,
-        "flag": "enforced",
+        "remaining_weekly_ops_usd": 7.3,
+        "flag": "near_limit",
         "constraining": false,
-        "estimated_spend_weekly_ops_usd_this_week": 34.4
+        "estimated_spend_weekly_ops_usd_this_week": 117.2
       },
       "live_committed": {
         "committed_count": 104,
@@ -139,7 +112,7 @@
       },
       "focus_library_research": {
         "market_id": "euro_depth",
-        "buy_tier_count": 41,
+        "buy_tier_count": 40,
         "memo_count": 27,
         "sampled": 27,
         "thin_or_zero_body": 0,
@@ -240,28 +213,28 @@
           "iseq20"
         ],
         "research_markets": [
-          "aex",
-          "iseq20",
-          "atx",
-          "cac40",
-          "sti",
-          "ibex35",
           "ftse_smallcap",
-          "euro_depth",
-          "euro_stoxx50",
-          "bel20",
-          "psi20",
+          "cac40",
           "omxs30",
           "smi",
-          "aim",
+          "asx200",
           "tsx60",
-          "us_adr_asia",
+          "psi20",
+          "iseq20",
+          "sp500",
+          "bel20",
+          "sti",
+          "aim",
+          "euro_depth",
           "dax",
+          "euro_stoxx50",
+          "atx",
+          "nasdaq100",
+          "aex",
           "hang_seng",
           "ftse_mib",
-          "asx200",
-          "sp500",
-          "nasdaq100"
+          "ibex35",
+          "us_adr_asia"
         ],
         "starved": [],
         "weekday_backlog": 0
@@ -449,79 +422,19 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 57,
-          "last_screen": "2026-11-08",
-          "observe_snapshots": 59
-        },
-        {
-          "market_id": "asx200",
-          "filing_ready": null,
-          "learning_ready": null,
-          "trajectory_ready": null,
-          "screen_stale": false,
-          "unique_days": 55,
-          "last_screen": "2026-11-08",
-          "observe_snapshots": 74
-        },
-        {
-          "market_id": "cac40",
-          "filing_ready": null,
-          "learning_ready": null,
-          "trajectory_ready": null,
-          "screen_stale": false,
-          "unique_days": 44,
-          "last_screen": "2026-11-08",
-          "observe_snapshots": 52
-        },
-        {
-          "market_id": "iseq20",
-          "filing_ready": null,
-          "learning_ready": null,
-          "trajectory_ready": null,
-          "screen_stale": false,
-          "unique_days": 25,
-          "last_screen": "2026-11-08",
-          "observe_snapshots": 26
+          "unique_days": 65,
+          "last_screen": "2026-11-22",
+          "observe_snapshots": 67
         },
         {
           "market_id": "sp500",
-          "filing_ready": true,
-          "learning_ready": true,
+          "filing_ready": false,
+          "learning_ready": false,
           "trajectory_ready": true,
           "screen_stale": false,
-          "unique_days": 57,
-          "last_screen": "2026-11-08",
-          "observe_snapshots": 77
-        },
-        {
-          "market_id": "ftse_smallcap",
-          "filing_ready": null,
-          "learning_ready": null,
-          "trajectory_ready": null,
-          "screen_stale": false,
-          "unique_days": 49,
-          "last_screen": "2026-11-08",
-          "observe_snapshots": 68
-        },
-        {
-          "market_id": "tsx60",
-          "filing_ready": null,
-          "learning_ready": null,
-          "trajectory_ready": null,
-          "screen_stale": false,
-          "unique_days": 52,
-          "last_screen": "2026-11-08",
-          "observe_snapshots": 60
-        },
-        {
-          "market_id": "euro_stoxx50",
-          "filing_ready": null,
-          "learning_ready": null,
-          "trajectory_ready": null,
-          "screen_stale": false,
-          "unique_days": 50,
-          "last_screen": "2026-11-08",
-          "observe_snapshots": 61
+          "unique_days": 67,
+          "last_screen": "2026-11-22",
+          "observe_snapshots": 91
         },
         {
           "market_id": "nasdaq100",
@@ -529,9 +442,69 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 46,
-          "last_screen": "2026-11-08",
-          "observe_snapshots": 61
+          "unique_days": 54,
+          "last_screen": "2026-11-22",
+          "observe_snapshots": 71
+        },
+        {
+          "market_id": "asx200",
+          "filing_ready": null,
+          "learning_ready": null,
+          "trajectory_ready": null,
+          "screen_stale": false,
+          "unique_days": 65,
+          "last_screen": "2026-11-22",
+          "observe_snapshots": 90
+        },
+        {
+          "market_id": "cac40",
+          "filing_ready": null,
+          "learning_ready": null,
+          "trajectory_ready": null,
+          "screen_stale": false,
+          "unique_days": 52,
+          "last_screen": "2026-11-22",
+          "observe_snapshots": 60
+        },
+        {
+          "market_id": "iseq20",
+          "filing_ready": null,
+          "learning_ready": null,
+          "trajectory_ready": null,
+          "screen_stale": false,
+          "unique_days": 33,
+          "last_screen": "2026-11-22",
+          "observe_snapshots": 34
+        },
+        {
+          "market_id": "ftse_smallcap",
+          "filing_ready": null,
+          "learning_ready": null,
+          "trajectory_ready": null,
+          "screen_stale": false,
+          "unique_days": 58,
+          "last_screen": "2026-11-22",
+          "observe_snapshots": 80
+        },
+        {
+          "market_id": "tsx60",
+          "filing_ready": null,
+          "learning_ready": null,
+          "trajectory_ready": null,
+          "screen_stale": false,
+          "unique_days": 60,
+          "last_screen": "2026-11-22",
+          "observe_snapshots": 71
+        },
+        {
+          "market_id": "euro_stoxx50",
+          "filing_ready": null,
+          "learning_ready": null,
+          "trajectory_ready": null,
+          "screen_stale": false,
+          "unique_days": 58,
+          "last_screen": "2026-11-22",
+          "observe_snapshots": 70
         },
         {
           "market_id": "dax",
@@ -539,9 +512,9 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 43,
-          "last_screen": "2026-11-08",
-          "observe_snapshots": 55
+          "unique_days": 52,
+          "last_screen": "2026-11-22",
+          "observe_snapshots": 68
         }
       ],
       "filing_ready_learning_stale": [],
