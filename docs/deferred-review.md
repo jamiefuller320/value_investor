@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-21T09:50:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-22T10:57:17+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -72,6 +72,8 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | frag-20261110-02 | Operating-decline gate applies company rules (revenue, operating margin) to listed funds and investment trusts; GCP.L (infrastructure fund) is declining on investment-income 'revenue' with no operating margin. Consider a fund-specific part-2 definition (NAV/dividend cover) at a strategy version review if the Phase 1 owner review flags it. | strategy-version-review, operating-decline-gate, funds |
 | frag-20261115-01 | What if we optimised for `within_4w_rate` (0.817) instead of 1w hit rate (0.368)—treating “buy” as a staged opinion with explicit lag labels rather than same-week direction? | trajectory, 1w-horizon, hypothesis |
 | frag-20261115-02 | What if positive replay delta (+0.46% on 19 log entries) and negative cumulative exclusion alpha (−0.1357%) are telling different stories—optimise ladder steps on “avoided loser signatures” rather than gross weekly alpha? | exclusion, regime, hypothesis |
+| frag-20261122-01 | Hypothesis: weekly exclusion alpha instability is driven by a small set of “timing_wait” names that mean-revert in weeks 2–4 — rolling slices might show u2 wins on 8w while u0 wins on 1w, suggesting a staged filter rather than a single step. | exclusion_ladder, counterfactual |
+| frag-20261122-02 | Hypothesis: scoring 1w “misses” against 4w realized labels (`within_4w_rate` 0.8153) — if we optimised the learning objective for 4w direction instead of 1w, upgrade events might look informative while 1w hit rate stays ~37%. | trajectory, labeling |
 
 ---
 
