@@ -1,9 +1,17 @@
 {
   "market_id": "sp500",
-  "assessed_at": "2026-11-18T13:40:06.842373+00:00",
-  "unmeasured": [],
+  "assessed_at": "2026-11-22T13:49:22.781863+00:00",
+  "unmeasured": [
+    "NVDA"
+  ],
   "zero_body": [],
   "indexed_without_body": [
+    {
+      "ticker": "CEG",
+      "indexed_without_body": 9,
+      "filings_total": 19,
+      "filings_with_body": 10
+    },
     {
       "ticker": "BXP",
       "indexed_without_body": 3,
@@ -43,9 +51,11 @@
   ],
   "thin_need_discovery": [],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
+    "NVDA",
+    "CEG",
     "BXP",
     "APTV",
     "EME",
@@ -54,13 +64,15 @@
     "NRG"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (6 tickers, top: BXP(3), APTV(2), EME(1), LH(1), LMT(1))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (7 tickers, top: CEG(9), BXP(3), APTV(2), EME(1), LH(1))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 6,
-    "indexed_without_body_rows": 9,
+    "indexed_without_body_tickers": 7,
+    "indexed_without_body_rows": 18,
     "thin_need_discovery": 0,
     "thin_need_bodies": 0
   }

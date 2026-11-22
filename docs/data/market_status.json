@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-22T07:24:17.759366+00:00",
+  "generated_at": "2026-11-22T13:50:43.126036+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -31,8 +31,8 @@
     "market_count": 24,
     "ingest_counts": {
       "live": 1,
-      "maintenance": 20,
-      "sprint": 2,
+      "sprint": 3,
+      "maintenance": 19,
       "queued": 1
     },
     "role_counts": {
@@ -42,8 +42,8 @@
       "admitted": 19,
       "queue": 1
     },
-    "sprint_count": 2,
-    "maintenance_count": 20,
+    "sprint_count": 3,
+    "maintenance_count": 19,
     "live_count": 1,
     "admitted_count": 22,
     "should_run_library_maintenance": true,
@@ -1023,10 +1023,10 @@
       "is_queue": false,
       "is_admitted": true,
       "is_ftse_equivalent": false,
-      "ingest": "maintenance",
+      "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest avenues exhausted — parked 7 leftover thin/IWB name(s) (ACKB.BR, APAM.AS, BAS.DE, DQ7A.IR, ESSITY-B.ST, EVN.VI, UCB.BR); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
-      "ingest_parity_met": false,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
       "ingest_exhausted": true,
       "queue_rank": null,
       "shared_maintenance": true,
@@ -1075,38 +1075,8 @@
           "min_weekly_batches": 4
         }
       },
-      "filing_health": {
-        "buy_tier_count": 40,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 6,
-        "indexed_without_body": 3,
-        "bodies_median": 5.0,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
-        "ingest_exhausted": true,
-        "parked_count": 7,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "ACKB.BR",
-          "APAM.AS",
-          "BAS.DE",
-          "EVN.VI",
-          "UCB.BR",
-          "DQ7A.IR"
-        ],
-        "unmeasured_tickers": [],
-        "parked_tickers": [
-          "ACKB.BR",
-          "APAM.AS",
-          "BAS.DE",
-          "DQ7A.IR",
-          "ESSITY-B.ST",
-          "EVN.VI",
-          "UCB.BR"
-        ]
-      },
-      "filing_gaps": 0,
+      "filing_health": null,
+      "filing_gaps": null,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -1162,7 +1132,54 @@
           "HEIA.AS"
         ]
       },
-      "sprint_progress": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 0,
+        "targets": 0,
+        "improved": 0,
+        "improved_tickers": [],
+        "last_run_at": null,
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "remaining": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "admission_ready": true,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "no_ingest_in_window",
+            "severity": "high",
+            "summary": "No ingest runs in the last 2 days"
+          }
+        ],
+        "sprint_entered_at": null
+      },
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -1906,7 +1923,7 @@
         "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 9,
+        "leftover": 0,
         "steps": [
           {
             "id": "start",
@@ -1975,12 +1992,12 @@
       "is_ftse_equivalent": true,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=0, indexed_without_body=18)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=18)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 1,
       "shared_maintenance": true,
-      "health": "warn",
+      "health": "ok",
       "coverage_pct": 1.0,
       "honest_coverage_pct": 1.0,
       "ticker_count": 503,
@@ -2029,7 +2046,7 @@
       },
       "filing_health": {
         "buy_tier_count": 147,
-        "unmeasured_buy_tier": 1,
+        "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
         "indexed_without_body": 18,
@@ -2040,9 +2057,7 @@
         "parked_count": 6,
         "zero_body_tickers": [],
         "thin_body_tickers": [],
-        "unmeasured_tickers": [
-          "NVDA"
-        ],
+        "unmeasured_tickers": [],
         "parked_tickers": [
           "APTV",
           "BXP",
@@ -2052,7 +2067,7 @@
           "NRG"
         ]
       },
-      "filing_gaps": 1,
+      "filing_gaps": 0,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -2116,11 +2131,13 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 0,
-        "targets": 0,
-        "improved": 0,
-        "improved_tickers": [],
-        "last_run_at": null,
+        "run_count": 1,
+        "targets": 1,
+        "improved": 1,
+        "improved_tickers": [
+          "NVDA"
+        ],
+        "last_run_at": "2026-11-22T13:49:43.147536+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -2131,35 +2148,29 @@
           "filing_gaps": 1
         },
         "gaps_after": {
-          "unmeasured": 1,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 18,
-          "filing_gaps": 1
-        },
-        "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 0,
+          "indexed_without_body": 18,
           "filing_gaps": 0
         },
+        "gap_delta": {
+          "unmeasured": -1,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": -1
+        },
         "remaining": {
-          "unmeasured": 1,
+          "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
           "indexed_without_body": 18,
-          "filing_gaps": 1
+          "filing_gaps": 0
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "awaiting_first_ingest",
-            "severity": "warn",
-            "summary": "Entered sprint on 2026-11-22; waiting on the first deepen slot"
-          }
-        ],
+        "admission_warnings": [],
         "sprint_entered_at": "2026-11-22T07:20:53.690016+00:00"
       },
       "held_vs_market": {
