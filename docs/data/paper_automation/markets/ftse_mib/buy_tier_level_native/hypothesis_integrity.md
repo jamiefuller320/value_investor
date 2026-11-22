@@ -1,53 +1,49 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-19T08:41:09.391747+00:00
+Track: `buy_tier_level_native` · updated 2026-11-22T07:16:57.064875+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 6 (0% count, 0% NAV)
-- Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `maintain`
+- Losers: **3** / 5 (60% count, 60% NAV)
+- Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
+- Balancing hint: `hold_intact_review_selection`
 
 ## Holding reviews
 
-### LTMC.MI — intact / hold_tolerate (-4.5%)
+### MONC.MI — intact / hold_tolerate (-7.7%)
+- price drawdown alone does not invalidate value thesis
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 70%
+
+### LTMC.MI — intact / hold_tolerate (-7.0%)
+- price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 40%
+- conviction 44%
 
-### MONC.MI — intact / hold_tolerate (-4.2%)
+### ENI.MI — intact / hold_tolerate (-5.3%)
+- price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 68%
+- conviction 79%
 
-### ENI.MI — intact / hold_tolerate (-2.6%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 76%
-
-### IG.MI — intact / hold_tolerate (-0.6%)
+### IG.MI — intact / hold_tolerate (-1.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 52%
 
-### INW.MI — weakening / watch_review (-0.4%)
-- left buy tier (hold)
-- research verdict caution
-- conviction 23% below intact floor
-- cheapness family still passes
-- data_quality 1.00
-
-### BZU.MI — intact / hold_tolerate (+11.1%)
+### BZU.MI — intact / hold_tolerate (+4.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 43%
+- conviction 44%

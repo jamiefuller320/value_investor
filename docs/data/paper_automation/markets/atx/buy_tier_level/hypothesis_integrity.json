@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-11-20T14:17:49.596425+00:00",
-  "as_of": "2026-11-20T14:17:49.552880+00:00",
+  "updated_at": "2026-11-22T07:17:36.230848+00:00",
+  "as_of": "2026-11-22T07:17:36.163822+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -17,7 +17,7 @@
     "skip_underwater_urgency_when_intact": true
   },
   "holding_count": 5,
-  "underwater_count": 1,
+  "underwater_count": 2,
   "thesis_status_counts": {
     "intact": 5,
     "weakening": 0,
@@ -26,13 +26,13 @@
   },
   "portfolio_feedback": {
     "holding_count": 5,
-    "loser_count": 1,
-    "loser_share": 0.2,
-    "loser_nav_share": 0.198,
+    "loser_count": 2,
+    "loser_share": 0.4,
+    "loser_nav_share": 0.3865,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
-    "within_tolerance": true,
-    "intact_loser_count": 1,
+    "within_tolerance": false,
+    "intact_loser_count": 2,
     "weakening_loser_count": 0,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
@@ -44,15 +44,15 @@
     },
     "family_fail_rate_non_losers": {
       "cheapness": 0.0,
-      "quality": 0.25,
+      "quality": 0.3333,
       "dividend": 0.0,
-      "garp": 0.5,
+      "garp": 0.3333,
       "risk": 0.0
     },
     "selection_feedback_flags": [
-      "garp fails more often among losers (100% vs 50%)"
+      "garp fails more often among losers (100% vs 33%)"
     ],
-    "balancing_hint": "tolerate_intact_losers",
+    "balancing_hint": "hold_intact_review_selection",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
@@ -63,12 +63,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.07,
-      "mark": 35.3,
-      "avg_cost": 37.9563,
+      "unrealized_pct": -0.1421,
+      "mark": 32.56,
+      "avg_cost": 37.9542,
       "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.533,
+      "timing_signal": "neutral",
+      "conviction_score": 0.5441,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -86,14 +86,56 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 53%"
+        "conviction 54%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 53%"
+        "conviction 54%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ANDR.VI",
+      "name": "Andritz AG",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0707,
+      "mark": 77.5,
+      "avg_cost": 83.4,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.562,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 56%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 56%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -105,12 +147,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0232,
-      "mark": 70.85,
+      "unrealized_pct": -0.0494,
+      "mark": 68.95,
       "avg_cost": 72.5304,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.6777,
+      "conviction_score": 0.6804,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -140,55 +182,14 @@
       "broken_reasons": []
     },
     {
-      "ticker": "ANDR.VI",
-      "name": "Andritz AG",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0216,
-      "mark": 81.6,
-      "avg_cost": 83.4,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.51,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 51%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 51%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "CAI.VI",
       "name": "CA Immobilien Anlagen AG",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0102,
-      "mark": 21.1,
+      "unrealized_pct": -0.043,
+      "mark": 20.4,
       "avg_cost": 21.3164,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -228,12 +229,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0104,
-      "mark": 102.4,
+      "unrealized_pct": 0.0242,
+      "mark": 103.8,
       "avg_cost": 101.3473,
-      "signal": "strong_buy",
+      "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.75,
+      "conviction_score": 0.4625,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -245,18 +246,18 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 75%"
+        "conviction 46%"
       ],
       "intact_reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 75%"
+        "conviction 46%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []

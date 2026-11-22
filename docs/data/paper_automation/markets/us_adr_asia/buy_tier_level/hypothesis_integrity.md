@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-20T14:17:47.918693+00:00
+Track: `buy_tier_level` · updated 2026-11-22T07:17:23.293909+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level` · updated 2026-11-20T14:17:47.918693+00:00
 
 ## Holding reviews
 
-### WIT — weakening / watch_review (+0.0%)
+### WIT — weakening / watch_review (+1.5%)
 - research verdict neutral
 - still strong_buy
 - cheapness family still passes

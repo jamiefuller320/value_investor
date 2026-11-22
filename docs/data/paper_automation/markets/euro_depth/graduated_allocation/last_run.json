@@ -1,15 +1,48 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-19T09:43:21.967938+01:00",
+    "local_time": "2026-11-22T08:19:15.755560+01:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-11-19T09:00:00+01:00",
-    "settle_at": "2026-11-19T09:30:00+01:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-11-22T09:00:00+01:00",
+    "settle_at": "2026-11-22T09:30:00+01:00",
+    "can_act": false,
+    "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "ae808073-f395-4d68-b4a3-29fe6a7579c1",
+      "fund_id": "05b488d3-5dcb-43eb-b9fa-943b2d30ce9c",
+      "acted_at": "2026-11-22T08:19:15.755560+01:00",
+      "ticker": "DTE.DE",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 4.09224,
+      "price": 26.34,
+      "gross": 107.79,
+      "cost": 0.2,
+      "net_cash": 107.59,
+      "note": "Graduated exit \u2014 left target set",
+      "name": "Deutsche Telekom AG",
+      "avg_cost_at_exit": 25.91,
+      "position_closed": true
+    },
+    {
+      "id": "4afb3587-7fcc-4a29-8514-ba77e3425f17",
+      "fund_id": "05b488d3-5dcb-43eb-b9fa-943b2d30ce9c",
+      "acted_at": "2026-11-22T08:19:15.755560+01:00",
+      "ticker": "ERIC-B.ST",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 1.079629,
+      "price": 101.7,
+      "gross": 109.8,
+      "cost": 0.2,
+      "net_cash": -110.0,
+      "note": "Graduated buy",
+      "name": "Telefonaktiebolaget LM Ericsson (publ)"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +56,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1021.02,
-    "cash": 473.93,
+    "nav": 1018.33,
+    "cash": 471.52,
     "max_positions": 5,
     "min_conviction": 0.0,
     "sector_cap": 0.3,
@@ -36,42 +69,42 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 204.2,
+    "target_sleeve_value": 203.67,
     "targets": [
       {
         "ticker": "UMI.BR",
         "name": "Umicore SA",
         "signal": "strong_buy",
-        "conviction_score": 0.9373,
-        "price": 16.77
+        "conviction_score": 0.9424,
+        "price": 15.84
       },
       {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "signal": "strong_buy",
         "conviction_score": 0.8619,
-        "price": 34.41
+        "price": 34.58
       },
       {
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
         "signal": "strong_buy",
         "conviction_score": 0.7562000000000001,
-        "price": 2.725
+        "price": 2.815
       },
       {
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7538,
-        "price": 19.3
+        "conviction_score": 0.7501,
+        "price": 19.2
       },
       {
-        "ticker": "DTE.DE",
-        "name": "Deutsche Telekom AG",
-        "signal": "buy",
-        "conviction_score": 0.7475,
-        "price": 26.34
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "signal": "strong_buy",
+        "conviction_score": 0.7023,
+        "price": 101.7
       }
     ],
     "anticipated_exits": [],
@@ -83,10 +116,10 @@
         "ticker": "UMI.BR",
         "name": "Umicore SA",
         "reason": "Top-up to equal weight",
-        "value": 97.99,
-        "price": 16.77,
-        "target_value": 204.2,
-        "conviction_score": 0.9373,
+        "value": 103.34,
+        "price": 15.84,
+        "target_value": 203.67,
+        "conviction_score": 0.9424,
         "signal": "strong_buy"
       },
       {
@@ -94,9 +127,9 @@
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "reason": "Top-up to equal weight",
-        "value": 92.5,
-        "price": 34.41,
-        "target_value": 204.2,
+        "value": 91.41,
+        "price": 34.58,
+        "target_value": 203.67,
         "conviction_score": 0.8619,
         "signal": "strong_buy"
       },
@@ -105,9 +138,9 @@
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
         "reason": "Top-up to equal weight",
-        "value": 94.42,
-        "price": 2.725,
-        "target_value": 204.2,
+        "value": 90.26,
+        "price": 2.815,
+        "target_value": 203.67,
         "conviction_score": 0.7562000000000001,
         "signal": "strong_buy"
       },
@@ -116,22 +149,22 @@
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
         "reason": "Top-up to equal weight",
-        "value": 92.61,
-        "price": 19.3,
-        "target_value": 204.2,
-        "conviction_score": 0.7538,
+        "value": 92.65,
+        "price": 19.2,
+        "target_value": 203.67,
+        "conviction_score": 0.7501,
         "signal": "strong_buy"
       },
       {
         "action": "buy",
-        "ticker": "DTE.DE",
-        "name": "Deutsche Telekom AG",
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "reason": "Top-up to equal weight",
-        "value": 96.41,
-        "price": 26.34,
-        "target_value": 204.2,
-        "conviction_score": 0.7475,
-        "signal": "buy"
+        "value": 93.87,
+        "price": 101.7,
+        "target_value": 203.67,
+        "conviction_score": 0.7023,
+        "signal": "strong_buy"
       }
     ],
     "anticipated_holds": [],
@@ -141,23 +174,12 @@
   },
   "alerts": [
     {
-      "ticker": "DTE.DE",
-      "name": "Deutsche Telekom AG",
-      "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 26.34000015258789,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "insufficient_data"
-    },
-    {
       "ticker": "AD.AS",
       "name": "Koninklijke Ahold Delhaize N.V.",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 34.40999984741211,
+      "mark": 34.58000183105469,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -167,8 +189,8 @@
       "name": "Umicore SA",
       "source": "paper",
       "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 16.770000457763672,
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
+      "mark": 15.84000015258789,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -179,7 +201,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 19.299999237060547,
+      "mark": 19.200000762939453,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -190,7 +212,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2.7249999046325684,
+      "mark": 2.815000057220459,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "ERIC-B.ST",
+      "name": "Telefonaktiebolaget LM Ericsson (publ)",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 101.69999694824219,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -211,21 +244,10 @@
       "id": "05b488d3-5dcb-43eb-b9fa-943b2d30ce9c",
       "created_at": "2026-09-09T07:22:34.663390+00:00"
     },
-    "cash": 473.93,
+    "cash": 471.52,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
-      "DTE.DE": {
-        "ticker": "DTE.DE",
-        "shares": 4.09224,
-        "avg_cost": 25.91,
-        "name": "Deutsche Telekom AG",
-        "sector": "Communication Services",
-        "currency": "EUR",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-11-07T13:52:16.277219+01:00"
-      },
       "AD.AS": {
         "ticker": "AD.AS",
         "shares": 3.246313,
@@ -269,6 +291,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-11-17T08:33:43.470101+01:00"
+      },
+      "ERIC-B.ST": {
+        "ticker": "ERIC-B.ST",
+        "shares": 1.079629,
+        "avg_cost": 101.7,
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "sector": "Technology",
+        "currency": "SEK",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-11-22T08:19:15.755560+01:00"
       }
     },
     "trades": [
@@ -1338,6 +1371,38 @@
         "net_cash": -111.8,
         "note": "Graduated buy",
         "name": "Cairn Homes plc"
+      },
+      {
+        "id": "ae808073-f395-4d68-b4a3-29fe6a7579c1",
+        "fund_id": "05b488d3-5dcb-43eb-b9fa-943b2d30ce9c",
+        "acted_at": "2026-11-22T08:19:15.755560+01:00",
+        "ticker": "DTE.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 4.09224,
+        "price": 26.34,
+        "gross": 107.79,
+        "cost": 0.2,
+        "net_cash": 107.59,
+        "note": "Graduated exit \u2014 left target set",
+        "name": "Deutsche Telekom AG",
+        "avg_cost_at_exit": 25.91,
+        "position_closed": true
+      },
+      {
+        "id": "4afb3587-7fcc-4a29-8514-ba77e3425f17",
+        "fund_id": "05b488d3-5dcb-43eb-b9fa-943b2d30ce9c",
+        "acted_at": "2026-11-22T08:19:15.755560+01:00",
+        "ticker": "ERIC-B.ST",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 1.079629,
+        "price": 101.7,
+        "gross": 109.8,
+        "cost": 0.2,
+        "net_cash": -110.0,
+        "note": "Graduated buy",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)"
       }
     ],
     "equity_curve": [
@@ -2807,24 +2872,61 @@
           "issues": []
         },
         "note": "Graduated rebalance"
+      },
+      {
+        "at": "2026-11-22T08:03:18.805759+01:00",
+        "portfolio_value": 930.47,
+        "cash": 473.93,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83799
+          },
+          "issues": []
+        },
+        "note": "Graduated rebalance"
+      },
+      {
+        "at": "2026-11-22T08:19:15.755560+01:00",
+        "portfolio_value": 845.91,
+        "cash": 471.52,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83799,
+            "SEK": 0.07449
+          },
+          "issues": []
+        },
+        "note": "Graduated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-19T09:43:21.967938+01:00",
+    "last_mark_at": "2026-11-22T08:19:15.755560+01:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {}
+      "reentry_cooldown": {
+        "DTE.DE": 1
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "euro_depth",
     "track_id": "graduated_allocation",
-    "generated_at": "2026-11-19T08:43:26.227130+00:00",
+    "generated_at": "2026-11-22T07:19:21.576767+00:00",
     "observe_only": true,
-    "open_count": 31,
+    "open_count": 32,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -2859,7 +2961,7 @@
       }
     },
     "first_episode": {
-      "open_count": 15,
+      "open_count": 16,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -2895,13 +2997,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "graduated_allocation",
-    "generated_at": "2026-11-19T08:43:26.228661+00:00",
+    "generated_at": "2026-11-22T07:19:21.579249+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2955,9 +3057,9 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 31,
+      "hold_closed_count": 32,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 33,
+      "hold_with_data_quality_count": 34,
       "gaps": [
         "swap_rotation closed rotations=0 (target >=10)"
       ],
@@ -2966,25 +3068,25 @@
     "hold_recovery": {
       "open": {
         "count": 2,
-        "recovered_to_breakeven": 0,
+        "recovered_to_breakeven": 1,
         "close_reasons": {
           "open": 2
         }
       },
       "closed": {
-        "count": 31,
-        "recovered_to_breakeven": 21,
+        "count": 32,
+        "recovered_to_breakeven": 22,
         "close_reasons": {
-          "sold_while_recovered": 21,
+          "sold_while_recovered": 22,
           "sold_while_underwater": 10
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 19,
+        "count": 20,
         "verdicts": {
-          "open": 19
+          "open": 20
         }
       },
       "closed": {
@@ -2994,7 +3096,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -3006,8 +3108,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "graduated_allocation",
-    "updated_at": "2026-11-19T08:43:26.230825+00:00",
-    "as_of": "2026-11-19T09:43:21.967938+01:00",
+    "updated_at": "2026-11-22T07:19:21.582416+00:00",
+    "as_of": "2026-11-22T08:19:15.755560+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3020,7 +3122,7 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 5,
-    "underwater_count": 0,
+    "underwater_count": 1,
     "thesis_status_counts": {
       "intact": 5,
       "weakening": 0,
@@ -3029,13 +3131,13 @@
     },
     "portfolio_feedback": {
       "holding_count": 5,
-      "loser_count": 0,
-      "loser_share": 0.0,
-      "loser_nav_share": 0.0,
+      "loser_count": 1,
+      "loser_share": 0.2,
+      "loser_nav_share": 0.1835,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
-      "intact_loser_count": 0,
+      "intact_loser_count": 1,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
@@ -3049,11 +3151,11 @@
         "cheapness": 0.0,
         "quality": 0.0,
         "dividend": 0.0,
-        "garp": 0.0,
+        "garp": 0.25,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
-      "balancing_hint": "maintain",
+      "balancing_hint": "tolerate_intact_losers",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
@@ -3062,14 +3164,14 @@
         "name": "Umicore SA",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
-        "underwater": false,
+        "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0482,
-        "mark": 16.77,
+        "unrealized_pct": -0.101,
+        "mark": 15.84,
         "avg_cost": 17.62,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9373,
+        "conviction_score": 0.9424,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3081,6 +3183,7 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
+          "price drawdown alone does not invalidate value thesis",
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
@@ -3093,46 +3196,6 @@
           "cheapness family still passes",
           "data_quality 1.00",
           "conviction 94%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "C5H.IR",
-        "name": "Cairn Homes plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0162,
-        "mark": 2.725,
-        "avg_cost": 2.77,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.7562,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 76%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 76%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3144,12 +3207,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0,
-        "mark": 19.3,
+        "unrealized_pct": -0.0052,
+        "mark": 19.2,
         "avg_cost": 19.3,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7538,
+        "conviction_score": 0.7501,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -3178,14 +3241,55 @@
         "broken_reasons": []
       },
       {
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 101.7,
+        "avg_cost": 101.7,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.7023,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 70%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 70%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0056,
-        "mark": 34.41,
+        "unrealized_pct": 0.0105,
+        "mark": 34.58,
         "avg_cost": 34.22,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -3218,18 +3322,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "DTE.DE",
-        "name": "Deutsche Telekom AG",
+        "ticker": "C5H.IR",
+        "name": "Cairn Homes plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0166,
-        "mark": 26.34,
-        "avg_cost": 25.91,
-        "signal": "buy",
+        "unrealized_pct": 0.0162,
+        "mark": 2.815,
+        "avg_cost": 2.77,
+        "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7475,
+        "conviction_score": 0.7562,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3241,18 +3345,18 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 75%"
+          "conviction 76%"
         ],
         "intact_reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 75%"
+          "conviction 76%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3265,13 +3369,13 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "graduated_allocation",
-    "generated_at": "2026-11-19T08:43:26.233426+00:00",
+    "generated_at": "2026-11-22T07:19:21.586398+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 31,
+      "closed_total": 32,
       "closed_unknown_thesis": 0,
       "open_with_thesis": 2,
       "by_thesis_status": {
@@ -3279,13 +3383,13 @@
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 30,
-          "recovery_rate": 0.6667,
-          "sold_underwater_rate": 0.3333,
-          "mean_peak_unrealized_pct": 0.01,
-          "mean_trough_unrealized_pct": -0.0045,
+          "closed_count": 31,
+          "recovery_rate": 0.6774,
+          "sold_underwater_rate": 0.3226,
+          "mean_peak_unrealized_pct": 0.0102,
+          "mean_trough_unrealized_pct": -0.0039,
           "outcome_labels": {
-            "recovered": 20,
+            "recovered": 21,
             "sold_underwater": 10
           }
         },
@@ -3325,7 +3429,7 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 31,
+      "hold_closed_with_thesis": 32,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
         "hold thesis buckets thin (broken=1; target >=3 each)",
@@ -3340,75 +3444,75 @@
     "schema_version": 1,
     "track_id": "graduated_allocation",
     "observe_only": true,
-    "generated_at": "2026-11-19T08:43:26.240085+00:00",
+    "generated_at": "2026-11-22T07:19:21.596341+00:00",
     "open_count": 5,
-    "closed_count": 26,
-    "scored_count": 10,
-    "scored_count_all": 26,
+    "closed_count": 27,
+    "scored_count": 11,
+    "scored_count_all": 27,
     "recommit_scored_count": 16,
     "entry_kind_counts": {
-      "first_entry": 10,
+      "first_entry": 11,
       "recommit": 16
     },
     "any_de_risk_count": 6,
     "winning_cadence_counts": {
       "dca_4x_weekly": 1,
-      "dca_5x_weekday": 4,
+      "dca_5x_weekday": 5,
       "dca_2x_weekly": 5
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 10,
-        "mean_end_value_delta": -0.34,
-        "mean_de_risk_gbp": 0.526,
-        "de_risk_rate": 0.6,
+        "scored_episodes": 11,
+        "mean_end_value_delta": -0.4455,
+        "mean_de_risk_gbp": 0.3527,
+        "de_risk_rate": 0.5455,
         "win_count": 5
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 10,
-        "mean_end_value_delta": -1.323,
-        "mean_de_risk_gbp": 0.171,
-        "de_risk_rate": 0.5,
+        "scored_episodes": 11,
+        "mean_end_value_delta": -1.3555,
+        "mean_de_risk_gbp": 0.0536,
+        "de_risk_rate": 0.4545,
         "win_count": 1
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 10,
-        "mean_end_value_delta": -0.898,
-        "mean_de_risk_gbp": 0.089,
-        "de_risk_rate": 0.4,
+        "scored_episodes": 11,
+        "mean_end_value_delta": -0.9055,
+        "mean_de_risk_gbp": 0.0018,
+        "de_risk_rate": 0.3636,
         "win_count": 0
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 10,
-        "mean_end_value_delta": -0.131,
-        "mean_de_risk_gbp": 0.102,
-        "de_risk_rate": 0.3,
-        "win_count": 4
+        "scored_episodes": 11,
+        "mean_end_value_delta": -0.1345,
+        "mean_de_risk_gbp": 0.0909,
+        "de_risk_rate": 0.2727,
+        "win_count": 5
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 10,
+      "closed_episodes": 11,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 10,
+      "first_entry_scored": 11,
       "recommit_scored": 16
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 5,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "graduated_allocation",
-    "generated_at": "2026-11-19T09:43:21.967938+01:00",
+    "generated_at": "2026-11-22T08:19:15.755560+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -3458,14 +3562,14 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_on_book": 1,
+      "tagged_off_book": 1
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "graduated_allocation",
-    "generated_at": "2026-11-19T09:43:21.967938+01:00",
+    "generated_at": "2026-11-22T08:19:15.755560+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -3473,41 +3577,255 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 2,
+    "card_count": 2,
     "verdict_counts": {
-      "agree": 0,
-      "veto": 0,
+      "agree": 1,
+      "veto": 1,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "sell": {
+        "agree": 0,
+        "veto": 1,
+        "abstain": 0
+      },
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "DTE.DE",
+        "name": "Deutsche Telekom AG",
+        "algo_action": "sell",
+        "algo_reason": "Graduated exit \u2014 left target set",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Graduated exit cites left target set while still_buyish remains true with strong_buy screen signal.",
+          "rank_drop is 0 versus entry rank 24, below hold-gate deterioration threshold \u2014 insufficient fundamental/rank case for churn sell.",
+          "Research overlay bound with accumulate verdict does not support exiting a name the screen still treats as buyish (capacity-bump risk)."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Graduated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 24
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 24
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "graduated_allocation",
+        "logged_at": "2026-11-22T08:19:15.755560+01:00",
+        "proposal_id": "graduated_allocation:DTE.DE:sell:2026-11-22T08:19:15.755560+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "veto",
+            "reasons": [
+              "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "algo_action": "buy",
+        "algo_reason": "Graduated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Graduated buy aligns with strong_buy effective signal and still_buyish true at decision time.",
+          "Conviction rank 8 with accumulate research verdict and overlay_bound supports adding to the buyish target set.",
+          "No rank_drop deterioration; higher conviction_score versus lower-ranked names supports selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Graduated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 8
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.7023
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "graduated_allocation",
+        "logged_at": "2026-11-22T08:19:15.755560+01:00",
+        "proposal_id": "graduated_allocation:ERIC-B.ST:buy:2026-11-22T08:19:15.755560+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null
+      "fallback": null,
+      "llm_card_count": 2
     },
     "review": {
       "schema_version": 1,
       "track_id": "graduated_allocation",
-      "generated_at": "2026-11-19T09:43:21.967938+01:00",
+      "generated_at": "2026-11-22T08:19:15.755560+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 2,
       "verdict_counts": {
-        "agree": 0,
-        "veto": 0,
+        "agree": 1,
+        "veto": 1,
         "abstain": 0
       },
-      "by_algo_action": {},
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "by_algo_action": {
+        "sell": {
+          "agree": 0,
+          "veto": 1,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "veto_sell_count": 1,
+      "veto_sell_tickers": [
+        "DTE.DE"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -3521,7 +3839,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-19T08:43:26.248152+00:00",
+  "generated_at": "2026-11-22T07:19:26.077133+00:00",
   "track_id": "graduated_allocation",
   "track_label": "Screen rules + graduated allocation",
   "is_primary_learning_track": false,

@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-11-20T14:17:21.603437+00:00",
+  "updated_at": "2026-11-22T07:16:09.182164+00:00",
   "hold_episodes": [
     {
       "episode_id": "buy_tier_level:GLE.L:2026-09-13T07:49:56.535586+01:00",
@@ -1024,10 +1024,18 @@
           "unrealized_pct": -0.0881,
           "peak_unrealized_pct": -0.0434,
           "trough_unrealized_pct": -0.0881
+        },
+        {
+          "scored_at": "2026-11-22T07:16:09.166191+00:00",
+          "days_after": 28,
+          "price": 100.0,
+          "unrealized_pct": -0.1858,
+          "peak_unrealized_pct": -0.0434,
+          "trough_unrealized_pct": -0.1858
         }
       ],
       "peak_unrealized_pct": -0.0434,
-      "trough_unrealized_pct": -0.1329,
+      "trough_unrealized_pct": -0.1858,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -1362,9 +1370,18 @@
       "conviction_score": 0.6839000000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-22T07:16:09.166191+00:00",
+          "days_after": 7,
+          "price": 82.1,
+          "unrealized_pct": -0.0552,
+          "peak_unrealized_pct": -0.0127,
+          "trough_unrealized_pct": -0.0552
+        }
+      ],
       "peak_unrealized_pct": -0.0127,
-      "trough_unrealized_pct": -0.0219,
+      "trough_unrealized_pct": -0.0552,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -1501,7 +1518,7 @@
       "ticker": "REC.L",
       "name": "Record plc",
       "started_at": "2026-11-20T14:17:21.576632+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -1515,12 +1532,12 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": 0.0,
-      "trough_unrealized_pct": 0.0,
+      "peak_unrealized_pct": -0.1468,
+      "trough_unrealized_pct": -0.1468,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-22T07:16:09.166191+00:00",
+      "linked_sell_trade_id": "d0d9efdc-3fa0-43b8-82c5-2507d00612ac",
       "thesis_status_at_start": "broken",
       "recommended_action_at_start": "exit_candidate",
       "thesis_reasons_at_start": [
@@ -1535,6 +1552,49 @@
       ],
       "research_verdict_at_start": null,
       "unrealized_pct_at_thesis": 0.0
+    },
+    {
+      "episode_id": "buy_tier_level:SBRE.L:2026-11-22T07:16:09.166191+00:00",
+      "track_id": "buy_tier_level",
+      "ticker": "SBRE.L",
+      "name": "Sabre Insurance Group plc",
+      "started_at": "2026-11-22T07:16:09.166191+00:00",
+      "status": "open",
+      "stress_triggers": [
+        "underwater",
+        "exit_streak",
+        "signal_downgrade"
+      ],
+      "entry_mark": 175.4,
+      "avg_cost": 180.6,
+      "unrealized_pct_at_start": -0.0288,
+      "thesis_status_at_start": "broken",
+      "recommended_action_at_start": "exit_candidate",
+      "thesis_reasons_at_start": [
+        "cheapness lost and not in buy tier"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": -0.0288,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.85,
+      "conviction_score": 0.2734,
+      "exit_streak_at_start": 1,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0288,
+      "trough_unrealized_pct": -0.0288,
+      "recovered_to_breakeven": null,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
     }
   ],
   "swap_rotations": [
@@ -1680,10 +1740,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CARD.L": 0.2328,
-        "CAPD.L": -0.0491,
-        "REC.L": 0.1721,
-        "GLE.L": -0.0077
+        "CARD.L": 0.1796,
+        "CAPD.L": -0.1071,
+        "REC.L": 0.0,
+        "GLE.L": -0.0577
       },
       "buy_returns_since_rotation": {
         "DFS.L": 0.0
@@ -1817,14 +1877,14 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "REC.L": 0.1326,
+        "REC.L": -0.0337,
         "DFS.L": 0.0,
-        "CARD.L": 0.2618
+        "CARD.L": 0.2074
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.0491,
-        "SBRE.L": 0.0611,
-        "GLE.L": 0.0424
+        "CAPD.L": -0.1071,
+        "SBRE.L": 0.0306,
+        "GLE.L": -0.0101
       },
       "verdict": null,
       "closed_at": null
@@ -1907,11 +1967,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "GLE.L": 0.0099
+        "GLE.L": -0.041
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.0229,
-        "CARD.L": 0.2787,
+        "CAPD.L": -0.0826,
+        "CARD.L": 0.2235,
         "FOXT.L": 0.0
       },
       "verdict": null,
@@ -1988,11 +2048,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "SBRE.L": 0.0439
+        "SBRE.L": 0.0139
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.0405,
-        "CARD.L": 0.2902
+        "CAPD.L": -0.0991,
+        "CARD.L": 0.2346
       },
       "verdict": null,
       "closed_at": null
@@ -2112,11 +2172,11 @@
       ],
       "sell_returns_since_rotation": {
         "FOXT.L": 0.0,
-        "CAPD.L": -0.0491,
-        "CARD.L": 0.2655
+        "CAPD.L": -0.1071,
+        "CARD.L": 0.2109
       },
       "buy_returns_since_rotation": {
-        "CLIG.L": 0.0433
+        "CLIG.L": -0.0041
       },
       "verdict": null,
       "closed_at": null
@@ -2219,8 +2279,8 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CAPD.L": -0.0819,
-        "CARD.L": 0.2257
+        "CAPD.L": -0.1379,
+        "CARD.L": 0.1729
       },
       "buy_returns_since_rotation": {
         "DFS.L": 0.1115,
@@ -2300,11 +2360,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CLIG.L": 0.0
+        "CLIG.L": -0.0455
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.0779,
-        "CARD.L": 0.2471
+        "CAPD.L": -0.1342,
+        "CARD.L": 0.1933
       },
       "verdict": null,
       "closed_at": null
@@ -2400,7 +2460,7 @@
         "APTD.L": 0.0
       },
       "buy_returns_since_rotation": {
-        "CARD.L": 0.2471
+        "CARD.L": 0.1933
       },
       "verdict": null,
       "closed_at": null
@@ -2503,8 +2563,8 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CAPD.L": -0.0897,
-        "CARD.L": 0.2275
+        "CAPD.L": -0.1453,
+        "CARD.L": 0.1745
       },
       "buy_returns_since_rotation": {
         "ULTP.L": 0.0,
@@ -2611,7 +2671,7 @@
         "MER.L": 0.0
       },
       "buy_returns_since_rotation": {
-        "REC.L": 0.1971,
+        "REC.L": 0.0214,
         "FOXT.L": -0.0274
       },
       "verdict": null,
@@ -2734,8 +2794,8 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CAPD.L": -0.1125,
-        "CARD.L": 0.2051,
+        "CAPD.L": -0.1667,
+        "CARD.L": 0.1531,
         "FOXT.L": -0.0483
       },
       "buy_returns_since_rotation": {
@@ -2798,13 +2858,20 @@
           "avg_sell_return": 0.1429,
           "avg_buy_return": -0.0208,
           "replacement_delta": -0.1637
+        },
+        {
+          "scored_at": "2026-11-22T07:16:09.166191+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0238,
+          "avg_buy_return": -0.1667,
+          "replacement_delta": -0.1905
         }
       ],
       "sell_returns_since_rotation": {
-        "REC.L": 0.2
+        "REC.L": 0.0238
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.1125
+        "CAPD.L": -0.1667
       },
       "verdict": null,
       "closed_at": null
@@ -2893,7 +2960,7 @@
         "DFS.L": 0.0804
       },
       "buy_returns_since_rotation": {
-        "CARD.L": 0.1983
+        "CARD.L": 0.1466
       },
       "verdict": null,
       "closed_at": null
@@ -2957,10 +3024,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CARD.L": 0.1014
+        "CARD.L": 0.0539
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.1162
+        "CAPD.L": -0.1701
       },
       "verdict": null,
       "closed_at": null
@@ -3049,11 +3116,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CAPD.L": -0.1088,
-        "CARD.L": 0.0438
+        "CAPD.L": -0.1632,
+        "CARD.L": -0.0012
       },
       "buy_returns_since_rotation": {
-        "REC.L": 0.1887
+        "REC.L": 0.0142
       },
       "verdict": null,
       "closed_at": null
@@ -3142,11 +3209,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CARD.L": 0.0438,
-        "CAPD.L": -0.1088
+        "CARD.L": -0.0012,
+        "CAPD.L": -0.1632
       },
       "buy_returns_since_rotation": {
-        "SBRE.L": 0.0379
+        "SBRE.L": 0.008
       },
       "verdict": null,
       "closed_at": null
@@ -3215,10 +3282,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "REC.L": 0.1887
+        "REC.L": 0.0142
       },
       "buy_returns_since_rotation": {
-        "SBRE.L": 0.0379,
+        "SBRE.L": 0.008,
         "ENQ.L": 0.0
       },
       "verdict": null,
@@ -3359,9 +3426,9 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CARD.L": 0.0438,
-        "CAPD.L": -0.1088,
-        "SBRE.L": 0.0379,
+        "CARD.L": -0.0012,
+        "CAPD.L": -0.1632,
+        "SBRE.L": 0.008,
         "ENQ.L": 0.0
       },
       "buy_returns_since_rotation": {
@@ -3429,10 +3496,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CAPD.L": -0.1162
+        "CAPD.L": -0.1701
       },
       "buy_returns_since_rotation": {
-        "REC.L": 0.156
+        "REC.L": -0.0138
       },
       "verdict": null,
       "closed_at": null
@@ -3511,9 +3578,9 @@
         "APTD.L": -0.0347
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.1125,
-        "CARD.L": -0.0069,
-        "SBRE.L": 0.0379
+        "CAPD.L": -0.1667,
+        "CARD.L": -0.0498,
+        "SBRE.L": 0.008
       },
       "verdict": null,
       "closed_at": null
@@ -3582,10 +3649,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "REC.L": 0.156
+        "REC.L": -0.0138
       },
       "buy_returns_since_rotation": {
-        "SBRE.L": 0.0308,
+        "SBRE.L": 0.0011,
         "ENQ.L": -0.0563
       },
       "verdict": null,
@@ -3682,11 +3749,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CARD.L": 0.0106,
-        "CAPD.L": -0.0975
+        "CARD.L": -0.033,
+        "CAPD.L": -0.1525
       },
       "buy_returns_since_rotation": {
-        "SBRE.L": 0.0308,
+        "SBRE.L": 0.0011,
         "ENQ.L": -0.0563
       },
       "verdict": null,
@@ -3791,12 +3858,12 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "SBRE.L": 0.0089,
+        "SBRE.L": -0.0201,
         "ENQ.L": -0.1625
       },
       "buy_returns_since_rotation": {
-        "CARD.L": -0.025,
-        "CAPD.L": -0.127,
+        "CARD.L": -0.067,
+        "CAPD.L": -0.1803,
         "TPT.L": 0.0
       },
       "verdict": null,
@@ -3869,8 +3936,8 @@
         "TPT.L": 0.0
       },
       "buy_returns_since_rotation": {
-        "CARD.L": -0.0654,
-        "CAPD.L": -0.127
+        "CARD.L": -0.1057,
+        "CAPD.L": -0.1803
       },
       "verdict": null,
       "closed_at": null
@@ -3932,10 +3999,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "SBRE.L": -0.0206
+        "SBRE.L": -0.0488
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.127
+        "CAPD.L": -0.1803
       },
       "verdict": null,
       "closed_at": null
@@ -3999,10 +4066,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CAPD.L": -0.1411
+        "CAPD.L": -0.1935
       },
       "buy_returns_since_rotation": {
-        "CLIG.L": 0.1048
+        "CLIG.L": 0.0546
       },
       "verdict": null,
       "closed_at": null
@@ -4074,8 +4141,8 @@
         "ENQ.L": -0.0335
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.1446,
-        "SBRE.L": 0.088
+        "CAPD.L": -0.1968,
+        "SBRE.L": 0.0566
       },
       "verdict": null,
       "closed_at": null
@@ -4162,11 +4229,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CARD.L": -0.0674,
-        "CLIG.L": 0.1048
+        "CARD.L": -0.1076,
+        "CLIG.L": 0.0546
       },
       "buy_returns_since_rotation": {
-        "SBRE.L": 0.088
+        "SBRE.L": 0.0566
       },
       "verdict": null,
       "closed_at": null
@@ -4252,14 +4319,21 @@
           "avg_sell_return": -0.014,
           "avg_buy_return": -0.0069,
           "replacement_delta": 0.0071
+        },
+        {
+          "scored_at": "2026-11-22T07:16:09.166191+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0555,
+          "avg_buy_return": -0.0445,
+          "replacement_delta": 0.011
         }
       ],
       "sell_returns_since_rotation": {
-        "CAPD.L": -0.0936,
-        "SBRE.L": 0.0686
+        "CAPD.L": -0.1489,
+        "SBRE.L": 0.0379
       },
       "buy_returns_since_rotation": {
-        "CARD.L": -0.0509,
+        "CARD.L": -0.0918,
         "TPT.L": 0.0029
       },
       "verdict": null,
@@ -4340,11 +4414,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CARD.L": -0.0509,
+        "CARD.L": -0.0918,
         "TPT.L": 0.0029
       },
       "buy_returns_since_rotation": {
-        "SBRE.L": 0.0686
+        "SBRE.L": 0.0379
       },
       "verdict": null,
       "closed_at": null
@@ -4426,8 +4500,8 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CAPD.L": -0.0858,
-        "SBRE.L": 0.0724
+        "CAPD.L": -0.1416,
+        "SBRE.L": 0.0416
       },
       "buy_returns_since_rotation": {
         "DFS.L": 0.136
@@ -4495,8 +4569,8 @@
         "DFS.L": 0.136
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.0491,
-        "SBRE.L": 0.0488
+        "CAPD.L": -0.1071,
+        "SBRE.L": 0.0186
       },
       "verdict": null,
       "closed_at": null
@@ -4553,10 +4627,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CAPD.L": -0.0318
+        "CAPD.L": -0.0909
       },
       "buy_returns_since_rotation": {
-        "ZTF.L": 0.009
+        "ZTF.L": -0.0258
       },
       "verdict": null,
       "closed_at": null
@@ -4625,12 +4699,12 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "SBRE.L": 0.0379
+        "SBRE.L": 0.008
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.0184,
-        "REC.L": 0.0611,
-        "TRI.L": -0.1706
+        "CAPD.L": -0.0783,
+        "REC.L": -0.0947,
+        "TRI.L": -0.1588
       },
       "verdict": null,
       "closed_at": null
@@ -4685,10 +4759,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "ZTF.L": -0.0249
+        "ZTF.L": -0.0584
       },
       "buy_returns_since_rotation": {
-        "TRI.L": -0.1706
+        "TRI.L": -0.1588
       },
       "verdict": null,
       "closed_at": null
@@ -4743,10 +4817,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "REC.L": 0.0611
+        "REC.L": -0.0947
       },
       "buy_returns_since_rotation": {
-        "SBRE.L": 0.0379
+        "SBRE.L": 0.008
       },
       "verdict": null,
       "closed_at": null
@@ -4801,10 +4875,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "TRI.L": -0.1954
+        "TRI.L": -0.1839
       },
       "buy_returns_since_rotation": {
-        "CARD.L": -0.0127
+        "CARD.L": -0.0552
       },
       "verdict": null,
       "closed_at": null
@@ -4901,14 +4975,22 @@
           "cost": 1.57
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-22T07:16:09.166191+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0496,
+          "avg_buy_return": -0.0417,
+          "replacement_delta": 0.0079
+        }
+      ],
       "sell_returns_since_rotation": {
-        "CARD.L": 0.0094,
-        "CAPD.L": -0.0139,
-        "SBRE.L": -0.012
+        "CARD.L": -0.0341,
+        "CAPD.L": -0.0741,
+        "SBRE.L": -0.0405
       },
       "buy_returns_since_rotation": {
-        "CLIG.L": 0.004
+        "CLIG.L": -0.0417
       },
       "verdict": null,
       "closed_at": null
@@ -4955,10 +5037,10 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "CLIG.L": -0.0117
+        "CLIG.L": -0.0566
       },
       "buy_returns_since_rotation": {
-        "CAPD.L": -0.0047
+        "CAPD.L": -0.0654
       },
       "verdict": null,
       "closed_at": null
@@ -5037,11 +5119,11 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "SBRE.L": -0.0153,
-        "CAPD.L": -0.0047
+        "SBRE.L": -0.0436,
+        "CAPD.L": -0.0654
       },
       "buy_returns_since_rotation": {
-        "CARD.L": 0.0059,
+        "CARD.L": -0.0375,
         "ULTP.L": -0.0519
       },
       "verdict": null,
@@ -5130,13 +5212,13 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "CARD.L": 0.0,
-        "CAPD.L": 0.0
+        "CARD.L": -0.0431,
+        "CAPD.L": -0.061
       },
       "buy_returns_since_rotation": {
-        "REC.L": 0.0,
-        "LSL.L": 0.0,
-        "TRI.L": 0.0
+        "REC.L": -0.1468,
+        "LSL.L": -0.0113,
+        "TRI.L": 0.0143
       },
       "verdict": null,
       "closed_at": null
@@ -5214,15 +5296,89 @@
         "ULTP.L": -0.0519
       },
       "buy_returns_since_rotation": {
+        "CARD.L": -0.0431,
+        "CAPD.L": -0.061,
+        "LSL.L": -0.0113,
+        "SBRE.L": -0.0288,
+        "TRI.L": 0.0143
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-22T07:16:09.166191+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-22T07:16:09.166191+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.003,
+      "sells": [
+        {
+          "ticker": "REC.L",
+          "price": 50.4,
+          "shares": 3.757783,
+          "gross": 189.39,
+          "cost": 0.09,
+          "avg_cost_at_exit": 50.4,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "CARD.L",
+          "price": 82.1,
+          "shares": 0.70771,
+          "gross": 58.1,
+          "cost": 0.32
+        },
+        {
+          "ticker": "CAPD.L",
+          "price": 100.0,
+          "shares": 0.621609,
+          "gross": 62.16,
+          "cost": 0.34
+        },
+        {
+          "ticker": "LSL.L",
+          "price": 262.0,
+          "shares": 0.194284,
+          "gross": 50.9,
+          "cost": 0.28
+        },
+        {
+          "ticker": "TRI.L",
+          "price": 71.0,
+          "shares": 0.240788,
+          "gross": 17.1,
+          "cost": 0.09
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "REC.L": -0.1468
+      },
+      "buy_returns_since_rotation": {
         "CARD.L": 0.0,
         "CAPD.L": 0.0,
         "LSL.L": 0.0,
-        "SBRE.L": 0.0,
         "TRI.L": 0.0
       },
       "verdict": null,
       "closed_at": null
     }
   ],
-  "hypothesis_outcome_link_updated_at": "2026-11-20T14:17:21.576632+00:00"
+  "hypothesis_outcome_link_updated_at": "2026-11-22T07:16:09.166191+00:00"
 }

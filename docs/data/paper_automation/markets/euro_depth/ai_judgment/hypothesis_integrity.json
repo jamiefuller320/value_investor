@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "ai_judgment",
-  "updated_at": "2026-11-19T08:42:42.663940+00:00",
-  "as_of": "2026-11-19T09:42:38.370045+01:00",
+  "updated_at": "2026-11-22T07:18:34.097491+00:00",
+  "as_of": "2026-11-22T08:18:28.203347+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -17,7 +17,7 @@
     "skip_underwater_urgency_when_intact": true
   },
   "holding_count": 5,
-  "underwater_count": 0,
+  "underwater_count": 1,
   "thesis_status_counts": {
     "intact": 5,
     "weakening": 0,
@@ -26,13 +26,13 @@
   },
   "portfolio_feedback": {
     "holding_count": 5,
-    "loser_count": 0,
-    "loser_share": 0.0,
-    "loser_nav_share": 0.0,
+    "loser_count": 1,
+    "loser_share": 0.2,
+    "loser_nav_share": 0.2,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
-    "intact_loser_count": 0,
+    "intact_loser_count": 1,
     "weakening_loser_count": 0,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
@@ -46,11 +46,11 @@
       "cheapness": 0.0,
       "quality": 0.0,
       "dividend": 0.0,
-      "garp": 0.0,
+      "garp": 0.25,
       "risk": 0.0
     },
     "selection_feedback_flags": [],
-    "balancing_hint": "maintain",
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
@@ -59,14 +59,14 @@
       "name": "Umicore SA",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0482,
-      "mark": 16.77,
-      "avg_cost": 17.62,
+      "unrealized_pct": -0.0942,
+      "mark": 15.84,
+      "avg_cost": 17.487,
       "signal": "strong_buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.9373,
+      "conviction_score": 0.9424,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -78,6 +78,7 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
@@ -90,46 +91,6 @@
         "cheapness family still passes",
         "data_quality 1.00",
         "conviction 94%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "C5H.IR",
-      "name": "Cairn Homes plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0162,
-      "mark": 2.725,
-      "avg_cost": 2.77,
-      "signal": "strong_buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.7562,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 76%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 76%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -141,12 +102,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0,
-      "mark": 19.3,
+      "unrealized_pct": -0.0052,
+      "mark": 19.2,
       "avg_cost": 19.3,
       "signal": "strong_buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.7538,
+      "conviction_score": 0.7501,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -175,14 +136,55 @@
       "broken_reasons": []
     },
     {
+      "ticker": "ERIC-B.ST",
+      "name": "Telefonaktiebolaget LM Ericsson (publ)",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 101.7,
+      "avg_cost": 101.7,
+      "signal": "strong_buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 0.7023,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 70%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 70%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "AD.AS",
       "name": "Koninklijke Ahold Delhaize N.V.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0061,
-      "mark": 34.43,
+      "unrealized_pct": 0.0105,
+      "mark": 34.58,
       "avg_cost": 34.22,
       "signal": "strong_buy",
       "timing_signal": "insufficient_data",
@@ -215,18 +217,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "DTE.DE",
-      "name": "Deutsche Telekom AG",
+      "ticker": "C5H.IR",
+      "name": "Cairn Homes plc",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0166,
-      "mark": 26.34,
-      "avg_cost": 25.9104,
-      "signal": "buy",
+      "unrealized_pct": 0.0162,
+      "mark": 2.815,
+      "avg_cost": 2.77,
+      "signal": "strong_buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.7475,
+      "conviction_score": 0.7562,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -238,18 +240,18 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
-        "still buy",
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 75%"
+        "conviction 76%"
       ],
       "intact_reasons": [
-        "still buy",
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 75%"
+        "conviction 76%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []

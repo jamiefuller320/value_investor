@@ -1,16 +1,16 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-20T14:17:41.278014+00:00
+Track: `buy_tier_level` · updated 2026-11-22T07:16:48.085854+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **7** / 15 (47% count, 48% NAV)
+- Losers: **8** / 15 (53% count, 54% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
 ## Holding reviews
 
-### IPX.L — weakening / watch_review (-22.2%)
+### IPX.L — weakening / watch_review (-27.2%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
@@ -21,7 +21,7 @@ Track: `buy_tier_level` · updated 2026-11-20T14:17:41.278014+00:00
 - still buy
 - cheapness family still passes
 
-### PAF.L — intact / hold_tolerate (-9.0%)
+### PAF.L — intact / hold_tolerate (-12.7%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
@@ -29,15 +29,7 @@ Track: `buy_tier_level` · updated 2026-11-20T14:17:41.278014+00:00
 - data_quality 1.00
 - conviction 62%
 
-### MPE.L — intact / hold_tolerate (-7.9%)
-- price drawdown alone does not invalidate value thesis
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 74%
-
-### CAML.L — intact / hold_tolerate (-6.9%)
+### CAML.L — intact / hold_tolerate (-10.9%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
@@ -45,62 +37,73 @@ Track: `buy_tier_level` · updated 2026-11-20T14:17:41.278014+00:00
 - data_quality 0.95
 - conviction 47%
 
-### CAM.L — weakening / watch_review (-6.0%)
-- research verdict caution
-- still buy
+### MPE.L — intact / hold_tolerate (-10.1%)
+- price drawdown alone does not invalidate value thesis
+- still strong_buy
+- research accumulate
 - cheapness family still passes
+- data_quality 0.95
+- conviction 74%
 
-### JHD.L — weakening / watch_review (-5.0%)
+### JHD.L — weakening / watch_review (-8.5%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### RWS.L — weakening / watch_review (-3.9%)
+### CAM.L — weakening / watch_review (-8.2%)
 - research verdict caution
-- conviction 24% below intact floor
 - still buy
 - cheapness family still passes
 
-### WJG.L — weakening / watch_review (-3.4%)
+### RWS.L — weakening / watch_review (-7.4%)
 - research verdict caution
-- conviction 18% below intact floor
+- conviction 23% below intact floor
 - still buy
 - cheapness family still passes
 
-### CRW.L — weakening / watch_review (-3.0%)
+### CRW.L — weakening / watch_review (-4.9%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
+
+### TFW.L — intact / hold_tolerate (-4.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 48%
 
 ### ASY.L — intact / hold_tolerate (-2.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 55%
+- conviction 51%
 
-### PEBB.L — intact / hold_tolerate (-2.7%)
+### KGH.L — intact / hold_tolerate (-2.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 58%
+
+### PEBB.L — intact / hold_tolerate (-1.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 51%
 
-### KGH.L — intact / hold_tolerate (-1.4%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 58%
-
-### TFW.L — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 58%
-
-### YNGN.L — weakening / watch_review (+19.2%)
+### WJG.L — weakening / watch_review (-1.9%)
+- left buy tier (hold)
 - research verdict caution
-- still buy
+- conviction 11% below intact floor
 - cheapness family still passes
+- data_quality 0.95
+
+### DOTD.L — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 53%

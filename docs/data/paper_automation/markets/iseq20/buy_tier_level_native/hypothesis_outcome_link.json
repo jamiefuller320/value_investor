@@ -3,27 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-11-19T08:42:12.289532+00:00",
+  "generated_at": "2026-11-22T07:18:07.752090+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 5,
+    "closed_total": 7,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 1,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 2,
-        "recovery_rate": 1.0,
-        "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.07,
-        "mean_trough_unrealized_pct": 0.0262,
+        "closed_count": 4,
+        "recovery_rate": 0.75,
+        "sold_underwater_rate": 0.25,
+        "mean_peak_unrealized_pct": 0.0444,
+        "mean_trough_unrealized_pct": 0.0054,
         "outcome_labels": {
-          "recovered": 2
+          "recovered": 3,
+          "sold_underwater": 1
         }
       },
       "broken": {
@@ -63,11 +64,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 5,
+    "hold_closed_with_thesis": 7,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=5 (target >=8)",
-      "hold thesis buckets thin (weakening=2; target >=3 each)",
+      "hold closed with thesis=7 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -129,7 +129,7 @@
           "trough_unrealized_pct": -0.0256
         }
       ],
-      "peak_unrealized_pct": 0.0974,
+      "peak_unrealized_pct": 0.1103,
       "trough_unrealized_pct": -0.0256,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -379,7 +379,7 @@
       "ticker": "GL9.IR",
       "name": "Glanbia plc",
       "started_at": "2026-11-07T12:50:55.284850+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -420,11 +420,11 @@
         }
       ],
       "peak_unrealized_pct": -0.0447,
-      "trough_unrealized_pct": -0.0816,
+      "trough_unrealized_pct": -0.0896,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-11-22T07:18:07.741556+00:00",
+      "linked_sell_trade_id": "5dd5c880-8e36-419c-b806-3ae4c798f2df"
     },
     {
       "episode_id": "buy_tier_level_native:MIO.IR:2026-11-17T07:32:33.500906+00:00",
@@ -432,7 +432,7 @@
       "ticker": "MIO.IR",
       "name": "Mincon Group plc",
       "started_at": "2026-11-17T07:32:33.500906+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -463,12 +463,12 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": 0.0588,
+      "peak_unrealized_pct": 0.0824,
       "trough_unrealized_pct": 0.0588,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-22T07:18:07.741556+00:00",
+      "linked_sell_trade_id": "429f29ee-5fb1-4512-b9f8-03b7e414dd18"
     }
   ],
   "swap_rotations": [
@@ -536,11 +536,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "EG7.IR": 0.0211
+        "EG7.IR": 0.0132
       },
       "buy_returns_since_rotation": {
-        "C5H.IR": 0.0321,
-        "OIZ.IR": 0.07
+        "C5H.IR": 0.0623,
+        "OIZ.IR": 0.0825
       },
       "verdict": null,
       "closed_at": null
@@ -629,11 +629,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "C5H.IR": 0.0282,
-        "OIZ.IR": 0.0891
+        "C5H.IR": 0.0583,
+        "OIZ.IR": 0.1018
       },
       "buy_returns_since_rotation": {
-        "KRX.IR": 0.0109
+        "KRX.IR": -0.056
       },
       "verdict": null,
       "closed_at": null
@@ -695,10 +695,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "KRX.IR": 0.0378
+        "KRX.IR": -0.0309
       },
       "buy_returns_since_rotation": {
-        "GL9.IR": -0.0133
+        "GL9.IR": -0.0489
       },
       "verdict": null,
       "closed_at": null
@@ -752,13 +752,20 @@
           "avg_sell_return": -0.025,
           "avg_buy_return": -0.0155,
           "replacement_delta": 0.0095
+        },
+        {
+          "scored_at": "2026-11-22T07:18:07.741556+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.031,
+          "avg_buy_return": -0.0655,
+          "replacement_delta": -0.0965
         }
       ],
       "sell_returns_since_rotation": {
-        "OIZ.IR": 0.019
+        "OIZ.IR": 0.031
       },
       "buy_returns_since_rotation": {
-        "GL9.IR": -0.0306
+        "GL9.IR": -0.0655
       },
       "verdict": null,
       "closed_at": null
@@ -820,11 +827,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "GL9.IR": -0.0427
+        "GL9.IR": -0.0772
       },
       "buy_returns_since_rotation": {
-        "C5H.IR": -0.0144,
-        "OIZ.IR": 0.0673
+        "C5H.IR": 0.0144,
+        "OIZ.IR": 0.0798
       },
       "verdict": null,
       "closed_at": null
@@ -906,11 +913,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "C5H.IR": -0.0144,
-        "OIZ.IR": 0.049
+        "C5H.IR": 0.0144,
+        "OIZ.IR": 0.0613
       },
       "buy_returns_since_rotation": {
-        "GL9.IR": -0.0589
+        "GL9.IR": -0.0928
       },
       "verdict": null,
       "closed_at": null
@@ -967,10 +974,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "C5H.IR": -0.0144
+        "C5H.IR": 0.0144
       },
       "buy_returns_since_rotation": {
-        "GL9.IR": 0.0283
+        "GL9.IR": -0.0088
       },
       "verdict": null,
       "closed_at": null
@@ -1026,11 +1033,11 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "C5H.IR": -0.0126
+        "C5H.IR": 0.0162
       },
       "buy_returns_since_rotation": {
-        "OIZ.IR": 0.0465,
-        "GL9.IR": -0.0025
+        "OIZ.IR": 0.0587,
+        "GL9.IR": -0.0385
       },
       "verdict": null,
       "closed_at": null
@@ -1105,11 +1112,11 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "GL9.IR": -0.0114,
-        "OIZ.IR": 0.019
+        "GL9.IR": -0.047,
+        "OIZ.IR": 0.031
       },
       "buy_returns_since_rotation": {
-        "MIO.IR": 0.0588
+        "MIO.IR": 0.0824
       },
       "verdict": null,
       "closed_at": null

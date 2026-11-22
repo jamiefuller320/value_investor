@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-20T14:17:52.711247+00:00
+Track: `buy_tier_level` · updated 2026-11-22T07:18:07.704728+00:00
 
 ## Portfolio loser feedback
 
@@ -10,16 +10,16 @@ Track: `buy_tier_level` · updated 2026-11-20T14:17:52.711247+00:00
 
 ## Holding reviews
 
-### C5H.IR — intact / hold_tolerate (+0.0%)
+### C5H.IR — intact / hold_tolerate (+2.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 70%
+- conviction 68%
 
-### OIZ.IR — intact / hold_tolerate (+4.7%)
+### OIZ.IR — intact / hold_tolerate (+5.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 40%
+- conviction 47%

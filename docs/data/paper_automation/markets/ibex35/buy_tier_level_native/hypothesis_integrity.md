@@ -1,28 +1,26 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-19T08:41:08.814274+00:00
+Track: `buy_tier_level_native` · updated 2026-11-22T07:16:53.091588+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 3 (0% count, 0% NAV)
-- Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `maintain`
+- Losers: **1** / 2 (50% count, 50% NAV)
+- Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
+- Balancing hint: `hold_intact_review_selection`
+- Selection feedback:
+  - quality fails more often among losers (100% vs 0%)
 
 ## Holding reviews
 
-### REP.MC — weakening / watch_review (-2.1%)
-- research verdict caution
-- still strong_buy
-- cheapness family still passes
-
-### ACS.MC — intact / hold_tolerate (-1.7%)
+### ACS.MC — intact / hold_tolerate (-8.6%)
+- price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 50%
+- conviction 52%
 
-### AENA.MC — intact / hold_tolerate (+0.4%)
+### AENA.MC — intact / hold_tolerate (-2.4%)
 - still buy
 - research accumulate
 - cheapness family still passes

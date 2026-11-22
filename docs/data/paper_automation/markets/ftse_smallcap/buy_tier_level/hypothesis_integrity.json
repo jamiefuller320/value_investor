@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-11-20T14:17:21.608843+00:00",
-  "as_of": "2026-11-20T14:17:21.576632+00:00",
+  "updated_at": "2026-11-22T07:16:09.187539+00:00",
+  "as_of": "2026-11-22T07:16:09.166191+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,86 +16,56 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 6,
-  "underwater_count": 0,
+  "holding_count": 5,
+  "underwater_count": 1,
   "thesis_status_counts": {
     "intact": 3,
     "weakening": 2,
-    "broken": 1,
+    "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 6,
-    "loser_count": 0,
-    "loser_share": 0.0,
-    "loser_nav_share": 0.0,
+    "holding_count": 5,
+    "loser_count": 1,
+    "loser_share": 0.2,
+    "loser_nav_share": 0.2499,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
-    "intact_loser_count": 0,
+    "intact_loser_count": 1,
     "weakening_loser_count": 0,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
       "quality": 0.0,
-      "dividend": 0.0,
+      "dividend": 1.0,
       "garp": 0.0,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.1667,
+      "cheapness": 0.0,
       "quality": 0.5,
-      "dividend": 0.5,
-      "garp": 0.6667,
-      "risk": 0.1667
+      "dividend": 0.25,
+      "garp": 0.75,
+      "risk": 0.0
     },
-    "selection_feedback_flags": [],
-    "balancing_hint": "maintain",
+    "selection_feedback_flags": [
+      "dividend fails more often among losers (100% vs 25%)"
+    ],
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
-    {
-      "ticker": "REC.L",
-      "name": "REC.L",
-      "thesis_status": "broken",
-      "recommended_action": "exit_candidate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 50.4,
-      "avg_cost": 50.4,
-      "signal": null,
-      "timing_signal": null,
-      "conviction_score": null,
-      "data_quality_score": null,
-      "passed_families": [],
-      "failed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "research_verdict": null,
-      "reasons": [
-        "cheapness lost and not in buy tier"
-      ],
-      "intact_reasons": [],
-      "weaken_reasons": [],
-      "broken_reasons": [
-        "cheapness lost and not in buy tier"
-      ]
-    },
     {
       "ticker": "CAPD.L",
       "name": "Capital Limited",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0363,
-      "mark": 106.5,
-      "avg_cost": 110.5164,
+      "unrealized_pct": -0.0753,
+      "mark": 100.0,
+      "avg_cost": 108.1485,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.6733,
@@ -111,6 +81,7 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
@@ -134,9 +105,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0068,
-      "mark": 85.8,
-      "avg_cost": 86.3893,
+      "unrealized_pct": -0.0396,
+      "mark": 82.1,
+      "avg_cost": 85.4866,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.6779,
@@ -169,18 +140,59 @@
       "broken_reasons": []
     },
     {
+      "ticker": "SBRE.L",
+      "name": "Sabre Insurance Group plc",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0288,
+      "mark": 175.4,
+      "avg_cost": 180.6,
+      "signal": "hold",
+      "timing_signal": "neutral",
+      "conviction_score": 0.2734,
+      "data_quality_score": 0.85,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "left buy tier (hold)",
+        "conviction 27% below intact floor",
+        "research accumulate",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.85"
+      ],
+      "weaken_reasons": [
+        "left buy tier (hold)",
+        "conviction 27% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
       "ticker": "LSL.L",
       "name": "LSL Property Services plc",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 265.0,
-      "avg_cost": 265.0,
+      "unrealized_pct": -0.0093,
+      "mark": 262.0,
+      "avg_cost": 264.447,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.3819,
+      "conviction_score": 0.4372,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -197,14 +209,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 38%"
+        "conviction 44%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 38%"
+        "conviction 44%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -216,12 +228,12 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0,
-      "mark": 70.0,
-      "avg_cost": 70.0,
+      "unrealized_pct": 0.0099,
+      "mark": 71.0,
+      "avg_cost": 70.3049,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.222,
+      "conviction_score": 0.2417,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -234,7 +246,7 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "conviction 22% below intact floor",
+        "conviction 24% below intact floor",
         "still buy",
         "research accumulate"
       ],
@@ -245,47 +257,7 @@
         "data_quality 0.95"
       ],
       "weaken_reasons": [
-        "conviction 22% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "SBRE.L",
-      "name": "Sabre Insurance Group plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 180.6,
-      "avg_cost": 180.6,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.3308,
-      "data_quality_score": 0.85,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 33% below intact floor",
-        "still buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.85"
-      ],
-      "weaken_reasons": [
-        "conviction 33% below intact floor"
+        "conviction 24% below intact floor"
       ],
       "broken_reasons": []
     }
