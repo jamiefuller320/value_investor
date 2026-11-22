@@ -574,7 +574,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-11-22T09:06:30.933620+00:00",
+  "updated_at": "2026-11-22T13:51:46.490148+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -586,12 +586,8 @@
     "omxs30",
     "psi20"
   ],
-  "ingest_parallel_sprint": [
-    "sp500"
-  ],
-  "ingest_parallel_sprint_2": [
-    "nasdaq100"
-  ],
+  "ingest_parallel_sprint": [],
+  "ingest_parallel_sprint_2": [],
   "ladder": {
     "enabled": true,
     "layers": [
@@ -877,36 +873,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-11-08T18:54:13.319909+00:00",
-        "parallel_stream": 2,
-        "from_market": "ftse_mib",
-        "to_market": null,
-        "stream_markets_after": [],
-        "ingest_parity_recorded": false
-      },
-      {
-        "reseeded": true,
-        "market_queue_appended": false,
-        "at": "2026-11-09T07:39:27.722075+00:00",
-        "parallel_stream": 1,
-        "from_market": null,
-        "to_market": "sp500",
-        "stream_markets_after": [
-          "sp500"
-        ],
-        "ingest_parity_recorded": false,
-        "screen_refresh": {
-          "refreshed": true,
-          "market_id": "sp500",
-          "forced": true,
-          "prior_screen_at": "2026-11-09T06:53:19.890728+00:00",
-          "prior_age_days": 0,
-          "run_at": "2026-11-09T07:39:27.722099+00:00",
-          "shortlist_count": 144,
-          "ticker_count": 503
-        }
-      },
       {
         "reseeded": true,
         "market_queue_appended": false,
@@ -1724,6 +1690,68 @@
           "run_at": "2026-11-22T07:21:15.765461+00:00",
           "shortlist_count": 41,
           "ticker_count": 101
+        }
+      },
+      {
+        "at": "2026-11-22T13:51:30.430117+00:00",
+        "parallel_stream": 1,
+        "from_market": "sp500",
+        "to_market": null,
+        "stream_markets_after": [],
+        "ingest_parity_recorded": false,
+        "gap_market_id": "sp500",
+        "window_days": 2,
+        "gaps_before": {
+          "unmeasured": 1,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 18,
+          "filing_gaps": 1
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 9,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": -1,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": -9,
+          "filing_gaps": -1
+        }
+      },
+      {
+        "at": "2026-11-22T13:51:46.489648+00:00",
+        "parallel_stream": 2,
+        "from_market": "nasdaq100",
+        "to_market": null,
+        "stream_markets_after": [],
+        "ingest_parity_recorded": false,
+        "gap_market_id": "nasdaq100",
+        "window_days": 2,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 9,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 9,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
         }
       }
     ]
