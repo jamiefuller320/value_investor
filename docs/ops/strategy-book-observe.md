@@ -313,17 +313,20 @@ raise and does not set `forward_live`.
 
 On 2026-11-17 the owner accepted the observe-shadow token cost and relaxed
 this shadow's sampling cap from $40 (100 memos) to $80 a week (200 memos
-at $0.40). On 2026-11-19 the owner doubled that ceiling to **$160 a week
-(400 memos at $0.40)** because Cursor credit is not being hit hard. A person
-reviews that ceiling on **30 Nov 2026 (Europe/London)**: keep the $160
-ceiling, lower it, or restore the $40 cap. Ops-monitor flags deferred
-trigger N275 that day. `influences_live` stays false. The review does not
-turn on live capital.
+at $0.40). On 2026-11-19 the owner doubled that ceiling to $160 a week
+(400 memos at $0.40). On 2026-11-22 the owner lifted the practical cap
+because Composer credit is spare. The code still needs a number, so the
+safety ceiling is **$640 a week (1600 memos at $0.40)**, four times the
+busier of that $160 ceiling and the $124.50 weekly ops cap. Current volume
+cannot reach it. A person still reviews that ceiling on **30 Nov 2026
+(Europe/London)**: keep the $640 safety ceiling, lower it, or restore a
+tighter cap. Ops-monitor flags deferred trigger N275 that day.
+`influences_live` stays false. The review does not turn on live capital.
 
-While an ISO week's estimated observe spend is inside $160, the weekday
+While an ISO week's estimated observe spend is inside $640, the weekday
 forward job requests a memo for each candidate whose memo is missing or
-older than 21 days. Above $160, `l694-memo-sample-v1` holds names back:
-do not pay again for a memo younger than 21 days; at most 400 new memos
+older than 21 days. Above $640, `l694-memo-sample-v1` holds names back:
+do not pay again for a memo younger than 21 days; at most 1600 new memos
 an ISO week; priority filled, then skipped for a slot, then gate-rejected;
 ticker order within a priority; one new memo per name per week. The shared
 `weekly_ops` headroom check still applies.
@@ -390,7 +393,7 @@ The check does not walk and it does not spend.
 | Strategy book memo-ranking shadow missing | warn | No store file |
 | Strategy book memo-ranking shadow stale | warn | Store is older than that slot |
 | Strategy book memo-ranking shadow unreadable | warn | File is not valid JSON |
-| Strategy book memo-ranking cost | info | Store is fresh. Names the full-width estimate and, when the week is above the $160 observe ceiling, sampling proposal `l694-memo-sample-v1`. `auto_fixable` false. `influences_live` stays false |
+| Strategy book memo-ranking cost | info | Store is fresh. Names the full-width estimate and, when the week is above the $640 safety ceiling, sampling proposal `l694-memo-sample-v1`. `auto_fixable` false. `influences_live` stays false |
 | Strategy book memo-ranking input gaps | info | Store is fresh. Names the P1 cite rank on these candidates. `auto_fixable` false. No ingest |
 
 ### Out of scope

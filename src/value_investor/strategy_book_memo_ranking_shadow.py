@@ -7,9 +7,11 @@ every market that produces a signal. A missing or stale cite is no score.
 ``influences_live`` is false. ``authorize_live_llm_influence`` is called on
 every card and fail-closes. The default path does not call a model and does
 not read or write ``forward_live``. ``--request-memos`` asks for missing or
-stale observe memos while this ISO week is inside the relaxed observe
-ceiling ($160, 400 memos), reviewed on 2026-11-30 Europe/London. Above that
-ceiling the sampling rule still holds names back. A memo dated after the
+stale observe memos while this ISO week is inside the safety ceiling
+($640, 1600 memos). On 2026-11-22 the owner lifted the practical cap because
+Composer credit is spare. A person still reviews it on 2026-11-30
+Europe/London. Above that ceiling the sampling rule still holds names back.
+A memo dated after the
 candidate session still does not score that session. This does not turn on
 live capital.
 
@@ -92,11 +94,14 @@ NOISE_BAND = 0.015
 REGISTERED_MEMO_RAISE_USD = 40.0
 REGISTERED_MEMO_RAISE_MEMOS = 100
 # Owner 2026-11-17 accepted the observe-shadow token cost. On 2026-11-19 the
-# owner doubled the ceiling to $160 (400 memos) because Cursor credit is not
-# being hit hard. Sampling applies only above this. Human review stays
-# 30 Nov 2026 (Europe/London). influences_live stays false.
-OBSERVE_CEILING_USD = 160.0
-OBSERVE_CEILING_MEMOS = 400
+# ceiling was $160 (400 memos). On 2026-11-22 the owner lifted the practical
+# cap because Composer credit is spare. The code still needs a number, so this
+# is a safety ceiling: 4× the busier of the $160 observe ceiling and the
+# $124.50 weekly_ops cap. Current volume cannot reach it. Sampling applies
+# only above it. Human review stays 30 Nov 2026 (Europe/London).
+# influences_live stays false.
+OBSERVE_CEILING_USD = 640.0
+OBSERVE_CEILING_MEMOS = 1600
 OBSERVE_CEILING_REVIEW_ON = "2026-11-30"
 WEEKLY_BUDGET_USD = OBSERVE_CEILING_USD
 WEEKLY_CAP_MEMOS = OBSERVE_CEILING_MEMOS
@@ -1441,9 +1446,9 @@ def findings_from_store(
     top = ranked[0]["source"] if ranked else "none"
     sampling = cost.get("sampling")
     ceiling = (
-        f"${WEEKLY_BUDGET_USD:.0f} observe ceiling "
-        f"(relaxed from ${REGISTERED_MEMO_RAISE_USD:.0f} until {OBSERVE_CEILING_REVIEW_ON} "
-        "Europe/London)"
+        f"${WEEKLY_BUDGET_USD:.0f} safety ceiling "
+        f"(practical cap lifted 2026-11-22 because Composer credit is spare; "
+        f"review {OBSERVE_CEILING_REVIEW_ON} Europe/London)"
     )
     if sampling:
         cost_text = (
@@ -1523,9 +1528,10 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help=(
             "Ask for missing or stale observe memos while this ISO week is inside "
-            f"the ${OBSERVE_CEILING_USD:.0f} ceiling "
-            f"(relaxed from ${REGISTERED_MEMO_RAISE_USD:.0f} until {OBSERVE_CEILING_REVIEW_ON} "
-            "Europe/London). Does not set influences_live or forward_live. "
+            f"the ${OBSERVE_CEILING_USD:.0f} safety ceiling "
+            f"(practical cap lifted 2026-11-22 because Composer credit is spare; "
+            f"review {OBSERVE_CEILING_REVIEW_ON} Europe/London). "
+            "Does not set influences_live or forward_live. "
             "A memo after the session does not score it."
         ),
     )

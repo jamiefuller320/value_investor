@@ -85,10 +85,11 @@ def test_l694_observe_ceiling_review_is_a_human_task():
     assert row["doc_anchor"] == "ceiling-review"
     assert "2026-11-30" in row["summary"]
     assert "Europe/London" in row["summary"]
-    assert "$160" in row["summary"]
-    assert "400" in row["summary"]
+    assert "$640" in row["summary"]
+    assert "1600" in row["summary"]
+    assert "Composer credit is spare" in row["summary"]
     assert "$40" in row["summary"]
-    assert "above $160" in row["summary"]
+    assert "above $640" in row["summary"]
     assert "influences_live" in row["summary"]
     assert "forward_live" in row["summary"]
 

@@ -21,6 +21,10 @@ on:
         description: "List due charts and forward counts without writing stores"
         type: boolean
         default: false
+      memo_budget_catchup:
+        description: "Request memos that were skipped for weekly_ops budget, using the screen snapshots recorded on those skips. Does not walk the book or set influences_live."
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -30,7 +34,55 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  memo-budget-catchup:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.memo_budget_catchup == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: bash scripts/gha_pip_install.sh -e .
+
+      # Observe-only. The API key is required before the job runs so a missing
+      # key cannot write a terminal runner_error skip. Screen snapshots are
+      # restored from the skip's data_commit and put back before publish.
+      # Publish appends log rows onto main and copies memo files. It does not
+      # push policy.json, latest_signals.csv, or vendor source files.
+      - name: Request memos deferred for budget
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${CURSOR_API_KEY:-}" ]; then
+            echo "::error::CURSOR_API_KEY missing"
+            exit 1
+          fi
+          python -m value_investor.strategy_book_memo_catchup \
+            --repo-root . \
+            --workdir "${RUNNER_TEMP}/memo-catchup"
+
+      - name: Publish catch-up memos onto main
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ ! -f "${RUNNER_TEMP}/memo-catchup/manifest.json" ]; then
+            echo "No catch-up manifest; nothing to publish"
+            exit 0
+          fi
+          python -m value_investor.strategy_book_memo_catchup \
+            --repo-root . \
+            --workdir "${RUNNER_TEMP}/memo-catchup" \
+            --publish-main
+
   forward:
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.memo_budget_catchup != 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -76,8 +128,10 @@ jobs:
           fi
 
       # Observe-only L694 ranking. Requests missing or stale memos while this
-      # ISO week is inside the $160 ceiling (400 memos; relaxed from $40 until
-      # 2026-11-30 Europe/London). l694-memo-sample-v1 applies only above $160.
+      # ISO week is inside the $640 safety ceiling (1600 memos). On 2026-11-22
+      # the practical cap was lifted because Composer credit is spare. Review
+      # remains 2026-11-30 Europe/London. l694-memo-sample-v1 applies only
+      # above $640.
       # Does not set influences_live or forward_live.
       # A failure must not stop the forward commit.
       # See docs/ops/strategy-book-observe.md.

@@ -236,7 +236,14 @@ def _blocking_row(
     matches = [row for row in rows if _row_key(row) == key]
     if not matches:
         return False
-    if any(row.get("action") in {"requested", "skipped"} for row in matches):
+    if any(row.get("action") == "requested" for row in matches):
+        return True
+    # A budget skip is a deferral. Once weekly_ops headroom allows, a later
+    # run requests the memo. Other skips (a runner error) stay terminal.
+    if any(
+        row.get("action") == "skipped" and row.get("skip_reason") != "memo_not_ready_budget"
+        for row in matches
+    ):
         return True
     if not spend:
         return any(row.get("action") == "dry_run" for row in matches)
@@ -742,9 +749,15 @@ def run_strategy_book_memo_job(
                         market_report["dry_run_requests"] += 1
             # Advance only through a close that was scored. A stale chart
             # stays unscored, so a measurement replay can still read it.
+            # Replaying an earlier close to catch up a budget skip must not
+            # move the cursor backwards.
             scored = list(plan.get("sessions") or [])
+            new_session = scored[-1] if scored else None
+            prior_session = (last_by_market.get(market) or {}).get("session")
+            if isinstance(prior_session, str) and new_session and prior_session > new_session:
+                new_session = prior_session
             last_by_market[market] = {
-                "session": scored[-1] if scored else None,
+                "session": new_session,
                 "run_at": moment.isoformat(),
                 "latest_bar": plan.get("latest_bar"),
                 "stale": bool(plan.get("suppressed_stale")),
