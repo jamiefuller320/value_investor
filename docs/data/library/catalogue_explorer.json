@@ -270,28 +270,10 @@
     "ALM_US_EQ",
     "ALNPY_US_EQ",
     "ALOR_US_EQ",
-    "ALPA_US_EQ"
+    "ALPA_US_EQ",
+    "ALPMY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "AKO/B_US_EQ",
-      "venue": "US",
-      "yahoo": "AKO/B",
-      "isin": "US29081P3038",
-      "name": "AKO/B",
-      "seconds": 85.286,
-      "outcome": "miss",
-      "at": "2026-11-23T08:43:05.449919+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.108
-      },
-      "screen_seconds": 85.108,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "AKOM_US_EQ",
       "venue": "US",
@@ -1032,6 +1014,25 @@
       },
       "screen_seconds": 85.964,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "ALPMY_US_EQ",
+      "venue": "US",
+      "yahoo": "ALPMY",
+      "isin": "US04623U1025",
+      "name": "ALPMY",
+      "seconds": 1.504,
+      "outcome": "miss",
+      "at": "2026-11-23T08:58:05.238740+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.309
+      },
+      "screen_seconds": 1.309,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -3131,43 +3132,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T08:54:12.685784+00:00"
+    },
+    {
+      "t212_ticker": "ALPMY_US_EQ",
+      "yahoo": "ALPMY",
+      "name": "ALPMY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T08:58:05.238740+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ALPA_US_EQ",
+    "t212_ticker": "ALPMY_US_EQ",
     "venue": "US",
-    "yahoo": "ALPA",
-    "isin": "US1429221294",
-    "name": "XAGE",
-    "seconds": 86.097,
+    "yahoo": "ALPMY",
+    "isin": "US04623U1025",
+    "name": "ALPMY",
+    "seconds": 1.504,
     "outcome": "miss",
-    "at": "2026-11-23T08:57:58.423330+00:00",
+    "at": "2026-11-23T08:58:05.238740+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.964
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.309
     },
-    "screen_seconds": 85.964,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.309,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ALPMY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T08:57:58.423330+00:00",
+  "updated_at": "2026-11-23T08:58:05.238740+00:00",
   "totals": {
-    "screened": 269,
+    "screened": 270,
     "signals": {
-      "buy": 59,
+      "buy": 60,
       "avoid": 72,
       "hold": 63,
       "insufficient_data": 74,
       "strong_buy": 1
     },
-    "signals_n": 269,
-    "screen_seconds_sum": 2302.8390000000004,
-    "screen_seconds_n": 269,
+    "signals_n": 270,
+    "screen_seconds_sum": 2304.1480000000006,
+    "screen_seconds_n": 270,
     "outcomes": {
-      "miss": 114,
+      "miss": 115,
       "saved": 155
     }
   },
