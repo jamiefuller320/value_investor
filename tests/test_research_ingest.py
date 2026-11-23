@@ -274,6 +274,78 @@ def test_asia_ingest_ensures_ir_allowlist_direct_for_c6l_si(
     "value_investor.research.ingest.fetch_annual_financials", return_value={"income_statement": {}}
 )
 @patch("value_investor.research.filings.ingest_filings")
+@patch("value_investor.research.filings.refetch_residual_filing_bodies")
+@patch("value_investor.research.filings.refetch_ir_presentation_sources")
+@patch("value_investor.research.filings.ensure_ir_allowlist_direct_filings_ingested")
+def test_euro_ingest_ensures_ir_allowlist_direct_for_evn_vi_eng_20261123_02(
+    mock_ir_ensure,
+    mock_ir_presentation,
+    mock_residual,
+    mock_ingest_filings,
+    _mock_financials,
+    _mock_yf_news,
+    _mock_google_news,
+    tmp_path: Path,
+):
+    """eng-20261123-02: euro_depth EVN.VI deepen must bootstrap builtin IR before residual refetch."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    index_path = filings_dir / "filings_index.json"
+    index_path.write_text(
+        json.dumps(
+            {
+                "summary": {"total": 3, "with_body": 2, "annual": 0, "interim": 2},
+                "filings": [
+                    {
+                        "id": "ir_07bb52dd9c03b279",
+                        "source": "ir_allowlist",
+                        "url": "https://www.evn.at/en/investor-relations/publications/",
+                        "period": "other",
+                        "has_body": False,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    mock_ingest_filings.return_value = {
+        "filings_index_path": str(index_path),
+        "filings_regime": "euro_filings",
+        "filings_summary": {"total": 3, "with_body": 2},
+        "filings_sources": ["esef_direct", "ir_allowlist"],
+    }
+    mock_ir_ensure.return_value = {
+        "skipped": False,
+        "merge": {"added": 1, "migrated_urls": 1, "total_allowlist": 2},
+        "attempted": 2,
+        "fetched": 2,
+        "ir_refetch": {"attempted": 2, "fetched": 2, "note": "refetch_ir_presentation_sources"},
+    }
+    mock_residual.return_value = {"attempted": 0, "fetched": 0}
+    mock_ir_presentation.return_value = {"attempted": 0, "fetched": 0}
+
+    meta = ingest_research_sources(
+        ticker="EVN.VI",
+        company_name="EVN AG",
+        screening_snapshot={"ticker": "EVN.VI", "name": "EVN AG", "signal": "buy"},
+        sources_dir=tmp_path,
+        market="euro_depth",
+        deepen_history=True,
+    )
+
+    mock_ir_ensure.assert_called_once()
+    assert mock_ir_ensure.call_args.kwargs["ticker"] == "EVN.VI"
+    assert meta["ir_refetch"]["attempted"] == 2
+    assert meta["ir_refetch"]["fetched"] == 2
+    assert int(meta["ir_allowlist_ensure"]["merge"]["migrated_urls"]) == 1
+
+
+@patch("value_investor.research.ingest.fetch_google_news_rss", return_value=[])
+@patch("value_investor.research.ingest.fetch_yfinance_news", return_value=[])
+@patch(
+    "value_investor.research.ingest.fetch_annual_financials", return_value={"income_statement": {}}
+)
+@patch("value_investor.research.filings.ingest_filings")
 @patch("value_investor.research.filings.refetch_ir_presentation_sources")
 @patch("value_investor.research.filings.fetch_filings_ir_allowlist")
 def test_eng_20261110_03_uk_ingest_ir_presentation_for_megp_l(

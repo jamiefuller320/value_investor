@@ -14933,6 +14933,76 @@ def test_refetch_euro_filings_primary_bodies_evn_vi_library_index_eng_20261122_0
     assert annual and annual[0].get("has_body")
 
 
+def test_refetch_residual_skips_ir_allowlist_rows_when_builtin_urls_exist_eng_20261123_02(
+    tmp_path: Path,
+):
+    """eng-20261123-02: residual must not attempt stale EVN.VI hub when IR pipeline owns refetch."""
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_07bb52dd9c03b279",
+                        "source": "ir_allowlist",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                    }
+                ],
+                "summary": {"total": 1, "with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    from value_investor.research.filings import refetch_residual_filing_bodies
+
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="EVN.VI",
+        company_name="EVN AG",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 0
+    assert result.get("note") == "no residual gaps"
+
+
+def test_filings_index_ir_allowlist_direct_gap_evn_vi_despite_esef_bodies(tmp_path: Path):
+    """eng-20261123-02: unfetchable IR hub is a gap even when ESEF interim rows have bodies."""
+    from value_investor.research.filings import filings_index_ir_allowlist_direct_gap
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    payload = {
+        "summary": {
+            "total": 3,
+            "with_body": 2,
+            "period_coverage": {
+                "annual": {"total": 0, "with_body": 0},
+                "interim": {"total": 2, "with_body": 2},
+            },
+        },
+        "filings": [
+            {
+                "id": "ir_07bb52dd9c03b279",
+                "source": "ir_allowlist",
+                "url": "https://www.evn.at/en/investor-relations/publications/",
+                "period": "other",
+                "has_body": False,
+            },
+            {
+                "id": "esef1",
+                "source": "esef_direct",
+                "period": "interim",
+                "has_body": True,
+            },
+        ],
+    }
+    assert filings_index_ir_allowlist_direct_gap(payload)
+
+
 def test_parked_source_hunter_evn_vi_euro_depth_has_fetchable_ir():
     """eng-20261121-02: EVN.VI evn.at statutory PDFs fetch and validate (hunter confirmed)."""
     assert "EVN.VI" not in PARKED_SOURCE_HUNTER_SKIP

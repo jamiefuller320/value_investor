@@ -1641,6 +1641,8 @@ def ingest_research_sources(
             }:
                 from value_investor.library_ingest_budget import deadline_reached
                 from value_investor.research.filings import (
+                    ensure_ir_allowlist_direct_filings_ingested,
+                    ir_allowlist_direct_eligible,
                     refetch_ir_allowlist_filing_bodies,
                     refetch_residual_filing_bodies,
                 )
@@ -1648,14 +1650,30 @@ def ingest_research_sources(
                 summary = filings_meta.get("filings_summary") or {}
                 ir_refetch: dict[str, Any] = {}
                 residual_refetch: dict[str, Any] = {}
+                ir_allowlist_ensure: dict[str, Any] = {}
                 if not deadline_reached(deadline_monotonic):
-                    ir_refetch = refetch_ir_allowlist_filing_bodies(
-                        sources_dir / "filings",
-                        ticker=ticker,
-                        company_name=company_name,
-                        max_bodies=12,
-                        deadline_monotonic=deadline_monotonic,
-                    )
+                    if regime == "euro_filings" and ir_allowlist_direct_eligible(ticker):
+                        # eng-20261123-02: EVN.VI euro_depth — bootstrap builtin IR PDFs before
+                        # residual deepen (igc-20261028-01 gaps_remain_without_refetch 0/0).
+                        ir_allowlist_ensure = ensure_ir_allowlist_direct_filings_ingested(
+                            sources_dir,
+                            ticker=ticker,
+                            company_name=company_name,
+                            market=market,
+                            deepen_history=deepen_history,
+                            max_bodies=12,
+                            deadline_monotonic=deadline_monotonic,
+                        )
+                        filings_meta["ir_allowlist_ensure"] = ir_allowlist_ensure
+                        ir_refetch = dict(ir_allowlist_ensure.get("ir_refetch") or {})
+                    else:
+                        ir_refetch = refetch_ir_allowlist_filing_bodies(
+                            sources_dir / "filings",
+                            ticker=ticker,
+                            company_name=company_name,
+                            max_bodies=12,
+                            deadline_monotonic=deadline_monotonic,
+                        )
                 if not deadline_reached(deadline_monotonic):
                     residual_refetch = refetch_residual_filing_bodies(
                         sources_dir / "filings",
@@ -1665,7 +1683,9 @@ def ingest_research_sources(
                     )
                 filings_meta["ir_refetch"] = ir_refetch
                 filings_meta["residual_refetch"] = residual_refetch
-                merge_added = int((ir_refetch.get("merge") or {}).get("added") or 0)
+                merge_added = int((ir_refetch.get("merge") or {}).get("added") or 0) + int(
+                    (ir_allowlist_ensure.get("merge") or {}).get("added") or 0
+                )
                 if (
                     int(ir_refetch.get("fetched") or 0)
                     or int(residual_refetch.get("fetched") or 0)
@@ -1853,6 +1873,7 @@ def ingest_research_sources(
         "filings_sources": filings_meta.get("filings_sources") or [],
         "filings_regime": filings_meta.get("filings_regime"),
         "ir_refetch": filings_meta.get("ir_refetch") or {},
+        "ir_allowlist_ensure": filings_meta.get("ir_allowlist_ensure") or {},
         "ir_presentation_metrics": filings_meta.get("ir_presentation_metrics") or {},
         "macro_context_path": str(written_macro) if written_macro else None,
         "macro_context": macro_meta,

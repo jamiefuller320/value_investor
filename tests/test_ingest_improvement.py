@@ -1494,6 +1494,84 @@ def test_intensive_pin_keeps_refetch_stats_when_source_ingest_raises(
     assert stats["fetched"] >= 1
 
 
+@patch("value_investor.research.ingest_improvement.fetch_filings_ir_allowlist")
+@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
+@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
+@patch("value_investor.research.ingest_improvement.ingest_research_sources")
+@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+@patch("value_investor.research.ingest_improvement.refetch_euro_filings_primary_bodies")
+def test_intensive_pin_evn_vi_euro_records_ir_refetch_attempts_eng_20261123_02(
+    mock_euro_primary,
+    mock_bootstrap,
+    mock_sanitize,
+    mock_ingest_sources,
+    mock_alternate,
+    mock_deepen,
+    mock_ir_allowlist,
+    tmp_path: Path,
+):
+    """eng-20261123-02: euro_depth EVN.VI gap closure must not report 0/0 refetch stats."""
+    output_dir = tmp_path / "output"
+    sources = output_dir / "research" / "EVN.VI" / "sources" / "filings"
+    sources.mkdir(parents=True)
+    (sources / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 3, "with_body": 2},
+                "filings": [
+                    {
+                        "id": "ir_07bb52dd9c03b279",
+                        "source": "ir_allowlist",
+                        "url": "https://www.evn.at/en/investor-relations/publications/",
+                        "period": "other",
+                        "has_body": False,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    mock_ir_allowlist.return_value = [
+        {
+            "url": "https://www.evn.at/getmedia/cf5d1356-1622-4d84-ae5a-5cb5c7dbecb6/EVN_Jahresfinanzbericht-2024-25.pdf"
+        }
+    ]
+    mock_euro_primary.return_value = {
+        "residual": {"attempted": 0, "fetched": 0},
+        "ir_allowlist": {"attempted": 2, "fetched": 2, "with_body_after": 4},
+        "attempted": 2,
+        "fetched": 2,
+        "with_body_before": 2,
+        "with_body_after": 4,
+    }
+    mock_ingest_sources.return_value = {"filings_summary": {"with_body": 4, "total": 4}}
+    mock_alternate.return_value = {"fetched": 0}
+    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
+
+    summary = run_ingest_improvement_pass(
+        reports=[_report("EVN.VI", "EVN AG", "buy")],
+        output_dir=output_dir,
+        market="euro_depth",
+        max_targets=1,
+        suggestions_path=tmp_path / "missing.json",
+        require_outstanding_gaps=True,
+        pin_tickers=["EVN.VI"],
+        intensive_gap_closure=True,
+        discovery_scan=False,
+    )
+
+    assert "EVN.VI" in BODY_GAP_BATCH_TICKERS
+    assert summary.results[0]["ir_refetch"]["attempted"] == 2
+    assert summary.results[0]["ir_refetch"]["fetched"] == 2
+
+    from value_investor.ingest_gap_closure import _refetch_stats_from_improvement_row
+
+    stats = _refetch_stats_from_improvement_row(summary.results[0])
+    assert stats["attempted"] >= 2
+    assert stats["fetched"] >= 2
+
+
 @patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
 @patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
 @patch("value_investor.research.ingest_improvement.ingest_research_sources")

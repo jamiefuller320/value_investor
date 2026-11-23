@@ -11411,6 +11411,10 @@ def refetch_residual_filing_bodies(
         company_name=company_name,
     )
     missing = [row for row in enriched if row.get("url") and not row.get("has_body")]
+    # eng-20261123-02: euro_depth EVN.VI — residual must not burn attempts on stale IR hub rows
+    # when builtin allowlist PDFs are refetched by the mandatory IR pipeline (igc-20261028-01).
+    if ir_allowlist_direct_eligible(ticker):
+        missing = [row for row in missing if not _is_ir_allowlist_row(row)]
     if not missing:
         return {
             **empty,
@@ -11716,13 +11720,6 @@ def refetch_euro_filings_primary_bodies(
         company_name=company_name,
         ticker=ticker,
     )
-    residual = refetch_residual_filing_bodies(
-        filings_dir,
-        ticker=ticker,
-        company_name=company_name,
-        max_bodies=max_bodies,
-        prune_unfetchable_after_attempt=prune_failed_residual_fetches,
-    )
     ir: dict[str, Any] = {}
     allowlist_rows = fetch_filings_ir_allowlist(ticker)
     if allowlist_rows:
@@ -11734,6 +11731,15 @@ def refetch_euro_filings_primary_bodies(
         )
         ir["mandatory"] = True
         ir["allowlist_count"] = len(allowlist_rows)
+    # eng-20261123-02: run IR merge/migrate before residual — dead IR hub HTML must not
+    # consume the residual budget before Jahresfinanzbericht PDF refetch (EVN.VI / euro_depth).
+    residual = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker=ticker,
+        company_name=company_name,
+        max_bodies=max_bodies,
+        prune_unfetchable_after_attempt=prune_failed_residual_fetches,
+    )
     final_reconcile = reconcile_filings_index_body_flags(
         filings_dir,
         company_name=company_name,
@@ -12387,11 +12393,12 @@ def filings_index_ir_allowlist_direct_gap(payload: dict[str, Any]) -> bool:
 
     if not isinstance(payload, dict):
         return True
-    if not key_bodies(payload):
-        return True
     filings = list(payload.get("filings") or [])
     ir_rows = [row for row in filings if _is_ir_allowlist_row(row)]
+    # eng-20261123-02: EVN.VI ESEF interim bodies must not skip IR allowlist bootstrap.
     if ir_rows and not any(row.get("has_body") for row in ir_rows):
+        return True
+    if not key_bodies(payload):
         return True
     return int((payload.get("summary") or {}).get("with_body") or 0) == 0
 
