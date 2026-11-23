@@ -114,28 +114,10 @@
     "ADPXY_US_EQ",
     "ADRA_US_EQ",
     "ADRNY_US_EQ",
-    "ADRX_US_EQ"
+    "ADRX_US_EQ",
+    "ADRZY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ACRV_US_EQ",
-      "venue": "US",
-      "yahoo": "ACRV",
-      "isin": "US0048901096",
-      "name": "ACRV",
-      "seconds": 2.403,
-      "outcome": "saved",
-      "at": "2026-11-23T08:00:09.083484+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.224
-      },
-      "screen_seconds": 1.224,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "ACRX_US_EQ",
       "venue": "US",
@@ -876,6 +858,25 @@
       },
       "screen_seconds": 1.246,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "ADRZY_US_EQ",
+      "venue": "US",
+      "yahoo": "ADRZY",
+      "isin": "US0345221024",
+      "name": "ADRZY",
+      "seconds": 1.338,
+      "outcome": "miss",
+      "at": "2026-11-23T08:06:01.709764+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.203
+      },
+      "screen_seconds": 1.203,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -1102,61 +1103,55 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T08:05:47.589253+00:00"
+    },
+    {
+      "t212_ticker": "ADRZY_US_EQ",
+      "yahoo": "ADRZY",
+      "name": "ADRZY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T08:06:01.709764+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ADRX_US_EQ",
+    "t212_ticker": "ADRZY_US_EQ",
     "venue": "US",
-    "yahoo": "ADRX",
-    "isin": "US00654F1057",
-    "name": "ADRX",
-    "seconds": 2.352,
-    "outcome": "saved",
-    "at": "2026-11-23T08:05:55.207516+00:00",
-    "rows": 3,
-    "filings": [
-      {
-        "title": null,
-        "date": null,
-        "url": "https://www.sec.gov/Archives/edgar/data/1802369/000119312526458444/adrx-20260930.htm",
-        "has_body": true
-      },
-      {
-        "title": null,
-        "date": null,
-        "url": "https://www.sec.gov/Archives/edgar/data/1802369/000119312526458321/adrx-20261112.htm",
-        "has_body": true
-      },
-      {
-        "title": null,
-        "date": null,
-        "url": "https://www.sec.gov/Archives/edgar/data/1802369/000119312526405297/d186630d8k.htm",
-        "has_body": true
-      }
-    ],
+    "yahoo": "ADRZY",
+    "isin": "US0345221024",
+    "name": "ADRZY",
+    "seconds": 1.338,
+    "outcome": "miss",
+    "at": "2026-11-23T08:06:01.709764+00:00",
+    "rows": 0,
+    "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.85,
-      "seconds": 1.246
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.203
     },
-    "screen_seconds": 1.246,
-    "signal": "hold"
+    "screen_seconds": 1.203,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ADRZY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T08:05:55.207516+00:00",
+  "updated_at": "2026-11-23T08:06:01.709764+00:00",
   "totals": {
-    "screened": 113,
+    "screened": 114,
     "signals": {
-      "buy": 28,
+      "buy": 29,
       "avoid": 32,
       "hold": 23,
       "insufficient_data": 30
     },
-    "signals_n": 113,
-    "screen_seconds_sum": 253.748,
-    "screen_seconds_n": 113,
+    "signals_n": 114,
+    "screen_seconds_sum": 254.951,
+    "screen_seconds_n": 114,
     "outcomes": {
-      "miss": 49,
+      "miss": 50,
       "saved": 64
     }
   },
