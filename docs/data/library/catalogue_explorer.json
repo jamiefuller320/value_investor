@@ -1259,28 +1259,10 @@
     "CLLS_US_EQ",
     "CLMT1_US_EQ",
     "CLNE_US_EQ",
-    "CLOK_US_EQ"
+    "CLOK_US_EQ",
+    "CLPBY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CINT_US_EQ",
-      "venue": "US",
-      "yahoo": "CINT",
-      "isin": "KYG213071064",
-      "name": "CINT",
-      "seconds": 1.938,
-      "outcome": "saved",
-      "at": "2026-11-23T19:53:08.604627+00:00",
-      "rows": 18,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.973
-      },
-      "screen_seconds": 0.973,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "CION_US_EQ",
       "venue": "US",
@@ -2021,6 +2003,25 @@
       },
       "screen_seconds": 84.785,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CLPBY_US_EQ",
+      "venue": "US",
+      "yahoo": "CLPBY",
+      "isin": "US19624Y2000",
+      "name": "CLPBY",
+      "seconds": 0.899,
+      "outcome": "miss",
+      "at": "2026-11-23T20:12:26.196060+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.854
+      },
+      "screen_seconds": 0.854,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -14531,43 +14532,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T20:07:29.136849+00:00"
+    },
+    {
+      "t212_ticker": "CLPBY_US_EQ",
+      "yahoo": "CLPBY",
+      "name": "CLPBY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T20:12:26.196060+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CLOK_US_EQ",
+    "t212_ticker": "CLPBY_US_EQ",
     "venue": "US",
-    "yahoo": "CLOK",
-    "isin": "US17253H2094",
-    "name": "SDCH",
-    "seconds": 84.83,
+    "yahoo": "CLPBY",
+    "isin": "US19624Y2000",
+    "name": "CLPBY",
+    "seconds": 0.899,
     "outcome": "miss",
-    "at": "2026-11-23T20:12:21.039483+00:00",
+    "at": "2026-11-23T20:12:26.196060+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.785
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.854
     },
-    "screen_seconds": 84.785,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.854,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CLPBY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T20:12:21.039483+00:00",
+  "updated_at": "2026-11-23T20:12:26.196060+00:00",
   "totals": {
-    "screened": 1258,
+    "screened": 1259,
     "signals": {
-      "buy": 355,
+      "buy": 356,
       "avoid": 301,
       "hold": 284,
       "insufficient_data": 314,
       "strong_buy": 4
     },
-    "signals_n": 1258,
-    "screen_seconds_sum": 14449.766999999993,
-    "screen_seconds_n": 1258,
+    "signals_n": 1259,
+    "screen_seconds_sum": 14450.620999999992,
+    "screen_seconds_n": 1259,
     "outcomes": {
-      "miss": 494,
+      "miss": 495,
       "saved": 764
     }
   },
