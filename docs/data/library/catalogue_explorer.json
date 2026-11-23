@@ -902,28 +902,10 @@
     "BRFS_US_EQ",
     "BRIA_US_EQ",
     "BRID_US_EQ",
-    "BRK/A_US_EQ"
+    "BRK/A_US_EQ",
+    "BRKH_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "BOLD1_US_EQ",
-      "venue": "US",
-      "yahoo": "BOLD1",
-      "isin": "US10170A1007",
-      "name": "BOLD",
-      "seconds": 4.939,
-      "outcome": "miss",
-      "at": "2026-11-23T14:04:24.566383+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.775
-      },
-      "screen_seconds": 4.775,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "BOLT_US_EQ",
       "venue": "US",
@@ -1664,6 +1646,25 @@
       },
       "screen_seconds": 3.72,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "BRKH_US_EQ",
+      "venue": "US",
+      "yahoo": "BRKH",
+      "isin": "US0929151076",
+      "name": "BZAI",
+      "seconds": 2.438,
+      "outcome": "saved",
+      "at": "2026-11-23T14:10:26.063327+00:00",
+      "rows": 6,
+      "screen": {
+        "signal": "hold",
+        "fits": false,
+        "data_quality_score": 0.55,
+        "seconds": 1.205
+      },
+      "screen_seconds": 1.205,
+      "signal": "hold"
     }
   ],
   "handoffs": [
@@ -7137,41 +7138,78 @@
     }
   ],
   "last": {
-    "t212_ticker": "BRK/A_US_EQ",
+    "t212_ticker": "BRKH_US_EQ",
     "venue": "US",
-    "yahoo": "BRK/A",
-    "isin": "US0846701086",
-    "name": "BRK.A",
-    "seconds": 3.838,
-    "outcome": "miss",
-    "at": "2026-11-23T14:10:17.818375+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "BRKH",
+    "isin": "US0929151076",
+    "name": "BZAI",
+    "seconds": 2.438,
+    "outcome": "saved",
+    "at": "2026-11-23T14:10:26.063327+00:00",
+    "rows": 6,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2098707/000121390026119007/ea0310178-10q_burtech2.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2098707/000121390026089318/ea0300900-10q_burtech2.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2098707/000121390026077285/ea0297707-8k_burtech2.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2098707/000121390026070703/ea0295027-10q_burtech2.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2098707/000121390026063614/ea0292303-8k_burtech2.htm",
+        "has_body": false
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2098707/000121390026061109/ea0292100-8k_burtech2.htm",
+        "has_body": false
+      }
+    ],
     "screen": {
-      "signal": "insufficient_data",
+      "signal": "hold",
       "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.72
+      "data_quality_score": 0.55,
+      "seconds": 1.205
     },
-    "screen_seconds": 3.72,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.205,
+    "signal": "hold"
   },
-  "updated_at": "2026-11-23T14:10:17.818375+00:00",
+  "updated_at": "2026-11-23T14:10:26.063327+00:00",
   "totals": {
-    "screened": 901,
+    "screened": 902,
     "signals": {
       "buy": 235,
       "avoid": 229,
-      "hold": 221,
+      "hold": 222,
       "insufficient_data": 213,
       "strong_buy": 3
     },
-    "signals_n": 901,
-    "screen_seconds_sum": 7667.724000000001,
-    "screen_seconds_n": 901,
+    "signals_n": 902,
+    "screen_seconds_sum": 7668.929000000001,
+    "screen_seconds_n": 902,
     "outcomes": {
       "miss": 353,
-      "saved": 548
+      "saved": 549
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
