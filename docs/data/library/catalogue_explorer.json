@@ -1773,28 +1773,10 @@
     "EARS_US_EQ",
     "EAST_US_EQ",
     "EAT_US_EQ",
-    "EBAC_US_EQ"
+    "EBAC_US_EQ",
+    "EBCOY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "DTSQ_US_EQ",
-      "venue": "US",
-      "yahoo": "DTSQ",
-      "isin": "KYG2853N1060",
-      "name": "DTSQ",
-      "seconds": 4.464,
-      "outcome": "saved",
-      "at": "2026-11-23T23:32:25.509933+00:00",
-      "rows": 20,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.85,
-        "seconds": 0.893
-      },
-      "screen_seconds": 0.893,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "DTSS_US_EQ",
       "venue": "US",
@@ -2535,6 +2517,25 @@
       },
       "screen_seconds": 85.647,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "EBCOY_US_EQ",
+      "venue": "US",
+      "yahoo": "EBCOY",
+      "isin": "US2786142016",
+      "name": "EBCOY",
+      "seconds": 1.418,
+      "outcome": "miss",
+      "at": "2026-11-23T23:53:47.861882+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.17
+      },
+      "screen_seconds": 1.17,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -20189,43 +20190,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T23:52:08.577263+00:00"
+    },
+    {
+      "t212_ticker": "EBCOY_US_EQ",
+      "yahoo": "EBCOY",
+      "name": "EBCOY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T23:53:47.861882+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "EBAC_US_EQ",
+    "t212_ticker": "EBCOY_US_EQ",
     "venue": "US",
-    "yahoo": "EBAC",
-    "isin": "CH1242303498",
-    "name": "OCS",
-    "seconds": 85.88,
+    "yahoo": "EBCOY",
+    "isin": "US2786142016",
+    "name": "EBCOY",
+    "seconds": 1.418,
     "outcome": "miss",
-    "at": "2026-11-23T23:53:40.372636+00:00",
+    "at": "2026-11-23T23:53:47.861882+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.647
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.17
     },
-    "screen_seconds": 85.647,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.17,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "EBCOY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T23:53:40.372636+00:00",
+  "updated_at": "2026-11-23T23:53:47.861882+00:00",
   "totals": {
-    "screened": 1772,
+    "screened": 1773,
     "signals": {
-      "buy": 499,
+      "buy": 500,
       "avoid": 444,
       "hold": 391,
       "insufficient_data": 430,
       "strong_buy": 8
     },
-    "signals_n": 1772,
-    "screen_seconds_sum": 20168.121000000003,
-    "screen_seconds_n": 1772,
+    "signals_n": 1773,
+    "screen_seconds_sum": 20169.291,
+    "screen_seconds_n": 1773,
     "outcomes": {
-      "miss": 685,
+      "miss": 686,
       "saved": 1087
     }
   },
