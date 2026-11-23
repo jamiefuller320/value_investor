@@ -1667,28 +1667,10 @@
     "DMZPY_US_EQ",
     "DNAC_US_EQ",
     "DNAY_US_EQ",
-    "DNHBY_US_EQ"
+    "DNHBY_US_EQ",
+    "DNIYY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "DH_US_EQ",
-      "venue": "US",
-      "yahoo": "DH",
-      "isin": "US24477E1038",
-      "name": "DH",
-      "seconds": 4.971,
-      "outcome": "saved",
-      "at": "2026-11-23T22:52:15.580469+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.88
-      },
-      "screen_seconds": 0.88,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "DIBS_US_EQ",
       "venue": "US",
@@ -2429,6 +2411,25 @@
       },
       "screen_seconds": 85.343,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "DNIYY_US_EQ",
+      "venue": "US",
+      "yahoo": "DNIYY",
+      "isin": "US23624A2042",
+      "name": "DNIYY",
+      "seconds": 4.245,
+      "outcome": "miss",
+      "at": "2026-11-23T23:04:19.864473+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.85,
+        "seconds": 1.141
+      },
+      "screen_seconds": 1.141,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -19827,43 +19828,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T22:55:52.449843+00:00"
+    },
+    {
+      "t212_ticker": "DNIYY_US_EQ",
+      "yahoo": "DNIYY",
+      "name": "DNIYY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T23:04:19.864473+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DNHBY_US_EQ",
+    "t212_ticker": "DNIYY_US_EQ",
     "venue": "US",
-    "yahoo": "DNHBY",
-    "isin": "US23341C1036",
-    "name": "DNBBY",
-    "seconds": 85.959,
+    "yahoo": "DNIYY",
+    "isin": "US23624A2042",
+    "name": "DNIYY",
+    "seconds": 4.245,
     "outcome": "miss",
-    "at": "2026-11-23T23:04:09.633122+00:00",
+    "at": "2026-11-23T23:04:19.864473+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.343
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.85,
+      "seconds": 1.141
     },
-    "screen_seconds": 85.343,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.141,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "DNIYY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T23:04:09.633122+00:00",
+  "updated_at": "2026-11-23T23:04:19.864473+00:00",
   "totals": {
-    "screened": 1666,
+    "screened": 1667,
     "signals": {
-      "buy": 467,
+      "buy": 468,
       "avoid": 421,
       "hold": 364,
       "insufficient_data": 406,
       "strong_buy": 8
     },
-    "signals_n": 1666,
-    "screen_seconds_sum": 18034.95600000001,
-    "screen_seconds_n": 1666,
+    "signals_n": 1667,
+    "screen_seconds_sum": 18036.09700000001,
+    "screen_seconds_n": 1667,
     "outcomes": {
-      "miss": 637,
+      "miss": 638,
       "saved": 1029
     }
   },
