@@ -832,28 +832,10 @@
     "BMEA_US_EQ",
     "BMGL_US_EQ",
     "BMI_US_EQ",
-    "BMMJ_US_EQ"
+    "BMMJ_US_EQ",
+    "BMMX_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "BKSC_US_EQ",
-      "venue": "US",
-      "yahoo": "BKSC",
-      "isin": "US0650661020",
-      "name": "BKSC",
-      "seconds": 1.303,
-      "outcome": "miss",
-      "at": "2026-11-23T13:54:45.543745+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.6,
-        "seconds": 1.16
-      },
-      "screen_seconds": 1.16,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "BKTI_US_EQ",
       "venue": "US",
@@ -1594,6 +1576,25 @@
       },
       "screen_seconds": 1.254,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "BMMX_US_EQ",
+      "venue": "US",
+      "yahoo": "BMMX",
+      "isin": "CA09215W1014",
+      "name": "BMMX",
+      "seconds": 3.075,
+      "outcome": "saved",
+      "at": "2026-11-23T14:00:01.606592+00:00",
+      "rows": 3,
+      "screen": {
+        "signal": "avoid",
+        "fits": false,
+        "data_quality_score": 0.9,
+        "seconds": 1.481
+      },
+      "screen_seconds": 1.481,
+      "signal": "avoid"
     }
   ],
   "handoffs": [
@@ -6899,41 +6900,60 @@
     }
   ],
   "last": {
-    "t212_ticker": "BMMJ_US_EQ",
+    "t212_ticker": "BMMX_US_EQ",
     "venue": "US",
-    "yahoo": "BMMJ",
-    "isin": "US09689V1008",
-    "name": "BMMJ",
-    "seconds": 1.448,
-    "outcome": "miss",
-    "at": "2026-11-23T13:59:53.100720+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "BMMX",
+    "isin": "CA09215W1014",
+    "name": "BMMX",
+    "seconds": 3.075,
+    "outcome": "saved",
+    "at": "2026-11-23T14:00:01.606592+00:00",
+    "rows": 3,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1929908/000119312526430427/d92420d6k.htm",
+        "has_body": false
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1929908/000119312526429002/d24159d6k.htm",
+        "has_body": false
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1929908/000119312526421797/d267034d6k.htm",
+        "has_body": false
+      }
+    ],
     "screen": {
-      "signal": "hold",
+      "signal": "avoid",
       "fits": false,
-      "data_quality_score": 0.85,
-      "seconds": 1.254
+      "data_quality_score": 0.9,
+      "seconds": 1.481
     },
-    "screen_seconds": 1.254,
-    "signal": "hold"
+    "screen_seconds": 1.481,
+    "signal": "avoid"
   },
-  "updated_at": "2026-11-23T13:59:53.100720+00:00",
+  "updated_at": "2026-11-23T14:00:01.606592+00:00",
   "totals": {
-    "screened": 831,
+    "screened": 832,
     "signals": {
       "buy": 214,
-      "avoid": 209,
+      "avoid": 210,
       "hold": 208,
       "insufficient_data": 197,
       "strong_buy": 3
     },
-    "signals_n": 831,
-    "screen_seconds_sum": 7544.417,
-    "screen_seconds_n": 831,
+    "signals_n": 832,
+    "screen_seconds_sum": 7545.898,
+    "screen_seconds_n": 832,
     "outcomes": {
       "miss": 325,
-      "saved": 506
+      "saved": 507
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
