@@ -1581,28 +1581,10 @@
     "DBDR_US_EQ",
     "DBGI_US_EQ",
     "DBI_US_EQ",
-    "DBOEY_US_EQ"
+    "DBOEY_US_EQ",
+    "DBSDY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CYBR_US_EQ",
-      "venue": "US",
-      "yahoo": "CYBR",
-      "isin": "IL0011334468",
-      "name": "CYBR",
-      "seconds": 2.878,
-      "outcome": "miss",
-      "at": "2026-11-23T22:36:26.103235+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 2.729
-      },
-      "screen_seconds": 2.729,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "CYCC_US_EQ",
       "venue": "US",
@@ -2343,6 +2325,25 @@
       },
       "screen_seconds": 0.974,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "DBSDY_US_EQ",
+      "venue": "US",
+      "yahoo": "DBSDY",
+      "isin": "US23304Y1001",
+      "name": "DBSDY",
+      "seconds": 1.22,
+      "outcome": "miss",
+      "at": "2026-11-23T22:42:48.475855+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.65,
+        "seconds": 1.091
+      },
+      "screen_seconds": 1.091,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -18476,43 +18477,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T22:40:50.731580+00:00"
+    },
+    {
+      "t212_ticker": "DBSDY_US_EQ",
+      "yahoo": "DBSDY",
+      "name": "DBSDY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T22:42:48.475855+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DBOEY_US_EQ",
+    "t212_ticker": "DBSDY_US_EQ",
     "venue": "US",
-    "yahoo": "DBOEY",
-    "isin": "US2515421061",
-    "name": "DBOEY",
-    "seconds": 1.091,
+    "yahoo": "DBSDY",
+    "isin": "US23304Y1001",
+    "name": "DBSDY",
+    "seconds": 1.22,
     "outcome": "miss",
-    "at": "2026-11-23T22:42:41.116763+00:00",
+    "at": "2026-11-23T22:42:48.475855+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.9,
-      "seconds": 0.974
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.65,
+      "seconds": 1.091
     },
-    "screen_seconds": 0.974,
-    "signal": "hold"
+    "screen_seconds": 1.091,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "DBSDY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T22:42:48.102356+00:00",
+  "updated_at": "2026-11-23T22:42:48.475855+00:00",
   "totals": {
-    "screened": 1580,
+    "screened": 1581,
     "signals": {
-      "buy": 445,
+      "buy": 446,
       "avoid": 401,
       "hold": 351,
       "insufficient_data": 375,
       "strong_buy": 8
     },
-    "signals_n": 1580,
-    "screen_seconds_sum": 17511.265000000014,
-    "screen_seconds_n": 1580,
+    "signals_n": 1581,
+    "screen_seconds_sum": 17512.356000000014,
+    "screen_seconds_n": 1581,
     "outcomes": {
-      "miss": 596,
+      "miss": 597,
       "saved": 984
     }
   },
