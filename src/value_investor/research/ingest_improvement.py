@@ -94,7 +94,18 @@ TRANSIENT_FETCH_RETRY_DELAY_SECONDS = 2.0
 UNMEASURED_PRIORITY_BONUS = 10.0
 # Buy-tier tickers with recurring indexed-without-body gaps — batch-prioritized in ingest pass.
 BODY_GAP_BATCH_TICKERS = frozenset(
-    {"ITV.L", "GFTU.L", "MGNS.L", "AEP.L", "FGP.L", "MEGP.L", "HIK.L", "TRST.L"}
+    {
+        "ITV.L",
+        "GFTU.L",
+        "MGNS.L",
+        "AEP.L",
+        "FGP.L",
+        "MEGP.L",
+        "HIK.L",
+        "TRST.L",
+        # eng-20261123-01: euro_depth EVN.VI recurring indexed_without_body on stale IR hub.
+        "EVN.VI",
+    }
 )
 BODY_GAP_BATCH_PRIORITY_BONUS = 8.0
 # Buy-tier tickers with low body penetration (many indexed rows, few substantive bodies).
