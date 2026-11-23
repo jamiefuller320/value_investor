@@ -305,28 +305,10 @@
     "AMCT_US_EQ",
     "AMCX_US_EQ",
     "AMC_US_EQ",
-    "AMEH_US_EQ"
+    "AMEH_US_EQ",
+    "AMFC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ALMU_US_EQ",
-      "venue": "US",
-      "yahoo": "ALMU",
-      "isin": "US00776X1090",
-      "name": "ALMU",
-      "seconds": 2.558,
-      "outcome": "saved",
-      "at": "2026-11-23T08:54:36.396918+00:00",
-      "rows": 20,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.303
-      },
-      "screen_seconds": 1.303,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "ALM_US_EQ",
       "venue": "US",
@@ -1067,6 +1049,25 @@
       },
       "screen_seconds": 85.853,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "AMFC_US_EQ",
+      "venue": "US",
+      "yahoo": "AMFC",
+      "isin": "US0019841032",
+      "name": "AMFC",
+      "seconds": 1.481,
+      "outcome": "miss",
+      "at": "2026-11-23T09:16:28.255541+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 1.261
+      },
+      "screen_seconds": 1.261,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -3246,43 +3247,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T09:12:49.178962+00:00"
+    },
+    {
+      "t212_ticker": "AMFC_US_EQ",
+      "yahoo": "AMFC",
+      "name": "AMFC",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T09:16:28.255541+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "AMEH_US_EQ",
+    "t212_ticker": "AMFC_US_EQ",
     "venue": "US",
-    "yahoo": "AMEH",
-    "isin": "US03763A2078",
-    "name": "ASTH",
-    "seconds": 85.978,
+    "yahoo": "AMFC",
+    "isin": "US0019841032",
+    "name": "AMFC",
+    "seconds": 1.481,
     "outcome": "miss",
-    "at": "2026-11-23T09:16:21.529557+00:00",
+    "at": "2026-11-23T09:16:28.255541+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.853
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 1.261
     },
-    "screen_seconds": 85.853,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.261,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "AMFC_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T09:16:21.529557+00:00",
+  "updated_at": "2026-11-23T09:16:28.255541+00:00",
   "totals": {
-    "screened": 304,
+    "screened": 305,
     "signals": {
-      "buy": 69,
+      "buy": 70,
       "avoid": 79,
       "hold": 71,
       "insufficient_data": 84,
       "strong_buy": 1
     },
-    "signals_n": 304,
-    "screen_seconds_sum": 3192.0710000000013,
-    "screen_seconds_n": 304,
+    "signals_n": 305,
+    "screen_seconds_sum": 3193.3320000000012,
+    "screen_seconds_n": 305,
     "outcomes": {
-      "miss": 132,
+      "miss": 133,
       "saved": 172
     }
   },
