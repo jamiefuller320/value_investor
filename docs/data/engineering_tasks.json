@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-11-23T14:23:02.019711+00:00",
+  "compiled_at": "2026-11-23T22:54:50.490909+00:00",
   "run_at": null,
   "task_count": 307,
   "tasks": [
@@ -4432,6 +4432,53 @@
       "merged_at": "2026-09-16T16:11:25.884730+00:00"
     },
     {
+      "id": "eng-20261112-02",
+      "area": "scoring",
+      "title": "Workflow fix: library ingest sprint 2 failure",
+      "summary": "GitHub workflow library-ingest-sprint-2.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/45281280424",
+      "priority": "high",
+      "priority_score": 90.0,
+      "source": "workflow_failure",
+      "evidence": {
+        "workflow": "library-ingest-sprint-2.yml",
+        "run_id": "45281280424",
+        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/45281280424",
+        "signature": null
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        ".github/workflows/library-ingest-sprint-2.yml",
+        "src/value_investor/scoring/",
+        "src/value_investor/summary.py",
+        "src/value_investor/library_screen.py",
+        "src/value_investor/library_ingest_dispatch.py",
+        "src/value_investor/library_ingest_escalation.py",
+        "src/value_investor/library_ingest_loop.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py",
+        "tests/test_workflow_failure_tasks.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "cancelled",
+      "parked_reason": "engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update",
+      "parked_at": "2026-11-12T17:40:52.447674+00:00",
+      "parked_policy": "workflow_permission",
+      "cancelled_reason": "workflow library-ingest-sprint-2.yml recovered (success run 44265437092 after failure 43460958952)",
+      "cancelled_at": "2026-11-18T10:04:22.117722+00:00",
+      "cancelled_policy": "workflow_recovered"
+    },
+    {
       "id": "eng-20261123-03",
       "area": "scoring",
       "title": "Workflow fix: library ingest sprint failure",
@@ -4477,53 +4524,6 @@
       "cancelled_reason": "workflow library-ingest-sprint.yml recovered (success run 45220095474 after failure 45187088011)",
       "cancelled_policy": "workflow_recovered",
       "cancelled_at": "2026-11-23T19:18:01.436872+00:00"
-    },
-    {
-      "id": "eng-20261112-02",
-      "area": "scoring",
-      "title": "Workflow fix: library ingest sprint 2 failure",
-      "summary": "GitHub workflow library-ingest-sprint-2.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/45163550295",
-      "priority": "high",
-      "priority_score": 90.0,
-      "source": "workflow_failure",
-      "evidence": {
-        "workflow": "library-ingest-sprint-2.yml",
-        "run_id": "45163550295",
-        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/45163550295",
-        "signature": null
-      },
-      "acceptance_criteria": [
-        "Export or overlay behaviour is covered by a unit test",
-        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
-        "No edits under blocked_paths"
-      ],
-      "allowed_paths": [
-        ".github/workflows/library-ingest-sprint-2.yml",
-        "src/value_investor/scoring/",
-        "src/value_investor/summary.py",
-        "src/value_investor/library_screen.py",
-        "src/value_investor/library_ingest_dispatch.py",
-        "src/value_investor/library_ingest_escalation.py",
-        "src/value_investor/library_ingest_loop.py",
-        "tests/test_pipeline.py",
-        "tests/test_summary.py",
-        "tests/test_workflow_failure_tasks.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "cancelled",
-      "parked_reason": "engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update",
-      "parked_at": "2026-11-12T17:40:52.447674+00:00",
-      "parked_policy": "workflow_permission",
-      "cancelled_reason": "workflow library-ingest-sprint-2.yml recovered (success run 44265437092 after failure 43460958952)",
-      "cancelled_at": "2026-11-18T10:04:22.117722+00:00",
-      "cancelled_policy": "workflow_recovered"
     },
     {
       "id": "eng-20261120-04",
