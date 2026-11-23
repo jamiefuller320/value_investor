@@ -1,6 +1,6 @@
 # GlobalData Plc (DATA.L) — Research memo
 
-_Version 5 · Updated 2026-11-01T08:13:49.110795+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-23T02:34:52.440647+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: Buy cheapness partly confirms accumulate; no new disclosures since Oct; FCF filing vs screen TTM mismatch and leverage/governance risks still cap conviction.
+Rationale: Screen buy cheapness partly supports accumulate, but no new filings since Oct and the unresolved FCF basis gap plus governance, leverage and CFO-transition risks still limit conviction.
 RiskTags: cyclical, competitive, governance, leverage, key_person, accounting, other
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Screen still Strong Buy (9/22, persistent); FCF filing vs screen TTM mismatch un
 No new GlobalData RNS since the 2 Oct buyback completion and 30 Sep CFO change.  
 News batch (11 Oct–1 Nov): no DATA.L-specific items; only generic UK data/market headlines.  
 Screen now Buy (6/22, five weeks persistent, stable); FCF filing £40M vs screen TTM £16.9M mismatch unchanged.
+
+### 2026-11-23T02:34:52.440647+00:00
+2 Nov RNS: Total Voting Rights only; no results or trading update since the 2 Oct buyback completion and 30 Sep CFO change.  
+News batch (1–23 Nov): third-party articles citing GlobalData research (cyber insurance, banking, data-centre construction)—not new DATA.L disclosures.  
+Screen still Buy (6/22, nine weeks, stable); FCF filing £40M vs screen TTM £16.9M mismatch unchanged.

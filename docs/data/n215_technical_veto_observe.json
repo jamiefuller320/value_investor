@@ -3,7 +3,7 @@
   "registration_id": "n215-soft-band-veto-v0",
   "recipe_id": "n215-soft-score-recipe-v0",
   "deferred_id": "N215",
-  "generated_at": "2026-11-22T07:52:11.632816+00:00",
+  "generated_at": "2026-11-23T02:38:42.218487+00:00",
   "observe_only": true,
   "influences_live": false,
   "learning_question": "For each pre-registered soft-veto band threshold on sealed N200 closed episodes (charts \u2264 buy_ts), what is catch rate among deep losers (fair-cost \u2264 \u221210%) vs miss rate among large winners (\u2265 +10%)? Companion: risk_score distribution. Observe labels only \u2014 no live gate.",
@@ -64,8 +64,8 @@
   "cohort": {
     "N200_closed": 115,
     "N200_coverage": 113,
-    "N206_closed": 297,
-    "N206_coverage": 288,
+    "N206_closed": 303,
+    "N206_coverage": 294,
     "N210_closed": 7,
     "deep_losers": 8,
     "large_winners": 8,
@@ -193,60 +193,60 @@
         "live_veto": false
       },
       "N206": {
-        "closed": 297,
-        "coverage": 288,
-        "fired": 53,
+        "closed": 303,
+        "coverage": 294,
+        "fired": 55,
         "deep_catch": "9/35",
         "deep_n": 9,
         "deep_total": 35,
-        "large_miss": "3/55",
-        "large_n": 3,
-        "large_total": 55,
-        "base_fc_median": 0.010585,
-        "alt_fc_median": 0.016594499999999998,
-        "base_fc_sum": 8.132363,
-        "alt_fc_sum": 8.670712,
-        "delta_fc_sum": 0.538349,
+        "large_miss": "4/56",
+        "large_n": 4,
+        "large_total": 56,
+        "base_fc_median": 0.010511,
+        "alt_fc_median": 0.01453,
+        "base_fc_sum": 8.138424,
+        "alt_fc_sum": 8.533543,
+        "delta_fc_sum": 0.395119,
         "live_veto": false,
         "role": "full_cohort_contaminated_report_only",
         "claim_set": false,
         "note": "Full sealed N206 including discovery history. Do not use for admit; prefer N206_post_warm for claim and N200 for cross-book alone-benefit."
       },
       "N206_pre_warm": {
-        "closed": 256,
-        "coverage": 247,
-        "fired": 46,
+        "closed": 259,
+        "coverage": 250,
+        "fired": 47,
         "deep_catch": "9/34",
         "deep_n": 9,
         "deep_total": 34,
-        "large_miss": "3/50",
-        "large_n": 3,
-        "large_total": 50,
-        "base_fc_median": 0.010475499999999999,
-        "alt_fc_median": 0.0147655,
-        "base_fc_sum": 7.129929,
-        "alt_fc_sum": 7.734552,
-        "delta_fc_sum": 0.604623,
+        "large_miss": "4/51",
+        "large_n": 4,
+        "large_total": 51,
+        "base_fc_median": 0.01044,
+        "alt_fc_median": 0.013508,
+        "base_fc_sum": 7.230592,
+        "alt_fc_sum": 7.717401,
+        "delta_fc_sum": 0.486809,
         "live_veto": false,
         "role": "discovery_contaminated_report_only",
         "buy_day_range": "buy_day < 2026-10-23",
         "claim_set": false
       },
       "N206_post_warm": {
-        "closed": 41,
-        "coverage": 41,
-        "fired": 7,
+        "closed": 44,
+        "coverage": 44,
+        "fired": 8,
         "deep_catch": "0/1",
         "deep_n": 0,
         "deep_total": 1,
         "large_miss": "0/5",
         "large_n": 0,
         "large_total": 5,
-        "base_fc_median": 0.015328,
-        "alt_fc_median": 0.020014,
-        "base_fc_sum": 1.002434,
-        "alt_fc_sum": 0.93616,
-        "delta_fc_sum": -0.066274,
+        "base_fc_median": 0.0129565,
+        "alt_fc_median": 0.0174685,
+        "base_fc_sum": 0.907832,
+        "alt_fc_sum": 0.816142,
+        "delta_fc_sum": -0.09169,
         "live_veto": false,
         "role": "n206_warm_claim_set",
         "buy_day_range": "buy_day >= 2026-10-23",
@@ -22471,6 +22471,159 @@
       }
     },
     {
+      "ticker": "SFR.AX",
+      "book": "N206",
+      "buy_ts": "2026-11-17T06:53:15+00:00",
+      "buy_day": "2026-11-17",
+      "fair_cost": -0.08688,
+      "bucket": "other",
+      "recipe_id": "n215-soft-score-recipe-v0",
+      "influences_live": false,
+      "observe_only": true,
+      "coverage": true,
+      "fail_closed": false,
+      "bars_pre_buy": 508,
+      "risk_score": 0.042372,
+      "band": "PASS",
+      "reasons": [
+        "recipe=n215-soft-score-recipe-v0 risk_score=0.0424 band=PASS",
+        "f_elev_abs=0.202\u00d7w0.15\u21920.030",
+        "f_elev_range=0.121\u00d7w0.10\u21920.012",
+        "twin_peak elev_abs=0.07982994803967884 elev_range=0.26365054602184107",
+        "hard_fires=none"
+      ],
+      "cited_features": {
+        "f_elev_abs": 0.201701,
+        "f_elev_range": 0.121165,
+        "f_near_high": 0.0,
+        "f_r20": 0.0,
+        "f_failed_bo": 0.0,
+        "f_rsi_fail": 0.0,
+        "f_rsi_level": 0.0,
+        "f_death_cross": 0.0,
+        "f_lost_200": 0.0
+      },
+      "feature_contributions": [
+        {
+          "feature": "f_elev_abs",
+          "value": 0.201701,
+          "weight": 0.15,
+          "contribution": 0.030255
+        },
+        {
+          "feature": "f_elev_range",
+          "value": 0.121165,
+          "weight": 0.1,
+          "contribution": 0.012116
+        }
+      ],
+      "hard_fires": {
+        "I01": false,
+        "I02": false,
+        "I05": false,
+        "I07": false,
+        "I08": false,
+        "I10": false
+      },
+      "mid_range_60": 0.193246,
+      "grind_mid60_fire": false,
+      "raw": {
+        "t0": 19.48,
+        "dist_abs": 0.18082422203532383,
+        "r20": -0.05206812652068127,
+        "rsi_t0": 44.351646060412236,
+        "mid_range_60": 0.19324577861163242,
+        "twin": {
+          "i1": 400,
+          "i2": 505,
+          "peak1": 21.17,
+          "peak2": 20.78,
+          "trough": 17.37,
+          "peak_hi": 21.17,
+          "elev_abs": 0.07982994803967884,
+          "elev_range": 0.26365054602184107
+        },
+        "failed_bo": null,
+        "death_cross": false,
+        "lost_200": false,
+        "bars": 508,
+        "lookback_used": 126
+      }
+    },
+    {
+      "ticker": "CSC.AX",
+      "book": "N206",
+      "buy_ts": "2026-11-19T06:53:22+00:00",
+      "buy_day": "2026-11-19",
+      "fair_cost": -0.033138,
+      "bucket": "other",
+      "recipe_id": "n215-soft-score-recipe-v0",
+      "influences_live": false,
+      "observe_only": true,
+      "coverage": true,
+      "fail_closed": false,
+      "bars_pre_buy": 507,
+      "risk_score": 0.06,
+      "band": "PASS",
+      "reasons": [
+        "recipe=n215-soft-score-recipe-v0 risk_score=0.0600 band=PASS",
+        "f_death_cross=1.000\u00d7w0.06\u21920.060",
+        "twin_peak elev_abs=0.391875 elev_range=0.9247787610619467",
+        "hard_fires=I07"
+      ],
+      "cited_features": {
+        "f_elev_abs": 0.0,
+        "f_elev_range": 0.0,
+        "f_near_high": 0.0,
+        "f_r20": 0.0,
+        "f_failed_bo": 0.0,
+        "f_rsi_fail": 0.0,
+        "f_rsi_level": 0.0,
+        "f_death_cross": 1.0,
+        "f_lost_200": 0.0
+      },
+      "feature_contributions": [
+        {
+          "feature": "f_death_cross",
+          "value": 1.0,
+          "weight": 0.06,
+          "contribution": 0.06
+        }
+      ],
+      "hard_fires": {
+        "I01": false,
+        "I02": false,
+        "I05": false,
+        "I07": true,
+        "I08": false,
+        "I10": false
+      },
+      "mid_range_60": 0.0,
+      "grind_mid60_fire": false,
+      "raw": {
+        "t0": 9.73,
+        "dist_abs": 0.4106602059357965,
+        "r20": -0.2203525641025641,
+        "rsi_t0": 29.86930956451613,
+        "mid_range_60": 0.0,
+        "twin": {
+          "i1": 397,
+          "i2": 457,
+          "peak1": 15.82,
+          "peak2": 16.0,
+          "trough": 12.25,
+          "peak_hi": 16.0,
+          "elev_abs": 0.391875,
+          "elev_range": 0.9247787610619467
+        },
+        "failed_bo": null,
+        "death_cross": true,
+        "lost_200": false,
+        "bars": 507,
+        "lookback_used": 126
+      }
+    },
+    {
       "ticker": "ENI.MI",
       "book": "N206",
       "buy_ts": "2026-08-20T20:07:01+00:00",
@@ -23134,6 +23287,97 @@
         "death_cross": false,
         "lost_200": false,
         "bars": 442,
+        "lookback_used": 126
+      }
+    },
+    {
+      "ticker": "C5H.IR",
+      "book": "N206",
+      "buy_ts": "2026-08-23T05:58:06+00:00",
+      "buy_day": "2026-08-23",
+      "fair_cost": 0.117814,
+      "bucket": "large_winner",
+      "recipe_id": "n215-soft-score-recipe-v0",
+      "influences_live": false,
+      "observe_only": true,
+      "coverage": true,
+      "fail_closed": false,
+      "bars_pre_buy": 444,
+      "risk_score": 0.270733,
+      "band": "PASS",
+      "reasons": [
+        "recipe=n215-soft-score-recipe-v0 risk_score=0.2707 band=PASS",
+        "f_failed_bo=1.000\u00d7w0.18\u21920.180",
+        "f_near_high=0.648\u00d7w0.12\u21920.078",
+        "f_r20=0.110\u00d7w0.10\u21920.011",
+        "f_rsi_level=0.024\u00d7w0.08\u21920.002",
+        "failed_breakout_structure",
+        "hard_fires=I05",
+        "companion=n215-grind-mid60-pass-v0 mid_range_60=0.7568>=0.5"
+      ],
+      "cited_features": {
+        "f_elev_abs": 0.0,
+        "f_elev_range": 0.0,
+        "f_near_high": 0.648438,
+        "f_r20": 0.109739,
+        "f_failed_bo": 1.0,
+        "f_rsi_fail": 0.0,
+        "f_rsi_level": 0.024328,
+        "f_death_cross": 0.0,
+        "f_lost_200": 0.0
+      },
+      "feature_contributions": [
+        {
+          "feature": "f_failed_bo",
+          "value": 1.0,
+          "weight": 0.18,
+          "contribution": 0.18
+        },
+        {
+          "feature": "f_near_high",
+          "value": 0.648438,
+          "weight": 0.12,
+          "contribution": 0.077813
+        },
+        {
+          "feature": "f_r20",
+          "value": 0.109739,
+          "weight": 0.1,
+          "contribution": 0.010974
+        },
+        {
+          "feature": "f_rsi_level",
+          "value": 0.024328,
+          "weight": 0.08,
+          "contribution": 0.001946
+        }
+      ],
+      "hard_fires": {
+        "I01": false,
+        "I02": false,
+        "I05": true,
+        "I07": false,
+        "I08": false,
+        "I10": false
+      },
+      "mid_range_60": 0.756757,
+      "grind_mid60_fire": true,
+      "raw": {
+        "t0": 2.47,
+        "dist_abs": 0.035156249999999944,
+        "r20": 0.016460905349794164,
+        "rsi_t0": 50.72982683927685,
+        "mid_range_60": 0.7567567567567572,
+        "twin": null,
+        "failed_bo": {
+          "break_i": 436,
+          "level": 2.51,
+          "spike": 2.53,
+          "t0": 2.47
+        },
+        "death_cross": false,
+        "lost_200": false,
+        "bars": 444,
         "lookback_used": 126
       }
     },
@@ -24191,6 +24435,107 @@
         "death_cross": false,
         "lost_200": false,
         "bars": 471,
+        "lookback_used": 126
+      }
+    },
+    {
+      "ticker": "CNE.L",
+      "book": "N206",
+      "buy_ts": "2026-10-20T06:52:57+00:00",
+      "buy_day": "2026-10-20",
+      "fair_cost": -0.010651,
+      "bucket": "other",
+      "recipe_id": "n215-soft-score-recipe-v0",
+      "influences_live": false,
+      "observe_only": true,
+      "coverage": true,
+      "fail_closed": false,
+      "bars_pre_buy": 486,
+      "risk_score": 0.438762,
+      "band": "WARN",
+      "reasons": [
+        "recipe=n215-soft-score-recipe-v0 risk_score=0.4388 band=WARN",
+        "f_elev_abs=1.000\u00d7w0.15\u21920.150",
+        "f_elev_range=1.000\u00d7w0.10\u21920.100",
+        "f_r20=0.781\u00d7w0.10\u21920.078",
+        "f_near_high=0.533\u00d7w0.12\u21920.064",
+        "f_rsi_level=0.583\u00d7w0.08\u21920.047",
+        "twin_peak elev_abs=-0.1171875 elev_range=-0.2647058823529412",
+        "hard_fires=none"
+      ],
+      "cited_features": {
+        "f_elev_abs": 1.0,
+        "f_elev_range": 1.0,
+        "f_near_high": 0.533333,
+        "f_r20": 0.78125,
+        "f_failed_bo": 0.0,
+        "f_rsi_fail": 0.0,
+        "f_rsi_level": 0.582961,
+        "f_death_cross": 0.0,
+        "f_lost_200": 0.0
+      },
+      "feature_contributions": [
+        {
+          "feature": "f_elev_abs",
+          "value": 1.0,
+          "weight": 0.15,
+          "contribution": 0.15
+        },
+        {
+          "feature": "f_elev_range",
+          "value": 1.0,
+          "weight": 0.1,
+          "contribution": 0.1
+        },
+        {
+          "feature": "f_r20",
+          "value": 0.78125,
+          "weight": 0.1,
+          "contribution": 0.078125
+        },
+        {
+          "feature": "f_near_high",
+          "value": 0.533333,
+          "weight": 0.12,
+          "contribution": 0.064
+        },
+        {
+          "feature": "f_rsi_level",
+          "value": 0.582961,
+          "weight": 0.08,
+          "contribution": 0.046637
+        }
+      ],
+      "hard_fires": {
+        "I01": false,
+        "I02": false,
+        "I05": false,
+        "I07": false,
+        "I08": false,
+        "I10": false
+      },
+      "mid_range_60": 0.8125,
+      "grind_mid60_fire": false,
+      "raw": {
+        "t0": 429.0,
+        "dist_abs": 0.04666666666666667,
+        "r20": 0.1171875,
+        "rsi_t0": 67.48882158095739,
+        "mid_range_60": 0.8125,
+        "twin": {
+          "i1": 424,
+          "i2": 460,
+          "peak1": 377.0,
+          "peak2": 384.0,
+          "trough": 338.0,
+          "peak_hi": 384.0,
+          "elev_abs": -0.1171875,
+          "elev_range": -0.2647058823529412
+        },
+        "failed_bo": null,
+        "death_cross": false,
+        "lost_200": false,
+        "bars": 486,
         "lookback_used": 126
       }
     },
@@ -28680,6 +29025,69 @@
       }
     },
     {
+      "ticker": "ASY.L",
+      "book": "N206",
+      "buy_ts": "2026-10-09T06:53:03+00:00",
+      "buy_day": "2026-10-09",
+      "fair_cost": -0.0065,
+      "bucket": "other",
+      "recipe_id": "n215-soft-score-recipe-v0",
+      "influences_live": false,
+      "observe_only": true,
+      "coverage": true,
+      "fail_closed": false,
+      "bars_pre_buy": 477,
+      "risk_score": 0.06,
+      "band": "PASS",
+      "reasons": [
+        "recipe=n215-soft-score-recipe-v0 risk_score=0.0600 band=PASS",
+        "f_lost_200=1.000\u00d7w0.06\u21920.060",
+        "hard_fires=I08"
+      ],
+      "cited_features": {
+        "f_elev_abs": 0.0,
+        "f_elev_range": 0.0,
+        "f_near_high": 0.0,
+        "f_r20": 0.0,
+        "f_failed_bo": 0.0,
+        "f_rsi_fail": 0.0,
+        "f_rsi_level": 0.0,
+        "f_death_cross": 0.0,
+        "f_lost_200": 1.0
+      },
+      "feature_contributions": [
+        {
+          "feature": "f_lost_200",
+          "value": 1.0,
+          "weight": 0.06,
+          "contribution": 0.06
+        }
+      ],
+      "hard_fires": {
+        "I01": false,
+        "I02": false,
+        "I05": false,
+        "I07": false,
+        "I08": true,
+        "I10": false
+      },
+      "mid_range_60": 0.115569,
+      "grind_mid60_fire": false,
+      "raw": {
+        "t0": 520.0,
+        "dist_abs": 0.12951771933642467,
+        "r20": -0.054339128537135406,
+        "rsi_t0": 31.333612309213265,
+        "mid_range_60": 0.11556927297668051,
+        "twin": null,
+        "failed_bo": null,
+        "death_cross": false,
+        "lost_200": true,
+        "bars": 477,
+        "lookback_used": 126
+      }
+    },
+    {
       "ticker": "BREE.L",
       "book": "N206",
       "buy_ts": "2026-10-12T06:52:50+00:00",
@@ -33078,6 +33486,84 @@
         "death_cross": false,
         "lost_200": false,
         "bars": 485,
+        "lookback_used": 126
+      }
+    },
+    {
+      "ticker": "EVO.ST",
+      "book": "N206",
+      "buy_ts": "2026-10-29T06:53:12+00:00",
+      "buy_day": "2026-10-29",
+      "fair_cost": 0.025416,
+      "bucket": "other",
+      "recipe_id": "n215-soft-score-recipe-v0",
+      "influences_live": false,
+      "observe_only": true,
+      "coverage": true,
+      "fail_closed": false,
+      "bars_pre_buy": 489,
+      "risk_score": 0.066167,
+      "band": "PASS",
+      "reasons": [
+        "recipe=n215-soft-score-recipe-v0 risk_score=0.0662 band=PASS",
+        "f_r20=0.300\u00d7w0.10\u21920.030",
+        "f_near_high=0.193\u00d7w0.12\u21920.023",
+        "f_rsi_level=0.162\u00d7w0.08\u21920.013",
+        "hard_fires=none",
+        "companion=n215-grind-mid60-pass-v0 mid_range_60=0.5579>=0.5"
+      ],
+      "cited_features": {
+        "f_elev_abs": 0.0,
+        "f_elev_range": 0.0,
+        "f_near_high": 0.193333,
+        "f_r20": 0.299739,
+        "f_failed_bo": 0.0,
+        "f_rsi_fail": 0.0,
+        "f_rsi_level": 0.162417,
+        "f_death_cross": 0.0,
+        "f_lost_200": 0.0
+      },
+      "feature_contributions": [
+        {
+          "feature": "f_r20",
+          "value": 0.299739,
+          "weight": 0.1,
+          "contribution": 0.029974
+        },
+        {
+          "feature": "f_near_high",
+          "value": 0.193333,
+          "weight": 0.12,
+          "contribution": 0.0232
+        },
+        {
+          "feature": "f_rsi_level",
+          "value": 0.162417,
+          "weight": 0.08,
+          "contribution": 0.012993
+        }
+      ],
+      "hard_fires": {
+        "I01": false,
+        "I02": false,
+        "I05": false,
+        "I07": false,
+        "I08": false,
+        "I10": false
+      },
+      "mid_range_60": 0.557856,
+      "grind_mid60_fire": true,
+      "raw": {
+        "t0": 827.4,
+        "dist_abs": 0.08066666666666669,
+        "r20": 0.04496084869916639,
+        "rsi_t0": 54.87251767028736,
+        "mid_range_60": 0.5578562728380024,
+        "twin": null,
+        "failed_bo": null,
+        "death_cross": false,
+        "lost_200": false,
+        "bars": 489,
         "lookback_used": 126
       }
     },
