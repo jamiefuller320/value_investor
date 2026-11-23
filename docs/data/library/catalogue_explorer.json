@@ -395,28 +395,10 @@
     "APLD_US_EQ",
     "APLE_US_EQ",
     "APLO_US_EQ",
-    "APLT_US_EQ"
+    "APLT_US_EQ",
+    "APMD_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ANGO_US_EQ",
-      "venue": "US",
-      "yahoo": "ANGO",
-      "isin": "US03475V1017",
-      "name": "ANGO",
-      "seconds": 1.574,
-      "outcome": "saved",
-      "at": "2026-11-23T10:51:14.281841+00:00",
-      "rows": 21,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.816
-      },
-      "screen_seconds": 0.816,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "ANGPY_US_EQ",
       "venue": "US",
@@ -1157,6 +1139,25 @@
       },
       "screen_seconds": 4.643,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "APMD_US_EQ",
+      "venue": "US",
+      "yahoo": "APMD",
+      "isin": "US03770Y1073",
+      "name": "APMD",
+      "seconds": 2.103,
+      "outcome": "saved",
+      "at": "2026-11-23T10:56:18.736030+00:00",
+      "rows": 7,
+      "screen": {
+        "signal": "hold",
+        "fits": false,
+        "data_quality_score": 0.9,
+        "seconds": 0.816
+      },
+      "screen_seconds": 0.816,
+      "signal": "hold"
     }
   ],
   "handoffs": [
@@ -3539,41 +3540,84 @@
     }
   ],
   "last": {
-    "t212_ticker": "APLT_US_EQ",
+    "t212_ticker": "APMD_US_EQ",
     "venue": "US",
-    "yahoo": "APLT",
-    "isin": "US03828A1016",
-    "name": "APLT",
-    "seconds": 4.743,
-    "outcome": "miss",
-    "at": "2026-11-23T10:56:11.287566+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "APMD",
+    "isin": "US03770Y1073",
+    "name": "APMD",
+    "seconds": 2.103,
+    "outcome": "saved",
+    "at": "2026-11-23T10:56:18.736030+00:00",
+    "rows": 7,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1745648/000119312526462185/apmd-20260930.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1745648/000119312526462171/apmd-20261113.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1745648/000119312526460871/apmd-20260630.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1745648/000119312526460864/apmd-20261113.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1745648/000119312526385356/apmd-20260630.htm",
+        "has_body": false
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1745648/000119312526385355/apmd-20260908.htm",
+        "has_body": false
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1745648/000119312526330509/apmd-20260803.htm",
+        "has_body": false
+      }
+    ],
     "screen": {
-      "signal": "insufficient_data",
+      "signal": "hold",
       "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.643
+      "data_quality_score": 0.9,
+      "seconds": 0.816
     },
-    "screen_seconds": 4.643,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.816,
+    "signal": "hold"
   },
-  "updated_at": "2026-11-23T10:56:11.287566+00:00",
+  "updated_at": "2026-11-23T10:56:18.736030+00:00",
   "totals": {
-    "screened": 394,
+    "screened": 395,
     "signals": {
       "buy": 94,
       "avoid": 103,
-      "hold": 93,
+      "hold": 94,
       "insufficient_data": 103,
       "strong_buy": 1
     },
-    "signals_n": 394,
-    "screen_seconds_sum": 3998.891000000002,
-    "screen_seconds_n": 394,
+    "signals_n": 395,
+    "screen_seconds_sum": 3999.7070000000017,
+    "screen_seconds_n": 395,
     "outcomes": {
       "miss": 170,
-      "saved": 224
+      "saved": 225
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
