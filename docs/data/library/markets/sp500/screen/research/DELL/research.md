@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 8 · Updated 2026-11-23T17:56:54.891100+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-23T21:40:59.972962+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: Pre-Q3 news skews bullish on AI backlog but stresses margin and cyclicality; on-file Q2 growth and RPO still only partly confirm strong_buy until filings update.
+Rationale: Nov 23 rally and pre-Q3 AI demand copy tilt bullish, but the move is Nvidia-linked sentiment; on-file Q2 growth and ~$132bn RPO unchanged—strong_buy partly confirmed only after Q3 report.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -48,3 +48,8 @@ Screen remains **strong_buy**; leverage and cyclical AI-hardware risks are uncha
 The 17:56 UTC news batch is heavy pre-Q3 earnings copy: roughly $49bn revenue expectations, AI server backlog optimism, and repeated margin-cost warnings.  
 On 23 Nov, Dell rallied with AI-hardware peers on Nvidia leadership headlines; on-file Q2 FY2027 themes (~$132bn RPO, higher debt and inventory) are unchanged.  
 Screen remains **strong_buy**; leverage and cyclical AI-hardware risks are unchanged ahead of reported Q3 figures.
+
+### 2026-11-23T21:40:59.972962+00:00
+The 21:40 UTC batch adds Q3 earnings on 24 Nov, a ~20%+ session rally, and options pricing a double-digit post-earnings swing; Jensen Huang’s return lifted AI-hardware peers.  
+Press cites tougher tests for AI demand and margins, plus reports of materially higher pricing on signed AI server deals; on-file Q2 themes are unchanged.  
+Screen remains **strong_buy**; leverage and cyclical AI-hardware risks are unchanged pending Q3 filings.

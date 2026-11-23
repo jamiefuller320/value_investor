@@ -1,6 +1,6 @@
 # Barrick Mining Corporation (ABX.TO) — Research memo
 
-_Version 10 · Updated 2026-11-23T17:51:24.130947+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-23T21:35:47.319288+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -57,4 +57,9 @@ No new Barrick regulatory disclosures in this pull.
 ### 2026-11-23T17:51:24.130947+00:00
 The 23 Nov news batch adds only a generic Yahoo Finance Canada quote page (21 Nov), with no substantive Barrick headline.
 Verified Q2 MD&A, three filing bodies, and Yahoo Q3 diluted EPS ($0.80) are unchanged.
+No new Barrick regulatory disclosures in this pull.
+
+### 2026-11-23T21:35:47.319288+00:00
+The 21:35 news batch adds one macro piece (23 Nov) on billionaire 13F stock picks; the summary gives no Barrick-specific detail.  
+Verified Q2 MD&A, three filing bodies, and Yahoo Q3 diluted EPS ($0.80) are unchanged.  
 No new Barrick regulatory disclosures in this pull.

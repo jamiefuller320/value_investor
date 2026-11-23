@@ -1,6 +1,6 @@
 # Adobe Inc. (ADBE) — Research memo
 
-_Version 6 · Updated 2026-11-20T07:48:25.155386+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-23T21:36:05.448907+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: Q3 FY2026 filings show double-digit revenue and ARR with strong cash generation, partly confirming the screen buy; AI-disruption and buyback-led EPS keep research at accumulate versus full alignment.
+Rationale: News highlights 9 Dec results and AI competition, but Q3 FY2026 filings are unchanged with strong revenue and ARR; research partly confirms the screen buy while AI and capital-allocation risks cap conviction.
 RiskTags: competitive, regulatory, litigation, leverage
 
 ## Weekly updates
@@ -37,4 +37,9 @@ Quantitative screen signal remains **strong buy**; filing-backed fundamentals ar
 ### 2026-11-20T07:48:25.155386+00:00
 No material change since the 02:33 UTC refresh on 20 Nov 2026.  
 The 07:48 news batch returned zero articles; the filing set is unchanged, with Q3 FY2026 10-Q still the latest interim.  
+Quantitative screen signal remains **buy**; filing-backed fundamentals are unchanged.
+
+### 2026-11-23T21:36:05.448907+00:00
+The 23 Nov news batch adds seven items since 20 Nov: 9 Dec FY2026 results framing (shares fell after six of the last ten fourth-quarter reports), Adobe joining the AI Transparency Initiative, and AI-bubble or Snowflake-vs-Adobe competitive commentary.  
+The filing set is unchanged; Q3 FY2026 10-Q (Aug 2026) remains the latest interim disclosure.  
 Quantitative screen signal remains **buy**; filing-backed fundamentals are unchanged.

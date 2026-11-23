@@ -1,6 +1,6 @@
 # JD Logistics, Inc. (2618.HK) — Research memo
 
-_Version 2 · Updated 2026-11-23T18:10:51.472050+00:00 · Mode: structured_verdict_update_
+_Version 3 · Updated 2026-11-23T21:54:19.558651+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.58
-Rationale: HKEX FY2025 revenue and operating cash flow support the screen buy, but non-IFRS profit eased, ~37% JD Group revenue and softer Q3 Yahoo EPS leave concentration and governance risks unresolved—research stays neutral.
+Rationale: Annual filing revenue and OCF support the screen buy, but softer Q3 diluted EPS, unverified TTM cash flow and JD Group customer concentration leave governance and leverage risks unresolved.
 RiskTags: customer_concentration, governance, competitive, leverage, cyclical
 
 ## Weekly updates
@@ -18,3 +18,8 @@ RiskTags: customer_concentration, governance, competitive, leverage, cyclical
 Since the 9 Oct verdict, the news batch adds two thematic Yahoo pieces (APEC cross-border trade, onshoring) citing logistics exposure; no new HKEX disclosures appear in supplied sources.  
 Yahoo Q3 2026 diluted EPS is 0.28 versus 0.33 a year earlier; quarterly cash flow remains empty, so screen TTM FCF is still unverified.  
 HKEX annual filing metrics underpinning the buy—FY2025 revenue growth, operating cash flow and ~37% JD Group revenue—are unchanged.
+
+### 2026-11-23T21:54:19.558651+00:00
+No articles in the 23 Nov 21:54 news batch since the earlier same-day refresh; no new HKEX disclosures in supplied sources.  
+FY2025 filing-aligned revenue and operating cash flow, and Yahoo Q3 2026 diluted EPS at 0.28 versus 0.33 a year earlier, are unchanged.  
+Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.

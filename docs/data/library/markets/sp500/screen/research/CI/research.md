@@ -1,6 +1,6 @@
 # The Cigna Group (CI) — Research memo
 
-_Version 3 · Updated 2026-11-19T23:53:54.759541+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-23T21:38:05.220536+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -22,3 +22,8 @@ Nov 18–19 news: managed-care sell-off on proposed CMS fraud/CRUSH rule; CI fel
 ### 2026-11-19T23:53:54.759541+00:00
 No material change to the filing-backed view since the earlier 19 Nov refresh.  
 Post-refresh news is peer-sector only (Medicare for All insurer sentiment); no new CI-specific disclosures in supplied sources.
+
+### 2026-11-23T21:38:05.220536+00:00
+Since 19 Nov, news is mostly post-sell-off valuation commentary (~4–11% pullback) with no new CI SEC disclosures in the batch.  
+CFO UBS conference (10 Nov) cited only in third-party pieces; no new metrics in supplied sources.  
+Filing-backed Evernorth margin, IFP exit and CMS sector-risk themes unchanged.

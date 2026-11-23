@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 3 · Updated 2026-11-23T18:19:23.296990+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-23T21:46:50.206191+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -21,3 +21,8 @@ Quantitative screen is now strong buy; news mixes AI memory narratives with cycl
 
 ### 2026-11-23T18:19:23.296990+00:00
 No material change.
+
+### 2026-11-23T21:46:50.206191+00:00
+News since the last refresh adds more Nvidia-led rally coverage (MU up roughly 18–20% on 23 Nov) and President DeBoer’s rival DRAM versus 3D DRAM comments; no new filings or sourced financials.  
+Screen remains strong buy with TTM FCF about $59bn in the snapshot; zero quantitative models passed in the screen.  
+Filing-based cyclical, leverage and concentration risks are unchanged—moves look sentiment-led.

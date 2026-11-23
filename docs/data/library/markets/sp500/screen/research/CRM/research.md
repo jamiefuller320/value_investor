@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 15 · Updated 2026-11-23T17:52:54.630134+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-23T21:38:36.782309+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: Filing-backed FCF still supports Strong Buy, but pre-earnings sell-side caution on core cloud outweighs Slack-agent headlines; leverage and competitive risks keep research below the screen.
+Rationale: Thin headlines add only a modest sector rebound and rival agent financing; filing-backed FCF still supports Strong Buy but leverage and competitive AI risks keep research below the screen.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -79,4 +79,9 @@ Leverage and competitive AI-sector themes are unchanged.
 ### 2026-11-23T17:52:54.630134+00:00
 23 Nov headlines add pre-earnings caution: Citi/Barron’s flag sluggish core cloud and cut the price target, with TD Cowen also lowering expectations, versus Benioff citing large Slack agent deployment.  
 Seeking Alpha frames limited downside ahead of results; ETF commentary notes net selling on 19 Nov (~$43.9m)—not issuer filings.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.
+
+### 2026-11-23T21:38:36.782309+00:00
+Later 23 Nov coverage notes CRM up roughly 3% in a Nasdaq-led software bounce after Friday’s sell-off, still trailing Palantir-led sovereign-AI gainers.  
+A Sierra $30bn agent start-up fund-raise (ex-CEO) underscores enterprise-agent competition; issuer impact is unknown.  
 No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.

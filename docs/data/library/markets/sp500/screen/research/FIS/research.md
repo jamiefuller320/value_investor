@@ -1,6 +1,6 @@
 # Fidelity National Information Services, Inc. (FIS) — Research memo
 
-_Version 15 · Updated 2026-11-23T17:57:23.877925+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-23T21:41:25.073887+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -82,3 +82,8 @@ Q3 leverage, trimmed outlook, leadership turnover and legal overhang remain unre
 No new SEC filings after the 4 Nov Q3 8-K/10-Q.  
 Incremental news: Citizens JMP initiates at Market Perform; commentary flags 2027 revenue and margin headwinds as temporary income fades.  
 Q3 leverage, paused buybacks, trimmed outlook, leadership turnover and legal overhang are unchanged.
+
+### 2026-11-23T21:41:25.073887+00:00
+No new SEC filings after the 4 Nov Q3 8-K/10-Q; the incremental news batch since the prior refresh has no articles.  
+No material change versus the 17:57 UTC update.  
+Q3 leverage, paused buybacks, trimmed outlook, leadership turnover and legal overhang remain unresolved.

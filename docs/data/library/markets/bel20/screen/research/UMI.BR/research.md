@@ -1,6 +1,6 @@
 # Umicore SA (UMI.BR) — Research memo
 
-_Version 13 · Updated 2026-11-23T18:09:37.562752+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-23T21:50:32.589251+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -72,4 +72,9 @@ Strong buy screen unchanged; TTM FCF stays unverified with quarterly cash flow a
 ### 2026-11-23T18:09:37.562752+00:00
 Indexed news since the prior refresh is third-party Yahoo valuation commentary plus a static chart page; no new company filings or results in the pack.  
 H1 2026 IR and upgraded FY26 adj. EBITDA guidance are unchanged; structured interim extract still empty.  
+Strong buy screen unchanged; quarterly cash flow absent so TTM FCF remains unverified.
+
+### 2026-11-23T21:50:32.589251+00:00
+No material change: the indexed news batch since the prior refresh is empty.  
+H1 2026 IR and upgraded FY26 adj. EBITDA guidance are unchanged in sources; the structured interim extract remains empty.  
 Strong buy screen unchanged; quarterly cash flow absent so TTM FCF remains unverified.

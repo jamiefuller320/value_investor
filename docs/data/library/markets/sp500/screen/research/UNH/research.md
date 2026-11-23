@@ -1,6 +1,6 @@
 # UnitedHealth Group Incorporated (UNH) — Research memo
 
-_Version 5 · Updated 2026-11-23T18:27:45.425396+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-23T22:01:16.981646+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.58
-Rationale: Research still weakens strong buy: 23 Nov CMS Star Ratings and Medicare payment headlines extend insurer slides while UNH sues CMS; screen cash metrics and Q3 EPS $4.56 are unchanged and firm-specific payment impact is unquantified here.
+Rationale: Research still weakens strong buy: fresh headlines repeat CMS star-rating reimbursement risk and relative share weakness while screen cash metrics and Q3 EPS $4.56 are unchanged and UNH-specific CMS exposure is not quantified here.
 RiskTags: regulatory, competitive, litigation, leverage, governance, accounting
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Screen strong_buy cash metrics and Q3 diluted EPS of $4.56 are unchanged; no new
 23 Nov CMS proposed Medicare Advantage Star Ratings changes; coverage cites roughly $107bn of industry payment risk over ten years and another sharp UNH slide, with Medicare-for-All debate still weighing on peers.  
 20–21 Nov TD Cowen buy upgrade, Distillate 13F adds and UNH litigation over Star Ratings sit against Barron’s noting UNH lagging the broader rally; screen strong_buy cash metrics and Q3 diluted EPS of $4.56 are unchanged.  
 No new interim SEC filing body in this pack; quantified UNH exposure to the latest CMS proposals remains unknown.
+
+### 2026-11-23T22:01:16.981646+00:00
+Evening coverage reiterates CMS’s estimated ~$107bn Medicare Advantage star-rating bonus cuts and links a modest UNH slide to the proposal; Barron’s notes insurers lagging Monday’s broad-market rally alongside Medicare-for-All rhetoric.  
+No new SEC filing bodies in this pack; screen strong_buy cash metrics and Q3 diluted EPS of $4.56 are unchanged.  
+Firm-specific payment impact from the latest CMS proposals remains unquantified in the supplied sources.

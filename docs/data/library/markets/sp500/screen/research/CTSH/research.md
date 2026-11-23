@@ -1,6 +1,6 @@
 # Cognizant Technology Solutions Corporation (CTSH) — Research memo
 
-_Version 4 · Updated 2026-11-23T17:54:37.297820+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-23T21:39:17.018482+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Supplied Q3 revenue and quarter free cash flow still support Strong Buy; the 23 Nov news batch adds only price-rebound chatter and repeated AI themes, with no new filings or guidance in the pack.
+Rationale: Supplied Q3 revenue and quarter free cash flow still support Strong Buy; the incremental batch has no new articles and EDGAR still ends 29 Oct, so the overlay confirms the screen without added conviction.
 RiskTags: regulatory, competitive, cyclical, customer_concentration, litigation, accounting, leverage
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Prior Deutsche Hold, Bank of America Neutral, and India tax themes are unchanged
 The incremental batch since 19 Nov is mostly share-price recovery after a tech/AI-led selloff and generic “time to buy?” headlines; Kalkine ties the rebound to AI-disruption fears rather than new fundamentals.  
 Yahoo repeats Patient Hub (NVIDIA) and Qualys cyber-AI alliance themes already in the prior week’s batch.  
 Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index has no EDGAR items after 29 Oct 2026.
+
+### 2026-11-23T21:39:17.018482+00:00
+The 23 Nov 21:38 news batch since the prior refresh contains no articles.  
+Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged with last EDGAR on 29 Oct 2026.  
+No material change to fundamentals, guidance, or sell-side themes in the supplied pack.

@@ -1,6 +1,6 @@
 # International Business Machines Corporation (IBM) — Research memo
 
-_Version 3 · Updated 2026-11-23T18:03:11.360823+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-23T21:45:23.896654+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.65
-Rationale: Post-earnings share weakness and bearish sentiment weaken the screen buy, but unchanged Q3 snapshot metrics and only a routine yen-note 8-K leave accumulate appropriate.
+Rationale: Thin sentiment-led news since the last update does not alter filing-backed Q3 metrics, so accumulate still moderates the buy screen against post-earnings share weakness.
 RiskTags: leverage, pension, competitive, cyclical, litigation, regulatory
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Q3 2026 snapshot data show revenue roughly flat quarter-on-quarter (~$17.1bn) an
 News since 19 Nov stresses an ~11% post-earnings slide, bearish technical commentary and mixed institutional buys and sells, offset partly by bullish analyst targets and Lightwell/Microsoft Marketplace coverage.  
 The library adds a 19 Nov 8-K (yen 2.869% notes due 2029); no other filing-backed change to operations, pension or leverage beyond routine debt issuance.  
 Q3 2026 screening snapshot and operating free cash flow inputs are unchanged.
+
+### 2026-11-23T21:45:23.896654+00:00
+Since the prior update, headlines cite unusual S&P 500 volume and a reported ~4.6% same-day rebound; broader market-research pieces add no IBM-specific fundamentals.  
+No new SEC filing bodies beyond the 19 Nov yen-note 8-K already in the library.  
+Q3 2026 screening snapshot and cash flow inputs are unchanged.

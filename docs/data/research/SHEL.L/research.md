@@ -1,6 +1,6 @@
 # Shell plc (SHEL.L) — Research memo
 
-_Version 6 · Updated 2026-11-23T18:26:30.853759+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-23T22:00:55.160363+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -37,3 +37,8 @@ The quantitative screen remains buy with neutral timing (RSI ~70); filing versus
 Shell and Equinor secured joint federal and provincial approval for the Bay du Nord development plan in Canada, moving the project toward FID.  
 Coverage reports continued mid‑November share buybacks for cancellation under the post‑Q3 programme.  
 No new group results since the 29 October Q3 release; the buy screen and filing–screen FCF mismatch are unchanged.
+
+### 2026-11-23T22:00:55.160363+00:00
+No material change since the earlier 23 November refresh; the news batch returned no new articles.  
+29 October Q3 2026 remains the latest group results; Bay du Nord approval and post‑Q3 buybacks are unchanged in sources.  
+Buy screen, neutral timing and filing–screen FCF divergence are unchanged.

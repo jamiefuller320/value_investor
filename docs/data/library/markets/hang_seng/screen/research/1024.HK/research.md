@@ -1,6 +1,6 @@
 # Kuaishou Technology (1024.HK) — Research memo
 
-_Version 18 · Updated 2026-11-23T17:49:46.485432+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-23T21:34:41.514348+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.71
-Rationale: Filed Q3 and post-earnings sell-side reaction leave revenue decline and Kling spend unaddressed, weakening the strong-buy case; screen TTM cash remains unverified.
+Rationale: Filed Q3 decline, operating loss and higher Kling spend weaken the strong-buy case; post-earnings sell-side is mixed and screen TTM cash stays unverified in Yahoo.
 RiskTags: regulatory, competitive, leverage, key_person, other
 
 ## Weekly updates
@@ -97,4 +97,9 @@ Yahoo pack unchanged—quarterly income still ends Jun 2026; quarterly cash flow
 ### 2026-11-23T17:49:46.485432+00:00
 Since 2026-11-20: news adds post-Q3 sell-side (Simply Wall St PT cut, Goldman Hold, GF Buy) and a TradingView recap on rising Kling billings versus lower marketing revenue per DAU.  
 HKEX index unchanged—Q3/nine-month to 30 Sep 2026 figures match prior refresh; no new in-window filings.  
+Yahoo pack unchanged—quarterly income still ends Jun 2026; quarterly cash flow empty (TTM cash suppressed).
+
+### 2026-11-23T21:34:41.514348+00:00
+No material change: the 21:34 UTC news batch since the 17:49 refresh returned zero Kuaishou articles.  
+HKEX index refreshed at 21:34 UTC; Q3/nine-month results to 30 Sep 2026 match prior figures; no new in-window filings.  
 Yahoo pack unchanged—quarterly income still ends Jun 2026; quarterly cash flow empty (TTM cash suppressed).

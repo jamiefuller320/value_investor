@@ -1,6 +1,6 @@
 # Clarkson PLC (CKN.L) — Research memo
 
-_Version 6 · Updated 2026-11-23T18:14:31.315485+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-23T21:56:44.480516+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.70
-Rationale: CFO is now in post and the screen re-passed buy, but cyclical FY26 earnings, filing–screen FCF divergence and no trading update since 6 Oct keep research neutral on adding size.
+Rationale: Stable buy screen and CFO in post support quality, but cyclical FY26 earnings, filing–screen FCF divergence and no trading RNS since 6 Oct leave research neutral versus the buy signal.
 RiskTags: cyclical, key_person, competitive, accounting
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Quantitative screen stays hold (7/22, stable six weeks); RSI has eased from over
 No trading or results RNS since 6 Oct; since 1 Nov only 2 Nov total voting rights and 17 Nov PDMR dealings.  
 Niamh Staunton is CFO from 11 Nov as previously disclosed; news is Kalkine/Yahoo price and valuation commentary only.  
 Quantitative screen is buy (7 models, stable four weeks, neutral timing; FCF basis mismatch flagged).
+
+### 2026-11-23T21:56:44.480516+00:00
+No material change: the 23 Nov evening news batch is empty and adds no RNS or filings since the earlier refresh.  
+Last trading disclosure remains the 6 Oct FY26 underlying PBT floor; Niamh Staunton is CFO from 11 Nov as already announced.  
+Quantitative screen stays buy (seven models, stable four weeks, neutral timing; FCF basis mismatch unchanged).

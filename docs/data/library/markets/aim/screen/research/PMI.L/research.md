@@ -1,6 +1,6 @@
 # Premier Miton Group plc (PMI.L) — Research memo
 
-_Version 10 · Updated 2026-11-23T18:22:07.730922+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-23T21:58:00.499387+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.73
-Rationale: No material disclosures since 19 Nov; on-file £8.1bn AuM, FY-scale net outflows and HY26 Mar loss with 1.5p interim still weaken the buy case versus the screen.
+Rationale: No material disclosures since prior refresh; on-file £8.1bn AuM, FY-scale net outflows and HY26 Mar loss with 1.5p interim still weaken the buy case versus the screen.
 RiskTags: competitive, cyclical, key_person
 
 ## Weekly updates
@@ -56,5 +56,10 @@ FY26 September year-end results are still scheduled for 3 December 2026 per that
 
 ### 2026-11-23T18:22:07.730922+00:00
 23 Nov news batch adds only UK macro PMI articles; nothing company-specific on Premier Miton.  
+No material RNS or new accounts since the 15 Oct Q4 AuM update; 4 Jun HY26 Mar interim remains the latest published set.  
+FY26 September year-end results are still scheduled for 3 December 2026 per that notice.
+
+### 2026-11-23T21:58:00.499387+00:00
+21:57 UTC news batch since the 18:22 refresh is empty; no company-specific coverage.  
 No material RNS or new accounts since the 15 Oct Q4 AuM update; 4 Jun HY26 Mar interim remains the latest published set.  
 FY26 September year-end results are still scheduled for 3 December 2026 per that notice.

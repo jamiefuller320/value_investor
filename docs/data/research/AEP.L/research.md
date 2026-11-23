@@ -1,6 +1,6 @@
 # AEP Plantations Plc (AEP.L) — Research memo
 
-_Version 7 · Updated 2026-11-23T18:12:51.383844+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-23T21:55:44.485000+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Oct Q3 filings still back the Strong Buy value case and favourable timing; November is buyback-only, with 2027 weather risk and the FCF definition gap capping conviction.
+Rationale: Q3 filings and favourable timing still support the Strong Buy screen; November disclosures are routine, while 2027 weather risk and statutory–screen FCF divergence cap conviction.
 RiskTags: cyclical, regulatory, customer_concentration, competitive, other
 
 ## Weekly updates
@@ -43,3 +43,8 @@ Strong Buy screen ~80% composite (5 weeks, stable); timing overlay Accumulate (R
 No new results or trading updates since the 12 Oct Q3 RNS; 31 Oct–23 Nov RNS is routine transaction-in-own-shares under the £8m buyback (e.g. 20 Nov ~32k shares at VWAP ~142.8p; ~4.16m shares in treasury since Jul).  
 12–20 Nov coverage is syndicated Kalkine buyback, dividend and Pinago/ninth-mill commentary plus palm-oil volatility; no verified Indonesia operating or policy news.  
 Strong Buy screen stable (~10 weeks); timing overlay Accumulate (~13% below 200-day MA); statutory vs screen FCF basis mismatch unchanged.
+
+### 2026-11-23T21:55:44.485000+00:00
+No new group results or trading updates since the 12 October nine-month RNS; late October–23 November RNS is buybacks (including 20 November ~32k shares at VWAP ~142.8p), voting rights, interim-dividend sterling confirmation, and abridged UK parent interim accounts to 30 September—no new Indonesia operating disclosure.  
+This news pull since the prior memo is empty; no verified Indonesia policy or operating news.  
+Strong Buy screen remains stable (~10 weeks); timing overlay Accumulate (~13% below 200-day MA); statutory versus screen FCF basis mismatch unchanged.

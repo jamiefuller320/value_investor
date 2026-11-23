@@ -1,6 +1,6 @@
 # Volex plc (VLX.L) — Research memo
 
-_Version 3 · Updated 2026-11-23T18:10:16.191044+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-23T21:53:46.041564+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -23,3 +23,8 @@ Since 2 Nov, news is one Kalkine “half-year momentum” headline only—no new
 No material change since the 02:36 UTC run: **strong_buy** screen and the three-way FCF gap (£35M filing / £6M screen TTM / company-adj $22.3M) are unchanged.  
 Since then the news batch is a single Yahoo Finance quote page only—no new RNS.  
 The 12 Nov half-year report is still indexed with a body; interim P&L/cash is not in the financials extract.
+
+### 2026-11-23T21:53:46.041564+00:00
+No material change since the 18:10 UTC refresh: **strong_buy** screen and the three-way FCF gap (£35M filing / £6M screen TTM / company-adj $22.3M) are unchanged.
+The 21:53 news batch since then has **no articles**—no new RNS or headlines.
+The 12 Nov half-year report remains indexed with a body; interim P&amp;L/cash is still absent from the financials extract.

@@ -1,6 +1,6 @@
 # Premier Foods plc (PFD.L) — Research memo
 
-_Version 6 · Updated 2026-11-23T18:07:38.722311+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-23T21:48:37.767532+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: H1 RNS confirms Oct bond redemption and lower financing costs; upgraded FY earnings and interim dividend support the strong-buy screen, but liquidity optics, sub-threshold ROE and dual FCF cover definitions still limit conviction.
+Rationale: H1 RNS refinancing and top-end FY guidance support the strong-buy screen, but liquidity optics, sub-threshold ROE and unreconciled screen FCF still cap conviction versus a full accumulate call.
 RiskTags: customer_concentration, regulatory, pension, competitive, liquidity, leverage
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Buy screen persists (seventeenth week, ~71% composite) but refi, liquidity and F
 12 Nov H1 RNS: branded revenue +3.2%, trading profit +2.4%; £330m notes redeemed on 15 Oct via £175m term loan and cash; FY adjusted PBT/EPS guided to the top end; 1.12p interim dividend introduced.  
 Net debt £131.2m (0.6× EBITDA); liquidity £583.6m though net current liabilities optics persist; screen FCF/cover definition divergence unchanged.  
 Quantitative signal is strong buy (new week); research overlay moves to accumulate after refinancing execution, pending ROE/FCF reconciliation.
+
+### 2026-11-23T21:48:37.767532+00:00
+No new RNS or indexed filings since the earlier 23 Nov refresh; the incremental news batch is empty.  
+12 Nov H1 RNS themes (Oct bond redemption, top-end FY guidance, interim dividend) remain the only material disclosures in sources.  
+Strong-buy screen persists; accumulate research overlay unchanged.

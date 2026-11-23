@@ -1,6 +1,6 @@
 # Adyen N.V. (ADYEN.AS) — Research memo
 
-_Version 4 · Updated 2026-11-23T18:11:49.973999+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-23T21:54:52.426550+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,9 +8,9 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: Filed FY2025 revenue, EPS and positive FCF still support the buy screen; new items are sentiment-only and unverified TTM FCF plus lower FY2025 OCF/FCF versus FY2024 temper conviction.
-RiskTags: competitive, regulatory, accounting
+Confidence: 0.68
+Rationale: Filed FY2025 growth and positive FCF still support the buy screen; the planned co-CEO handover is a watch item but not a fundamental break, while unverified TTM FCF and weaker FY2025 cash flow versus FY2024 keep conviction tempered.
+RiskTags: competitive, regulatory, accounting, key_person
 
 ## Weekly updates
 
@@ -28,3 +28,8 @@ Buy screen signal and prior Visa Agentic Ready / European payments context are u
 Indexed news since 19 Nov adds a 20 Nov Visa Agentic Ready follow-up, a CRM vs Adyen value piece, and Dutch commentary citing persistent bearish selling pressure (23 Nov).  
 Filed FY2025 revenue, EPS and positive FCF are unchanged; Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.  
 Buy screen and accumulate overlay are unchanged; sentiment-led headlines do not alter the fundamental picture.
+
+### 2026-11-23T21:54:52.426550+00:00
+23 Nov news: co-founder Pieter van der Does to retire as co-CEO at year-end; Ingo Uytdehaage becomes sole CEO on 1 Jan 2027 under a stated multi-year succession plan.  
+Dutch commentary (De AandeelHouder) says the departure should not drive immediate operational changes.  
+Filed FY2025 revenue, EPS and positive FCF are unchanged; Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.
