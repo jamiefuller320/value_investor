@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-23T12:33:10.374141+00:00`
+Generated: `2026-11-23T17:33:21.919817+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -36,7 +36,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `ingest_narrow`/verified PR #1467 `eng-20261123-01` — Close library ingest gaps for euro_depth / EVN.VI (chain 1/3: 0/0 improved, run igc-20261028-01)
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 398
+- Occasion count: 400
 - `validate failed` — 9×
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate check failed` — 6×
