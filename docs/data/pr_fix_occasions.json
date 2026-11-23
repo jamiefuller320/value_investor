@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-22T22:25:23.243959+00:00",
-  "occasion_count": 397,
+  "updated_at": "2026-11-23T00:45:50.599218+00:00",
+  "occasion_count": 398,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -7214,6 +7214,26 @@
       ],
       "notes": "Run 45074048006 on f9bfba0ad0. Pytest shard 2 printed no dots from 21:55:59Z (56%) until the job was cancelled at 22:15:09Z. The same shard passed in 12 minutes on c73774a.",
       "details": {}
+    },
+    {
+      "id": "prf-20261123-001",
+      "recorded_at": "2026-11-23T00:45:50.599218+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "CI test shards 1 and 2 cancelled at the 25 minute job timeout",
+      "pr_number": 1466,
+      "branch": "cursor/catalogue-explorer-venue-market-3a8f",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1466",
+      "task_id": null,
+      "head_sha": "a2973a6687cf94839d138cb4873426e962b89fea",
+      "mergeable_state": "unstable",
+      "failed_check_names": [
+        "CI / test (1)",
+        "CI / test (2)"
+      ],
+      "notes": "Pytest was still progressing (shard 1 at 81%, shard 2 at 64%) when the 25 minute job timeout cancelled them. Merged origin/main, which raises the shard timeout to 40 minutes.",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -7459,7 +7479,7 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 208
+        "count": 209
       },
       {
         "kind": "merge_conflict",
@@ -7473,7 +7493,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 391
+        "count": 392
       },
       {
         "source": "traffic_controller",
