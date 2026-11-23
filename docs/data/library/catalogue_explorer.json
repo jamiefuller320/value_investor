@@ -519,28 +519,10 @@
     "ATAC_US_EQ",
     "ATAK_US_EQ",
     "ATAT_US_EQ",
-    "ATCX1_US_EQ"
+    "ATCX1_US_EQ",
+    "ATDRY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ASC_US_EQ",
-      "venue": "US",
-      "yahoo": "ASC",
-      "isin": "MHY0207T1001",
-      "name": "ASC",
-      "seconds": 1.909,
-      "outcome": "saved",
-      "at": "2026-11-23T11:06:44.334452+00:00",
-      "rows": 22,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 1.025
-      },
-      "screen_seconds": 1.025,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "ASEKY_US_EQ",
       "venue": "US",
@@ -1281,6 +1263,25 @@
       },
       "screen_seconds": 4.471,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "ATDRY_US_EQ",
+      "venue": "US",
+      "yahoo": "ATDRY",
+      "isin": "US05277E1047",
+      "name": "ATDRY",
+      "seconds": 1.05,
+      "outcome": "miss",
+      "at": "2026-11-23T11:11:53.429105+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.906
+      },
+      "screen_seconds": 0.906,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -3916,43 +3917,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T11:11:36.558617+00:00"
+    },
+    {
+      "t212_ticker": "ATDRY_US_EQ",
+      "yahoo": "ATDRY",
+      "name": "ATDRY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T11:11:53.429105+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ATCX1_US_EQ",
+    "t212_ticker": "ATDRY_US_EQ",
     "venue": "US",
-    "yahoo": "ATCX1",
-    "isin": "MHG5211G2009",
-    "name": "ATCX",
-    "seconds": 4.578,
+    "yahoo": "ATDRY",
+    "isin": "US05277E1047",
+    "name": "ATDRY",
+    "seconds": 1.05,
     "outcome": "miss",
-    "at": "2026-11-23T11:11:46.687275+00:00",
+    "at": "2026-11-23T11:11:53.429105+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.471
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.906
     },
-    "screen_seconds": 4.471,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.906,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ATDRY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T11:11:46.687275+00:00",
+  "updated_at": "2026-11-23T11:11:53.429105+00:00",
   "totals": {
-    "screened": 518,
+    "screened": 519,
     "signals": {
-      "buy": 126,
+      "buy": 127,
       "avoid": 134,
       "hold": 128,
       "insufficient_data": 129,
       "strong_buy": 1
     },
-    "signals_n": 518,
-    "screen_seconds_sum": 4198.287000000002,
-    "screen_seconds_n": 518,
+    "signals_n": 519,
+    "screen_seconds_sum": 4199.193000000002,
+    "screen_seconds_n": 519,
     "outcomes": {
-      "miss": 216,
+      "miss": 217,
       "saved": 302
     }
   },
