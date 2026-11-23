@@ -6,7 +6,8 @@
     "AACG_US_EQ",
     "AACI_US_EQ",
     "AACQ_US_EQ",
-    "AACT_US_EQ"
+    "AACT_US_EQ",
+    "AADX_US_EQ"
   ],
   "runs": [
     {
@@ -103,6 +104,25 @@
       },
       "screen_seconds": 5.136,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "AADX_US_EQ",
+      "venue": "US",
+      "yahoo": "AADX",
+      "isin": "US03815J1079",
+      "name": "AADX",
+      "seconds": 3.094,
+      "outcome": "saved",
+      "at": "2026-11-23T07:51:04.362752+00:00",
+      "rows": 6,
+      "screen": {
+        "signal": "hold",
+        "fits": false,
+        "data_quality_score": 0.85,
+        "seconds": 1.097
+      },
+      "screen_seconds": 1.097,
+      "signal": "hold"
     }
   ],
   "handoffs": [
@@ -116,40 +136,77 @@
     }
   ],
   "last": {
-    "t212_ticker": "AACT_US_EQ",
+    "t212_ticker": "AADX_US_EQ",
     "venue": "US",
-    "yahoo": "AACT",
-    "isin": "US5000811043",
-    "name": "KDK",
-    "seconds": 5.248,
-    "outcome": "miss",
-    "at": "2026-11-23T07:50:56.009625+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "AADX",
+    "isin": "US03815J1079",
+    "name": "AADX",
+    "seconds": 3.094,
+    "outcome": "saved",
+    "at": "2026-11-23T07:51:04.362752+00:00",
+    "rows": 6,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2118195/000162828026073170/aadx-20260930.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2118195/000162828026073095/aadx-20261111.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2118195/000162828026056207/aadx-20260630.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2118195/000162828026055948/aadx-20260812.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2118195/000162828026055006/aadx-20260807.htm",
+        "has_body": false
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2118195/000119312526257600/d31398d8k.htm",
+        "has_body": false
+      }
+    ],
     "screen": {
-      "signal": "insufficient_data",
+      "signal": "hold",
       "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 5.136
+      "data_quality_score": 0.85,
+      "seconds": 1.097
     },
-    "screen_seconds": 5.136,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.097,
+    "signal": "hold"
   },
-  "updated_at": "2026-11-23T07:50:56.009625+00:00",
+  "updated_at": "2026-11-23T07:51:04.362752+00:00",
   "totals": {
-    "screened": 5,
+    "screened": 6,
     "signals": {
       "buy": 1,
       "avoid": 1,
-      "hold": 1,
+      "hold": 2,
       "insufficient_data": 2
     },
-    "signals_n": 5,
-    "screen_seconds_sum": 14.352999999999998,
-    "screen_seconds_n": 5,
+    "signals_n": 6,
+    "screen_seconds_sum": 15.449999999999998,
+    "screen_seconds_n": 6,
     "outcomes": {
       "miss": 3,
-      "saved": 2
+      "saved": 3
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
