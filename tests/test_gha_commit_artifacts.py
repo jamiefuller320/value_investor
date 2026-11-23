@@ -227,7 +227,7 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     forward = Path(".github/workflows/strategy-book-forward.yml").read_text(encoding="utf-8")
     assert 'cron: "30 21 * * 1-5"' in forward
     # 120 is the hard stop after the close refresh, including observe memo
-    # requests. The weekly observe ceiling is $160 (400 memos). Timeout unchanged.
+    # requests. The weekly observe safety ceiling is $640 (1600 memos). Timeout unchanged.
     assert "timeout-minutes: 120" in forward
     assert "docs/data/strategy_book_observe.json" in forward
     assert "docs/data/strategy_book_fx_rates.json" in forward

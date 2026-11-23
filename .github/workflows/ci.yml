@@ -64,7 +64,10 @@ jobs:
     # Live IR/SEC/ASX body fetches (pytest mark live_network) can stall a shard
     # 20–35m+ when CDNs hang; eng preflight already skips them. Nightly still
     # runs the full suite including live_network (ci-main-nightly.yml).
-    timeout-minutes: 25
+    # 2026-11-22: shard 2 was cancelled at 25m after test_research_filings
+    # stopped printing at 56%. The same shard had finished in 12m on the
+    # previous commit, inside the documented stall window.
+    timeout-minutes: 40
     strategy:
       fail-fast: false
       matrix:
@@ -93,7 +96,7 @@ jobs:
           # Round-robin file sharding moves test_research_filings.py between
           # shards when any earlier test module is added — concentrating the
           # live IR fetches onto one job (#1183 shard 1 hang).
-          pytest -q -m "not live_network" $FILES
+          pytest -q -m "not live_network" --durations=20 $FILES
 
   engineering-path-guard:
     if: github.event_name == 'pull_request'
