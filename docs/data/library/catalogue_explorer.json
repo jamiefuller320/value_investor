@@ -1766,28 +1766,10 @@
     "DYN_US_EQ",
     "DYSL_US_EQ",
     "DY_US_EQ",
-    "DZSI_US_EQ"
+    "DZSI_US_EQ",
+    "EADSY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "DTC_US_EQ",
-      "venue": "US",
-      "yahoo": "DTC",
-      "isin": "US83425V2034",
-      "name": "SBDS",
-      "seconds": 86.135,
-      "outcome": "miss",
-      "at": "2026-11-23T23:28:19.021867+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.53
-      },
-      "screen_seconds": 85.53,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "DTEA_US_EQ",
       "venue": "US",
@@ -2528,6 +2510,25 @@
       },
       "screen_seconds": 85.497,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "EADSY_US_EQ",
+      "venue": "US",
+      "yahoo": "EADSY",
+      "isin": "US0092791005",
+      "name": "EADSY",
+      "seconds": 1.284,
+      "outcome": "miss",
+      "at": "2026-11-23T23:48:39.028165+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.104
+      },
+      "screen_seconds": 1.104,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -20166,43 +20167,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T23:40:15.411265+00:00"
+    },
+    {
+      "t212_ticker": "EADSY_US_EQ",
+      "yahoo": "EADSY",
+      "name": "EADSY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T23:48:39.028165+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DZSI_US_EQ",
+    "t212_ticker": "EADSY_US_EQ",
     "venue": "US",
-    "yahoo": "DZSI",
-    "isin": "US2682111099",
-    "name": "DZSIQ",
-    "seconds": 85.639,
+    "yahoo": "EADSY",
+    "isin": "US0092791005",
+    "name": "EADSY",
+    "seconds": 1.284,
     "outcome": "miss",
-    "at": "2026-11-23T23:48:31.507031+00:00",
+    "at": "2026-11-23T23:48:39.028165+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.497
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.104
     },
-    "screen_seconds": 85.497,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.104,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "EADSY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T23:48:31.507031+00:00",
+  "updated_at": "2026-11-23T23:48:39.028165+00:00",
   "totals": {
-    "screened": 1765,
+    "screened": 1766,
     "signals": {
-      "buy": 497,
+      "buy": 498,
       "avoid": 444,
       "hold": 389,
       "insufficient_data": 427,
       "strong_buy": 8
     },
-    "signals_n": 1765,
-    "screen_seconds_sum": 19907.644,
-    "screen_seconds_n": 1765,
+    "signals_n": 1766,
+    "screen_seconds_sum": 19908.748,
+    "screen_seconds_n": 1766,
     "outcomes": {
-      "miss": 681,
+      "miss": 682,
       "saved": 1084
     }
   },
