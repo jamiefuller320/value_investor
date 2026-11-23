@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-22T07:16:28.812730+00:00
+Track: `buy_tier_level` · updated 2026-11-23T15:20:02.187172+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **18** / 33 (55% count, 52% NAV)
+- Losers: **18** / 34 (53% count, 51% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -76,10 +76,13 @@ Track: `buy_tier_level` · updated 2026-11-22T07:16:28.812730+00:00
 - still buy
 - research accumulate
 
-### ADBE — weakening / watch_review (-13.1%)
-- conviction 31% below intact floor
+### ADBE — intact / hold_tolerate (-13.1%)
+- price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 36%
 
 ### CSCO — intact / hold_tolerate (-12.6%)
 - price drawdown alone does not invalidate value thesis
@@ -130,7 +133,7 @@ Track: `buy_tier_level` · updated 2026-11-22T07:16:28.812730+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 55%
+- conviction 62%
 
 ### PAYX — intact / hold_tolerate (-3.5%)
 - still buy
@@ -168,14 +171,14 @@ Track: `buy_tier_level` · updated 2026-11-22T07:16:28.812730+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 55%
+- conviction 63%
 
 ### MAR — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 49%
+- conviction 56%
 
 ### CEG — weakening / watch_review (+0.0%)
 - research verdict neutral
@@ -188,6 +191,20 @@ Track: `buy_tier_level` · updated 2026-11-22T07:16:28.812730+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 38%
+
+### ROP — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 88%
+
+### ADP — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 51%
 
 ### PEP — intact / hold_tolerate (+4.6%)
 - still strong_buy
@@ -216,10 +233,3 @@ Track: `buy_tier_level` · updated 2026-11-22T07:16:28.812730+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 65%
-
-### REGN — intact / hold_tolerate (+18.9%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 80%

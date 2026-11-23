@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-11-22T07:17:03.577766+00:00",
+  "updated_at": "2026-11-23T15:20:08.541613+00:00",
   "hold_episodes": [
     {
       "episode_id": "buy_tier_level:SOLB.BR:2026-10-01T09:47:06.806324+01:00",
@@ -104,7 +104,7 @@
       "ticker": "AED.BR",
       "name": "Aedifica NV/SA",
       "started_at": "2026-10-04T08:10:09.895727+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -154,9 +154,9 @@
       "peak_unrealized_pct": 0.0336,
       "trough_unrealized_pct": -0.0513,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-23T15:20:08.522032+00:00",
+      "linked_sell_trade_id": "9fe6fa93-597c-418b-a6e6-0b141f8092f0"
     },
     {
       "episode_id": "buy_tier_level:UMI.BR:2026-10-07T17:34:49.612936+01:00",
@@ -1159,6 +1159,13 @@
           "avg_sell_return": 0.0128,
           "avg_buy_return": 0.0,
           "replacement_delta": -0.0128
+        },
+        {
+          "scored_at": "2026-11-23T15:20:08.522032+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0393,
+          "avg_buy_return": 0.0086,
+          "replacement_delta": 0.0479
         }
       ],
       "sell_returns_since_rotation": {
@@ -1329,7 +1336,15 @@
           "cost": 0.55
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-23T15:20:08.522032+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0705,
+          "avg_buy_return": -0.0679,
+          "replacement_delta": 0.0026
+        }
+      ],
       "sell_returns_since_rotation": {
         "UMI.BR": -0.101,
         "AED.BR": -0.04
@@ -1397,7 +1412,57 @@
       },
       "verdict": null,
       "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-23T15:20:08.522032+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-23T15:20:08.522032+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "AED.BR",
+          "price": 63.6,
+          "shares": 7.033878,
+          "gross": 447.35,
+          "cost": 0.78,
+          "avg_cost_at_exit": 64.1695,
+          "realized_pct": -0.0089,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0089
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "UMI.BR",
+          "price": 15.84,
+          "shares": 28.143411,
+          "gross": 445.79,
+          "cost": 0.78
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "AED.BR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "UMI.BR": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
     }
   ],
-  "hypothesis_outcome_link_updated_at": "2026-11-22T07:17:03.557062+00:00"
+  "hypothesis_outcome_link_updated_at": "2026-11-23T15:20:08.522032+00:00"
 }

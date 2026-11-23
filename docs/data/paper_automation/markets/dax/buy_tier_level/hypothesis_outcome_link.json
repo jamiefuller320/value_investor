@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-22T07:16:45.546162+00:00",
+  "generated_at": "2026-11-23T15:20:04.256446+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 19,
+    "closed_total": 20,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 6,
+        "closed_count": 7,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0218,
-        "mean_trough_unrealized_pct": 0.0067,
+        "mean_peak_unrealized_pct": 0.0146,
+        "mean_trough_unrealized_pct": -0.0128,
         "outcome_labels": {
-          "recovered": 6
+          "recovered": 7
         }
       },
       "broken": {
@@ -63,7 +63,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 19,
+    "hold_closed_with_thesis": 20,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -777,7 +777,7 @@
       "ticker": "VOW3.DE",
       "name": "Volkswagen AG",
       "started_at": "2026-11-06T07:52:44.561932+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -820,9 +820,9 @@
       "peak_unrealized_pct": -0.0289,
       "trough_unrealized_pct": -0.1293,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-23T15:20:04.228666+00:00",
+      "linked_sell_trade_id": "6914df84-17ef-4a08-97c7-f132491190c1"
     },
     {
       "episode_id": "buy_tier_level:HEI.DE:2026-11-11T14:17:21.307191+00:00",
@@ -1556,6 +1556,13 @@
           "avg_sell_return": 0.0165,
           "avg_buy_return": 0.0013,
           "replacement_delta": -0.0152
+        },
+        {
+          "scored_at": "2026-11-23T15:20:04.228666+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0396,
+          "avg_buy_return": 0.0314,
+          "replacement_delta": 0.0709
         }
       ],
       "sell_returns_since_rotation": {
@@ -2508,7 +2515,15 @@
           "cost": 0.38
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-23T15:20:04.228666+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0333,
+          "avg_buy_return": -0.0673,
+          "replacement_delta": -0.034
+        }
+      ],
       "sell_returns_since_rotation": {
         "MUV2.DE": -0.0189,
         "BNR.DE": -0.0477
@@ -2516,6 +2531,64 @@
       "buy_returns_since_rotation": {
         "FME.DE": -0.0626,
         "VOW3.DE": -0.072
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-23T15:20:04.228666+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-23T15:20:04.228666+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "VOW3.DE",
+          "price": 62.62,
+          "shares": 5.533389,
+          "gross": 346.5,
+          "cost": 0.61,
+          "avg_cost_at_exit": 69.1239,
+          "realized_pct": -0.0941,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": -0.0941
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "DHL.DE",
+          "price": 57.1,
+          "shares": 3.015203,
+          "gross": 172.17,
+          "cost": 0.3
+        },
+        {
+          "ticker": "FME.DE",
+          "price": 37.6,
+          "shares": 4.604312,
+          "gross": 173.12,
+          "cost": 0.3
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "VOW3.DE": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "DHL.DE": 0.0,
+        "FME.DE": 0.0
       },
       "verdict": null,
       "closed_at": null

@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-22T07:17:05.598189+00:00",
+  "generated_at": "2026-11-23T15:20:10.047946+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 20,
+    "closed_total": 21,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 12,
+    "open_with_thesis": 11,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -28,13 +28,14 @@
         }
       },
       "broken": {
-        "closed_count": 5,
-        "recovery_rate": 1.0,
-        "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0028,
-        "mean_trough_unrealized_pct": -0.007,
+        "closed_count": 6,
+        "recovery_rate": 0.8333,
+        "sold_underwater_rate": 0.1667,
+        "mean_peak_unrealized_pct": -0.0001,
+        "mean_trough_unrealized_pct": -0.0083,
         "outcome_labels": {
-          "recovered": 5
+          "recovered": 5,
+          "sold_underwater": 1
         }
       },
       "insufficient_data": {
@@ -63,7 +64,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 20,
+    "hold_closed_with_thesis": 21,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -1563,7 +1564,16 @@
       "conviction_score": 0.24919999999999998,
       "exit_streak_at_start": 1,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-23T15:20:09.917185+00:00",
+          "days_after": 7,
+          "price": 58.5,
+          "unrealized_pct": -0.0714,
+          "peak_unrealized_pct": 0.0254,
+          "trough_unrealized_pct": -0.0714
+        }
+      ],
       "peak_unrealized_pct": 0.0254,
       "trough_unrealized_pct": -0.0714,
       "recovered_to_breakeven": true,
@@ -1665,7 +1675,7 @@
       "ticker": "0300.HK",
       "name": "Midea Group Co., Ltd.",
       "started_at": "2026-11-22T07:17:05.466782+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater",
         "exit_streak",
@@ -1698,9 +1708,9 @@
       "peak_unrealized_pct": -0.0144,
       "trough_unrealized_pct": -0.0144,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-11-23T15:20:09.917185+00:00",
+      "linked_sell_trade_id": "ef412de2-49e1-450f-86ab-fea2570313f2"
     }
   ],
   "swap_rotations": [
@@ -3875,6 +3885,56 @@
       },
       "buy_returns_since_rotation": {
         "0300.HK": -0.0144
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-23T15:20:09.917185+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-23T15:20:09.917185+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0019,
+      "sells": [
+        {
+          "ticker": "0300.HK",
+          "price": 103.0,
+          "shares": 0.703021,
+          "gross": 72.41,
+          "cost": 0.14,
+          "avg_cost_at_exit": 104.5,
+          "realized_pct": -0.0144,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0144
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "6618.HK",
+          "price": 32.6,
+          "shares": 2.002998,
+          "gross": 65.3,
+          "cost": 0.12
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "0300.HK": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "6618.HK": 0.0
       },
       "verdict": null,
       "closed_at": null

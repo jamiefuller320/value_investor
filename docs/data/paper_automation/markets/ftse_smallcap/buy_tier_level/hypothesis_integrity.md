@@ -1,14 +1,14 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-22T07:16:09.187539+00:00
+Track: `buy_tier_level` · updated 2026-11-23T15:19:40.693572+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 5 (20% count, 25% NAV)
+- Losers: **1** / 4 (25% count, 25% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - dividend fails more often among losers (100% vs 25%)
+  - dividend fails more often among losers (100% vs 33%)
 
 ## Holding reviews
 
@@ -27,12 +27,6 @@ Track: `buy_tier_level` · updated 2026-11-22T07:16:09.187539+00:00
 - data_quality 1.00
 - conviction 68%
 
-### SBRE.L — weakening / watch_review (-2.9%)
-- left buy tier (hold)
-- conviction 27% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### LSL.L — intact / hold_tolerate (-0.9%)
 - still buy
 - research accumulate
@@ -40,7 +34,7 @@ Track: `buy_tier_level` · updated 2026-11-22T07:16:09.187539+00:00
 - data_quality 1.00
 - conviction 44%
 
-### TRI.L — weakening / watch_review (+1.0%)
+### TRI.L — weakening / watch_review (+0.2%)
 - conviction 24% below intact floor
 - still buy
 - research accumulate

@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-22T07:16:28.819880+00:00",
+  "generated_at": "2026-11-23T15:20:02.193035+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 40,
+    "closed_total": 41,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 30,
+    "open_with_thesis": 29,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 23,
+        "closed_count": 24,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.1059,
-        "mean_trough_unrealized_pct": 0.0021,
+        "mean_peak_unrealized_pct": 0.1114,
+        "mean_trough_unrealized_pct": -0.0001,
         "outcome_labels": {
-          "recovered": 23
+          "recovered": 24
         }
       },
       "broken": {
@@ -63,7 +63,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 40,
+    "hold_closed_with_thesis": 41,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -1503,7 +1503,7 @@
       "ticker": "REGN",
       "name": "Regeneron Pharmaceuticals, Inc.",
       "started_at": "2026-09-29T03:24:19.266107-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -1553,9 +1553,9 @@
       "peak_unrealized_pct": 0.2386,
       "trough_unrealized_pct": -0.0509,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-23T10:20:02.102083-05:00",
+      "linked_sell_trade_id": "872a2ad4-f81c-4ea1-a668-c56cb44776cc"
     },
     {
       "episode_id": "buy_tier_level:GILD:2026-10-04T03:10:06.166936-04:00",
@@ -3385,7 +3385,16 @@
       "conviction_score": 0.21810000000000002,
       "exit_streak_at_start": 1,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-23T10:20:02.102083-05:00",
+          "days_after": 7,
+          "price": 457.01,
+          "unrealized_pct": -0.0092,
+          "peak_unrealized_pct": 0.1453,
+          "trough_unrealized_pct": -0.0092
+        }
+      ],
       "peak_unrealized_pct": 0.1453,
       "trough_unrealized_pct": -0.0092,
       "recovered_to_breakeven": true,
@@ -4558,6 +4567,13 @@
           "avg_sell_return": -0.0028,
           "avg_buy_return": 0.0192,
           "replacement_delta": 0.022
+        },
+        {
+          "scored_at": "2026-11-23T10:20:02.102083-05:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0075,
+          "avg_buy_return": -0.0553,
+          "replacement_delta": -0.0628
         }
       ],
       "sell_returns_since_rotation": {
@@ -5437,7 +5453,15 @@
           "cost": 0.02
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-23T10:20:02.102083-05:00",
+          "days_after": 7,
+          "avg_sell_return": -0.1249,
+          "avg_buy_return": -0.2067,
+          "replacement_delta": -0.0818
+        }
+      ],
       "sell_returns_since_rotation": {
         "INTU": -0.2085,
         "KDP": -0.0413
@@ -5912,6 +5936,66 @@
         "MAR": 0.0,
         "CEG": 0.0,
         "GILD": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-23T10:20:02.102083-05:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-23T10:20:02.102083-05:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "REGN",
+          "price": 920.69,
+          "shares": 0.037903,
+          "gross": 34.9,
+          "cost": 0.06,
+          "avg_cost_at_exit": 774.61,
+          "realized_pct": 0.1886,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.1886
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "ROP",
+          "price": 459.83,
+          "shares": 0.054696,
+          "gross": 25.15,
+          "cost": 0.04
+        },
+        {
+          "ticker": "ADP",
+          "price": 301.71,
+          "shares": 0.036498,
+          "gross": 11.01,
+          "cost": 0.02
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "REGN": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "ROP": 0.0,
+        "ADP": 0.0
       },
       "verdict": null,
       "closed_at": null

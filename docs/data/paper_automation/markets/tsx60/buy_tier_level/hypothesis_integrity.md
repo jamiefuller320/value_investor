@@ -1,12 +1,12 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-22T07:16:14.323104+00:00
+Track: `buy_tier_level` · updated 2026-11-23T15:19:41.825789+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **3** / 8 (38% count, 38% NAV)
-- Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
-- Balancing hint: `trim_weakening_losers`
+- Losers: **3** / 9 (33% count, 34% NAV)
+- Tolerance: count ≤ 40%, NAV ≤ 35% → within band
+- Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
@@ -42,6 +42,11 @@ Track: `buy_tier_level` · updated 2026-11-22T07:16:14.323104+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 88%
+
+### SAP.TO — weakening / watch_review (+0.0%)
+- research verdict caution
+- still buy
+- cheapness family still passes
 
 ### CP.TO — weakening / watch_review (+1.8%)
 - research verdict neutral

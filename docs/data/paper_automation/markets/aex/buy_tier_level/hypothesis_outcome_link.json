@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-22T07:17:02.927649+00:00",
+  "generated_at": "2026-11-23T15:20:08.069585+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 17,
+    "closed_total": 18,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 6,
+    "open_with_thesis": 5,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 14,
-        "recovery_rate": 0.7857,
-        "sold_underwater_rate": 0.2143,
-        "mean_peak_unrealized_pct": 0.0579,
-        "mean_trough_unrealized_pct": -0.0333,
+        "closed_count": 15,
+        "recovery_rate": 0.8,
+        "sold_underwater_rate": 0.2,
+        "mean_peak_unrealized_pct": 0.0559,
+        "mean_trough_unrealized_pct": -0.0292,
         "outcome_labels": {
-          "recovered": 11,
+          "recovered": 12,
           "sold_underwater": 3
         }
       },
@@ -63,7 +63,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 17,
+    "hold_closed_with_thesis": 18,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -1132,7 +1132,7 @@
       "ticker": "AD.AS",
       "name": "Koninklijke Ahold Delhaize N.V.",
       "started_at": "2026-11-22T07:17:02.705663+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -1165,9 +1165,9 @@
       "peak_unrealized_pct": 0.0291,
       "trough_unrealized_pct": 0.0291,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-23T15:20:08.039363+00:00",
+      "linked_sell_trade_id": "b53994b0-8f8a-44fe-86af-443ff6271b01"
     }
   ],
   "swap_rotations": [
@@ -2470,6 +2470,13 @@
           "avg_sell_return": 0.0097,
           "avg_buy_return": 0.0243,
           "replacement_delta": 0.0145
+        },
+        {
+          "scored_at": "2026-11-23T15:20:08.039363+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0212,
+          "avg_buy_return": -0.0587,
+          "replacement_delta": -0.0375
         }
       ],
       "sell_returns_since_rotation": {
@@ -3442,6 +3449,58 @@
         "ASM.AS": -0.0768,
         "PRX.AS": -0.0718,
         "ADYEN.AS": -0.0513
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-23T15:20:08.039363+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-23T15:20:08.039363+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "AD.AS",
+          "price": 34.58,
+          "shares": 3.959169,
+          "gross": 136.91,
+          "cost": 0.24,
+          "avg_cost_at_exit": 33.6006,
+          "realized_pct": 0.0291,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0291
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "RAND.AS",
+          "price": 40.96,
+          "shares": 3.225824,
+          "gross": 132.13,
+          "cost": 0.23
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "AD.AS": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "RAND.AS": 0.0
       },
       "verdict": null,
       "closed_at": null

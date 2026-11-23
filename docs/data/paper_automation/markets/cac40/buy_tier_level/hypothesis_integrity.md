@@ -1,14 +1,12 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-22T07:16:44.437219+00:00
+Track: `buy_tier_level` · updated 2026-11-23T15:20:03.485000+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **2** / 13 (15% count, 16% NAV)
+- Losers: **2** / 14 (14% count, 16% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
-- Selection feedback:
-  - garp fails more often among losers (100% vs 64%)
 
 ## Holding reviews
 
@@ -56,6 +54,12 @@ Track: `buy_tier_level` · updated 2026-11-22T07:16:44.437219+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
+
+### RI.PA — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 32% below intact floor
+- still buy
+- cheapness family still passes
 
 ### DG.PA — intact / hold_tolerate (+0.9%)
 - still strong_buy

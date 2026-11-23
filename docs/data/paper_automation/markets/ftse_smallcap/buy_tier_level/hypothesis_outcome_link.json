@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-22T07:16:09.193872+00:00",
+  "generated_at": "2026-11-23T15:19:40.698408+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 32,
+    "closed_total": 33,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,13 +27,14 @@
         }
       },
       "broken": {
-        "closed_count": 23,
-        "recovery_rate": 1.0,
-        "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0224,
-        "mean_trough_unrealized_pct": 0.0178,
+        "closed_count": 24,
+        "recovery_rate": 0.9583,
+        "sold_underwater_rate": 0.0417,
+        "mean_peak_unrealized_pct": 0.0203,
+        "mean_trough_unrealized_pct": 0.0159,
         "outcome_labels": {
-          "recovered": 23
+          "recovered": 23,
+          "sold_underwater": 1
         }
       },
       "insufficient_data": {
@@ -62,7 +63,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 32,
+    "hold_closed_with_thesis": 33,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -1578,7 +1579,7 @@
       "ticker": "SBRE.L",
       "name": "Sabre Insurance Group plc",
       "started_at": "2026-11-22T07:16:09.166191+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater",
         "exit_streak",
@@ -1611,9 +1612,9 @@
       "peak_unrealized_pct": -0.0288,
       "trough_unrealized_pct": -0.0288,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-11-23T15:19:40.675526+00:00",
+      "linked_sell_trade_id": "ff64211e-ea47-4f35-9e16-bfa14895bc26"
     }
   ],
   "swap_rotations": [
@@ -2972,6 +2973,13 @@
           "avg_sell_return": -0.026,
           "avg_buy_return": 0.2626,
           "replacement_delta": 0.2885
+        },
+        {
+          "scored_at": "2026-11-23T15:19:40.675526+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0265,
+          "avg_buy_return": 0.1466,
+          "replacement_delta": 0.1201
         }
       ],
       "sell_returns_since_rotation": {
@@ -5393,6 +5401,56 @@
         "CARD.L": 0.0,
         "CAPD.L": 0.0,
         "LSL.L": 0.0,
+        "TRI.L": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-23T15:19:40.675526+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-23T15:19:40.675526+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.003,
+      "sells": [
+        {
+          "ticker": "SBRE.L",
+          "price": 175.4,
+          "shares": 1.255698,
+          "gross": 220.25,
+          "cost": 0.11,
+          "avg_cost_at_exit": 180.6,
+          "realized_pct": -0.0288,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0288
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "TRI.L",
+          "price": 71.0,
+          "shares": 3.082442,
+          "gross": 218.85,
+          "cost": 1.2
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "SBRE.L": 0.0
+      },
+      "buy_returns_since_rotation": {
         "TRI.L": 0.0
       },
       "verdict": null,
