@@ -1712,28 +1712,10 @@
     "DRUG_US_EQ",
     "DRVN_US_EQ",
     "DSAC_US_EQ",
-    "DSCSY_US_EQ"
+    "DSCSY_US_EQ",
+    "DSC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "DNN_US_EQ",
-      "venue": "US",
-      "yahoo": "DNN",
-      "isin": "CA2483561072",
-      "name": "DNN",
-      "seconds": 3.229,
-      "outcome": "saved",
-      "at": "2026-11-23T23:06:26.156356+00:00",
-      "rows": 40,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.088
-      },
-      "screen_seconds": 1.088,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "DNOPY_US_EQ",
       "venue": "US",
@@ -2474,6 +2456,25 @@
       },
       "screen_seconds": 1.052,
       "signal": "buy"
+    },
+    {
+      "t212_ticker": "DSC_US_EQ",
+      "venue": "US",
+      "yahoo": "DSC",
+      "isin": "US2333691077",
+      "name": "DSC",
+      "seconds": 2.827,
+      "outcome": "saved",
+      "at": "2026-11-23T23:21:57.699271+00:00",
+      "rows": 2,
+      "screen": {
+        "signal": "hold",
+        "fits": false,
+        "data_quality_score": 0.85,
+        "seconds": 1.01
+      },
+      "screen_seconds": 1.01,
+      "signal": "hold"
     }
   ],
   "handoffs": [
@@ -20019,46 +20020,54 @@
     }
   ],
   "last": {
-    "t212_ticker": "DSCSY_US_EQ",
+    "t212_ticker": "DSC_US_EQ",
     "venue": "US",
-    "yahoo": "DSCSY",
-    "isin": "US25461D1000",
-    "name": "DSCSY",
-    "seconds": 1.173,
-    "outcome": "miss",
-    "at": "2026-11-23T23:21:48.909428+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "DSC",
+    "isin": "US2333691077",
+    "name": "DSC",
+    "seconds": 2.827,
+    "outcome": "saved",
+    "at": "2026-11-23T23:21:57.699271+00:00",
+    "rows": 2,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1966041/000117184326005741/f6k_082626.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1966041/000117184326005424/f6k_081126.htm",
+        "has_body": false
+      }
+    ],
     "screen": {
-      "signal": "buy",
-      "fits": true,
-      "data_quality_score": 0.95,
-      "seconds": 1.052
+      "signal": "hold",
+      "fits": false,
+      "data_quality_score": 0.85,
+      "seconds": 1.01
     },
-    "screen_seconds": 1.052,
-    "signal": "buy",
-    "handoff": {
-      "status": "pending",
-      "signal": "buy",
-      "t212_ticker": "DSCSY_US_EQ"
-    }
+    "screen_seconds": 1.01,
+    "signal": "hold"
   },
-  "updated_at": "2026-11-23T23:21:48.909428+00:00",
+  "updated_at": "2026-11-23T23:21:57.699271+00:00",
   "totals": {
-    "screened": 1711,
+    "screened": 1712,
     "signals": {
       "buy": 485,
       "avoid": 434,
-      "hold": 370,
+      "hold": 371,
       "insufficient_data": 414,
       "strong_buy": 8
     },
-    "signals_n": 1711,
-    "screen_seconds_sum": 18753.613000000012,
-    "screen_seconds_n": 1711,
+    "signals_n": 1712,
+    "screen_seconds_sum": 18754.62300000001,
+    "screen_seconds_n": 1712,
     "outcomes": {
       "miss": 656,
-      "saved": 1055
+      "saved": 1056
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
