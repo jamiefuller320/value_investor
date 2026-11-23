@@ -338,7 +338,9 @@ def test_push_merges_catalogue_cursor_with_a_finished_handoff(tmp_path: Path):
     assert merged["last"]["t212_ticker"] == "BBB_US_EQ"
 
 
-def _race_env(tmp_path: Path, *, rejects: int, hard_fails: int, advance: Path | None) -> dict[str, str]:
+def _race_env(
+    tmp_path: Path, *, rejects: int, hard_fails: int, advance: Path | None
+) -> dict[str, str]:
     git_real = shutil.which("git")
     assert git_real
     bin_dir = tmp_path / "bin"
@@ -424,7 +426,9 @@ def _init_pair(tmp_path: Path) -> tuple[Path, Path]:
     return work, other
 
 
-def _run_repo_push(work: Path, env: dict[str, str], message: str) -> subprocess.CompletedProcess[str]:
+def _run_repo_push(
+    work: Path, env: dict[str, str], message: str
+) -> subprocess.CompletedProcess[str]:
     script = Path(__file__).resolve().parents[1] / "scripts" / "push_library_ingest_artifacts.sh"
     return subprocess.run(
         ["bash", str(script), message],
@@ -464,7 +468,9 @@ def test_push_wins_when_catalogue_screens_land_during_the_push(tmp_path: Path):
         + "\n",
         encoding="utf-8",
     )
-    screen = work / "docs/data/library/catalogue_explorer/research/BWA/sources/screening_snapshot.json"
+    screen = (
+        work / "docs/data/library/catalogue_explorer/research/BWA/sources/screening_snapshot.json"
+    )
     screen.parent.mkdir(parents=True)
     screen.write_text('{"ticker":"BWA"}\n', encoding="utf-8")
 
@@ -553,12 +559,16 @@ def test_push_skips_when_the_finished_screen_is_already_on_main(tmp_path: Path):
     payload = '{"ticker":"BWA"}\n'
     payload_file = tmp_path / "screening_snapshot.json"
     payload_file.write_text(payload, encoding="utf-8")
-    screen = work / "docs/data/library/catalogue_explorer/research/BWA/sources/screening_snapshot.json"
+    screen = (
+        work / "docs/data/library/catalogue_explorer/research/BWA/sources/screening_snapshot.json"
+    )
     screen.parent.mkdir(parents=True)
     shutil.copyfile(payload_file, screen)
 
     advance = tmp_path / "advance.sh"
-    dest = other / "docs/data/library/catalogue_explorer/research/BWA/sources/screening_snapshot.json"
+    dest = (
+        other / "docs/data/library/catalogue_explorer/research/BWA/sources/screening_snapshot.json"
+    )
     env = _race_env(tmp_path, rejects=1, hard_fails=0, advance=advance)
     git_real = env["GIT_REAL"]
     advance.write_text(
