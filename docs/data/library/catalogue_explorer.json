@@ -1638,28 +1638,10 @@
     "DIST_US_EQ",
     "DIT_US_EQ",
     "DJCO_US_EQ",
-    "DKDCA_US_EQ"
+    "DKDCA_US_EQ",
+    "DKILY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "DDS_US_EQ",
-      "venue": "US",
-      "yahoo": "DDS",
-      "isin": "US2540671011",
-      "name": "DDS",
-      "seconds": 2.389,
-      "outcome": "saved",
-      "at": "2026-11-23T22:45:58.724861+00:00",
-      "rows": 18,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.949
-      },
-      "screen_seconds": 0.949,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "DEAC_US_EQ",
       "venue": "US",
@@ -2400,6 +2382,25 @@
       },
       "screen_seconds": 5.44,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "DKILY_US_EQ",
+      "venue": "US",
+      "yahoo": "DKILY",
+      "isin": "US23381B1061",
+      "name": "DKILY",
+      "seconds": 1.296,
+      "outcome": "miss",
+      "at": "2026-11-23T22:54:08.480675+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.18
+      },
+      "screen_seconds": 1.18,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -19758,43 +19759,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T22:53:22.421441+00:00"
+    },
+    {
+      "t212_ticker": "DKILY_US_EQ",
+      "yahoo": "DKILY",
+      "name": "DKILY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T22:54:08.480675+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DKDCA_US_EQ",
+    "t212_ticker": "DKILY_US_EQ",
     "venue": "US",
-    "yahoo": "DKDCA",
-    "isin": "US68270C2026",
-    "name": "ONMD",
-    "seconds": 5.599,
+    "yahoo": "DKILY",
+    "isin": "US23381B1061",
+    "name": "DKILY",
+    "seconds": 1.296,
     "outcome": "miss",
-    "at": "2026-11-23T22:54:01.500250+00:00",
+    "at": "2026-11-23T22:54:08.480675+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 5.44
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.18
     },
-    "screen_seconds": 5.44,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.18,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "DKILY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T22:54:01.500250+00:00",
+  "updated_at": "2026-11-23T22:54:08.480675+00:00",
   "totals": {
-    "screened": 1637,
+    "screened": 1638,
     "signals": {
-      "buy": 462,
+      "buy": 463,
       "avoid": 414,
       "hold": 359,
       "insufficient_data": 394,
       "strong_buy": 8
     },
-    "signals_n": 1637,
-    "screen_seconds_sum": 17635.784000000018,
-    "screen_seconds_n": 1637,
+    "signals_n": 1638,
+    "screen_seconds_sum": 17636.964000000018,
+    "screen_seconds_n": 1638,
     "outcomes": {
-      "miss": 620,
+      "miss": 621,
       "saved": 1017
     }
   },
