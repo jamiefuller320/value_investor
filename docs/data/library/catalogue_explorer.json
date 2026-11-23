@@ -364,28 +364,10 @@
     "ANIX_US_EQ",
     "ANL_US_EQ",
     "ANNX_US_EQ",
-    "ANPC_US_EQ"
+    "ANPC_US_EQ",
+    "ANPDY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "AMRC_US_EQ",
-      "venue": "US",
-      "yahoo": "AMRC",
-      "isin": "US02361E1082",
-      "name": "AMRC",
-      "seconds": 2.315,
-      "outcome": "saved",
-      "at": "2026-11-23T09:21:45.179542+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 1.262
-      },
-      "screen_seconds": 1.262,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "AMRH_US_EQ",
       "venue": "US",
@@ -1126,6 +1108,25 @@
       },
       "screen_seconds": 4.515,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "ANPDY_US_EQ",
+      "venue": "US",
+      "yahoo": "ANPDY",
+      "isin": "US03662P1075",
+      "name": "ANPDY",
+      "seconds": 1.029,
+      "outcome": "miss",
+      "at": "2026-11-23T10:52:21.292719+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.921
+      },
+      "screen_seconds": 0.921,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -3433,43 +3434,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T10:51:41.038404+00:00"
+    },
+    {
+      "t212_ticker": "ANPDY_US_EQ",
+      "yahoo": "ANPDY",
+      "name": "ANPDY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T10:52:21.292719+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ANPC_US_EQ",
+    "t212_ticker": "ANPDY_US_EQ",
     "venue": "US",
-    "yahoo": "ANPC",
-    "isin": "US03635R3057",
-    "name": "FREHY",
-    "seconds": 4.663,
+    "yahoo": "ANPDY",
+    "isin": "US03662P1075",
+    "name": "ANPDY",
+    "seconds": 1.029,
     "outcome": "miss",
-    "at": "2026-11-23T10:52:12.452923+00:00",
+    "at": "2026-11-23T10:52:21.292719+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.515
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.921
     },
-    "screen_seconds": 4.515,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.921,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ANPDY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T10:52:12.452923+00:00",
+  "updated_at": "2026-11-23T10:52:21.292719+00:00",
   "totals": {
-    "screened": 363,
+    "screened": 364,
     "signals": {
-      "buy": 85,
+      "buy": 86,
       "avoid": 96,
       "hold": 86,
       "insufficient_data": 95,
       "strong_buy": 1
     },
-    "signals_n": 363,
-    "screen_seconds_sum": 3944.3570000000022,
-    "screen_seconds_n": 363,
+    "signals_n": 364,
+    "screen_seconds_sum": 3945.278000000002,
+    "screen_seconds_n": 364,
     "outcomes": {
-      "miss": 154,
+      "miss": 155,
       "saved": 209
     }
   },
