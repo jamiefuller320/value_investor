@@ -16,6 +16,11 @@ does not wipe a finished ingest.
 This module does not add a third screener, and it does not add the name to an
 index or an investment book. Held overlay rows are skipped. A miss is still
 marked completed so the cursor cannot sit on the same line.
+
+A cursor saved before the venue-market quote (``cursor_epoch`` below
+``CURSOR_EPOCH``) is cleared on the next screen or handoff. Those rows were
+scored on the wrong Yahoo symbol. A later merge keeps the new epoch and does
+not union the old names back.
 """
 
 from __future__ import annotations
@@ -32,6 +37,15 @@ from value_investor.storage import read_json, write_json
 from value_investor.t212_coverage import t212_symbol, t212_venue
 
 VENUE_ORDER = ("US", "DE", "LSE")
+# Yahoo market ids for the three catalogue venues. A bare US symbol is rewritten
+# to ``.L`` when the quote is fetched with no market.
+_VENUE_QUOTE_MARKET = {"US": "us", "DE": "dax", "LSE": "lse"}
+# Bump when a saved cursor must be walked again. Epoch 1 was the London-symbol
+# screen. Epoch 2 rescreens US, Xetra, and LSE with the venue market.
+CURSOR_EPOCH = 2
+CURSOR_RESET_REASON = (
+    "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol."
+)
 STATE_NAME = "catalogue_explorer.json"
 EXPLORER_TITLE = "Catalogue explorer"
 BODY_CAP = 4
@@ -59,6 +73,37 @@ def load_state(library_root: Path | None = None) -> dict[str, Any]:
     payload.setdefault("completed", [])
     payload.setdefault("runs", [])
     return payload
+
+
+def _cursor_epoch(state: dict[str, Any]) -> int:
+    try:
+        return int(state.get("cursor_epoch") or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def restart_cursor(state: dict[str, Any]) -> bool:
+    """Drop a cursor scored before the venue-market quote. Keep a current one."""
+    if _cursor_epoch(state) >= CURSOR_EPOCH:
+        return False
+    state["cursor_epoch"] = CURSOR_EPOCH
+    state["cursor_reset_reason"] = CURSOR_RESET_REASON
+    state["completed"] = []
+    state["runs"] = []
+    state["handoffs"] = []
+    state["last"] = None
+    state["totals"] = _empty_totals()
+    state["schema_version"] = 1
+    state["updated_at"] = datetime.now(UTC).isoformat()
+    return True
+
+
+def _load_ready_state(library_root: Path) -> dict[str, Any]:
+    """Load the cursor, clearing one that was scored on the wrong symbol."""
+    state = load_state(library_root)
+    if restart_cursor(state):
+        save_state(state, library_root)
+    return state
 
 
 def save_state(state: dict[str, Any], library_root: Path | None = None) -> Path:
@@ -386,10 +431,14 @@ def default_walk(
         else:
             from value_investor.fetch import fetch_company_metrics
 
-            yahoo = yahoo_ticker(str(instrument.get("ticker") or "")) or ""
+            raw_ticker = str(instrument.get("ticker") or "")
+            yahoo = yahoo_ticker(raw_ticker) or ""
             company = str(instrument.get("shortName") or instrument.get("name") or yahoo)
-            loader = metrics_fetch or fetch_company_metrics
-            metrics = loader(yahoo, company)
+            market = _VENUE_QUOTE_MARKET.get(t212_venue(raw_ticker) or "")
+            if metrics_fetch is not None:
+                metrics = metrics_fetch(yahoo, company)
+            else:
+                metrics = fetch_company_metrics(yahoo, company, market=market)
             row = metrics.to_dict() if hasattr(metrics, "to_dict") else dict(metrics)
             row.setdefault("ticker", yahoo)
             screen_result = screen_metrics_row(row)
@@ -437,7 +486,7 @@ def explore_one(
     while this name was screening is still there when the screen is saved.
     """
     root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
-    state = load_state(root)
+    state = _load_ready_state(root)
     if instruments is None:
         from value_investor.t212_coverage import load_catalogue_index
 
@@ -461,7 +510,7 @@ def explore_one(
         }
     walker = fetch or (lambda instrument: default_walk(instrument, library_root=root))
     record = _fetch_record(chosen, fetch=walker)
-    fresh = load_state(root)
+    fresh = _load_ready_state(root)
     queued = apply_completion(
         fresh,
         record,
@@ -650,7 +699,7 @@ def run_one_handoff(
     the parse stays on the cursor.
     """
     root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
-    state = load_state(root)
+    state = _load_ready_state(root)
     handoffs = [row for row in (state.get("handoffs") or []) if isinstance(row, dict)]
     pending = next((row for row in handoffs if row.get("status") == "pending"), None)
     if pending is None:
@@ -682,7 +731,7 @@ def run_one_handoff(
         update["ingest"] = ingest_row
     ingest_row["seconds"] = round(time.perf_counter() - started, 3)
     update["finished_at"] = datetime.now(UTC).isoformat()
-    fresh = load_state(root)
+    fresh = _load_ready_state(root)
     row, changed = _apply_handoff_update(fresh, ticker, update)
     if row is None:
         return {"action": "idle", "reason": "no_handoff", "pending": 0}
@@ -755,8 +804,69 @@ def _row_for(state: dict[str, Any], ticker: str) -> dict[str, Any] | None:
     return with_seconds[-1] if with_seconds else matches[-1]
 
 
+def _completed_tokens(state: dict[str, Any]) -> list[str]:
+    completed: list[str] = []
+    seen: set[str] = set()
+    for item in state.get("completed") or []:
+        token = str(item).upper()
+        if token and token not in seen:
+            seen.add(token)
+            completed.append(token)
+    return completed
+
+
+def _merge_newer_epoch(winner: dict[str, Any], loser: dict[str, Any]) -> dict[str, Any]:
+    """Keep the newer cursor. Do not union names scored on the previous epoch."""
+    completed = _completed_tokens(winner)
+    runs = [row for row in (winner.get("runs") or []) if isinstance(row, dict)]
+    runs.sort(key=lambda row: str(row.get("at") or ""))
+    handoffs = [dict(row) for row in (winner.get("handoffs") or []) if isinstance(row, dict)]
+    totals = winner.get("totals") if isinstance(winner.get("totals"), dict) else None
+    if totals is None:
+        totals = _empty_totals()
+    else:
+        totals = {
+            "screened": len(completed),
+            "signals": dict(totals.get("signals") or {}),
+            "signals_n": int(totals.get("signals_n") or 0),
+            "screen_seconds_sum": float(totals.get("screen_seconds_sum") or 0.0),
+            "screen_seconds_n": int(totals.get("screen_seconds_n") or 0),
+            "outcomes": dict(totals.get("outcomes") or {}),
+        }
+    skipped = winner.get("skipped_held")
+    if skipped is None:
+        skipped = loser.get("skipped_held")
+    updated = max(str(winner.get("updated_at") or ""), str(loser.get("updated_at") or "")) or None
+    merged: dict[str, Any] = {
+        "schema_version": 1,
+        "cursor_epoch": _cursor_epoch(winner),
+        "completed": completed,
+        "runs": runs[-40:],
+        "handoffs": handoffs,
+        "last": winner.get("last") if isinstance(winner.get("last"), dict) else None,
+        "updated_at": updated,
+        "totals": totals,
+    }
+    reason = winner.get("cursor_reset_reason")
+    if reason:
+        merged["cursor_reset_reason"] = reason
+    if skipped is not None:
+        merged["skipped_held"] = skipped
+    return merged
+
+
 def merge_states(base: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
-    """Union two catalogue states. A finished ingest wins over a stale pending row."""
+    """Union two catalogue states. A finished ingest wins over a stale pending row.
+
+    A higher ``cursor_epoch`` replaces the older cursor, so names scored on the
+    wrong Yahoo symbol are not unioned back after the rescreen starts.
+    """
+    base_epoch = _cursor_epoch(base)
+    incoming_epoch = _cursor_epoch(incoming)
+    if base_epoch != incoming_epoch:
+        if incoming_epoch > base_epoch:
+            return _merge_newer_epoch(incoming, base)
+        return _merge_newer_epoch(base, incoming)
     completed: list[str] = []
     seen: set[str] = set()
     for source in (base, incoming):
@@ -801,6 +911,7 @@ def merge_states(base: dict[str, Any], incoming: dict[str, Any]) -> dict[str, An
         skipped = incoming_skipped
     merged: dict[str, Any] = {
         "schema_version": 1,
+        "cursor_epoch": base_epoch,
         "completed": completed,
         "runs": runs[-40:],
         "handoffs": [by_ticker[key] for key in order],
@@ -812,6 +923,9 @@ def merge_states(base: dict[str, Any], incoming: dict[str, Any]) -> dict[str, An
         or None,
         "totals": _merge_totals(base, incoming, completed),
     }
+    reason = incoming.get("cursor_reset_reason") or base.get("cursor_reset_reason")
+    if reason:
+        merged["cursor_reset_reason"] = reason
     if skipped is not None:
         merged["skipped_held"] = skipped
     return merged

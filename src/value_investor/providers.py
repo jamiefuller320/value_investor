@@ -321,13 +321,15 @@ def apply_fallback_providers(
     *,
     providers: tuple[DataProvider, ...] | None = None,
     force: bool = False,
+    market: str | None = None,
 ) -> tuple[dict[str, Any], dict[str, str], list[str]]:
     """
     Fill missing screening fields from curated alternate providers.
 
     Runs when the primary fetch reported errors, left ``market_cap`` empty,
     or ``force`` is set — not on every partial row (avoids extra HTTP for
-    healthy yfinance responses).
+    healthy yfinance responses). ``market`` is the same venue id the primary
+    quote used, so a bare US symbol is not rewritten to ``.L`` on the retry.
 
     Returns ``(metrics, source_map, provider_errors)``.
     """
@@ -336,7 +338,7 @@ def apply_fallback_providers(
     source_map: dict[str, str] = {}
     provider_errors: list[str] = []
     chain = providers if providers is not None else DEFAULT_FALLBACK_PROVIDERS
-    fetch_ticker = normalize_yahoo_ticker(ticker)
+    fetch_ticker = normalize_yahoo_ticker(ticker, market)
 
     errors = metrics.get("errors") or []
     needs_fallback = force or bool(errors) or metrics.get("market_cap") is None
