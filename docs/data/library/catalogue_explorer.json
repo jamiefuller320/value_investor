@@ -1728,28 +1728,10 @@
     "DTCK_US_EQ",
     "DTCWY_US_EQ",
     "DTC_US_EQ",
-    "DTEA_US_EQ"
+    "DTEA_US_EQ",
+    "DTEGY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "DOX_US_EQ",
-      "venue": "US",
-      "yahoo": "DOX",
-      "isin": "GB0022569080",
-      "name": "DOX",
-      "seconds": 2.208,
-      "outcome": "saved",
-      "at": "2026-11-23T23:10:04.778543+00:00",
-      "rows": 25,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 1.215
-      },
-      "screen_seconds": 1.215,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "DOYU_US_EQ",
       "venue": "US",
@@ -2490,6 +2472,25 @@
       },
       "screen_seconds": 85.336,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "DTEGY_US_EQ",
+      "venue": "US",
+      "yahoo": "DTEGY",
+      "isin": "US2515661054",
+      "name": "DTEGY",
+      "seconds": 1.97,
+      "outcome": "miss",
+      "at": "2026-11-23T23:29:58.376993+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.15
+      },
+      "screen_seconds": 1.15,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -20080,43 +20081,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T23:23:25.807092+00:00"
+    },
+    {
+      "t212_ticker": "DTEGY_US_EQ",
+      "yahoo": "DTEGY",
+      "name": "DTEGY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T23:29:58.376993+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DTEA_US_EQ",
+    "t212_ticker": "DTEGY_US_EQ",
     "venue": "US",
-    "yahoo": "DTEA",
-    "isin": "CA2386611024",
-    "name": "DTEAF",
-    "seconds": 85.468,
+    "yahoo": "DTEGY",
+    "isin": "US2515661054",
+    "name": "DTEGY",
+    "seconds": 1.97,
     "outcome": "miss",
-    "at": "2026-11-23T23:29:50.552210+00:00",
+    "at": "2026-11-23T23:29:58.376993+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.336
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.15
     },
-    "screen_seconds": 85.336,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.15,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "DTEGY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T23:29:50.552210+00:00",
+  "updated_at": "2026-11-23T23:29:58.376993+00:00",
   "totals": {
-    "screened": 1727,
+    "screened": 1728,
     "signals": {
-      "buy": 491,
+      "buy": 492,
       "avoid": 436,
       "hold": 374,
       "insufficient_data": 418,
       "strong_buy": 8
     },
-    "signals_n": 1727,
-    "screen_seconds_sum": 19108.363000000005,
-    "screen_seconds_n": 1727,
+    "signals_n": 1728,
+    "screen_seconds_sum": 19109.513000000006,
+    "screen_seconds_n": 1728,
     "outcomes": {
-      "miss": 665,
+      "miss": 666,
       "saved": 1062
     }
   },
