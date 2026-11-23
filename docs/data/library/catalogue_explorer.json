@@ -1391,28 +1391,10 @@
     "CPSS_US_EQ",
     "CPST_US_EQ",
     "CPS_US_EQ",
-    "CPTK_US_EQ"
+    "CPTK_US_EQ",
+    "CPTP_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "COLL_US_EQ",
-      "venue": "US",
-      "yahoo": "COLL",
-      "isin": "US19459J1043",
-      "name": "COLL",
-      "seconds": 1.984,
-      "outcome": "saved",
-      "at": "2026-11-23T20:44:54.921010+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.946
-      },
-      "screen_seconds": 0.946,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "COLM_US_EQ",
       "venue": "US",
@@ -2153,6 +2135,25 @@
       },
       "screen_seconds": 84.969,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CPTP_US_EQ",
+      "venue": "US",
+      "yahoo": "CPTP",
+      "isin": "US1404301095",
+      "name": "CPTP",
+      "seconds": 1.447,
+      "outcome": "saved",
+      "at": "2026-11-23T21:02:52.337841+00:00",
+      "rows": 2,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.927
+      },
+      "screen_seconds": 0.927,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -17566,44 +17567,70 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T20:54:39.526978+00:00"
+    },
+    {
+      "t212_ticker": "CPTP_US_EQ",
+      "yahoo": "CPTP",
+      "name": "CPTP",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T21:02:52.337841+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CPTK_US_EQ",
+    "t212_ticker": "CPTP_US_EQ",
     "venue": "US",
-    "yahoo": "CPTK",
-    "isin": "KYG257411028",
-    "name": "CPTK",
-    "seconds": 85.108,
-    "outcome": "miss",
-    "at": "2026-11-23T21:02:46.467954+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "CPTP",
+    "isin": "US1404301095",
+    "name": "CPTP",
+    "seconds": 1.447,
+    "outcome": "saved",
+    "at": "2026-11-23T21:02:52.337841+00:00",
+    "rows": 2,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/202947/000095017025016420/cptp-20241231.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/202947/000095017024119989/cptp-20240930.htm",
+        "has_body": true
+      }
+    ],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.969
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.927
     },
-    "screen_seconds": 84.969,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.927,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CPTP_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T21:02:46.467954+00:00",
+  "updated_at": "2026-11-23T21:02:52.337841+00:00",
   "totals": {
-    "screened": 1390,
+    "screened": 1391,
     "signals": {
-      "buy": 391,
+      "buy": 392,
       "avoid": 341,
       "hold": 311,
       "insufficient_data": 342,
       "strong_buy": 5
     },
-    "signals_n": 1390,
-    "screen_seconds_sum": 16733.138000000006,
-    "screen_seconds_n": 1390,
+    "signals_n": 1391,
+    "screen_seconds_sum": 16734.065000000006,
+    "screen_seconds_n": 1391,
     "outcomes": {
       "miss": 537,
-      "saved": 853
+      "saved": 854
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
