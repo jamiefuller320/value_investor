@@ -1189,28 +1189,10 @@
     "CHFW_US_EQ",
     "CHGCY_US_EQ",
     "CHGG_US_EQ",
-    "CHG_US_EQ"
+    "CHG_US_EQ",
+    "CHHE_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CFST_US_EQ",
-      "venue": "US",
-      "yahoo": "CFST",
-      "isin": "US20344D1046",
-      "name": "FFBB",
-      "seconds": 85.028,
-      "outcome": "miss",
-      "at": "2026-11-23T18:19:38.275843+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.975
-      },
-      "screen_seconds": 84.975,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "CFVI_US_EQ",
       "venue": "US",
@@ -1951,6 +1933,25 @@
       },
       "screen_seconds": 84.717,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CHHE_US_EQ",
+      "venue": "US",
+      "yahoo": "CHHE",
+      "isin": "US1693981045",
+      "name": "CHHE",
+      "seconds": 0.735,
+      "outcome": "miss",
+      "at": "2026-11-23T19:41:36.376729+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.85,
+        "seconds": 0.692
+      },
+      "screen_seconds": 0.692,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -14220,43 +14221,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T19:39:56.112232+00:00"
+    },
+    {
+      "t212_ticker": "CHHE_US_EQ",
+      "yahoo": "CHHE",
+      "name": "CHHE",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T19:41:36.376729+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CHG_US_EQ",
+    "t212_ticker": "CHHE_US_EQ",
     "venue": "US",
-    "yahoo": "CHG",
-    "isin": "US21985R3030",
-    "name": "LUXHQ",
-    "seconds": 84.763,
+    "yahoo": "CHHE",
+    "isin": "US1693981045",
+    "name": "CHHE",
+    "seconds": 0.735,
     "outcome": "miss",
-    "at": "2026-11-23T19:41:31.288302+00:00",
+    "at": "2026-11-23T19:41:36.376729+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.717
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.85,
+      "seconds": 0.692
     },
-    "screen_seconds": 84.717,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.692,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CHHE_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T19:41:31.288302+00:00",
+  "updated_at": "2026-11-23T19:41:36.376729+00:00",
   "totals": {
-    "screened": 1188,
+    "screened": 1189,
     "signals": {
-      "buy": 329,
+      "buy": 330,
       "avoid": 283,
       "hold": 277,
       "insufficient_data": 295,
       "strong_buy": 4
     },
-    "signals_n": 1188,
-    "screen_seconds_sum": 12957.025999999985,
-    "screen_seconds_n": 1188,
+    "signals_n": 1189,
+    "screen_seconds_sum": 12957.717999999984,
+    "screen_seconds_n": 1189,
     "outcomes": {
-      "miss": 466,
+      "miss": 467,
       "saved": 722
     }
   },
