@@ -593,28 +593,10 @@
     "AVDL_US_EQ",
     "AVD_US_EQ",
     "AVEX_US_EQ",
-    "AVGR_US_EQ"
+    "AVGR_US_EQ",
+    "AVHNY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ATS_US_EQ",
-      "venue": "US",
-      "yahoo": "ATS",
-      "isin": "CA00217Y1043",
-      "name": "ATS",
-      "seconds": 5.639,
-      "outcome": "saved",
-      "at": "2026-11-23T11:16:10.802477+00:00",
-      "rows": 40,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.939
-      },
-      "screen_seconds": 0.939,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "ATTO1_US_EQ",
       "venue": "US",
@@ -1355,6 +1337,25 @@
       },
       "screen_seconds": 4.292,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "AVHNY_US_EQ",
+      "venue": "US",
+      "yahoo": "AVHNY",
+      "isin": "US0045631027",
+      "name": "AVHNY",
+      "seconds": 1.045,
+      "outcome": "miss",
+      "at": "2026-11-23T11:21:30.048024+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.909
+      },
+      "screen_seconds": 0.909,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -4126,43 +4127,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T11:20:33.330830+00:00"
+    },
+    {
+      "t212_ticker": "AVHNY_US_EQ",
+      "yahoo": "AVHNY",
+      "name": "AVHNY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T11:21:30.048024+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "AVGR_US_EQ",
+    "t212_ticker": "AVHNY_US_EQ",
     "venue": "US",
-    "yahoo": "AVGR",
-    "isin": "US0537348775",
-    "name": "AVGR",
-    "seconds": 4.405,
+    "yahoo": "AVHNY",
+    "isin": "US0045631027",
+    "name": "AVHNY",
+    "seconds": 1.045,
     "outcome": "miss",
-    "at": "2026-11-23T11:21:23.701772+00:00",
+    "at": "2026-11-23T11:21:30.048024+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.292
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.909
     },
-    "screen_seconds": 4.292,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.909,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "AVHNY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T11:21:23.701772+00:00",
+  "updated_at": "2026-11-23T11:21:30.048024+00:00",
   "totals": {
-    "screened": 592,
+    "screened": 593,
     "signals": {
-      "buy": 142,
+      "buy": 143,
       "avoid": 154,
       "hold": 149,
       "insufficient_data": 145,
       "strong_buy": 2
     },
-    "signals_n": 592,
-    "screen_seconds_sum": 4320.275000000001,
-    "screen_seconds_n": 592,
+    "signals_n": 593,
+    "screen_seconds_sum": 4321.184,
+    "screen_seconds_n": 593,
     "outcomes": {
-      "miss": 241,
+      "miss": 242,
       "saved": 351
     }
   },
