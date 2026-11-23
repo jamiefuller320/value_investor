@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-22T07:15:46.243003+00:00
+Track: `buy_tier_level` · updated 2026-11-23T00:46:59.925531+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **15** / 31 (48% count, 46% NAV)
+- Losers: **14** / 28 (50% count, 47% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -101,22 +101,10 @@ Track: `buy_tier_level` · updated 2026-11-22T07:15:46.243003+00:00
 - still buy
 - cheapness family still passes
 
-### NEM.AX — weakening / watch_review (-6.7%)
-- left buy tier (hold)
-- conviction 28% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### BPT.AX — weakening / watch_review (-4.6%)
 - research verdict caution
 - conviction 33% below intact floor
 - still buy
-- cheapness family still passes
-
-### PXA.AX — weakening / watch_review (-4.5%)
-- left buy tier (hold)
-- conviction 20% below intact floor
-- research accumulate
 - cheapness family still passes
 
 ### NWS.AX — weakening / watch_review (-3.0%)
@@ -128,13 +116,6 @@ Track: `buy_tier_level` · updated 2026-11-22T07:15:46.243003+00:00
 - research verdict caution
 - still buy
 - cheapness family still passes
-
-### CQR.AX — intact / hold_tolerate (-2.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.90
-- conviction 80%
 
 ### CYL.AX — intact / hold_tolerate (-2.0%)
 - still buy
@@ -168,19 +149,19 @@ Track: `buy_tier_level` · updated 2026-11-22T07:15:46.243003+00:00
 - still buy
 - cheapness family still passes
 
+### JBH.AX — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 49%
+
 ### ANN.AX — intact / hold_tolerate (+2.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
 - conviction 69%
-
-### PLS.AX — weakening / watch_review (+2.3%)
-- left buy tier (hold)
-- research verdict caution
-- conviction 16% below intact floor
-- cheapness family still passes
-- data_quality 0.95
 
 ### PMV.AX — intact / hold_tolerate (+2.5%)
 - still buy
