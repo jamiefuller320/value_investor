@@ -1693,28 +1693,10 @@
     "DOYU_US_EQ",
     "DPCS_US_EQ",
     "DPC_US_EQ",
-    "DPHC_US_EQ"
+    "DPHC_US_EQ",
+    "DPMLF_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "DMEHF_US_EQ",
-      "venue": "US",
-      "yahoo": "DMEHF",
-      "isin": "CA25043D1078",
-      "name": "DMEHF",
-      "seconds": 1.139,
-      "outcome": "miss",
-      "at": "2026-11-23T22:56:26.654467+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.9,
-        "seconds": 1.03
-      },
-      "screen_seconds": 1.03,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "DMGGF_US_EQ",
       "venue": "US",
@@ -2455,6 +2437,25 @@
       },
       "screen_seconds": 85.839,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "DPMLF_US_EQ",
+      "venue": "US",
+      "yahoo": "DPMLF",
+      "isin": "CA26139R1091",
+      "name": "DPMLF",
+      "seconds": 1.225,
+      "outcome": "miss",
+      "at": "2026-11-23T23:13:33.180310+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.056
+      },
+      "screen_seconds": 1.056,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -19941,43 +19942,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T23:10:13.984303+00:00"
+    },
+    {
+      "t212_ticker": "DPMLF_US_EQ",
+      "yahoo": "DPMLF",
+      "name": "DPMLF",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T23:13:33.180310+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DPHC_US_EQ",
+    "t212_ticker": "DPMLF_US_EQ",
     "venue": "US",
-    "yahoo": "DPHC",
-    "isin": "US54405Q2093",
-    "name": "SNFI",
-    "seconds": 85.959,
+    "yahoo": "DPMLF",
+    "isin": "CA26139R1091",
+    "name": "DPMLF",
+    "seconds": 1.225,
     "outcome": "miss",
-    "at": "2026-11-23T23:13:26.153284+00:00",
+    "at": "2026-11-23T23:13:33.180310+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.839
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.056
     },
-    "screen_seconds": 85.839,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.056,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "DPMLF_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T23:13:26.153284+00:00",
+  "updated_at": "2026-11-23T23:13:33.180310+00:00",
   "totals": {
-    "screened": 1692,
+    "screened": 1693,
     "signals": {
-      "buy": 478,
+      "buy": 479,
       "avoid": 429,
       "hold": 367,
       "insufficient_data": 410,
       "strong_buy": 8
     },
-    "signals_n": 1692,
-    "screen_seconds_sum": 18397.03900000001,
-    "screen_seconds_n": 1692,
+    "signals_n": 1693,
+    "screen_seconds_sum": 18398.095000000012,
+    "screen_seconds_n": 1693,
     "outcomes": {
-      "miss": 649,
+      "miss": 650,
       "saved": 1043
     }
   },
