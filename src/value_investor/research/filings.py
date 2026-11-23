@@ -6111,11 +6111,15 @@ def _ir_allowlist_unfetchable_may_retry(
         return False
     if row.get("has_body"):
         return False
-    reason = str(row.get("unfetchable_reason") or "").strip()
-    if reason == "allowlist_removed":
-        return False
     url = str(row.get("url") or "").strip()
     if not url:
+        return False
+    reason = str(row.get("unfetchable_reason") or "").strip()
+    if reason == "allowlist_removed":
+        canon = _resolve_ir_allowlist_canonical(url, ticker)
+        fetch_url = _resolve_ir_allowlist_fetch_url(canon)
+        if canon != url and any(candidate in allowlist_urls for candidate in (canon, fetch_url)):
+            return True
         return False
     canon = _resolve_ir_allowlist_canonical(url, ticker)
     fetch_url = _resolve_ir_allowlist_fetch_url(canon)
@@ -7060,6 +7064,15 @@ def merge_ir_allowlist_filings(
         filings_dir.mkdir(parents=True, exist_ok=True)
 
     filings = list(payload.get("filings") or [])
+    migrated_urls = 0
+    refreshed_filings: list[dict[str, Any]] = []
+    for row in filings:
+        item, migrated = _migrate_ir_allowlist_row_url(row, ticker)
+        if migrated:
+            migrated_urls += 1
+        refreshed_filings.append(item)
+    filings = refreshed_filings
+    filings, url_deduped = _dedupe_ir_allowlist_rows_by_url(filings)
     known_ids = {row.get("id") for row in filings}
     known_urls = {str(row.get("url") or "").strip() for row in filings if row.get("url")}
     added = 0
@@ -7084,13 +7097,15 @@ def merge_ir_allowlist_filings(
     )
     if sources_used:
         payload["sources_used"] = sources_used
-    if added:
+    if added or migrated_urls:
         payload["ir_allowlist_merged_at"] = datetime.now(UTC).isoformat()
-    if added or shared_body_propagated:
+    if added or shared_body_propagated or migrated_urls or url_deduped:
         payload["ir_allowlist_body_synced_at"] = datetime.now(UTC).isoformat()
     index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return {
         "added": added,
+        "migrated_urls": migrated_urls,
+        "url_deduped": url_deduped,
         "total_allowlist": len(allowlist_rows),
         "note": "merge_ir_allowlist_filings",
     }
@@ -7212,14 +7227,21 @@ def refetch_ir_allowlist_filing_bodies(
         refreshed: list[dict[str, Any]] = []
         for row in filings:
             item = dict(row)
-            if _is_ir_allowlist_row(item) and _ir_allowlist_unfetchable_may_retry(
-                item,
-                allowlist_urls=allowlist_urls,
-                ticker=ticker,
-            ):
-                for key in ("unfetchable", "unfetchable_reason", "unfetchable_at"):
-                    item.pop(key, None)
-                retry_cleared += 1
+            if _is_ir_allowlist_row(item):
+                if str(item.get("unfetchable_reason") or "") == "allowlist_removed":
+                    item, migrated = _migrate_ir_allowlist_row_url(item, ticker)
+                    if migrated:
+                        retry_cleared += 1
+                        refreshed.append(item)
+                        continue
+                if _ir_allowlist_unfetchable_may_retry(
+                    item,
+                    allowlist_urls=allowlist_urls,
+                    ticker=ticker,
+                ):
+                    for key in ("unfetchable", "unfetchable_reason", "unfetchable_at"):
+                        item.pop(key, None)
+                    retry_cleared += 1
             refreshed.append(item)
         filings = refreshed
         if retry_cleared:

@@ -14738,6 +14738,82 @@ def test_refetch_ir_allowlist_migrates_evn_vi_dead_publications_url(tmp_path: Pa
     assert migrated[0]["has_body"] is True
 
 
+def test_merge_ir_allowlist_migrates_evn_vi_dead_publications_url_eng_20261123_01(
+    tmp_path: Path,
+):
+    """eng-20261123-01: merge must canonicalize stale hub before adding live PDF rows."""
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    live = _BUILTIN_IR_URLS["EVN.VI"][0]
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_07bb52dd9c03b279",
+                        "source": "ir_allowlist",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                    }
+                ],
+                "summary": {"total": 1, "with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = merge_ir_allowlist_filings("EVN.VI", filings_dir)
+    assert int(result.get("migrated_urls") or 0) >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ir_urls = [row["url"] for row in saved["filings"] if row.get("source") == "ir_allowlist"]
+    assert dead not in ir_urls
+    assert live in ir_urls
+    assert len(ir_urls) == 2
+
+
+def test_refetch_ir_allowlist_evn_vi_allowlist_removed_migrates_on_retry_eng_20261123_01(
+    tmp_path: Path,
+    monkeypatch,
+):
+    """eng-20261123-01: allowlist_removed stale hub is rewritten before body fetch."""
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    live = _BUILTIN_IR_URLS["EVN.VI"][0]
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_07bb52dd9c03b279",
+                        "source": "ir_allowlist",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "allowlist_removed",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return "EVN AG Jahresfinanzbericht consolidated revenue earnings " * 25, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(filings_dir, "EVN.VI", max_bodies=5)
+    assert result["attempted"] >= 1
+    assert result["fetched"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert any(row.get("url") == live and row.get("has_body") for row in saved["filings"])
+
+
 def test_refetch_ir_allowlist_evn_vi_stale_dead_hub_not_allowlist_removed_eng_20261122_02(
     tmp_path: Path,
     monkeypatch,
