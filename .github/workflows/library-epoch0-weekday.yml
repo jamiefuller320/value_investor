@@ -92,7 +92,9 @@ jobs:
 
       # Shared fetch+reset overlay + push retry (L348). A lone pull --rebase
       # before git-auto-commit still loses to engineering-queue / ingest on
-      # US 14:15–15:15 UTC (cannot lock ref / fetch first).
+      # US 14:15–15:15 UTC (cannot lock ref / fetch first). Byte-identical
+      # owned files stay off the commit so this retry is shorter than
+      # catalogue-explorer's one-name pushes (EU 08:45 UTC, 2026-11-23).
       - name: Commit epoch-0 weekday artifacts
         env:
           COMMIT_MESSAGE: "chore: admitted epoch-0 weekday marks [skip ci]"
