@@ -112,28 +112,10 @@
     "ADOM_US_EQ",
     "ADPT_US_EQ",
     "ADPXY_US_EQ",
-    "ADRA_US_EQ"
+    "ADRA_US_EQ",
+    "ADRNY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ACRE_US_EQ",
-      "venue": "US",
-      "yahoo": "ACRE",
-      "isin": "US04013V1089",
-      "name": "ACRE",
-      "seconds": 2.381,
-      "outcome": "saved",
-      "at": "2026-11-23T07:59:52.348277+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.8,
-        "seconds": 1.166
-      },
-      "screen_seconds": 1.166,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "ACRS_US_EQ",
       "venue": "US",
@@ -874,6 +856,25 @@
       },
       "screen_seconds": 5.056,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "ADRNY_US_EQ",
+      "venue": "US",
+      "yahoo": "ADRNY",
+      "isin": "US5004675014",
+      "name": "ADRNY",
+      "seconds": 1.436,
+      "outcome": "miss",
+      "at": "2026-11-23T08:05:47.589253+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.324
+      },
+      "screen_seconds": 1.324,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -1092,42 +1093,55 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T08:04:29.911252+00:00"
+    },
+    {
+      "t212_ticker": "ADRNY_US_EQ",
+      "yahoo": "ADRNY",
+      "name": "ADRNY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T08:05:47.589253+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ADRA_US_EQ",
+    "t212_ticker": "ADRNY_US_EQ",
     "venue": "US",
-    "yahoo": "ADRA",
-    "isin": "US01861F1021",
-    "name": "AENT",
-    "seconds": 5.188,
+    "yahoo": "ADRNY",
+    "isin": "US5004675014",
+    "name": "ADRNY",
+    "seconds": 1.436,
     "outcome": "miss",
-    "at": "2026-11-23T08:05:40.957550+00:00",
+    "at": "2026-11-23T08:05:47.589253+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 5.056
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.324
     },
-    "screen_seconds": 5.056,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.324,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ADRNY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T08:05:40.957550+00:00",
+  "updated_at": "2026-11-23T08:05:47.589253+00:00",
   "totals": {
-    "screened": 111,
+    "screened": 112,
     "signals": {
-      "buy": 27,
+      "buy": 28,
       "avoid": 32,
       "hold": 22,
       "insufficient_data": 30
     },
-    "signals_n": 111,
-    "screen_seconds_sum": 251.17799999999997,
-    "screen_seconds_n": 111,
+    "signals_n": 112,
+    "screen_seconds_sum": 252.50199999999998,
+    "screen_seconds_n": 112,
     "outcomes": {
-      "miss": 48,
+      "miss": 49,
       "saved": 63
     }
   },
