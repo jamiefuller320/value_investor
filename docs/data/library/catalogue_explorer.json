@@ -1114,28 +1114,10 @@
     "CDXC_US_EQ",
     "CDXS_US_EQ",
     "CDZI_US_EQ",
-    "CECE_US_EQ"
+    "CECE_US_EQ",
+    "CEFC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CCCM_US_EQ",
-      "venue": "US",
-      "yahoo": "CCCM",
-      "isin": "US74277P1057",
-      "name": "SVIA",
-      "seconds": 85.412,
-      "outcome": "miss",
-      "at": "2026-11-23T17:35:02.834926+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.205
-      },
-      "screen_seconds": 85.205,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "CCCX_US_EQ",
       "venue": "US",
@@ -1876,6 +1858,25 @@
       },
       "screen_seconds": 84.906,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CEFC_US_EQ",
+      "venue": "US",
+      "yahoo": "CEFC",
+      "isin": "US2022161077",
+      "name": "CEFC",
+      "seconds": 0.965,
+      "outcome": "miss",
+      "at": "2026-11-23T17:58:12.262906+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.871
+      },
+      "screen_seconds": 0.871,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -13937,43 +13938,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T17:54:32.178418+00:00"
+    },
+    {
+      "t212_ticker": "CEFC_US_EQ",
+      "yahoo": "CEFC",
+      "name": "CEFC",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T17:58:12.262906+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CECE_US_EQ",
+    "t212_ticker": "CEFC_US_EQ",
     "venue": "US",
-    "yahoo": "CECE",
-    "isin": "US1251411013",
-    "name": "CECO",
-    "seconds": 84.961,
+    "yahoo": "CEFC",
+    "isin": "US2022161077",
+    "name": "CEFC",
+    "seconds": 0.965,
     "outcome": "miss",
-    "at": "2026-11-23T17:58:05.258804+00:00",
+    "at": "2026-11-23T17:58:12.262906+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.906
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.871
     },
-    "screen_seconds": 84.906,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.871,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CEFC_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T17:58:05.258804+00:00",
+  "updated_at": "2026-11-23T17:58:12.262906+00:00",
   "totals": {
-    "screened": 1113,
+    "screened": 1114,
     "signals": {
-      "buy": 304,
+      "buy": 305,
       "avoid": 270,
       "hold": 266,
       "insufficient_data": 270,
       "strong_buy": 3
     },
-    "signals_n": 1113,
-    "screen_seconds_sum": 10797.088999999993,
-    "screen_seconds_n": 1113,
+    "signals_n": 1114,
+    "screen_seconds_sum": 10797.959999999992,
+    "screen_seconds_n": 1114,
     "outcomes": {
-      "miss": 430,
+      "miss": 431,
       "saved": 683
     }
   },
