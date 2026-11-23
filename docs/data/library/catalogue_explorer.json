@@ -1146,28 +1146,10 @@
     "CFFI_US_EQ",
     "CFFN_US_EQ",
     "CFNB_US_EQ",
-    "CFPZF_US_EQ"
+    "CFPZF_US_EQ",
+    "CFRUY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CDPMF_US_EQ",
-      "venue": "US",
-      "yahoo": "CDPMF",
-      "isin": "CA1568281051",
-      "name": "CDPMF",
-      "seconds": 0.867,
-      "outcome": "miss",
-      "at": "2026-11-23T17:54:24.462488+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.716
-      },
-      "screen_seconds": 0.716,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "CDRE_US_EQ",
       "venue": "US",
@@ -1908,6 +1890,25 @@
       },
       "screen_seconds": 1.298,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "CFRUY_US_EQ",
+      "venue": "US",
+      "yahoo": "CFRUY",
+      "isin": "US2043191079",
+      "name": "CFRUY",
+      "seconds": 0.947,
+      "outcome": "miss",
+      "at": "2026-11-23T18:16:10.934188+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.901
+      },
+      "screen_seconds": 0.901,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -14049,43 +14050,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T18:15:56.991127+00:00"
+    },
+    {
+      "t212_ticker": "CFRUY_US_EQ",
+      "yahoo": "CFRUY",
+      "name": "CFRUY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T18:16:10.934188+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CFPZF_US_EQ",
+    "t212_ticker": "CFRUY_US_EQ",
     "venue": "US",
-    "yahoo": "CFPZF",
-    "isin": "CA1375761048",
-    "name": "CFPZF",
-    "seconds": 1.56,
+    "yahoo": "CFRUY",
+    "isin": "US2043191079",
+    "name": "CFRUY",
+    "seconds": 0.947,
     "outcome": "miss",
-    "at": "2026-11-23T18:16:04.198801+00:00",
+    "at": "2026-11-23T18:16:10.934188+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 1.298
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.901
     },
-    "screen_seconds": 1.298,
-    "signal": "avoid"
+    "screen_seconds": 0.901,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CFRUY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T18:16:04.198801+00:00",
+  "updated_at": "2026-11-23T18:16:10.934188+00:00",
   "totals": {
-    "screened": 1145,
+    "screened": 1146,
     "signals": {
-      "buy": 314,
+      "buy": 315,
       "avoid": 277,
       "hold": 271,
       "insufficient_data": 280,
       "strong_buy": 3
     },
-    "signals_n": 1145,
-    "screen_seconds_sum": 11663.32099999999,
-    "screen_seconds_n": 1145,
+    "signals_n": 1146,
+    "screen_seconds_sum": 11664.22199999999,
+    "screen_seconds_n": 1146,
     "outcomes": {
-      "miss": 443,
+      "miss": 444,
       "saved": 702
     }
   },
