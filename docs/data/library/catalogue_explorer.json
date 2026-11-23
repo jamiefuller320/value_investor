@@ -194,28 +194,10 @@
     "AHPI_US_EQ",
     "AHR_US_EQ",
     "AHT_US_EQ",
-    "AI1_US_EQ"
+    "AI1_US_EQ",
+    "AIAGY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "AGBK_US_EQ",
-      "venue": "US",
-      "yahoo": "AGBK",
-      "isin": "KYG0118C1050",
-      "name": "AGBK",
-      "seconds": 4.563,
-      "outcome": "saved",
-      "at": "2026-11-23T08:11:51.229321+00:00",
-      "rows": 29,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.8,
-        "seconds": 1.319
-      },
-      "screen_seconds": 1.319,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "AGCC_US_EQ",
       "venue": "US",
@@ -956,6 +938,25 @@
       },
       "screen_seconds": 86.194,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "AIAGY_US_EQ",
+      "venue": "US",
+      "yahoo": "AIAGY",
+      "isin": "US05207U1034",
+      "name": "AIAGY",
+      "seconds": 1.339,
+      "outcome": "miss",
+      "at": "2026-11-23T08:21:38.345448+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.164
+      },
+      "screen_seconds": 1.164,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -1598,42 +1599,55 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T08:16:34.725684+00:00"
+    },
+    {
+      "t212_ticker": "AIAGY_US_EQ",
+      "yahoo": "AIAGY",
+      "name": "AIAGY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T08:21:38.345448+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "AI1_US_EQ",
+    "t212_ticker": "AIAGY_US_EQ",
     "venue": "US",
-    "yahoo": "AI1",
-    "isin": "US12468P1049",
-    "name": "AI",
-    "seconds": 86.306,
+    "yahoo": "AIAGY",
+    "isin": "US05207U1034",
+    "name": "AIAGY",
+    "seconds": 1.339,
     "outcome": "miss",
-    "at": "2026-11-23T08:21:31.573392+00:00",
+    "at": "2026-11-23T08:21:38.345448+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 86.194
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.164
     },
-    "screen_seconds": 86.194,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.164,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "AIAGY_US_EQ"
+    }
   },
   "updated_at": "2026-11-23T08:22:01.574822+00:00",
   "totals": {
-    "screened": 193,
+    "screened": 194,
     "signals": {
-      "buy": 47,
+      "buy": 48,
       "avoid": 46,
       "hold": 44,
       "insufficient_data": 56
     },
-    "signals_n": 193,
-    "screen_seconds_sum": 691.3229999999998,
-    "screen_seconds_n": 193,
+    "signals_n": 194,
+    "screen_seconds_sum": 692.4869999999997,
+    "screen_seconds_n": 194,
     "outcomes": {
-      "miss": 88,
+      "miss": 89,
       "saved": 105
     }
   },
