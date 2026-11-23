@@ -18,6 +18,13 @@
 # overlay. That stops long dashboard jobs from resurrecting stale foreign-owned
 # artifacts (progress-report, ops-monitor, etc.) without listing every path.
 #
+# Byte-identical snapshots are left off the commit. Owned trees such as
+# buy_tier_level/** are ~200MB; a per-file `git show` + generated_at parse of
+# every JSON made each retry longer than catalogue-explorer's one-name push
+# interval, so every attempt lost with "fetch first" (Library epoch-0 weekday
+# run 45136445860, 2026-11-23). Blob hashes are compared to HEAD instead, and
+# the freshness check runs only for files that actually differ.
+#
 # docs/data/latest.json is the screen bundle. Its run_at is the screen clock
 # and outranks generated_at: a queue refresh can stamp generated_at on a stale
 # checkout and would otherwise drop Sunday's new screen (email-report
@@ -386,6 +393,83 @@ done
 sort -u -o "$OWNED_MANIFEST" "$OWNED_MANIFEST"
 sort -u -o "$OPTIONAL_MANIFEST" "$OPTIONAL_MANIFEST"
 
+# Git blob id of each snapshot file (sha1). Compared to HEAD each attempt so
+# unchanged artifacts skip the generated_at git-show. Object format other than
+# sha1 simply never matches, and those files take the full overlay path.
+SNAPSHOT_INDEX="$WORKDIR/snapshot_blobs.tsv"
+python3 - "$OWNED_MANIFEST" "$OPTIONAL_MANIFEST" "$SNAPSHOT_INDEX" "$WORKDIR" <<'PY'
+import hashlib
+import sys
+from pathlib import Path
+
+def blob_sha1(data: bytes) -> str:
+    return hashlib.sha1(f"blob {len(data)}\0".encode() + data).hexdigest()
+
+root = Path(sys.argv[4])
+seen: set[str] = set()
+lines: list[str] = []
+for manifest in sys.argv[1:3]:
+    for raw in Path(manifest).read_text(encoding="utf-8").splitlines():
+        path = raw.strip()
+        if not path or path in seen:
+            continue
+        seen.add(path)
+        file = root / path
+        if not file.is_file():
+            continue
+        lines.append(f"{blob_sha1(file.read_bytes())}\t{path}")
+Path(sys.argv[3]).write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf-8")
+PY
+
+declare -A UNCHANGED_BLOBS=()
+
+refresh_unchanged_set() {
+  local path listing
+  # Not `local listing=$(...)`: bash makes `local` succeed even when python fails.
+  listing="$(python3 - "$SNAPSHOT_INDEX" <<'PY'
+import subprocess
+import sys
+from pathlib import Path
+
+rows: list[tuple[str, str]] = []
+for line in Path(sys.argv[1]).read_text(encoding="utf-8").splitlines():
+    if not line:
+        continue
+    digest, path = line.split("\t", 1)
+    rows.append((digest, path))
+if not rows:
+    raise SystemExit(0)
+proc = subprocess.run(
+    ["git", "cat-file", "--batch-check"],
+    input="".join(f"HEAD:{path}\n" for _, path in rows),
+    text=True,
+    capture_output=True,
+    check=True,
+)
+lines = proc.stdout.splitlines()
+if len(lines) != len(rows):
+    raise SystemExit(
+        f"git cat-file returned {len(lines)} lines for {len(rows)} paths"
+    )
+for (digest, path), line in zip(rows, lines):
+    oid = line.split(" ", 1)[0]
+    if oid == digest:
+        print(path)
+PY
+)"
+  unset UNCHANGED_BLOBS
+  declare -g -A UNCHANGED_BLOBS=()
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    UNCHANGED_BLOBS["$path"]=1
+  done <<<"$listing"
+}
+
+snapshot_matches_head() {
+  local path="$1"
+  [ -n "${UNCHANGED_BLOBS[$path]:-}" ]
+}
+
 git config user.name "${GIT_AUTHOR_NAME:-github-actions[bot]}"
 git config user.email "${GIT_AUTHOR_EMAIL:-41898282+github-actions[bot]@users.noreply.github.com}"
 
@@ -394,10 +478,16 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
   echo "${LABEL} commit attempt $attempt/$MAX_ATTEMPTS"
   git fetch "$REMOTE" "$REF"
   git reset --hard "${REMOTE}/${REF}"
+  refresh_unchanged_set
 
   restored=()
+  unchanged=0
   while IFS= read -r path; do
     [ -n "$path" ] || continue
+    if snapshot_matches_head "$path"; then
+      unchanged=$((unchanged + 1))
+      continue
+    fi
     if should_skip_stale_json_overlay "$path" "${REMOTE}/${REF}"; then
       echo "Preserving newer ${REMOTE}/${REF} $path (generated_at ahead of ${LABEL} snapshot)" >&2
       continue
@@ -413,6 +503,10 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
     if [ ! -f "$WORKDIR/$path" ]; then
       continue
     fi
+    if snapshot_matches_head "$path"; then
+      unchanged=$((unchanged + 1))
+      continue
+    fi
     base_blob="$(blob_at "$START_SHA" "$path")"
     main_blob="$(blob_at "${REMOTE}/${REF}" "$path")"
     if [ "$base_blob" = "$main_blob" ]; then
@@ -424,6 +518,12 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
       echo "Skipping $path — ${REMOTE}/${REF} changed it since checkout ${START_SHA:0:12}" >&2
     fi
   done <"$OPTIONAL_MANIFEST"
+
+  if [ "$unchanged" -eq 1 ]; then
+    echo "Leaving 1 unchanged artifact file off the ${LABEL} commit"
+  elif [ "$unchanged" -gt 1 ]; then
+    echo "Leaving ${unchanged} unchanged artifact files off the ${LABEL} commit"
+  fi
 
   if [ "${#restored[@]}" -eq 0 ]; then
     echo "No ${LABEL} artifact delta"

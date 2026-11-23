@@ -681,3 +681,41 @@ def test_artifact_commit_merges_daily_focus_acks_on_race(tmp_path: Path):
         "mwarn:dax:zero_improve_stall",
         "mwarn:dax:unmeasured_stuck",
     }
+
+
+def test_artifact_commit_leaves_identical_blobs_off_the_commit(tmp_path: Path):
+    """Unchanged owned files must not be re-added.
+
+    Epoch0-weekday owned buy_tier trees are ~200MB. Re-checking every JSON
+    made each push retry longer than catalogue-explorer's main commits
+    (run 45136445860).
+    """
+    remote, work = _seed_repo(tmp_path)
+    book = work / "docs" / "data" / "book"
+    _write(book / "a.json", '{"n": 1}\n')
+    _write(book / "b.json", '{"n": 1}\n')
+    _write(book / "c.json", '{"n": 1}\n')
+    _git(work, "add", "docs/data/book")
+    _git(work, "commit", "-m", "seed books")
+    _git(work, "push", "origin", "main")
+
+    _write(book / "b.json", '{"n": 2}\n')
+    result = _run_script(work, owned="docs/data/book")
+    assert result.returncode == 0, textwrap.dedent(
+        f"""
+        stdout: {result.stdout}
+        stderr: {result.stderr}
+        """
+    )
+    assert "Leaving 2 unchanged artifact files off the Test artifacts commit" in result.stdout
+
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    names = _git(latest, "show", "--name-only", "--pretty=format:", "HEAD")
+    assert names.stdout.strip() == "docs/data/book/b.json"
+    assert json.loads(
+        (latest / "docs" / "data" / "book" / "b.json").read_text(encoding="utf-8")
+    ) == {"n": 2}
+    assert json.loads(
+        (latest / "docs" / "data" / "book" / "a.json").read_text(encoding="utf-8")
+    ) == {"n": 1}
