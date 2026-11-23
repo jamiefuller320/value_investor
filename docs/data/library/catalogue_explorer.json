@@ -1501,28 +1501,10 @@
     "CURR_US_EQ",
     "CURV_US_EQ",
     "CURX_US_EQ",
-    "CUX_US_EQ"
+    "CUX_US_EQ",
+    "CUYTY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CTBI_US_EQ",
-      "venue": "US",
-      "yahoo": "CTBI",
-      "isin": "US2041491083",
-      "name": "CTBI",
-      "seconds": 2.651,
-      "outcome": "saved",
-      "at": "2026-11-23T22:24:36.367559+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.7,
-        "seconds": 0.987
-      },
-      "screen_seconds": 0.987,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "CTGO_US_EQ",
       "venue": "US",
@@ -2263,6 +2245,25 @@
       },
       "screen_seconds": 2.591,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CUYTY_US_EQ",
+      "venue": "US",
+      "yahoo": "CUYTY",
+      "isin": "US1968501015",
+      "name": "CUYTY",
+      "seconds": 1.263,
+      "outcome": "miss",
+      "at": "2026-11-23T22:30:30.542016+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.144
+      },
+      "screen_seconds": 1.144,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -17916,43 +17917,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T22:29:14.523849+00:00"
+    },
+    {
+      "t212_ticker": "CUYTY_US_EQ",
+      "yahoo": "CUYTY",
+      "name": "CUYTY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T22:30:30.542016+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CUX_US_EQ",
+    "t212_ticker": "CUYTY_US_EQ",
     "venue": "US",
-    "yahoo": "CUX",
-    "isin": "US2176741005",
-    "name": "CUX",
-    "seconds": 2.733,
+    "yahoo": "CUYTY",
+    "isin": "US1968501015",
+    "name": "CUYTY",
+    "seconds": 1.263,
     "outcome": "miss",
-    "at": "2026-11-23T22:30:23.480823+00:00",
+    "at": "2026-11-23T22:30:30.542016+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 2.591
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.144
     },
-    "screen_seconds": 2.591,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.144,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CUYTY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T22:30:23.480823+00:00",
+  "updated_at": "2026-11-23T22:30:30.542016+00:00",
   "totals": {
-    "screened": 1500,
+    "screened": 1501,
     "signals": {
-      "buy": 420,
+      "buy": 421,
       "avoid": 376,
       "hold": 336,
       "insufficient_data": 362,
       "strong_buy": 6
     },
-    "signals_n": 1500,
-    "screen_seconds_sum": 17385.578000000012,
-    "screen_seconds_n": 1500,
+    "signals_n": 1501,
+    "screen_seconds_sum": 17386.722000000012,
+    "screen_seconds_n": 1501,
     "outcomes": {
-      "miss": 569,
+      "miss": 570,
       "saved": 931
     }
   },
