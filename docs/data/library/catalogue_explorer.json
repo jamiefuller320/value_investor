@@ -183,28 +183,10 @@
     "AGX_US_EQ",
     "AGYS_US_EQ",
     "AG_US_EQ",
-    "AHAC_US_EQ"
+    "AHAC_US_EQ",
+    "AHCHY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "AFAR_US_EQ",
-      "venue": "US",
-      "yahoo": "AFAR",
-      "isin": "KYG063621000",
-      "name": "AFAR",
-      "seconds": 5.333,
-      "outcome": "miss",
-      "at": "2026-11-23T08:10:14.520590+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 5.157
-      },
-      "screen_seconds": 5.157,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "AFCG_US_EQ",
       "venue": "US",
@@ -945,6 +927,25 @@
       },
       "screen_seconds": 5.181,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "AHCHY_US_EQ",
+      "venue": "US",
+      "yahoo": "AHCHY",
+      "isin": "US0352431045",
+      "name": "AHCHY",
+      "seconds": 1.508,
+      "outcome": "miss",
+      "at": "2026-11-23T08:15:54.916361+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.251
+      },
+      "screen_seconds": 1.251,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -1299,42 +1300,55 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T08:15:37.694228+00:00"
+    },
+    {
+      "t212_ticker": "AHCHY_US_EQ",
+      "yahoo": "AHCHY",
+      "name": "AHCHY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T08:15:54.916361+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "AHAC_US_EQ",
+    "t212_ticker": "AHCHY_US_EQ",
     "venue": "US",
-    "yahoo": "AHAC",
-    "isin": "US44486Q1031",
-    "name": "HUMA",
-    "seconds": 5.303,
+    "yahoo": "AHCHY",
+    "isin": "US0352431045",
+    "name": "AHCHY",
+    "seconds": 1.508,
     "outcome": "miss",
-    "at": "2026-11-23T08:15:48.233283+00:00",
+    "at": "2026-11-23T08:15:54.916361+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 5.181
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.251
     },
-    "screen_seconds": 5.181,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.251,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "AHCHY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T08:15:48.233283+00:00",
+  "updated_at": "2026-11-23T08:15:54.916361+00:00",
   "totals": {
-    "screened": 182,
+    "screened": 183,
     "signals": {
-      "buy": 44,
+      "buy": 45,
       "avoid": 45,
       "hold": 42,
       "insufficient_data": 51
     },
-    "signals_n": 182,
-    "screen_seconds_sum": 417.22099999999983,
-    "screen_seconds_n": 182,
+    "signals_n": 183,
+    "screen_seconds_sum": 418.4719999999998,
+    "screen_seconds_n": 183,
     "outcomes": {
-      "miss": 80,
+      "miss": 81,
       "saved": 102
     }
   },
