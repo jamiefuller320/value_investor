@@ -1697,28 +1697,10 @@
     "DPMLF_US_EQ",
     "DPRO_US_EQ",
     "DPSGY_US_EQ",
-    "DPW_US_EQ"
+    "DPW_US_EQ",
+    "DQJCY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "DMRC_US_EQ",
-      "venue": "US",
-      "yahoo": "DMRC",
-      "isin": "US25382K1007",
-      "name": "DMRC",
-      "seconds": 2.379,
-      "outcome": "saved",
-      "at": "2026-11-23T22:57:04.882040+00:00",
-      "rows": 10,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.85
-      },
-      "screen_seconds": 0.85,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "DMYD_US_EQ",
       "venue": "US",
@@ -2459,6 +2441,25 @@
       },
       "screen_seconds": 85.348,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "DQJCY_US_EQ",
+      "venue": "US",
+      "yahoo": "DQJCY",
+      "isin": "US69807K1051",
+      "name": "DQJCY",
+      "seconds": 1.333,
+      "outcome": "miss",
+      "at": "2026-11-23T23:16:56.430633+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.158
+      },
+      "screen_seconds": 1.158,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -19953,43 +19954,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T23:13:33.180310+00:00"
+    },
+    {
+      "t212_ticker": "DQJCY_US_EQ",
+      "yahoo": "DQJCY",
+      "name": "DQJCY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T23:16:56.430633+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DPW_US_EQ",
+    "t212_ticker": "DQJCY_US_EQ",
     "venue": "US",
-    "yahoo": "DPW",
-    "isin": "US09175M8799",
-    "name": "GPUS",
-    "seconds": 85.811,
+    "yahoo": "DQJCY",
+    "isin": "US69807K1051",
+    "name": "DQJCY",
+    "seconds": 1.333,
     "outcome": "miss",
-    "at": "2026-11-23T23:16:49.354035+00:00",
+    "at": "2026-11-23T23:16:56.430633+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.348
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.158
     },
-    "screen_seconds": 85.348,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.158,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "DQJCY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T23:16:49.354035+00:00",
+  "updated_at": "2026-11-23T23:16:56.430633+00:00",
   "totals": {
-    "screened": 1696,
+    "screened": 1697,
     "signals": {
-      "buy": 479,
+      "buy": 480,
       "avoid": 430,
       "hold": 367,
       "insufficient_data": 412,
       "strong_buy": 8
     },
-    "signals_n": 1696,
-    "screen_seconds_sum": 18569.756000000012,
-    "screen_seconds_n": 1696,
+    "signals_n": 1697,
+    "screen_seconds_sum": 18570.91400000001,
+    "screen_seconds_n": 1697,
     "outcomes": {
-      "miss": 652,
+      "miss": 653,
       "saved": 1044
     }
   },
