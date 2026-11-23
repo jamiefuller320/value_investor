@@ -1,6 +1,6 @@
 # Open Text Corporation (OTEX.TO) — Research memo
 
-_Version 1 · Updated 2026-11-20T00:18:35.617174+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-11-23T18:06:48.449817+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,13 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: medium
-Confidence: 0.58
-Rationale: FY2026 Yahoo FCF (~$808m) comfortably covers dividends (~3.0×), but filing debt (~$5.8bn at Sep-2026) and softer Q1 FY2027 revenue weaken the strong_buy case; the screen shows no passed models and truncated 10-K bodies block full FCF rec...
-RiskTags: leverage, litigation, competitive, accounting, pension
+Confidence: 0.57
+Rationale: Yahoo FY2026 FCF (~$808m) still covers dividends, but ~$6bn debt, softer Q1 FY2027 revenue, empty filing bodies and zero passed screen models weaken the strong_buy case.
+RiskTags: leverage, competitive, accounting, pension
+
+## Weekly updates
+
+### 2026-11-23T18:06:48.449817+00:00
+21–22 Nov news is third-party cloud/valuation commentary and Yahoo quote pages only; no new company disclosures since the 20 Nov verdict refresh.  
+Refreshed Yahoo financials are unchanged on FCF and debt; Q1 FY2027 revenue ~$1.24bn remains the softest recent quarter in the library.  
+The filings index still shows no SEDAR/SEC bodies attached, so litigation and accounting detail cannot be re-verified from on-file sources.

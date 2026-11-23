@@ -1,6 +1,6 @@
 # Clarkson PLC (CKN.L) — Research memo
 
-_Version 5 · Updated 2026-11-01T08:38:36.467562+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-23T18:14:31.315485+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.70
-Rationale: CFO start date closes a succession gap, but cyclical earnings, filing–screen FCF divergence and absent post-Oct trading news leave research aligned with hold rather than adding size.
+Rationale: CFO is now in post and the screen re-passed buy, but cyclical FY26 earnings, filing–screen FCF divergence and no trading update since 6 Oct keep research neutral on adding size.
 RiskTags: cyclical, key_person, competitive, accounting
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Quantitative screen is now hold (6/22 models, deteriorating; RSI ~71; cheapness 
 14 Oct RNS confirms Niamh Staunton joins as CFO and executive director from 11 Nov 2026, following the June appointment notice.  
 No further trading update since the 6 Oct FY26 underlying PBT floor; the news batch is Kalkine/LSE commentary only.  
 Quantitative screen stays hold (7/22, stable six weeks); RSI has eased from overbought and cheapness has re-passed.
+
+### 2026-11-23T18:14:31.315485+00:00
+No trading or results RNS since 6 Oct; since 1 Nov only 2 Nov total voting rights and 17 Nov PDMR dealings.  
+Niamh Staunton is CFO from 11 Nov as previously disclosed; news is Kalkine/Yahoo price and valuation commentary only.  
+Quantitative screen is buy (7 models, stable four weeks, neutral timing; FCF basis mismatch flagged).

@@ -1,6 +1,6 @@
 # Fidelity National Information Services, Inc. (FIS) — Research memo
 
-_Version 14 · Updated 2026-11-19T23:56:35.910117+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-23T17:57:23.877925+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.70
-Rationale: No new filings or news this refresh; Q3 leverage, trimmed outlook, leadership turnover and litigation still weaken the strong buy case.
+Rationale: Citizens' Market Perform initiation and 2027 margin headwind commentary weaken the strong buy case; Q3 leverage, trimmed outlook, leadership and litigation remain unresolved.
 RiskTags: leverage, governance, litigation, competitive
 
 ## Weekly updates
@@ -77,3 +77,8 @@ Q3 leverage, trimmed outlook, leadership turnover and legal overhang remain unre
 No new SEC filings after the 4 Nov Q3 8-K/10-Q; the incremental news batch has no articles.  
 No material change versus the 21:43 UTC update.  
 Q3 leverage, trimmed outlook, leadership turnover and legal overhang remain unresolved.
+
+### 2026-11-23T17:57:23.877925+00:00
+No new SEC filings after the 4 Nov Q3 8-K/10-Q.  
+Incremental news: Citizens JMP initiates at Market Perform; commentary flags 2027 revenue and margin headwinds as temporary income fades.  
+Q3 leverage, paused buybacks, trimmed outlook, leadership turnover and legal overhang are unchanged.

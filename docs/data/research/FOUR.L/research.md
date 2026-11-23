@@ -1,6 +1,6 @@
 # 4imprint Group plc (FOUR.L) — Research memo
 
-_Version 6 · Updated 2026-11-23T02:35:37.447899+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-23T18:01:41.740668+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -37,3 +37,8 @@ The filing-led view is unchanged: H1 2026 tariff margin pressure, ~$130m FY2026 
 10 November RNS reaffirms FY2026 guidance (~$130m adjusted PBT, revenue slightly above $1.35bn); ten-month revenue +2%, cash $152m, new-customer orders still −5% YTD but improving in Q3.  
 Quantitative **buy** unchanged (8/22 models, eight weeks, stable trend; neutral timing); FCF/dividend definition divergence on the screen persists.  
 Yahoo cash-flow piece (12 Nov) and a false-positive “four session” market headline; no other material 4imprint press since 30 October.
+
+### 2026-11-23T18:01:41.740668+00:00
+No new 4imprint RNS or company-specific press in the 23 November evening news batch since the 02:35 refresh.
+Quantitative **buy** unchanged (8/22 models, eight weeks, stable trend; neutral timing).
+Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.

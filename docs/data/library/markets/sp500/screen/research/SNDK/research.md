@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 14 · Updated 2026-11-19T17:56:16.848373+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-23T18:09:19.132866+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: high
-Confidence: 0.58
-Rationale: On-file earnings and cash flow remain very strong, but split-day relief does not offset 2027 NAND oversupply sentiment and institutional selling; research still weakens the strong-buy screen.
+Confidence: 0.59
+Rationale: On-file FCF and earnings remain exceptional and Citi calls the selloff overdone, but 2027 NAND oversupply press and post-split weakness still dominate; research weakens the strong-buy screen.
 RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
@@ -62,3 +62,8 @@ No material change.
 On 19 November, split-day headlines and a ~4% memory bounce (Anthropic IPO-led AI trade) sit with pieces calling Sandisk cheap versus Micron; the 8-for-1 split lands today.
 GF Securities’s 2027 NAND glut narrative and mixed 13F flows (Ken Fisher among buyers; Duquesne full exit) still frame cycle anxiety.
 No new SNDK issuer filings in the batch; on-file financials still show very strong cash flow.
+
+### 2026-11-23T18:09:19.132866+00:00
+Post-split trading drew 14–16% falls and worst-week-since-July framing tied to TrendForce’s bearish 2027 NAND view and Morningstar bust commentary; the 8-for-1 split is now in effect.  
+On 23 November, Jensen Huang’s return at Nvidia lifted AI/memory names (~12% SNDK); Citi argues the Micron–Sandisk slide is overdone, beside value-trap versus “numbers still ridiculous” debate.  
+No new SNDK issuer filings in the batch; refreshed on-file financials still show very strong free cash flow.

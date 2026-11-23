@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 14 · Updated 2026-11-19T23:54:22.619406+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-23T17:52:54.630134+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: No new filings or headlines in this batch; filed FY26 FCF still supports Strong Buy, but leverage and competitive AI risks keep research one notch below the screen.
+Rationale: Filing-backed FCF still supports Strong Buy, but pre-earnings sell-side caution on core cloud outweighs Slack-agent headlines; leverage and competitive risks keep research below the screen.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -75,3 +75,8 @@ Leverage and competitive AI-sector themes are unchanged.
 The 19 Nov 23:54 news batch adds no articles since the prior refresh at 21:39 UTC.  
 Filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged; no new primary filings.  
 Leverage and competitive AI-sector themes are unchanged.
+
+### 2026-11-23T17:52:54.630134+00:00
+23 Nov headlines add pre-earnings caution: Citi/Barron’s flag sluggish core cloud and cut the price target, with TD Cowen also lowering expectations, versus Benioff citing large Slack agent deployment.  
+Seeking Alpha frames limited downside ahead of results; ETF commentary notes net selling on 19 Nov (~$43.9m)—not issuer filings.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.

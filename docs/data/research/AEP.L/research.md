@@ -1,6 +1,6 @@
 # AEP Plantations Plc (AEP.L) — Research memo
 
-_Version 6 · Updated 2026-10-30T22:51:50.492331+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-23T18:12:51.383844+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Q3 RNS still backs Strong Buy on output and FY guidance; oversold screen timing helps, but 2027 weather risk and no new ops news keep a phased accumulate overlay.
+Rationale: Oct Q3 filings still back the Strong Buy value case and favourable timing; November is buyback-only, with 2027 weather risk and the FCF definition gap capping conviction.
 RiskTags: cyclical, regulatory, customer_concentration, competitive, other
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Strong Buy screen ~79% composite (3 weeks, stable); 13–23 Oct RNS is buybacks 
 No new results or trading updates since the 12 Oct Q3 RNS; 26–30 Oct RNS is routine transaction-in-own-shares under the buyback only.  
 26–30 Oct news is US “American Electric Power” and options-page ticker noise—no verified Indonesia operating or policy items.  
 Strong Buy screen ~80% composite (5 weeks, stable); timing overlay Accumulate (RSI oversold, below 200-day MA).
+
+### 2026-11-23T18:12:51.383844+00:00
+No new results or trading updates since the 12 Oct Q3 RNS; 31 Oct–23 Nov RNS is routine transaction-in-own-shares under the £8m buyback (e.g. 20 Nov ~32k shares at VWAP ~142.8p; ~4.16m shares in treasury since Jul).  
+12–20 Nov coverage is syndicated Kalkine buyback, dividend and Pinago/ninth-mill commentary plus palm-oil volatility; no verified Indonesia operating or policy news.  
+Strong Buy screen stable (~10 weeks); timing overlay Accumulate (~13% below 200-day MA); statutory vs screen FCF basis mismatch unchanged.

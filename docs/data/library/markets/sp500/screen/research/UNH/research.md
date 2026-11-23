@@ -1,6 +1,6 @@
 # UnitedHealth Group Incorporated (UNH) — Research memo
 
-_Version 4 · Updated 2026-11-19T18:04:22.581108+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-23T18:27:45.425396+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: medium
-Confidence: 0.59
-Rationale: Research still weakens the strong buy: 19 Nov Medicare fraud-proposal and Medicare-for-All headlines extend the sell-off while screen cash metrics are unchanged and UNH clawback exposure is unquantified in this pack.
+Confidence: 0.58
+Rationale: Research still weakens strong buy: 23 Nov CMS Star Ratings and Medicare payment headlines extend insurer slides while UNH sues CMS; screen cash metrics and Q3 EPS $4.56 are unchanged and firm-specific payment impact is unquantified here.
 RiskTags: regulatory, competitive, litigation, leverage, governance, accounting
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Screen buy metrics and Q3 diluted EPS of $4.56 are unchanged; no new interim fil
 19 Nov news extends the federal Medicare fraud-proposal sell-off (UNH among Dow decliners, reports cite ~5% session drop); insurers slide on Medicare-for-All push headlines.  
 Bullish RiverPark valuation and blue-chip buy lists sit alongside consumer MA cancellation coverage; quantified UNH clawback exposure is still absent from SEC extracts here.  
 Screen strong_buy cash metrics and Q3 diluted EPS of $4.56 are unchanged; no new interim filing body in this pack.
+
+### 2026-11-23T18:27:45.425396+00:00
+23 Nov CMS proposed Medicare Advantage Star Ratings changes; coverage cites roughly $107bn of industry payment risk over ten years and another sharp UNH slide, with Medicare-for-All debate still weighing on peers.  
+20–21 Nov TD Cowen buy upgrade, Distillate 13F adds and UNH litigation over Star Ratings sit against Barron’s noting UNH lagging the broader rally; screen strong_buy cash metrics and Q3 diluted EPS of $4.56 are unchanged.  
+No new interim SEC filing body in this pack; quantified UNH exposure to the latest CMS proposals remains unknown.

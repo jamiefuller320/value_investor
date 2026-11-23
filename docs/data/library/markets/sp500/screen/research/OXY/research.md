@@ -1,6 +1,6 @@
 # Occidental Petroleum Corporation (OXY) — Research memo
 
-_Version 5 · Updated 2026-11-19T21:52:20.896236+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-23T18:20:30.808463+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: Q3 filings and the tender 8-K still support deleveraging, but softer near-term crude in sector commentary and legacy leverage and liability risks keep the buy screen ahead of research conviction.
+Rationale: Post-19 Nov headlines cite value multiples and fund interest but disclose nothing new; Q3 10-Q and the 18 Nov tender 8-K still support deleveraging while cyclical oil and legacy liabilities keep the buy screen ahead of research.
 RiskTags: cyclical, leverage, regulatory, litigation, governance, accounting, other
 
 ## Weekly updates
@@ -30,3 +30,8 @@ No new SEC filings since the 18 Nov senior-notes tender 8-K; Q3 10-Q and ~$10.0b
 ### 2026-11-19T21:52:20.896236+00:00
 No material change since the 19 Nov 18:01 UTC pass: the `news_batch_20261119_215204` pull returned no new articles.  
 Q3 2026 10-Q, principal debt ~$10.0bn, and the 18 Nov senior-notes tender 8-K remain the latest filing inputs.
+
+### 2026-11-23T18:20:30.808463+00:00
+23 Nov news adds third-party value-screen, Bridgewater energy, and Berkshire 13F commentary only; no new OXY figures or SEC items since the 18 Nov tender 8-K.  
+Q3 2026 10-Q and ~$10.0bn principal debt remain the latest filing inputs.  
+Prior commodity-cyclicality themes are unchanged in this batch.

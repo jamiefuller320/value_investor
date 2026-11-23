@@ -1,6 +1,6 @@
 # Atalaya Mining Copper, S.A. (ATYM.L) — Research memo
 
-_Version 1 · Updated 2026-11-02T11:28:31.215315+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-11-23T17:52:11.396460+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,13 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: FY2025/H1 2026 filings back the screen on earnings, net cash and dividend cover (statutory OCF−CapEx ~€111M vs €10M paid; headline FCF €107M); adjusted Hold vs raw Buy reflects open FCF definition gap (screen TTM €127M).
+Confidence: 0.76
+Rationale: Fresh Q3/YTD 2026 RNS confirms cash generation and net cash, supporting the buy screen; Tharsis cash use, cost pressure and the unresolved FCF definition gap keep a step below raw Buy.
 RiskTags: cyclical, regulatory, governance, other
+
+## Weekly updates
+
+### 2026-11-23T17:52:11.396460+00:00
+12 Nov Q3/YTD 2026 RNS: record quarterly and nine-month EBITDA; net cash €342m at 30 Sep; FY copper output still expected at the low end of guidance.  
+11 Nov Tharsis acquisition closed for €125m total (€75m cash on completion, €50m deferred within 12 months), funded from existing cash per filing.  
+Quantitative screen remains buy with accumulate timing; filing vs screen TTM FCF basis mismatch unchanged in snapshot.

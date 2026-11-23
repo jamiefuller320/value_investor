@@ -1,6 +1,6 @@
 # Cognizant Technology Solutions Corporation (CTSH) — Research memo
 
-_Version 3 · Updated 2026-11-19T23:55:13.791862+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-23T17:54:37.297820+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Q3 margin and free-cash-flow trends plus buybacks still support Strong Buy; sell-side growth scepticism and India tax risks are unchanged, and the incremental batch adds no new disclosure.
+Rationale: Supplied Q3 revenue and quarter free cash flow still support Strong Buy; the 23 Nov news batch adds only price-rebound chatter and repeated AI themes, with no new filings or guidance in the pack.
 RiskTags: regulatory, competitive, cyclical, customer_concentration, litigation, accounting, leverage
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Qualys mROC and Patient Hub AI launches continue the pivot narrative; CFO flagge
 The incremental news batch adds one peer-comparison headline (IBM versus Cognizant); no new company-specific disclosures in supplied sources.  
 Refreshed quarterly data still shows Q3 revenue about $5.66bn and quarter free cash flow of $925m versus $459m in Q2.  
 Prior Deutsche Hold, Bank of America Neutral, and India tax themes are unchanged; no new filings in this batch.
+
+### 2026-11-23T17:54:37.297820+00:00
+The incremental batch since 19 Nov is mostly share-price recovery after a tech/AI-led selloff and generic “time to buy?” headlines; Kalkine ties the rebound to AI-disruption fears rather than new fundamentals.  
+Yahoo repeats Patient Hub (NVIDIA) and Qualys cyber-AI alliance themes already in the prior week’s batch.  
+Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index has no EDGAR items after 29 Oct 2026.

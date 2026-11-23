@@ -1,6 +1,6 @@
 # DaVita Inc. (DVA) — Research memo
 
-_Version 7 · Updated 2026-11-19T23:56:24.086066+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-23T17:57:04.116211+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.65
-Rationale: Filing-backed cash yield still supports the screen, but HHS kidney-care reform scrutiny, Pomerantz litigation headlines, leverage and 2027 reimbursement risk weaken full alignment with strong_buy.
+Rationale: Filing-backed cash yield still supports the screen, but commentary-only news leaves HHS, leverage and litigation risks unchanged, weakening full alignment with strong_buy.
 RiskTags: regulatory, leverage, litigation
 
 ## Weekly updates
@@ -43,3 +43,8 @@ The quantitative screen remains **strong_buy**; the filing pack is unchanged.
 No material change since the 21:42 UTC refresh.  
 The 23:56 UTC news batch adds no articles; regulatory, leverage and litigation overlays are unchanged.  
 The quantitative screen remains **strong_buy**; the filing pack is unchanged.
+
+### 2026-11-23T17:57:04.116211+00:00
+Since the 19 Nov refresh, news is mostly price and valuation (Yahoo cheapness after expanded HD US rollout, Kalkine bounce after a ~16% monthly fall, Trefis/Yahoo FCF tilt) plus generic quote pages; expanded HD was already in the prior memo.
+No new filing pack; HHS kidney-care reform, leverage and Pomerantz/litigation overlays are unchanged.
+The quantitative screen remains **strong_buy**.

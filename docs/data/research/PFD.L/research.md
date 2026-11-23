@@ -1,15 +1,15 @@
 # Premier Foods plc (PFD.L) — Research memo
 
-_Version 5 · Updated 2026-10-30T23:27:46.588233+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-23T18:07:38.722311+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
-Verdict: neutral
+Verdict: accumulate
 Risk: medium
-Confidence: 0.67
-Rationale: Research remains neutral on the persistent buy screen: filing cheapness holds, but Oct 2026 refinancing, weak liquidity, FCF/cover definition gaps and sub-threshold ROE still block a conviction upgrade.
+Confidence: 0.72
+Rationale: H1 RNS confirms Oct bond redemption and lower financing costs; upgraded FY earnings and interim dividend support the strong-buy screen, but liquidity optics, sub-threshold ROE and dual FCF cover definitions still limit conviction.
 RiskTags: customer_concentration, regulatory, pension, competitive, liquidity, leverage
 
 ## Weekly updates
@@ -33,3 +33,8 @@ The buy screen is stronger (twelfth week, ~71% composite) but refi, liquidity an
 No new results or trading RNS since the 7 Oct refresh; the 2 Oct Total Voting Rights notice remains the only indexed disclosure in the window.  
 The 30 Oct news batch is syndicated Kalkine/Simply Wall St quote pages plus unrelated “PFD” preferred-ticker noise (Kalkine 13 Oct rehashes an earlier quarterly update).  
 Buy screen persists (seventeenth week, ~71% composite) but refi, liquidity and FCF/cover gaps are unchanged—neutral overlay holds.
+
+### 2026-11-23T18:07:38.722311+00:00
+12 Nov H1 RNS: branded revenue +3.2%, trading profit +2.4%; £330m notes redeemed on 15 Oct via £175m term loan and cash; FY adjusted PBT/EPS guided to the top end; 1.12p interim dividend introduced.  
+Net debt £131.2m (0.6× EBITDA); liquidity £583.6m though net current liabilities optics persist; screen FCF/cover definition divergence unchanged.  
+Quantitative signal is strong buy (new week); research overlay moves to accumulate after refinancing execution, pending ROE/FCF reconciliation.

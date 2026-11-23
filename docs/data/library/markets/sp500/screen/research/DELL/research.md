@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 7 · Updated 2026-11-19T23:56:06.509336+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-23T17:56:54.891100+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: The 23:55 UTC news batch is empty; on-file Q2 growth and ~$132bn RPO are unchanged, so research still only partly confirms strong_buy amid leverage and cyclical margin risks.
+Rationale: Pre-Q3 news skews bullish on AI backlog but stresses margin and cyclicality; on-file Q2 growth and RPO still only partly confirm strong_buy until filings update.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -43,3 +43,8 @@ Screen remains **strong_buy**; leverage and cyclical AI-hardware risks are uncha
 The 23:55 UTC news batch adds no articles since the 21:42 UTC refresh.  
 On-file Q2 FY2027 themes (rising revenue and EPS, about $132bn RPO, higher debt and inventory) are unchanged.  
 Screen remains **strong_buy**; leverage and cyclical AI-hardware risks are unchanged.
+
+### 2026-11-23T17:56:54.891100+00:00
+The 17:56 UTC news batch is heavy pre-Q3 earnings copy: roughly $49bn revenue expectations, AI server backlog optimism, and repeated margin-cost warnings.  
+On 23 Nov, Dell rallied with AI-hardware peers on Nvidia leadership headlines; on-file Q2 FY2027 themes (~$132bn RPO, higher debt and inventory) are unchanged.  
+Screen remains **strong_buy**; leverage and cyclical AI-hardware risks are unchanged ahead of reported Q3 figures.

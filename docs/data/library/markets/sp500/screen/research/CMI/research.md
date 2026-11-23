@@ -1,6 +1,6 @@
 # Cummins Inc. (CMI) — Research memo
 
-_Version 11 · Updated 2026-11-19T23:54:13.020944+00:00 · Mode: structured_verdict_update_
+_Version 12 · Updated 2026-11-23T17:52:44.228396+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Q3 diluted EPS of $8.25 and about $3.2bn TTM free cash flow still anchor the case; no Cummins-specific news since the prior refresh confirms the strong buy screen at unchanged filing risks.
+Rationale: Q3 diluted EPS of $8.25 and about $3.2bn TTM free cash flow still anchor the case; flow and sentiment headlines add no new disclosure, modestly confirming the strong buy screen at unchanged filing risks.
 RiskTags: regulatory, cyclical, customer_concentration, litigation, leverage
 
 ## Weekly updates
@@ -63,3 +63,8 @@ Caterpillar peer pieces and a mis-tagged TSXV ticker are not Cummins-specific; p
 The 23:53 UTC news batch adds one mis-tagged Johnson Controls item since 21:38 UTC; no Cummins-specific headlines.  
 Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.2bn; the screen remains a strong buy.  
 Prior Argus, Boston Partners, First Eagle, and Morgan Stanley themes are unchanged; filing risk themes are unchanged.
+
+### 2026-11-23T17:52:44.228396+00:00
+The 23 Nov news batch adds eight items since 19 Nov, including State Street and Voya disposal headlines, a Simply Wall St undervaluation piece tied to mining engines, and GuruFocus on a 4.2% share-price decline.
+Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.2bn; the screen remains a strong buy.
+Mis-tagged TSXV:CMI and Bloom Energy articles are not Cummins-specific; prior Argus, Boston Partners and Morgan Stanley themes are unchanged; filing risk themes are unchanged.

@@ -1,6 +1,6 @@
 # United Rentals, Inc. (URI) — Research memo
 
-_Version 1 · Updated 2026-10-15T07:24:44.604832+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-11-23T18:28:06.968431+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,13 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: medium
-Confidence: 0.68
-Rationale: Filings show strong FY2025 OCF ($5.19bn) but capex-heavy FCF (~$0.66bn FY25; ~$0.63bn TTM) vs screen ~$1.7bn; dividend cover was 0.96× in FY2024 and ~1.4× in FY25—tension with dividend-family passes and 74% yield input.
+Confidence: 0.70
+Rationale: Q3 filing confirms strong OCF and earnings, but capex-heavy FCF, low cash and $14.7bn debt still weaken the screen buy case relative to dividend and free-cash flow metrics.
 RiskTags: leverage, cyclical, liquidity, competitive
+
+## Weekly updates
+
+### 2026-11-23T18:28:06.968431+00:00
+Q3 10-Q (filed 21 Oct) shows stronger YTD rentals and nine-month OCF of $4.93bn; total indebtedness was $14.7bn and cash $153m at 30 Sep.
+Heavy fleet capex left Q2–Q3 free cash flow negative despite operating strength; TTM FCF in inputs is ~$0.89bn.
+News since mid-October is largely post-earnings price and valuation commentary; no filing change that resolves prior FCF versus screen tension.

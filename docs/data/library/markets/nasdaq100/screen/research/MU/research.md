@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 1 · Updated 2026-10-05T10:48:25.857002+00:00 · Mode: structured_verdict_
+_Version 3 · Updated 2026-11-23T18:19:23.296990+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,16 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: high
-Confidence: 0.68
-Rationale: Filings show a sharp FY2026 revenue/OCF step-up vs FY2025, supporting the screen buy, but the snapshot has no model metrics and FY2025 GAAP FCF (~$1.7bn) vs Yahoo TTM ~$26bn highlights capex-heavy, cyclical memory risk.
+Confidence: 0.71
+Rationale: FY2026 10-K and TTM cash flows corroborate the strong-buy screen, but absent model metrics and memory-cycle price swings keep research conviction at accumulate, not full alignment.
 RiskTags: cyclical, competitive, leverage, customer_concentration
+
+## Weekly updates
+
+### 2026-11-23T18:19:08.630725+00:00
+FY2026 10-K (filed 9 Oct) is in the corpus; Yahoo annual data show about $133bn revenue and ~$59bn GAAP free cash flow versus ~$1.7bn FCF in FY2025.  
+Shares fell sharply on 20–21 Nov, then rose ~19% on 23 Nov with the wider chip rally after Nvidia reinstated Jensen Huang; coverage also cites a large fund adding MU in Q3.  
+Quantitative screen is now strong buy; news mixes AI memory narratives with cyclical valuation caution—filing-based risk picture unchanged.
+
+### 2026-11-23T18:19:23.296990+00:00
+No material change.

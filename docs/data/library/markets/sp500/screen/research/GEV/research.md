@@ -1,6 +1,6 @@
 # GE Vernova Inc. (GEV) — Research memo
 
-_Version 1 · Updated 2026-10-23T07:22:07.850496+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-11-23T18:16:04.216459+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,13 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: medium
-Confidence: 0.62
-Rationale: FY2025 10-K cash flow supports dividend cover, but screen TTM FCF (~$15.7bn) and 24% yield diverge from filed OCF−capex FCF ($3.7bn) and $275m dividends; weak liquidity and offshore-wind risks temper the buy.
+Confidence: 0.60
+Rationale: Secondary pieces flag stronger Power/Electrification and 2026 targets, but filed FY25 FCF still diverges from screen TTM FCF and Wind execution risk keeps the quantitative buy only partly supported.
 RiskTags: cyclical, regulatory, liquidity, pension, accounting
+
+## Weekly updates
+
+### 2026-11-23T18:16:04.216459+00:00
+News flow is mixed: commentaries cite higher 2026 Power/Electrification targets, while Wind losses, execution risk and a ~14% monthly share decline dominate recent headlines.
+Erste Group reportedly downgraded GEV; HSBC had upgraded to Buy (Wind “past the worst”) in late October—both unverified beyond press summaries in the batch.
+Sourced SEC annual cash flow is unchanged (FY2025 10-K OCF $4.99bn, FCF $3.71bn, dividends $275m); Yahoo TTM FCF remains far above filed annual FCF.

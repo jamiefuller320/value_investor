@@ -1,6 +1,6 @@
 # Adyen N.V. (ADYEN.AS) — Research memo
 
-_Version 3 · Updated 2026-11-19T21:50:30.130524+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-23T18:11:49.973999+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: Filed FY2025 growth and positive FCF still support the buy screen, but unverified TTM FCF and lower FY2025 OCF/FCF versus FY2024 temper conviction.
+Rationale: Filed FY2025 revenue, EPS and positive FCF still support the buy screen; new items are sentiment-only and unverified TTM FCF plus lower FY2025 OCF/FCF versus FY2024 temper conviction.
 RiskTags: competitive, regulatory, accounting
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Sourced FY2025 financials still show revenue and EPS growth with positive FCF, b
 No indexed news since the earlier 19 Nov verdict refresh (`news_batch_20261119_215001.json` is empty).  
 FY2025 filed revenue, EPS and positive FCF are unchanged; Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.  
 Buy screen signal and prior Visa Agentic Ready / European payments context are unchanged in this batch.
+
+### 2026-11-23T18:11:49.973999+00:00
+Indexed news since 19 Nov adds a 20 Nov Visa Agentic Ready follow-up, a CRM vs Adyen value piece, and Dutch commentary citing persistent bearish selling pressure (23 Nov).  
+Filed FY2025 revenue, EPS and positive FCF are unchanged; Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.  
+Buy screen and accumulate overlay are unchanged; sentiment-led headlines do not alter the fundamental picture.
