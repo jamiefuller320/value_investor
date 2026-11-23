@@ -1186,28 +1186,10 @@
     "CHEOY_US_EQ",
     "CHE_US_EQ",
     "CHFS_US_EQ",
-    "CHFW_US_EQ"
+    "CHFW_US_EQ",
+    "CHGCY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CFRUY_US_EQ",
-      "venue": "US",
-      "yahoo": "CFRUY",
-      "isin": "US2043191079",
-      "name": "CFRUY",
-      "seconds": 0.947,
-      "outcome": "miss",
-      "at": "2026-11-23T18:16:10.934188+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.901
-      },
-      "screen_seconds": 0.901,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "CFRX_US_EQ",
       "venue": "US",
@@ -1948,6 +1930,25 @@
       },
       "screen_seconds": 84.891,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CHGCY_US_EQ",
+      "venue": "US",
+      "yahoo": "CHGCY",
+      "isin": "US1712691039",
+      "name": "CHGCY",
+      "seconds": 0.855,
+      "outcome": "miss",
+      "at": "2026-11-23T19:39:56.112232+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.814
+      },
+      "screen_seconds": 0.814,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -14209,43 +14210,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T19:36:51.139382+00:00"
+    },
+    {
+      "t212_ticker": "CHGCY_US_EQ",
+      "yahoo": "CHGCY",
+      "name": "CHGCY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T19:39:56.112232+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CHFW_US_EQ",
+    "t212_ticker": "CHGCY_US_EQ",
     "venue": "US",
-    "yahoo": "CHFW",
-    "isin": "US86889P2083",
-    "name": "SRZN",
-    "seconds": 84.977,
+    "yahoo": "CHGCY",
+    "isin": "US1712691039",
+    "name": "CHGCY",
+    "seconds": 0.855,
     "outcome": "miss",
-    "at": "2026-11-23T19:39:50.875048+00:00",
+    "at": "2026-11-23T19:39:56.112232+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.891
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.814
     },
-    "screen_seconds": 84.891,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.814,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CHGCY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T19:39:50.875048+00:00",
+  "updated_at": "2026-11-23T19:39:56.112232+00:00",
   "totals": {
-    "screened": 1185,
+    "screened": 1186,
     "signals": {
-      "buy": 328,
+      "buy": 329,
       "avoid": 282,
       "hold": 277,
       "insufficient_data": 294,
       "strong_buy": 4
     },
-    "signals_n": 1185,
-    "screen_seconds_sum": 12870.692999999985,
-    "screen_seconds_n": 1185,
+    "signals_n": 1186,
+    "screen_seconds_sum": 12871.506999999985,
+    "screen_seconds_n": 1186,
     "outcomes": {
-      "miss": 464,
+      "miss": 465,
       "saved": 721
     }
   },
