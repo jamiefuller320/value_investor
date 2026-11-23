@@ -555,28 +555,10 @@
     "ATRO_US_EQ",
     "ATR_US_EQ",
     "ATS_US_EQ",
-    "ATTO1_US_EQ"
+    "ATTO1_US_EQ",
+    "ATTO_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ATAC_US_EQ",
-      "venue": "US",
-      "yahoo": "ATAC",
-      "isin": "US09581B1035",
-      "name": "OWL",
-      "seconds": 4.531,
-      "outcome": "miss",
-      "at": "2026-11-23T11:11:19.583284+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.243
-      },
-      "screen_seconds": 4.243,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "ATAK_US_EQ",
       "venue": "US",
@@ -1317,6 +1299,25 @@
       },
       "screen_seconds": 4.495,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "ATTO_US_EQ",
+      "venue": "US",
+      "yahoo": "ATTO",
+      "isin": "LU2212224153",
+      "name": "ATTOF",
+      "seconds": 2.026,
+      "outcome": "saved",
+      "at": "2026-11-23T11:16:27.997592+00:00",
+      "rows": 5,
+      "screen": {
+        "signal": "hold",
+        "fits": false,
+        "data_quality_score": 0.85,
+        "seconds": 0.933
+      },
+      "screen_seconds": 0.933,
+      "signal": "hold"
     }
   ],
   "handoffs": [
@@ -4019,41 +4020,72 @@
     }
   ],
   "last": {
-    "t212_ticker": "ATTO1_US_EQ",
+    "t212_ticker": "ATTO_US_EQ",
     "venue": "US",
-    "yahoo": "ATTO1",
-    "isin": "US04987L1026",
-    "name": "ATTO",
-    "seconds": 4.603,
-    "outcome": "miss",
-    "at": "2026-11-23T11:16:20.739336+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "ATTO",
+    "isin": "LU2212224153",
+    "name": "ATTOF",
+    "seconds": 2.026,
+    "outcome": "saved",
+    "at": "2026-11-23T11:16:27.997592+00:00",
+    "rows": 5,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2058707/000119312526453622/atto-20260930.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2058707/000119312526453592/atto-20261109.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2058707/000119312526380228/atto-20260630.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2058707/000119312526380215/atto-20260902.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2058707/000119312526338037/d155197d8k.htm",
+        "has_body": false
+      }
+    ],
     "screen": {
-      "signal": "insufficient_data",
+      "signal": "hold",
       "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.495
+      "data_quality_score": 0.85,
+      "seconds": 0.933
     },
-    "screen_seconds": 4.495,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.933,
+    "signal": "hold"
   },
-  "updated_at": "2026-11-23T11:16:20.739336+00:00",
+  "updated_at": "2026-11-23T11:16:27.997592+00:00",
   "totals": {
-    "screened": 554,
+    "screened": 555,
     "signals": {
       "buy": 133,
       "avoid": 142,
-      "hold": 141,
+      "hold": 142,
       "insufficient_data": 136,
       "strong_buy": 2
     },
-    "signals_n": 554,
-    "screen_seconds_sum": 4253.876,
-    "screen_seconds_n": 554,
+    "signals_n": 555,
+    "screen_seconds_sum": 4254.809,
+    "screen_seconds_n": 555,
     "outcomes": {
       "miss": 228,
-      "saved": 326
+      "saved": 327
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
