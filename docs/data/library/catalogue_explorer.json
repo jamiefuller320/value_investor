@@ -1486,28 +1486,10 @@
     "CTVA_US_EQ",
     "CTW_US_EQ",
     "CTXR_US_EQ",
-    "CTYP_US_EQ"
+    "CTYP_US_EQ",
+    "CTY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CSLM_US_EQ",
-      "venue": "US",
-      "yahoo": "CSLM",
-      "isin": "US36118R1032",
-      "name": "FUSE",
-      "seconds": 4.862,
-      "outcome": "miss",
-      "at": "2026-11-23T22:22:17.363867+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.73
-      },
-      "screen_seconds": 4.73,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "CSL_US_EQ",
       "venue": "US",
@@ -2247,6 +2229,25 @@
         "seconds": 1.136
       },
       "screen_seconds": 1.136,
+      "signal": "hold"
+    },
+    {
+      "t212_ticker": "CTY_US_EQ",
+      "venue": "US",
+      "yahoo": "CTY",
+      "isin": "US1787821081",
+      "name": "CTY",
+      "seconds": 2.587,
+      "outcome": "saved",
+      "at": "2026-11-23T22:28:16.494511+00:00",
+      "rows": 4,
+      "screen": {
+        "signal": "hold",
+        "fits": false,
+        "data_quality_score": 0.85,
+        "seconds": 0.87
+      },
+      "screen_seconds": 0.87,
       "signal": "hold"
     }
   ],
@@ -17888,41 +17889,66 @@
     }
   ],
   "last": {
-    "t212_ticker": "CTYP_US_EQ",
+    "t212_ticker": "CTY_US_EQ",
     "venue": "US",
-    "yahoo": "CTYP",
-    "isin": "US20361A1088",
-    "name": "CTYP",
-    "seconds": 1.272,
-    "outcome": "miss",
-    "at": "2026-11-23T22:28:08.331023+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "CTY",
+    "isin": "US1787821081",
+    "name": "CTY",
+    "seconds": 2.587,
+    "outcome": "saved",
+    "at": "2026-11-23T22:28:16.494511+00:00",
+    "rows": 4,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2143850/000110465926130825/tmb-20260930x10q.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2143850/000110465926130823/tm2630160d1_8k.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2143850/000110465926124775/tm2629408d1_8k.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2143850/000110465926116947/tm2627874d1_8k.htm",
+        "has_body": true
+      }
+    ],
     "screen": {
       "signal": "hold",
       "fits": false,
-      "data_quality_score": 0.5,
-      "seconds": 1.136
+      "data_quality_score": 0.85,
+      "seconds": 0.87
     },
-    "screen_seconds": 1.136,
+    "screen_seconds": 0.87,
     "signal": "hold"
   },
-  "updated_at": "2026-11-23T22:28:08.331023+00:00",
+  "updated_at": "2026-11-23T22:28:16.494511+00:00",
   "totals": {
-    "screened": 1485,
+    "screened": 1486,
     "signals": {
       "buy": 418,
       "avoid": 371,
-      "hold": 330,
+      "hold": 331,
       "insufficient_data": 360,
       "strong_buy": 6
     },
-    "signals_n": 1485,
-    "screen_seconds_sum": 17365.18100000001,
-    "screen_seconds_n": 1485,
+    "signals_n": 1486,
+    "screen_seconds_sum": 17366.05100000001,
+    "screen_seconds_n": 1486,
     "outcomes": {
       "miss": 566,
-      "saved": 919
+      "saved": 920
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
