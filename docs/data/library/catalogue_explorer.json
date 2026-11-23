@@ -849,28 +849,10 @@
     "BNGO_US_EQ",
     "BNIX_US_EQ",
     "BNL_US_EQ",
-    "BNOX_US_EQ"
+    "BNOX_US_EQ",
+    "BNPQY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "BLKB_US_EQ",
-      "venue": "US",
-      "yahoo": "BLKB",
-      "isin": "US09227Q1004",
-      "name": "BLKB",
-      "seconds": 2.373,
-      "outcome": "saved",
-      "at": "2026-11-23T13:56:58.581173+00:00",
-      "rows": 20,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.919
-      },
-      "screen_seconds": 0.919,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "BLLN_US_EQ",
       "venue": "US",
@@ -1611,6 +1593,25 @@
       },
       "screen_seconds": 4.503,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "BNPQY_US_EQ",
+      "venue": "US",
+      "yahoo": "BNPQY",
+      "isin": "US05565A2024",
+      "name": "BNPQY",
+      "seconds": 1.166,
+      "outcome": "miss",
+      "at": "2026-11-23T14:02:26.125432+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 1.051
+      },
+      "screen_seconds": 1.051,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -6953,43 +6954,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T14:02:06.304419+00:00"
+    },
+    {
+      "t212_ticker": "BNPQY_US_EQ",
+      "yahoo": "BNPQY",
+      "name": "BNPQY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T14:02:26.125432+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "BNOX_US_EQ",
+    "t212_ticker": "BNPQY_US_EQ",
     "venue": "US",
-    "yahoo": "BNOX",
-    "isin": "US64136E1029",
-    "name": "NEUP",
-    "seconds": 4.639,
+    "yahoo": "BNPQY",
+    "isin": "US05565A2024",
+    "name": "BNPQY",
+    "seconds": 1.166,
     "outcome": "miss",
-    "at": "2026-11-23T14:02:17.031446+00:00",
+    "at": "2026-11-23T14:02:26.125432+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.503
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 1.051
     },
-    "screen_seconds": 4.503,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.051,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "BNPQY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T14:02:17.031446+00:00",
+  "updated_at": "2026-11-23T14:02:26.125432+00:00",
   "totals": {
-    "screened": 848,
+    "screened": 849,
     "signals": {
-      "buy": 219,
+      "buy": 220,
       "avoid": 214,
       "hold": 212,
       "insufficient_data": 200,
       "strong_buy": 3
     },
-    "signals_n": 848,
-    "screen_seconds_sum": 7572.589999999998,
-    "screen_seconds_n": 848,
+    "signals_n": 849,
+    "screen_seconds_sum": 7573.640999999999,
+    "screen_seconds_n": 849,
     "outcomes": {
-      "miss": 331,
+      "miss": 332,
       "saved": 517
     }
   },
