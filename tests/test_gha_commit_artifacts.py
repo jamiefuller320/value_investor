@@ -713,9 +713,9 @@ def test_artifact_commit_leaves_identical_blobs_off_the_commit(tmp_path: Path):
     _git(tmp_path, "clone", str(remote), str(latest))
     names = _git(latest, "show", "--name-only", "--pretty=format:", "HEAD")
     assert names.stdout.strip() == "docs/data/book/b.json"
-    assert json.loads((latest / "docs" / "data" / "book" / "b.json").read_text(encoding="utf-8")) == {
-        "n": 2
-    }
-    assert json.loads((latest / "docs" / "data" / "book" / "a.json").read_text(encoding="utf-8")) == {
-        "n": 1
-    }
+    assert json.loads(
+        (latest / "docs" / "data" / "book" / "b.json").read_text(encoding="utf-8")
+    ) == {"n": 2}
+    assert json.loads(
+        (latest / "docs" / "data" / "book" / "a.json").read_text(encoding="utf-8")
+    ) == {"n": 1}
