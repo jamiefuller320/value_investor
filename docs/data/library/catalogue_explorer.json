@@ -473,28 +473,10 @@
     "ARZGY_US_EQ",
     "AR_US_EQ",
     "ASAN_US_EQ",
-    "ASAZY_US_EQ"
+    "ASAZY_US_EQ",
+    "ASBFY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ARDX_US_EQ",
-      "venue": "US",
-      "yahoo": "ARDX",
-      "isin": "US0396971071",
-      "name": "ARDX",
-      "seconds": 1.721,
-      "outcome": "saved",
-      "at": "2026-11-23T11:01:05.346748+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.983
-      },
-      "screen_seconds": 0.983,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "AREB_US_EQ",
       "venue": "US",
@@ -1235,6 +1217,25 @@
       },
       "screen_seconds": 0.856,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "ASBFY_US_EQ",
+      "venue": "US",
+      "yahoo": "ASBFY",
+      "isin": "US0455194029",
+      "name": "ASBFY",
+      "seconds": 0.965,
+      "outcome": "miss",
+      "at": "2026-11-23T11:05:57.733982+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.855
+      },
+      "screen_seconds": 0.855,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -3758,43 +3759,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-23T11:05:30.727399+00:00"
+    },
+    {
+      "t212_ticker": "ASBFY_US_EQ",
+      "yahoo": "ASBFY",
+      "name": "ASBFY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-23T11:05:57.733982+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ASAZY_US_EQ",
+    "t212_ticker": "ASBFY_US_EQ",
     "venue": "US",
-    "yahoo": "ASAZY",
-    "isin": "US0453871073",
-    "name": "ASAZY",
-    "seconds": 0.995,
+    "yahoo": "ASBFY",
+    "isin": "US0455194029",
+    "name": "ASBFY",
+    "seconds": 0.965,
     "outcome": "miss",
-    "at": "2026-11-23T11:05:51.418277+00:00",
+    "at": "2026-11-23T11:05:57.733982+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 0.856
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.855
     },
-    "screen_seconds": 0.856,
-    "signal": "hold"
+    "screen_seconds": 0.855,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ASBFY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-23T11:05:51.418277+00:00",
+  "updated_at": "2026-11-23T11:05:57.733982+00:00",
   "totals": {
-    "screened": 472,
+    "screened": 473,
     "signals": {
-      "buy": 112,
+      "buy": 113,
       "avoid": 125,
       "hold": 118,
       "insufficient_data": 116,
       "strong_buy": 1
     },
-    "signals_n": 472,
-    "screen_seconds_sum": 4113.678000000003,
-    "screen_seconds_n": 472,
+    "signals_n": 473,
+    "screen_seconds_sum": 4114.533000000002,
+    "screen_seconds_n": 473,
     "outcomes": {
-      "miss": 194,
+      "miss": 195,
       "saved": 278
     }
   },
