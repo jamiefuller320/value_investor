@@ -3042,28 +3042,10 @@
     "JLL_US_EQ",
     "JL_US_EQ",
     "JMAC_US_EQ",
-    "JMG_US_EQ"
+    "JMG_US_EQ",
+    "JMHLY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "JAN_US_EQ",
-      "venue": "US",
-      "yahoo": "JAN",
-      "isin": "US47089W1045",
-      "name": "AIFC",
-      "seconds": 3.263,
-      "outcome": "saved",
-      "at": "2026-11-24T11:43:41.959008+00:00",
-      "rows": 11,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.8,
-        "seconds": 0.64
-      },
-      "screen_seconds": 0.64,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "JAPAY_US_EQ",
       "venue": "US",
@@ -3804,6 +3786,25 @@
       },
       "screen_seconds": 83.103,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "JMHLY_US_EQ",
+      "venue": "US",
+      "yahoo": "JMHLY",
+      "isin": "US4711154025",
+      "name": "JMHLY",
+      "seconds": 0.824,
+      "outcome": "miss",
+      "at": "2026-11-24T12:05:49.101844+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.752
+      },
+      "screen_seconds": 0.752,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -39442,43 +39443,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T12:02:31.073342+00:00"
+    },
+    {
+      "t212_ticker": "JMHLY_US_EQ",
+      "yahoo": "JMHLY",
+      "name": "JMHLY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T12:05:49.101844+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "JMG_US_EQ",
+    "t212_ticker": "JMHLY_US_EQ",
     "venue": "US",
-    "yahoo": "JMG",
-    "isin": "VGG5146R1073",
-    "name": "JMG",
-    "seconds": 83.187,
+    "yahoo": "JMHLY",
+    "isin": "US4711154025",
+    "name": "JMHLY",
+    "seconds": 0.824,
     "outcome": "miss",
-    "at": "2026-11-24T12:05:41.671849+00:00",
+    "at": "2026-11-24T12:05:49.101844+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 83.103
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.752
     },
-    "screen_seconds": 83.103,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.752,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "JMHLY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T12:05:41.671849+00:00",
+  "updated_at": "2026-11-24T12:05:49.101844+00:00",
   "totals": {
-    "screened": 3041,
+    "screened": 3042,
     "signals": {
-      "buy": 923,
+      "buy": 924,
       "avoid": 721,
       "hold": 637,
       "insufficient_data": 743,
       "strong_buy": 17
     },
-    "signals_n": 3041,
-    "screen_seconds_sum": 30554.1270000001,
-    "screen_seconds_n": 3041,
+    "signals_n": 3042,
+    "screen_seconds_sum": 30554.8790000001,
+    "screen_seconds_n": 3042,
     "outcomes": {
-      "miss": 1169,
+      "miss": 1170,
       "saved": 1872
     }
   },
