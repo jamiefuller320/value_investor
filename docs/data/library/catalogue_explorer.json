@@ -2510,28 +2510,10 @@
     "GURE_US_EQ",
     "GUTS_US_EQ",
     "GVA_US_EQ",
-    "GVDNY_US_EQ"
+    "GVDNY_US_EQ",
+    "GVFF_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "GSAH_US_EQ",
-      "venue": "US",
-      "yahoo": "GSAH",
-      "isin": "US60471A1016",
-      "name": "MIR",
-      "seconds": 84.51,
-      "outcome": "miss",
-      "at": "2026-11-24T04:26:16.211504+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.42
-      },
-      "screen_seconds": 84.42,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "GSAT_US_EQ",
       "venue": "US",
@@ -3272,6 +3254,25 @@
       },
       "screen_seconds": 0.649,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "GVFF_US_EQ",
+      "venue": "US",
+      "yahoo": "GVFF",
+      "isin": "US3960781074",
+      "name": "GVFF",
+      "seconds": 0.855,
+      "outcome": "miss",
+      "at": "2026-11-24T04:39:37.524966+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "strong_buy",
+        "fits": true,
+        "data_quality_score": 0.65,
+        "seconds": 0.76
+      },
+      "screen_seconds": 0.76,
+      "signal": "strong_buy"
     }
   ],
   "handoffs": [
@@ -34458,43 +34459,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T04:39:00.688264+00:00"
+    },
+    {
+      "t212_ticker": "GVFF_US_EQ",
+      "yahoo": "GVFF",
+      "name": "GVFF",
+      "signal": "strong_buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T04:39:37.524966+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "GVDNY_US_EQ",
+    "t212_ticker": "GVFF_US_EQ",
     "venue": "US",
-    "yahoo": "GVDNY",
-    "isin": "US37636P1084",
-    "name": "GVDNY",
-    "seconds": 0.739,
+    "yahoo": "GVFF",
+    "isin": "US3960781074",
+    "name": "GVFF",
+    "seconds": 0.855,
     "outcome": "miss",
-    "at": "2026-11-24T04:39:32.021556+00:00",
+    "at": "2026-11-24T04:39:37.524966+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 1.0,
-      "seconds": 0.649
+      "signal": "strong_buy",
+      "fits": true,
+      "data_quality_score": 0.65,
+      "seconds": 0.76
     },
-    "screen_seconds": 0.649,
-    "signal": "hold"
+    "screen_seconds": 0.76,
+    "signal": "strong_buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "strong_buy",
+      "t212_ticker": "GVFF_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T04:39:32.021556+00:00",
+  "updated_at": "2026-11-24T04:39:37.524966+00:00",
   "totals": {
-    "screened": 2509,
+    "screened": 2510,
     "signals": {
       "buy": 751,
       "avoid": 605,
       "hold": 547,
       "insufficient_data": 594,
-      "strong_buy": 12
+      "strong_buy": 13
     },
-    "signals_n": 2509,
-    "screen_seconds_sum": 27249.683000000034,
-    "screen_seconds_n": 2509,
+    "signals_n": 2510,
+    "screen_seconds_sum": 27250.443000000032,
+    "screen_seconds_n": 2510,
     "outcomes": {
-      "miss": 948,
+      "miss": 949,
       "saved": 1561
     }
   },
