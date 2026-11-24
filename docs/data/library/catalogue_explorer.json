@@ -3113,28 +3113,10 @@
     "KBSF_US_EQ",
     "KB_US_EQ",
     "KCAC2_US_EQ",
-    "KCAC_US_EQ"
+    "KCAC_US_EQ",
+    "KCLI_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "JUSHF_US_EQ",
-      "venue": "US",
-      "yahoo": "JUSHF",
-      "isin": "US48214U1043",
-      "name": "JUSH",
-      "seconds": 84.872,
-      "outcome": "miss",
-      "at": "2026-11-24T12:23:58.632214+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.81
-      },
-      "screen_seconds": 84.81,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "JUVF_US_EQ",
       "venue": "US",
@@ -3875,6 +3857,25 @@
       },
       "screen_seconds": 4.8,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "KCLI_US_EQ",
+      "venue": "US",
+      "yahoo": "KCLI",
+      "isin": "US4848362004",
+      "name": "KCLI",
+      "seconds": 1.207,
+      "outcome": "miss",
+      "at": "2026-11-24T13:54:20.893543+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.85,
+        "seconds": 1.084
+      },
+      "screen_seconds": 1.084,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -39705,43 +39706,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T13:53:54.544874+00:00"
+    },
+    {
+      "t212_ticker": "KCLI_US_EQ",
+      "yahoo": "KCLI",
+      "name": "KCLI",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T13:54:20.893543+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "KCAC_US_EQ",
+    "t212_ticker": "KCLI_US_EQ",
     "venue": "US",
-    "yahoo": "KCAC",
-    "isin": "US74767V1098",
-    "name": "QS",
-    "seconds": 4.878,
+    "yahoo": "KCLI",
+    "isin": "US4848362004",
+    "name": "KCLI",
+    "seconds": 1.207,
     "outcome": "miss",
-    "at": "2026-11-24T13:54:14.515532+00:00",
+    "at": "2026-11-24T13:54:20.893543+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.8
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.85,
+      "seconds": 1.084
     },
-    "screen_seconds": 4.8,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.084,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "KCLI_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T13:54:14.515532+00:00",
+  "updated_at": "2026-11-24T13:54:20.893543+00:00",
   "totals": {
-    "screened": 3112,
+    "screened": 3113,
     "signals": {
-      "buy": 947,
+      "buy": 948,
       "avoid": 733,
       "hold": 650,
       "insufficient_data": 765,
       "strong_buy": 17
     },
-    "signals_n": 3112,
-    "screen_seconds_sum": 31979.92500000011,
-    "screen_seconds_n": 3112,
+    "signals_n": 3113,
+    "screen_seconds_sum": 31981.009000000107,
+    "screen_seconds_n": 3113,
     "outcomes": {
-      "miss": 1210,
+      "miss": 1211,
       "saved": 1902
     }
   },
