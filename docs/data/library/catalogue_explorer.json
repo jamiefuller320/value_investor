@@ -3848,28 +3848,10 @@
     "NBTB_US_EQ",
     "NBTX_US_EQ",
     "NBY_US_EQ",
-    "NCAC_US_EQ"
+    "NCAC_US_EQ",
+    "NCBDY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MYNZ_US_EQ",
-      "venue": "US",
-      "yahoo": "MYNZ",
-      "isin": "NL0015000LC2",
-      "name": "QUCY",
-      "seconds": 83.148,
-      "outcome": "miss",
-      "at": "2026-11-24T18:16:18.037603+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 83.041
-      },
-      "screen_seconds": 83.041,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "MYO_US_EQ",
       "venue": "US",
@@ -4610,6 +4592,25 @@
       },
       "screen_seconds": 4.531,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "NCBDY_US_EQ",
+      "venue": "US",
+      "yahoo": "NCBDY",
+      "isin": "US0598311076",
+      "name": "NCBDY",
+      "seconds": 1.274,
+      "outcome": "miss",
+      "at": "2026-11-24T19:11:45.104938+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 1.094
+      },
+      "screen_seconds": 1.094,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -42532,43 +42533,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T19:11:00.372101+00:00"
+    },
+    {
+      "t212_ticker": "NCBDY_US_EQ",
+      "yahoo": "NCBDY",
+      "name": "NCBDY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T19:11:45.104938+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "NCAC_US_EQ",
+    "t212_ticker": "NCBDY_US_EQ",
     "venue": "US",
-    "yahoo": "NCAC",
-    "isin": "CA74449F4078",
-    "name": "PBM",
-    "seconds": 4.739,
+    "yahoo": "NCBDY",
+    "isin": "US0598311076",
+    "name": "NCBDY",
+    "seconds": 1.274,
     "outcome": "miss",
-    "at": "2026-11-24T19:11:36.874262+00:00",
+    "at": "2026-11-24T19:11:45.104938+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.531
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 1.094
     },
-    "screen_seconds": 4.531,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.094,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "NCBDY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T19:11:36.874262+00:00",
+  "updated_at": "2026-11-24T19:11:45.104938+00:00",
   "totals": {
-    "screened": 3847,
+    "screened": 3848,
     "signals": {
-      "buy": 1152,
+      "buy": 1153,
       "avoid": 906,
       "hold": 833,
       "insufficient_data": 932,
       "strong_buy": 24
     },
-    "signals_n": 3847,
-    "screen_seconds_sum": 38323.55800000009,
-    "screen_seconds_n": 3847,
+    "signals_n": 3848,
+    "screen_seconds_sum": 38324.65200000009,
+    "screen_seconds_n": 3848,
     "outcomes": {
-      "miss": 1495,
+      "miss": 1496,
       "saved": 2352
     }
   },
