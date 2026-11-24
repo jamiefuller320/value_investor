@@ -2955,28 +2955,10 @@
     "ISBA_US_EQ",
     "ISDR_US_EQ",
     "ISENF_US_EQ",
-    "ISIG_US_EQ"
+    "ISIG_US_EQ",
+    "ISMAY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "IOVA_US_EQ",
-      "venue": "US",
-      "yahoo": "IOVA",
-      "isin": "US4622601007",
-      "name": "IOVA",
-      "seconds": 1.49,
-      "outcome": "saved",
-      "at": "2026-11-24T11:16:59.722912+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.605
-      },
-      "screen_seconds": 0.605,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "IO_US_EQ",
       "venue": "US",
@@ -3717,6 +3699,25 @@
       },
       "screen_seconds": 3.529,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "ISMAY_US_EQ",
+      "venue": "US",
+      "yahoo": "ISMAY",
+      "isin": "US45579R1068",
+      "name": "ISMAY",
+      "seconds": 0.832,
+      "outcome": "miss",
+      "at": "2026-11-24T11:24:17.964398+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.776
+      },
+      "screen_seconds": 0.776,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -39107,43 +39108,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T11:23:30.930058+00:00"
+    },
+    {
+      "t212_ticker": "ISMAY_US_EQ",
+      "yahoo": "ISMAY",
+      "name": "ISMAY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T11:24:17.964398+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ISIG_US_EQ",
+    "t212_ticker": "ISMAY_US_EQ",
     "venue": "US",
-    "yahoo": "ISIG",
-    "isin": "US45765Y2046",
-    "name": "TULP",
-    "seconds": 3.599,
+    "yahoo": "ISMAY",
+    "isin": "US45579R1068",
+    "name": "ISMAY",
+    "seconds": 0.832,
     "outcome": "miss",
-    "at": "2026-11-24T11:24:02.801608+00:00",
+    "at": "2026-11-24T11:24:17.964398+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.529
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.776
     },
-    "screen_seconds": 3.529,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.776,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ISMAY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T11:24:02.801608+00:00",
+  "updated_at": "2026-11-24T11:24:17.964398+00:00",
   "totals": {
-    "screened": 2954,
+    "screened": 2955,
     "signals": {
-      "buy": 893,
+      "buy": 894,
       "avoid": 708,
       "hold": 622,
       "insufficient_data": 715,
       "strong_buy": 16
     },
-    "signals_n": 2954,
-    "screen_seconds_sum": 28718.077000000085,
-    "screen_seconds_n": 2954,
+    "signals_n": 2955,
+    "screen_seconds_sum": 28718.853000000086,
+    "screen_seconds_n": 2955,
     "outcomes": {
-      "miss": 1128,
+      "miss": 1129,
       "saved": 1826
     }
   },
