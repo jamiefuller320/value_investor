@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 17 · Updated 2026-11-24T05:45:43.383394+00:00 · Mode: structured_verdict_update_
+_Version 18 · Updated 2026-11-24T07:48:20.313860+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.58
-Rationale: On-file FCF stays exceptional and peer relief helps, but 2027 NAND oversupply press and cycle volatility without new disclosures keep research weakening the strong-buy screen.
+Rationale: On-file FCF remains exceptional and split paperwork is filed, but 2027 NAND oversupply press and cycle volatility without fresh guidance still weaken the strong-buy screen.
 RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
@@ -76,4 +76,9 @@ Refreshed on-file financials still show very strong free cash flow.
 ### 2026-11-24T05:45:43.383394+00:00
 Seeking Alpha argues 2027 NAND “Armageddon” is priced in; Micron’s sharp rebound keeps memory names in a sector relief rally.
 The batch adds a 2027 price-outlook piece only; no new SNDK issuer filings.
+Refreshed on-file financials still show very strong free cash flow.
+
+### 2026-11-24T07:48:20.313860+00:00
+The batch since the morning refresh adds only an FXLeaders NAND price-outlook and key-levels piece; no new issuer filings in that news slice.  
+Newly indexed 8-Ks record the 17 November annual meeting and 19 November 8-for-1 split effectiveness; neither adds operating guidance.  
 Refreshed on-file financials still show very strong free cash flow.
