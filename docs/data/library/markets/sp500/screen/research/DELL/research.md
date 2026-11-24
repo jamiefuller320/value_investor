@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 11 · Updated 2026-11-24T17:57:06.668793+00:00 · Mode: structured_verdict_update_
+_Version 12 · Updated 2026-11-24T21:41:11.180622+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.65
-Rationale: HPE’s margin scare and Tuesday’s pre-earnings pull-back temper Monday’s rally; on-file Q2 growth holds, but Q3 is unverified—strong_buy is only partly confirmed.
+Confidence: 0.72
+Rationale: Filed Q3 FY2027 8-K confirms sharp revenue and EPS growth and higher FY guidance, strengthening strong_buy; leverage and cyclical AI-hardware risks are unchanged.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -63,3 +63,8 @@ The quantitative screen remains **strong_buy**; leverage and cyclical AI-hardwar
 The 17:56 UTC news batch adds a Tuesday pull-back (press cites roughly 5–11%) ahead of Q3 after the close, plus HPE’s margin-guidance disappointment spilling into AI-server peers.  
 On-file Q2 FY2027 themes (~$132bn RPO, higher debt and inventory) are unchanged; no Q3 FY2027 filing or reported Dell results are in the supplied sources.  
 Screen remains **strong_buy**; leverage and cyclical AI-margin risks are unchanged pending Q3 disclosure.
+
+### 2026-11-24T21:41:11.180622+00:00
+The 21:40 UTC batch and after-close press report Q3 beats and raised FY27 guidance, citing roughly $132bn AI backlog; the 24 Nov 8-K shows Q3 revenue $54.9bn and diluted EPS $9.45.  
+Tuesday’s pre-earnings sell-off and HPE margin spillover preceded results; AI-hardware sentiment remains volatile.  
+Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchanged.

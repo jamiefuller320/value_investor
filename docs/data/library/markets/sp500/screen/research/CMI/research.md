@@ -1,6 +1,6 @@
 # Cummins Inc. (CMI) — Research memo
 
-_Version 15 · Updated 2026-11-24T17:53:23.363533+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-24T21:37:27.511847+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: Q3 diluted EPS of $8.25 and about $3.5bn TTM free cash flow anchor the case; HOOPP and dividend headlines add no new filings—research modestly confirms strong buy with unchanged medium filing risks.
+Rationale: Q3 diluted EPS of $8.25 and about $3.5bn TTM free cash flow still anchor the case; a thin “down today” headline adds no filing—research modestly confirms strong buy with unchanged medium risks.
 RiskTags: regulatory, cyclical, customer_concentration, litigation, leverage
 
 ## Weekly updates
@@ -83,3 +83,8 @@ Prior institutional-flow and analyst themes are unchanged; filing risk tags are 
 The 17:53 UTC news batch adds three items since 05:33 UTC: HOOPP reportedly acquired CMI, plus two generic Yahoo dividend listicles naming Cummins.  
 Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.5bn; the screen remains a strong buy.  
 No new verified filing disclosure; prior Power Systems shipment and institutional-flow themes are unchanged.
+
+### 2026-11-24T21:37:27.511847+00:00
+The 21:37 UTC news batch adds one Quiver Quantitative headline on why CMI traded lower today; the syndicated snippet carries no verified company disclosure.
+Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.5bn; the screen remains a strong buy.
+Prior HOOPP, institutional-flow and analyst themes are unchanged; filing risk tags are unchanged.

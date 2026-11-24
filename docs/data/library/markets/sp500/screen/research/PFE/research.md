@@ -1,6 +1,6 @@
 # Pfizer, Inc. (PFE) — Research memo
 
-_Version 5 · Updated 2026-11-24T18:06:52.554216+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T21:52:14.294801+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.69
-Rationale: Research still weakens the buy case: 24 Nov press reinforces dividend-cover and valuation scepticism plus drug-pricing politics, while Japan/Canada LNP suits stay unresolved versus Starna and oncology headlines.
+Rationale: Research still weakens the buy case: a sector rally lifted shares without new filings while press keeps dividend, pricing-politics and unresolved Japan/Canada LNP suit risks in view.
 RiskTags: regulatory, competitive, leverage, litigation, accounting
 
 ## Weekly updates
@@ -29,3 +29,8 @@ No material change. The 24 Nov news batch has no Pfizer-specific items since the
 Later 24 Nov press revisits the Starna in vivo CAR-T licence and oncology growth narrative; no new SEC filings since the 3 Nov Q3 packet.  
 Commentary adds dividend-trap and above-fair-value warnings plus post-election US drug-pricing politics.  
 Japan/Canada lipid-nanoparticle actions remain as last recorded; outcomes still unknown in the file set.
+
+### 2026-11-24T21:52:14.294801+00:00
+PFE rose about 4.2% with a health-care sector rally on 24 Nov; press attributes the move to sector rotation, not new company fundamentals.  
+Sector articles add post-election US drug-pricing politics and Sanofi’s $41bn Insmed deal as rival big-pharma growth context.  
+No new SEC filings since the 3 Nov Q3 packet; Japan/Canada lipid-nanoparticle litigation unchanged in the file set.

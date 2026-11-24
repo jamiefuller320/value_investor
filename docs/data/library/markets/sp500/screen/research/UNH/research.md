@@ -1,6 +1,6 @@
 # UnitedHealth Group Incorporated (UNH) — Research memo
 
-_Version 8 · Updated 2026-11-24T18:14:13.079226+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-24T21:58:57.103862+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: UNH’s CMS star-rating lawsuit heightens regulatory and litigation overhang while sector headlines stay weak; screen cash metrics and Q3 EPS $4.56 are unchanged, so research still weakens strong buy.
+Rationale: CMS star-rating litigation and sector reimbursement headlines persist; screen cash metrics are intact but unquantified payment risk still weakens the strong_buy case.
 RiskTags: regulatory, competitive, litigation, leverage, governance, accounting
 
 ## Weekly updates
@@ -48,3 +48,8 @@ No new interim SEC filing bodies in this pack; firm-specific CMS payment impact 
 24 Nov headlines report UNH suing CMS over 2027 Medicare Advantage star ratings, with coverage citing 45 contracts that should rate 0.5–1; bullish sell-side commentary sits beside the suit.  
 Broader healthcare weakness, Humana/CVS pressure and a Genoa behavioural-pharmacy piece add sector colour without new quantified filing evidence.  
 Screen strong_buy cash metrics and Q3 diluted EPS of $4.56 are unchanged; no new interim SEC filing body in this pack.
+
+### 2026-11-24T21:58:57.103862+00:00
+Since the prior refresh, the news batch only adds a yfinance headline on UNH downside risk, without usable detail in this pack.  
+CMS star-rating litigation and broader Medicare Advantage reimbursement stress from 24 Nov are unchanged; screen strong_buy cash metrics and Q3 diluted EPS of $4.56 are unchanged.  
+No new interim SEC filing body; firm-specific CMS payment impact remains unquantified.

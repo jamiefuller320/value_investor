@@ -1,6 +1,6 @@
 # NIKE, Inc. (NKE) — Research memo
 
-_Version 5 · Updated 2026-11-24T18:05:52.789197+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T21:50:57.589648+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.68
-Rationale: Reaffirmed FY27 sales decline and Sportswear/Jordan reset headlines reinforce Aug-10-Q weakness; the dividend pledge does not offset—research still weakens the screen buy.
+Rationale: Dick's Q3 strength and an upgrade-driven share bounce add modest wholesale read-through, but filed revenue decline and reaffirmed FY27 reset still weaken the screen buy.
 RiskTags: cyclical, competitive, regulatory, customer_concentration
 
 ## Weekly updates
@@ -32,4 +32,9 @@ Q2 FY27 on 17 Dec remains outside the supplied sources.
 ### 2026-11-24T18:05:52.789197+00:00
 Afternoon batch adds commentary only; no new SEC filings since the morning refresh.  
 Headlines cite reaffirmed FY27 sales decline, Sportswear/Jordan supply cuts, a $12bn dividend pledge, and mixed Dick's/Foot Locker wholesale read-through.  
+Q2 FY27 on 17 Dec remains outside the supplied sources.
+
+### 2026-11-24T21:50:57.589648+00:00
+Evening batch is commentary only: Dick's Q3 surge, Foot Locker same-store sales rebound, and headlines tie a ~6% NKE move to an upgrade—no new SEC filings.  
+Aug-2026 10-Q revenue and Q1 cash-flow pressure, plus prior FY27 decline and Sportswear/Jordan reset themes, are unchanged in the file set.  
 Q2 FY27 on 17 Dec remains outside the supplied sources.

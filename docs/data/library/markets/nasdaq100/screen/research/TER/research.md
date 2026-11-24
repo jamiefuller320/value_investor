@@ -1,6 +1,6 @@
 # Teradyne, Inc. (TER) — Research memo
 
-_Version 5 · Updated 2026-11-24T18:08:59.917928+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T21:54:14.752262+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: Generic AI-infrastructure lists do not offset weak momentum and a Tuesday chip-peer selloff; ~$800m TTM FCF supports quality, but buy-screen valuation and earnings-quality gaps stay unresolved.
+Rationale: Research weakens the buy case: sympathy semicap selling and unresolved screen quality gates outweigh ~$800m TTM FCF and generic AI-infrastructure mentions.
 RiskTags: cyclical, customer_concentration, competitive
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Yahoo TTM free cash flow remains about $800m; the buy screen signal is unchanged
 Tuesday coverage ties a renewed AI-chip selloff to falling semiconductor-equipment peers; one Teradyne headline cites a bounce attempt with weak momentum near resistance.  
 Yahoo still names Teradyne among post-Huang AI infrastructure ideas, but the stories are generic and the filings index shows no new SEC bodies after the 30 Oct 2026 10-Q.  
 TTM free cash flow remains about $800m; the buy screen is unchanged and prior valuation and earnings-quality concerns are still unresolved.
+
+### 2026-11-24T21:54:14.752262+00:00
+Since the last refresh, coverage is only a Tuesday semicap-equipment selloff (KLA, ICHR, Lam); nothing Teradyne-specific landed in this batch.  
+The filings index was refreshed with no new SEC bodies after the 30 Oct 2026 10-Q; Yahoo still shows TTM free cash flow near $800m.  
+The buy screen is unchanged and prior valuation and earnings-quality concerns remain unresolved.

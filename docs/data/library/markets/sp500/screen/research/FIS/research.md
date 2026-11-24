@@ -1,6 +1,6 @@
 # Fidelity National Information Services, Inc. (FIS) — Research memo
 
-_Version 18 · Updated 2026-11-24T17:57:50.120907+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-24T21:41:48.641662+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -97,3 +97,8 @@ Q3 leverage, paused buybacks, trimmed outlook, leadership turnover and legal ove
 No new SEC filings after the 4 Nov Q3 8-K/10-Q.  
 Incremental news: Simply Wall St on 2027 revenue-pressure narrative and MarketBeat on State Street reducing its FIS stake—no new issuer-specific disclosure.  
 Q3 leverage, paused buybacks, trimmed outlook, leadership turnover and legal overhang remain unresolved.
+
+### 2026-11-24T21:41:48.641662+00:00
+No new SEC filings after the 4 Nov Q3 8-K/10-Q.  
+Incremental news is one Yahoo Finance hypothetical dividend-portfolio piece with no new issuer-specific disclosure.  
+No material change versus the 17:57 UTC update; Q3 leverage, paused buybacks, trimmed outlook, leadership turnover and legal overhang remain unresolved.

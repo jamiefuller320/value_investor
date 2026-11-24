@@ -1,6 +1,6 @@
 # PLS Group Limited (PLS.AX) — Research memo
 
-_Version 5 · Updated 2026-11-24T18:07:40.396391+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T21:52:52.727840+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.63
-Rationale: Research confirms hold: no new operating disclosure since 24 Nov AGM; cyclical lithium, leverage and offtake risks unchanged and screen TTM FCF remains unverified.
+Rationale: Research confirms hold: no new disclosures or news since the 24 Nov AGM; cyclical lithium, leverage and offtake risks unchanged; screen TTM FCF remains unverified.
 RiskTags: cyclical, leverage, customer_concentration, competitive
 
 ## Weekly updates
@@ -31,4 +31,9 @@ Screen stays hold; Yahoo quarterly cashflow remains empty, so TTM FCF is still u
 ### 2026-11-24T18:07:40.396391+00:00
 One incremental Yahoo piece on ETF exposure and third-party dilution or pricing commentary only; no new ASX operating filings since the 24 Nov AGM pack.  
 Filing index unchanged on re-fetch; latest operating disclosure remains the 28 Oct Sep-quarter activities pack plus AGM materials.  
+Screen stays hold; Yahoo quarterly cashflow is still empty, so TTM FCF is unverified.
+
+### 2026-11-24T21:52:52.727840+00:00
+No articles in the incremental news batch since the 18:07 UTC refresh; filing index unchanged on re-fetch at 21:52 UTC.  
+Latest operating disclosure remains the 28 Oct FY27 Sep-quarter pack plus 24 Nov AGM materials; no new ASX operating filings.  
 Screen stays hold; Yahoo quarterly cashflow is still empty, so TTM FCF is unverified.

@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 18 · Updated 2026-11-24T17:53:45.274079+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-24T21:37:44.805636+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: Filing-backed FCF still supports Strong Buy, but Sierra’s agent scale-up and pre-earnings growth anxiety keep research at accumulate versus the screen.
+Rationale: Filing-backed FCF still supports Strong Buy, but the latest news only repeats pre-earnings cheapness talk and leaves agent and leverage worries unresolved versus the screen.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -95,3 +95,8 @@ No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy scr
 24 Nov coverage ties a share rebound to oversold, pre-earnings positioning; TD Cowen cut its target to $275 but kept Buy.  
 Sierra’s reported $400m run rate and $30bn round sharpen enterprise-agent rivalry with Agentforce; pension-fund add/buy pieces are not issuer filings.  
 No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.
+
+### 2026-11-24T21:37:44.805636+00:00
+The 21:37 UTC batch adds pre-earnings Yahoo commentary on CRM looking cheap versus earnings, plus ~4% move wrap; peer tickers moved without CRM-specific news.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
+Leverage and competitive themes are unchanged from the prior refresh.

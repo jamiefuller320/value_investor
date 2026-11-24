@@ -1,6 +1,6 @@
 # Cisco Systems, Inc. (CSCO) — Research memo
 
-_Version 5 · Updated 2026-11-24T17:54:49.091774+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T21:38:36.926371+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Q1 snapshot and the buy screen still hold; late-24 Nov headlines are profit-taking and peer-margin noise plus repeated router-security commentary, with no new SEC bodies.
+Rationale: Q1 FY27 EPS $1.14 and the buy screen are unchanged; this batch is generic dividend-list commentary only, so filings-backed research still confirms accumulate despite prior margin and governance noise.
 RiskTags: competitive, cyclical, leverage, governance
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Post-earnings margin, insider-sale and governance narratives from the 23 Nov pas
 Headlines cite a ~4% intraday slide on tech pullback and profit-taking after the morning bounce; Zacks still frames networking upgrades as supportive.  
 Coverage repeats Shirudo/OpenAI remediation and flags China-linked router-targeting risk; HPE gross-margin moderation is peer colour only.  
 No new SEC filing bodies; the screen remains **buy** on unchanged Q1 FY27 EPS $1.14 and ~$18.5bn revenue per snapshot.
+
+### 2026-11-24T21:38:36.926371+00:00
+This batch adds one generic multi-sector dividend piece naming CSCO among five holdings; no company-specific events.  
+No new SEC filing bodies since the 24 Nov afternoon pass; Q1 FY27 EPS $1.14 on ~$18.5bn revenue per snapshot are unchanged.  
+Post-earnings margin, insider-sale and router-security narratives from earlier 24 Nov coverage are unchanged.

@@ -1,6 +1,6 @@
 # JD Logistics, Inc. (2618.HK) — Research memo
 
-_Version 5 · Updated 2026-11-24T18:11:19.476851+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T21:56:19.106041+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -31,5 +31,10 @@ Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.
 
 ### 2026-11-24T18:11:19.476851+00:00
 No articles in the 24 Nov 18:10 news batch since the earlier same-day refresh; no new HKEX disclosures in the supplied sources.  
+FY2025 filing-aligned revenue and operating cash flow, and Yahoo Q3 2026 diluted EPS at 0.28 versus 0.33 a year earlier, are unchanged.  
+Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.
+
+### 2026-11-24T21:56:19.106041+00:00
+No articles in the 24 Nov 21:55 news batch since the 18:11 refresh; no new HKEX disclosures in supplied sources.  
 FY2025 filing-aligned revenue and operating cash flow, and Yahoo Q3 2026 diluted EPS at 0.28 versus 0.33 a year earlier, are unchanged.  
 Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.

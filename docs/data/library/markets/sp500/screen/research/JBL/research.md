@@ -1,6 +1,6 @@
 # Jabil Inc. (JBL) — Research memo
 
-_Version 5 · Updated 2026-11-24T18:02:32.693499+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T21:46:51.896948+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -32,4 +32,9 @@ No material change to filing-backed risks or the unresolved screen–earnings re
 ### 2026-11-24T18:02:32.693499+00:00
 No Jabil-specific headlines since the morning refresh; peer EMS names fell on a broader tech selloff without company news.  
 18:02 financial pull unchanged: TTM operating cash flow ~$2.0bn, free cash flow ~$1.37bn; leverage and tangible-book flags stand.  
+Screen–filing earnings reconciliation remains unresolved; filing-backed risk profile unchanged.
+
+### 2026-11-24T21:46:51.896948+00:00
+No Jabil-specific headlines since the 18:02 refresh; the batch only covers peer EMS names (Flex, Bel Fuse) falling on an AI chip selloff.  
+21:46 financial pull unchanged: TTM operating cash flow ~$2.0bn, free cash flow ~$1.37bn; leverage and negative tangible book persist.  
 Screen–filing earnings reconciliation remains unresolved; filing-backed risk profile unchanged.

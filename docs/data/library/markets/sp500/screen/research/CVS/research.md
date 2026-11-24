@@ -1,6 +1,6 @@
 # CVS Health Corporation (CVS) — Research memo
 
-_Version 7 · Updated 2026-11-24T17:55:32.726165+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-24T21:39:28.966004+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -43,3 +43,8 @@ No material change to the accumulate overlay.
 24 Nov headlines cite ~10% weekly share weakness (~$79.65) and persistent breakup uncertainty despite commentary on six straight earnings beats.  
 UnitedHealth’s CMS star-ratings lawsuit adds sector MA payment noise; extra director Form 4s only—no new CVS filing extracts.  
 No material change to the accumulate overlay versus the 05:35 refresh.
+
+### 2026-11-24T21:39:28.966004+00:00
+Since 17:55 UTC the batch is two peer-only yfinance pieces (UnitedHealth, Cardinal Health); CVS is not named.  
+No new SEC extracts beyond the 4 Nov Q3 10-Q.  
+No material change to the accumulate overlay versus the 17:55 refresh.

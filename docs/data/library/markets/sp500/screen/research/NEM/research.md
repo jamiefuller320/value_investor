@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM) — Research memo
 
-_Version 5 · Updated 2026-11-24T18:05:31.818659+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T21:50:05.255983+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: File-set TTM cash generation still supports the screen buy; thin news adds peer cost and gold-price risks without new filings, so research only partly confirms the case.
+Rationale: File-set TTM cash generation still supports the screen buy; no new filings or news since the evening refresh, so prior cyclical and valuation risks still only partly confirm the case.
 RiskTags: cyclical, regulatory, governance, litigation, customer_concentration
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Macro markers in sources (yields, dollar) are unchanged from the prior weekly wi
 Since the morning refresh, headlines are mostly a NEM versus Kinross comparison: solid pipelines and cash flow, with rising costs and shifting gold prices flagged for both.  
 No new company filings; quarterly cash flow in the file set is unchanged.  
 China critical-minerals coverage is macro-only for miners; nothing NEM-specific in the batch.
+
+### 2026-11-24T21:50:05.255983+00:00
+News batch since the 18:05 refresh is empty; no new articles in the supplied sources.  
+No new company filings; screen TTM free cash flow (~$10.1bn) and quarterly cash flow in the file set are unchanged.  
+No material change versus the evening refresh; buy screen and accumulate overlay unchanged.

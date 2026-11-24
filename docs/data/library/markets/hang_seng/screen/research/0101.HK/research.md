@@ -1,6 +1,6 @@
 # Hang Lung Properties Limited (0101.HK) — Research memo
 
-_Version 3 · Updated 2026-11-24T18:10:48.817557+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-24T21:55:54.104572+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -22,4 +22,9 @@ Yahoo quarterly cash flow is still empty, so screen TTM free cash flow remains u
 ### 2026-11-24T18:10:48.817557+00:00
 No Hang Lung-specific headlines in the news batch since the morning refresh.
 H1 2026 interim filings are unchanged in the pack: underlying EPS HK$0.28 vs HK$0.33 prior H1; interim dividend held at HK$0.12.
+Yahoo quarterly cash flow remains empty, so screen TTM free cash flow is still unverified.
+
+### 2026-11-24T21:55:54.104572+00:00
+No Hang Lung-specific headlines in the evening news batch since the afternoon refresh.  
+HKEX filing pack unchanged: H1 2026 underlying EPS still down YoY; interim dividend held at HK$0.12.  
 Yahoo quarterly cash flow remains empty, so screen TTM free cash flow is still unverified.

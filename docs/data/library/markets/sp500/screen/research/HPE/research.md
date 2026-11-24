@@ -1,6 +1,6 @@
 # Hewlett Packard Enterprise Company (HPE) — Research memo
 
-_Version 5 · Updated 2026-11-24T18:12:43.215491+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T21:57:37.307882+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.65
-Rationale: Q4 growth and repurchase uplift support the screen buy case, but the session selloff on AI margin warnings and analyst target cuts slightly weaken near-term conviction; leverage overlays are unchanged.
+Confidence: 0.63
+Rationale: Raised FY outlook, buybacks and AI orders still support the screen buy, but the sharp post-earnings fall on thinner AI-server margins slightly weakens near-term conviction; leverage overlays are unchanged.
 RiskTags: cyclical, leverage, competitive, accounting, litigation, customer_concentration, governance, liquidity
 
 ## Weekly updates
@@ -32,4 +32,9 @@ No new SEC items after that 8-K; HPE appears in broader AI-hardware sentiment li
 ### 2026-11-24T18:12:43.215491+00:00
 Regular-hours coverage reports a deeper fall (~10–17%) after the earnings beat, centred on gross-margin compression and management cautions on thinner AI-server profits.  
 Several banks trimmed price targets despite raised FY outlook and strong AI orders; CEO commentary still stresses 2027 momentum.  
+No new SEC filings since the 23 November 8-K; periodic reports in the set still end at the Q3 10-Q.
+
+### 2026-11-24T21:57:37.307882+00:00
+Late 24 November headlines consolidate a ~16–17% regular-session fall despite beat-and-raise, centred on shrinking AI-server margins overshadowing upbeat guidance (Reuters, Yahoo, Benzinga).
+CEO interview reiterates raised outlook on infrastructure upgrades, inference demand and hyperscaler spend; HPE appears on a Morgan Stanley 2027 server-stock list while peer Dell reports strong AI demand.
 No new SEC filings since the 23 November 8-K; periodic reports in the set still end at the Q3 10-Q.

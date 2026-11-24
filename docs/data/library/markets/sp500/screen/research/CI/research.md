@@ -1,6 +1,6 @@
 # The Cigna Group (CI) — Research memo
 
-_Version 6 · Updated 2026-11-24T17:53:09.384367+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-24T21:37:17.540784+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -37,3 +37,8 @@ Filing-backed Evernorth margin, IFP exit and CMS sector-risk themes are unchange
 No material change since the earlier 24 Nov refresh.  
 The latest batch is ETF net-selling flow (20 Nov) and generic long-horizon return commentary; no new SEC disclosures.  
 Filing-backed Evernorth margin, IFP exit and CMS sector-risk themes are unchanged.
+
+### 2026-11-24T21:37:17.540784+00:00
+No material change since the 17:53 refresh.  
+Evening batch is peer-sector UnitedHealth headline only; no CI-specific disclosures in supplied sources.  
+Filing-backed Evernorth margin, IFP exit and CMS sector-risk themes remain unchanged.

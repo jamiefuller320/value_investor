@@ -1,6 +1,6 @@
 # Western Digital Corporation (WDC) — Research memo
 
-_Version 6 · Updated 2026-11-24T18:10:12.809991+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-24T21:55:27.571411+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.65
-Rationale: Q1 FY26 revenue and ~$4.3bn TTM FCF still support the buy screen; Tuesday's AI chip selloff and Sandisk margin press add cyclical volatility without new filings, leaving accounting risks unresolved.
+Rationale: Q1 FY26 revenue and ~$4.3bn TTM FCF still support the buy screen; the evening batch adds only sector selloff colour and a retrospective piece, with no new WDC filing and accounting risks unresolved.
 RiskTags: cyclical, customer_concentration, competitive, accounting
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Sandisk/Micron press adds cycle colour only and does not resolve customer concen
 Tuesday’s batch reports a broad AI/chip selloff after Monday’s rally, with Micron down about 7% and Sandisk/NAND margin concerns in focus; WDC items are mostly options quotes and a repeat director grant note.  
 Q1 FY26 revenue $4.38bn and TTM FCF ~$4.29bn are unchanged in the screening snapshot; no new WDC filing in the supplied sources.  
 Peer volatility adds cyclical colour but does not update company fundamentals in the supplied files.
+
+### 2026-11-24T21:55:27.571411+00:00
+The evening batch is thin: a Benzinga decade-return retrospective and a Yahoo/GuruFocus piece on AI and storage sector weakness, not fresh WDC fundamentals.  
+Q1 FY26 revenue of $4.38bn and TTM free cash flow of about $4.29bn are unchanged in the screening snapshot; no new WDC filing since the 20 Nov 8-K.  
+Sector selloff colour reinforces cyclical risk but does not resolve customer concentration or accounting concerns.
