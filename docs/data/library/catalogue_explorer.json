@@ -2087,28 +2087,10 @@
     "FIGS_US_EQ",
     "FIG_US_EQ",
     "FIHL_US_EQ",
-    "FIII_US_EQ"
+    "FIII_US_EQ",
+    "FINMY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FEAC_US_EQ",
-      "venue": "US",
-      "yahoo": "FEAC",
-      "isin": "US83067L2088",
-      "name": "FIRY",
-      "seconds": 3.068,
-      "outcome": "miss",
-      "at": "2026-11-24T01:54:38.759962+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.075,
-        "seconds": 2.869
-      },
-      "screen_seconds": 2.869,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "FEAM_US_EQ",
       "venue": "US",
@@ -2849,6 +2831,25 @@
       },
       "screen_seconds": 5.188,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "FINMY_US_EQ",
+      "venue": "US",
+      "yahoo": "FINMY",
+      "isin": "US52660W1018",
+      "name": "FINMY",
+      "seconds": 1.639,
+      "outcome": "miss",
+      "at": "2026-11-24T02:00:04.756804+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.394
+      },
+      "screen_seconds": 1.394,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -22452,43 +22453,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T01:59:30.970130+00:00"
+    },
+    {
+      "t212_ticker": "FINMY_US_EQ",
+      "yahoo": "FINMY",
+      "name": "FINMY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T02:00:04.756804+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "FIII_US_EQ",
+    "t212_ticker": "FINMY_US_EQ",
     "venue": "US",
-    "yahoo": "FIII",
-    "isin": "US28489L1044",
-    "name": "ELMSQ",
-    "seconds": 5.399,
+    "yahoo": "FINMY",
+    "isin": "US52660W1018",
+    "name": "FINMY",
+    "seconds": 1.639,
     "outcome": "miss",
-    "at": "2026-11-24T01:59:58.192959+00:00",
+    "at": "2026-11-24T02:00:04.756804+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 5.188
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.394
     },
-    "screen_seconds": 5.188,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.394,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "FINMY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T01:59:58.192959+00:00",
+  "updated_at": "2026-11-24T02:00:04.756804+00:00",
   "totals": {
-    "screened": 2086,
+    "screened": 2087,
     "signals": {
-      "buy": 622,
+      "buy": 623,
       "avoid": 507,
       "hold": 461,
       "insufficient_data": 487,
       "strong_buy": 9
     },
-    "signals_n": 2086,
-    "screen_seconds_sum": 20924.38800000002,
-    "screen_seconds_n": 2086,
+    "signals_n": 2087,
+    "screen_seconds_sum": 20925.78200000002,
+    "screen_seconds_n": 2087,
     "outcomes": {
-      "miss": 792,
+      "miss": 793,
       "saved": 1294
     }
   },
