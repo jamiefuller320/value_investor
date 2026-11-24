@@ -12573,7 +12573,19 @@ def ingest_filings(
     prior_filings = _load_prior_filings_rows(filings_dir)
     unextractable_urls = load_unextractable_body_urls(filings_dir)
     if prior_filings:
-        groups.append(prior_filings)
+        # eng-20261124-02: euro_depth EVN.VI library index kept the dead evn.at publications
+        # hub across scan-then-target listing passes; migrate before merge so live getmedia
+        # PDFs refetch even when merge_ir_allowlist only runs in the deepen pass.
+        migrated_prior: list[dict[str, Any]] = []
+        prior_migrated = 0
+        for row in prior_filings:
+            item, migrated = _migrate_ir_allowlist_row_url(row, ticker)
+            if migrated:
+                prior_migrated += 1
+            migrated_prior.append(item)
+        if prior_migrated:
+            migrated_prior, _ = _dedupe_ir_allowlist_rows_by_url(migrated_prior)
+        groups.append(migrated_prior)
     ch_accounts = max_ch_accounts
     if ch_accounts is None:
         ch_accounts = DEEPEN_MAX_ACCOUNTS if deepen_history else DEFAULT_MAX_ACCOUNTS

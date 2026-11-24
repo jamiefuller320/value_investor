@@ -925,6 +925,11 @@ def test_select_ingest_improvement_targets_prioritizes_body_gap_batch(tmp_path: 
     assert targets[0].priority_score > targets[1].priority_score
 
 
+def test_body_gap_batch_includes_evn_vi_eng_20261124_02():
+    """eng-20261124-02: euro_depth EVN.VI stale IR hub stays on ingest-improvement batch list."""
+    assert "EVN.VI" in BODY_GAP_BATCH_TICKERS
+
+
 def test_rat_l_form_83_stubs_do_not_count_as_low_penetration_pack(tmp_path: Path):
     """eng-20260923-02: RAT.L statutory pack bodied; Form 8.3 audit rows must not reopen gaps."""
     output_dir = tmp_path / "output"
