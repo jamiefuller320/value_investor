@@ -3457,28 +3457,10 @@
     "LYG_US_EQ",
     "LYL_US_EQ",
     "LYNX_US_EQ",
-    "LYRA_US_EQ"
+    "LYRA_US_EQ",
+    "LYSDY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "LSPR_US_EQ",
-      "venue": "US",
-      "yahoo": "LSPR",
-      "isin": "US98987D3008",
-      "name": "ZVSA",
-      "seconds": 85.737,
-      "outcome": "miss",
-      "at": "2026-11-24T15:26:28.301355+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.588
-      },
-      "screen_seconds": 85.588,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "LSRCY_US_EQ",
       "venue": "US",
@@ -4219,6 +4201,25 @@
       },
       "screen_seconds": 0.733,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "LYSDY_US_EQ",
+      "venue": "US",
+      "yahoo": "LYSDY",
+      "isin": "US5510733075",
+      "name": "LYSDY",
+      "seconds": 0.779,
+      "outcome": "miss",
+      "at": "2026-11-24T16:54:02.324621+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.68
+      },
+      "screen_seconds": 0.68,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -40924,43 +40925,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T16:53:30.161085+00:00"
+    },
+    {
+      "t212_ticker": "LYSDY_US_EQ",
+      "yahoo": "LYSDY",
+      "name": "LYSDY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T16:54:02.324621+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "LYRA_US_EQ",
+    "t212_ticker": "LYSDY_US_EQ",
     "venue": "US",
-    "yahoo": "LYRA",
-    "isin": "US55234L2043",
-    "name": "LYRA",
-    "seconds": 0.846,
+    "yahoo": "LYSDY",
+    "isin": "US5510733075",
+    "name": "LYSDY",
+    "seconds": 0.779,
     "outcome": "miss",
-    "at": "2026-11-24T16:53:55.298709+00:00",
+    "at": "2026-11-24T16:54:02.324621+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.9,
-      "seconds": 0.733
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.68
     },
-    "screen_seconds": 0.733,
-    "signal": "avoid"
+    "screen_seconds": 0.68,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "LYSDY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T16:53:55.298709+00:00",
+  "updated_at": "2026-11-24T16:54:02.324621+00:00",
   "totals": {
-    "screened": 3456,
+    "screened": 3457,
     "signals": {
-      "buy": 1041,
+      "buy": 1042,
       "avoid": 813,
       "hold": 738,
       "insufficient_data": 844,
       "strong_buy": 20
     },
-    "signals_n": 3456,
-    "screen_seconds_sum": 35630.89200000012,
-    "screen_seconds_n": 3456,
+    "signals_n": 3457,
+    "screen_seconds_sum": 35631.572000000124,
+    "screen_seconds_n": 3457,
     "outcomes": {
-      "miss": 1340,
+      "miss": 1341,
       "saved": 2116
     }
   },
