@@ -3475,28 +3475,10 @@
     "MACK_US_EQ",
     "MAC_US_EQ",
     "MAGH_US_EQ",
-    "MAGS_US_EQ"
+    "MAGS_US_EQ",
+    "MAHLY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "LUVU_US_EQ",
-      "venue": "US",
-      "yahoo": "LUVU",
-      "isin": "US55066U1088",
-      "name": "LUVU",
-      "seconds": 2.327,
-      "outcome": "saved",
-      "at": "2026-11-24T16:50:57.539654+00:00",
-      "rows": 14,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 0.606
-      },
-      "screen_seconds": 0.606,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "LU_US_EQ",
       "venue": "US",
@@ -4237,6 +4219,25 @@
       },
       "screen_seconds": 2.583,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MAHLY_US_EQ",
+      "venue": "US",
+      "yahoo": "MAHLY",
+      "isin": "US58502T1079",
+      "name": "MAHLY",
+      "seconds": 0.771,
+      "outcome": "miss",
+      "at": "2026-11-24T16:56:45.694686+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.667
+      },
+      "screen_seconds": 0.667,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -40990,43 +40991,56 @@
       "signal": "strong_buy",
       "status": "pending",
       "queued_at": "2026-11-24T16:55:30.280851+00:00"
+    },
+    {
+      "t212_ticker": "MAHLY_US_EQ",
+      "yahoo": "MAHLY",
+      "name": "MAHLY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T16:56:45.694686+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MAGS_US_EQ",
+    "t212_ticker": "MAHLY_US_EQ",
     "venue": "US",
-    "yahoo": "MAGS",
-    "isin": "CA81728N1006",
-    "name": "SNT",
-    "seconds": 2.711,
+    "yahoo": "MAHLY",
+    "isin": "US58502T1079",
+    "name": "MAHLY",
+    "seconds": 0.771,
     "outcome": "miss",
-    "at": "2026-11-24T16:56:38.571706+00:00",
+    "at": "2026-11-24T16:56:45.694686+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0375,
-      "seconds": 2.583
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.667
     },
-    "screen_seconds": 2.583,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.667,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MAHLY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T16:56:38.571706+00:00",
+  "updated_at": "2026-11-24T16:56:45.694686+00:00",
   "totals": {
-    "screened": 3474,
+    "screened": 3475,
     "signals": {
-      "buy": 1046,
+      "buy": 1047,
       "avoid": 816,
       "hold": 741,
       "insufficient_data": 850,
       "strong_buy": 21
     },
-    "signals_n": 3474,
-    "screen_seconds_sum": 35660.282000000116,
-    "screen_seconds_n": 3474,
+    "signals_n": 3475,
+    "screen_seconds_sum": 35660.94900000012,
+    "screen_seconds_n": 3475,
     "outcomes": {
-      "miss": 1350,
+      "miss": 1351,
       "saved": 2124
     }
   },
