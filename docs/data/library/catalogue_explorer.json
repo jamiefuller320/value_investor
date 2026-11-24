@@ -2036,28 +2036,10 @@
     "FCEL_US_EQ",
     "FCFS_US_EQ",
     "FCF_US_EQ",
-    "FCNCA_US_EQ"
+    "FCNCA_US_EQ",
+    "FCNCB_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "EZFL_US_EQ",
-      "venue": "US",
-      "yahoo": "EZFL",
-      "isin": "US6529413030",
-      "name": "NXXT",
-      "seconds": 4.424,
-      "outcome": "miss",
-      "at": "2026-11-24T01:46:27.818553+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.218
-      },
-      "screen_seconds": 4.218,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "EZGO_US_EQ",
       "venue": "US",
@@ -2797,6 +2779,25 @@
         "seconds": 1.142
       },
       "screen_seconds": 1.142,
+      "signal": "buy"
+    },
+    {
+      "t212_ticker": "FCNCB_US_EQ",
+      "venue": "US",
+      "yahoo": "FCNCB",
+      "isin": "US31946M2026",
+      "name": "FCNCB",
+      "seconds": 2.929,
+      "outcome": "saved",
+      "at": "2026-11-24T01:53:09.218662+00:00",
+      "rows": 19,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.907
+      },
+      "screen_seconds": 0.907,
       "signal": "buy"
     }
   ],
@@ -22201,17 +22202,25 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T01:53:01.441398+00:00"
+    },
+    {
+      "t212_ticker": "FCNCB_US_EQ",
+      "yahoo": "FCNCB",
+      "name": "FCNCB",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T01:53:09.218662+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "FCNCA_US_EQ",
+    "t212_ticker": "FCNCB_US_EQ",
     "venue": "US",
-    "yahoo": "FCNCA",
-    "isin": "US31946M1036",
-    "name": "FCNCA",
-    "seconds": 3.339,
+    "yahoo": "FCNCB",
+    "isin": "US31946M2026",
+    "name": "FCNCB",
+    "seconds": 2.929,
     "outcome": "saved",
-    "at": "2026-11-24T01:53:01.441398+00:00",
+    "at": "2026-11-24T01:53:09.218662+00:00",
     "rows": 19,
     "filings": [
       {
@@ -22333,32 +22342,32 @@
       "signal": "buy",
       "fits": true,
       "data_quality_score": 0.7,
-      "seconds": 1.142
+      "seconds": 0.907
     },
-    "screen_seconds": 1.142,
+    "screen_seconds": 0.907,
     "signal": "buy",
     "handoff": {
       "status": "pending",
       "signal": "buy",
-      "t212_ticker": "FCNCA_US_EQ"
+      "t212_ticker": "FCNCB_US_EQ"
     }
   },
-  "updated_at": "2026-11-24T01:53:01.441398+00:00",
+  "updated_at": "2026-11-24T01:53:09.218662+00:00",
   "totals": {
-    "screened": 2035,
+    "screened": 2036,
     "signals": {
-      "buy": 597,
+      "buy": 598,
       "avoid": 497,
       "hold": 454,
       "insufficient_data": 478,
       "strong_buy": 9
     },
-    "signals_n": 2035,
-    "screen_seconds_sum": 20846.421000000024,
-    "screen_seconds_n": 2035,
+    "signals_n": 2036,
+    "screen_seconds_sum": 20847.328000000023,
+    "screen_seconds_n": 2036,
     "outcomes": {
       "miss": 774,
-      "saved": 1261
+      "saved": 1262
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
