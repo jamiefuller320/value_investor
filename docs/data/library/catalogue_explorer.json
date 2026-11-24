@@ -3826,28 +3826,10 @@
     "NAMI_US_EQ",
     "NANO_US_EQ",
     "NANX_US_EQ",
-    "NAOV_US_EQ"
+    "NAOV_US_EQ",
+    "NARA_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MTX_US_EQ",
-      "venue": "US",
-      "yahoo": "MTX",
-      "isin": "US6031581068",
-      "name": "MTX",
-      "seconds": 2.212,
-      "outcome": "saved",
-      "at": "2026-11-24T18:10:20.344108+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.621
-      },
-      "screen_seconds": 0.621,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "MTZ_US_EQ",
       "venue": "US",
@@ -4588,6 +4570,25 @@
       },
       "screen_seconds": 83.212,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "NARA_US_EQ",
+      "venue": "US",
+      "yahoo": "NARA",
+      "isin": "US6309171022",
+      "name": "NARA",
+      "seconds": 3.161,
+      "outcome": "saved",
+      "at": "2026-11-24T18:25:44.244272+00:00",
+      "rows": 6,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.65,
+        "seconds": 0.549
+      },
+      "screen_seconds": 0.549,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -42422,44 +42423,94 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T18:22:25.529167+00:00"
+    },
+    {
+      "t212_ticker": "NARA_US_EQ",
+      "yahoo": "NARA",
+      "name": "NARA",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T18:25:44.244272+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "NAOV_US_EQ",
+    "t212_ticker": "NARA_US_EQ",
     "venue": "US",
-    "yahoo": "NAOV",
-    "isin": "US63008J8760",
-    "name": "FEED",
-    "seconds": 83.372,
-    "outcome": "miss",
-    "at": "2026-11-24T18:25:34.395833+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "NARA",
+    "isin": "US6309171022",
+    "name": "NARA",
+    "seconds": 3.161,
+    "outcome": "saved",
+    "at": "2026-11-24T18:25:44.244272+00:00",
+    "rows": 6,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2138186/000119312526455495/nara-20260930.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2138186/000094337426000482/nara-20261029.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2138186/000119312526433652/nara-20261027.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2138186/000094337426000439/none-20261005.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2138186/000119312526396522/nara-20260630.htm",
+        "has_body": false
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2138186/000119312526353578/d157264d8k.htm",
+        "has_body": false
+      }
+    ],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 83.212
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.65,
+      "seconds": 0.549
     },
-    "screen_seconds": 83.212,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.549,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "NARA_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T18:25:34.395833+00:00",
+  "updated_at": "2026-11-24T18:25:44.244272+00:00",
   "totals": {
-    "screened": 3825,
+    "screened": 3826,
     "signals": {
-      "buy": 1141,
+      "buy": 1142,
       "avoid": 903,
       "hold": 831,
       "insufficient_data": 926,
       "strong_buy": 24
     },
-    "signals_n": 3825,
-    "screen_seconds_sum": 38123.54600000008,
-    "screen_seconds_n": 3825,
+    "signals_n": 3826,
+    "screen_seconds_sum": 38124.09500000008,
+    "screen_seconds_n": 3826,
     "outcomes": {
       "miss": 1486,
-      "saved": 2339
+      "saved": 2340
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
