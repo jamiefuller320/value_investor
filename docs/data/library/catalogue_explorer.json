@@ -2008,28 +2008,10 @@
     "FAF_US_EQ",
     "FALC_US_EQ",
     "FAMI_US_EQ",
-    "FANH_US_EQ"
+    "FANH_US_EQ",
+    "FANUY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "EVMN_US_EQ",
-      "venue": "US",
-      "yahoo": "EVMN",
-      "isin": "US30054Y1073",
-      "name": "EVMN",
-      "seconds": 4.256,
-      "outcome": "saved",
-      "at": "2026-11-24T01:42:00.400505+00:00",
-      "rows": 15,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.104
-      },
-      "screen_seconds": 1.104,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "EVOL_US_EQ",
       "venue": "US",
@@ -2770,6 +2752,25 @@
       },
       "screen_seconds": 4.164,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "FANUY_US_EQ",
+      "venue": "US",
+      "yahoo": "FANUY",
+      "isin": "US3073051027",
+      "name": "FANUY",
+      "seconds": 1.371,
+      "outcome": "miss",
+      "at": "2026-11-24T01:49:04.525547+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 1.125
+      },
+      "screen_seconds": 1.125,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -21757,43 +21758,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T01:48:18.640412+00:00"
+    },
+    {
+      "t212_ticker": "FANUY_US_EQ",
+      "yahoo": "FANUY",
+      "name": "FANUY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T01:49:04.525547+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "FANH_US_EQ",
+    "t212_ticker": "FANUY_US_EQ",
     "venue": "US",
-    "yahoo": "FANH",
-    "isin": "KYG3314G1284",
-    "name": "AIFU",
-    "seconds": 4.455,
+    "yahoo": "FANUY",
+    "isin": "US3073051027",
+    "name": "FANUY",
+    "seconds": 1.371,
     "outcome": "miss",
-    "at": "2026-11-24T01:48:51.667666+00:00",
+    "at": "2026-11-24T01:49:04.525547+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.164
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 1.125
     },
-    "screen_seconds": 4.164,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.125,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "FANUY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T01:48:51.667666+00:00",
+  "updated_at": "2026-11-24T01:49:04.525547+00:00",
   "totals": {
-    "screened": 2007,
+    "screened": 2008,
     "signals": {
-      "buy": 579,
+      "buy": 580,
       "avoid": 493,
       "hold": 451,
       "insufficient_data": 476,
       "strong_buy": 8
     },
-    "signals_n": 2007,
-    "screen_seconds_sum": 20807.237000000016,
-    "screen_seconds_n": 2007,
+    "signals_n": 2008,
+    "screen_seconds_sum": 20808.362000000016,
+    "screen_seconds_n": 2008,
     "outcomes": {
-      "miss": 767,
+      "miss": 768,
       "saved": 1240
     }
   },
