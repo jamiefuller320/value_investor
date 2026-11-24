@@ -1845,28 +1845,10 @@
     "ELAN_US_EQ",
     "ELA_US_EQ",
     "ELBM_US_EQ",
-    "ELEMF_US_EQ"
+    "ELEMF_US_EQ",
+    "ELEZY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "EFC_US_EQ",
-      "venue": "US",
-      "yahoo": "EFC",
-      "isin": "US28852N1090",
-      "name": "EFC",
-      "seconds": 3.816,
-      "outcome": "saved",
-      "at": "2026-11-24T01:19:04.246191+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.8,
-        "seconds": 1.052
-      },
-      "screen_seconds": 1.052,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "EFGSY_US_EQ",
       "venue": "US",
@@ -2607,6 +2589,25 @@
       },
       "screen_seconds": 4.749,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "ELEZY_US_EQ",
+      "venue": "US",
+      "yahoo": "ELEZY",
+      "isin": "US29258N2062",
+      "name": "ELEZY",
+      "seconds": 1.336,
+      "outcome": "miss",
+      "at": "2026-11-24T01:24:33.813984+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.064
+      },
+      "screen_seconds": 1.064,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -20429,43 +20430,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T01:24:09.349739+00:00"
+    },
+    {
+      "t212_ticker": "ELEZY_US_EQ",
+      "yahoo": "ELEZY",
+      "name": "ELEZY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T01:24:33.813984+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ELEMF_US_EQ",
+    "t212_ticker": "ELEZY_US_EQ",
     "venue": "US",
-    "yahoo": "ELEMF",
-    "isin": "CA28620K1066",
-    "name": "ELE",
-    "seconds": 5.002,
+    "yahoo": "ELEZY",
+    "isin": "US29258N2062",
+    "name": "ELEZY",
+    "seconds": 1.336,
     "outcome": "miss",
-    "at": "2026-11-24T01:24:27.688828+00:00",
+    "at": "2026-11-24T01:24:33.813984+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.749
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.064
     },
-    "screen_seconds": 4.749,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.064,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ELEZY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T01:24:27.688828+00:00",
+  "updated_at": "2026-11-24T01:24:33.813984+00:00",
   "totals": {
-    "screened": 1844,
+    "screened": 1845,
     "signals": {
-      "buy": 520,
+      "buy": 521,
       "avoid": 461,
       "hold": 415,
       "insufficient_data": 440,
       "strong_buy": 8
     },
-    "signals_n": 1844,
-    "screen_seconds_sum": 20512.46600000001,
-    "screen_seconds_n": 1844,
+    "signals_n": 1845,
+    "screen_seconds_sum": 20513.53000000001,
+    "screen_seconds_n": 1845,
     "outcomes": {
-      "miss": 707,
+      "miss": 708,
       "saved": 1137
     }
   },
