@@ -2614,28 +2614,10 @@
     "HKIB_US_EQ",
     "HKMPY_US_EQ",
     "HKUOY_US_EQ",
-    "HKXCY_US_EQ"
+    "HKXCY_US_EQ",
+    "HLFN_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HEINY_US_EQ",
-      "venue": "US",
-      "yahoo": "HEINY",
-      "isin": "US4230123014",
-      "name": "HEINY",
-      "seconds": 0.817,
-      "outcome": "miss",
-      "at": "2026-11-24T07:57:25.133688+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.764
-      },
-      "screen_seconds": 0.764,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "HELE_US_EQ",
       "venue": "US",
@@ -3376,6 +3358,25 @@
       },
       "screen_seconds": 0.81,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "HLFN_US_EQ",
+      "venue": "US",
+      "yahoo": "HLFN",
+      "isin": "US4371832050",
+      "name": "HLFN",
+      "seconds": 0.929,
+      "outcome": "miss",
+      "at": "2026-11-24T08:03:12.039874+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.768
+      },
+      "screen_seconds": 0.768,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -34866,43 +34867,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T08:02:58.254375+00:00"
+    },
+    {
+      "t212_ticker": "HLFN_US_EQ",
+      "yahoo": "HLFN",
+      "name": "HLFN",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T08:03:12.039874+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HKXCY_US_EQ",
+    "t212_ticker": "HLFN_US_EQ",
     "venue": "US",
-    "yahoo": "HKXCY",
-    "isin": "US43858F1093",
-    "name": "HKXCY",
-    "seconds": 0.873,
+    "yahoo": "HLFN",
+    "isin": "US4371832050",
+    "name": "HLFN",
+    "seconds": 0.929,
     "outcome": "miss",
-    "at": "2026-11-24T08:03:05.127322+00:00",
+    "at": "2026-11-24T08:03:12.039874+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 0.81
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.768
     },
-    "screen_seconds": 0.81,
-    "signal": "hold"
+    "screen_seconds": 0.768,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HLFN_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T08:03:05.127322+00:00",
+  "updated_at": "2026-11-24T08:03:12.039874+00:00",
   "totals": {
-    "screened": 2613,
+    "screened": 2614,
     "signals": {
-      "buy": 787,
+      "buy": 788,
       "avoid": 621,
       "hold": 566,
       "insufficient_data": 625,
       "strong_buy": 14
     },
-    "signals_n": 2613,
-    "screen_seconds_sum": 27980.260000000042,
-    "screen_seconds_n": 2613,
+    "signals_n": 2614,
+    "screen_seconds_sum": 27981.028000000042,
+    "screen_seconds_n": 2614,
     "outcomes": {
-      "miss": 998,
+      "miss": 999,
       "saved": 1615
     }
   },
