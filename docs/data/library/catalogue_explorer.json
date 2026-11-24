@@ -2532,28 +2532,10 @@
     "HALMY_US_EQ",
     "HALO_US_EQ",
     "HAO_US_EQ",
-    "HAPP_US_EQ"
+    "HAPP_US_EQ",
+    "HARL_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "GTII_US_EQ",
-      "venue": "US",
-      "yahoo": "GTII",
-      "isin": "US37955R1077",
-      "name": "GTII",
-      "seconds": 0.693,
-      "outcome": "miss",
-      "at": "2026-11-24T04:34:50.232679+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.9,
-        "seconds": 0.613
-      },
-      "screen_seconds": 0.613,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "GTIM_US_EQ",
       "venue": "US",
@@ -3294,6 +3276,25 @@
       },
       "screen_seconds": 84.627,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HARL_US_EQ",
+      "venue": "US",
+      "yahoo": "HARL",
+      "isin": "US41284E1001",
+      "name": "HARL",
+      "seconds": 0.895,
+      "outcome": "miss",
+      "at": "2026-11-24T07:51:12.733634+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.816
+      },
+      "screen_seconds": 0.816,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -34544,43 +34545,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T04:49:55.869119+00:00"
+    },
+    {
+      "t212_ticker": "HARL_US_EQ",
+      "yahoo": "HARL",
+      "name": "HARL",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T07:51:12.733634+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HAPP_US_EQ",
+    "t212_ticker": "HARL_US_EQ",
     "venue": "US",
-    "yahoo": "HAPP",
-    "isin": "KYG4289N1557",
-    "name": "PAVS",
-    "seconds": 84.676,
+    "yahoo": "HARL",
+    "isin": "US41284E1001",
+    "name": "HARL",
+    "seconds": 0.895,
     "outcome": "miss",
-    "at": "2026-11-24T04:51:33.035400+00:00",
+    "at": "2026-11-24T07:51:12.733634+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.627
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.816
     },
-    "screen_seconds": 84.627,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.816,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HARL_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T04:51:33.035400+00:00",
+  "updated_at": "2026-11-24T07:51:12.733634+00:00",
   "totals": {
-    "screened": 2531,
+    "screened": 2532,
     "signals": {
-      "buy": 758,
+      "buy": 759,
       "avoid": 607,
       "hold": 552,
       "insufficient_data": 601,
       "strong_buy": 13
     },
-    "signals_n": 2531,
-    "screen_seconds_sum": 27852.516000000036,
-    "screen_seconds_n": 2531,
+    "signals_n": 2532,
+    "screen_seconds_sum": 27853.332000000035,
+    "screen_seconds_n": 2532,
     "outcomes": {
-      "miss": 957,
+      "miss": 958,
       "saved": 1574
     }
   },
