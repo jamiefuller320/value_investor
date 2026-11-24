@@ -3702,28 +3702,10 @@
     "MOH_US_EQ",
     "MOLN_US_EQ",
     "MOMO_US_EQ",
-    "MONDY_US_EQ"
+    "MONDY_US_EQ",
+    "MONOY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MLP_US_EQ",
-      "venue": "US",
-      "yahoo": "MLP",
-      "isin": "US5773451019",
-      "name": "MLP",
-      "seconds": 2.758,
-      "outcome": "saved",
-      "at": "2026-11-24T17:26:44.768756+00:00",
-      "rows": 20,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.757
-      },
-      "screen_seconds": 0.757,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "MLR_US_EQ",
       "venue": "US",
@@ -4464,6 +4446,25 @@
       },
       "screen_seconds": 0.724,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "MONOY_US_EQ",
+      "venue": "US",
+      "yahoo": "MONOY",
+      "isin": "US61022V1070",
+      "name": "MONOY",
+      "seconds": 0.766,
+      "outcome": "miss",
+      "at": "2026-11-24T17:34:46.724136+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.662
+      },
+      "screen_seconds": 0.662,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -41962,43 +41963,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T17:34:31.261996+00:00"
+    },
+    {
+      "t212_ticker": "MONOY_US_EQ",
+      "yahoo": "MONOY",
+      "name": "MONOY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T17:34:46.724136+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MONDY_US_EQ",
+    "t212_ticker": "MONOY_US_EQ",
     "venue": "US",
-    "yahoo": "MONDY",
-    "isin": "US60921V2007",
-    "name": "MONDY",
-    "seconds": 0.87,
+    "yahoo": "MONOY",
+    "isin": "US61022V1070",
+    "name": "MONOY",
+    "seconds": 0.766,
     "outcome": "miss",
-    "at": "2026-11-24T17:34:39.564026+00:00",
+    "at": "2026-11-24T17:34:46.724136+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 0.95,
-      "seconds": 0.724
+      "seconds": 0.662
     },
-    "screen_seconds": 0.724,
-    "signal": "avoid"
+    "screen_seconds": 0.662,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MONOY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T17:34:39.564026+00:00",
+  "updated_at": "2026-11-24T17:34:46.724136+00:00",
   "totals": {
-    "screened": 3701,
+    "screened": 3702,
     "signals": {
-      "buy": 1100,
+      "buy": 1101,
       "avoid": 872,
       "hold": 804,
       "insufficient_data": 902,
       "strong_buy": 23
     },
-    "signals_n": 3701,
-    "screen_seconds_sum": 36031.05800000009,
-    "screen_seconds_n": 3701,
+    "signals_n": 3702,
+    "screen_seconds_sum": 36031.72000000009,
+    "screen_seconds_n": 3702,
     "outcomes": {
-      "miss": 1440,
+      "miss": 1441,
       "saved": 2261
     }
   },
