@@ -4136,28 +4136,10 @@
     "OG_US_EQ",
     "OHI_US_EQ",
     "OIBRC_US_EQ",
-    "OIBRQ_US_EQ"
+    "OIBRQ_US_EQ",
+    "OIG_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "OBNK_US_EQ",
-      "venue": "US",
-      "yahoo": "OBNK",
-      "isin": "US68621T1025",
-      "name": "OBK",
-      "seconds": 86.532,
-      "outcome": "saved",
-      "at": "2026-11-24T20:03:14.575024+00:00",
-      "rows": 24,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.143
-      },
-      "screen_seconds": 84.143,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "OBX_US_EQ",
       "venue": "US",
@@ -4898,6 +4880,25 @@
       },
       "screen_seconds": 1.056,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "OIG_US_EQ",
+      "venue": "US",
+      "yahoo": "OIG",
+      "isin": "US68629T1043",
+      "name": "OIG",
+      "seconds": 2.34,
+      "outcome": "saved",
+      "at": "2026-11-24T20:22:48.464718+00:00",
+      "rows": 3,
+      "screen": {
+        "signal": "hold",
+        "fits": false,
+        "data_quality_score": 0.8,
+        "seconds": 0.944
+      },
+      "screen_seconds": 0.944,
+      "signal": "hold"
     }
   ],
   "handoffs": [
@@ -44657,41 +44658,60 @@
     }
   ],
   "last": {
-    "t212_ticker": "OIBRQ_US_EQ",
+    "t212_ticker": "OIG_US_EQ",
     "venue": "US",
-    "yahoo": "OIBRQ",
-    "isin": "US6708517080",
-    "name": "OIBRQ",
-    "seconds": 1.257,
-    "outcome": "miss",
-    "at": "2026-11-24T20:22:39.240051+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "OIG",
+    "isin": "US68629T1043",
+    "name": "OIG",
+    "seconds": 2.34,
+    "outcome": "saved",
+    "at": "2026-11-24T20:22:48.464718+00:00",
+    "rows": 3,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2124472/000162828026072710/oig-20260930.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2124472/000162828026072706/oro-20261110.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2124472/000162828026062917/orion180-8xk.htm",
+        "has_body": true
+      }
+    ],
     "screen": {
-      "signal": "avoid",
+      "signal": "hold",
       "fits": false,
-      "data_quality_score": 0.75,
-      "seconds": 1.056
+      "data_quality_score": 0.8,
+      "seconds": 0.944
     },
-    "screen_seconds": 1.056,
-    "signal": "avoid"
+    "screen_seconds": 0.944,
+    "signal": "hold"
   },
-  "updated_at": "2026-11-24T20:22:39.240051+00:00",
+  "updated_at": "2026-11-24T20:22:48.464718+00:00",
   "totals": {
-    "screened": 4135,
+    "screened": 4136,
     "signals": {
       "buy": 1239,
       "avoid": 980,
-      "hold": 892,
+      "hold": 893,
       "insufficient_data": 998,
       "strong_buy": 26
     },
-    "signals_n": 4135,
-    "screen_seconds_sum": 39915.59300000011,
-    "screen_seconds_n": 4135,
+    "signals_n": 4136,
+    "screen_seconds_sum": 39916.53700000011,
+    "screen_seconds_n": 4136,
     "outcomes": {
       "miss": 1608,
-      "saved": 2527
+      "saved": 2528
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
