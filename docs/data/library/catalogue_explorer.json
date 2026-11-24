@@ -3405,28 +3405,10 @@
     "LQMT_US_EQ",
     "LQR_US_EQ",
     "LRE_US_EQ",
-    "LRHC_US_EQ"
+    "LRHC_US_EQ",
+    "LRLCY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "LMNR_US_EQ",
-      "venue": "US",
-      "yahoo": "LMNR",
-      "isin": "US5327461043",
-      "name": "LMNR",
-      "seconds": 3.025,
-      "outcome": "saved",
-      "at": "2026-11-24T15:02:07.411415+00:00",
-      "rows": 18,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.939
-      },
-      "screen_seconds": 0.939,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "LMPX_US_EQ",
       "venue": "US",
@@ -4167,6 +4149,25 @@
       },
       "screen_seconds": 0.816,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "LRLCY_US_EQ",
+      "venue": "US",
+      "yahoo": "LRLCY",
+      "isin": "US5021172037",
+      "name": "LRLCY",
+      "seconds": 1.171,
+      "outcome": "miss",
+      "at": "2026-11-24T15:19:08.878081+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.025
+      },
+      "screen_seconds": 1.025,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -40760,43 +40761,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T15:16:58.660585+00:00"
+    },
+    {
+      "t212_ticker": "LRLCY_US_EQ",
+      "yahoo": "LRLCY",
+      "name": "LRLCY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T15:19:08.878081+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "LRHC_US_EQ",
+    "t212_ticker": "LRLCY_US_EQ",
     "venue": "US",
-    "yahoo": "LRHC",
-    "isin": "US50172T6082",
-    "name": "SRTM",
-    "seconds": 0.965,
+    "yahoo": "LRLCY",
+    "isin": "US5021172037",
+    "name": "LRLCY",
+    "seconds": 1.171,
     "outcome": "miss",
-    "at": "2026-11-24T15:19:01.939948+00:00",
+    "at": "2026-11-24T15:19:08.878081+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.8,
-      "seconds": 0.816
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.025
     },
-    "screen_seconds": 0.816,
-    "signal": "avoid"
+    "screen_seconds": 1.025,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "LRLCY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T15:19:01.939948+00:00",
+  "updated_at": "2026-11-24T15:19:08.878081+00:00",
   "totals": {
-    "screened": 3404,
+    "screened": 3405,
     "signals": {
-      "buy": 1028,
+      "buy": 1029,
       "avoid": 799,
       "hold": 723,
       "insufficient_data": 835,
       "strong_buy": 19
     },
-    "signals_n": 3404,
-    "screen_seconds_sum": 34986.17600000014,
-    "screen_seconds_n": 3404,
+    "signals_n": 3405,
+    "screen_seconds_sum": 34987.20100000014,
+    "screen_seconds_n": 3405,
     "outcomes": {
-      "miss": 1323,
+      "miss": 1324,
       "saved": 2081
     }
   },
