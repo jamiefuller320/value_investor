@@ -2696,28 +2696,10 @@
     "HSTM_US_EQ",
     "HTA_US_EQ",
     "HTBI_US_EQ",
-    "HTBX_US_EQ"
+    "HTBX_US_EQ",
+    "HTCMY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HORI_US_EQ",
-      "venue": "US",
-      "yahoo": "HORI",
-      "isin": "KYG3033X1051",
-      "name": "HORI",
-      "seconds": 3.511,
-      "outcome": "miss",
-      "at": "2026-11-24T08:09:59.445530+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.439
-      },
-      "screen_seconds": 3.439,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "HOTH_US_EQ",
       "venue": "US",
@@ -3458,6 +3440,25 @@
       },
       "screen_seconds": 3.598,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HTCMY_US_EQ",
+      "venue": "US",
+      "yahoo": "HTCMY",
+      "isin": "US43358L1017",
+      "name": "HTCMY",
+      "seconds": 0.93,
+      "outcome": "miss",
+      "at": "2026-11-24T08:15:36.261085+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.806
+      },
+      "screen_seconds": 0.806,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -35196,43 +35197,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T08:14:58.662899+00:00"
+    },
+    {
+      "t212_ticker": "HTCMY_US_EQ",
+      "yahoo": "HTCMY",
+      "name": "HTCMY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T08:15:36.261085+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HTBX_US_EQ",
+    "t212_ticker": "HTCMY_US_EQ",
     "venue": "US",
-    "yahoo": "HTBX",
-    "isin": "US42237K5083",
-    "name": "SCPX",
-    "seconds": 3.662,
+    "yahoo": "HTCMY",
+    "isin": "US43358L1017",
+    "name": "HTCMY",
+    "seconds": 0.93,
     "outcome": "miss",
-    "at": "2026-11-24T08:15:28.929048+00:00",
+    "at": "2026-11-24T08:15:36.261085+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.598
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.806
     },
-    "screen_seconds": 3.598,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.806,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HTCMY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T08:15:28.929048+00:00",
+  "updated_at": "2026-11-24T08:15:36.261085+00:00",
   "totals": {
-    "screened": 2695,
+    "screened": 2696,
     "signals": {
-      "buy": 818,
+      "buy": 819,
       "avoid": 633,
       "hold": 579,
       "insufficient_data": 651,
       "strong_buy": 14
     },
-    "signals_n": 2695,
-    "screen_seconds_sum": 28109.806000000048,
-    "screen_seconds_n": 2695,
+    "signals_n": 2696,
+    "screen_seconds_sum": 28110.61200000005,
+    "screen_seconds_n": 2696,
     "outcomes": {
-      "miss": 1036,
+      "miss": 1037,
       "saved": 1659
     }
   },
