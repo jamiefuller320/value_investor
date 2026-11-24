@@ -1,15 +1,48 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-23T09:46:52.336520+01:00",
+    "local_time": "2026-11-24T09:47:03.709074+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-11-23T09:00:00+01:00",
-    "settle_at": "2026-11-23T09:30:00+01:00",
+    "market_open_at": "2026-11-24T09:00:00+01:00",
+    "settle_at": "2026-11-24T09:30:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "43906e70-5f93-4e7a-b0ef-940f206dfc70",
+      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+      "acted_at": "2026-11-24T09:47:03.709074+01:00",
+      "ticker": "AD.AS",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.915418,
+      "price": 34.58,
+      "gross": 31.66,
+      "cost": 0.06,
+      "net_cash": 31.6,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Koninklijke Ahold Delhaize N.V.",
+      "avg_cost_at_exit": 31.14,
+      "position_closed": true
+    },
+    {
+      "id": "4f90c9d6-b8df-422b-b3ac-3f52ba15e5f7",
+      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+      "acted_at": "2026-11-24T09:47:03.709074+01:00",
+      "ticker": "PHIA.AS",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.908733,
+      "price": 26.39,
+      "gross": 23.98,
+      "cost": 0.04,
+      "net_cash": -24.03,
+      "note": "Automated buy",
+      "name": "Koninklijke Philips N.V."
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +56,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 995.46,
-    "cash": 0.0,
+    "nav": 995.36,
+    "cash": 7.57,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,7 +69,7 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 31.11,
+    "target_sleeve_value": 31.1,
     "targets": [
       {
         "ticker": "UMI.BR",
@@ -263,32 +296,10 @@
         "price": 62.28
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.915418,
-        "price": 34.58,
-        "value": 31.66
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
-      {
-        "action": "buy",
-        "ticker": "PHIA.AS",
-        "name": "Koninklijke Philips N.V.",
-        "reason": "Top-up to equal weight",
-        "value": 24.03,
-        "price": 26.39,
-        "target_value": 31.11,
-        "conviction_score": 0.3359,
-        "signal": "buy"
-      }
-    ],
+    "anticipated_buys": [],
     "anticipated_holds": [
       {
         "action": "hold",
@@ -296,7 +307,7 @@
         "name": "Umicore SA",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 29.16,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.9424,
         "signal": "strong_buy"
       },
@@ -306,7 +317,7 @@
         "name": "Vinci SA",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 27.93,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.888,
         "signal": "strong_buy"
       },
@@ -316,7 +327,7 @@
         "name": "Cairn Homes plc",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.97,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.7562000000000001,
         "signal": "strong_buy"
       },
@@ -326,7 +337,7 @@
         "name": "FBD Holdings plc",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.79,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.7501,
         "signal": "strong_buy"
       },
@@ -336,7 +347,7 @@
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 29.05,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.7023,
         "signal": "strong_buy"
       },
@@ -346,7 +357,7 @@
         "name": "Randstad N.V.",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 30.75,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.6964,
         "signal": "buy"
       },
@@ -356,7 +367,7 @@
         "name": "Compagnie de Saint-Gobain S.A.",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.02,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.6894,
         "signal": "strong_buy"
       },
@@ -366,7 +377,7 @@
         "name": "Sanofi",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 30.02,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.6879000000000001,
         "signal": "buy"
       },
@@ -376,7 +387,7 @@
         "name": "Skanska AB (publ)",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 27.87,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.6686000000000001,
         "signal": "buy"
       },
@@ -386,7 +397,7 @@
         "name": "Andritz AG",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 25.73,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.6461,
         "signal": "strong_buy"
       },
@@ -396,7 +407,7 @@
         "name": "Tele2 AB (publ)",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 26.84,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.625,
         "signal": "buy"
       },
@@ -406,7 +417,7 @@
         "name": "DHL AG",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 29.25,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.5980000000000001,
         "signal": "buy"
       },
@@ -416,7 +427,7 @@
         "name": "Shell plc",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 29.98,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.5932000000000001,
         "signal": "buy"
       },
@@ -426,7 +437,7 @@
         "name": "OMV Aktiengesellschaft",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 29.82,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.5467,
         "signal": "buy"
       },
@@ -436,7 +447,7 @@
         "name": "Melexis NV",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 27.89,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.4899,
         "signal": "strong_buy"
       },
@@ -446,7 +457,7 @@
         "name": "Voestalpine AG",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 30.04,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.4728,
         "signal": "strong_buy"
       },
@@ -456,7 +467,7 @@
         "name": "Logitech International S.A.",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 27.91,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.4446,
         "signal": "buy"
       },
@@ -466,7 +477,7 @@
         "name": "Prosus N.V.",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 29.17,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.41939,
         "signal": "buy"
       },
@@ -476,8 +487,18 @@
         "name": "Kingspan Group plc",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 27.18,
-        "target_value": 31.11,
+        "target_value": 31.1,
         "conviction_score": 0.3455,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "PHIA.AS",
+        "name": "Koninklijke Philips N.V.",
+        "reason": "Already near equal-weight target",
+        "value": 31.06,
+        "target_value": 31.1,
+        "conviction_score": 0.3359,
         "signal": "buy"
       }
     ],
@@ -491,7 +512,7 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 32 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 19 near-target holding(s)."
+    "summary": "Next rebalance would target 32 equal-weight sleeve(s); leave 20 near-target holding(s)."
   },
   "alerts": [
     {
@@ -504,17 +525,6 @@
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
-    },
-    {
-      "ticker": "AD.AS",
-      "name": "Koninklijke Ahold Delhaize N.V.",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
-      "mark": 34.58,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "wait"
     },
     {
       "ticker": "LOGN.SW",
@@ -873,7 +883,7 @@
       "id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
       "created_at": "2026-09-09T07:22:40.558605+00:00"
     },
-    "cash": 0.0,
+    "cash": 7.57,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -884,17 +894,6 @@
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "sector": "Technology",
         "currency": "SEK",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-09-09T09:22:40.558497+02:00"
-      },
-      "AD.AS": {
-        "ticker": "AD.AS",
-        "shares": 0.915418,
-        "avg_cost": 31.14,
-        "name": "Koninklijke Ahold Delhaize N.V.",
-        "sector": "Consumer Defensive",
-        "currency": "EUR",
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-09-09T09:22:40.558497+02:00"
@@ -1220,8 +1219,8 @@
       },
       "PHIA.AS": {
         "ticker": "PHIA.AS",
-        "shares": 0.268304,
-        "avg_cost": 27.14,
+        "shares": 1.177037,
+        "avg_cost": 26.561,
         "name": "Koninklijke Philips N.V.",
         "sector": "Healthcare",
         "currency": "EUR",
@@ -4271,6 +4270,38 @@
         "net_cash": -27.23,
         "note": "Automated buy",
         "name": "Kingspan Group plc"
+      },
+      {
+        "id": "43906e70-5f93-4e7a-b0ef-940f206dfc70",
+        "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+        "acted_at": "2026-11-24T09:47:03.709074+01:00",
+        "ticker": "AD.AS",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.915418,
+        "price": 34.58,
+        "gross": 31.66,
+        "cost": 0.06,
+        "net_cash": 31.6,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Koninklijke Ahold Delhaize N.V.",
+        "avg_cost_at_exit": 31.14,
+        "position_closed": true
+      },
+      {
+        "id": "4f90c9d6-b8df-422b-b3ac-3f52ba15e5f7",
+        "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+        "acted_at": "2026-11-24T09:47:03.709074+01:00",
+        "ticker": "PHIA.AS",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.908733,
+        "price": 26.39,
+        "gross": 23.98,
+        "cost": 0.04,
+        "net_cash": -24.03,
+        "note": "Automated buy",
+        "name": "Koninklijke Philips N.V."
       }
     ],
     "equity_curve": [
@@ -7166,26 +7197,45 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-24T09:47:03.709074+01:00",
+        "portfolio_value": 697.31,
+        "cash": 7.57,
+        "contributed_capital": 1000.0,
+        "positions": 32,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CHF": 0.9095,
+            "EUR": 0.83631,
+            "SEK": 0.07441
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-23T09:46:52.336520+01:00",
+    "last_mark_at": "2026-11-24T09:47:03.709074+01:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "AD.AS": 1
-      },
-      "reentry_cooldown": {}
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "euro_depth",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-23T08:46:53.307386+00:00",
+    "generated_at": "2026-11-24T08:47:04.233574+00:00",
     "observe_only": true,
-    "open_count": 57,
+    "open_count": 58,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -7220,7 +7270,7 @@
       }
     },
     "first_episode": {
-      "open_count": 42,
+      "open_count": 43,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -7256,13 +7306,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 2
+    "ingested_this_pass": 1,
+    "checkpoints_added_this_pass": 4
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-23T08:46:53.310986+00:00",
+    "generated_at": "2026-11-24T08:47:04.238350+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -7316,7 +7366,7 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 55,
+      "hold_closed_count": 56,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 79,
       "gaps": [
@@ -7326,26 +7376,26 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 29,
-        "recovered_to_breakeven": 20,
+        "count": 28,
+        "recovered_to_breakeven": 19,
         "close_reasons": {
-          "open": 29
+          "open": 28
         }
       },
       "closed": {
-        "count": 55,
-        "recovered_to_breakeven": 48,
+        "count": 56,
+        "recovered_to_breakeven": 49,
         "close_reasons": {
-          "sold_while_recovered": 48,
+          "sold_while_recovered": 49,
           "sold_while_underwater": 7
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 32,
+        "count": 33,
         "verdicts": {
-          "open": 32
+          "open": 33
         }
       },
       "closed": {
@@ -7355,11 +7405,11 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 3
     }
   },
   "hypothesis_integrity": {
@@ -7367,8 +7417,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-23T08:46:53.318186+00:00",
-    "as_of": "2026-11-23T09:46:52.336520+01:00",
+    "updated_at": "2026-11-24T08:47:04.245933+00:00",
+    "as_of": "2026-11-24T09:47:03.709074+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -7380,19 +7430,19 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 33,
+    "holding_count": 32,
     "underwater_count": 10,
     "thesis_status_counts": {
-      "intact": 29,
+      "intact": 28,
       "weakening": 4,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 33,
+      "holding_count": 32,
       "loser_count": 10,
-      "loser_share": 0.303,
-      "loser_nav_share": 0.3096,
+      "loser_share": 0.3125,
+      "loser_nav_share": 0.312,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
@@ -7407,10 +7457,10 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.0435,
-        "quality": 0.1739,
-        "dividend": 0.087,
-        "garp": 0.3478,
+        "cheapness": 0.0455,
+        "quality": 0.1818,
+        "dividend": 0.0909,
+        "garp": 0.3636,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -7953,46 +8003,6 @@
         "broken_reasons": []
       },
       {
-        "ticker": "PHIA.AS",
-        "name": "Koninklijke Philips N.V.",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0276,
-        "mark": 26.39,
-        "avg_cost": 27.14,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.3359,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "risk"
-        ],
-        "failed_families": [
-          "dividend",
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "conviction 34% below intact floor",
-          "still buy",
-          "research accumulate"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00"
-        ],
-        "weaken_reasons": [
-          "conviction 34% below intact floor"
-        ],
-        "broken_reasons": []
-      },
-      {
         "ticker": "MC.PA",
         "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
         "thesis_status": "intact",
@@ -8113,6 +8123,46 @@
           "conviction 69%"
         ],
         "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "PHIA.AS",
+        "name": "Koninklijke Philips N.V.",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0064,
+        "mark": 26.39,
+        "avg_cost": 26.561,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.3359,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "risk"
+        ],
+        "failed_families": [
+          "dividend",
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "conviction 34% below intact floor",
+          "still buy",
+          "research accumulate"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00"
+        ],
+        "weaken_reasons": [
+          "conviction 34% below intact floor"
+        ],
         "broken_reasons": []
       },
       {
@@ -8721,46 +8771,6 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
-      },
-      {
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.1105,
-        "mark": 34.58,
-        "avg_cost": 31.14,
-        "signal": "strong_buy",
-        "timing_signal": "wait",
-        "conviction_score": 0.8619,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 86%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 86%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -8770,27 +8780,27 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-23T08:46:53.325710+00:00",
+    "generated_at": "2026-11-24T08:47:04.257902+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 55,
+      "closed_total": 56,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 29,
+      "open_with_thesis": 28,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 37,
-          "recovery_rate": 0.8919,
-          "sold_underwater_rate": 0.1081,
-          "mean_peak_unrealized_pct": 0.0486,
-          "mean_trough_unrealized_pct": -0.023,
+          "closed_count": 38,
+          "recovery_rate": 0.8947,
+          "sold_underwater_rate": 0.1053,
+          "mean_peak_unrealized_pct": 0.0515,
+          "mean_trough_unrealized_pct": -0.0227,
           "outcome_labels": {
-            "recovered": 33,
+            "recovered": 34,
             "sold_underwater": 4
           }
         },
@@ -8831,7 +8841,7 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 55,
+      "hold_closed_with_thesis": 56,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
         "swap sell legs with thesis=0 (target >=5)"
@@ -8845,7 +8855,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-23T08:46:53.348544+00:00",
+    "generated_at": "2026-11-24T08:47:04.319069+00:00",
     "open_count": 10,
     "closed_count": 60,
     "scored_count": 41,
@@ -8914,7 +8924,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-23T09:46:52.336520+01:00",
+    "generated_at": "2026-11-24T09:47:03.709074+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -8938,16 +8948,16 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 56,
-    "closed_count": 10,
+    "open_count": 55,
+    "closed_count": 11,
     "open_by_capital_status": {
-      "on_book": 33,
+      "on_book": 32,
       "off_book": 22,
       "never_funded": 1
     },
     "closed_by_capital_status": {
       "on_book": 1,
-      "off_book": 4,
+      "off_book": 5,
       "never_funded": 5
     },
     "readiness": {
@@ -8955,7 +8965,7 @@
       "closed_per_tag_target": 15,
       "gaps": [
         "on_book closed=1 (target>=15)",
-        "off_book closed=4 (target>=15)",
+        "off_book closed=5 (target>=15)",
         "never_funded closed=5 (target>=15)"
       ],
       "note": "Probability / nested counterfactual promotion waits until each capital_status tag has a thick closed cohort."
@@ -8963,15 +8973,15 @@
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
       "opened": 0,
-      "closed": 0,
+      "closed": 1,
       "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_off_book": 1
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-23T09:46:52.336520+01:00",
+    "generated_at": "2026-11-24T09:47:03.709074+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -8979,36 +8989,251 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 2,
+    "card_count": 2,
     "verdict_counts": {
-      "agree": 0,
-      "veto": 0,
+      "agree": 1,
+      "veto": 1,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "sell": {
+        "agree": 0,
+        "veto": 1,
+        "abstain": 0
+      },
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "AD.AS",
+        "name": "Koninklijke Ahold Delhaize N.V.",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 3
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 3
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.8619
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-24T09:47:03.709074+01:00",
+        "proposal_id": "buy_tier_level:AD.AS:sell:2026-11-24T09:47:03.709074+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "PHIA.AS",
+        "name": "Koninklijke Philips N.V.",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy into buyish target set \u2014 agree with algo selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 32
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 32
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.3359
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-24T09:47:03.709074+01:00",
+        "proposal_id": "buy_tier_level:PHIA.AS:buy:2026-11-24T09:47:03.709074+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-23T09:46:52.336520+01:00",
+      "generated_at": "2026-11-24T09:47:03.709074+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 2,
       "verdict_counts": {
-        "agree": 0,
-        "veto": 0,
+        "agree": 1,
+        "veto": 1,
         "abstain": 0
       },
-      "by_algo_action": {},
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "by_algo_action": {
+        "sell": {
+          "agree": 0,
+          "veto": 1,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "veto_sell_count": 1,
+      "veto_sell_tickers": [
+        "AD.AS"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -9022,7 +9247,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-11-23T08:46:53.407650+00:00",
+  "generated_at": "2026-11-24T08:47:04.383855+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

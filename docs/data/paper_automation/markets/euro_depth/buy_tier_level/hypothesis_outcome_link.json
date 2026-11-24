@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-23T08:46:53.325710+00:00",
+  "generated_at": "2026-11-24T08:47:04.257902+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 55,
+    "closed_total": 56,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 29,
+    "open_with_thesis": 28,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 37,
-        "recovery_rate": 0.8919,
-        "sold_underwater_rate": 0.1081,
-        "mean_peak_unrealized_pct": 0.0486,
-        "mean_trough_unrealized_pct": -0.023,
+        "closed_count": 38,
+        "recovery_rate": 0.8947,
+        "sold_underwater_rate": 0.1053,
+        "mean_peak_unrealized_pct": 0.0515,
+        "mean_trough_unrealized_pct": -0.0227,
         "outcome_labels": {
-          "recovered": 33,
+          "recovered": 34,
           "sold_underwater": 4
         }
       },
@@ -64,7 +64,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 55,
+    "hold_closed_with_thesis": 56,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -309,7 +309,7 @@
       "ticker": "AD.AS",
       "name": "Koninklijke Ahold Delhaize N.V.",
       "started_at": "2026-09-13T08:49:29.998772+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -367,9 +367,9 @@
       "peak_unrealized_pct": 0.1577,
       "trough_unrealized_pct": -0.0112,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-24T09:47:03.709074+01:00",
+      "linked_sell_trade_id": "43906e70-5f93-4e7a-b0ef-940f206dfc70"
     },
     {
       "episode_id": "buy_tier_level:PHIA.AS:2026-09-13T08:49:29.998772+02:00",
@@ -5470,6 +5470,13 @@
           "avg_sell_return": 0.0941,
           "avg_buy_return": 0.266,
           "replacement_delta": 0.1719
+        },
+        {
+          "scored_at": "2026-11-24T09:47:03.709074+01:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0824,
+          "avg_buy_return": 0.0,
+          "replacement_delta": -0.0824
         }
       ],
       "sell_returns_since_rotation": {
@@ -6702,6 +6709,13 @@
           "avg_sell_return": 0.0128,
           "avg_buy_return": -0.0043,
           "replacement_delta": -0.0171
+        },
+        {
+          "scored_at": "2026-11-24T09:47:03.709074+01:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0226,
+          "avg_buy_return": -0.0126,
+          "replacement_delta": -0.0352
         }
       ],
       "sell_returns_since_rotation": {
@@ -7917,7 +7931,15 @@
           "cost": 0.07
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-24T09:47:03.709074+01:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0211,
+          "avg_buy_return": -0.0442,
+          "replacement_delta": -0.0231
+        }
+      ],
       "sell_returns_since_rotation": {
         "HEIA.AS": -0.0306,
         "AZE.BR": -0.0316,
@@ -8026,6 +8048,58 @@
       },
       "buy_returns_since_rotation": {
         "KRX.IR": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-24T09:47:03.709074+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-24T09:47:03.709074+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0019,
+      "sells": [
+        {
+          "ticker": "AD.AS",
+          "price": 34.58,
+          "shares": 0.915418,
+          "gross": 31.66,
+          "cost": 0.06,
+          "avg_cost_at_exit": 31.14,
+          "realized_pct": 0.1105,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.1105
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "PHIA.AS",
+          "price": 26.39,
+          "shares": 0.908733,
+          "gross": 23.98,
+          "cost": 0.04
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "AD.AS": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "PHIA.AS": 0.0
       },
       "verdict": null,
       "closed_at": null
