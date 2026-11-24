@@ -3527,28 +3527,10 @@
     "MCAF_US_EQ",
     "MCAG_US_EQ",
     "MCARY_US_EQ",
-    "MCBI_US_EQ"
+    "MCBI_US_EQ",
+    "MCBK_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MAQC_US_EQ",
-      "venue": "US",
-      "yahoo": "MAQC",
-      "isin": "US56564V1017",
-      "name": "MAQC",
-      "seconds": 0.761,
-      "outcome": "miss",
-      "at": "2026-11-24T16:58:24.739893+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.8,
-        "seconds": 0.607
-      },
-      "screen_seconds": 0.607,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "MARA_US_EQ",
       "venue": "US",
@@ -4289,6 +4271,25 @@
       },
       "screen_seconds": 3.969,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MCBK_US_EQ",
+      "venue": "US",
+      "yahoo": "MCBK",
+      "isin": "US5567771002",
+      "name": "MCBK",
+      "seconds": 1.018,
+      "outcome": "miss",
+      "at": "2026-11-24T17:04:20.582113+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.6,
+        "seconds": 0.769
+      },
+      "screen_seconds": 0.769,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -41146,43 +41147,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T17:02:56.533235+00:00"
+    },
+    {
+      "t212_ticker": "MCBK_US_EQ",
+      "yahoo": "MCBK",
+      "name": "MCBK",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T17:04:20.582113+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MCBI_US_EQ",
+    "t212_ticker": "MCBK_US_EQ",
     "venue": "US",
-    "yahoo": "MCBI",
-    "isin": "US6240041078",
-    "name": "MCBI",
-    "seconds": 4.099,
+    "yahoo": "MCBK",
+    "isin": "US5567771002",
+    "name": "MCBK",
+    "seconds": 1.018,
     "outcome": "miss",
-    "at": "2026-11-24T17:04:13.207898+00:00",
+    "at": "2026-11-24T17:04:20.582113+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.969
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.6,
+      "seconds": 0.769
     },
-    "screen_seconds": 3.969,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.769,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MCBK_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T17:04:13.207898+00:00",
+  "updated_at": "2026-11-24T17:04:20.582113+00:00",
   "totals": {
-    "screened": 3526,
+    "screened": 3527,
     "signals": {
-      "buy": 1058,
+      "buy": 1059,
       "avoid": 831,
       "hold": 755,
       "insufficient_data": 860,
       "strong_buy": 22
     },
-    "signals_n": 3526,
-    "screen_seconds_sum": 35719.73600000012,
-    "screen_seconds_n": 3526,
+    "signals_n": 3527,
+    "screen_seconds_sum": 35720.50500000012,
+    "screen_seconds_n": 3527,
     "outcomes": {
-      "miss": 1371,
+      "miss": 1372,
       "saved": 2155
     }
   },
