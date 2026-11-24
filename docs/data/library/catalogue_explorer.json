@@ -2066,28 +2066,10 @@
     "FFIN_US_EQ",
     "FFMH_US_EQ",
     "FFNTF_US_EQ",
-    "FFUCF_US_EQ"
+    "FFUCF_US_EQ",
+    "FFWC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FBSI_US_EQ",
-      "venue": "US",
-      "yahoo": "FBSI",
-      "isin": "US3186871006",
-      "name": "FBSI",
-      "seconds": 1.582,
-      "outcome": "miss",
-      "at": "2026-11-24T01:51:48.903721+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "strong_buy",
-        "fits": true,
-        "data_quality_score": 0.65,
-        "seconds": 1.24
-      },
-      "screen_seconds": 1.24,
-      "signal": "strong_buy"
-    },
     {
       "t212_ticker": "FBTT_US_EQ",
       "venue": "US",
@@ -2828,6 +2810,25 @@
       },
       "screen_seconds": 1.186,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "FFWC_US_EQ",
+      "venue": "US",
+      "yahoo": "FFWC",
+      "isin": "US30242L1089",
+      "name": "FFWC",
+      "seconds": 1.355,
+      "outcome": "miss",
+      "at": "2026-11-24T01:57:05.099530+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 1.165
+      },
+      "screen_seconds": 1.165,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -22351,43 +22352,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T01:56:46.498416+00:00"
+    },
+    {
+      "t212_ticker": "FFWC_US_EQ",
+      "yahoo": "FFWC",
+      "name": "FFWC",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T01:57:05.099530+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "FFUCF_US_EQ",
+    "t212_ticker": "FFWC_US_EQ",
     "venue": "US",
-    "yahoo": "FFUCF",
-    "isin": "CA30336V1031",
-    "name": "FFUCF",
-    "seconds": 1.409,
+    "yahoo": "FFWC",
+    "isin": "US30242L1089",
+    "name": "FFWC",
+    "seconds": 1.355,
     "outcome": "miss",
-    "at": "2026-11-24T01:56:58.943758+00:00",
+    "at": "2026-11-24T01:57:05.099530+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.6,
-      "seconds": 1.186
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 1.165
     },
-    "screen_seconds": 1.186,
-    "signal": "avoid"
+    "screen_seconds": 1.165,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "FFWC_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T01:56:58.943758+00:00",
+  "updated_at": "2026-11-24T01:57:05.099530+00:00",
   "totals": {
-    "screened": 2065,
+    "screened": 2066,
     "signals": {
-      "buy": 612,
+      "buy": 613,
       "avoid": 503,
       "hold": 460,
       "insufficient_data": 481,
       "strong_buy": 9
     },
-    "signals_n": 2065,
-    "screen_seconds_sum": 20885.342000000022,
-    "screen_seconds_n": 2065,
+    "signals_n": 2066,
+    "screen_seconds_sum": 20886.507000000023,
+    "screen_seconds_n": 2066,
     "outcomes": {
-      "miss": 784,
+      "miss": 785,
       "saved": 1281
     }
   },
