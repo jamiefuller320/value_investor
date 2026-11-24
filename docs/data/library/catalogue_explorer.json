@@ -2528,28 +2528,10 @@
     "HAFN_US_EQ",
     "HAIA_US_EQ",
     "HAIN_US_EQ",
-    "HALL_US_EQ"
+    "HALL_US_EQ",
+    "HALMY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "GTCH_US_EQ",
-      "venue": "US",
-      "yahoo": "GTCH",
-      "isin": "US3615483084",
-      "name": "GTCH",
-      "seconds": 1.673,
-      "outcome": "saved",
-      "at": "2026-11-24T04:34:26.130587+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.75,
-        "seconds": 0.806
-      },
-      "screen_seconds": 0.806,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "GTEC_US_EQ",
       "venue": "US",
@@ -3290,6 +3272,25 @@
       },
       "screen_seconds": 84.474,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HALMY_US_EQ",
+      "venue": "US",
+      "yahoo": "HALMY",
+      "isin": "US40637C3088",
+      "name": "HALMY",
+      "seconds": 0.663,
+      "outcome": "miss",
+      "at": "2026-11-24T04:49:48.665404+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.561
+      },
+      "screen_seconds": 0.561,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -34524,43 +34525,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T04:46:38.560461+00:00"
+    },
+    {
+      "t212_ticker": "HALMY_US_EQ",
+      "yahoo": "HALMY",
+      "name": "HALMY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T04:49:48.665404+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HALL_US_EQ",
+    "t212_ticker": "HALMY_US_EQ",
     "venue": "US",
-    "yahoo": "HALL",
-    "isin": "US40624Q3020",
-    "name": "HALLQ",
-    "seconds": 84.591,
+    "yahoo": "HALMY",
+    "isin": "US40637C3088",
+    "name": "HALMY",
+    "seconds": 0.663,
     "outcome": "miss",
-    "at": "2026-11-24T04:49:43.523234+00:00",
+    "at": "2026-11-24T04:49:48.665404+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.474
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.561
     },
-    "screen_seconds": 84.474,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.561,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HALMY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T04:49:43.523234+00:00",
+  "updated_at": "2026-11-24T04:49:48.665404+00:00",
   "totals": {
-    "screened": 2527,
+    "screened": 2528,
     "signals": {
-      "buy": 756,
+      "buy": 757,
       "avoid": 607,
       "hold": 551,
       "insufficient_data": 600,
       "strong_buy": 13
     },
-    "signals_n": 2527,
-    "screen_seconds_sum": 27765.90400000003,
-    "screen_seconds_n": 2527,
+    "signals_n": 2528,
+    "screen_seconds_sum": 27766.465000000033,
+    "screen_seconds_n": 2528,
     "outcomes": {
-      "miss": 955,
+      "miss": 956,
       "saved": 1572
     }
   },
