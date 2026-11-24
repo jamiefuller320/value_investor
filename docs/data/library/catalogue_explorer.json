@@ -2581,28 +2581,10 @@
     "HENOY_US_EQ",
     "HEPA_US_EQ",
     "HEPS_US_EQ",
-    "HERTF_US_EQ"
+    "HERTF_US_EQ",
+    "HESAY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HBM_US_EQ",
-      "venue": "US",
-      "yahoo": "HBM",
-      "isin": "CA4436281022",
-      "name": "HBM",
-      "seconds": 2.566,
-      "outcome": "saved",
-      "at": "2026-11-24T07:52:35.947045+00:00",
-      "rows": 40,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 0.997
-      },
-      "screen_seconds": 0.997,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "HBNC_US_EQ",
       "venue": "US",
@@ -3343,6 +3325,25 @@
       },
       "screen_seconds": 3.619,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HESAY_US_EQ",
+      "venue": "US",
+      "yahoo": "HESAY",
+      "isin": "US42751Q1058",
+      "name": "HESAY",
+      "seconds": 0.873,
+      "outcome": "miss",
+      "at": "2026-11-24T07:58:19.607048+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.622
+      },
+      "screen_seconds": 0.622,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -34729,43 +34730,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T07:57:46.552724+00:00"
+    },
+    {
+      "t212_ticker": "HESAY_US_EQ",
+      "yahoo": "HESAY",
+      "name": "HESAY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T07:58:19.607048+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HERTF_US_EQ",
+    "t212_ticker": "HESAY_US_EQ",
     "venue": "US",
-    "yahoo": "HERTF",
-    "isin": "CA42727B1094",
-    "name": "HERTF",
-    "seconds": 3.68,
+    "yahoo": "HESAY",
+    "isin": "US42751Q1058",
+    "name": "HESAY",
+    "seconds": 0.873,
     "outcome": "miss",
-    "at": "2026-11-24T07:58:12.765898+00:00",
+    "at": "2026-11-24T07:58:19.607048+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.619
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.622
     },
-    "screen_seconds": 3.619,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.622,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HESAY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T07:58:12.765898+00:00",
+  "updated_at": "2026-11-24T07:58:19.607048+00:00",
   "totals": {
-    "screened": 2580,
+    "screened": 2581,
     "signals": {
-      "buy": 775,
+      "buy": 776,
       "avoid": 617,
       "hold": 561,
       "insufficient_data": 614,
       "strong_buy": 13
     },
-    "signals_n": 2580,
-    "screen_seconds_sum": 27923.345000000038,
-    "screen_seconds_n": 2580,
+    "signals_n": 2581,
+    "screen_seconds_sum": 27923.967000000037,
+    "screen_seconds_n": 2581,
     "outcomes": {
-      "miss": 978,
+      "miss": 979,
       "saved": 1602
     }
   },
