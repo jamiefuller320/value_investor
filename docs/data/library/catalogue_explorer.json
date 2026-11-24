@@ -4121,28 +4121,10 @@
     "OEG_US_EQ",
     "OESX_US_EQ",
     "OEZVY_US_EQ",
-    "OFC_US_EQ"
+    "OFC_US_EQ",
+    "OFED_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "NX_US_EQ",
-      "venue": "US",
-      "yahoo": "NX",
-      "isin": "US7476191041",
-      "name": "NX",
-      "seconds": 3.024,
-      "outcome": "saved",
-      "at": "2026-11-24T19:55:01.865601+00:00",
-      "rows": 18,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 1.041
-      },
-      "screen_seconds": 1.041,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "NYCB_US_EQ",
       "venue": "US",
@@ -4883,6 +4865,25 @@
       },
       "screen_seconds": 85.542,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "OFED_US_EQ",
+      "venue": "US",
+      "yahoo": "OFED",
+      "isin": "US6756071055",
+      "name": "OFED",
+      "seconds": 1.469,
+      "outcome": "miss",
+      "at": "2026-11-24T20:16:57.934363+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 1.046
+      },
+      "screen_seconds": 1.046,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -44591,43 +44592,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T20:11:23.204862+00:00"
+    },
+    {
+      "t212_ticker": "OFED_US_EQ",
+      "yahoo": "OFED",
+      "name": "OFED",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T20:16:57.934363+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "OFC_US_EQ",
+    "t212_ticker": "OFED_US_EQ",
     "venue": "US",
-    "yahoo": "OFC",
-    "isin": "US22002T1088",
-    "name": "CDP",
-    "seconds": 85.723,
+    "yahoo": "OFED",
+    "isin": "US6756071055",
+    "name": "OFED",
+    "seconds": 1.469,
     "outcome": "miss",
-    "at": "2026-11-24T20:16:49.824323+00:00",
+    "at": "2026-11-24T20:16:57.934363+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.542
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 1.046
     },
-    "screen_seconds": 85.542,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.046,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "OFED_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T20:16:49.824323+00:00",
+  "updated_at": "2026-11-24T20:16:57.934363+00:00",
   "totals": {
-    "screened": 4120,
+    "screened": 4121,
     "signals": {
-      "buy": 1233,
+      "buy": 1234,
       "avoid": 976,
       "hold": 889,
       "insufficient_data": 996,
       "strong_buy": 26
     },
-    "signals_n": 4120,
-    "screen_seconds_sum": 39729.98500000012,
-    "screen_seconds_n": 4120,
+    "signals_n": 4121,
+    "screen_seconds_sum": 39731.03100000012,
+    "screen_seconds_n": 4121,
     "outcomes": {
-      "miss": 1604,
+      "miss": 1605,
       "saved": 2516
     }
   },
