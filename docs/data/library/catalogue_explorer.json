@@ -2180,28 +2180,10 @@
     "FRCOY_US_EQ",
     "FRC_US_EQ",
     "FRD_US_EQ",
-    "FREQ_US_EQ"
+    "FREQ_US_EQ",
+    "FRFC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FNB_US_EQ",
-      "venue": "US",
-      "yahoo": "FNB",
-      "isin": "US3025201019",
-      "name": "FNB",
-      "seconds": 3.384,
-      "outcome": "saved",
-      "at": "2026-11-24T02:18:14.500993+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.7,
-        "seconds": 0.959
-      },
-      "screen_seconds": 0.959,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "FND_US_EQ",
       "venue": "US",
@@ -2942,6 +2924,25 @@
       },
       "screen_seconds": 85.973,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "FRFC_US_EQ",
+      "venue": "US",
+      "yahoo": "FRFC",
+      "isin": "US3361881077",
+      "name": "FRFC",
+      "seconds": 1.372,
+      "outcome": "miss",
+      "at": "2026-11-24T02:37:40.355035+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.55,
+        "seconds": 1.128
+      },
+      "screen_seconds": 1.128,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -22873,43 +22874,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T02:36:01.133492+00:00"
+    },
+    {
+      "t212_ticker": "FRFC_US_EQ",
+      "yahoo": "FRFC",
+      "name": "FRFC",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T02:37:40.355035+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "FREQ_US_EQ",
+    "t212_ticker": "FRFC_US_EQ",
     "venue": "US",
-    "yahoo": "FREQ",
-    "isin": "US5009461089",
-    "name": "KRRO",
-    "seconds": 86.169,
+    "yahoo": "FRFC",
+    "isin": "US3361881077",
+    "name": "FRFC",
+    "seconds": 1.372,
     "outcome": "miss",
-    "at": "2026-11-24T02:37:32.941745+00:00",
+    "at": "2026-11-24T02:37:40.355035+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.973
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.55,
+      "seconds": 1.128
     },
-    "screen_seconds": 85.973,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.128,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "FRFC_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T02:37:32.941745+00:00",
+  "updated_at": "2026-11-24T02:37:40.355035+00:00",
   "totals": {
-    "screened": 2179,
+    "screened": 2180,
     "signals": {
-      "buy": 662,
+      "buy": 663,
       "avoid": 525,
       "hold": 477,
       "insufficient_data": 505,
       "strong_buy": 10
     },
-    "signals_n": 2179,
-    "screen_seconds_sum": 22531.83900000002,
-    "screen_seconds_n": 2179,
+    "signals_n": 2180,
+    "screen_seconds_sum": 22532.967000000022,
+    "screen_seconds_n": 2180,
     "outcomes": {
-      "miss": 823,
+      "miss": 824,
       "saved": 1356
     }
   },
