@@ -3537,28 +3537,10 @@
     "MCF_US_EQ",
     "MCHX_US_EQ",
     "MCLD_US_EQ",
-    "MCMJ_US_EQ"
+    "MCMJ_US_EQ",
+    "MCRAA_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MAURY_US_EQ",
-      "venue": "US",
-      "yahoo": "MAURY",
-      "isin": "US5738143081",
-      "name": "MAURY",
-      "seconds": 0.71,
-      "outcome": "miss",
-      "at": "2026-11-24T16:59:49.516404+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 0.545
-      },
-      "screen_seconds": 0.545,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "MAUSY_US_EQ",
       "venue": "US",
@@ -4299,6 +4281,25 @@
       },
       "screen_seconds": 3.656,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MCRAA_US_EQ",
+      "venue": "US",
+      "yahoo": "MCRAA",
+      "isin": "US5827572091",
+      "name": "MCRAA",
+      "seconds": 0.754,
+      "outcome": "miss",
+      "at": "2026-11-24T17:05:52.438766+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.642
+      },
+      "screen_seconds": 0.642,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -41196,43 +41197,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T17:05:04.143388+00:00"
+    },
+    {
+      "t212_ticker": "MCRAA_US_EQ",
+      "yahoo": "MCRAA",
+      "name": "MCRAA",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T17:05:52.438766+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MCMJ_US_EQ",
+    "t212_ticker": "MCRAA_US_EQ",
     "venue": "US",
-    "yahoo": "MCMJ",
-    "isin": "US52178J4022",
-    "name": "LFLH",
-    "seconds": 3.808,
+    "yahoo": "MCRAA",
+    "isin": "US5827572091",
+    "name": "MCRAA",
+    "seconds": 0.754,
     "outcome": "miss",
-    "at": "2026-11-24T17:05:45.172521+00:00",
+    "at": "2026-11-24T17:05:52.438766+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.656
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.642
     },
-    "screen_seconds": 3.656,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.642,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MCRAA_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T17:05:45.172521+00:00",
+  "updated_at": "2026-11-24T17:05:52.438766+00:00",
   "totals": {
-    "screened": 3536,
+    "screened": 3537,
     "signals": {
-      "buy": 1063,
+      "buy": 1064,
       "avoid": 831,
       "hold": 756,
       "insufficient_data": 864,
       "strong_buy": 22
     },
-    "signals_n": 3536,
-    "screen_seconds_sum": 35738.481000000116,
-    "screen_seconds_n": 3536,
+    "signals_n": 3537,
+    "screen_seconds_sum": 35739.123000000116,
+    "screen_seconds_n": 3537,
     "outcomes": {
-      "miss": 1377,
+      "miss": 1378,
       "saved": 2159
     }
   },
