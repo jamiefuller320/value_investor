@@ -1,6 +1,6 @@
 # Baker Hughes Company (BKR) — Research memo
 
-_Version 5 · Updated 2026-11-23T21:37:27.690173+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T05:32:45.501842+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: The 20 Nov 8-K confirms Chart closed 16 Jul with debt repaid; Ichthys work and TTM FCF ~$3.2bn support the strong-buy screen, but post-deal leverage and normalised earnings stay unverified in BKR filings.
+Rationale: The 20 Nov 8-K confirms Chart closed 16 Jul with debt repaid; TTM FCF ~$3.2bn and LNG backlog support the strong-buy screen, but post-deal leverage and normalised BKR earnings stay unverified in filings.
 RiskTags: cyclical, leverage, competitive, regulatory
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Chart close timing and normalised post-portfolio earnings remain unverified in s
 8-K filed 20 Nov attaches Chart H1 statements stating the Baker Hughes merger completed 16 Jul 2026 and Chart debt was repaid—resolves close timing but confirms leverage step-up.  
 News since 20 Nov is mostly Ichthys/rig-count reprints plus a third-party LNG valuation piece (21 Nov); screen still strong buy with Q3 revenue ~$8.0bn and TTM FCF ~$3.2bn.  
 Normalised post-Chart and post-portfolio BKR earnings remain unverified in supplied primary filings.
+
+### 2026-11-24T05:32:45.501842+00:00
+No BKR-specific headlines in the 24 Nov news batch since the 23 Nov 8-K refresh (one unrelated Victrex piece only).  
+Strong-buy screen unchanged with Q3 revenue ~$8.0bn and TTM FCF ~$3.2bn; no new SEC filing bodies in supplied sources.  
+Normalised post-Chart earnings remain unverified in supplied primary filings.

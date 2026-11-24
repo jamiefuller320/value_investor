@@ -1,6 +1,6 @@
 # Fidelity National Information Services, Inc. (FIS) — Research memo
 
-_Version 16 · Updated 2026-11-23T21:41:25.073887+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-24T05:36:55.887247+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.70
-Rationale: Citizens' Market Perform initiation and 2027 margin headwind commentary weaken the strong buy case; Q3 leverage, trimmed outlook, leadership and litigation remain unresolved.
+Rationale: Thin press on securities investigations adds no new filing facts but keeps litigation live; Q3 leverage, trimmed outlook and leadership turnover still weaken the strong buy case.
 RiskTags: leverage, governance, litigation, competitive
 
 ## Weekly updates
@@ -86,4 +86,9 @@ Q3 leverage, paused buybacks, trimmed outlook, leadership turnover and legal ove
 ### 2026-11-23T21:41:25.073887+00:00
 No new SEC filings after the 4 Nov Q3 8-K/10-Q; the incremental news batch since the prior refresh has no articles.  
 No material change versus the 17:57 UTC update.  
+Q3 leverage, paused buybacks, trimmed outlook, leadership turnover and legal overhang remain unresolved.
+
+### 2026-11-24T05:36:55.887247+00:00
+No new SEC filings after the 4 Nov Q3 8-K/10-Q.  
+Incremental news is one scanx.trade item on a SueWallSt securities probe into misleading outlook, with no new issuer-specific disclosure.  
 Q3 leverage, paused buybacks, trimmed outlook, leadership turnover and legal overhang remain unresolved.

@@ -1,6 +1,6 @@
 # Beach Energy Limited (BPT.AX) — Research memo
 
-_Version 3 · Updated 2026-11-23T21:56:11.429472+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-24T05:53:14.674850+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.67
-Rationale: No new disclosures this cycle; FY26 cash dividends still exceed sourced FCF, quarterly cash flow remains empty and screen TTM FCF is unverified—research still weakens the buy case.
+Rationale: Latest news is Taroom commentary only; FY26 cash dividends still exceed sourced FCF, quarterly cash flow remains empty and screen TTM FCF is unverified—research still weakens the buy case.
 RiskTags: cyclical, regulatory, leverage
 
 ## Weekly updates
@@ -21,5 +21,10 @@ Buy screen persists but adjusted signal remains hold with TTM FCF unverified and
 
 ### 2026-11-23T21:56:11.429472+00:00
 No indexed news since the earlier 23 Nov refresh; Santos Taroom talks remain the latest headline in sources.  
+Yahoo FY26 figures unchanged (FCF $155.5m vs cash dividends $159.6m); quarterly cash flow still empty and adjusted screen signal hold.  
+No material change versus the prior structured verdict update.
+
+### 2026-11-24T05:53:14.674850+00:00
+Kalkine pieces on Taroom Trough/Santos talks are the only new indexed items; no fresh company disclosures in the batch.  
 Yahoo FY26 figures unchanged (FCF $155.5m vs cash dividends $159.6m); quarterly cash flow still empty and adjusted screen signal hold.  
 No material change versus the prior structured verdict update.

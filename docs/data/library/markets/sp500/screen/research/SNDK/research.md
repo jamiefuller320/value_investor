@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 16 · Updated 2026-11-23T21:50:11.656859+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-24T05:45:43.383394+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.58
-Rationale: On-file FCF and earnings stay exceptional and the Nvidia-led memory bounce helps, but 2027 NAND oversupply press, post-split volatility and a proposed officer sale keep research weakening the strong-buy screen.
+Rationale: On-file FCF stays exceptional and peer relief helps, but 2027 NAND oversupply press and cycle volatility without new disclosures keep research weakening the strong-buy screen.
 RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
@@ -71,4 +71,9 @@ No new SNDK issuer filings in the batch; refreshed on-file financials still show
 ### 2026-11-23T21:50:11.656859+00:00
 Nvidia-led chip rally kept SNDK in headline flow with a sharp Micron rebound; press still debates post-split bargain versus full valuation.
 The batch cites a proposed officer share sale (~$2.37M); no new issuer filings in the pack.
+Refreshed on-file financials still show very strong free cash flow.
+
+### 2026-11-24T05:45:43.383394+00:00
+Seeking Alpha argues 2027 NAND “Armageddon” is priced in; Micron’s sharp rebound keeps memory names in a sector relief rally.
+The batch adds a 2027 price-outlook piece only; no new SNDK issuer filings.
 Refreshed on-file financials still show very strong free cash flow.

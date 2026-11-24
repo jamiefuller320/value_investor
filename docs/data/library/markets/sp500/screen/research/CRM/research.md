@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 16 · Updated 2026-11-23T21:38:36.782309+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-24T05:34:01.542939+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: Thin headlines add only a modest sector rebound and rival agent financing; filing-backed FCF still supports Strong Buy but leverage and competitive AI risks keep research below the screen.
+Rationale: Routine insider conversions and AI commentary add little; filing-backed FCF still supports Strong Buy but leverage and competitive AI risks keep research at accumulate.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -84,4 +84,9 @@ No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy scr
 ### 2026-11-23T21:38:36.782309+00:00
 Later 23 Nov coverage notes CRM up roughly 3% in a Nasdaq-led software bounce after Friday’s sell-off, still trailing Palantir-led sovereign-AI gainers.  
 A Sierra $30bn agent start-up fund-raise (ex-CEO) underscores enterprise-agent competition; issuer impact is unknown.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.
+
+### 2026-11-24T05:34:01.542939+00:00
+The 24 Nov batch is mostly routine director and officer RSU conversions plus Simply Wall St AI commentary; Yahoo cites CRM up roughly 2.7% on 23 Nov.  
+A Chamath/Microsoft frontier-model piece is sector-only; no issuer-specific filing news.  
 No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.

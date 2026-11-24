@@ -1,6 +1,6 @@
 # Leidos Holdings, Inc. (LDOS) — Research memo
 
-_Version 3 · Updated 2026-11-23T21:46:05.577783+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-24T05:41:44.909877+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -22,3 +22,8 @@ Screen snapshot now includes Q3 quarterly revenue (~$4.63bn) and EPS (~$3.28); T
 ### 2026-11-23T21:46:05.577783+00:00
 No material change since the earlier 2026-11-23 refresh: the news batch since 18:18 UTC is empty.  
 Q3 revenue (~$4.63bn), EPS (~$3.28), and TTM FCF (~$1.96bn) in the screen snapshot are unchanged; prior drivers (VBA 2027 recompete, probes, leverage) stand.
+
+### 2026-11-24T05:41:44.909877+00:00
+No material change: the news batch since 2026-11-23T21:46 UTC is empty.  
+Strong-buy screen and Q3 snapshot (revenue ~$4.63bn, EPS ~$3.28, TTM FCF ~$1.96bn) are unchanged.  
+VBA 2027 recompete, open DOJ/SEC probes, and post-Entrust leverage remain the main research offsets.

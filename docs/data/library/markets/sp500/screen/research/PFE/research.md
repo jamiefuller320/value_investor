@@ -1,6 +1,6 @@
 # Pfizer, Inc. (PFE) — Research memo
 
-_Version 3 · Updated 2026-11-23T21:48:57.605754+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-24T05:44:23.771273+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.68
-Rationale: New Japan and Canada lipid-nanoparticle patent suits add vaccine litigation risk; dividend-cover and patent-cliff debate in press still weaken the screen buy case versus Q3 filing strengths.
+Rationale: Research still weakens the buy case: no new filings in the file set, and outstanding Japan/Canada LNP suits plus dividend and patent-cliff debate offset Q3 revenue and EPS strengths.
 RiskTags: regulatory, competitive, leverage, litigation, accounting
 
 ## Weekly updates
@@ -21,3 +21,6 @@ Starna Therapeutics exclusive licensing (up to $2.6bn, announced 18 Nov) adds CA
 ### 2026-11-23T21:48:57.605754+00:00
 Arbutus and Genevant expanded lipid-nanoparticle patent actions in Japan (injunction and damages on mRNA COVID vaccines) and broadened remedies in Canada, per 23 Nov press.  
 No new company filings since 19 Nov; commentary on dividend cover, valuation and pipeline deals is unchanged.
+
+### 2026-11-24T05:44:23.771273+00:00
+No material change. The 24 Nov news batch has no Pfizer-specific items since the 23 Nov refresh. Japan/Canada lipid-nanoparticle litigation and dividend or patent-cliff commentary remain as last recorded; no new company filings in the supplied sources.

@@ -1,6 +1,6 @@
 # Gartner, Inc. (IT) — Research memo
 
-_Version 4 · Updated 2026-11-23T21:45:33.174755+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-24T05:41:07.805131+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -28,3 +28,8 @@ Broader tech/AI headlines in the batch are not company-attributed; competitive a
 Filings pulled at 21:45 UTC add no disclosures after the 19 Nov executive RSU 8-K; the Q3 2026 Form 10-Q and 3 Nov earnings 8-K remain the latest on file.  
 The 21:45 news batch has no Gartner-specific items—only “IT” ticker noise (Nvidia, nVent, CrowdStrike, etc.).  
 No material change to Q3 results, guidance or prior risk themes.
+
+### 2026-11-24T05:41:07.805131+00:00
+No new SEC filings since the 19 Nov executive RSU 8-K; Q3 2026 Form 10-Q and the 3 Nov earnings 8-K remain the latest on file.  
+The 24 Nov news batch has no Gartner-specific items—only “IT” ticker noise (Nvidia, Marvell, HOOD, etc.).  
+No material change.

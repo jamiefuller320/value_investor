@@ -1,6 +1,6 @@
 # Cisco Systems, Inc. (CSCO) — Research memo
 
-_Version 3 · Updated 2026-11-23T21:38:56.621298+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-24T05:34:30.773391+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Q1 beat and raised FY2027 outlook still confirm the screen buy; thin follow-on news adds only a Cisco–OpenAI security headline, with margin, leverage and governance concerns unchanged.
+Rationale: Q1 fundamentals and the buy screen still hold; 24 Nov news is post-earnings bounce and valuation commentary only, with no new filings—margin, leverage and governance concerns unchanged.
 RiskTags: competitive, cyclical, leverage, governance
 
 ## Weekly updates
@@ -23,3 +23,8 @@ No new SEC bodies in this batch; the screen snapshot still flags buy with strong
 Headlines cite a Cisco–OpenAI tool to protect systems during remediation; no material new SEC disclosure bodies in this batch.  
 Peer AI-hardware sentiment firmed on Nvidia’s rebound; direct read-through to CSCO in supplied coverage is limited.  
 No change to Q1 fundamentals, post-earnings margin or governance narratives captured in the earlier 23 Nov pass.
+
+### 2026-11-24T05:34:30.773391+00:00
+Headlines report a 6.8% post-earnings bounce plus mixed valuation pieces ($120 targets, cheap-after-rally, Ciena peer compare); Shirudo/OpenAI security tie-up repeats.  
+No new SEC filing bodies in this batch; the screen remains **buy** with Q1 FY27 EPS $1.14 on ~$18.5bn revenue per snapshot.  
+Post-earnings margin, insider-sale and governance narratives from the 23 Nov pass are unchanged.

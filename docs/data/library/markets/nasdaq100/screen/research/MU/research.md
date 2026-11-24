@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 4 · Updated 2026-11-23T21:46:50.206191+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-24T05:42:32.222491+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.71
-Rationale: FY2026 10-K and TTM cash flows corroborate the strong-buy screen, but absent model metrics and memory-cycle price swings keep research conviction at accumulate, not full alignment.
+Rationale: Filing-backed TTM cash flows corroborate the strong-buy screen, but zero model passes and mixed cyclical sell commentary leave research at accumulate, not full alignment.
 RiskTags: cyclical, competitive, leverage, customer_concentration
 
 ## Weekly updates
@@ -26,3 +26,8 @@ No material change.
 News since the last refresh adds more Nvidia-led rally coverage (MU up roughly 18–20% on 23 Nov) and President DeBoer’s rival DRAM versus 3D DRAM comments; no new filings or sourced financials.  
 Screen remains strong buy with TTM FCF about $59bn in the snapshot; zero quantitative models passed in the screen.  
 Filing-based cyclical, leverage and concentration risks are unchanged—moves look sentiment-led.
+
+### 2026-11-24T05:42:32.222491+00:00
+Follow-on news is mostly the Nvidia-led chip rally and MU’s ~19% jump on 23 Nov; Seeking Alpha mixes a cyclical sell downgrade with bullish price commentary.  
+No new filings or sourced financials in this batch; the screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed.  
+Filing-based cyclical, leverage and customer-concentration risks are unchanged—moves still look sentiment-led.

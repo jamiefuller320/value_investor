@@ -1,6 +1,6 @@
 # GlobalData Plc (DATA.L) — Research memo
 
-_Version 8 · Updated 2026-11-23T21:40:43.652225+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-24T05:36:13.683658+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -47,4 +47,9 @@ Screen still Buy (6/22, nine weeks, stable); FCF filing £40M vs screen TTM £16
 ### 2026-11-23T21:40:43.652225+00:00
 No new GlobalData RNS since the 2 Nov total voting rights notice; the latest filing pull adds no company-specific results or trading updates.  
 News batch since the afternoon refresh is empty—no DATA.L-specific coverage.  
+Screen still Buy (6/22, nine weeks, stable); filing FCF £40M vs screen TTM £16.9M mismatch unchanged.
+
+### 2026-11-24T05:36:13.683658+00:00
+No new GlobalData RNS since the 2 Nov total voting rights notice; the 24 Nov filing pull adds no results or trading updates.  
+News batch since the 23 Nov evening refresh is empty—no DATA.L-specific coverage.  
 Screen still Buy (6/22, nine weeks, stable); filing FCF £40M vs screen TTM £16.9M mismatch unchanged.

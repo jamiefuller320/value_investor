@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 9 · Updated 2026-11-23T21:40:59.972962+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-24T05:36:22.506498+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: Nov 23 rally and pre-Q3 AI demand copy tilt bullish, but the move is Nvidia-linked sentiment; on-file Q2 growth and ~$132bn RPO unchanged—strong_buy partly confirmed only after Q3 report.
+Rationale: Monday’s ~20% rally and pre-earnings AI optimism modestly support the screen, but the move is peer-sentiment-led and Q3 results are not on file—strong_buy is only partly confirmed until filings land.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -53,3 +53,8 @@ Screen remains **strong_buy**; leverage and cyclical AI-hardware risks are uncha
 The 21:40 UTC batch adds Q3 earnings on 24 Nov, a ~20%+ session rally, and options pricing a double-digit post-earnings swing; Jensen Huang’s return lifted AI-hardware peers.  
 Press cites tougher tests for AI demand and margins, plus reports of materially higher pricing on signed AI server deals; on-file Q2 themes are unchanged.  
 Screen remains **strong_buy**; leverage and cyclical AI-hardware risks are unchanged pending Q3 filings.
+
+### 2026-11-24T05:36:22.506498+00:00
+The 05:36 UTC batch adds Monday’s ~20% rally and “two catalysts” copy ahead of earnings after the close, plus AI-server peer comparisons; wider market pieces note a reported Nvidia SEC probe.
+On-file Q2 FY2027 themes (~$132bn RPO, higher debt and inventory) are unchanged; no Q3 FY2027 filing or reported results are in the supplied sources.
+The quantitative screen remains **strong_buy**; leverage and cyclical AI-hardware risks are unchanged pending Q3 disclosure.

@@ -1,6 +1,6 @@
 # The Cigna Group (CI) — Research memo
 
-_Version 4 · Updated 2026-11-23T21:38:05.220536+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-24T05:33:13.708399+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -27,3 +27,8 @@ Post-refresh news is peer-sector only (Medicare for All insurer sentiment); no n
 Since 19 Nov, news is mostly post-sell-off valuation commentary (~4–11% pullback) with no new CI SEC disclosures in the batch.  
 CFO UBS conference (10 Nov) cited only in third-party pieces; no new metrics in supplied sources.  
 Filing-backed Evernorth margin, IFP exit and CMS sector-risk themes unchanged.
+
+### 2026-11-24T05:33:13.708399+00:00
+No material change since the 23 Nov refresh.  
+The 24 Nov news batch has no CI-specific disclosures (one unrelated yfinance ticker match only).  
+Filing-backed Evernorth margin, IFP exit and CMS sector-risk themes are unchanged.

@@ -1,6 +1,6 @@
 # United Rentals, Inc. (URI) — Research memo
 
-_Version 3 · Updated 2026-11-23T21:53:15.231408+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-24T05:49:39.982127+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -23,3 +23,8 @@ News since mid-October is largely post-earnings price and valuation commentary; 
 No new SEC filings in sources since the Q3 10-Q filed 21 Oct; Q3 debt, cash and FCF picture is unchanged.  
 Since the last refresh, news is one third-party report of a 149-share purchase—not operationally material.  
 No material change to capex-heavy FCF versus screen buy tension.
+
+### 2026-11-24T05:49:39.982127+00:00
+No new SEC filings in sources since the Q3 10-Q filed 21 Oct; Q3 debt, cash and capex-heavy FCF are unchanged.  
+Since the last refresh, news is director open-market purchases (~149 shares) and third-party valuation or price-move commentary—not operationally material.  
+No material change to capex-heavy FCF versus the screen buy tension.

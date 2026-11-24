@@ -1,6 +1,6 @@
 # NIKE, Inc. (NKE) — Research memo
 
-_Version 3 · Updated 2026-11-23T21:47:26.051629+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-24T05:43:14.371982+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.69
-Rationale: Channel commentary points to softer Nike and Jordan demand without new filings; the Aug-2026 10-Q revenue decline and thin Q1 cash flow still weaken, not confirm, the screen buy.
+Rationale: No new filings or headlines in this window; Aug-2026 10-Q revenue decline and thin Q1 cash flow still weaken, not confirm, the screen buy.
 RiskTags: cyclical, competitive, regulatory, customer_concentration
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Q2 FY27 results are scheduled for 17 Dec; outcomes are not yet in the supplied f
 Since the 18:20 refresh, the batch is thin and includes no new company filings.
 Headlines note ~$247.4m of Nike stock in the company 401(k) at 31 May 2026 and channel pieces on softer Nike sportswear and Jordan demand ahead of Dick's Q3.
 Q2 FY27 on 17 Dec remains outside the supplied file set.
+
+### 2026-11-24T05:43:14.371982+00:00
+News batch since the 23 Nov evening refresh is empty; no new company filings or headlines.  
+Aug-2026 10-Q pressure on revenue and Q1 cash flow, plus prior channel softness themes, are unchanged in the file set.  
+Q2 FY27 on 17 Dec remains outside the supplied sources.

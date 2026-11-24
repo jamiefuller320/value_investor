@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM) — Research memo
 
-_Version 3 · Updated 2026-11-23T21:47:05.827347+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-24T05:42:43.705488+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Quarterly cash generation in the file set still supports the buy signal, yet renewed gold-led selling and momentum-focused downgrades leave the overlay only partly confirmatory.
+Rationale: TTM cash generation in the file set still supports the screen buy, but thin news flags price above third-party model value after a modest bounce, so research only partly confirms the case.
 RiskTags: cyclical, regulatory, governance, litigation, customer_concentration
 
 ## Weekly updates
@@ -23,3 +23,8 @@ On 18 Nov NEM fell roughly 5–8% with a broad gold sell-off (spot cited below $
 Gold and gold miners remained weak in the batch: spot was cited below about $3,600 on 20 Nov, with miners near yearly lows on yields and a firmer dollar.
 Seeking Alpha downgraded NEM on momentum; other pieces still highlight strong cash flow and Druckenmiller/“cheap stocks” interest, alongside overvaluation calls on some models.
 No new company filings in this window; the operational picture is unchanged from the 19 Nov data refresh.
+
+### 2026-11-24T05:42:43.705488+00:00
+Fresh headlines cite a ~6.4% NEM move and GuruFocus GF Value ~$86.67 versus price ~$100.73; Trefis/Yahoo pieces discuss recovery toward ~$130.
+No new company filings since the 23 Nov refresh; quarterly cash flow in the file set is unchanged.
+Macro markers in sources (yields, dollar) are unchanged from the prior weekly window.

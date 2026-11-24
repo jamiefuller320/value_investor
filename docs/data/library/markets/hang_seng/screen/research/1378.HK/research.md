@@ -1,6 +1,6 @@
 # China Hongqiao Group Limited (1378.HK) — Research memo
 
-_Version 11 · Updated 2026-11-23T21:35:12.967959+00:00 · Mode: structured_verdict_update_
+_Version 12 · Updated 2026-11-24T05:30:16.754883+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -62,4 +62,9 @@ Yahoo quarterly cash flow is still empty; screen TTM free cash flow remains unve
 ### 2026-11-23T21:35:12.967959+00:00
 Sources refreshed 23 Nov 2026 (~21:34 UTC); filing-aligned FY2025 metrics are unchanged (modest attributable profit growth, ~RMB39.0bn operating cash flow).  
 Evening news batch since the afternoon memo is empty; no new HKEX results or trading updates in sources.  
+Yahoo quarterly cash flow is still empty; screen TTM free cash flow remains unverified against filings.
+
+### 2026-11-24T05:30:16.754883+00:00
+Sources refreshed 24 Nov 2026; filing-aligned FY2025 metrics are unchanged (modest attributable profit growth, ~RMB39.0bn operating cash flow, HK165c proposed final dividend per filings).
+Since the 23 Nov memo: one third-party headline (Deutsche Bank HK$30 price target); no new HKEX results or trading updates in the batch.
 Yahoo quarterly cash flow is still empty; screen TTM free cash flow remains unverified against filings.

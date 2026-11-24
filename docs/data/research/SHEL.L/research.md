@@ -1,6 +1,6 @@
 # Shell plc (SHEL.L) — Research memo
 
-_Version 7 · Updated 2026-11-23T22:00:55.160363+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-24T05:58:05.205245+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -40,5 +40,10 @@ No new group results since the 29 October Q3 release; the buy screen and filing�
 
 ### 2026-11-23T22:00:55.160363+00:00
 No material change since the earlier 23 November refresh; the news batch returned no new articles.  
+29 October Q3 2026 remains the latest group results; Bay du Nord approval and post‑Q3 buybacks are unchanged in sources.  
+Buy screen, neutral timing and filing–screen FCF divergence are unchanged.
+
+### 2026-11-24T05:58:05.205245+00:00
+No material change: the 24 Nov news batch is empty and adds no coverage since the 23 Nov refresh.  
 29 October Q3 2026 remains the latest group results; Bay du Nord approval and post‑Q3 buybacks are unchanged in sources.  
 Buy screen, neutral timing and filing–screen FCF divergence are unchanged.
