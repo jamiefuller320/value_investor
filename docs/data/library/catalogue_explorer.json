@@ -4250,28 +4250,10 @@
     "OVID_US_EQ",
     "OVLY_US_EQ",
     "OVV_US_EQ",
-    "OXAC_US_EQ"
+    "OXAC_US_EQ",
+    "OXBC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ORKT_US_EQ",
-      "venue": "US",
-      "yahoo": "ORKT",
-      "isin": "KYG6781F1191",
-      "name": "ORKT",
-      "seconds": 2.573,
-      "outcome": "saved",
-      "at": "2026-11-24T20:58:44.443976+00:00",
-      "rows": 25,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.9,
-        "seconds": 0.717
-      },
-      "screen_seconds": 0.717,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "ORMP_US_EQ",
       "venue": "US",
@@ -5012,6 +4994,25 @@
       },
       "screen_seconds": 84.656,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "OXBC_US_EQ",
+      "venue": "US",
+      "yahoo": "OXBC",
+      "isin": "US69140P1003",
+      "name": "OXBC",
+      "seconds": 0.789,
+      "outcome": "miss",
+      "at": "2026-11-24T23:32:51.202403+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.737
+      },
+      "screen_seconds": 0.737,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -58106,43 +58107,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T23:31:15.908172+00:00"
+    },
+    {
+      "t212_ticker": "OXBC_US_EQ",
+      "yahoo": "OXBC",
+      "name": "OXBC",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T23:32:51.202403+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "OXAC_US_EQ",
+    "t212_ticker": "OXBC_US_EQ",
     "venue": "US",
-    "yahoo": "OXAC",
-    "isin": "US47714H4074",
-    "name": "JTAI",
-    "seconds": 84.727,
+    "yahoo": "OXBC",
+    "isin": "US69140P1003",
+    "name": "OXBC",
+    "seconds": 0.789,
     "outcome": "miss",
-    "at": "2026-11-24T23:32:45.563495+00:00",
+    "at": "2026-11-24T23:32:51.202403+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.656
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.737
     },
-    "screen_seconds": 84.656,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.737,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "OXBC_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T23:32:45.563495+00:00",
+  "updated_at": "2026-11-24T23:32:51.202403+00:00",
   "totals": {
-    "screened": 4249,
+    "screened": 4250,
     "signals": {
-      "buy": 1281,
+      "buy": 1282,
       "avoid": 1000,
       "hold": 921,
       "insufficient_data": 1021,
       "strong_buy": 26
     },
-    "signals_n": 4249,
-    "screen_seconds_sum": 41709.29400000013,
-    "screen_seconds_n": 4249,
+    "signals_n": 4250,
+    "screen_seconds_sum": 41710.031000000134,
+    "screen_seconds_n": 4250,
     "outcomes": {
-      "miss": 1651,
+      "miss": 1652,
       "saved": 2598
     }
   },
