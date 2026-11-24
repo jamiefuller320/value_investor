@@ -2653,28 +2653,10 @@
     "HOLX_US_EQ",
     "HOL_US_EQ",
     "HOMB_US_EQ",
-    "HOND_US_EQ"
+    "HOND_US_EQ",
+    "HONT_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HKXCY_US_EQ",
-      "venue": "US",
-      "yahoo": "HKXCY",
-      "isin": "US43858F1093",
-      "name": "HKXCY",
-      "seconds": 0.873,
-      "outcome": "miss",
-      "at": "2026-11-24T08:03:05.127322+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.81
-      },
-      "screen_seconds": 0.81,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "HLFN_US_EQ",
       "venue": "US",
@@ -3415,6 +3397,25 @@
       },
       "screen_seconds": 3.943,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HONT_US_EQ",
+      "venue": "US",
+      "yahoo": "HONT",
+      "isin": "US4381151079",
+      "name": "HONT",
+      "seconds": 1.129,
+      "outcome": "miss",
+      "at": "2026-11-24T08:09:30.089039+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.55,
+        "seconds": 0.809
+      },
+      "screen_seconds": 0.809,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -35049,43 +35050,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T08:09:12.898908+00:00"
+    },
+    {
+      "t212_ticker": "HONT_US_EQ",
+      "yahoo": "HONT",
+      "name": "HONT",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T08:09:30.089039+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HOND_US_EQ",
+    "t212_ticker": "HONT_US_EQ",
     "venue": "US",
-    "yahoo": "HOND",
-    "isin": "US8814541020",
-    "name": "IMSR",
-    "seconds": 4.016,
+    "yahoo": "HONT",
+    "isin": "US4381151079",
+    "name": "HONT",
+    "seconds": 1.129,
     "outcome": "miss",
-    "at": "2026-11-24T08:09:22.966483+00:00",
+    "at": "2026-11-24T08:09:30.089039+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.943
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.55,
+      "seconds": 0.809
     },
-    "screen_seconds": 3.943,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.809,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HONT_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T08:09:22.966483+00:00",
+  "updated_at": "2026-11-24T08:09:30.089039+00:00",
   "totals": {
-    "screened": 2652,
+    "screened": 2653,
     "signals": {
-      "buy": 805,
+      "buy": 806,
       "avoid": 624,
       "hold": 574,
       "insufficient_data": 635,
       "strong_buy": 14
     },
-    "signals_n": 2652,
-    "screen_seconds_sum": 28037.308000000055,
-    "screen_seconds_n": 2652,
+    "signals_n": 2653,
+    "screen_seconds_sum": 28038.117000000057,
+    "screen_seconds_n": 2653,
     "outcomes": {
-      "miss": 1015,
+      "miss": 1016,
       "saved": 1637
     }
   },
