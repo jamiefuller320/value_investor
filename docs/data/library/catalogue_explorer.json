@@ -3090,28 +3090,10 @@
     "JZXN_US_EQ",
     "JZ_US_EQ",
     "KACL_US_EQ",
-    "KAEPY_US_EQ"
+    "KAEPY_US_EQ",
+    "KAIKY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "JOE_US_EQ",
-      "venue": "US",
-      "yahoo": "JOE",
-      "isin": "US7901481009",
-      "name": "JOE",
-      "seconds": 1.819,
-      "outcome": "saved",
-      "at": "2026-11-24T12:09:41.432464+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.852
-      },
-      "screen_seconds": 0.852,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "JOUT_US_EQ",
       "venue": "US",
@@ -3852,6 +3834,25 @@
       },
       "screen_seconds": 1.381,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "KAIKY_US_EQ",
+      "venue": "US",
+      "yahoo": "KAIKY",
+      "isin": "US4863642017",
+      "name": "KAIKY",
+      "seconds": 0.965,
+      "outcome": "miss",
+      "at": "2026-11-24T13:51:12.216293+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.899
+      },
+      "screen_seconds": 0.899,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -39602,43 +39603,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T12:24:15.613198+00:00"
+    },
+    {
+      "t212_ticker": "KAIKY_US_EQ",
+      "yahoo": "KAIKY",
+      "name": "KAIKY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T13:51:12.216293+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "KAEPY_US_EQ",
+    "t212_ticker": "KAIKY_US_EQ",
     "venue": "US",
-    "yahoo": "KAEPY",
-    "isin": "US4846023053",
-    "name": "KAEPY",
-    "seconds": 1.501,
+    "yahoo": "KAIKY",
+    "isin": "US4863642017",
+    "name": "KAIKY",
+    "seconds": 0.965,
     "outcome": "miss",
-    "at": "2026-11-24T13:51:05.820203+00:00",
+    "at": "2026-11-24T13:51:12.216293+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 1.0,
-      "seconds": 1.381
+      "seconds": 0.899
     },
-    "screen_seconds": 1.381,
-    "signal": "hold"
+    "screen_seconds": 0.899,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "KAIKY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T13:51:05.820203+00:00",
+  "updated_at": "2026-11-24T13:51:12.216293+00:00",
   "totals": {
-    "screened": 3089,
+    "screened": 3090,
     "signals": {
-      "buy": 937,
+      "buy": 938,
       "avoid": 729,
       "hold": 646,
       "insufficient_data": 760,
       "strong_buy": 17
     },
-    "signals_n": 3089,
-    "screen_seconds_sum": 31939.5960000001,
-    "screen_seconds_n": 3089,
+    "signals_n": 3090,
+    "screen_seconds_sum": 31940.4950000001,
+    "screen_seconds_n": 3090,
     "outcomes": {
-      "miss": 1199,
+      "miss": 1200,
       "saved": 1890
     }
   },
