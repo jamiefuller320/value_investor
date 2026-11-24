@@ -16,6 +16,7 @@ from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
     merge_ir_allowlist_filings,
     period_body_coverage,
+    refetch_euro_filings_primary_bodies,
     refetch_ir_presentation_sources,
     refetch_missing_filing_bodies,
     refetch_uk_primary_filing_bodies,
@@ -564,7 +565,20 @@ def prepare_gap_fill_source_pack(
         if int(primary_refetch.get("fetched") or 0) > 0:
             body_refetch = primary_refetch
     ir_refetch: dict[str, Any] = {}
-    if ir_allowlist_rows:
+    bucket = _market_bucket(market, ticker)
+    if bucket == "euro" and ir_allowlist_rows:
+        euro_primary = refetch_euro_filings_primary_bodies(
+            filings_dir,
+            ticker=ticker,
+            company_name=company_name,
+            max_bodies=20,
+        )
+        ir_refetch = dict(euro_primary.get("ir_allowlist") or {})
+        ir_refetch["mandatory"] = True
+        ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
+        if int(euro_primary.get("fetched") or 0) > 0:
+            body_refetch = euro_primary
+    elif ir_allowlist_rows:
         ir_refetch = refetch_ir_allowlist_filing_bodies(
             filings_dir,
             ticker,

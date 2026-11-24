@@ -1641,34 +1641,52 @@ def ingest_research_sources(
             }:
                 from value_investor.library_ingest_budget import deadline_reached
                 from value_investor.research.filings import (
-                    refetch_ir_allowlist_filing_bodies,
-                    refetch_residual_filing_bodies,
+                    ensure_ir_allowlist_direct_filings_ingested,
+                    ir_allowlist_direct_eligible,
+                    refetch_euro_filings_primary_bodies,
                 )
 
                 summary = filings_meta.get("filings_summary") or {}
                 ir_refetch: dict[str, Any] = {}
                 residual_refetch: dict[str, Any] = {}
-                if not deadline_reached(deadline_monotonic):
-                    ir_refetch = refetch_ir_allowlist_filing_bodies(
-                        sources_dir / "filings",
+                euro_primary: dict[str, Any] = {}
+                if not deadline_reached(deadline_monotonic) and ir_allowlist_direct_eligible(
+                    ticker
+                ):
+                    # eng-20261124-01: euro_depth EVN.VI had ESEF interim bodies but stale IR hub;
+                    # merge builtin evn.at PDFs then refetch (asia_filings already uses ensure_*).
+                    ir_allowlist_ensure = ensure_ir_allowlist_direct_filings_ingested(
+                        sources_dir,
                         ticker=ticker,
                         company_name=company_name,
-                        max_bodies=12,
+                        market=market,
+                        deepen_history=deepen_history,
                         deadline_monotonic=deadline_monotonic,
                     )
+                    filings_meta["ir_allowlist_ensure"] = ir_allowlist_ensure
+                    ir_refetch = dict(ir_allowlist_ensure.get("ir_refetch") or {})
                 if not deadline_reached(deadline_monotonic):
-                    residual_refetch = refetch_residual_filing_bodies(
+                    euro_primary = refetch_euro_filings_primary_bodies(
                         sources_dir / "filings",
                         ticker=ticker,
                         company_name=company_name,
                         max_bodies=12,
                     )
+                    residual_refetch = dict(euro_primary.get("residual") or {})
+                    if not ir_refetch:
+                        ir_refetch = dict(euro_primary.get("ir_allowlist") or {})
                 filings_meta["ir_refetch"] = ir_refetch
                 filings_meta["residual_refetch"] = residual_refetch
-                merge_added = int((ir_refetch.get("merge") or {}).get("added") or 0)
+                filings_meta["euro_primary_refetch"] = euro_primary
+                merge_added = int(
+                    (ir_refetch.get("merge") or {}).get("added")
+                    or (filings_meta.get("ir_allowlist_ensure") or {}).get("merge", {}).get("added")
+                    or 0
+                )
                 if (
                     int(ir_refetch.get("fetched") or 0)
                     or int(residual_refetch.get("fetched") or 0)
+                    or int(euro_primary.get("fetched") or 0)
                     or merge_added > 0
                 ):
                     index_path = sources_dir / "filings" / "filings_index.json"

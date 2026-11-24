@@ -11403,6 +11403,18 @@ def refetch_residual_filing_bodies(
     except (OSError, ValueError, TypeError) as exc:
         return {**empty, "note": f"unreadable index: {exc}"}
 
+    ir_merge: dict[str, Any] = {}
+    token = str(ticker or "").strip().upper()
+    if token and fetch_filings_ir_allowlist(token):
+        # eng-20261124-01: library euro deepen runs residual before IR refetch; merge
+        # builtin PDF rows first so stale hubs migrate and statutory URLs get bodies.
+        ir_merge = merge_ir_allowlist_filings(token, filings_dir)
+        if ir_merge.get("added") or ir_merge.get("migrated_urls"):
+            try:
+                payload = json.loads(index_path.read_text(encoding="utf-8"))
+            except (OSError, ValueError, TypeError):
+                pass
+
     filings = list(payload.get("filings") or [])
     before = sum(1 for row in filings if row.get("has_body"))
     enriched = enrich_filing_rows(
@@ -11469,6 +11481,7 @@ def refetch_residual_filing_bodies(
         "indexed_without_body_before": int(coverage_before.get("indexed_without_body") or 0),
         "indexed_without_body_after": int(coverage_after.get("indexed_without_body") or 0),
         "deadline_hit": deadline_reached(deadline_monotonic),
+        "ir_allowlist_merge": ir_merge,
         "note": "refetch_residual_filing_bodies",
     }
 
@@ -11716,6 +11729,8 @@ def refetch_euro_filings_primary_bodies(
         company_name=company_name,
         ticker=ticker,
     )
+    if fetch_filings_ir_allowlist(ticker):
+        merge_ir_allowlist_filings(ticker, filings_dir)
     residual = refetch_residual_filing_bodies(
         filings_dir,
         ticker=ticker,
@@ -12393,6 +12408,18 @@ def filings_index_ir_allowlist_direct_gap(payload: dict[str, Any]) -> bool:
     ir_rows = [row for row in filings if _is_ir_allowlist_row(row)]
     if ir_rows and not any(row.get("has_body") for row in ir_rows):
         return True
+    # eng-20261124-01: EVN.VI euro_depth — ESEF interim bodies satisfied key_bodies
+    # while stale IR hub rows and missing Jahresfinanzbericht annual remained indexed.
+    period_cov = (payload.get("summary") or {}).get("period_coverage") or {}
+    annual_gap = int((period_cov.get("annual") or {}).get("total") or 0) == 0 or int(
+        (period_cov.get("annual") or {}).get("with_body") or 0
+    ) < int((period_cov.get("annual") or {}).get("total") or 0)
+    if ir_rows and annual_gap:
+        return True
+    for row in ir_rows:
+        url = str(row.get("url") or "")
+        if url in _IR_ALLOWLIST_URL_CANONICAL and not row.get("has_body"):
+            return True
     return int((payload.get("summary") or {}).get("with_body") or 0) == 0
 
 

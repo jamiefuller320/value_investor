@@ -353,6 +353,49 @@ def test_prepare_gap_fill_calls_ir_refetch_for_allowlisted_ticker(
 
 
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_euro_filings_primary_bodies")
+@patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist")
+@patch("value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
+def test_prepare_gap_fill_calls_euro_primary_for_evn_vi_eng_20261124_01(
+    mock_refetch,
+    mock_primary_refetch,
+    mock_ir_rows,
+    mock_euro_primary,
+    mock_news,
+    tmp_path: Path,
+):
+    from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"summary": {"with_body": 1}, "filings": []}),
+        encoding="utf-8",
+    )
+    mock_refetch.return_value = {"fetched": 0, "with_body_after": 1}
+    mock_primary_refetch.return_value = {"fetched": 0}
+    mock_ir_rows.return_value = [
+        {"id": "ir_evn", "source": "ir_allowlist", "url": "https://www.evn.at/getmedia/x.pdf"}
+    ]
+    mock_euro_primary.return_value = {
+        "fetched": 1,
+        "ir_allowlist": {"fetched": 1, "attempted": 2},
+    }
+
+    pack = prepare_gap_fill_source_pack(
+        ticker="EVN.VI",
+        company_name="EVN AG",
+        sources_dir=tmp_path,
+        open_questions=["annual statutory"],
+        market="euro_depth",
+    )
+
+    mock_euro_primary.assert_called_once()
+    assert pack["body_refetch"]["fetched"] == 1
+
+
+@patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist")
 @patch("value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies")

@@ -602,6 +602,18 @@ def select_ingest_improvement_targets(
     discovery_bonus_by_ticker = discovery_bonus_by_ticker or {}
     candidates: list[IngestImprovementTarget] = []
     pin_set = {str(t or "").strip().upper() for t in (pin_tickers or []) if str(t or "").strip()}
+    # eng-20261124-01: intensive gap pins may target a different symbol than the open
+    # IWB name (e.g. euro_depth EVN.VI vs pin WIE.VI); still deepen batch gap tickers.
+    if pin_set and require_outstanding_gaps:
+        for report in reports:
+            if report.signal not in ("strong_buy", "buy"):
+                continue
+            token = report.ticker.upper()
+            if token not in BODY_GAP_BATCH_TICKERS or token in pin_set:
+                continue
+            coverage = _filing_coverage(store, report.ticker, output_dir)
+            if int(coverage.get("indexed_without_body") or 0) > 0:
+                pin_set.add(token)
 
     for report in reports:
         if report.signal not in ("strong_buy", "buy"):

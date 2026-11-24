@@ -925,6 +925,41 @@ def test_select_ingest_improvement_targets_prioritizes_body_gap_batch(tmp_path: 
     assert targets[0].priority_score > targets[1].priority_score
 
 
+def test_select_ingest_improvement_intensive_pin_includes_body_gap_batch_evn_eng_20261124_01(
+    tmp_path: Path,
+):
+    """eng-20261124-01: EVN.VI stays in targets when pin is another euro_depth name."""
+    output_dir = tmp_path / "output"
+    for ticker in ("EVN.VI", "WIE.VI"):
+        filings_dir = output_dir / "research" / ticker / "sources" / "filings"
+        filings_dir.mkdir(parents=True)
+        (filings_dir / "filings_index.json").write_text(
+            json.dumps(
+                {
+                    "summary": {"total": 3, "with_body": 2, "annual": 0, "interim": 2},
+                    "filings": [{"has_body": False}, {"has_body": True}, {"has_body": True}],
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    targets = select_ingest_improvement_targets(
+        [
+            _report("WIE.VI", "Wienerberger AG", signal="buy"),
+            _report("EVN.VI", "EVN AG", signal="buy"),
+        ],
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        require_outstanding_gaps=True,
+        pin_tickers=["WIE.VI"],
+        max_targets=4,
+    )
+    tickers = {row.ticker for row in targets}
+    assert "WIE.VI" in tickers
+    assert "EVN.VI" in tickers
+    assert "EVN.VI" in BODY_GAP_BATCH_TICKERS
+
+
 def test_rat_l_form_83_stubs_do_not_count_as_low_penetration_pack(tmp_path: Path):
     """eng-20260923-02: RAT.L statutory pack bodied; Form 8.3 audit rows must not reopen gaps."""
     output_dir = tmp_path / "output"

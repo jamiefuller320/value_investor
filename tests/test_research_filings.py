@@ -14926,11 +14926,100 @@ def test_refetch_euro_filings_primary_bodies_evn_vi_library_index_eng_20261122_0
         max_bodies=5,
     )
     ir = result.get("ir_allowlist") or {}
-    assert int(ir.get("attempted") or 0) >= 1
+    residual = result.get("residual") or {}
+    assert int(residual.get("attempted") or 0) + int(ir.get("attempted") or 0) >= 1
     assert int(result.get("fetched") or 0) >= 1
     payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     annual = [row for row in payload["filings"] if row.get("period") == "annual"]
     assert annual and annual[0].get("has_body")
+
+
+@patch("value_investor.research.filings._fetch_ir_allowlist_body")
+def test_refetch_residual_premerges_evn_vi_ir_allowlist_eng_20261124_01(
+    mock_fetch,
+    tmp_path: Path,
+):
+    """eng-20261124-01: library residual pass must merge evn.at PDFs before body fetch."""
+    mock_fetch.return_value = (
+        "EVN AG Jahresfinanzbericht consolidated revenue operating profit " * 30,
+        "pdf",
+    )
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "EVN.VI",
+                "company_name": "EVN AG",
+                "filings": [
+                    {
+                        "id": "ir_07bb52dd9c03b279",
+                        "source": "ir_allowlist",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                    },
+                    {
+                        "id": "1de226c8c5dad0db",
+                        "source": "esef_direct",
+                        "url": "https://filings.xbrl.org/529900P4JZBFEVNEAE60/2024-09-30/ESEF/AT/0/evnag-2024-09-30-0-en/reports/evnag-2024-09-30-0-en.xhtml",
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(bodies_dir / "1de226c8c5dad0db.txt"),
+                    },
+                ],
+                "summary": {
+                    "total": 2,
+                    "with_body": 1,
+                    "period_coverage": {
+                        "annual": {"total": 0, "with_body": 0},
+                        "interim": {"total": 1, "with_body": 1},
+                    },
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (bodies_dir / "1de226c8c5dad0db.txt").write_text("esef " * 500, encoding="utf-8")
+
+    from value_investor.research.filings import refetch_residual_filing_bodies
+
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="EVN.VI",
+        company_name="EVN AG",
+        max_bodies=5,
+    )
+    assert int(result.get("ir_allowlist_merge", {}).get("migrated_urls") or 0) >= 1
+    assert result["attempted"] >= 1
+    assert result["fetched"] >= 1
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    annual = [row for row in payload["filings"] if row.get("period") == "annual"]
+    assert annual and annual[0].get("has_body")
+
+
+def test_filings_index_ir_allowlist_direct_gap_evn_vi_stale_hub_eng_20261124_01():
+    """ESEF interim bodies must not skip ensure_ir when annual IR and stale hub remain."""
+    from value_investor.research.filings import filings_index_ir_allowlist_direct_gap
+
+    payload = {
+        "summary": {
+            "with_body": 2,
+            "period_coverage": {"annual": {"total": 0, "with_body": 0}},
+        },
+        "filings": [
+            {
+                "source": "ir_allowlist",
+                "url": "https://www.evn.at/en/investor-relations/publications/",
+                "has_body": False,
+            },
+            {"source": "esef_direct", "period": "interim", "has_body": True},
+        ],
+    }
+    assert filings_index_ir_allowlist_direct_gap(payload) is True
 
 
 def test_parked_source_hunter_evn_vi_euro_depth_has_fetchable_ir():
