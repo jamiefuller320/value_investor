@@ -2662,28 +2662,10 @@
     "HOUR_US_EQ",
     "HOV_US_EQ",
     "HOWL_US_EQ",
-    "HPCO_US_EQ"
+    "HPCO_US_EQ",
+    "HPGLY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HLN_US_EQ",
-      "venue": "US",
-      "yahoo": "HLN",
-      "isin": "US4055521003",
-      "name": "HLN",
-      "seconds": 1.889,
-      "outcome": "saved",
-      "at": "2026-11-24T08:04:30.074766+00:00",
-      "rows": 40,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.74
-      },
-      "screen_seconds": 0.74,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "HLP_US_EQ",
       "venue": "US",
@@ -3424,6 +3406,25 @@
       },
       "screen_seconds": 1.136,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "HPGLY_US_EQ",
+      "venue": "US",
+      "yahoo": "HPGLY",
+      "isin": "US41135Q1040",
+      "name": "HPGLY",
+      "seconds": 0.781,
+      "outcome": "miss",
+      "at": "2026-11-24T08:10:45.194695+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.707
+      },
+      "screen_seconds": 0.707,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -35074,43 +35075,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T08:09:49.564915+00:00"
+    },
+    {
+      "t212_ticker": "HPGLY_US_EQ",
+      "yahoo": "HPGLY",
+      "name": "HPGLY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T08:10:45.194695+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HPCO_US_EQ",
+    "t212_ticker": "HPGLY_US_EQ",
     "venue": "US",
-    "yahoo": "HPCO",
-    "isin": "US42371L2051",
-    "name": "HPCO",
-    "seconds": 1.221,
+    "yahoo": "HPGLY",
+    "isin": "US41135Q1040",
+    "name": "HPGLY",
+    "seconds": 0.781,
     "outcome": "miss",
-    "at": "2026-11-24T08:10:38.433535+00:00",
+    "at": "2026-11-24T08:10:45.194695+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.9,
-      "seconds": 1.136
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.707
     },
-    "screen_seconds": 1.136,
-    "signal": "avoid"
+    "screen_seconds": 0.707,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HPGLY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T08:10:38.433535+00:00",
+  "updated_at": "2026-11-24T08:10:45.194695+00:00",
   "totals": {
-    "screened": 2661,
+    "screened": 2662,
     "signals": {
-      "buy": 807,
+      "buy": 808,
       "avoid": 626,
       "hold": 576,
       "insufficient_data": 638,
       "strong_buy": 14
     },
-    "signals_n": 2661,
-    "screen_seconds_sum": 28051.216000000048,
-    "screen_seconds_n": 2661,
+    "signals_n": 2662,
+    "screen_seconds_sum": 28051.923000000046,
+    "screen_seconds_n": 2662,
     "outcomes": {
-      "miss": 1020,
+      "miss": 1021,
       "saved": 1641
     }
   },
