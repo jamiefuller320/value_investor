@@ -2027,28 +2027,10 @@
     "FBPI_US_EQ",
     "FBP_US_EQ",
     "FBRT_US_EQ",
-    "FBSI_US_EQ"
+    "FBSI_US_EQ",
+    "FBTT_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "EXP_US_EQ",
-      "venue": "US",
-      "yahoo": "EXP",
-      "isin": "US26969P1084",
-      "name": "EXP",
-      "seconds": 3.097,
-      "outcome": "saved",
-      "at": "2026-11-24T01:44:34.222111+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 0.915
-      },
-      "screen_seconds": 0.915,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "EXROF_US_EQ",
       "venue": "US",
@@ -2789,6 +2771,25 @@
       },
       "screen_seconds": 1.24,
       "signal": "strong_buy"
+    },
+    {
+      "t212_ticker": "FBTT_US_EQ",
+      "venue": "US",
+      "yahoo": "FBTT",
+      "isin": "US31929F1093",
+      "name": "FBTT",
+      "seconds": 1.449,
+      "outcome": "miss",
+      "at": "2026-11-24T01:51:55.484794+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.65,
+        "seconds": 1.179
+      },
+      "screen_seconds": 1.179,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -22029,48 +22030,56 @@
       "signal": "strong_buy",
       "status": "pending",
       "queued_at": "2026-11-24T01:51:48.903721+00:00"
+    },
+    {
+      "t212_ticker": "FBTT_US_EQ",
+      "yahoo": "FBTT",
+      "name": "FBTT",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T01:51:55.484794+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "FBSI_US_EQ",
+    "t212_ticker": "FBTT_US_EQ",
     "venue": "US",
-    "yahoo": "FBSI",
-    "isin": "US3186871006",
-    "name": "FBSI",
-    "seconds": 1.582,
+    "yahoo": "FBTT",
+    "isin": "US31929F1093",
+    "name": "FBTT",
+    "seconds": 1.449,
     "outcome": "miss",
-    "at": "2026-11-24T01:51:48.903721+00:00",
+    "at": "2026-11-24T01:51:55.484794+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "strong_buy",
+      "signal": "buy",
       "fits": true,
       "data_quality_score": 0.65,
-      "seconds": 1.24
+      "seconds": 1.179
     },
-    "screen_seconds": 1.24,
-    "signal": "strong_buy",
+    "screen_seconds": 1.179,
+    "signal": "buy",
     "handoff": {
       "status": "pending",
-      "signal": "strong_buy",
-      "t212_ticker": "FBSI_US_EQ"
+      "signal": "buy",
+      "t212_ticker": "FBTT_US_EQ"
     }
   },
-  "updated_at": "2026-11-24T01:51:48.903721+00:00",
+  "updated_at": "2026-11-24T01:51:55.484794+00:00",
   "totals": {
-    "screened": 2026,
+    "screened": 2027,
     "signals": {
-      "buy": 589,
+      "buy": 590,
       "avoid": 496,
       "hold": 454,
       "insufficient_data": 478,
       "strong_buy": 9
     },
-    "signals_n": 2026,
-    "screen_seconds_sum": 20835.826000000023,
-    "screen_seconds_n": 2026,
+    "signals_n": 2027,
+    "screen_seconds_sum": 20837.005000000023,
+    "screen_seconds_n": 2027,
     "outcomes": {
-      "miss": 773,
+      "miss": 774,
       "saved": 1253
     }
   },
