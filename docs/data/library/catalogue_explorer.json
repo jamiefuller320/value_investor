@@ -2611,28 +2611,10 @@
     "HJLI_US_EQ",
     "HKD_US_EQ",
     "HKHHY_US_EQ",
-    "HKIB_US_EQ"
+    "HKIB_US_EQ",
+    "HKMPY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HEBT_US_EQ",
-      "venue": "US",
-      "yahoo": "HEBT",
-      "isin": "VGG6593L1307",
-      "name": "AIOS",
-      "seconds": 3.702,
-      "outcome": "miss",
-      "at": "2026-11-24T07:56:59.688037+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.622
-      },
-      "screen_seconds": 3.622,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "HEI/A_US_EQ",
       "venue": "US",
@@ -3373,6 +3355,25 @@
       },
       "screen_seconds": 3.782,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HKMPY_US_EQ",
+      "venue": "US",
+      "yahoo": "HKMPY",
+      "isin": "US4312881091",
+      "name": "HKMPY",
+      "seconds": 0.804,
+      "outcome": "miss",
+      "at": "2026-11-24T08:02:51.422071+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.745
+      },
+      "screen_seconds": 0.745,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -34847,43 +34848,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T08:02:34.203079+00:00"
+    },
+    {
+      "t212_ticker": "HKMPY_US_EQ",
+      "yahoo": "HKMPY",
+      "name": "HKMPY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T08:02:51.422071+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HKIB_US_EQ",
+    "t212_ticker": "HKMPY_US_EQ",
     "venue": "US",
-    "yahoo": "HKIB",
-    "isin": "US00180G4038",
-    "name": "AMTD",
-    "seconds": 3.877,
+    "yahoo": "HKMPY",
+    "isin": "US4312881091",
+    "name": "HKMPY",
+    "seconds": 0.804,
     "outcome": "miss",
-    "at": "2026-11-24T08:02:44.144692+00:00",
+    "at": "2026-11-24T08:02:51.422071+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.782
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.745
     },
-    "screen_seconds": 3.782,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.745,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HKMPY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T08:02:44.144692+00:00",
+  "updated_at": "2026-11-24T08:02:51.422071+00:00",
   "totals": {
-    "screened": 2610,
+    "screened": 2611,
     "signals": {
-      "buy": 785,
+      "buy": 786,
       "avoid": 621,
       "hold": 565,
       "insufficient_data": 625,
       "strong_buy": 14
     },
-    "signals_n": 2610,
-    "screen_seconds_sum": 27978.09600000004,
-    "screen_seconds_n": 2610,
+    "signals_n": 2611,
+    "screen_seconds_sum": 27978.84100000004,
+    "screen_seconds_n": 2611,
     "outcomes": {
-      "miss": 995,
+      "miss": 996,
       "saved": 1615
     }
   },
