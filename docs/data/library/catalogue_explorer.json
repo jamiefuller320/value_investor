@@ -2244,28 +2244,10 @@
     "FUSB_US_EQ",
     "FUTU_US_EQ",
     "FUUFF_US_EQ",
-    "FUV_US_EQ"
+    "FUV_US_EQ",
+    "FUWAY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FSM_US_EQ",
-      "venue": "US",
-      "yahoo": "FSM",
-      "isin": "CA3499421020",
-      "name": "FSM",
-      "seconds": 6.76,
-      "outcome": "saved",
-      "at": "2026-11-24T02:43:44.681751+00:00",
-      "rows": 40,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.811
-      },
-      "screen_seconds": 0.811,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "FSNUY_US_EQ",
       "venue": "US",
@@ -3006,6 +2988,25 @@
       },
       "screen_seconds": 85.776,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "FUWAY_US_EQ",
+      "venue": "US",
+      "yahoo": "FUWAY",
+      "isin": "US3611181021",
+      "name": "FUWAY",
+      "seconds": 0.803,
+      "outcome": "miss",
+      "at": "2026-11-24T03:07:47.974276+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.717
+      },
+      "screen_seconds": 0.717,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -23145,43 +23146,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T02:59:38.109926+00:00"
+    },
+    {
+      "t212_ticker": "FUWAY_US_EQ",
+      "yahoo": "FUWAY",
+      "name": "FUWAY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T03:07:47.974276+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "FUV_US_EQ",
+    "t212_ticker": "FUWAY_US_EQ",
     "venue": "US",
-    "yahoo": "FUV",
-    "isin": "US0395872098",
-    "name": "FUVV",
-    "seconds": 86.101,
+    "yahoo": "FUWAY",
+    "isin": "US3611181021",
+    "name": "FUWAY",
+    "seconds": 0.803,
     "outcome": "miss",
-    "at": "2026-11-24T03:01:16.022173+00:00",
+    "at": "2026-11-24T03:07:47.974276+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.776
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.717
     },
-    "screen_seconds": 85.776,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.717,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "FUWAY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T03:01:16.022173+00:00",
+  "updated_at": "2026-11-24T03:07:47.974276+00:00",
   "totals": {
-    "screened": 2243,
+    "screened": 2244,
     "signals": {
-      "buy": 688,
+      "buy": 689,
       "avoid": 540,
       "hold": 489,
       "insufficient_data": 516,
       "strong_buy": 10
     },
-    "signals_n": 2243,
-    "screen_seconds_sum": 23528.184000000023,
-    "screen_seconds_n": 2243,
+    "signals_n": 2244,
+    "screen_seconds_sum": 23528.901000000023,
+    "screen_seconds_n": 2244,
     "outcomes": {
-      "miss": 846,
+      "miss": 847,
       "saved": 1397
     }
   },
