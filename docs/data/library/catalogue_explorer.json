@@ -3069,28 +3069,10 @@
     "JSGRY_US_EQ",
     "JTEKY_US_EQ",
     "JTTRY_US_EQ",
-    "JT_US_EQ"
+    "JT_US_EQ",
+    "JUMSY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "JFIN_US_EQ",
-      "venue": "US",
-      "yahoo": "JFIN",
-      "isin": "US47737C1045",
-      "name": "JFIN",
-      "seconds": 2.712,
-      "outcome": "saved",
-      "at": "2026-11-24T11:58:27.317763+00:00",
-      "rows": 17,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.95,
-        "seconds": 0.77
-      },
-      "screen_seconds": 0.77,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "JFK_US_EQ",
       "venue": "US",
@@ -3831,6 +3813,25 @@
       },
       "screen_seconds": 84.784,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "JUMSY_US_EQ",
+      "venue": "US",
+      "yahoo": "JUMSY",
+      "isin": "US48138V1052",
+      "name": "JUMSY",
+      "seconds": 0.893,
+      "outcome": "miss",
+      "at": "2026-11-24T12:17:51.658738+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.829
+      },
+      "screen_seconds": 0.829,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -39557,43 +39558,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T12:16:11.873806+00:00"
+    },
+    {
+      "t212_ticker": "JUMSY_US_EQ",
+      "yahoo": "JUMSY",
+      "name": "JUMSY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T12:17:51.658738+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "JT_US_EQ",
+    "t212_ticker": "JUMSY_US_EQ",
     "venue": "US",
-    "yahoo": "JT",
-    "isin": "US47738D3098",
-    "name": "AIJTY",
-    "seconds": 84.859,
+    "yahoo": "JUMSY",
+    "isin": "US48138V1052",
+    "name": "JUMSY",
+    "seconds": 0.893,
     "outcome": "miss",
-    "at": "2026-11-24T12:17:43.736939+00:00",
+    "at": "2026-11-24T12:17:51.658738+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.784
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.829
     },
-    "screen_seconds": 84.784,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.829,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "JUMSY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T12:17:43.736939+00:00",
+  "updated_at": "2026-11-24T12:17:51.658738+00:00",
   "totals": {
-    "screened": 3068,
+    "screened": 3069,
     "signals": {
-      "buy": 934,
+      "buy": 935,
       "avoid": 726,
       "hold": 642,
       "insufficient_data": 749,
       "strong_buy": 17
     },
-    "signals_n": 3068,
-    "screen_seconds_sum": 31078.198000000095,
-    "screen_seconds_n": 3068,
+    "signals_n": 3069,
+    "screen_seconds_sum": 31079.027000000096,
+    "screen_seconds_n": 3069,
     "outcomes": {
-      "miss": 1186,
+      "miss": 1187,
       "saved": 1882
     }
   },
