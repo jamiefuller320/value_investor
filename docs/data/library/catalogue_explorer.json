@@ -4291,28 +4291,10 @@
     "PAYS_US_EQ",
     "PAY_US_EQ",
     "PBAM_US_EQ",
-    "PBAX_US_EQ"
+    "PBAX_US_EQ",
+    "PBCO_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "OXBR_US_EQ",
-      "venue": "US",
-      "yahoo": "OXBR",
-      "isin": "KYG6856M1069",
-      "name": "OXBR",
-      "seconds": 2.015,
-      "outcome": "saved",
-      "at": "2026-11-24T23:32:57.986640+00:00",
-      "rows": 20,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.85,
-        "seconds": 0.798
-      },
-      "screen_seconds": 0.798,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "OXLC_US_EQ",
       "venue": "US",
@@ -5053,6 +5035,25 @@
       },
       "screen_seconds": 84.563,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "PBCO_US_EQ",
+      "venue": "US",
+      "yahoo": "PBCO",
+      "isin": "US69317J1016",
+      "name": "PBCO",
+      "seconds": 0.759,
+      "outcome": "miss",
+      "at": "2026-11-24T23:50:00.776170+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.711
+      },
+      "screen_seconds": 0.711,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -58845,43 +58846,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T23:48:25.185411+00:00"
+    },
+    {
+      "t212_ticker": "PBCO_US_EQ",
+      "yahoo": "PBCO",
+      "name": "PBCO",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T23:50:00.776170+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "PBAX_US_EQ",
+    "t212_ticker": "PBCO_US_EQ",
     "venue": "US",
-    "yahoo": "PBAX",
-    "isin": "US71902K4022",
-    "name": "CERO",
-    "seconds": 84.613,
+    "yahoo": "PBCO",
+    "isin": "US69317J1016",
+    "name": "PBCO",
+    "seconds": 0.759,
     "outcome": "miss",
-    "at": "2026-11-24T23:49:54.847141+00:00",
+    "at": "2026-11-24T23:50:00.776170+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.563
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.711
     },
-    "screen_seconds": 84.563,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.711,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "PBCO_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T23:49:54.847141+00:00",
+  "updated_at": "2026-11-24T23:50:00.776170+00:00",
   "totals": {
-    "screened": 4290,
+    "screened": 4291,
     "signals": {
-      "buy": 1294,
+      "buy": 1295,
       "avoid": 1011,
       "hold": 929,
       "insufficient_data": 1030,
       "strong_buy": 26
     },
-    "signals_n": 4290,
-    "screen_seconds_sum": 42494.69800000015,
-    "screen_seconds_n": 4290,
+    "signals_n": 4291,
+    "screen_seconds_sum": 42495.40900000015,
+    "screen_seconds_n": 4291,
     "outcomes": {
-      "miss": 1663,
+      "miss": 1664,
       "saved": 2627
     }
   },
