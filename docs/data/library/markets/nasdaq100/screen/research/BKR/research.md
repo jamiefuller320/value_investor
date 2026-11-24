@@ -1,6 +1,6 @@
 # Baker Hughes Company (BKR) — Research memo
 
-_Version 6 · Updated 2026-11-24T05:32:45.501842+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-24T17:52:21.040257+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: The 20 Nov 8-K confirms Chart closed 16 Jul with debt repaid; TTM FCF ~$3.2bn and LNG backlog support the strong-buy screen, but post-deal leverage and normalised BKR earnings stay unverified in filings.
+Rationale: TTM FCF ~$3.2bn and Jul Chart close in the 20 Nov 8-K support the strong-buy screen; latest news is ETF flow only and normalised earnings remain unverified in filings.
 RiskTags: cyclical, leverage, competitive, regulatory
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Normalised post-Chart and post-portfolio BKR earnings remain unverified in suppl
 No BKR-specific headlines in the 24 Nov news batch since the 23 Nov 8-K refresh (one unrelated Victrex piece only).  
 Strong-buy screen unchanged with Q3 revenue ~$8.0bn and TTM FCF ~$3.2bn; no new SEC filing bodies in supplied sources.  
 Normalised post-Chart earnings remain unverified in supplied primary filings.
+
+### 2026-11-24T17:52:21.040257+00:00
+Afternoon 24 Nov batch adds only ETF net-selling ($16.6m on 20 Nov) flow headline—no new SEC filing bodies.  
+Strong-buy screen unchanged with Q3 2026 revenue ~$8.0bn and TTM FCF ~$3.2bn.  
+Normalised post-Chart BKR earnings remain unverified in supplied primary filings.

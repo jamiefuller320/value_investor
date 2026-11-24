@@ -1,6 +1,6 @@
 # Cognizant Technology Solutions Corporation (CTSH) — Research memo
 
-_Version 6 · Updated 2026-11-24T05:34:50.122939+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-24T17:55:12.038323+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Q3 revenue and quarter free cash flow in supplied sources still support Strong Buy; the 24 Nov batch has no articles and EDGAR ends 29 Oct, so research confirms the screen without added conviction.
+Rationale: Q3 revenue and quarter free cash flow in supplied sources still support Strong Buy; the 17:54 batch is mostly peer noise and a State Street trim—EDGAR still ends 29 Oct—so research confirms the screen without added conviction.
 RiskTags: regulatory, competitive, cyclical, customer_concentration, litigation, accounting, leverage
 
 ## Weekly updates
@@ -36,5 +36,10 @@ No material change to fundamentals, guidance, or sell-side themes in the supplie
 
 ### 2026-11-24T05:34:50.122939+00:00
 The 24 Nov 05:34 news batch since the prior refresh contains no articles.  
+Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged with last EDGAR on 29 Oct 2026.  
+No material change to fundamentals, guidance, or sell-side themes in the supplied pack.
+
+### 2026-11-24T17:55:12.038323+00:00
+The 24 Nov 17:54 batch adds five headlines; only State Street trimming CTSH holdings is company-specific—the rest are Globant, Accenture, Clarivate, or quote boilerplate.  
 Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged with last EDGAR on 29 Oct 2026.  
 No material change to fundamentals, guidance, or sell-side themes in the supplied pack.

@@ -1,6 +1,6 @@
 # GE Vernova Inc. (GEV) — Research memo
 
-_Version 4 · Updated 2026-11-24T05:40:39.931351+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-24T18:01:31.172485+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: Fresh press stresses Wind versus Power and a ~14% monthly fall, but filed FY25 FCF still trails screen TTM FCF, so research only partly supports the buy signal.
+Rationale: Bullish commentary cites FCF momentum and data-centre power demand, but no new filings and filed FY25 FCF still lags screen TTM, so research only partly supports the buy signal.
 RiskTags: cyclical, regulatory, liquidity, pension, accounting
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Wind execution and mixed analyst views noted earlier remain the main fundamental
 Latest batch adds Globe and Mail coverage on a ~14.2% monthly decline and Wind risks challenging the Power narrative; no new SEC filings or sourced financial changes.  
 Filed FY2025 cash flow in sources remains OCF $4.99bn and FCF $3.71bn; Yahoo TTM FCF (~$17.1bn) still far exceeds annual filed FCF underpinning the screen.  
 Other headlines are options-page noise only; Wind execution and FCF-basis divergence remain the main overhangs from prior updates.
+
+### 2026-11-24T18:01:31.172485+00:00
+Incremental batch is commentary-only: Seeking Alpha frames a FCF jump as a strong buy; Yahoo links AI data-centre power to YTD gains; another piece says momentum still lacks trend confirmation.  
+No new SEC filings; sourced FY2025 cash flow is unchanged (OCF $4.99bn, FCF $3.71bn) and Yahoo TTM FCF (~$17.1bn) still far exceeds filed annual FCF underpinning the screen.  
+Wind execution and the FCF-basis gap from prior updates are not resolved in this batch.

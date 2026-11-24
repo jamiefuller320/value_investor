@@ -1,6 +1,6 @@
 # Cisco Systems, Inc. (CSCO) — Research memo
 
-_Version 4 · Updated 2026-11-24T05:34:30.773391+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-24T17:54:49.091774+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.73
-Rationale: Q1 fundamentals and the buy screen still hold; 24 Nov news is post-earnings bounce and valuation commentary only, with no new filings—margin, leverage and governance concerns unchanged.
+Confidence: 0.72
+Rationale: Q1 snapshot and the buy screen still hold; late-24 Nov headlines are profit-taking and peer-margin noise plus repeated router-security commentary, with no new SEC bodies.
 RiskTags: competitive, cyclical, leverage, governance
 
 ## Weekly updates
@@ -28,3 +28,8 @@ No change to Q1 fundamentals, post-earnings margin or governance narratives capt
 Headlines report a 6.8% post-earnings bounce plus mixed valuation pieces ($120 targets, cheap-after-rally, Ciena peer compare); Shirudo/OpenAI security tie-up repeats.  
 No new SEC filing bodies in this batch; the screen remains **buy** with Q1 FY27 EPS $1.14 on ~$18.5bn revenue per snapshot.  
 Post-earnings margin, insider-sale and governance narratives from the 23 Nov pass are unchanged.
+
+### 2026-11-24T17:54:49.091774+00:00
+Headlines cite a ~4% intraday slide on tech pullback and profit-taking after the morning bounce; Zacks still frames networking upgrades as supportive.  
+Coverage repeats Shirudo/OpenAI remediation and flags China-linked router-targeting risk; HPE gross-margin moderation is peer colour only.  
+No new SEC filing bodies; the screen remains **buy** on unchanged Q1 FY27 EPS $1.14 and ~$18.5bn revenue per snapshot.

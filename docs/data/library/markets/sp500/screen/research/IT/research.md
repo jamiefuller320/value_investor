@@ -1,6 +1,6 @@
 # Gartner, Inc. (IT) — Research memo
 
-_Version 5 · Updated 2026-11-24T05:41:07.805131+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T18:02:16.630443+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: On-file Q3 2026 disclosures still support the strong-buy cash-return case; no company-specific news since the last refresh, with leverage, AI competition and cyclical risks unchanged.
+Confidence: 0.75
+Rationale: On-file Q3 disclosures are unchanged; afternoon coverage cites strong contract growth versus AI fears, with Uber Freight's Magic Quadrant break a minor competitive headline—research still confirms the strong-buy case.
 RiskTags: competitive, leverage, cyclical, litigation
 
 ## Weekly updates
@@ -33,3 +33,8 @@ No material change to Q3 results, guidance or prior risk themes.
 No new SEC filings since the 19 Nov executive RSU 8-K; Q3 2026 Form 10-Q and the 3 Nov earnings 8-K remain the latest on file.  
 The 24 Nov news batch has no Gartner-specific items—only “IT” ticker noise (Nvidia, Marvell, HOOD, etc.).  
 No material change.
+
+### 2026-11-24T18:02:16.630443+00:00
+No new SEC filings since the 19 Nov executive RSU 8-K; Q3 2026 Form 10-Q and the 3 Nov earnings 8-K remain the latest on file.  
+The 24 Nov afternoon batch adds Madison Investments commentary on strong quarterly contract growth versus AI-disruption fears.  
+Uber Freight reportedly will no longer cooperate on future Magic Quadrant work—a minor competitive/reputational headline, not a filing event.

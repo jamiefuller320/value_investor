@@ -1,6 +1,6 @@
 # Hewlett Packard Enterprise Company (HPE) — Research memo
 
-_Version 4 · Updated 2026-11-24T05:54:08.014155+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-24T18:12:43.215491+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.67
-Rationale: Furnished Q4 results and capital-return actions support the screen buy case, but post-earnings selling, mixed guidance versus consensus, and unchanged leverage and quality overlays keep conviction measured.
+Confidence: 0.65
+Rationale: Q4 growth and repurchase uplift support the screen buy case, but the session selloff on AI margin warnings and analyst target cuts slightly weaken near-term conviction; leverage overlays are unchanged.
 RiskTags: cyclical, leverage, competitive, accounting, litigation, customer_concentration, governance, liquidity
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Filings in the refresh set still stop at the Q3 10-Q; full Q4 figures are only i
 Post-earnings coverage since the last refresh emphasises an after-hours share price fall (~7–8%) despite reported Q4 revenue growth (~50% YoY) and AI-server momentum in furnished materials.
 Headlines disagree on guidance (FY uplift vs Q1 outlook marginally below consensus); the filing set still has no Q4 10-K—only the 23 November 8-K and press release.
 No new SEC items after that 8-K; HPE appears in broader AI-hardware sentiment linked to sector pre-market moves on 24 November.
+
+### 2026-11-24T18:12:43.215491+00:00
+Regular-hours coverage reports a deeper fall (~10–17%) after the earnings beat, centred on gross-margin compression and management cautions on thinner AI-server profits.  
+Several banks trimmed price targets despite raised FY outlook and strong AI orders; CEO commentary still stresses 2027 momentum.  
+No new SEC filings since the 23 November 8-K; periodic reports in the set still end at the Q3 10-Q.

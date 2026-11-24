@@ -1,6 +1,6 @@
 # Teradyne, Inc. (TER) — Research memo
 
-_Version 4 · Updated 2026-11-24T05:49:16.763270+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-24T18:08:59.917928+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: TTM free cash flow near $800m supports quality, but sector sympathy after Nvidia’s reinstatement rally does not clear unresolved buy-screen valuation and earnings-quality gaps.
+Rationale: Generic AI-infrastructure lists do not offset weak momentum and a Tuesday chip-peer selloff; ~$800m TTM FCF supports quality, but buy-screen valuation and earnings-quality gaps stay unresolved.
 RiskTags: cyclical, customer_concentration, competitive
 
 ## Weekly updates
@@ -28,3 +28,8 @@ The headline move does not address cyclical concentration or competitive test-eq
 Chip-sector coverage cites bargain-hunting after Nvidia’s CEO reinstatement and a Monday AI/semiconductor bounce; nothing Teradyne-specific beyond sympathy trading.  
 The news batch is mostly options quotes; filings index refreshed with no new SEC bodies since the 30 Oct 2026 10-Q.  
 Yahoo TTM free cash flow remains about $800m; the buy screen signal is unchanged and research still cannot confirm prior valuation/quality concerns.
+
+### 2026-11-24T18:08:59.917928+00:00
+Tuesday coverage ties a renewed AI-chip selloff to falling semiconductor-equipment peers; one Teradyne headline cites a bounce attempt with weak momentum near resistance.  
+Yahoo still names Teradyne among post-Huang AI infrastructure ideas, but the stories are generic and the filings index shows no new SEC bodies after the 30 Oct 2026 10-Q.  
+TTM free cash flow remains about $800m; the buy screen is unchanged and prior valuation and earnings-quality concerns are still unresolved.

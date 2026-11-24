@@ -1,6 +1,6 @@
 # International Business Machines Corporation (IBM) — Research memo
 
-_Version 5 · Updated 2026-11-24T05:40:52.469315+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T18:01:57.731215+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.65
-Rationale: A lone smart-ports industry note adds no filing-backed change; accumulate still moderates the buy screen against unchanged Q3 metrics and enduring leverage, pension and competitive risks.
+Rationale: Peripheral quantum-customer headlines add no filing-backed change; accumulate still moderates the buy screen on unchanged Q3 metrics and standing leverage, pension and competitive risks.
 RiskTags: leverage, pension, competitive, cyclical, litigation, regulatory
 
 ## Weekly updates
@@ -32,4 +32,9 @@ Q3 2026 screening snapshot and cash flow inputs are unchanged.
 ### 2026-11-24T05:40:52.469315+00:00
 Since the prior update, one industry-research piece highlights IBM as a smart-ports technology supplier; it adds no filing-backed fundamentals.
 No new SEC filing bodies appear beyond the 19 Nov yen-note 8-K already in the library.
+Q3 2026 screening snapshot and cash-flow inputs are unchanged.
+
+### 2026-11-24T18:01:57.731215+00:00
+Since the prior update, the news batch is mostly Palantir and Accenture headlines; the only IBM mention is BMO reporting quantum-utility work on IBM hardware, with no new issuer fundamentals.  
+No new SEC filing bodies beyond the 19 Nov yen-note 8-K already in the library.  
 Q3 2026 screening snapshot and cash-flow inputs are unchanged.

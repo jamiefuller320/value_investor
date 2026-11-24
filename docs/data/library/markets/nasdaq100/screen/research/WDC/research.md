@@ -1,6 +1,6 @@
 # Western Digital Corporation (WDC) — Research memo
 
-_Version 5 · Updated 2026-11-24T05:50:38.180924+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-24T18:10:12.809991+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: high
-Confidence: 0.66
-Rationale: Q1 FY26 revenue and ~$4.3bn TTM FCF still support the buy screen; new press is director RSU grants and AI undervaluation commentary without filings, leaving cyclical and accounting risks intact.
+Confidence: 0.65
+Rationale: Q1 FY26 revenue and ~$4.3bn TTM FCF still support the buy screen; Tuesday's AI chip selloff and Sandisk margin press add cyclical volatility without new filings, leaving accounting risks unresolved.
 RiskTags: cyclical, customer_concentration, competitive, accounting
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Press is mostly sector momentum and peer notes (e.g. Rosenblatt on Seagate), not
 The overnight batch is mostly routine 20 Nov director RSU grants (746 units) and a Simply Wall St undervaluation/AI earnings piece; AMD and Micron items are peer-only.
 Q1 FY26 revenue $4.38bn and TTM FCF ~$4.29bn are unchanged in the screening snapshot; no new WDC filing in the supplied sources.
 Sandisk/Micron press adds cycle colour only and does not resolve customer concentration or GAAP complexity risks.
+
+### 2026-11-24T18:10:12.809991+00:00
+Tuesday’s batch reports a broad AI/chip selloff after Monday’s rally, with Micron down about 7% and Sandisk/NAND margin concerns in focus; WDC items are mostly options quotes and a repeat director grant note.  
+Q1 FY26 revenue $4.38bn and TTM FCF ~$4.29bn are unchanged in the screening snapshot; no new WDC filing in the supplied sources.  
+Peer volatility adds cyclical colour but does not update company fundamentals in the supplied files.

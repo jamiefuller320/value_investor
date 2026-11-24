@@ -1,6 +1,6 @@
 # United Rentals, Inc. (URI) — Research memo
 
-_Version 4 · Updated 2026-11-24T05:49:39.982127+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-24T18:09:22.249682+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.70
-Rationale: Q3 filing confirms strong OCF and earnings, but capex-heavy FCF, low cash and $14.7bn debt still weaken the screen buy case relative to dividend and free-cash flow metrics.
+Rationale: Q3 10-Q still shows strong OCF and earnings, but capex-heavy FCF, low cash and heavy indebtedness weaken the screen buy case versus dividend and free-cash-flow metrics.
 RiskTags: leverage, cyclical, liquidity, competitive
 
 ## Weekly updates
@@ -27,4 +27,9 @@ No material change to capex-heavy FCF versus screen buy tension.
 ### 2026-11-24T05:49:39.982127+00:00
 No new SEC filings in sources since the Q3 10-Q filed 21 Oct; Q3 debt, cash and capex-heavy FCF are unchanged.  
 Since the last refresh, news is director open-market purchases (~149 shares) and third-party valuation or price-move commentary—not operationally material.  
+No material change to capex-heavy FCF versus the screen buy tension.
+
+### 2026-11-24T18:09:22.249682+00:00
+No new SEC filings since the Q3 10-Q filed 21 Oct; debt, cash and capex-heavy FCF in sources are unchanged.  
+Since the last refresh, news is third-party share-price and volatility commentary only; financing mentions are not substantiated by new filings.  
 No material change to capex-heavy FCF versus the screen buy tension.

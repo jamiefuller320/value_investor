@@ -1,6 +1,6 @@
 # NIKE, Inc. (NKE) — Research memo
 
-_Version 4 · Updated 2026-11-24T05:43:14.371982+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-24T18:05:52.789197+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: medium
-Confidence: 0.69
-Rationale: No new filings or headlines in this window; Aug-2026 10-Q revenue decline and thin Q1 cash flow still weaken, not confirm, the screen buy.
+Confidence: 0.68
+Rationale: Reaffirmed FY27 sales decline and Sportswear/Jordan reset headlines reinforce Aug-10-Q weakness; the dividend pledge does not offset—research still weakens the screen buy.
 RiskTags: cyclical, competitive, regulatory, customer_concentration
 
 ## Weekly updates
@@ -27,4 +27,9 @@ Q2 FY27 on 17 Dec remains outside the supplied file set.
 ### 2026-11-24T05:43:14.371982+00:00
 News batch since the 23 Nov evening refresh is empty; no new company filings or headlines.  
 Aug-2026 10-Q pressure on revenue and Q1 cash flow, plus prior channel softness themes, are unchanged in the file set.  
+Q2 FY27 on 17 Dec remains outside the supplied sources.
+
+### 2026-11-24T18:05:52.789197+00:00
+Afternoon batch adds commentary only; no new SEC filings since the morning refresh.  
+Headlines cite reaffirmed FY27 sales decline, Sportswear/Jordan supply cuts, a $12bn dividend pledge, and mixed Dick's/Foot Locker wholesale read-through.  
 Q2 FY27 on 17 Dec remains outside the supplied sources.

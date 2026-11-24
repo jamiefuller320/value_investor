@@ -1,6 +1,6 @@
 # Atalaya Mining Copper, S.A. (ATYM.L) — Research memo
 
-_Version 4 · Updated 2026-11-24T05:31:56.549317+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-24T17:51:40.510296+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.76
-Rationale: Q3/YTD RNS still supports the buy screen on record EBITDA and net cash; no new filings or news since 20 Nov, and the unresolved FCF basis gap keeps research at accumulate rather than full buy.
+Rationale: Q3/YTD RNS still supports the buy screen on record EBITDA and net cash, but no new disclosures and the unresolved FCF basis gap keep research at accumulate rather than fully confirming buy.
 RiskTags: cyclical, regulatory, governance, other
 
 ## Weekly updates
@@ -27,4 +27,9 @@ Buy screen remains stable with accumulate timing; filing vs screen TTM FCF basis
 ### 2026-11-24T05:31:56.549317+00:00
 No material change since the 23 Nov refresh: Q3/YTD RNS, Tharsis close and routine 20 Nov RNS are unchanged in the filing set.  
 News batch since the last run (to 24 Nov 05:31 UTC) returned no new articles.  
+Buy screen remains stable with accumulate timing; filing vs screen TTM FCF basis mismatch unchanged.
+
+### 2026-11-24T17:51:40.510296+00:00
+No material change since the 24 Nov morning refresh: the Q3/YTD RNS, Tharsis close and routine 20 Nov RNS are unchanged in the filing set.  
+The news batch since 05:31 UTC (to 24 Nov 17:51) returned no new articles.  
 Buy screen remains stable with accumulate timing; filing vs screen TTM FCF basis mismatch unchanged.

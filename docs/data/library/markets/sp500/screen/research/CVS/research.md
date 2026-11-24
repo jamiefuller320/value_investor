@@ -1,6 +1,6 @@
 # CVS Health Corporation (CVS) — Research memo
 
-_Version 6 · Updated 2026-11-24T05:35:07.593798+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-24T17:55:32.726165+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.64
-Rationale: Nine-month 10-Q profit and cash support the screen, but Medicare Advantage proposal pressure and breakup scrutiny weaken the strong-buy case; CMS and separation impacts stay unquantified in filings.
+Rationale: Nine-month 10-Q profit and cash still support the screen, but breakup uncertainty, MA/CMS headlines and a sharp weekly fall weaken the strong-buy case; separation impacts stay unquantified in filings.
 RiskTags: regulatory, competitive, leverage, litigation, cyclical, customer_concentration, pension, governance
 
 ## Weekly updates
@@ -38,3 +38,8 @@ No material change to the accumulate overlay versus the 17:55 refresh.
 Since 23 Nov 21:39 UTC the batch is mostly routine director Form 4 and semiannual retainer grants; Axios cites AI and primary care amid breakup without new economics.  
 No new SEC body extracts beyond the 4 Nov Q3 10-Q.  
 No material change to the accumulate overlay.
+
+### 2026-11-24T17:55:32.726165+00:00
+24 Nov headlines cite ~10% weekly share weakness (~$79.65) and persistent breakup uncertainty despite commentary on six straight earnings beats.  
+UnitedHealth’s CMS star-ratings lawsuit adds sector MA payment noise; extra director Form 4s only—no new CVS filing extracts.  
+No material change to the accumulate overlay versus the 05:35 refresh.

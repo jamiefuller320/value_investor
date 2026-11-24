@@ -1,6 +1,6 @@
 # Adyen N.V. (ADYEN.AS) — Research memo
 
-_Version 6 · Updated 2026-11-24T05:51:55.109809+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-24T18:12:00.926525+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Filed FY2025 growth and positive FCF still support the buy screen; planned co-CEO succession remains a watch item, while unverified TTM FCF and weaker FY2025 cash flow versus FY2024 temper conviction.
+Rationale: Filed FY2025 growth and positive FCF still support the buy screen; added press on the planned co-CEO exit reinforces key-person risk without new metrics, and TTM FCF stays unverified.
 RiskTags: competitive, regulatory, accounting, key_person
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Filed FY2025 revenue, EPS and positive FCF are unchanged; Yahoo quarterly cash f
 No indexed news since the 23 Nov verdict refresh (`news_batch_20261124_055131.json` is empty).  
 Filed FY2025 revenue, EPS and positive FCF are unchanged; Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.  
 Buy screen signal and accumulate overlay are unchanged; the planned co-CEO handover remains the main watch item.
+
+### 2026-11-24T18:12:00.926525+00:00
+Indexed news since 05:51 adds Yahoo and Dutch coverage of Pieter van der Does’s planned co-CEO exit; one headline pairs the CEO change with Klarna integration, without new filing detail in this batch.  
+Filed FY2025 revenue, EPS and positive FCF are unchanged; Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.  
+Buy screen and accumulate overlay are unchanged; succession remains the main research watch item.

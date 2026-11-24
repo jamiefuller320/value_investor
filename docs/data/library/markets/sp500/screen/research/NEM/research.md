@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM) — Research memo
 
-_Version 4 · Updated 2026-11-24T05:42:43.705488+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-24T18:05:31.818659+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: TTM cash generation in the file set still supports the screen buy, but thin news flags price above third-party model value after a modest bounce, so research only partly confirms the case.
+Rationale: File-set TTM cash generation still supports the screen buy; thin news adds peer cost and gold-price risks without new filings, so research only partly confirms the case.
 RiskTags: cyclical, regulatory, governance, litigation, customer_concentration
 
 ## Weekly updates
@@ -28,3 +28,8 @@ No new company filings in this window; the operational picture is unchanged from
 Fresh headlines cite a ~6.4% NEM move and GuruFocus GF Value ~$86.67 versus price ~$100.73; Trefis/Yahoo pieces discuss recovery toward ~$130.
 No new company filings since the 23 Nov refresh; quarterly cash flow in the file set is unchanged.
 Macro markers in sources (yields, dollar) are unchanged from the prior weekly window.
+
+### 2026-11-24T18:05:31.818659+00:00
+Since the morning refresh, headlines are mostly a NEM versus Kinross comparison: solid pipelines and cash flow, with rising costs and shifting gold prices flagged for both.  
+No new company filings; quarterly cash flow in the file set is unchanged.  
+China critical-minerals coverage is macro-only for miners; nothing NEM-specific in the batch.

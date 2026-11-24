@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 10 · Updated 2026-11-24T05:36:22.506498+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-24T17:57:06.668793+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.67
-Rationale: Monday’s ~20% rally and pre-earnings AI optimism modestly support the screen, but the move is peer-sentiment-led and Q3 results are not on file—strong_buy is only partly confirmed until filings land.
+Confidence: 0.65
+Rationale: HPE’s margin scare and Tuesday’s pre-earnings pull-back temper Monday’s rally; on-file Q2 growth holds, but Q3 is unverified—strong_buy is only partly confirmed.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -58,3 +58,8 @@ Screen remains **strong_buy**; leverage and cyclical AI-hardware risks are uncha
 The 05:36 UTC batch adds Monday’s ~20% rally and “two catalysts” copy ahead of earnings after the close, plus AI-server peer comparisons; wider market pieces note a reported Nvidia SEC probe.
 On-file Q2 FY2027 themes (~$132bn RPO, higher debt and inventory) are unchanged; no Q3 FY2027 filing or reported results are in the supplied sources.
 The quantitative screen remains **strong_buy**; leverage and cyclical AI-hardware risks are unchanged pending Q3 disclosure.
+
+### 2026-11-24T17:57:06.668793+00:00
+The 17:56 UTC news batch adds a Tuesday pull-back (press cites roughly 5–11%) ahead of Q3 after the close, plus HPE’s margin-guidance disappointment spilling into AI-server peers.  
+On-file Q2 FY2027 themes (~$132bn RPO, higher debt and inventory) are unchanged; no Q3 FY2027 filing or reported Dell results are in the supplied sources.  
+Screen remains **strong_buy**; leverage and cyclical AI-margin risks are unchanged pending Q3 disclosure.
