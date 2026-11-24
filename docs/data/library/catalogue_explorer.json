@@ -3620,28 +3620,10 @@
     "MHLD_US_EQ",
     "MHO_US_EQ",
     "MHPC_US_EQ",
-    "MHUA_US_EQ"
+    "MHUA_US_EQ",
+    "MHVYF_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MESA_US_EQ",
-      "venue": "US",
-      "yahoo": "MESA",
-      "isin": "US5904794089",
-      "name": "RJET",
-      "seconds": 2.612,
-      "outcome": "miss",
-      "at": "2026-11-24T17:12:57.715907+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 2.449
-      },
-      "screen_seconds": 2.449,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "MESO_US_EQ",
       "venue": "US",
@@ -4382,6 +4364,25 @@
       },
       "screen_seconds": 2.199,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MHVYF_US_EQ",
+      "venue": "US",
+      "yahoo": "MHVYF",
+      "isin": "JP3900000005",
+      "name": "MHVYF",
+      "seconds": 0.812,
+      "outcome": "miss",
+      "at": "2026-11-24T17:19:27.324173+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.699
+      },
+      "screen_seconds": 0.699,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -41407,43 +41408,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T17:19:05.170178+00:00"
+    },
+    {
+      "t212_ticker": "MHVYF_US_EQ",
+      "yahoo": "MHVYF",
+      "name": "MHVYF",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T17:19:27.324173+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MHUA_US_EQ",
+    "t212_ticker": "MHVYF_US_EQ",
     "venue": "US",
-    "yahoo": "MHUA",
-    "isin": "KYG5966G1165",
-    "name": "MHUAF",
-    "seconds": 2.312,
+    "yahoo": "MHVYF",
+    "isin": "JP3900000005",
+    "name": "MHVYF",
+    "seconds": 0.812,
     "outcome": "miss",
-    "at": "2026-11-24T17:19:20.441832+00:00",
+    "at": "2026-11-24T17:19:27.324173+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 2.199
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.699
     },
-    "screen_seconds": 2.199,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.699,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MHVYF_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T17:19:20.441832+00:00",
+  "updated_at": "2026-11-24T17:19:27.324173+00:00",
   "totals": {
-    "screened": 3619,
+    "screened": 3620,
     "signals": {
-      "buy": 1078,
+      "buy": 1079,
       "avoid": 853,
       "hold": 782,
       "insufficient_data": 883,
       "strong_buy": 23
     },
-    "signals_n": 3619,
-    "screen_seconds_sum": 35843.546000000104,
-    "screen_seconds_n": 3619,
+    "signals_n": 3620,
+    "screen_seconds_sum": 35844.245000000104,
+    "screen_seconds_n": 3620,
     "outcomes": {
-      "miss": 1407,
+      "miss": 1408,
       "saved": 2212
     }
   },
