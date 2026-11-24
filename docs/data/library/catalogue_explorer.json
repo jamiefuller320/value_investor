@@ -2796,28 +2796,10 @@
     "IFBD_US_EQ",
     "IFIN_US_EQ",
     "IFJPY_US_EQ",
-    "IFMK_US_EQ"
+    "IFMK_US_EQ",
+    "IFNNY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "IBAC_US_EQ",
-      "venue": "US",
-      "yahoo": "IBAC",
-      "isin": "US44934N1081",
-      "name": "IBAC",
-      "seconds": 1.634,
-      "outcome": "saved",
-      "at": "2026-11-24T10:52:34.198921+00:00",
-      "rows": 18,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.8,
-        "seconds": 0.611
-      },
-      "screen_seconds": 0.611,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "IBCP_US_EQ",
       "venue": "US",
@@ -3558,6 +3540,25 @@
       },
       "screen_seconds": 0.859,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "IFNNY_US_EQ",
+      "venue": "US",
+      "yahoo": "IFNNY",
+      "isin": "US45662N1037",
+      "name": "IFNNY",
+      "seconds": 1.056,
+      "outcome": "miss",
+      "at": "2026-11-24T10:58:25.371479+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.826
+      },
+      "screen_seconds": 0.826,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -38530,43 +38531,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T10:57:32.656333+00:00"
+    },
+    {
+      "t212_ticker": "IFNNY_US_EQ",
+      "yahoo": "IFNNY",
+      "name": "IFNNY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T10:58:25.371479+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "IFMK_US_EQ",
+    "t212_ticker": "IFNNY_US_EQ",
     "venue": "US",
-    "yahoo": "IFMK",
-    "isin": "US4495381075",
-    "name": "IFMK",
-    "seconds": 1.017,
+    "yahoo": "IFNNY",
+    "isin": "US45662N1037",
+    "name": "IFNNY",
+    "seconds": 1.056,
     "outcome": "miss",
-    "at": "2026-11-24T10:58:17.560412+00:00",
+    "at": "2026-11-24T10:58:25.371479+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.7,
-      "seconds": 0.859
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.826
     },
-    "screen_seconds": 0.859,
-    "signal": "avoid"
+    "screen_seconds": 0.826,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "IFNNY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T10:58:17.560412+00:00",
+  "updated_at": "2026-11-24T10:58:25.371479+00:00",
   "totals": {
-    "screened": 2795,
+    "screened": 2796,
     "signals": {
-      "buy": 850,
+      "buy": 851,
       "avoid": 655,
       "hold": 600,
       "insufficient_data": 675,
       "strong_buy": 15
     },
-    "signals_n": 2795,
-    "screen_seconds_sum": 28488.048000000046,
-    "screen_seconds_n": 2795,
+    "signals_n": 2796,
+    "screen_seconds_sum": 28488.874000000047,
+    "screen_seconds_n": 2796,
     "outcomes": {
-      "miss": 1073,
+      "miss": 1074,
       "saved": 1722
     }
   },
