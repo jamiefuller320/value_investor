@@ -2722,28 +2722,10 @@
     "HUTMF_US_EQ",
     "HUYA_US_EQ",
     "HVBTF_US_EQ",
-    "HVII_US_EQ"
+    "HVII_US_EQ",
+    "HVRRY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HSBC_US_EQ",
-      "venue": "US",
-      "yahoo": "HSBC",
-      "isin": "US4042804066",
-      "name": "HSBC",
-      "seconds": 1.595,
-      "outcome": "saved",
-      "at": "2026-11-24T08:13:34.028382+00:00",
-      "rows": 40,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.7,
-        "seconds": 0.672
-      },
-      "screen_seconds": 0.672,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "HSCS_US_EQ",
       "venue": "US",
@@ -3484,6 +3466,25 @@
       },
       "screen_seconds": 0.673,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "HVRRY_US_EQ",
+      "venue": "US",
+      "yahoo": "HVRRY",
+      "isin": "US4106931052",
+      "name": "HVRRY",
+      "seconds": 1.027,
+      "outcome": "miss",
+      "at": "2026-11-24T08:19:33.815880+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.735
+      },
+      "screen_seconds": 0.735,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -35278,43 +35279,56 @@
       "signal": "strong_buy",
       "status": "pending",
       "queued_at": "2026-11-24T08:17:55.538018+00:00"
+    },
+    {
+      "t212_ticker": "HVRRY_US_EQ",
+      "yahoo": "HVRRY",
+      "name": "HVRRY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T08:19:33.815880+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HVII_US_EQ",
+    "t212_ticker": "HVRRY_US_EQ",
     "venue": "US",
-    "yahoo": "HVII",
-    "isin": "US68253E1001",
-    "name": "ONEN",
-    "seconds": 0.878,
+    "yahoo": "HVRRY",
+    "isin": "US4106931052",
+    "name": "HVRRY",
+    "seconds": 1.027,
     "outcome": "miss",
-    "at": "2026-11-24T08:19:26.658031+00:00",
+    "at": "2026-11-24T08:19:33.815880+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.75,
-      "seconds": 0.673
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.735
     },
-    "screen_seconds": 0.673,
-    "signal": "hold"
+    "screen_seconds": 0.735,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HVRRY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T08:19:26.658031+00:00",
+  "updated_at": "2026-11-24T08:19:33.815880+00:00",
   "totals": {
-    "screened": 2721,
+    "screened": 2722,
     "signals": {
-      "buy": 824,
+      "buy": 825,
       "avoid": 637,
       "hold": 587,
       "insufficient_data": 658,
       "strong_buy": 15
     },
-    "signals_n": 2721,
-    "screen_seconds_sum": 28148.21800000005,
-    "screen_seconds_n": 2721,
+    "signals_n": 2722,
+    "screen_seconds_sum": 28148.953000000052,
+    "screen_seconds_n": 2722,
     "outcomes": {
-      "miss": 1046,
+      "miss": 1047,
       "saved": 1675
     }
   },
