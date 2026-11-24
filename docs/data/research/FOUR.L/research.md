@@ -1,6 +1,6 @@
 # 4imprint Group plc (FOUR.L) — Research memo
 
-_Version 8 · Updated 2026-11-23T21:44:42.588695+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-24T00:52:20.199520+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.70
-Rationale: Nov RNS reaffirms ~$130m FY26 adjusted PBT and $152m cash, but dual FCF/dividend cover and tariff/cycle risks keep research neutral versus the screen buy.
+Rationale: 10 Nov trading update still supports ~$130m FY26 adjusted PBT and $152m cash, but dual FCF/dividend definitions and tariff/cycle risks keep research neutral vs the buy screen.
 RiskTags: cyclical, competitive, accounting, key_person, regulatory
 
 ## Weekly updates
@@ -46,4 +46,9 @@ Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash
 ### 2026-11-23T21:44:42.588695+00:00
 No new 4imprint RNS or company-specific press in the 23 November late-evening news batch since the earlier same-day refresh.  
 Quantitative **buy** unchanged (8/22 models, eight weeks, stable trend; neutral timing).  
+Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.
+
+### 2026-11-24T00:52:20.199520+00:00
+No new 4imprint RNS or company-specific press in the 24 November news batch since the 23 November refresh.  
+Quantitative **buy** unchanged (8/22 models, eight weeks, stable trend; neutral timing; FCF basis mismatch on screen).  
 Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.
