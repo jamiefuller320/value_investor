@@ -4199,28 +4199,10 @@
     "OP_US_EQ",
     "ORAN_US_EQ",
     "ORA_US_EQ",
-    "ORBN_US_EQ"
+    "ORBN_US_EQ",
+    "ORBT_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "OMVKY_US_EQ",
-      "venue": "US",
-      "yahoo": "OMVKY",
-      "isin": "US6708755094",
-      "name": "OMVKY",
-      "seconds": 1.455,
-      "outcome": "miss",
-      "at": "2026-11-24T20:29:22.463984+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 1.067
-      },
-      "screen_seconds": 1.067,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "OM_US_EQ",
       "venue": "US",
@@ -4961,6 +4943,25 @@
       },
       "screen_seconds": 1.055,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "ORBT_US_EQ",
+      "venue": "US",
+      "yahoo": "ORBT",
+      "isin": "US6855593041",
+      "name": "ORBT",
+      "seconds": 1.566,
+      "outcome": "miss",
+      "at": "2026-11-24T20:51:08.315941+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.9
+      },
+      "screen_seconds": 0.9,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -44869,43 +44870,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T20:45:54.502429+00:00"
+    },
+    {
+      "t212_ticker": "ORBT_US_EQ",
+      "yahoo": "ORBT",
+      "name": "ORBT",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T20:51:08.315941+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ORBN_US_EQ",
+    "t212_ticker": "ORBT_US_EQ",
     "venue": "US",
-    "yahoo": "ORBN",
-    "isin": "US6857951064",
-    "name": "ORBN",
-    "seconds": 1.259,
+    "yahoo": "ORBT",
+    "isin": "US6855593041",
+    "name": "ORBT",
+    "seconds": 1.566,
     "outcome": "miss",
-    "at": "2026-11-24T20:50:59.875297+00:00",
+    "at": "2026-11-24T20:51:08.315941+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 0.7,
-      "seconds": 1.055
+      "seconds": 0.9
     },
-    "screen_seconds": 1.055,
-    "signal": "hold"
+    "screen_seconds": 0.9,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ORBT_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T20:50:59.875297+00:00",
+  "updated_at": "2026-11-24T20:51:08.315941+00:00",
   "totals": {
-    "screened": 4198,
+    "screened": 4199,
     "signals": {
-      "buy": 1258,
+      "buy": 1259,
       "avoid": 995,
       "hold": 908,
       "insufficient_data": 1011,
       "strong_buy": 26
     },
-    "signals_n": 4198,
-    "screen_seconds_sum": 41076.299000000115,
-    "screen_seconds_n": 4198,
+    "signals_n": 4199,
+    "screen_seconds_sum": 41077.19900000012,
+    "screen_seconds_n": 4199,
     "outcomes": {
-      "miss": 1628,
+      "miss": 1629,
       "saved": 2570
     }
   },
