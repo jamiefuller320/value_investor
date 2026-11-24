@@ -3467,28 +3467,10 @@
     "LZM_US_EQ",
     "LZRFY_US_EQ",
     "LZ_US_EQ",
-    "MAAC_US_EQ"
+    "MAAC_US_EQ",
+    "MAAL_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "LTRX_US_EQ",
-      "venue": "US",
-      "yahoo": "LTRX",
-      "isin": "US5165482036",
-      "name": "LTRX",
-      "seconds": 3.021,
-      "outcome": "saved",
-      "at": "2026-11-24T15:28:01.219726+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.128
-      },
-      "screen_seconds": 1.128,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "LUCD_US_EQ",
       "venue": "US",
@@ -4229,6 +4211,25 @@
       },
       "screen_seconds": 3.69,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MAAL_US_EQ",
+      "venue": "US",
+      "yahoo": "MAAL",
+      "isin": "US57061M1071",
+      "name": "MAAL",
+      "seconds": 0.616,
+      "outcome": "miss",
+      "at": "2026-11-24T16:55:30.280851+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "strong_buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.508
+      },
+      "screen_seconds": 0.508,
+      "signal": "strong_buy"
     }
   ],
   "handoffs": [
@@ -40974,43 +40975,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T16:55:13.407417+00:00"
+    },
+    {
+      "t212_ticker": "MAAL_US_EQ",
+      "yahoo": "MAAL",
+      "name": "MAAL",
+      "signal": "strong_buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T16:55:30.280851+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MAAC_US_EQ",
+    "t212_ticker": "MAAL_US_EQ",
     "venue": "US",
-    "yahoo": "MAAC",
-    "isin": "BMG762791017",
-    "name": "ROIV",
-    "seconds": 3.81,
+    "yahoo": "MAAL",
+    "isin": "US57061M1071",
+    "name": "MAAL",
+    "seconds": 0.616,
     "outcome": "miss",
-    "at": "2026-11-24T16:55:23.489252+00:00",
+    "at": "2026-11-24T16:55:30.280851+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.69
+      "signal": "strong_buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.508
     },
-    "screen_seconds": 3.69,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.508,
+    "signal": "strong_buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "strong_buy",
+      "t212_ticker": "MAAL_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T16:55:23.489252+00:00",
+  "updated_at": "2026-11-24T16:55:30.280851+00:00",
   "totals": {
-    "screened": 3466,
+    "screened": 3467,
     "signals": {
       "buy": 1046,
       "avoid": 815,
       "hold": 739,
       "insufficient_data": 846,
-      "strong_buy": 20
+      "strong_buy": 21
     },
-    "signals_n": 3466,
-    "screen_seconds_sum": 35643.98300000012,
-    "screen_seconds_n": 3466,
+    "signals_n": 3467,
+    "screen_seconds_sum": 35644.49100000012,
+    "screen_seconds_n": 3467,
     "outcomes": {
-      "miss": 1345,
+      "miss": 1346,
       "saved": 2121
     }
   },
