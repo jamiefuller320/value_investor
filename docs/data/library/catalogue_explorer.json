@@ -2907,28 +2907,10 @@
     "INVU_US_EQ",
     "INV_US_EQ",
     "IOAC_US_EQ",
-    "IOBT_US_EQ"
+    "IOBT_US_EQ",
+    "IOND_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "INGR_US_EQ",
-      "venue": "US",
-      "yahoo": "INGR",
-      "isin": "US4571871023",
-      "name": "INGR",
-      "seconds": 1.633,
-      "outcome": "saved",
-      "at": "2026-11-24T11:09:55.631089+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.989
-      },
-      "screen_seconds": 0.989,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "ING_US_EQ",
       "venue": "US",
@@ -3669,6 +3651,25 @@
       },
       "screen_seconds": 2.167,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "IOND_US_EQ",
+      "venue": "US",
+      "yahoo": "IOND",
+      "isin": "US4622101057",
+      "name": "IOND",
+      "seconds": 1.356,
+      "outcome": "saved",
+      "at": "2026-11-24T11:15:51.226956+00:00",
+      "rows": 6,
+      "screen": {
+        "signal": "hold",
+        "fits": false,
+        "data_quality_score": 0.85,
+        "seconds": 0.673
+      },
+      "screen_seconds": 0.673,
+      "signal": "hold"
     }
   ],
   "handoffs": [
@@ -38908,41 +38909,78 @@
     }
   ],
   "last": {
-    "t212_ticker": "IOBT_US_EQ",
+    "t212_ticker": "IOND_US_EQ",
     "venue": "US",
-    "yahoo": "IOBT",
-    "isin": "US4497781090",
-    "name": "IOBTQ",
-    "seconds": 2.254,
-    "outcome": "miss",
-    "at": "2026-11-24T11:15:43.243038+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "IOND",
+    "isin": "US4622101057",
+    "name": "IOND",
+    "seconds": 1.356,
+    "outcome": "saved",
+    "at": "2026-11-24T11:15:51.226956+00:00",
+    "rows": 6,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2007691/000200769126000024/iond-20260930.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2007691/000200769126000020/ioni-20261104.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2007691/000200769126000016/ioni-20260910.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2007691/000200769126000012/ioni-20260630.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2007691/000200769126000007/ioni-20260819.htm",
+        "has_body": false
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2007691/000118518526003071/ionicdigi8k072126.htm",
+        "has_body": false
+      }
+    ],
     "screen": {
-      "signal": "insufficient_data",
+      "signal": "hold",
       "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 2.167
+      "data_quality_score": 0.85,
+      "seconds": 0.673
     },
-    "screen_seconds": 2.167,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.673,
+    "signal": "hold"
   },
-  "updated_at": "2026-11-24T11:15:43.243038+00:00",
+  "updated_at": "2026-11-24T11:15:51.226956+00:00",
   "totals": {
-    "screened": 2906,
+    "screened": 2907,
     "signals": {
       "buy": 882,
       "avoid": 693,
-      "hold": 616,
+      "hold": 617,
       "insufficient_data": 699,
       "strong_buy": 16
     },
-    "signals_n": 2906,
-    "screen_seconds_sum": 28638.512000000068,
-    "screen_seconds_n": 2906,
+    "signals_n": 2907,
+    "screen_seconds_sum": 28639.185000000067,
+    "screen_seconds_n": 2907,
     "outcomes": {
       "miss": 1109,
-      "saved": 1797
+      "saved": 1798
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
