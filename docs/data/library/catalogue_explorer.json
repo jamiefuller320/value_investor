@@ -3020,28 +3020,10 @@
     "JCOM_US_EQ",
     "JCSE_US_EQ",
     "JCS_US_EQ",
-    "JCTCF_US_EQ"
+    "JCTCF_US_EQ",
+    "JCYGY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "IVCA_US_EQ",
-      "venue": "US",
-      "yahoo": "IVCA",
-      "isin": "KYG492191013",
-      "name": "IVCAF",
-      "seconds": 84.763,
-      "outcome": "miss",
-      "at": "2026-11-24T11:33:40.956150+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.578
-      },
-      "screen_seconds": 84.578,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "IVCB_US_EQ",
       "venue": "US",
@@ -3782,6 +3764,25 @@
       },
       "screen_seconds": 84.558,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "JCYGY_US_EQ",
+      "venue": "US",
+      "yahoo": "JCYGY",
+      "isin": "US47110M2089",
+      "name": "JCYGY",
+      "seconds": 0.998,
+      "outcome": "miss",
+      "at": "2026-11-24T11:54:28.124126+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.822
+      },
+      "screen_seconds": 0.822,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -39340,43 +39341,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T11:51:17.796554+00:00"
+    },
+    {
+      "t212_ticker": "JCYGY_US_EQ",
+      "yahoo": "JCYGY",
+      "name": "JCYGY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T11:54:28.124126+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "JCTCF_US_EQ",
+    "t212_ticker": "JCYGY_US_EQ",
     "venue": "US",
-    "yahoo": "JCTCF",
-    "isin": "CA47733C2076",
-    "name": "JCTC",
-    "seconds": 84.645,
+    "yahoo": "JCYGY",
+    "isin": "US47110M2089",
+    "name": "JCYGY",
+    "seconds": 0.998,
     "outcome": "miss",
-    "at": "2026-11-24T11:54:20.427116+00:00",
+    "at": "2026-11-24T11:54:28.124126+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.558
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.822
     },
-    "screen_seconds": 84.558,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.822,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "JCYGY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T11:54:20.427116+00:00",
+  "updated_at": "2026-11-24T11:54:28.124126+00:00",
   "totals": {
-    "screened": 3019,
+    "screened": 3020,
     "signals": {
-      "buy": 914,
+      "buy": 915,
       "avoid": 719,
       "hold": 633,
       "insufficient_data": 737,
       "strong_buy": 16
     },
-    "signals_n": 3019,
-    "screen_seconds_sum": 30036.876000000102,
-    "screen_seconds_n": 3019,
+    "signals_n": 3020,
+    "screen_seconds_sum": 30037.698000000102,
+    "screen_seconds_n": 3020,
     "outcomes": {
-      "miss": 1157,
+      "miss": 1158,
       "saved": 1862
     }
   },
