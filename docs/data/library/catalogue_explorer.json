@@ -2253,28 +2253,10 @@
     "FVR_US_EQ",
     "FWAA_US_EQ",
     "FWAC_US_EQ",
-    "FWONA_US_EQ"
+    "FWONA_US_EQ",
+    "FWONK_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FTCH_US_EQ",
-      "venue": "US",
-      "yahoo": "FTCH",
-      "isin": "KY30744W1070",
-      "name": "FTCHQ",
-      "seconds": 85.654,
-      "outcome": "miss",
-      "at": "2026-11-24T02:47:41.124035+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.233
-      },
-      "screen_seconds": 85.233,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "FTCI_US_EQ",
       "venue": "US",
@@ -3014,6 +2996,25 @@
         "seconds": 0.796
       },
       "screen_seconds": 0.796,
+      "signal": "buy"
+    },
+    {
+      "t212_ticker": "FWONK_US_EQ",
+      "venue": "US",
+      "yahoo": "FWONK",
+      "isin": "US5312297550",
+      "name": "FWONK",
+      "seconds": 1.329,
+      "outcome": "saved",
+      "at": "2026-11-24T03:08:52.186420+00:00",
+      "rows": 19,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.736
+      },
+      "screen_seconds": 0.736,
       "signal": "buy"
     }
   ],
@@ -23186,17 +23187,25 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T03:08:46.594059+00:00"
+    },
+    {
+      "t212_ticker": "FWONK_US_EQ",
+      "yahoo": "FWONK",
+      "name": "FWONK",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T03:08:52.186420+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "FWONA_US_EQ",
+    "t212_ticker": "FWONK_US_EQ",
     "venue": "US",
-    "yahoo": "FWONA",
-    "isin": "US5312297717",
-    "name": "FWONA",
-    "seconds": 1.839,
+    "yahoo": "FWONK",
+    "isin": "US5312297550",
+    "name": "FWONK",
+    "seconds": 1.329,
     "outcome": "saved",
-    "at": "2026-11-24T03:08:46.594059+00:00",
+    "at": "2026-11-24T03:08:52.186420+00:00",
     "rows": 19,
     "filings": [
       {
@@ -23318,32 +23327,32 @@
       "signal": "buy",
       "fits": true,
       "data_quality_score": 1.0,
-      "seconds": 0.796
+      "seconds": 0.736
     },
-    "screen_seconds": 0.796,
+    "screen_seconds": 0.736,
     "signal": "buy",
     "handoff": {
       "status": "pending",
       "signal": "buy",
-      "t212_ticker": "FWONA_US_EQ"
+      "t212_ticker": "FWONK_US_EQ"
     }
   },
-  "updated_at": "2026-11-24T03:08:46.594059+00:00",
+  "updated_at": "2026-11-24T03:08:52.186420+00:00",
   "totals": {
-    "screened": 2252,
+    "screened": 2253,
     "signals": {
-      "buy": 692,
+      "buy": 693,
       "avoid": 541,
       "hold": 490,
       "insufficient_data": 519,
       "strong_buy": 10
     },
-    "signals_n": 2252,
-    "screen_seconds_sum": 23540.47700000002,
-    "screen_seconds_n": 2252,
+    "signals_n": 2253,
+    "screen_seconds_sum": 23541.21300000002,
+    "screen_seconds_n": 2253,
     "outcomes": {
       "miss": 849,
-      "saved": 1403
+      "saved": 1404
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
