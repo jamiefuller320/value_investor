@@ -2701,28 +2701,10 @@
     "HTCR_US_EQ",
     "HTFL_US_EQ",
     "HTGC_US_EQ",
-    "HTGM_US_EQ"
+    "HTGM_US_EQ",
+    "HTHIY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HPCO_US_EQ",
-      "venue": "US",
-      "yahoo": "HPCO",
-      "isin": "US42371L2051",
-      "name": "HPCO",
-      "seconds": 1.221,
-      "outcome": "miss",
-      "at": "2026-11-24T08:10:38.433535+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.9,
-        "seconds": 1.136
-      },
-      "screen_seconds": 1.136,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "HPGLY_US_EQ",
       "venue": "US",
@@ -3463,6 +3445,25 @@
       },
       "screen_seconds": 3.554,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HTHIY_US_EQ",
+      "venue": "US",
+      "yahoo": "HTHIY",
+      "isin": "US4335785071",
+      "name": "HTHIY",
+      "seconds": 0.95,
+      "outcome": "miss",
+      "at": "2026-11-24T08:16:20.182938+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.77
+      },
+      "screen_seconds": 0.77,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -35209,43 +35210,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T08:15:36.261085+00:00"
+    },
+    {
+      "t212_ticker": "HTHIY_US_EQ",
+      "yahoo": "HTHIY",
+      "name": "HTHIY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T08:16:20.182938+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HTGM_US_EQ",
+    "t212_ticker": "HTHIY_US_EQ",
     "venue": "US",
-    "yahoo": "HTGM",
-    "isin": "US40434H3021",
-    "name": "HTGMQ",
-    "seconds": 3.705,
+    "yahoo": "HTHIY",
+    "isin": "US4335785071",
+    "name": "HTHIY",
+    "seconds": 0.95,
     "outcome": "miss",
-    "at": "2026-11-24T08:16:12.919514+00:00",
+    "at": "2026-11-24T08:16:20.182938+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.554
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.77
     },
-    "screen_seconds": 3.554,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.77,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HTHIY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T08:16:12.919514+00:00",
+  "updated_at": "2026-11-24T08:16:20.182938+00:00",
   "totals": {
-    "screened": 2700,
+    "screened": 2701,
     "signals": {
-      "buy": 819,
+      "buy": 820,
       "avoid": 633,
       "hold": 582,
       "insufficient_data": 652,
       "strong_buy": 14
     },
-    "signals_n": 2700,
-    "screen_seconds_sum": 28116.558000000052,
-    "screen_seconds_n": 2700,
+    "signals_n": 2701,
+    "screen_seconds_sum": 28117.328000000052,
+    "screen_seconds_n": 2701,
     "outcomes": {
-      "miss": 1038,
+      "miss": 1039,
       "saved": 1662
     }
   },
