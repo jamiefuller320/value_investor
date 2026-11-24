@@ -3490,28 +3490,10 @@
     "MAN_US_EQ",
     "MAQC_US_EQ",
     "MARA_US_EQ",
-    "MARK_US_EQ"
+    "MARK_US_EQ",
+    "MARUY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "LYCA_US_EQ",
-      "venue": "US",
-      "yahoo": "LYCA",
-      "isin": "US55081P1003",
-      "name": "LYCA",
-      "seconds": 1.475,
-      "outcome": "saved",
-      "at": "2026-11-24T16:53:06.892193+00:00",
-      "rows": 1,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.85,
-        "seconds": 0.618
-      },
-      "screen_seconds": 0.618,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "LYEL_US_EQ",
       "venue": "US",
@@ -4252,6 +4234,25 @@
       },
       "screen_seconds": 0.551,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "MARUY_US_EQ",
+      "venue": "US",
+      "yahoo": "MARUY",
+      "isin": "US5738102079",
+      "name": "MARUY",
+      "seconds": 0.794,
+      "outcome": "miss",
+      "at": "2026-11-24T16:58:46.915423+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "strong_buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.675
+      },
+      "screen_seconds": 0.675,
+      "signal": "strong_buy"
     }
   ],
   "handoffs": [
@@ -41053,43 +41054,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T16:58:17.649250+00:00"
+    },
+    {
+      "t212_ticker": "MARUY_US_EQ",
+      "yahoo": "MARUY",
+      "name": "MARUY",
+      "signal": "strong_buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T16:58:46.915423+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MARK_US_EQ",
+    "t212_ticker": "MARUY_US_EQ",
     "venue": "US",
-    "yahoo": "MARK",
-    "isin": "US75955K3005",
-    "name": "MARK",
-    "seconds": 0.659,
+    "yahoo": "MARUY",
+    "isin": "US5738102079",
+    "name": "MARUY",
+    "seconds": 0.794,
     "outcome": "miss",
-    "at": "2026-11-24T16:58:39.736722+00:00",
+    "at": "2026-11-24T16:58:46.915423+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.85,
-      "seconds": 0.551
+      "signal": "strong_buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.675
     },
-    "screen_seconds": 0.551,
-    "signal": "hold"
+    "screen_seconds": 0.675,
+    "signal": "strong_buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "strong_buy",
+      "t212_ticker": "MARUY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T16:58:39.736722+00:00",
+  "updated_at": "2026-11-24T16:58:46.915423+00:00",
   "totals": {
-    "screened": 3489,
+    "screened": 3490,
     "signals": {
       "buy": 1052,
       "avoid": 820,
       "hold": 746,
       "insufficient_data": 850,
-      "strong_buy": 21
+      "strong_buy": 22
     },
-    "signals_n": 3489,
-    "screen_seconds_sum": 35670.28700000012,
-    "screen_seconds_n": 3489,
+    "signals_n": 3490,
+    "screen_seconds_sum": 35670.96200000012,
+    "screen_seconds_n": 3490,
     "outcomes": {
-      "miss": 1355,
+      "miss": 1356,
       "saved": 2134
     }
   },
