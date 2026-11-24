@@ -3026,28 +3026,10 @@
     "JDZG_US_EQ",
     "JELD_US_EQ",
     "JEWL_US_EQ",
-    "JE_US_EQ"
+    "JE_US_EQ",
+    "JFBC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "IVST_US_EQ",
-      "venue": "US",
-      "yahoo": "IVST",
-      "isin": "US45781Q1022",
-      "name": "IVST",
-      "seconds": 0.755,
-      "outcome": "miss",
-      "at": "2026-11-24T11:37:15.981522+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.45,
-        "seconds": 0.675
-      },
-      "screen_seconds": 0.675,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "IVT_US_EQ",
       "venue": "US",
@@ -3788,6 +3770,25 @@
       },
       "screen_seconds": 84.732,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "JFBC_US_EQ",
+      "venue": "US",
+      "yahoo": "JFBC",
+      "isin": "US47559A1034",
+      "name": "JFBC",
+      "seconds": 1.047,
+      "outcome": "miss",
+      "at": "2026-11-24T11:56:40.530477+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.888
+      },
+      "screen_seconds": 0.888,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -39370,43 +39371,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T11:54:46.177455+00:00"
+    },
+    {
+      "t212_ticker": "JFBC_US_EQ",
+      "yahoo": "JFBC",
+      "name": "JFBC",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T11:56:40.530477+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "JE_US_EQ",
+    "t212_ticker": "JFBC_US_EQ",
     "venue": "US",
-    "yahoo": "JE",
-    "isin": "CA48213W4083",
-    "name": "JENGQ",
-    "seconds": 84.786,
+    "yahoo": "JFBC",
+    "isin": "US47559A1034",
+    "name": "JFBC",
+    "seconds": 1.047,
     "outcome": "miss",
-    "at": "2026-11-24T11:56:32.760315+00:00",
+    "at": "2026-11-24T11:56:40.530477+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.732
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.888
     },
-    "screen_seconds": 84.732,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.888,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "JFBC_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T11:56:32.760315+00:00",
+  "updated_at": "2026-11-24T11:56:40.530477+00:00",
   "totals": {
-    "screened": 3025,
+    "screened": 3026,
     "signals": {
-      "buy": 917,
+      "buy": 918,
       "avoid": 721,
       "hold": 633,
       "insufficient_data": 738,
       "strong_buy": 16
     },
-    "signals_n": 3025,
-    "screen_seconds_sum": 30125.566000000104,
-    "screen_seconds_n": 3025,
+    "signals_n": 3026,
+    "screen_seconds_sum": 30126.454000000103,
+    "screen_seconds_n": 3026,
     "outcomes": {
-      "miss": 1161,
+      "miss": 1162,
       "saved": 1864
     }
   },
