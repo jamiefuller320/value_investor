@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-23T15:19:41.825789+00:00
+Track: `buy_tier_level` · updated 2026-11-24T15:21:40.830878+00:00
 
 ## Portfolio loser feedback
 
@@ -31,10 +31,12 @@ Track: `buy_tier_level` · updated 2026-11-23T15:19:41.825789+00:00
 - still buy
 - cheapness family still passes
 
-### OTEX.TO — weakening / watch_review (-2.9%)
-- research verdict caution
+### OTEX.TO — intact / hold_tolerate (-2.9%)
 - still strong_buy
+- research accumulate
 - cheapness family still passes
+- data_quality 1.00
+- conviction 86%
 
 ### WSP.TO — intact / hold_tolerate (-1.1%)
 - still strong_buy

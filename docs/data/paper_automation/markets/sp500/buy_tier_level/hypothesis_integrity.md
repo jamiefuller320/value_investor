@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-23T15:19:38.211131+00:00
+Track: `buy_tier_level` · updated 2026-11-24T15:21:37.469709+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **59** / 120 (49% count, 45% NAV)
+- Losers: **58** / 120 (48% count, 44% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -366,12 +366,6 @@ Track: `buy_tier_level` · updated 2026-11-23T15:19:38.211131+00:00
 - data_quality 0.90
 - conviction 48%
 
-### CHTR — weakening / watch_review (-7.0%)
-- research verdict caution
-- conviction 33% below intact floor
-- still buy
-- cheapness family still passes
-
 ### CTSH — intact / hold_tolerate (-6.8%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
@@ -437,11 +431,6 @@ Track: `buy_tier_level` · updated 2026-11-23T15:19:38.211131+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 46%
-
-### PRU — weakening / watch_review (-4.7%)
-- research verdict caution
-- still strong_buy
-- cheapness family still passes
 
 ### ADM — intact / hold_tolerate (-4.3%)
 - still buy
@@ -679,6 +668,27 @@ Track: `buy_tier_level` · updated 2026-11-23T15:19:38.211131+00:00
 - still buy
 - cheapness family still passes
 
+### GEHC — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 66%
+
+### MAS — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.90
+- conviction 46%
+
+### OTIS — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.90
+- conviction 46%
+
 ### PHM — intact / hold_tolerate (+0.2%)
 - still strong_buy
 - research accumulate
@@ -718,12 +728,6 @@ Track: `buy_tier_level` · updated 2026-11-23T15:19:38.211131+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 65%
-
-### HRL — weakening / watch_review (+1.7%)
-- research verdict neutral
-- conviction 34% below intact floor
-- still buy
-- cheapness family still passes
 
 ### DPZ — intact / hold_tolerate (+2.2%)
 - still buy
