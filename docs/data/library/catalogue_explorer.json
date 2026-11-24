@@ -1989,28 +1989,10 @@
     "EXPI_US_EQ",
     "EXPO_US_EQ",
     "EXP_US_EQ",
-    "EXROF_US_EQ"
+    "EXROF_US_EQ",
+    "EXSR_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ETM_US_EQ",
-      "venue": "US",
-      "yahoo": "ETM",
-      "isin": "US05070N2027",
-      "name": "AUDAQ",
-      "seconds": 4.33,
-      "outcome": "miss",
-      "at": "2026-11-24T01:39:17.218486+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.12
-      },
-      "screen_seconds": 4.12,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "ETOLF_US_EQ",
       "venue": "US",
@@ -2751,6 +2733,25 @@
       },
       "screen_seconds": 0.95,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "EXSR_US_EQ",
+      "venue": "US",
+      "yahoo": "EXSR",
+      "isin": "US3012272031",
+      "name": "EXSR",
+      "seconds": 1.258,
+      "outcome": "miss",
+      "at": "2026-11-24T01:44:54.978596+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.65,
+        "seconds": 0.964
+      },
+      "screen_seconds": 0.964,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -21121,43 +21122,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T01:44:25.540114+00:00"
+    },
+    {
+      "t212_ticker": "EXSR_US_EQ",
+      "yahoo": "EXSR",
+      "name": "EXSR",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T01:44:54.978596+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "EXROF_US_EQ",
+    "t212_ticker": "EXSR_US_EQ",
     "venue": "US",
-    "yahoo": "EXROF",
-    "isin": "CA30222R1091",
-    "name": "EXROF",
-    "seconds": 1.487,
+    "yahoo": "EXSR",
+    "isin": "US3012272031",
+    "name": "EXSR",
+    "seconds": 1.258,
     "outcome": "miss",
-    "at": "2026-11-24T01:44:41.264775+00:00",
+    "at": "2026-11-24T01:44:54.978596+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.9,
-      "seconds": 0.95
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.65,
+      "seconds": 0.964
     },
-    "screen_seconds": 0.95,
-    "signal": "avoid"
+    "screen_seconds": 0.964,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "EXSR_US_EQ"
+    }
   },
   "updated_at": "2026-11-24T01:45:07.361517+00:00",
   "totals": {
-    "screened": 1988,
+    "screened": 1989,
     "signals": {
-      "buy": 572,
+      "buy": 573,
       "avoid": 489,
       "hold": 449,
       "insufficient_data": 470,
       "strong_buy": 8
     },
-    "signals_n": 1988,
-    "screen_seconds_sum": 20768.660000000014,
-    "screen_seconds_n": 1988,
+    "signals_n": 1989,
+    "screen_seconds_sum": 20769.624000000014,
+    "screen_seconds_n": 1989,
     "outcomes": {
-      "miss": 758,
+      "miss": 759,
       "saved": 1230
     }
   },
