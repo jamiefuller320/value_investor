@@ -3814,28 +3814,10 @@
     "MYRG_US_EQ",
     "MYSZ_US_EQ",
     "MYTE_US_EQ",
-    "MYT_US_EQ"
+    "MYT_US_EQ",
+    "MZDAY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MTL_US_EQ",
-      "venue": "US",
-      "yahoo": "MTL",
-      "isin": "US5838406081",
-      "name": "MTL",
-      "seconds": 84.865,
-      "outcome": "miss",
-      "at": "2026-11-24T18:05:52.877025+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.674
-      },
-      "screen_seconds": 84.674,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "MTNB_US_EQ",
       "venue": "US",
@@ -4576,6 +4558,25 @@
       },
       "screen_seconds": 84.708,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MZDAY_US_EQ",
+      "venue": "US",
+      "yahoo": "MZDAY",
+      "isin": "US5787871038",
+      "name": "MZDAY",
+      "seconds": 0.622,
+      "outcome": "miss",
+      "at": "2026-11-24T18:19:53.321070+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.487
+      },
+      "screen_seconds": 0.487,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -42378,43 +42379,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T18:16:35.554229+00:00"
+    },
+    {
+      "t212_ticker": "MZDAY_US_EQ",
+      "yahoo": "MZDAY",
+      "name": "MZDAY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T18:19:53.321070+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MYT_US_EQ",
+    "t212_ticker": "MZDAY_US_EQ",
     "venue": "US",
-    "yahoo": "MYT",
-    "isin": "VGG1144D1336",
-    "name": "BETSF",
-    "seconds": 85.046,
+    "yahoo": "MZDAY",
+    "isin": "US5787871038",
+    "name": "MZDAY",
+    "seconds": 0.622,
     "outcome": "miss",
-    "at": "2026-11-24T18:19:46.153105+00:00",
+    "at": "2026-11-24T18:19:53.321070+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.708
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.487
     },
-    "screen_seconds": 84.708,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.487,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MZDAY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T18:19:46.153105+00:00",
+  "updated_at": "2026-11-24T18:19:53.321070+00:00",
   "totals": {
-    "screened": 3813,
+    "screened": 3814,
     "signals": {
-      "buy": 1137,
+      "buy": 1138,
       "avoid": 900,
       "hold": 829,
       "insufficient_data": 923,
       "strong_buy": 24
     },
-    "signals_n": 3813,
-    "screen_seconds_sum": 37864.6100000001,
-    "screen_seconds_n": 3813,
+    "signals_n": 3814,
+    "screen_seconds_sum": 37865.0970000001,
+    "screen_seconds_n": 3814,
     "outcomes": {
-      "miss": 1481,
+      "miss": 1482,
       "saved": 2332
     }
   },
