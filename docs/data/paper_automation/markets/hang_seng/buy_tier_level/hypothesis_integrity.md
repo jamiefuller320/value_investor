@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-23T15:20:10.044027+00:00
+Track: `buy_tier_level` · updated 2026-11-24T10:25:20.623089+00:00
 
 ## Portfolio loser feedback
 
@@ -60,7 +60,7 @@ Track: `buy_tier_level` · updated 2026-11-23T15:20:10.044027+00:00
 - data_quality 1.00
 - conviction 51%
 
-### 6618.HK — weakening / watch_review (-0.0%)
+### 6618.HK — weakening / watch_review (+0.0%)
 - conviction 33% below intact floor
 - still buy
 - research accumulate

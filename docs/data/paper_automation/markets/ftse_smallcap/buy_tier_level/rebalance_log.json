@@ -33211,5 +33211,383 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-11-24T10:25:13.926608+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_smallcap/screen_latest.json",
+      "run_at": "2026-11-22T06:23:16.911480+00:00",
+      "generated_at": "2026-11-24T10:25:13.860430+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-11-24T10:25:13.878546+00:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-11-24T08:00:00+00:00",
+      "settle_at": "2026-11-24T09:15:00+00:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (0 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.003,
+    "candidates": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6779000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 82.1,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6733,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 100.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "TRI.L",
+        "name": "Trifast plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.24170000000000003,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 71.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "LSL.L",
+        "name": "LSL Property Services plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4372,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 262.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6779000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 82.1,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6733,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 100.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "TRI.L",
+        "name": "Trifast plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.24170000000000003,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 71.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "LSL.L",
+        "name": "LSL Property Services plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4372,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 262.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.55% / sell 0.05% (legacy symmetric slot 0.30%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1103.32,
+      "cash": 0.08,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 275.83,
+      "targets": [
+        {
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "signal": "strong_buy",
+          "conviction_score": 0.6779000000000001,
+          "price": 82.1
+        },
+        {
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "signal": "strong_buy",
+          "conviction_score": 0.6733,
+          "price": 100.0
+        },
+        {
+          "ticker": "LSL.L",
+          "name": "LSL Property Services plc",
+          "signal": "buy",
+          "conviction_score": 0.4372,
+          "price": 262.0
+        },
+        {
+          "ticker": "TRI.L",
+          "name": "Trifast plc",
+          "signal": "buy",
+          "conviction_score": 0.24170000000000003,
+          "price": 71.0
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "reason": "Already near equal-weight target",
+          "value": 276.1,
+          "target_value": 275.83,
+          "conviction_score": 0.6779000000000001,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "reason": "Already near equal-weight target",
+          "value": 276.08,
+          "target_value": 275.83,
+          "conviction_score": 0.6733,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "LSL.L",
+          "name": "LSL Property Services plc",
+          "reason": "Already near equal-weight target",
+          "value": 276.14,
+          "target_value": 275.83,
+          "conviction_score": 0.4372,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "TRI.L",
+          "name": "Trifast plc",
+          "reason": "Already near equal-weight target",
+          "value": 274.93,
+          "target_value": 275.83,
+          "conviction_score": 0.24170000000000003,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
+    },
+    "trades": [],
+    "nav_before": 1103.32,
+    "cash_before": 0.08,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "CAPD.L",
+        "shares": 2.760766,
+        "avg_cost": 108.1485,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CARD.L",
+        "shares": 3.362958,
+        "avg_cost": 85.4866,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "LSL.L",
+        "shares": 1.053964,
+        "avg_cost": 264.447,
+        "sector": "Real Estate",
+        "name": "LSL Property Services plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TRI.L",
+        "shares": 3.872231,
+        "avg_cost": 70.8582,
+        "sector": "Industrials",
+        "name": "Trifast plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "SBRE.L": 1
+      }
+    },
+    "nav_after": 1103.32,
+    "cash_after": 0.08,
+    "holdings_after": [
+      {
+        "ticker": "CAPD.L",
+        "shares": 2.760766,
+        "avg_cost": 108.1485,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CARD.L",
+        "shares": 3.362958,
+        "avg_cost": 85.4866,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "LSL.L",
+        "shares": 1.053964,
+        "avg_cost": 264.447,
+        "sector": "Real Estate",
+        "name": "LSL Property Services plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TRI.L",
+        "shares": 3.872231,
+        "avg_cost": 70.8582,
+        "sector": "Industrials",
+        "name": "Trifast plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": []
+    }
   }
 ]
