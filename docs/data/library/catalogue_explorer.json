@@ -3218,28 +3218,10 @@
     "KUKE_US_EQ",
     "KULR_US_EQ",
     "KURA_US_EQ",
-    "KURI_US_EQ"
+    "KURI_US_EQ",
+    "KURRY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "KOS_US_EQ",
-      "venue": "US",
-      "yahoo": "KOS",
-      "isin": "US5006881065",
-      "name": "KOS",
-      "seconds": 3.508,
-      "outcome": "saved",
-      "at": "2026-11-24T14:03:17.666067+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.02
-      },
-      "screen_seconds": 1.02,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "KOTMY_US_EQ",
       "venue": "US",
@@ -3980,6 +3962,25 @@
       },
       "screen_seconds": 6.234,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "KURRY_US_EQ",
+      "venue": "US",
+      "yahoo": "KURRY",
+      "isin": "US50127R1032",
+      "name": "KURRY",
+      "seconds": 1.401,
+      "outcome": "miss",
+      "at": "2026-11-24T14:08:50.273026+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "strong_buy",
+        "fits": true,
+        "data_quality_score": 0.9,
+        "seconds": 1.34
+      },
+      "screen_seconds": 1.34,
+      "signal": "strong_buy"
     }
   ],
   "handoffs": [
@@ -40178,43 +40179,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T14:08:00.533981+00:00"
+    },
+    {
+      "t212_ticker": "KURRY_US_EQ",
+      "yahoo": "KURRY",
+      "name": "KURRY",
+      "signal": "strong_buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T14:08:50.273026+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "KURI_US_EQ",
+    "t212_ticker": "KURRY_US_EQ",
     "venue": "US",
-    "yahoo": "KURI",
-    "isin": "JE00BQWMWC12",
-    "name": "BBLNF",
-    "seconds": 6.329,
+    "yahoo": "KURRY",
+    "isin": "US50127R1032",
+    "name": "KURRY",
+    "seconds": 1.401,
     "outcome": "miss",
-    "at": "2026-11-24T14:08:43.241509+00:00",
+    "at": "2026-11-24T14:08:50.273026+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 6.234
+      "signal": "strong_buy",
+      "fits": true,
+      "data_quality_score": 0.9,
+      "seconds": 1.34
     },
-    "screen_seconds": 6.234,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.34,
+    "signal": "strong_buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "strong_buy",
+      "t212_ticker": "KURRY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T14:08:43.241509+00:00",
+  "updated_at": "2026-11-24T14:08:50.273026+00:00",
   "totals": {
-    "screened": 3217,
+    "screened": 3218,
     "signals": {
       "buy": 992,
       "avoid": 755,
       "hold": 672,
       "insufficient_data": 780,
-      "strong_buy": 18
+      "strong_buy": 19
     },
-    "signals_n": 3217,
-    "screen_seconds_sum": 32143.408000000123,
-    "screen_seconds_n": 3217,
+    "signals_n": 3218,
+    "screen_seconds_sum": 32144.748000000123,
+    "screen_seconds_n": 3218,
     "outcomes": {
-      "miss": 1251,
+      "miss": 1252,
       "saved": 1966
     }
   },
