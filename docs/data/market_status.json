@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-24T14:32:33.614009+00:00",
+  "generated_at": "2026-11-24T17:30:05.287844+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -70,7 +70,7 @@
       "us_adr_asia"
     ],
     "spare_sprint": {},
-    "equal_support_generated_at": "2026-11-24T14:16:56.139559+00:00"
+    "equal_support_generated_at": "2026-11-24T15:22:16.677477+00:00"
   },
   "markets": [
     {
@@ -12781,11 +12781,11 @@
         "acted": true,
         "last_run_at": "2026-11-22T07:16:43.319456+00:00",
         "holdings": 34,
-        "nav": 715.21,
-        "cash": -0.0,
+        "nav": 711.15,
+        "cash": 0.0,
         "contributed_capital": 1000.0,
         "weekday_batch_count": 52,
-        "epoch0_batch_count": 34
+        "epoch0_batch_count": 33
       },
       "equal_support": {
         "present": true,
@@ -12793,7 +12793,7 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 0,
+        "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 21,
         "not_buy_tier_count": 60,
         "never_buy_tier_count": 47,
@@ -12802,15 +12802,17 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 0,
+        "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 21,
         "not_buy_tier_count": 60,
         "never_buy_tier_count": 47,
-        "timing_signal_present": false,
+        "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [],
+        "buy_tier_not_now_sample": [
+          "CMCSA"
+        ],
         "hold_near_buy_sample": [
           "LRCX",
           "META",
@@ -13486,6 +13488,19 @@
               "buy_tier_level_gbp_fx_warped": 715.21
             },
             "market": 892.2
+          },
+          {
+            "date": "2026-11-24",
+            "held": 950.3,
+            "nav": 950.3,
+            "held_stock": 950.3,
+            "cash": 0.0,
+            "positions": 34,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 711.15
+            },
+            "market": 892.2
           }
         ],
         "series": [
@@ -13525,11 +13540,11 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 57
+            "point_count": 58
           }
         ],
         "last": {
-          "date": "2026-11-23",
+          "date": "2026-11-24",
           "held": 950.3,
           "market": 892.2,
           "nav": 950.3,
@@ -15344,11 +15359,11 @@
         "acted": true,
         "last_run_at": "2026-11-22T07:15:42.586039+00:00",
         "holdings": 120,
-        "nav": 743.79,
-        "cash": 36.27,
+        "nav": 740.06,
+        "cash": 37.16,
         "contributed_capital": 1000.0,
         "weekday_batch_count": 52,
-        "epoch0_batch_count": 34
+        "epoch0_batch_count": 33
       },
       "equal_support": {
         "present": true,
@@ -15356,7 +15371,7 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 0,
+        "buy_tier_not_now_count": 2,
         "hold_near_buy_count": 129,
         "not_buy_tier_count": 356,
         "never_buy_tier_count": 293,
@@ -15365,15 +15380,18 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 0,
+        "buy_tier_not_now_count": 2,
         "hold_near_buy_count": 129,
         "not_buy_tier_count": 356,
         "never_buy_tier_count": 293,
-        "timing_signal_present": false,
+        "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [],
+        "buy_tier_not_now_sample": [
+          "CAH",
+          "UPS"
+        ],
         "hold_near_buy_sample": [
           "UHS",
           "HCA",
@@ -16049,6 +16067,19 @@
               "buy_tier_level_gbp_fx_warped": 707.52
             },
             "market": 892.2
+          },
+          {
+            "date": "2026-11-24",
+            "held": 984.97,
+            "nav": 1022.47,
+            "held_stock": 984.97,
+            "cash": 37.5,
+            "positions": 120,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 702.9
+            },
+            "market": 892.2
           }
         ],
         "series": [
@@ -16088,16 +16119,16 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 65
+            "point_count": 66
           }
         ],
         "last": {
-          "date": "2026-11-23",
-          "held": 986.0,
+          "date": "2026-11-24",
+          "held": 984.97,
           "market": 892.2,
-          "nav": 1022.49,
+          "nav": 1022.47,
           "positions": 120,
-          "excess_pct": 0.105133
+          "excess_pct": 0.103979
         }
       },
       "learning_depth": {
@@ -17205,11 +17236,11 @@
         "acted": true,
         "last_run_at": "2026-11-22T07:16:24.701611+00:00",
         "holdings": 9,
-        "nav": 508.77,
+        "nav": 508.58,
         "cash": 0.0,
         "contributed_capital": 1000.0,
         "weekday_batch_count": 52,
-        "epoch0_batch_count": 34
+        "epoch0_batch_count": 33
       },
       "equal_support": {
         "present": true,
@@ -17910,6 +17941,19 @@
               "buy_tier_level_gbp_fx_warped": 508.77
             },
             "market": 926.84
+          },
+          {
+            "date": "2026-11-24",
+            "held": 987.97,
+            "nav": 987.97,
+            "held_stock": 987.97,
+            "cash": 0.0,
+            "positions": 9,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 508.58
+            },
+            "market": 926.84
           }
         ],
         "series": [
@@ -17949,11 +17993,11 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 63
+            "point_count": 64
           }
         ],
         "last": {
-          "date": "2026-11-23",
+          "date": "2026-11-24",
           "held": 987.97,
           "market": 926.84,
           "nav": 987.97,
