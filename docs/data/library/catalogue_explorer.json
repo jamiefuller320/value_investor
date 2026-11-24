@@ -2421,28 +2421,10 @@
     "GNW_US_EQ",
     "GOAI_US_EQ",
     "GODN_US_EQ",
-    "GOED_US_EQ"
+    "GOED_US_EQ",
+    "GOFPY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "GLT_US_EQ",
-      "venue": "US",
-      "yahoo": "GLT",
-      "isin": "US55939A1079",
-      "name": "MAGN",
-      "seconds": 84.749,
-      "outcome": "miss",
-      "at": "2026-11-24T03:31:36.883786+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.636
-      },
-      "screen_seconds": 84.636,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "GLUE_US_EQ",
       "venue": "US",
@@ -3183,6 +3165,25 @@
       },
       "screen_seconds": 84.517,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "GOFPY_US_EQ",
+      "venue": "US",
+      "yahoo": "GOFPY",
+      "isin": "US3924831031",
+      "name": "GOFPY",
+      "seconds": 0.837,
+      "outcome": "miss",
+      "at": "2026-11-24T03:56:22.067675+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.752
+      },
+      "screen_seconds": 0.752,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -27849,43 +27850,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T03:52:58.771050+00:00"
+    },
+    {
+      "t212_ticker": "GOFPY_US_EQ",
+      "yahoo": "GOFPY",
+      "name": "GOFPY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T03:56:22.067675+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "GOED_US_EQ",
+    "t212_ticker": "GOFPY_US_EQ",
     "venue": "US",
-    "yahoo": "GOED",
-    "isin": "US28252C2089",
-    "name": "POLCQ",
-    "seconds": 84.808,
+    "yahoo": "GOFPY",
+    "isin": "US3924831031",
+    "name": "GOFPY",
+    "seconds": 0.837,
     "outcome": "miss",
-    "at": "2026-11-24T03:56:16.244533+00:00",
+    "at": "2026-11-24T03:56:22.067675+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.517
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.752
     },
-    "screen_seconds": 84.517,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.752,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "GOFPY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T03:56:16.244533+00:00",
+  "updated_at": "2026-11-24T03:56:22.067675+00:00",
   "totals": {
-    "screened": 2420,
+    "screened": 2421,
     "signals": {
-      "buy": 729,
+      "buy": 730,
       "avoid": 583,
       "hold": 525,
       "insufficient_data": 572,
       "strong_buy": 11
     },
-    "signals_n": 2420,
-    "screen_seconds_sum": 25341.935000000012,
-    "screen_seconds_n": 2420,
+    "signals_n": 2421,
+    "screen_seconds_sum": 25342.687000000013,
+    "screen_seconds_n": 2421,
     "outcomes": {
-      "miss": 919,
+      "miss": 920,
       "saved": 1501
     }
   },
