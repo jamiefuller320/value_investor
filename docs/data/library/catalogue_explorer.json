@@ -3055,28 +3055,10 @@
     "JOUT_US_EQ",
     "JPPHY_US_EQ",
     "JPSWY_US_EQ",
-    "JPS_US_EQ"
+    "JPS_US_EQ",
+    "JPXGY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "JCIC_US_EQ",
-      "venue": "US",
-      "yahoo": "JCIC",
-      "isin": "US96812F1021",
-      "name": "BAER",
-      "seconds": 84.74,
-      "outcome": "miss",
-      "at": "2026-11-24T11:49:37.767883+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.542
-      },
-      "screen_seconds": 84.542,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "JCOM_US_EQ",
       "venue": "US",
@@ -3817,6 +3799,25 @@
       },
       "screen_seconds": 84.599,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "JPXGY_US_EQ",
+      "venue": "US",
+      "yahoo": "JPXGY",
+      "isin": "US4710591052",
+      "name": "JPXGY",
+      "seconds": 0.913,
+      "outcome": "miss",
+      "at": "2026-11-24T12:11:45.592129+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.684
+      },
+      "screen_seconds": 0.684,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -39495,43 +39496,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T12:10:05.688628+00:00"
+    },
+    {
+      "t212_ticker": "JPXGY_US_EQ",
+      "yahoo": "JPXGY",
+      "name": "JPXGY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T12:11:45.592129+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "JPS_US_EQ",
+    "t212_ticker": "JPXGY_US_EQ",
     "venue": "US",
-    "yahoo": "JPS",
-    "isin": "US67073B1061",
-    "name": "JPC",
-    "seconds": 84.658,
+    "yahoo": "JPXGY",
+    "isin": "US4710591052",
+    "name": "JPXGY",
+    "seconds": 0.913,
     "outcome": "miss",
-    "at": "2026-11-24T12:11:37.132395+00:00",
+    "at": "2026-11-24T12:11:45.592129+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.599
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.684
     },
-    "screen_seconds": 84.599,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.684,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "JPXGY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T12:11:37.132395+00:00",
+  "updated_at": "2026-11-24T12:11:45.592129+00:00",
   "totals": {
-    "screened": 3054,
+    "screened": 3055,
     "signals": {
-      "buy": 928,
+      "buy": 929,
       "avoid": 723,
       "hold": 640,
       "insufficient_data": 746,
       "strong_buy": 17
     },
-    "signals_n": 3054,
-    "screen_seconds_sum": 30816.178000000098,
-    "screen_seconds_n": 3054,
+    "signals_n": 3055,
+    "screen_seconds_sum": 30816.8620000001,
+    "screen_seconds_n": 3055,
     "outcomes": {
-      "miss": 1176,
+      "miss": 1177,
       "saved": 1878
     }
   },
