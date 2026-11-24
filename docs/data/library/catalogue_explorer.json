@@ -2101,28 +2101,10 @@
     "FIZZ_US_EQ",
     "FI_US_EQ",
     "FJET_US_EQ",
-    "FJTNY_US_EQ"
+    "FJTNY_US_EQ",
+    "FJTSY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FFHL_US_EQ",
-      "venue": "US",
-      "yahoo": "FFHL",
-      "isin": "KYG0704V1115",
-      "name": "RTCJF",
-      "seconds": 4.338,
-      "outcome": "miss",
-      "at": "2026-11-24T01:56:33.084638+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.129
-      },
-      "screen_seconds": 4.129,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "FFIN_US_EQ",
       "venue": "US",
@@ -2863,6 +2845,25 @@
       },
       "screen_seconds": 0.754,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "FJTSY_US_EQ",
+      "venue": "US",
+      "yahoo": "FJTSY",
+      "isin": "US3595903044",
+      "name": "FJTSY",
+      "seconds": 0.93,
+      "outcome": "miss",
+      "at": "2026-11-24T02:04:37.339548+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.751
+      },
+      "screen_seconds": 0.751,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -22530,43 +22531,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T02:02:47.897892+00:00"
+    },
+    {
+      "t212_ticker": "FJTSY_US_EQ",
+      "yahoo": "FJTSY",
+      "name": "FJTSY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T02:04:37.339548+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "FJTNY_US_EQ",
+    "t212_ticker": "FJTSY_US_EQ",
     "venue": "US",
-    "yahoo": "FJTNY",
-    "isin": "US3595821030",
-    "name": "FJTNY",
-    "seconds": 0.965,
+    "yahoo": "FJTSY",
+    "isin": "US3595903044",
+    "name": "FJTSY",
+    "seconds": 0.93,
     "outcome": "miss",
-    "at": "2026-11-24T02:04:31.569538+00:00",
+    "at": "2026-11-24T02:04:37.339548+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 1.0,
-      "seconds": 0.754
+      "seconds": 0.751
     },
-    "screen_seconds": 0.754,
-    "signal": "hold"
+    "screen_seconds": 0.751,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "FJTSY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T02:04:31.569538+00:00",
+  "updated_at": "2026-11-24T02:04:37.339548+00:00",
   "totals": {
-    "screened": 2100,
+    "screened": 2101,
     "signals": {
-      "buy": 630,
+      "buy": 631,
       "avoid": 510,
       "hold": 462,
       "insufficient_data": 489,
       "strong_buy": 9
     },
-    "signals_n": 2100,
-    "screen_seconds_sum": 21104.680000000026,
-    "screen_seconds_n": 2100,
+    "signals_n": 2101,
+    "screen_seconds_sum": 21105.431000000026,
+    "screen_seconds_n": 2101,
     "outcomes": {
-      "miss": 797,
+      "miss": 798,
       "saved": 1303
     }
   },
