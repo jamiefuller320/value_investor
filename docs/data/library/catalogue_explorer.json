@@ -2753,28 +2753,10 @@
     "IACA_US_EQ",
     "IAC_US_EQ",
     "IAG_US_EQ",
-    "IAIC_US_EQ"
+    "IAIC_US_EQ",
+    "IAM_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HUN_US_EQ",
-      "venue": "US",
-      "yahoo": "HUN",
-      "isin": "US4470111075",
-      "name": "HUN",
-      "seconds": 1.683,
-      "outcome": "saved",
-      "at": "2026-11-24T08:18:10.458483+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.646
-      },
-      "screen_seconds": 0.646,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "HURC_US_EQ",
       "venue": "US",
@@ -3515,6 +3497,25 @@
       },
       "screen_seconds": 3.553,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "IAM_US_EQ",
+      "venue": "US",
+      "yahoo": "IAM",
+      "isin": "US45076A1016",
+      "name": "IAM",
+      "seconds": 2.378,
+      "outcome": "saved",
+      "at": "2026-11-24T10:52:09.141388+00:00",
+      "rows": 3,
+      "screen": {
+        "signal": "hold",
+        "fits": false,
+        "data_quality_score": 0.85,
+        "seconds": 0.777
+      },
+      "screen_seconds": 0.777,
+      "signal": "hold"
     }
   ],
   "handoffs": [
@@ -38378,41 +38379,60 @@
     }
   ],
   "last": {
-    "t212_ticker": "IAIC_US_EQ",
+    "t212_ticker": "IAM_US_EQ",
     "venue": "US",
-    "yahoo": "IAIC",
-    "isin": "US3179701012",
-    "name": "AIFF",
-    "seconds": 3.721,
-    "outcome": "miss",
-    "at": "2026-11-24T10:52:00.031524+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "IAM",
+    "isin": "US45076A1016",
+    "name": "IAM",
+    "seconds": 2.378,
+    "outcome": "saved",
+    "at": "2026-11-24T10:52:09.141388+00:00",
+    "rows": 3,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1997038/000119312526468537/iam-20260930.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1997038/000119312526462184/iam-20261116.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1997038/000119312526424242/iam-20261016.htm",
+        "has_body": true
+      }
+    ],
     "screen": {
-      "signal": "insufficient_data",
+      "signal": "hold",
       "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.553
+      "data_quality_score": 0.85,
+      "seconds": 0.777
     },
-    "screen_seconds": 3.553,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.777,
+    "signal": "hold"
   },
-  "updated_at": "2026-11-24T10:52:00.031524+00:00",
+  "updated_at": "2026-11-24T10:52:09.141388+00:00",
   "totals": {
-    "screened": 2752,
+    "screened": 2753,
     "signals": {
       "buy": 836,
       "avoid": 642,
-      "hold": 588,
+      "hold": 589,
       "insufficient_data": 671,
       "strong_buy": 15
     },
-    "signals_n": 2752,
-    "screen_seconds_sum": 28444.14700000005,
-    "screen_seconds_n": 2752,
+    "signals_n": 2753,
+    "screen_seconds_sum": 28444.92400000005,
+    "screen_seconds_n": 2753,
     "outcomes": {
       "miss": 1062,
-      "saved": 1690
+      "saved": 1691
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
