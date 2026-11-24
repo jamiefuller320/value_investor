@@ -1984,28 +1984,10 @@
     "EXK_US_EQ",
     "EXLS_US_EQ",
     "EXOD_US_EQ",
-    "EXPC_US_EQ"
+    "EXPC_US_EQ",
+    "EXPGY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ESTA_US_EQ",
-      "venue": "US",
-      "yahoo": "ESTA",
-      "isin": "VGG312491084",
-      "name": "ESTA",
-      "seconds": 4.343,
-      "outcome": "saved",
-      "at": "2026-11-24T01:38:38.662810+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.302
-      },
-      "screen_seconds": 1.302,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "ESTC_US_EQ",
       "venue": "US",
@@ -2746,6 +2728,25 @@
       },
       "screen_seconds": 4.223,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "EXPGY_US_EQ",
+      "venue": "US",
+      "yahoo": "EXPGY",
+      "isin": "US30215C1018",
+      "name": "EXPGY",
+      "seconds": 3.755,
+      "outcome": "miss",
+      "at": "2026-11-24T01:44:10.564245+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 3.522
+      },
+      "screen_seconds": 3.522,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -20968,43 +20969,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T01:43:44.448694+00:00"
+    },
+    {
+      "t212_ticker": "EXPGY_US_EQ",
+      "yahoo": "EXPGY",
+      "name": "EXPGY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T01:44:10.564245+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "EXPC_US_EQ",
+    "t212_ticker": "EXPGY_US_EQ",
     "venue": "US",
-    "yahoo": "EXPC",
-    "isin": "US0926671043",
-    "name": "SRTA",
-    "seconds": 4.62,
+    "yahoo": "EXPGY",
+    "isin": "US30215C1018",
+    "name": "EXPGY",
+    "seconds": 3.755,
     "outcome": "miss",
-    "at": "2026-11-24T01:44:01.778692+00:00",
+    "at": "2026-11-24T01:44:10.564245+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.223
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 3.522
     },
-    "screen_seconds": 4.223,
-    "signal": "insufficient_data"
+    "screen_seconds": 3.522,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "EXPGY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T01:44:01.778692+00:00",
+  "updated_at": "2026-11-24T01:44:10.564245+00:00",
   "totals": {
-    "screened": 1983,
+    "screened": 1984,
     "signals": {
-      "buy": 570,
+      "buy": 571,
       "avoid": 488,
       "hold": 448,
       "insufficient_data": 469,
       "strong_buy": 8
     },
-    "signals_n": 1983,
-    "screen_seconds_sum": 20760.28400000001,
-    "screen_seconds_n": 1983,
+    "signals_n": 1984,
+    "screen_seconds_sum": 20763.80600000001,
+    "screen_seconds_n": 1984,
     "outcomes": {
-      "miss": 755,
+      "miss": 756,
       "saved": 1228
     }
   },
