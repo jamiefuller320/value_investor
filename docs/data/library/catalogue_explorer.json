@@ -3887,28 +3887,10 @@
     "NEWT_US_EQ",
     "NEW_US_EQ",
     "NEXA_US_EQ",
-    "NEXI_US_EQ"
+    "NEXI_US_EQ",
+    "NEXOY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "NCAC_US_EQ",
-      "venue": "US",
-      "yahoo": "NCAC",
-      "isin": "CA74449F4078",
-      "name": "PBM",
-      "seconds": 4.739,
-      "outcome": "miss",
-      "at": "2026-11-24T19:11:36.874262+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.531
-      },
-      "screen_seconds": 4.531,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "NCBDY_US_EQ",
       "venue": "US",
@@ -4649,6 +4631,25 @@
       },
       "screen_seconds": 1.075,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "NEXOY_US_EQ",
+      "venue": "US",
+      "yahoo": "NEXOY",
+      "isin": "US65340H1041",
+      "name": "NEXOY",
+      "seconds": 1.379,
+      "outcome": "miss",
+      "at": "2026-11-24T19:18:39.545942+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.098
+      },
+      "screen_seconds": 1.098,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -42675,43 +42676,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T19:18:23.301857+00:00"
+    },
+    {
+      "t212_ticker": "NEXOY_US_EQ",
+      "yahoo": "NEXOY",
+      "name": "NEXOY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T19:18:39.545942+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "NEXI_US_EQ",
+    "t212_ticker": "NEXOY_US_EQ",
     "venue": "US",
-    "yahoo": "NEXI",
-    "isin": "US65344D2080",
-    "name": "NEXI",
-    "seconds": 1.249,
+    "yahoo": "NEXOY",
+    "isin": "US65340H1041",
+    "name": "NEXOY",
+    "seconds": 1.379,
     "outcome": "miss",
-    "at": "2026-11-24T19:18:31.410477+00:00",
+    "at": "2026-11-24T19:18:39.545942+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.9,
-      "seconds": 1.075
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.098
     },
-    "screen_seconds": 1.075,
-    "signal": "avoid"
+    "screen_seconds": 1.098,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "NEXOY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T19:18:31.410477+00:00",
+  "updated_at": "2026-11-24T19:18:39.545942+00:00",
   "totals": {
-    "screened": 3886,
+    "screened": 3887,
     "signals": {
-      "buy": 1165,
+      "buy": 1166,
       "avoid": 915,
       "hold": 840,
       "insufficient_data": 942,
       "strong_buy": 24
     },
-    "signals_n": 3886,
-    "screen_seconds_sum": 38402.525000000096,
-    "screen_seconds_n": 3886,
+    "signals_n": 3887,
+    "screen_seconds_sum": 38403.623000000094,
+    "screen_seconds_n": 3887,
     "outcomes": {
-      "miss": 1510,
+      "miss": 1511,
       "saved": 2376
     }
   },
