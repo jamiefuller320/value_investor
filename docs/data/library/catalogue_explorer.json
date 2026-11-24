@@ -3989,28 +3989,10 @@
     "NPO_US_EQ",
     "NPPNY_US_EQ",
     "NPPTF_US_EQ",
-    "NPSCY_US_EQ"
+    "NPSCY_US_EQ",
+    "NPSKY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "NMRK_US_EQ",
-      "venue": "US",
-      "yahoo": "NMRK",
-      "isin": "US65158N1028",
-      "name": "NMRK",
-      "seconds": 2.761,
-      "outcome": "saved",
-      "at": "2026-11-24T19:29:16.848776+00:00",
-      "rows": 21,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 1.004
-      },
-      "screen_seconds": 1.004,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "NMTC_US_EQ",
       "venue": "US",
@@ -4751,6 +4733,25 @@
       },
       "screen_seconds": 1.082,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "NPSKY_US_EQ",
+      "venue": "US",
+      "yahoo": "NPSKY",
+      "isin": "US6701841008",
+      "name": "NPSKY",
+      "seconds": 1.294,
+      "outcome": "miss",
+      "at": "2026-11-24T19:37:03.994053+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.011
+      },
+      "screen_seconds": 1.011,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -43339,43 +43340,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T19:36:32.392907+00:00"
+    },
+    {
+      "t212_ticker": "NPSKY_US_EQ",
+      "yahoo": "NPSKY",
+      "name": "NPSKY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T19:37:03.994053+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "NPSCY_US_EQ",
+    "t212_ticker": "NPSKY_US_EQ",
     "venue": "US",
-    "yahoo": "NPSCY",
-    "isin": "US65461T1016",
-    "name": "NPSCY",
-    "seconds": 1.361,
+    "yahoo": "NPSKY",
+    "isin": "US6701841008",
+    "name": "NPSKY",
+    "seconds": 1.294,
     "outcome": "miss",
-    "at": "2026-11-24T19:36:55.763432+00:00",
+    "at": "2026-11-24T19:37:03.994053+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 1.0,
-      "seconds": 1.082
+      "seconds": 1.011
     },
-    "screen_seconds": 1.082,
-    "signal": "hold"
+    "screen_seconds": 1.011,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "NPSKY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T19:36:55.763432+00:00",
+  "updated_at": "2026-11-24T19:37:03.994053+00:00",
   "totals": {
-    "screened": 3988,
+    "screened": 3989,
     "signals": {
-      "buy": 1193,
+      "buy": 1194,
       "avoid": 946,
       "hold": 865,
       "insufficient_data": 959,
       "strong_buy": 25
     },
-    "signals_n": 3988,
-    "screen_seconds_sum": 38571.47500000009,
-    "screen_seconds_n": 3988,
+    "signals_n": 3989,
+    "screen_seconds_sum": 38572.48600000009,
+    "screen_seconds_n": 3989,
     "outcomes": {
-      "miss": 1553,
+      "miss": 1554,
       "saved": 2435
     }
   },
