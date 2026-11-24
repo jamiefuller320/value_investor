@@ -2070,28 +2070,10 @@
     "FFWC_US_EQ",
     "FF_US_EQ",
     "FGBI_US_EQ",
-    "FGEN_US_EQ"
+    "FGEN_US_EQ",
+    "FGFH_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FCBM_US_EQ",
-      "venue": "US",
-      "yahoo": "FCBM",
-      "isin": "US31943F2002",
-      "name": "FCBM",
-      "seconds": 2.922,
-      "outcome": "saved",
-      "at": "2026-11-24T01:52:19.691875+00:00",
-      "rows": 7,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.65,
-        "seconds": 1.322
-      },
-      "screen_seconds": 1.322,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "FCCO_US_EQ",
       "venue": "US",
@@ -2832,6 +2814,25 @@
       },
       "screen_seconds": 2.995,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "FGFH_US_EQ",
+      "venue": "US",
+      "yahoo": "FGFH",
+      "isin": "US3455261079",
+      "name": "FGFH",
+      "seconds": 1.701,
+      "outcome": "miss",
+      "at": "2026-11-24T01:57:35.546567+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 1.242
+      },
+      "screen_seconds": 1.242,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -22371,43 +22372,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T01:57:20.921867+00:00"
+    },
+    {
+      "t212_ticker": "FGFH_US_EQ",
+      "yahoo": "FGFH",
+      "name": "FGFH",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T01:57:35.546567+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "FGEN_US_EQ",
+    "t212_ticker": "FGFH_US_EQ",
     "venue": "US",
-    "yahoo": "FGEN",
-    "isin": "US31572Q8814",
-    "name": "KYNB",
-    "seconds": 3.262,
+    "yahoo": "FGFH",
+    "isin": "US3455261079",
+    "name": "FGFH",
+    "seconds": 1.701,
     "outcome": "miss",
-    "at": "2026-11-24T01:57:28.940340+00:00",
+    "at": "2026-11-24T01:57:35.546567+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 2.995
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 1.242
     },
-    "screen_seconds": 2.995,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.242,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "FGFH_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T01:57:28.940340+00:00",
+  "updated_at": "2026-11-24T01:57:35.546567+00:00",
   "totals": {
-    "screened": 2069,
+    "screened": 2070,
     "signals": {
-      "buy": 614,
+      "buy": 615,
       "avoid": 504,
       "hold": 460,
       "insufficient_data": 482,
       "strong_buy": 9
     },
-    "signals_n": 2069,
-    "screen_seconds_sum": 20891.972000000023,
-    "screen_seconds_n": 2069,
+    "signals_n": 2070,
+    "screen_seconds_sum": 20893.21400000002,
+    "screen_seconds_n": 2070,
     "outcomes": {
-      "miss": 786,
+      "miss": 787,
       "saved": 1283
     }
   },
