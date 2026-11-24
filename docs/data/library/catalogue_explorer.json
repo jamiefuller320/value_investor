@@ -3531,28 +3531,10 @@
     "MCBK_US_EQ",
     "MCBS_US_EQ",
     "MCB_US_EQ",
-    "MCC_US_EQ"
+    "MCC_US_EQ",
+    "MCEM_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MARX_US_EQ",
-      "venue": "US",
-      "yahoo": "MARX",
-      "isin": "US80603V2034",
-      "name": "STAI",
-      "seconds": 4.279,
-      "outcome": "miss",
-      "at": "2026-11-24T16:58:57.435206+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.808
-      },
-      "screen_seconds": 3.808,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "MASK_US_EQ",
       "venue": "US",
@@ -4293,6 +4275,25 @@
       },
       "screen_seconds": 3.717,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MCEM_US_EQ",
+      "venue": "US",
+      "yahoo": "MCEM",
+      "isin": "US6090313072",
+      "name": "MCEM",
+      "seconds": 0.742,
+      "outcome": "miss",
+      "at": "2026-11-24T17:04:55.367689+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.573
+      },
+      "screen_seconds": 0.573,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -41174,43 +41175,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T17:04:37.821463+00:00"
+    },
+    {
+      "t212_ticker": "MCEM_US_EQ",
+      "yahoo": "MCEM",
+      "name": "MCEM",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T17:04:55.367689+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MCC_US_EQ",
+    "t212_ticker": "MCEM_US_EQ",
     "venue": "US",
-    "yahoo": "MCC",
-    "isin": "US71742W1036",
-    "name": "PFX",
-    "seconds": 3.865,
+    "yahoo": "MCEM",
+    "isin": "US6090313072",
+    "name": "MCEM",
+    "seconds": 0.742,
     "outcome": "miss",
-    "at": "2026-11-24T17:04:48.134019+00:00",
+    "at": "2026-11-24T17:04:55.367689+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.717
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.573
     },
-    "screen_seconds": 3.717,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.573,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MCEM_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T17:04:48.134019+00:00",
+  "updated_at": "2026-11-24T17:04:55.367689+00:00",
   "totals": {
-    "screened": 3530,
+    "screened": 3531,
     "signals": {
-      "buy": 1061,
+      "buy": 1062,
       "avoid": 831,
       "hold": 755,
       "insufficient_data": 861,
       "strong_buy": 22
     },
-    "signals_n": 3530,
-    "screen_seconds_sum": 35725.36800000012,
-    "screen_seconds_n": 3530,
+    "signals_n": 3531,
+    "screen_seconds_sum": 35725.941000000115,
+    "screen_seconds_n": 3531,
     "outcomes": {
-      "miss": 1373,
+      "miss": 1374,
       "saved": 2157
     }
   },
