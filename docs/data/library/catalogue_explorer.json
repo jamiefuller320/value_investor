@@ -2962,28 +2962,10 @@
     "ISPC_US_EQ",
     "ISPR_US_EQ",
     "ISRL_US_EQ",
-    "ISR_US_EQ"
+    "ISR_US_EQ",
+    "ISSC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "IPGP_US_EQ",
-      "venue": "US",
-      "yahoo": "IPGP",
-      "isin": "US44980X1090",
-      "name": "IPGP",
-      "seconds": 11.74,
-      "outcome": "saved",
-      "at": "2026-11-24T11:18:18.482542+00:00",
-      "rows": 20,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.737
-      },
-      "screen_seconds": 0.737,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "IPHA_US_EQ",
       "venue": "US",
@@ -3724,6 +3706,25 @@
       },
       "screen_seconds": 3.651,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "ISSC_US_EQ",
+      "venue": "US",
+      "yahoo": "ISSC",
+      "isin": "US45769N1054",
+      "name": "IA",
+      "seconds": 0.902,
+      "outcome": "miss",
+      "at": "2026-11-24T11:25:30.029880+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.845
+      },
+      "screen_seconds": 0.845,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -39122,43 +39123,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T11:24:17.964398+00:00"
+    },
+    {
+      "t212_ticker": "ISSC_US_EQ",
+      "yahoo": "ISSC",
+      "name": "IA",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T11:25:30.029880+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ISR_US_EQ",
+    "t212_ticker": "ISSC_US_EQ",
     "venue": "US",
-    "yahoo": "ISR",
-    "isin": "US46489V3024",
-    "name": "CATX",
-    "seconds": 3.72,
+    "yahoo": "ISSC",
+    "isin": "US45769N1054",
+    "name": "IA",
+    "seconds": 0.902,
     "outcome": "miss",
-    "at": "2026-11-24T11:25:14.915959+00:00",
+    "at": "2026-11-24T11:25:30.029880+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.651
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.845
     },
-    "screen_seconds": 3.651,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.845,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ISSC_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T11:25:14.915959+00:00",
+  "updated_at": "2026-11-24T11:25:30.029880+00:00",
   "totals": {
-    "screened": 2961,
+    "screened": 2962,
     "signals": {
-      "buy": 894,
+      "buy": 895,
       "avoid": 709,
       "hold": 623,
       "insufficient_data": 719,
       "strong_buy": 16
     },
-    "signals_n": 2961,
-    "screen_seconds_sum": 28732.15100000009,
-    "screen_seconds_n": 2961,
+    "signals_n": 2962,
+    "screen_seconds_sum": 28732.99600000009,
+    "screen_seconds_n": 2962,
     "outcomes": {
-      "miss": 1133,
+      "miss": 1134,
       "saved": 1828
     }
   },
