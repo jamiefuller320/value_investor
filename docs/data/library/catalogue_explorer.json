@@ -3418,28 +3418,10 @@
     "LSF_US_EQ",
     "LSH_US_EQ",
     "LSPD_US_EQ",
-    "LSPR_US_EQ"
+    "LSPR_US_EQ",
+    "LSRCY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "LOAR_US_EQ",
-      "venue": "US",
-      "yahoo": "LOAR",
-      "isin": "US53947R1059",
-      "name": "LOAR",
-      "seconds": 3.371,
-      "outcome": "saved",
-      "at": "2026-11-24T15:06:49.438980+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 1.311
-      },
-      "screen_seconds": 1.311,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "LOBO_US_EQ",
       "venue": "US",
@@ -4180,6 +4162,25 @@
       },
       "screen_seconds": 85.588,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "LSRCY_US_EQ",
+      "venue": "US",
+      "yahoo": "LSRCY",
+      "isin": "US51809L1098",
+      "name": "LSRCY",
+      "seconds": 1.244,
+      "outcome": "miss",
+      "at": "2026-11-24T15:26:35.089201+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 1.049
+      },
+      "screen_seconds": 1.049,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -40805,43 +40806,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T15:23:08.390294+00:00"
+    },
+    {
+      "t212_ticker": "LSRCY_US_EQ",
+      "yahoo": "LSRCY",
+      "name": "LSRCY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T15:26:35.089201+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "LSPR_US_EQ",
+    "t212_ticker": "LSRCY_US_EQ",
     "venue": "US",
-    "yahoo": "LSPR",
-    "isin": "US98987D3008",
-    "name": "ZVSA",
-    "seconds": 85.737,
+    "yahoo": "LSRCY",
+    "isin": "US51809L1098",
+    "name": "LSRCY",
+    "seconds": 1.244,
     "outcome": "miss",
-    "at": "2026-11-24T15:26:28.301355+00:00",
+    "at": "2026-11-24T15:26:35.089201+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.588
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 1.049
     },
-    "screen_seconds": 85.588,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.049,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "LSRCY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T15:26:28.301355+00:00",
+  "updated_at": "2026-11-24T15:26:35.089201+00:00",
   "totals": {
-    "screened": 3417,
+    "screened": 3418,
     "signals": {
-      "buy": 1032,
+      "buy": 1033,
       "avoid": 802,
       "hold": 725,
       "insufficient_data": 839,
       "strong_buy": 19
     },
-    "signals_n": 3417,
-    "screen_seconds_sum": 35336.883000000125,
-    "screen_seconds_n": 3417,
+    "signals_n": 3418,
+    "screen_seconds_sum": 35337.932000000124,
+    "screen_seconds_n": 3418,
     "outcomes": {
-      "miss": 1329,
+      "miss": 1330,
       "saved": 2088
     }
   },
