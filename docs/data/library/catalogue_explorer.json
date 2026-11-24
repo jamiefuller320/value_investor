@@ -2842,28 +2842,10 @@
     "IMMX_US_EQ",
     "IMNM_US_EQ",
     "IMOS_US_EQ",
-    "IMPPP_US_EQ"
+    "IMPPP_US_EQ",
+    "IMPP_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "IGIC_US_EQ",
-      "venue": "US",
-      "yahoo": "IGIC",
-      "isin": "BMG4809J1062",
-      "name": "IGIC",
-      "seconds": 2.917,
-      "outcome": "saved",
-      "at": "2026-11-24T10:59:16.488068+00:00",
-      "rows": 40,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.8,
-        "seconds": 0.762
-      },
-      "screen_seconds": 0.762,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "IGTA_US_EQ",
       "venue": "US",
@@ -3604,6 +3586,25 @@
       },
       "screen_seconds": 2.633,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "IMPP_US_EQ",
+      "venue": "US",
+      "yahoo": "IMPP",
+      "isin": "MHY3894J1872",
+      "name": "IMPP",
+      "seconds": 3.595,
+      "outcome": "saved",
+      "at": "2026-11-24T11:06:12.747522+00:00",
+      "rows": 20,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.651
+      },
+      "screen_seconds": 0.651,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -38696,17 +38697,25 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T11:05:51.122379+00:00"
+    },
+    {
+      "t212_ticker": "IMPP_US_EQ",
+      "yahoo": "IMPP",
+      "name": "IMPP",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T11:06:12.747522+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "IMPPP_US_EQ",
+    "t212_ticker": "IMPP_US_EQ",
     "venue": "US",
-    "yahoo": "IMPPP",
-    "isin": "MHY3894J1120",
-    "name": "IMPPP",
-    "seconds": 4.991,
+    "yahoo": "IMPP",
+    "isin": "MHY3894J1872",
+    "name": "IMPP",
+    "seconds": 3.595,
     "outcome": "saved",
-    "at": "2026-11-24T11:06:02.631878+00:00",
+    "at": "2026-11-24T11:06:12.747522+00:00",
     "rows": 20,
     "filings": [
       {
@@ -38831,30 +38840,35 @@
       }
     ],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 2.633
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.651
     },
-    "screen_seconds": 2.633,
-    "signal": "hold"
+    "screen_seconds": 0.651,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "IMPP_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T11:06:02.631878+00:00",
+  "updated_at": "2026-11-24T11:06:12.747522+00:00",
   "totals": {
-    "screened": 2841,
+    "screened": 2842,
     "signals": {
-      "buy": 864,
+      "buy": 865,
       "avoid": 669,
       "hold": 606,
       "insufficient_data": 686,
       "strong_buy": 16
     },
-    "signals_n": 2841,
-    "screen_seconds_sum": 28554.743000000053,
-    "screen_seconds_n": 2841,
+    "signals_n": 2842,
+    "screen_seconds_sum": 28555.394000000055,
+    "screen_seconds_n": 2842,
     "outcomes": {
       "miss": 1091,
-      "saved": 1750
+      "saved": 1751
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
