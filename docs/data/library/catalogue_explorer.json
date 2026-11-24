@@ -3583,28 +3583,10 @@
     "MERC_US_EQ",
     "MESA_US_EQ",
     "MESO_US_EQ",
-    "METCB_US_EQ"
+    "METCB_US_EQ",
+    "METC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MCVT_US_EQ",
-      "venue": "US",
-      "yahoo": "MCVT",
-      "isin": "US59982U2006",
-      "name": "SUIG",
-      "seconds": 1.035,
-      "outcome": "miss",
-      "at": "2026-11-24T17:06:43.288150+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.05,
-        "seconds": 0.813
-      },
-      "screen_seconds": 0.813,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "MCY_US_EQ",
       "venue": "US",
@@ -4344,6 +4326,25 @@
         "seconds": 0.681
       },
       "screen_seconds": 0.681,
+      "signal": "avoid"
+    },
+    {
+      "t212_ticker": "METC_US_EQ",
+      "venue": "US",
+      "yahoo": "METC",
+      "isin": "US75134P6007",
+      "name": "METC",
+      "seconds": 1.707,
+      "outcome": "saved",
+      "at": "2026-11-24T17:13:46.104530+00:00",
+      "rows": 20,
+      "screen": {
+        "signal": "avoid",
+        "fits": false,
+        "data_quality_score": 0.95,
+        "seconds": 0.518
+      },
+      "screen_seconds": 0.518,
       "signal": "avoid"
     }
   ],
@@ -41325,14 +41326,14 @@
     }
   ],
   "last": {
-    "t212_ticker": "METCB_US_EQ",
+    "t212_ticker": "METC_US_EQ",
     "venue": "US",
-    "yahoo": "METCB",
-    "isin": "US75134P5017",
-    "name": "METCB",
-    "seconds": 2.326,
+    "yahoo": "METC",
+    "isin": "US75134P6007",
+    "name": "METC",
+    "seconds": 1.707,
     "outcome": "saved",
-    "at": "2026-11-24T17:13:37.957176+00:00",
+    "at": "2026-11-24T17:13:46.104530+00:00",
     "rows": 20,
     "filings": [
       {
@@ -41460,27 +41461,27 @@
       "signal": "avoid",
       "fits": false,
       "data_quality_score": 0.95,
-      "seconds": 0.681
+      "seconds": 0.518
     },
-    "screen_seconds": 0.681,
+    "screen_seconds": 0.518,
     "signal": "avoid"
   },
-  "updated_at": "2026-11-24T17:13:37.957176+00:00",
+  "updated_at": "2026-11-24T17:13:46.104530+00:00",
   "totals": {
-    "screened": 3582,
+    "screened": 3583,
     "signals": {
       "buy": 1072,
-      "avoid": 845,
+      "avoid": 846,
       "hold": 767,
       "insufficient_data": 875,
       "strong_buy": 23
     },
-    "signals_n": 3582,
-    "screen_seconds_sum": 35796.379000000095,
-    "screen_seconds_n": 3582,
+    "signals_n": 3583,
+    "screen_seconds_sum": 35796.89700000009,
+    "screen_seconds_n": 3583,
     "outcomes": {
       "miss": 1392,
-      "saved": 2190
+      "saved": 2191
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
