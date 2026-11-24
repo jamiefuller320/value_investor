@@ -14950,6 +14950,59 @@ def test_parked_source_hunter_evn_vi_euro_depth_has_fetchable_ir():
     assert valid, reason
 
 
+@patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_investegate_company", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_esef_direct", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_belgium_official", return_value=[])
+@patch("value_investor.research.filings.fetch_filing_body", return_value=None)
+def test_ingest_filings_euro_depth_evn_vi_migrates_stale_ir_hub_prior_eng_20261124_03(
+    _mock_body,
+    _mock_belgium,
+    _mock_esef,
+    _mock_investegate,
+    _mock_news,
+    tmp_path: Path,
+):
+    """eng-20261124-03: listing re-ingest must rewrite dead publications hub before IR merge."""
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    live_annual = _BUILTIN_IR_URLS["EVN.VI"][0]
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_07bb52dd9c03b279",
+                        "source": "ir_allowlist",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                    }
+                ],
+                "summary": {"total": 1, "with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    meta = ingest_filings(
+        ticker="EVN.VI",
+        company_name="EVN AG",
+        sources_dir=tmp_path,
+        market="euro_depth",
+    )
+    assert meta.get("filings_index_path")
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    ir_urls = [
+        str(row.get("url") or "")
+        for row in index.get("filings") or []
+        if row.get("source") == "ir_allowlist"
+    ]
+    assert dead not in ir_urls
+    assert live_annual in ir_urls
+    assert any("1-HJ-2025-26" in url for url in ir_urls)
+
+
 def test_parked_source_hunter_cai_vi_atx_has_fetchable_ir():
     """eng-20261021-08: CAI.VI caimmo.com FY2025 annual + H1 2026 interim PDFs fetch and validate."""
     assert "CAI.VI" not in PARKED_SOURCE_HUNTER_SKIP
