@@ -4310,28 +4310,10 @@
     "PB_US_EQ",
     "PCAP_US_EQ",
     "PCB_US_EQ",
-    "PCCT_US_EQ"
+    "PCCT_US_EQ",
+    "PCLB_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "PAIC_US_EQ",
-      "venue": "US",
-      "yahoo": "PAIC",
-      "isin": "US76135L8871",
-      "name": "REVB",
-      "seconds": 84.675,
-      "outcome": "miss",
-      "at": "2026-11-24T23:43:29.771071+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.621
-      },
-      "screen_seconds": 84.621,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "PALT_US_EQ",
       "venue": "US",
@@ -5072,6 +5054,25 @@
       },
       "screen_seconds": 84.842,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "PCLB_US_EQ",
+      "venue": "US",
+      "yahoo": "PCLB",
+      "isin": "US7229031015",
+      "name": "PCLB",
+      "seconds": 0.896,
+      "outcome": "miss",
+      "at": "2026-11-24T23:57:42.037616+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.788
+      },
+      "screen_seconds": 0.788,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -58952,43 +58953,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T23:56:06.223577+00:00"
+    },
+    {
+      "t212_ticker": "PCLB_US_EQ",
+      "yahoo": "PCLB",
+      "name": "PCLB",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T23:57:42.037616+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "PCCT_US_EQ",
+    "t212_ticker": "PCLB_US_EQ",
     "venue": "US",
-    "yahoo": "PCCT",
-    "isin": "US84753T1097",
-    "name": "SPEC",
-    "seconds": 84.885,
+    "yahoo": "PCLB",
+    "isin": "US7229031015",
+    "name": "PCLB",
+    "seconds": 0.896,
     "outcome": "miss",
-    "at": "2026-11-24T23:57:35.907732+00:00",
+    "at": "2026-11-24T23:57:42.037616+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.842
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.788
     },
-    "screen_seconds": 84.842,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.788,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "PCLB_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T23:57:35.907732+00:00",
+  "updated_at": "2026-11-24T23:57:42.037616+00:00",
   "totals": {
-    "screened": 4309,
+    "screened": 4310,
     "signals": {
-      "buy": 1305,
+      "buy": 1306,
       "avoid": 1011,
       "hold": 933,
       "insufficient_data": 1034,
       "strong_buy": 26
     },
-    "signals_n": 4309,
-    "screen_seconds_sum": 42844.66300000015,
-    "screen_seconds_n": 4309,
+    "signals_n": 4310,
+    "screen_seconds_sum": 42845.451000000154,
+    "screen_seconds_n": 4310,
     "outcomes": {
-      "miss": 1669,
+      "miss": 1670,
       "saved": 2640
     }
   },
