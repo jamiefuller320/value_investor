@@ -2600,28 +2600,10 @@
     "HHC_US_EQ",
     "HHR_US_EQ",
     "HHT_US_EQ",
-    "HHULY_US_EQ"
+    "HHULY_US_EQ",
+    "HIFS_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HCMLY_US_EQ",
-      "venue": "US",
-      "yahoo": "HCMLY",
-      "isin": "US43475E1055",
-      "name": "HCMLY",
-      "seconds": 0.761,
-      "outcome": "miss",
-      "at": "2026-11-24T07:55:15.337348+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 0.714
-      },
-      "screen_seconds": 0.714,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "HCM_US_EQ",
       "venue": "US",
@@ -3362,6 +3344,25 @@
       },
       "screen_seconds": 0.81,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "HIFS_US_EQ",
+      "venue": "US",
+      "yahoo": "HIFS",
+      "isin": "US4333231029",
+      "name": "HIFS",
+      "seconds": 0.695,
+      "outcome": "miss",
+      "at": "2026-11-24T08:01:15.856022+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.644
+      },
+      "screen_seconds": 0.644,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -34804,43 +34805,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-24T08:00:32.625982+00:00"
+    },
+    {
+      "t212_ticker": "HIFS_US_EQ",
+      "yahoo": "HIFS",
+      "name": "HIFS",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-24T08:01:15.856022+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HHULY_US_EQ",
+    "t212_ticker": "HIFS_US_EQ",
     "venue": "US",
-    "yahoo": "HHULY",
-    "isin": "US4067631022",
-    "name": "HHULY",
-    "seconds": 0.866,
+    "yahoo": "HIFS",
+    "isin": "US4333231029",
+    "name": "HIFS",
+    "seconds": 0.695,
     "outcome": "miss",
-    "at": "2026-11-24T08:01:09.141934+00:00",
+    "at": "2026-11-24T08:01:15.856022+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 0.81
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.644
     },
-    "screen_seconds": 0.81,
-    "signal": "avoid"
+    "screen_seconds": 0.644,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HIFS_US_EQ"
+    }
   },
-  "updated_at": "2026-11-24T08:01:09.141934+00:00",
+  "updated_at": "2026-11-24T08:01:15.856022+00:00",
   "totals": {
-    "screened": 2599,
+    "screened": 2600,
     "signals": {
-      "buy": 782,
+      "buy": 783,
       "avoid": 620,
       "hold": 563,
       "insufficient_data": 621,
       "strong_buy": 13
     },
-    "signals_n": 2599,
-    "screen_seconds_sum": 27958.24800000004,
-    "screen_seconds_n": 2599,
+    "signals_n": 2600,
+    "screen_seconds_sum": 27958.89200000004,
+    "screen_seconds_n": 2600,
     "outcomes": {
-      "miss": 989,
+      "miss": 990,
       "saved": 1610
     }
   },
