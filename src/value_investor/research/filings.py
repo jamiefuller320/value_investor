@@ -442,8 +442,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm",
         "https://www.sec.gov/Archives/edgar/data/1306965/000162828026031628/shellq120266-k.htm",
     ],
+    # euro_depth no_key_bodies — the indexed interim is a recirculated Wiener Börse
+    # “AUSTRIAN POST Q1 2012” Google News hit with no body. Same assets.post.at
+    # host as the FY2025 annual; Q1–3 2026 interim report (period end 30 Sep 2026).
     "POST.VI": [
         "https://assets.post.at/-/media/Dokumente/En/Investor-Relations/Geschaefts--und-Nachhaltigkeitsberichte/AustrianPost_Annual_Report_2025.pdf",
+        "https://assets.post.at/-/media/Dokumente/En/Investor-Relations/Quartalsergebnisse/2026/Q1-3-2026/Q1-3-2026-Austrian-Post-Interim-Report.pdf",
     ],
     "OMV.VI": [
         "https://reports.omv.com/en/annual-report/2025/_assets/downloads/entire-omv-ar25.pdf",
@@ -4597,6 +4601,43 @@ def _priority_score(
     return score
 
 
+# Recirculated exchange adhocs stay inside the publication lookback. A headline
+# whose newest results year is this many years behind the publication year is not
+# a current filing (Wiener Börse “AUSTRIAN POST Q1 2012”, published 2026).
+_GOOGLE_NEWS_STALE_RESULTS_YEARS = 5
+_HEADLINE_YEAR_RE = re.compile(r"\b(?:19|20)\d{2}\b")
+
+
+def _google_news_results_year_is_stale(headline: str, published: str | None) -> bool:
+    """True when a Google News headline only names a long-past results year."""
+    years = [int(year) for year in _HEADLINE_YEAR_RE.findall(headline or "")]
+    if not years or not published:
+        return False
+    try:
+        anchor = datetime.fromisoformat(str(published).replace("Z", "+00:00")).year
+    except ValueError:
+        return False
+    return max(years) <= anchor - _GOOGLE_NEWS_STALE_RESULTS_YEARS
+
+
+def _drop_stale_google_news_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Drop bodiless Google News rows that only cite a long-past results year."""
+    kept: list[dict[str, Any]] = []
+    for row in rows:
+        source = str(row.get("source") or "")
+        if (
+            not row.get("has_body")
+            and source.startswith("google_news")
+            and _google_news_results_year_is_stale(
+                str(row.get("headline") or ""),
+                str(row.get("published_at") or "") or None,
+            )
+        ):
+            continue
+        kept.append(row)
+    return kept
+
+
 def fetch_filings_google_news(
     *,
     company_name: str,
@@ -4655,6 +4696,8 @@ def fetch_filings_google_news(
                     continue
             except ValueError:
                 pass
+        if _google_news_results_year_is_stale(title, published):
+            continue
         period = classify_filing_period(title)
         summary = _strip_html(item.findtext("description") or "")
         rows.append(
@@ -12573,7 +12616,7 @@ def ingest_filings(
     prior_filings = _load_prior_filings_rows(filings_dir)
     unextractable_urls = load_unextractable_body_urls(filings_dir)
     if prior_filings:
-        groups.append(prior_filings)
+        groups.append(_drop_stale_google_news_rows(prior_filings))
     ch_accounts = max_ch_accounts
     if ch_accounts is None:
         ch_accounts = DEEPEN_MAX_ACCOUNTS if deepen_history else DEFAULT_MAX_ACCOUNTS
