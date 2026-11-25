@@ -1,0 +1,131 @@
+{
+  "comparison_id": "memo-model-comparison-2026-11",
+  "decision_rule_version": "v2",
+  "outcome": "inconclusive_keep",
+  "governing": "owner_sample",
+  "judge_trusted": false,
+  "judge_model": "gpt-5.6-luna",
+  "checks": {
+    "complete_pairs": {
+      "value": 5,
+      "need": ">= 10 pairs with both memos and both judge orders",
+      "ok": false
+    },
+    "judge_prefers_challenger": {
+      "value": {
+        "challenger": 3,
+        "incumbent": 0,
+        "tie": 2
+      },
+      "need": "order-consistent judge preference: challenger >= 8 and incumbent <= 3 (owner's non-tie pick governs book-effect disagreements)",
+      "ok": false
+    },
+    "judge_rubric_gain": {
+      "value": 1.8,
+      "need": "mean judge challenger minus incumbent total (of 15) >= 1.0",
+      "ok": true
+    },
+    "citations_not_worse": {
+      "value": {
+        "incumbent": 0.908,
+        "challenger": 1.0
+      },
+      "need": "challenger quote resolution rate >= incumbent",
+      "ok": true
+    },
+    "hallucination_not_worse": {
+      "value": {
+        "incumbent": 5,
+        "challenger": 0
+      },
+      "need": "challenger hallucination flags <= incumbent",
+      "ok": true
+    },
+    "book_effect_disagreements": {
+      "value": {
+        "challenger": 0,
+        "incumbent": 0,
+        "tie": 0
+      },
+      "need": "where one verdict blocks entry and the other does not, challenger preferred at least as often",
+      "ok": true
+    },
+    "weekly_cost_fits": {
+      "value": {
+        "per_memo_usd": 1.04,
+        "weekly_high_usd": 36.4
+      },
+      "need": "35 memos a week <= $40 strategy_book_memo_raise",
+      "ok": true
+    },
+    "judge_calibration": {
+      "value": {
+        "sample": 4,
+        "rated": 4,
+        "agree": 2
+      },
+      "need": "owner agrees with the judge's preference on >= 3 of 4 (ceil(0.75 x sample)), sample >= 4",
+      "ok": false
+    }
+  },
+  "calibration": {
+    "sample": 4,
+    "rated": 4,
+    "agree": 2,
+    "need": 3,
+    "rows": [
+      {
+        "slug": "ftse350__SCT.L",
+        "reasons": [
+          "top_up"
+        ],
+        "owner": "B",
+        "judge": "B",
+        "agree": true
+      },
+      {
+        "slug": "ftse350__VLX.L",
+        "reasons": [
+          "top_up"
+        ],
+        "owner": "B",
+        "judge": "tie",
+        "agree": false
+      },
+      {
+        "slug": "ftse350__BP.L",
+        "reasons": [
+          "top_up"
+        ],
+        "owner": "B",
+        "judge": "A",
+        "agree": false
+      },
+      {
+        "slug": "nasdaq100__STX",
+        "reasons": [
+          "top_up"
+        ],
+        "owner": "B",
+        "judge": "B",
+        "agree": true
+      }
+    ],
+    "owner_governed_book_effect": []
+  },
+  "owner_sample": {
+    "preferences": {
+      "challenger": 3,
+      "incumbent": 1,
+      "tie": 0
+    },
+    "mean_rubric_gain": 1.5,
+    "overwhelming_challenger": false
+  },
+  "incumbent": "composer-2.5",
+  "challenger": "grok-4.6",
+  "note": "switch: owner approves, then the memo model change is logged as an operational_switches row on docs/data/strategy_book_registration.json (not a rule change) and the memo runner's model is changed in its own PR. keep / inconclusive_keep: composer-2.5 stays; nothing changes. judge_trusted records whether this judge passed owner calibration for reuse in later comparisons.",
+  "observe_only": true,
+  "influences_live": false,
+  "generated_at": "2026-11-25T19:28:05.235897+00:00"
+}
