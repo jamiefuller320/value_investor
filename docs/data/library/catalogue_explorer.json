@@ -5697,28 +5697,10 @@
     "TX_US_EQ",
     "TYDEV_US_EQ",
     "TYFG_US_EQ",
-    "TYHT_US_EQ"
+    "TYHT_US_EQ",
+    "TYOBY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "TSU_US_EQ",
-      "venue": "US",
-      "yahoo": "TSU",
-      "isin": "US88706T1088",
-      "name": "TIMB",
-      "seconds": 4.016,
-      "outcome": "miss",
-      "at": "2026-11-25T17:10:20.067655+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.92
-      },
-      "screen_seconds": 3.92,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "TTAM_US_EQ",
       "venue": "US",
@@ -6459,6 +6441,25 @@
       },
       "screen_seconds": 4.499,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "TYOBY_US_EQ",
+      "venue": "US",
+      "yahoo": "TYOBY",
+      "isin": "US8923142041",
+      "name": "TYOBY",
+      "seconds": 1.049,
+      "outcome": "miss",
+      "at": "2026-11-25T17:16:14.093965+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.973
+      },
+      "screen_seconds": 0.973,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -75463,43 +75464,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T17:15:57.522752+00:00"
+    },
+    {
+      "t212_ticker": "TYOBY_US_EQ",
+      "yahoo": "TYOBY",
+      "name": "TYOBY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T17:16:14.093965+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "TYHT_US_EQ",
+    "t212_ticker": "TYOBY_US_EQ",
     "venue": "US",
-    "yahoo": "TYHT",
-    "isin": "US8245676064",
-    "name": "SISI",
-    "seconds": 4.688,
+    "yahoo": "TYOBY",
+    "isin": "US8923142041",
+    "name": "TYOBY",
+    "seconds": 1.049,
     "outcome": "miss",
-    "at": "2026-11-25T17:16:07.758424+00:00",
+    "at": "2026-11-25T17:16:14.093965+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.499
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.973
     },
-    "screen_seconds": 4.499,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.973,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "TYOBY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T17:16:07.758424+00:00",
+  "updated_at": "2026-11-25T17:16:14.093965+00:00",
   "totals": {
-    "screened": 5696,
+    "screened": 5697,
     "signals": {
-      "buy": 1723,
+      "buy": 1724,
       "avoid": 1329,
       "hold": 1250,
       "insufficient_data": 1364,
       "strong_buy": 30
     },
-    "signals_n": 5696,
-    "screen_seconds_sum": 55574.87100000018,
-    "screen_seconds_n": 5696,
+    "signals_n": 5697,
+    "screen_seconds_sum": 55575.84400000018,
+    "screen_seconds_n": 5697,
     "outcomes": {
-      "miss": 2231,
+      "miss": 2232,
       "saved": 3465
     }
   },
