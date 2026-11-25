@@ -5711,28 +5711,10 @@
     "UBAB_US_EQ",
     "UBCP_US_EQ",
     "UBFO_US_EQ",
-    "UBNT_US_EQ"
+    "UBNT_US_EQ",
+    "UBOH_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "TTRX_US_EQ",
-      "venue": "US",
-      "yahoo": "TTRX",
-      "isin": "US90021W1053",
-      "name": "TTRX",
-      "seconds": 2.891,
-      "outcome": "saved",
-      "at": "2026-11-25T17:12:19.301273+00:00",
-      "rows": 15,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.006
-      },
-      "screen_seconds": 1.006,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "TUESQ_US_EQ",
       "venue": "US",
@@ -6473,6 +6455,25 @@
       },
       "screen_seconds": 4.169,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "UBOH_US_EQ",
+      "venue": "US",
+      "yahoo": "UBOH",
+      "isin": "US9094581017",
+      "name": "UBOH",
+      "seconds": 2.117,
+      "outcome": "miss",
+      "at": "2026-11-25T17:18:07.042098+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 1.912
+      },
+      "screen_seconds": 1.912,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -75509,43 +75510,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T17:17:41.203981+00:00"
+    },
+    {
+      "t212_ticker": "UBOH_US_EQ",
+      "yahoo": "UBOH",
+      "name": "UBOH",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T17:18:07.042098+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "UBNT_US_EQ",
+    "t212_ticker": "UBOH_US_EQ",
     "venue": "US",
-    "yahoo": "UBNT",
-    "isin": "US90353W1036",
-    "name": "UI",
-    "seconds": 4.241,
+    "yahoo": "UBOH",
+    "isin": "US9094581017",
+    "name": "UBOH",
+    "seconds": 2.117,
     "outcome": "miss",
-    "at": "2026-11-25T17:17:59.296699+00:00",
+    "at": "2026-11-25T17:18:07.042098+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.169
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 1.912
     },
-    "screen_seconds": 4.169,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.912,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "UBOH_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T17:17:59.296699+00:00",
+  "updated_at": "2026-11-25T17:18:07.042098+00:00",
   "totals": {
-    "screened": 5710,
+    "screened": 5711,
     "signals": {
-      "buy": 1727,
+      "buy": 1728,
       "avoid": 1333,
       "hold": 1251,
       "insufficient_data": 1369,
       "strong_buy": 30
     },
-    "signals_n": 5710,
-    "screen_seconds_sum": 55599.52800000019,
-    "screen_seconds_n": 5710,
+    "signals_n": 5711,
+    "screen_seconds_sum": 55601.440000000184,
+    "screen_seconds_n": 5711,
     "outcomes": {
-      "miss": 2239,
+      "miss": 2240,
       "saved": 3471
     }
   },
