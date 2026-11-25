@@ -599,6 +599,8 @@ def _finalize_and_persist(
         "units_completed": int(assemble.get("units_completed") or 0),
         "objects_written": int(assemble.get("objects_written") or 0),
         "hydrate_hits": int(assemble.get("hydrate_hits") or 0),
+        "tickers_selected": int(assemble.get("tickers_selected") or 0),
+        "tickers_skipped_hydrated": int(assemble.get("tickers_skipped_hydrated") or 0),
         "unit_results": unit_rows,
         "unit_status_counts": unit_status_counts(unit_rows),
         "capacity_isolation": isolation,
@@ -652,6 +654,9 @@ def _finalize_and_persist(
     review["throughput"]["units_attempted"] = int(assemble.get("units_attempted") or 0)
     review["throughput"]["units_completed"] = int(assemble.get("units_completed") or 0)
     review["throughput"]["objects_written"] = int(assemble.get("objects_written") or 0)
+    review["throughput"]["tickers_skipped_hydrated"] = int(
+        assemble.get("tickers_skipped_hydrated") or 0
+    )
     if isolation:
         review["capacity_isolation"] = isolation
     bn_row = bn_timer.finish("ok", bottlenecks=len(review.get("bottlenecks") or []))
@@ -912,6 +917,8 @@ def run_universe_filing_archive_pack(
                     units_attempted=int(assemble.get("units_attempted") or 0),
                     units_completed=int(assemble.get("units_completed") or 0),
                     objects_written=int(assemble.get("objects_written") or 0),
+                    tickers_selected=int(assemble.get("tickers_selected") or 0),
+                    tickers_skipped_hydrated=int(assemble.get("tickers_skipped_hydrated") or 0),
                     http_fetches=int(
                         (assemble.get("capacity_isolation") or {}).get("http_fetches") or 0
                     ),
