@@ -4566,28 +4566,10 @@
     "PUODY_US_EQ",
     "PURE_US_EQ",
     "PURR_US_EQ",
-    "PUYI_US_EQ"
+    "PUYI_US_EQ",
+    "PVBK_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "PSNL_US_EQ",
-      "venue": "US",
-      "yahoo": "PSNL",
-      "isin": "US71535D1063",
-      "name": "PSNL",
-      "seconds": 2.483,
-      "outcome": "saved",
-      "at": "2026-11-25T01:22:27.905892+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.062
-      },
-      "screen_seconds": 1.062,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "PSN_US_EQ",
       "venue": "US",
@@ -5328,6 +5310,25 @@
       },
       "screen_seconds": 4.837,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "PVBK_US_EQ",
+      "venue": "US",
+      "yahoo": "PVBK",
+      "isin": "US69503T1034",
+      "name": "PVBK",
+      "seconds": 1.011,
+      "outcome": "miss",
+      "at": "2026-11-25T01:29:02.505948+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.89
+      },
+      "screen_seconds": 0.89,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -59800,43 +59801,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T01:28:43.502718+00:00"
+    },
+    {
+      "t212_ticker": "PVBK_US_EQ",
+      "yahoo": "PVBK",
+      "name": "PVBK",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T01:29:02.505948+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "PUYI_US_EQ",
+    "t212_ticker": "PVBK_US_EQ",
     "venue": "US",
-    "yahoo": "PUYI",
-    "isin": "KYG4453R1157",
-    "name": "MAAS",
-    "seconds": 5.035,
+    "yahoo": "PVBK",
+    "isin": "US69503T1034",
+    "name": "PVBK",
+    "seconds": 1.011,
     "outcome": "miss",
-    "at": "2026-11-25T01:28:55.049718+00:00",
+    "at": "2026-11-25T01:29:02.505948+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.837
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.89
     },
-    "screen_seconds": 4.837,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.89,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "PVBK_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T01:28:55.049718+00:00",
+  "updated_at": "2026-11-25T01:29:02.505948+00:00",
   "totals": {
-    "screened": 4565,
+    "screened": 4566,
     "signals": {
-      "buy": 1378,
+      "buy": 1379,
       "avoid": 1079,
       "hold": 985,
       "insufficient_data": 1096,
       "strong_buy": 27
     },
-    "signals_n": 4565,
-    "screen_seconds_sum": 46169.91700000016,
-    "screen_seconds_n": 4565,
+    "signals_n": 4566,
+    "screen_seconds_sum": 46170.80700000016,
+    "screen_seconds_n": 4566,
     "outcomes": {
-      "miss": 1757,
+      "miss": 1758,
       "saved": 2808
     }
   },
