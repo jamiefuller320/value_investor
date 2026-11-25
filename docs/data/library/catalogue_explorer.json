@@ -5587,28 +5587,10 @@
     "TOP_US_EQ",
     "TORO_US_EQ",
     "TOST_US_EQ",
-    "TOTA_US_EQ"
+    "TOTA_US_EQ",
+    "TOTDY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "TLYS_US_EQ",
-      "venue": "US",
-      "yahoo": "TLYS",
-      "isin": "US8868851028",
-      "name": "TLYS",
-      "seconds": 3.201,
-      "outcome": "saved",
-      "at": "2026-11-25T16:54:00.428935+00:00",
-      "rows": 18,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 1.064
-      },
-      "screen_seconds": 1.064,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "TMCI_US_EQ",
       "venue": "US",
@@ -6349,6 +6331,25 @@
       },
       "screen_seconds": 4.086,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "TOTDY_US_EQ",
+      "venue": "US",
+      "yahoo": "TOTDY",
+      "isin": "US8915152073",
+      "name": "TOTDY",
+      "seconds": 0.942,
+      "outcome": "miss",
+      "at": "2026-11-25T16:59:24.048522+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.846
+      },
+      "screen_seconds": 0.846,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -75057,43 +75058,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T16:59:07.831830+00:00"
+    },
+    {
+      "t212_ticker": "TOTDY_US_EQ",
+      "yahoo": "TOTDY",
+      "name": "TOTDY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T16:59:24.048522+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "TOTA_US_EQ",
+    "t212_ticker": "TOTDY_US_EQ",
     "venue": "US",
-    "yahoo": "TOTA",
-    "isin": "US1856342019",
-    "name": "CLNN",
-    "seconds": 4.167,
+    "yahoo": "TOTDY",
+    "isin": "US8915152073",
+    "name": "TOTDY",
+    "seconds": 0.942,
     "outcome": "miss",
-    "at": "2026-11-25T16:59:17.752809+00:00",
+    "at": "2026-11-25T16:59:24.048522+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.086
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.846
     },
-    "screen_seconds": 4.086,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.846,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "TOTDY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T16:59:17.752809+00:00",
+  "updated_at": "2026-11-25T16:59:24.048522+00:00",
   "totals": {
-    "screened": 5586,
+    "screened": 5587,
     "signals": {
-      "buy": 1686,
+      "buy": 1687,
       "avoid": 1311,
       "hold": 1224,
       "insufficient_data": 1335,
       "strong_buy": 30
     },
-    "signals_n": 5586,
-    "screen_seconds_sum": 55375.20200000018,
-    "screen_seconds_n": 5586,
+    "signals_n": 5587,
+    "screen_seconds_sum": 55376.04800000018,
+    "screen_seconds_n": 5587,
     "outcomes": {
-      "miss": 2188,
+      "miss": 2189,
       "saved": 3398
     }
   },
