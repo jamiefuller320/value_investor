@@ -5649,28 +5649,10 @@
     "TSBK_US_EQ",
     "TSCDY_US_EQ",
     "TSEM_US_EQ",
-    "TSE_US_EQ"
+    "TSE_US_EQ",
+    "TSGTY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "TRDA_US_EQ",
-      "venue": "US",
-      "yahoo": "TRDA",
-      "isin": "US29384C1080",
-      "name": "TRDA",
-      "seconds": 2.213,
-      "outcome": "saved",
-      "at": "2026-11-25T17:02:54.369000+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.719
-      },
-      "screen_seconds": 0.719,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "TREB_US_EQ",
       "venue": "US",
@@ -6411,6 +6393,25 @@
       },
       "screen_seconds": 3.26,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "TSGTY_US_EQ",
+      "venue": "US",
+      "yahoo": "TSGTY",
+      "isin": "US8985291025",
+      "name": "TSGTY",
+      "seconds": 0.893,
+      "outcome": "miss",
+      "at": "2026-11-25T17:09:11.264875+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.794
+      },
+      "screen_seconds": 0.794,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -75287,43 +75288,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T17:08:56.185234+00:00"
+    },
+    {
+      "t212_ticker": "TSGTY_US_EQ",
+      "yahoo": "TSGTY",
+      "name": "TSGTY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T17:09:11.264875+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "TSE_US_EQ",
+    "t212_ticker": "TSGTY_US_EQ",
     "venue": "US",
-    "yahoo": "TSE",
-    "isin": "IE0000QBK8U7",
-    "name": "TSEOQ",
-    "seconds": 3.34,
+    "yahoo": "TSGTY",
+    "isin": "US8985291025",
+    "name": "TSGTY",
+    "seconds": 0.893,
     "outcome": "miss",
-    "at": "2026-11-25T17:09:04.817320+00:00",
+    "at": "2026-11-25T17:09:11.264875+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.26
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.794
     },
-    "screen_seconds": 3.26,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.794,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "TSGTY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T17:09:04.817320+00:00",
+  "updated_at": "2026-11-25T17:09:11.264875+00:00",
   "totals": {
-    "screened": 5648,
+    "screened": 5649,
     "signals": {
-      "buy": 1707,
+      "buy": 1708,
       "avoid": 1321,
       "hold": 1240,
       "insufficient_data": 1350,
       "strong_buy": 30
     },
-    "signals_n": 5648,
-    "screen_seconds_sum": 55488.346000000165,
-    "screen_seconds_n": 5648,
+    "signals_n": 5649,
+    "screen_seconds_sum": 55489.14000000017,
+    "screen_seconds_n": 5649,
     "outcomes": {
-      "miss": 2212,
+      "miss": 2213,
       "saved": 3436
     }
   },
