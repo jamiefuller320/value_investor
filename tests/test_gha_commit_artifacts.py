@@ -324,11 +324,18 @@ def test_artifact_commit_preserves_newer_generated_at(tmp_path: Path):
     _git(other, "commit", "-m", "progress refresh")
     _git(other, "push", "origin", "main")
 
-    # Email job still has the stale Sep-22 snapshot under docs/data.
+    # Email job rewrote the stale snapshot (different body, older generated_at).
     _write(work / "docs" / "data" / "latest.json", '{"n":2}\n')
     _write(
         work / "docs" / "data" / "progress_report.json",
-        json.dumps({"generated_at": "2026-09-22T08:34:03+00:00", "defer": ["L121"]}) + "\n",
+        json.dumps(
+            {
+                "generated_at": "2026-09-22T08:34:03+00:00",
+                "defer": ["L121"],
+                "touched": True,
+            }
+        )
+        + "\n",
     )
 
     result = _run_script(work, owned="docs/data")
@@ -546,6 +553,10 @@ def test_email_report_skips_full_ingest_deepen() -> None:
     # Defense in depth from L429 even though Sunday no longer deepens.
     assert "timeout-minutes: 360" in email
     assert "COMPANIES_HOUSE_DEEPEN_OCR_MAX_PAGES" in email
+    # Run 45048271823: each full-tree overlay lost the push race. Keep retrying
+    # through catalogue-explorer bursts instead of stopping at 5.
+    assert 'GHA_COMMIT_ATTEMPTS: "30"' in email
+    assert 'GHA_COMMIT_SLEEP_CAP: "5"' in email
 
 
 def test_ingest_loop_has_saturday_pre_sunday_schedules() -> None:
@@ -707,7 +718,8 @@ def test_artifact_commit_leaves_identical_blobs_off_the_commit(tmp_path: Path):
         stderr: {result.stderr}
         """
     )
-    assert "Leaving 2 unchanged artifact files off the Test artifacts commit" in result.stdout
+    assert "snapshot 1 changed owned file" in result.stdout
+    assert "Leaving 2 unchanged" not in result.stdout
 
     latest = tmp_path / "latest"
     _git(tmp_path, "clone", str(remote), str(latest))
@@ -719,3 +731,112 @@ def test_artifact_commit_leaves_identical_blobs_off_the_commit(tmp_path: Path):
     assert json.loads(
         (latest / "docs" / "data" / "book" / "a.json").read_text(encoding="utf-8")
     ) == {"n": 1}
+
+
+def test_artifact_commit_keeps_concurrent_edits_to_untouched_files(tmp_path: Path):
+    """A file this job did not write stays at origin, even with no generated_at guard.
+
+    email-report run 45048271823 overlaid every owned file. Catalogue-explorer
+    commits that landed during the screen would have been rewritten with the
+    checkout copy whenever the JSON had no newer generated_at.
+    """
+    remote, work = _seed_repo(tmp_path)
+    _write(work / "docs" / "data" / "latest.json", '{"n": 1}\n')
+    _write(work / "docs" / "data" / "notes.txt", "seed\n")
+    _git(work, "add", "docs/data/latest.json", "docs/data/notes.txt")
+    _git(work, "commit", "-m", "seed notes")
+    _git(work, "push", "origin", "main")
+
+    other = tmp_path / "other"
+    _git(tmp_path, "clone", str(remote), str(other))
+    _git(other, "config", "user.email", "other@example.com")
+    _git(other, "config", "user.name", "other")
+    _write(other / "docs" / "data" / "notes.txt", "from catalogue\n")
+    _git(other, "add", "docs/data/notes.txt")
+    _git(other, "commit", "-m", "concurrent note")
+    _git(other, "push", "origin", "main")
+
+    _write(work / "docs" / "data" / "latest.json", '{"n": 2}\n')
+    result = _run_script(work, owned="docs/data")
+    assert result.returncode == 0, result.stderr
+    assert "snapshot 1 changed owned file" in result.stdout
+
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    assert json.loads((latest / "docs" / "data" / "latest.json").read_text(encoding="utf-8")) == {
+        "n": 2
+    }
+    assert (latest / "docs" / "data" / "notes.txt").read_text(
+        encoding="utf-8"
+    ) == "from catalogue\n"
+
+
+def test_artifact_commit_glob_spec_commits_only_matching_changes(tmp_path: Path):
+    """Epoch-0 pathspecs are globs. Unrelated edits under docs/data must stay out."""
+    remote, work = _seed_repo(tmp_path)
+    book = work / "docs" / "data" / "paper_automation" / "markets" / "ftse" / "buy_tier_level"
+    _write(book / "a.json", '{"n": 1}\n')
+    _write(book / "b.json", '{"n": 1}\n')
+    _write(work / "docs" / "data" / "other.json", '{"n": 1}\n')
+    _git(work, "add", "docs/data")
+    _git(work, "commit", "-m", "seed glob")
+    _git(work, "push", "origin", "main")
+
+    _write(book / "b.json", '{"n": 2}\n')
+    _write(work / "docs" / "data" / "other.json", '{"n": 9}\n')
+    _write(book / "new.json", '{"n": 3}\n')
+    result = _run_script(
+        work,
+        owned="docs/data/paper_automation/markets/**/buy_tier_level/**",
+    )
+    assert result.returncode == 0, result.stderr
+    assert "snapshot 2 changed owned files" in result.stdout
+
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    names = set(_git(latest, "show", "--name-only", "--pretty=format:", "HEAD").stdout.split())
+    assert names == {
+        "docs/data/paper_automation/markets/ftse/buy_tier_level/b.json",
+        "docs/data/paper_automation/markets/ftse/buy_tier_level/new.json",
+    }
+    assert json.loads((latest / "docs" / "data" / "other.json").read_text(encoding="utf-8")) == {
+        "n": 1
+    }
+    kept = (
+        latest
+        / "docs"
+        / "data"
+        / "paper_automation"
+        / "markets"
+        / "ftse"
+        / "buy_tier_level"
+        / "a.json"
+    )
+    assert json.loads(kept.read_text(encoding="utf-8")) == {"n": 1}
+
+
+def test_artifact_commit_directory_exclude_skips_dirty_child(tmp_path: Path):
+    """A trailing-slash exclude drops dirty files under that directory."""
+    remote, work = _seed_repo(tmp_path)
+    keep = work / "docs" / "data" / "latest.json"
+    skip = work / "docs" / "data" / "memo_model_comparison" / "ratings.json"
+    _write(keep, "{}\n")
+    _write(skip, '{"owner": "fresh"}\n')
+    _git(work, "add", "docs/data")
+    _git(work, "commit", "-m", "seed memo")
+    _git(work, "push", "origin", "main")
+    _write(keep, '{"n": 2}\n')
+    _write(skip, '{"owner": "stale"}\n')
+    result = _run_script(
+        work,
+        owned="docs/data",
+        exclude="docs/data/memo_model_comparison/",
+    )
+    assert result.returncode == 0, result.stderr
+    assert "Excluding docs/data/memo_model_comparison/ratings.json" in result.stderr
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    assert json.loads((latest / "docs" / "data" / "latest.json").read_text()) == {"n": 2}
+    assert json.loads(
+        (latest / "docs" / "data" / "memo_model_comparison" / "ratings.json").read_text()
+    ) == {"owner": "fresh"}
