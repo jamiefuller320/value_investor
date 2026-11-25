@@ -5005,28 +5005,10 @@
     "SFUN_US_EQ",
     "SFWL_US_EQ",
     "SF_US_EQ",
-    "SG1_US_EQ"
+    "SG1_US_EQ",
+    "SGAMY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SEG_US_EQ",
-      "venue": "US",
-      "yahoo": "SEG",
-      "isin": "US8122152007",
-      "name": "SEG",
-      "seconds": 1.713,
-      "outcome": "saved",
-      "at": "2026-11-25T08:12:41.297066+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.68
-      },
-      "screen_seconds": 0.68,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "SEIC_US_EQ",
       "venue": "US",
@@ -5767,6 +5749,25 @@
       },
       "screen_seconds": 84.771,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SGAMY_US_EQ",
+      "venue": "US",
+      "yahoo": "SGAMY",
+      "isin": "US8157941027",
+      "name": "SGAMY",
+      "seconds": 1.027,
+      "outcome": "miss",
+      "at": "2026-11-25T08:23:55.580575+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.669
+      },
+      "screen_seconds": 0.669,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -64363,43 +64364,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T08:22:04.145541+00:00"
+    },
+    {
+      "t212_ticker": "SGAMY_US_EQ",
+      "yahoo": "SGAMY",
+      "name": "SGAMY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T08:23:55.580575+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SG1_US_EQ",
+    "t212_ticker": "SGAMY_US_EQ",
     "venue": "US",
-    "yahoo": "SG1",
-    "isin": "US87043Q1085",
-    "name": "SG",
-    "seconds": 84.957,
+    "yahoo": "SGAMY",
+    "isin": "US8157941027",
+    "name": "SGAMY",
+    "seconds": 1.027,
     "outcome": "miss",
-    "at": "2026-11-25T08:23:47.784236+00:00",
+    "at": "2026-11-25T08:23:55.580575+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.771
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.669
     },
-    "screen_seconds": 84.771,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.669,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SGAMY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T08:23:49.353729+00:00",
+  "updated_at": "2026-11-25T08:23:55.580575+00:00",
   "totals": {
-    "screened": 5004,
+    "screened": 5005,
     "signals": {
-      "buy": 1513,
+      "buy": 1514,
       "avoid": 1170,
       "hold": 1090,
       "insufficient_data": 1203,
       "strong_buy": 28
     },
-    "signals_n": 5004,
-    "screen_seconds_sum": 49570.192000000236,
-    "screen_seconds_n": 5004,
+    "signals_n": 5005,
+    "screen_seconds_sum": 49570.86100000024,
+    "screen_seconds_n": 5005,
     "outcomes": {
-      "miss": 1935,
+      "miss": 1936,
       "saved": 3069
     }
   },
