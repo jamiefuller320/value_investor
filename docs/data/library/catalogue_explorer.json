@@ -5389,28 +5389,10 @@
     "SYTE_US_EQ",
     "SYX_US_EQ",
     "SY_US_EQ",
-    "SZGPY_US_EQ"
+    "SZGPY_US_EQ",
+    "SZKMY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SVNDY_US_EQ",
-      "venue": "US",
-      "yahoo": "SVNDY",
-      "isin": "US81783H1059",
-      "name": "SVNDY",
-      "seconds": 1.203,
-      "outcome": "miss",
-      "at": "2026-11-25T11:15:29.707667+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 1.066
-      },
-      "screen_seconds": 1.066,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "SVNLY_US_EQ",
       "venue": "US",
@@ -6151,6 +6133,25 @@
       },
       "screen_seconds": 0.784,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "SZKMY_US_EQ",
+      "venue": "US",
+      "yahoo": "SZKMY",
+      "isin": "US86959X1072",
+      "name": "SZKMY",
+      "seconds": 0.958,
+      "outcome": "miss",
+      "at": "2026-11-25T11:21:32.019610+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.856
+      },
+      "screen_seconds": 0.856,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -71293,43 +71294,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T11:19:12.986845+00:00"
+    },
+    {
+      "t212_ticker": "SZKMY_US_EQ",
+      "yahoo": "SZKMY",
+      "name": "SZKMY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T11:21:32.019610+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SZGPY_US_EQ",
+    "t212_ticker": "SZKMY_US_EQ",
     "venue": "US",
-    "yahoo": "SZGPY",
-    "isin": "US7958422021",
-    "name": "SZGPY",
-    "seconds": 0.876,
+    "yahoo": "SZKMY",
+    "isin": "US86959X1072",
+    "name": "SZKMY",
+    "seconds": 0.958,
     "outcome": "miss",
-    "at": "2026-11-25T11:21:19.017486+00:00",
+    "at": "2026-11-25T11:21:32.019610+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 1.0,
-      "seconds": 0.784
+      "seconds": 0.856
     },
-    "screen_seconds": 0.784,
-    "signal": "hold"
+    "screen_seconds": 0.856,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SZKMY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T11:21:28.223875+00:00",
+  "updated_at": "2026-11-25T11:21:32.019610+00:00",
   "totals": {
-    "screened": 5388,
+    "screened": 5389,
     "signals": {
-      "buy": 1628,
+      "buy": 1629,
       "avoid": 1268,
       "hold": 1173,
       "insufficient_data": 1289,
       "strong_buy": 30
     },
-    "signals_n": 5388,
-    "screen_seconds_sum": 52702.329000000245,
-    "screen_seconds_n": 5388,
+    "signals_n": 5389,
+    "screen_seconds_sum": 52703.185000000245,
+    "screen_seconds_n": 5389,
     "outcomes": {
-      "miss": 2098,
+      "miss": 2099,
       "saved": 3290
     }
   },
