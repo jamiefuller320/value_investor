@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-24T23:56:39.688579+00:00
+Track: `buy_tier_level` · updated 2026-11-25T23:40:59.755799+00:00
 
 ## Portfolio loser feedback
 
@@ -90,10 +90,13 @@ Track: `buy_tier_level` · updated 2026-11-24T23:56:39.688579+00:00
 - still buy
 - cheapness family still passes
 
-### WDS.AX — weakening / watch_review (-7.4%)
-- research verdict caution
+### WDS.AX — intact / hold_tolerate (-7.4%)
+- price drawdown alone does not invalidate value thesis
 - still buy
+- research accumulate
 - cheapness family still passes
+- data_quality 1.00
+- conviction 54%
 
 ### YAL.AX — weakening / watch_review (-6.7%)
 - research verdict caution
