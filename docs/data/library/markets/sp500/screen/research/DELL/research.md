@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 13 · Updated 2026-11-25T04:41:19.325635+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-25T17:56:24.153586+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Post-earnings press reinforces the filed Q3 beat-and-raise and AI backlog, supporting strong_buy; muted trading, target cuts and AI-sector selling leave leverage and cyclical risks unchanged.
+Rationale: Q3 filings and backlog confirm strong_buy, but deeper post-earnings selling, peak-AI press and broker resets temper conviction; leverage and cyclical server risks are unchanged.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -73,3 +73,8 @@ Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchang
 The 04:40 UTC batch covers Q3 aftermath: beat-and-raise headlines, press citing roughly $132bn AI backlog, muted share reaction, and a sharp Evercore price-target cut despite record results.  
 Call coverage emphasises firm AI demand and vetted orders; wider AI-hardware selling, chip-capacity pressure on PCs, and Nvidia diversion headlines add sector noise.  
 On-file Q3 FY2027 8-K figures are unchanged; screen remains **strong_buy**; leverage and cyclical AI-server risks are unchanged.
+
+### 2026-11-25T17:56:24.153586+00:00
+The 17:56 UTC batch deepens the Q3 aftermath: further share falls despite beat-and-raise, IBD “peak” copy, Morningstar fair-value cuts on AI-cycle risk, and multiple broker target reductions (press also cites a $25bn buyback).  
+Wider risk-off (hot PCE, AI-hardware selling) outweighs isolated upgrades; mixed sell-side reset, no new SEC extracts beyond the on-file Q3 8-K.  
+Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchanged.

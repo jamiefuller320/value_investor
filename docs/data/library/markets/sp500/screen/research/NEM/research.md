@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM) — Research memo
 
-_Version 7 · Updated 2026-11-25T04:50:09.904088+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T18:05:45.225616+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: File-set TTM cash generation still supports the screen buy; only duplicative peer-comparison press since last refresh, so cyclical and valuation risks still only partly confirm the case.
+Rationale: File-set TTM cash generation still supports the screen buy; sector press on 15-month lows reinforces cyclical timing risk without new company evidence to weaken fundamentals.
 RiskTags: cyclical, regulatory, governance, litigation, customer_concentration
 
 ## Weekly updates
@@ -43,3 +43,8 @@ No material change versus the evening refresh; buy screen and accumulate overlay
 Since the 24 Nov evening refresh, the batch adds another NEM versus Kinross (KGC) peer piece and a Yahoo options quote entry without company news.  
 No new SEC filings; screen TTM free cash flow (~$10.1bn) and quarterly cash flow in the file set are unchanged.  
 No material change versus the prior refresh; buy screen and accumulate overlay unchanged.
+
+### 2026-11-25T18:05:45.225616+00:00
+Since the 25 Nov morning refresh, the batch adds one Yahoo/Investing.com sector piece on gold and silver miners at 15-month lows and balance-sheet cushion.
+No new SEC filings; screen TTM free cash flow (~$10.1bn) and quarterly cash flow in the file set are unchanged.
+The headline adds cyclical colour only; no material operational change versus the prior refresh.

@@ -1,6 +1,6 @@
 # M.P. Evans Group PLC (MPE.L) — Research memo
 
-_Version 7 · Updated 2026-11-25T04:49:11.031405+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T18:04:57.983200+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: Sep-2026 interim and TTM OCF US$149.3m still underpin the strong-buy screen; no new filings or news in this batch—research confirms cash quality, not a full overlay upgrade.
+Rationale: Sep-2026 interim and TTM OCF US$149.3m still underpin the strong-buy screen; new buyback RNS and press add no fundamentals—research confirms cash quality, not a full overlay upgrade.
 RiskTags: cyclical, regulatory, pension, liquidity
 
 ## Weekly updates
@@ -42,4 +42,9 @@ Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal and accu
 ### 2026-11-25T04:49:11.031405+00:00
 News batch since the 24 Nov evening refresh is empty; no new articles in the supplied sources.  
 No new RNS after 24 Nov “transaction in own shares”; last substantive disclosure remains 14 Sep 2026 interim results.  
+Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal and accumulate overlay unchanged.
+
+### 2026-11-25T18:04:57.983200+00:00
+Filings add 25 Nov “transaction in own shares” only (VWAP ~1,710.22p on 24 Nov purchases); last substantive disclosure remains 14 Sep 2026 interim results.
+News adds buyback headlines (up to ~1,730p) and a third-party cash-flow valuation piece; neither adds fundamentals beyond the ongoing cancellation programme.
 Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal and accumulate overlay unchanged.

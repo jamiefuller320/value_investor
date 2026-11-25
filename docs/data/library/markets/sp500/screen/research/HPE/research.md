@@ -1,6 +1,6 @@
 # Hewlett Packard Enterprise Company (HPE) — Research memo
 
-_Version 7 · Updated 2026-11-25T04:56:30.545766+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T18:15:05.620561+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.62
-Rationale: Furnished beat-and-raise Q4 and buybacks still support the screen buy, but margin-led selling and thin periodic filing depth slightly weaken near-term conviction; leverage risks unchanged.
+Confidence: 0.60
+Rationale: Furnished beat-and-raise Q4 and buybacks still support the screen buy, but peak-demand and margin-led headlines since the morning refresh slightly weaken conviction; filing depth is unchanged.
 RiskTags: cyclical, leverage, competitive, accounting, litigation, customer_concentration, governance, liquidity
 
 ## Weekly updates
@@ -42,4 +42,9 @@ No new SEC filings since the 23 November 8-K; periodic reports in the set still 
 ### 2026-11-25T04:56:30.545766+00:00
 Early 25 November coverage extends the post-Q4 sell-off story (~16% session fall, ~$40.19 close cited) despite revenue and EPS beats in furnished materials.  
 Headlines stress thinner Cloud & AI margins (FY2027 near ~14%), supply doubts and peer Dell contrast; WSJ recap keeps HPE on the AI-hardware watchlist.  
+No new SEC filings since the 23 November 8-K; periodic reports in the set still end at the Q3 10-Q.
+
+### 2026-11-25T18:15:05.620561+00:00
+Afternoon coverage pairs HPE with Dell on “peak” AI sales-growth fears and a broader pullback, despite beat-and-raise quarters in furnished materials.
+Headlines reiterate margin pressure, a memory shortage cited through 2028, and CEO comments on server pricing; contrarian bullish bank pieces and cash-vs-Dell comparisons also appear.
 No new SEC filings since the 23 November 8-K; periodic reports in the set still end at the Q3 10-Q.

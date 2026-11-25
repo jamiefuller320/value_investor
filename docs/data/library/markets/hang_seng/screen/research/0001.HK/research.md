@@ -1,6 +1,6 @@
 # CK Hutchison Holdings Limited (0001.HK) — Research memo
 
-_Version 2 · Updated 2026-11-25T04:32:48.643251+00:00 · Mode: structured_verdict_update_
+_Version 3 · Updated 2026-11-25T17:48:09.132101+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.65
-Rationale: HKEX-aligned OCF/FCF and dividend still support the buy screen, but Panama’s criminal PPC complaint and delayed AS Watson listing add litigation and monetisation risk without fresh filings.
+Rationale: Filing-aligned cash flow still supports the buy screen; Panama litigation and deferred AS Watson listing keep medium risk, and this refresh adds no new filings to resolve them.
 RiskTags: regulatory, leverage, governance, litigation, cyclical, key_person
 
 ## Weekly updates
@@ -18,3 +18,8 @@ RiskTags: regulatory, leverage, governance, litigation, cyclical, key_person
 Panama’s comptroller filed a criminal complaint (18 Nov) over suspected irregularities in the audit of Panama Ports Company’s state concession, extending the ports dispute.
 WSJ reports CK Hutchison has delayed AS Watson’s planned dual listing (11 Nov); outcome and timing are not in the supplied filings.
 Screen cash-flow inputs are unchanged (OCF HK$62.6bn, FCF HK$41.7bn); Yahoo quarterly cash flow remains empty, so TTM FCF is still unverified.
+
+### 2026-11-25T17:48:09.132101+00:00
+News since the earlier 25 Nov run is only irrelevant “0001” search matches; no fresh CK Hutchison headlines in the supplied batch.  
+Panama’s PPC criminal complaint (18 Nov) and delayed AS Watson dual listing (11 Nov) remain the latest substantive items; HKEX filing set is unchanged.  
+Screen OCF HK$62.6bn and FCF HK$41.7bn are unchanged; Yahoo quarterly cash flow is still empty, so TTM FCF remains unverified.

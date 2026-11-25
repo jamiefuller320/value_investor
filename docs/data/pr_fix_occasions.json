@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-25T16:26:54.198406+00:00",
-  "occasion_count": 405,
+  "updated_at": "2026-11-25T19:27:48.719363+00:00",
+  "occasion_count": 408,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -7314,6 +7314,43 @@
     },
     {
       "id": "prf-20261125-002",
+      "recorded_at": "2026-11-25T15:52:25.237124+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "Pytest shards test (0) and test (1) failed: gap-scan goldens drifted from latest.json and SBRY overlay test read committed filings",
+      "pr_number": 1476,
+      "branch": "cursor/eng-20261125-03-1de3",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1476",
+      "task_id": "eng-20261125-03",
+      "head_sha": "8a474b1b89e25f811f57a0097e9c484dcebc0e7f",
+      "mergeable_state": null,
+      "failed_check_names": [
+        "test (0)",
+        "test (1)"
+      ],
+      "notes": "Failures reproduce on main filings.py; not introduced by the FCF canonical overlay. Gap-scan pins and the SBRY fixture isolation need a refresh so the required suite can go green.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-003",
+      "recorded_at": "2026-11-25T16:25:43.519760+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR 1476 conflicted with main after the screen-pin refresh landed",
+      "pr_number": 1476,
+      "branch": "cursor/eng-20261125-03-1de3",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1476",
+      "task_id": "eng-20261125-03",
+      "head_sha": "04f64455919eb83b56f6f95e302d4c767d23dea1",
+      "mergeable_state": "dirty",
+      "failed_check_names": [],
+      "notes": "Kept main's SBRY fixture bridge guard and prf-20261125-001. Renumbered this PR's CI occasion to prf-20261125-002. Feature diff stays filings.py and test_research_filings.py.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-004",
       "recorded_at": "2026-11-25T16:24:37.051534+00:00",
       "source": "human_request",
       "kind": "ci_check",
@@ -7333,7 +7370,7 @@
       "details": {}
     },
     {
-      "id": "prf-20261125-003",
+      "id": "prf-20261125-005",
       "recorded_at": "2026-11-25T16:24:37.120198+00:00",
       "source": "human_request",
       "kind": "merge_conflict",
@@ -7350,7 +7387,7 @@
       "details": {}
     },
     {
-      "id": "prf-20261125-004",
+      "id": "prf-20261125-006",
       "recorded_at": "2026-11-25T16:26:54.198406+00:00",
       "source": "human_request",
       "kind": "merge_conflict",
@@ -7364,6 +7401,23 @@
       "mergeable_state": null,
       "failed_check_names": [],
       "notes": null,
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-007",
+      "recorded_at": "2026-11-25T19:27:48.719363+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "merge conflict with main on pr_fix_occasions after the green suite",
+      "pr_number": 1478,
+      "branch": "cursor/tighten-floor-on-thesis-break-edc1",
+      "title": "Queue N279: do not sell a rising thesis break",
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1478",
+      "task_id": null,
+      "head_sha": "de0c1078e892639b1c2e4ae016bf141fbb73ce1d",
+      "mergeable_state": "dirty",
+      "failed_check_names": [],
+      "notes": "Full suite on de0c1078 was green. Main moved and the fix-occasion log collided on prf-20261125-002 and prf-20261125-003. Kept main's PR 1476 rows and renumbered the PR 1478 rows.",
       "details": {}
     }
   ],
@@ -7610,11 +7664,11 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 214
+        "count": 215
       },
       {
         "kind": "merge_conflict",
-        "count": 190
+        "count": 192
       },
       {
         "kind": "ci_and_merge",
@@ -7624,7 +7678,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 399
+        "count": 402
       },
       {
         "source": "traffic_controller",

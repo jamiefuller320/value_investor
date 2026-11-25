@@ -86,6 +86,7 @@ from value_investor.research.filings import (
     refetch_uk_primary_filing_bodies,
     refresh_sources_yahoo_cashflow_metrics,
     refresh_uk_filing_listings_into_index,
+    resolve_filing_aligned_fcf_canonical,
     resolve_filings_regime,
     resolve_google_news_publisher_url,
     resolve_investegate_document_url,
@@ -755,6 +756,106 @@ def test_fetch_cashflow_fallback_does_not_double_fetch_yfinance(monkeypatch):
         fetch_mod.fetch_company_metrics("MEGP.L")
 
     assert seen == ["MEGP.L"]
+
+
+def test_eng_20261125_03_refresh_sources_persists_fcf_canonical_and_yahoo_delta(tmp_path: Path):
+    """ITV-like: filing OCF−CapEx canonical vs divergent Yahoo TTM on overlay payload."""
+    sources = tmp_path / "research" / "ITV.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "ITV.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 200_000_000.0,
+                "Capital Expenditure": -52_000_000.0,
+            }
+        },
+        "quarterly_cashflow": {
+            "2025-12-31": {"Free Cash Flow": 52_975_000.0},
+            "2025-09-30": {"Free Cash Flow": 52_975_000.0},
+            "2025-06-30": {"Free Cash Flow": 52_975_000.0},
+            "2025-03-31": {"Free Cash Flow": 52_975_000.0},
+        },
+        "cashflow_metrics": {},
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    result = refresh_sources_yahoo_cashflow_metrics(ticker="ITV.L", sources_dir=sources)
+
+    assert result["updated"] is True
+    overlay = result["fcf_canonical_overlay"]
+    assert overlay["filing_aligned"] == pytest.approx(148_000_000.0)
+    assert overlay["filing_aligned_source"] == "financials_annual"
+    assert overlay["yahoo_ttm"] == pytest.approx(211_900_000.0)
+    assert overlay["filing_vs_yahoo_ttm_delta"] == pytest.approx(-63_900_000.0)
+
+    stored = json.loads((sources / "financials_annual.json").read_text(encoding="utf-8"))
+    metrics = stored["cashflow_metrics"]
+    assert metrics["filing_aligned_fcf_canonical"] == pytest.approx(148_000_000.0)
+    assert metrics["filing_vs_yahoo_ttm_delta"] == pytest.approx(-63_900_000.0)
+    assert metrics["fcf_canonical_overlay"]["yahoo_ttm"] == pytest.approx(211_900_000.0)
+
+
+def test_eng_20261125_03_resolve_fcf_canonical_from_ir_statutory_bridge(tmp_path: Path):
+    """FGP-style statutory appendix bridge supplies canonical when annual rows omit FCF."""
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "ir_presentation_metrics.json").write_text(
+        json.dumps(
+            {
+                "ticker": "FGP.L",
+                "bridges": [
+                    {
+                        "bridge_type": "statutory_to_adjusted_cash_flow",
+                        "period": "annual",
+                        "derived": {
+                            "statutory_free_cash_flow_millions": 391.6,
+                            "adjusted_free_cash_flow_millions": 73.8,
+                        },
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    financials = {
+        "ticker": "FGP.L",
+        "cash_flow": {},
+        "cashflow_metrics": {"free_cashflow_ttm": 120_000_000.0},
+    }
+
+    overlay = resolve_filing_aligned_fcf_canonical(sources_dir=sources, financials=financials)
+
+    assert overlay["filing_aligned"] == pytest.approx(391_600_000.0)
+    assert overlay["filing_aligned_source"] == "ir_presentation_statutory"
+    assert overlay["filing_vs_yahoo_ttm_delta"] == pytest.approx(271_600_000.0)
+
+
+def test_eng_20261125_03_resolve_fcf_canonical_from_filing_interim_highlights(tmp_path: Path):
+    """Half-year statutory report prose when Yahoo quarterlies are empty."""
+    sources = tmp_path / "research" / "ITV.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "filing_interim_financials.json").write_text(
+        json.dumps(
+            {
+                "ticker": "ITV.L",
+                "interim_highlights": {"free_cash_flow_millions": 40.0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    financials = {
+        "ticker": "ITV.L",
+        "cash_flow": {},
+        "quarterly_cashflow": {},
+        "cashflow_metrics": {"free_cashflow_ttm": 87_600_000.0},
+    }
+
+    overlay = resolve_filing_aligned_fcf_canonical(sources_dir=sources, financials=financials)
+
+    assert overlay["filing_aligned"] == pytest.approx(40_000_000.0)
+    assert overlay["filing_aligned_source"] == "filing_interim_bodies"
+    assert overlay["filing_vs_yahoo_ttm_delta"] == pytest.approx(-47_600_000.0)
 
 
 def test_eng_20260921_04_refresh_sources_yahoo_cashflow_metrics_from_annual_rows(
