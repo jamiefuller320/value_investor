@@ -5572,28 +5572,10 @@
     "TNP_US_EQ",
     "TNXP_US_EQ",
     "TNYA_US_EQ",
-    "TOBAF_US_EQ"
+    "TOBAF_US_EQ",
+    "TOELY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "TLCC_US_EQ",
-      "venue": "US",
-      "yahoo": "TLCC",
-      "isin": "US9017731012",
-      "name": "TLCC",
-      "seconds": 1.083,
-      "outcome": "miss",
-      "at": "2026-11-25T16:51:52.449111+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.85,
-        "seconds": 0.889
-      },
-      "screen_seconds": 0.889,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "TLGA_US_EQ",
       "venue": "US",
@@ -6334,6 +6316,25 @@
       },
       "screen_seconds": 0.812,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "TOELY_US_EQ",
+      "venue": "US",
+      "yahoo": "TOELY",
+      "isin": "US8891102019",
+      "name": "TELWY",
+      "seconds": 0.844,
+      "outcome": "miss",
+      "at": "2026-11-25T16:57:19.971351+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.637
+      },
+      "screen_seconds": 0.637,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -75002,43 +75003,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T16:56:34.311015+00:00"
+    },
+    {
+      "t212_ticker": "TOELY_US_EQ",
+      "yahoo": "TOELY",
+      "name": "TELWY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T16:57:19.971351+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "TOBAF_US_EQ",
+    "t212_ticker": "TOELY_US_EQ",
     "venue": "US",
-    "yahoo": "TOBAF",
-    "isin": "CA87320M2004",
-    "name": "TOBAF",
-    "seconds": 0.942,
+    "yahoo": "TOELY",
+    "isin": "US8891102019",
+    "name": "TELWY",
+    "seconds": 0.844,
     "outcome": "miss",
-    "at": "2026-11-25T16:57:13.716045+00:00",
+    "at": "2026-11-25T16:57:19.971351+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 0.95,
-      "seconds": 0.812
+      "seconds": 0.637
     },
-    "screen_seconds": 0.812,
-    "signal": "avoid"
+    "screen_seconds": 0.637,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "TOELY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T16:57:13.716045+00:00",
+  "updated_at": "2026-11-25T16:57:19.971351+00:00",
   "totals": {
-    "screened": 5571,
+    "screened": 5572,
     "signals": {
-      "buy": 1681,
+      "buy": 1682,
       "avoid": 1307,
       "hold": 1221,
       "insufficient_data": 1332,
       "strong_buy": 30
     },
-    "signals_n": 5571,
-    "screen_seconds_sum": 55351.36600000017,
-    "screen_seconds_n": 5571,
+    "signals_n": 5572,
+    "screen_seconds_sum": 55352.00300000017,
+    "screen_seconds_n": 5572,
     "outcomes": {
-      "miss": 2181,
+      "miss": 2182,
       "saved": 3390
     }
   },
