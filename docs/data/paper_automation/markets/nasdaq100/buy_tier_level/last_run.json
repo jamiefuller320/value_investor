@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-24T10:22:11.243716-05:00",
+    "local_time": "2026-11-25T10:21:02.378339-05:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-11-24T09:30:00-05:00",
-    "settle_at": "2026-11-24T10:00:00-05:00",
+    "market_open_at": "2026-11-25T09:30:00-05:00",
+    "settle_at": "2026-11-25T10:00:00-05:00",
     "can_act": true,
     "reason": "ok"
   },
@@ -39,11 +39,11 @@
     "target_sleeve_value": 24.53,
     "targets": [
       {
-        "ticker": "GEHC",
-        "name": "GE HealthCare Technologies Inc.",
+        "ticker": "CMCSA",
+        "name": "Comcast Corporation",
         "signal": "strong_buy",
-        "conviction_score": 0.8813000000000001,
-        "price": 80.64
+        "conviction_score": 0.9111,
+        "price": 24.9
       },
       {
         "ticker": "MU",
@@ -305,56 +305,28 @@
         "price": 49.1
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "CMCSA",
-        "name": "Comcast Corporation",
-        "reason": "No longer in the top conviction target set",
-        "shares": 1.237269,
-        "price": 24.9,
-        "value": 30.81
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
+    "anticipated_buys": [],
+    "anticipated_holds": [],
+    "skipped": [
       {
-        "action": "buy",
-        "ticker": "GEHC",
-        "name": "GE HealthCare Technologies Inc.",
-        "reason": "New sleeve",
-        "value": 24.53,
-        "price": 80.64,
-        "target_value": 24.53,
-        "conviction_score": 0.8813000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "REGN",
-        "name": "Regeneron Pharmaceuticals, Inc.",
-        "reason": "New sleeve",
-        "value": 6.23,
-        "price": 920.69,
-        "target_value": 24.53,
-        "conviction_score": 0.805,
-        "signal": "strong_buy"
-      }
-    ],
-    "anticipated_holds": [
-      {
-        "action": "hold",
         "ticker": "INTU",
         "name": "Intuit Inc.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 22.1,
+        "reason": "Insufficient cash after higher-conviction fills",
         "target_value": 24.53,
         "conviction_score": 0.8528,
         "signal": "strong_buy"
-      }
-    ],
-    "skipped": [
+      },
+      {
+        "ticker": "REGN",
+        "name": "Regeneron Pharmaceuticals, Inc.",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 24.53,
+        "conviction_score": 0.805,
+        "signal": "strong_buy"
+      },
       {
         "ticker": "BKR",
         "name": "Baker Hughes Company",
@@ -414,26 +386,26 @@
     ],
     "waitlisted": [
       {
-        "ticker": "CMCSA",
-        "name": "Comcast Corporation",
+        "ticker": "GEHC",
+        "name": "GE HealthCare Technologies Inc.",
         "signal": "strong_buy",
-        "conviction_score": 0.9111,
+        "conviction_score": 0.8813000000000001,
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 38 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 38 equal-weight sleeve(s)."
   },
   "alerts": [
     {
       "ticker": "CMCSA",
       "name": "Comcast Corporation",
       "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
       "mark": 24.9,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "wait"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "BKR",
@@ -532,7 +504,7 @@
       "mark": 90.64,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "MDLZ",
@@ -609,7 +581,7 @@
       "mark": 264.0,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "ROST",
@@ -4440,13 +4412,28 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-25T10:21:02.378339-05:00",
+        "portfolio_value": 713.65,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 34,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "USD": 0.7656
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-24T10:22:11.243716-05:00",
+    "last_mark_at": "2026-11-25T10:21:02.378339-05:00",
     "rebalance_state": {
-      "exit_streak": {
-        "CMCSA": 1
-      },
+      "exit_streak": {},
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
@@ -4457,7 +4444,7 @@
     "schema_version": 2,
     "market_id": "nasdaq100",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T15:22:11.426310+00:00",
+    "generated_at": "2026-11-25T15:21:02.470123+00:00",
     "observe_only": true,
     "open_count": 41,
     "closed_count": 0,
@@ -4536,7 +4523,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T15:22:11.429870+00:00",
+    "generated_at": "2026-11-25T15:21:02.473506+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -4633,7 +4620,7 @@
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 2
     }
   },
   "hypothesis_integrity": {
@@ -4641,8 +4628,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-24T15:22:11.435730+00:00",
-    "as_of": "2026-11-24T10:22:11.243716-05:00",
+    "updated_at": "2026-11-25T15:21:02.479212+00:00",
+    "as_of": "2026-11-25T10:21:02.378339-05:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -4988,7 +4975,7 @@
         "mark": 264.0,
         "avg_cost": 320.9569,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.517,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -5152,7 +5139,7 @@
         "mark": 90.64,
         "avg_cost": 103.7536,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.5484,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -5958,7 +5945,7 @@
         "mark": 24.9,
         "avg_cost": 23.73,
         "signal": "strong_buy",
-        "timing_signal": "wait",
+        "timing_signal": "neutral",
         "conviction_score": 0.9111,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -6076,7 +6063,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T15:22:11.442975+00:00",
+    "generated_at": "2026-11-25T15:21:02.486368+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -6150,7 +6137,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-24T15:22:11.466487+00:00",
+    "generated_at": "2026-11-25T15:21:02.510179+00:00",
     "open_count": 13,
     "closed_count": 62,
     "scored_count": 47,
@@ -6219,7 +6206,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T10:22:11.243716-05:00",
+    "generated_at": "2026-11-25T10:21:02.378339-05:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -6243,16 +6230,16 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 48,
-    "closed_count": 5,
+    "open_count": 47,
+    "closed_count": 6,
     "open_by_capital_status": {
       "on_book": 34,
-      "off_book": 13,
+      "off_book": 12,
       "never_funded": 1
     },
     "closed_by_capital_status": {
       "on_book": 0,
-      "off_book": 3,
+      "off_book": 4,
       "never_funded": 2
     },
     "readiness": {
@@ -6260,7 +6247,7 @@
       "closed_per_tag_target": 15,
       "gaps": [
         "on_book closed=0 (target>=15)",
-        "off_book closed=3 (target>=15)",
+        "off_book closed=4 (target>=15)",
         "never_funded closed=2 (target>=15)"
       ],
       "note": "Probability / nested counterfactual promotion waits until each capital_status tag has a thick closed cohort."
@@ -6276,7 +6263,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T10:22:11.243716-05:00",
+    "generated_at": "2026-11-25T10:21:02.378339-05:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -6284,22 +6271,212 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 7,
-    "card_count": 7,
+    "proposal_count": 9,
+    "card_count": 9,
     "verdict_counts": {
-      "agree": 7,
+      "agree": 9,
       "veto": 0,
       "abstain": 0
     },
     "by_algo_action": {
       "rebuy_skip": {
-        "agree": 7,
+        "agree": 9,
         "veto": 0,
         "abstain": 0
       }
     },
     "disagree_vs_heuristic_count": 0,
     "cards": [
+      {
+        "ticker": "INTU",
+        "name": "Intuit Inc.",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 5
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 5
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.8528
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-25T10:21:02.378339-05:00",
+        "proposal_id": "buy_tier_level:INTU:rebuy_skip:2026-11-25T10:21:02.378339-05:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "REGN",
+        "name": "Regeneron Pharmaceuticals, Inc.",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 7
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 7
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.805
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-25T10:21:02.378339-05:00",
+        "proposal_id": "buy_tier_level:REGN:rebuy_skip:2026-11-25T10:21:02.378339-05:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
       {
         "ticker": "BKR",
         "name": "Baker Hughes Company",
@@ -6375,8 +6552,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-24T10:22:11.243716-05:00",
-        "proposal_id": "buy_tier_level:BKR:rebuy_skip:2026-11-24T10:22:11.243716-05:00",
+        "logged_at": "2026-11-25T10:21:02.378339-05:00",
+        "proposal_id": "buy_tier_level:BKR:rebuy_skip:2026-11-25T10:21:02.378339-05:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -6470,8 +6647,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-24T10:22:11.243716-05:00",
-        "proposal_id": "buy_tier_level:NVDA:rebuy_skip:2026-11-24T10:22:11.243716-05:00",
+        "logged_at": "2026-11-25T10:21:02.378339-05:00",
+        "proposal_id": "buy_tier_level:NVDA:rebuy_skip:2026-11-25T10:21:02.378339-05:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -6565,8 +6742,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-24T10:22:11.243716-05:00",
-        "proposal_id": "buy_tier_level:ADP:rebuy_skip:2026-11-24T10:22:11.243716-05:00",
+        "logged_at": "2026-11-25T10:21:02.378339-05:00",
+        "proposal_id": "buy_tier_level:ADP:rebuy_skip:2026-11-25T10:21:02.378339-05:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -6660,8 +6837,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-24T10:22:11.243716-05:00",
-        "proposal_id": "buy_tier_level:CPRT:rebuy_skip:2026-11-24T10:22:11.243716-05:00",
+        "logged_at": "2026-11-25T10:21:02.378339-05:00",
+        "proposal_id": "buy_tier_level:CPRT:rebuy_skip:2026-11-25T10:21:02.378339-05:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -6755,8 +6932,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-24T10:22:11.243716-05:00",
-        "proposal_id": "buy_tier_level:TER:rebuy_skip:2026-11-24T10:22:11.243716-05:00",
+        "logged_at": "2026-11-25T10:21:02.378339-05:00",
+        "proposal_id": "buy_tier_level:TER:rebuy_skip:2026-11-25T10:21:02.378339-05:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": 0,
@@ -6850,8 +7027,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-24T10:22:11.243716-05:00",
-        "proposal_id": "buy_tier_level:AMAT:rebuy_skip:2026-11-24T10:22:11.243716-05:00",
+        "logged_at": "2026-11-25T10:21:02.378339-05:00",
+        "proposal_id": "buy_tier_level:AMAT:rebuy_skip:2026-11-25T10:21:02.378339-05:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -6945,8 +7122,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-24T10:22:11.243716-05:00",
-        "proposal_id": "buy_tier_level:CSX:rebuy_skip:2026-11-24T10:22:11.243716-05:00",
+        "logged_at": "2026-11-25T10:21:02.378339-05:00",
+        "proposal_id": "buy_tier_level:CSX:rebuy_skip:2026-11-25T10:21:02.378339-05:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -6970,22 +7147,22 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-24T10:22:11.243716-05:00",
+      "generated_at": "2026-11-25T10:21:02.378339-05:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 7,
+      "card_count": 9,
       "verdict_counts": {
-        "agree": 7,
+        "agree": 9,
         "veto": 0,
         "abstain": 0
       },
       "by_algo_action": {
         "rebuy_skip": {
-          "agree": 7,
+          "agree": 9,
           "veto": 0,
           "abstain": 0
         }
@@ -7005,7 +7182,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-11-24T15:22:11.502364+00:00",
+  "generated_at": "2026-11-25T15:21:02.545707+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
