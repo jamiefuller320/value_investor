@@ -1,6 +1,6 @@
 # Prosus N.V. (PRX.AS) — Research memo
 
-_Version 13 · Updated 2026-11-25T18:09:06.385710+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-25T21:54:25.903740+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.58
-Rationale: Research weakens the buy: 25 Nov headlines flag weaker H1 operating profit and cash flow and smaller Tencent disposal gains; screen TTM FCF remains unverified despite interim statements in the pack.
+Rationale: Research still weakens the buy: no incremental news since 18:09; H1 profit and cash-flow pressure headlines persist and screen TTM FCF stays unverified despite interim statements in the pack.
 RiskTags: governance, customer_concentration, accounting, leverage, competitive
 
 ## Weekly updates
@@ -72,4 +72,9 @@ Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.
 ### 2026-11-25T18:09:06.385710+00:00
 25 Nov news reports weaker first-half operating profit and cash flow, food-delivery spend to defend share, and shares at a 2½-year low; WSJ links lower net profit to smaller Tencent disposal gains.  
 HY2026 interim statements remain in the pack with positive ecommerce aEBITDA commentary, but the incremental flow stresses profitability headwinds.  
+Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.
+
+### 2026-11-25T21:54:25.903740+00:00
+No new articles in the incremental news batch since the 18:09 refresh.  
+25 Nov headlines on weaker H1 operating profit and cash flow, food-delivery spend and smaller Tencent disposal gains remain the latest manifest items.  
 Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.

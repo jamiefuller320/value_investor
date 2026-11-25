@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 14 · Updated 2026-11-25T17:56:24.153586+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-25T21:41:26.333922+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.73
-Rationale: Q3 filings and backlog confirm strong_buy, but deeper post-earnings selling, peak-AI press and broker resets temper conviction; leverage and cyclical server risks are unchanged.
+Confidence: 0.72
+Rationale: Q3 beat and backlog confirm strong_buy; Clarke cites no reschedules, but peak-AI press and post-earnings selling on earnings duration temper overlay conviction; leverage and cyclical risks unchanged.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -77,4 +77,9 @@ On-file Q3 FY2027 8-K figures are unchanged; screen remains **strong_buy**; leve
 ### 2026-11-25T17:56:24.153586+00:00
 The 17:56 UTC batch deepens the Q3 aftermath: further share falls despite beat-and-raise, IBD “peak” copy, Morningstar fair-value cuts on AI-cycle risk, and multiple broker target reductions (press also cites a $25bn buyback).  
 Wider risk-off (hot PCE, AI-hardware selling) outweighs isolated upgrades; mixed sell-side reset, no new SEC extracts beyond the on-file Q3 8-K.  
+Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchanged.
+
+### 2026-11-25T21:41:26.333922+00:00
+The 21:41 UTC batch adds IBD peak-AI-spending copy, further post-Q3 share falls, Clarke’s no-reschedule backlog remark (~$132bn), and press on a $25bn buyback plus Vera Rubin order mix.  
+On-file Q3 8-K figures are unchanged; no new SEC extracts since the 17:56 UTC refresh.  
 Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchanged.

@@ -1,6 +1,6 @@
 # Cummins Inc. (CMI) — Research memo
 
-_Version 18 · Updated 2026-11-25T17:53:08.776998+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-25T21:38:37.346076+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: The 17:52 UTC batch adds one generic power-sector bargain headline, not Cummins-specific; Q3 diluted EPS of $8.25 and about $3.5bn TTM free cash flow still modestly confirm the strong buy case.
+Rationale: The 21:38 UTC batch adds no articles since 17:53 UTC; Q3 diluted EPS of $8.25 and about $3.2bn TTM free cash flow still modestly confirm the strong buy case.
 RiskTags: regulatory, cyclical, customer_concentration, litigation, leverage
 
 ## Weekly updates
@@ -98,3 +98,8 @@ Prior HOOPP, institutional-flow and Quiver sentiment themes are unchanged; filin
 The 17:52 UTC news batch adds one generic WSJ/Yahoo headline on power-stock bargains after the AI correction; it is not Cummins-specific.
 Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.5bn; the screen remains a strong buy.
 Prior HOOPP, institutional-flow and Quiver sentiment themes are unchanged; filing risk tags are unchanged.
+
+### 2026-11-25T21:38:37.346076+00:00
+The 21:38 UTC news batch adds no articles since the 17:53 UTC refresh.  
+Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.2bn; the screen remains a strong buy.  
+Prior power-bargain, HOOPP, institutional-flow and Quiver sentiment themes are unchanged; filing risk tags are unchanged.

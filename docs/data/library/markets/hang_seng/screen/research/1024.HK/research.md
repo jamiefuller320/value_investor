@@ -1,6 +1,6 @@
 # Kuaishou Technology (1024.HK) — Research memo
 
-_Version 25 · Updated 2026-11-25T17:48:33.617992+00:00 · Mode: structured_verdict_update_
+_Version 26 · Updated 2026-11-25T21:34:30.429801+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -133,3 +133,8 @@ HKEX index refreshed at 07:48 UTC; Q3/nine-month to 30 Sep 2026 unchanged; struc
 No material change: the 17:48 UTC news batch since the morning refresh returned only unrelated “1024” query noise (no Kuaishou articles).  
 Yahoo pack unchanged—quarterly income through Sep 2026 (Q3 diluted EPS −0.22); quarterly cash flow still empty (TTM suppressed).  
 HKEX index refreshed at 17:48 UTC; Q3/nine-month to 30 Sep 2026 unchanged; no new in-window filings.
+
+### 2026-11-25T21:34:30.429801+00:00
+No material change: the 21:34 UTC news batch since the 17:48 refresh returned zero Kuaishou articles.  
+Yahoo pack refreshed at 21:34 UTC—quarterly income still through Sep 2026 (Q3 diluted EPS −0.22); quarterly cash flow remains empty (TTM suppressed).  
+HKEX index refreshed at 21:34 UTC; Q3/nine-month to 30 Sep 2026 unchanged; no new in-window filings.

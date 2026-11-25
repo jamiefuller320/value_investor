@@ -1,6 +1,6 @@
 # Gartner, Inc. (IT) — Research memo
 
-_Version 9 · Updated 2026-11-25T18:02:00.558902+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-25T21:47:21.277435+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: On-file Q3 and prior contract-value commentary stand; no new filings or company news; accumulate still moderates the strong-buy screen on leverage, competitive, cyclical and litigation risks.
+Rationale: On-file Q3 metrics stand; evening Yahoo valuation commentary is secondary; accumulate still moderates the strong-buy screen on leverage, competitive, cyclical and litigation risks.
 RiskTags: competitive, leverage, cyclical, litigation
 
 ## Weekly updates
@@ -53,3 +53,8 @@ Remaining headlines are generic “IT” ticker noise; leverage, competitive, cy
 No new SEC filings since the 19 Nov executive RSU 8-K; the Q3 2026 Form 10-Q and 3 Nov earnings 8-K remain the latest on file.  
 The 25 Nov afternoon news batch has no Gartner-specific items—only generic “IT” ticker noise (Nvidia, Oracle, MarketWatch, etc.).  
 No material change.
+
+### 2026-11-25T21:47:21.277435+00:00
+No new SEC filings since the 19 Nov executive RSU 8-K; the Q3 2026 Form 10-Q and 3 Nov earnings 8-K remain the latest on file.  
+The 25 Nov evening batch adds one Gartner-specific Yahoo piece on the share drawdown and whether price aligns with recurring-contract cash flows—secondary to filed Q3.  
+Other headlines are generic “IT” ticker noise; leverage, competitive, cyclical and litigation themes are unchanged.

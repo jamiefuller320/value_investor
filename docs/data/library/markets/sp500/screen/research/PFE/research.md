@@ -1,6 +1,6 @@
 # Pfizer, Inc. (PFE) — Research memo
 
-_Version 9 · Updated 2026-11-25T18:07:54.351196+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-25T21:53:17.900102+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.69
-Rationale: Research still weakens the buy case: the 18:07 batch is Starna, dividend and flow commentary plus a Guggenheim target raise, with no new filings; LNP litigation and US pricing risks remain unresolved in-file.
+Rationale: Research still weakens the buy case: the 21:53 batch has no PFE-specific news or new filings; Japan/Canada LNP litigation, dividend-cliff debate and US pricing risks remain unresolved in-file.
 RiskTags: regulatory, competitive, leverage, litigation, accounting
 
 ## Weekly updates
@@ -49,3 +49,8 @@ Japan/Canada LNP litigation, dividend or patent-cliff themes, and post-election 
 The 18:07 news batch adds commentary on the Starna in vivo CAR-T licence and whether it changes the bull case; terms align with the 18 Nov announcement.  
 Press notes Guggenheim’s Buy and $33 target, ETF inflows, and dividend-safety debate versus other pharma names; Sanofi–Insmed M&A is sector context only.  
 No new SEC filings since the 3 Nov Q3 packet; Japan/Canada lipid-nanoparticle litigation and US drug-pricing themes are unchanged in the file set.
+
+### 2026-11-25T21:53:17.900102+00:00
+No material change since the 18:07 refresh.  
+The 21:53 news batch has no Pfizer-specific articles; Sanofi–Insmed M&A is sector context only.  
+No new SEC filings since the 3 Nov Q3 packet; Japan/Canada LNP litigation and US drug-pricing themes are unchanged in the file set.

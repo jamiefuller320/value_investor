@@ -1,6 +1,6 @@
 # United Rentals, Inc. (URI) — Research memo
 
-_Version 8 · Updated 2026-11-25T18:11:20.968388+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-25T21:56:19.408200+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -47,4 +47,9 @@ No material change to capex-heavy FCF versus the screen buy tension.
 ### 2026-11-25T18:11:20.968388+00:00
 No new SEC filings in sources since the Q3 10-Q filed 21 Oct; Q3 debt, cash and capex-heavy FCF are unchanged.  
 Since the last refresh, news is third-party URI versus HRI rental-demand and GuruFocus DCF or valuation commentary—not operationally material.  
+No material change to capex-heavy FCF versus the screen buy tension.
+
+### 2026-11-25T21:56:19.408200+00:00
+No new SEC filings in sources since the Q3 10-Q filed 21 Oct; Q3 debt, cash and capex-heavy FCF are unchanged.  
+Since the last refresh, the news batch is one unrelated Avis Budget share-price piece—not URI-specific or operationally material.  
 No material change to capex-heavy FCF versus the screen buy tension.

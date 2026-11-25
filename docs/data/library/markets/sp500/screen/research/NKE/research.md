@@ -1,6 +1,6 @@
 # NIKE, Inc. (NKE) — Research memo
 
-_Version 8 · Updated 2026-11-25T18:06:48.523844+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-25T21:52:18.345809+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.67
-Rationale: Commentary-only batch adds sceptical turnaround and long-dated growth-reset themes without new filings; Aug-2026 10-Q pressure still weakens the screen buy.
+Rationale: Commentary-only batch adds tariff risk on China/Vietnam supply without new filings; Aug-2026 10-Q revenue and weak Q1 cash flow still weaken the screen buy.
 RiskTags: cyclical, competitive, regulatory, customer_concentration
 
 ## Weekly updates
@@ -47,4 +47,9 @@ Q2 FY27 on 17 Dec remains outside the supplied sources.
 ### 2026-11-25T18:06:48.523844+00:00
 Afternoon batch is commentary only; no new SEC filings since the morning refresh.  
 Headlines stress sceptical turnaround themes (innovation talent, Mbappé exit), Black Friday pressure after large YTD share declines, and mixed dip-buying vs no market growth until FY29 in cited plan commentary.  
+Q2 FY27 on 17 Dec remains outside the supplied sources.
+
+### 2026-11-25T21:52:18.345809+00:00
+Evening batch is commentary only; no new SEC filings since the afternoon refresh.
+Headlines cite sharper US tariff rhetoric on China and Vietnam sourcing, a Nike share-move piece without firm company news, and peripheral Kohl’s footwear retail context.
 Q2 FY27 on 17 Dec remains outside the supplied sources.

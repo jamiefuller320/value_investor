@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 9 · Updated 2026-11-25T18:05:13.491721+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-25T21:50:58.018166+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.69
-Rationale: ~$59bn TTM FCF still supports the screen, but Wed's ~11% selloff, TrendForce DRAM cuts and downgrades weaken the strong-buy overlay—zero model passes keep research at accumulate.
+Rationale: ~$59bn TTM FCF still supports the screen; mixed evening headlines—fund sizing, tariff relief and cyclical fear—do not resolve zero model passes, so research stays accumulate versus strong buy.
 RiskTags: cyclical, competitive, leverage, customer_concentration
 
 ## Weekly updates
@@ -50,4 +50,9 @@ Filing-based cyclical, leverage and customer-concentration risks are unchanged.
 ### 2026-11-25T18:05:13.491721+00:00
 On 25 Nov MU fell roughly 7–11% in a renewed AI-chip selloff, with coverage citing UBS target cuts, BNP Paribas downgrades, TrendForce trimming DRAM pricing forecasts, tariff fears and Barron’s bearish memory narrative; Citi’s $1,300 Buy is a counterweight only in headlines.  
 No new filings or sourced financials in this batch; the screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed.  
+Filing-based cyclical, leverage, competitive and customer-concentration risks are unchanged.
+
+### 2026-11-25T21:50:58.018166+00:00
+Evening headlines add mixed bull–bear colour—Seeking Alpha “fire sale” pieces, David Tepper sizing MU as a top holding, Barron’s chip tariff exemptions and Barchart on higher spending; no new filings or sourced financials.  
+Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed.  
 Filing-based cyclical, leverage, competitive and customer-concentration risks are unchanged.

@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 23 · Updated 2026-11-25T18:10:11.760411+00:00 · Mode: structured_verdict_update_
+_Version 24 · Updated 2026-11-25T21:55:18.411115+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.57
-Rationale: On-file FCF is still exceptional and Cantor flags buybacks, but today’s memory selloff, TrendForce’s lower 2027 outlook and no new guidance still weaken the strong-buy screen.
+Rationale: On-file FCF stays exceptional, but incremental press only adds post-selloff bounce and 2027 peer debate; NAND cycle, pricing and tariff fears without new guidance still weaken the strong-buy screen.
 RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
@@ -107,3 +107,8 @@ The 2027 NAND oversupply debate, semis estimate-cut headlines and post-split off
 On 25 November SNDK fell roughly 10–13% as Nvidia-led chip names sold off; TrendForce cut 2027 memory forecasts after Chinese cloud order cuts and lowered DRAM pricing views.  
 Press stresses NAND demand and pricing worries plus tariff fears; Cantor’s CJ Muse still cites potential buybacks from exceptional on-file cash generation.  
 No new SNDK issuer filings in the batch; refreshed on-file financials still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).
+
+### 2026-11-25T21:55:18.411115+00:00
+Since the 18:10 refresh, FXLeaders and peers note a partial rebound after the sharp selloff while NAND pricing and 2027 cycle risks still dominate commentary.
+Yahoo pieces compare Qualcomm with Sandisk for 2027 and frame SNDK among laggards versus Q3 earnings winners; Barron’s ties chip weakness to a softer Nvidia.
+No new SNDK issuer filings in the batch; on-file financials still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).

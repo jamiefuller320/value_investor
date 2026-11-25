@@ -1,6 +1,6 @@
 # International Business Machines Corporation (IBM) — Research memo
 
-_Version 9 · Updated 2026-11-25T18:01:31.097933+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-25T21:47:02.078315+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.65
-Rationale: Headlines mildly support the hybrid-cloud narrative but add no new filings; standing leverage, pension and competitive risks leave accumulate moderating the buy screen.
+Rationale: Intraday price headlines add no filing-backed change; standing leverage, pension and competitive risks leave accumulate moderating the buy screen.
 RiskTags: leverage, pension, competitive, cyclical, litigation, regulatory
 
 ## Weekly updates
@@ -52,4 +52,9 @@ Q3 2026 screening snapshot and cash-flow inputs are unchanged.
 ### 2026-11-25T18:01:31.097933+00:00
 Since the prior run, headlines cite relative AI-cloud strength versus peers, a $276 price target, Microsoft Azure Compute Fleet integration, and mixed institutional flows; technical and dividend pieces add no filing-backed fundamentals.  
 No new SEC filing bodies appear beyond the 19 Nov yen-note 8-K already in the library.  
+Q3 2026 screening snapshot and cash-flow inputs are unchanged.
+
+### 2026-11-25T21:47:02.078315+00:00
+Since the 18:01 run, headlines cite modest same-day share gains (~3–3.5%); one peer piece carries no IBM fundamentals.
+No new SEC filing bodies beyond the 19 Nov yen-note 8-K already in the library.
 Q3 2026 screening snapshot and cash-flow inputs are unchanged.

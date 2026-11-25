@@ -1,6 +1,6 @@
 # Hewlett Packard Enterprise Company (HPE) — Research memo
 
-_Version 8 · Updated 2026-11-25T18:15:05.620561+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-25T22:00:08.875702+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.60
-Rationale: Furnished beat-and-raise Q4 and buybacks still support the screen buy, but peak-demand and margin-led headlines since the morning refresh slightly weaken conviction; filing depth is unchanged.
+Confidence: 0.58
+Rationale: Furnished beat-and-raise Q4 and buybacks still support the screen buy, but evening peak-AI and margin-framing headlines add little new filing depth and slightly weaken conviction.
 RiskTags: cyclical, leverage, competitive, accounting, litigation, customer_concentration, governance, liquidity
 
 ## Weekly updates
@@ -47,4 +47,9 @@ No new SEC filings since the 23 November 8-K; periodic reports in the set still 
 ### 2026-11-25T18:15:05.620561+00:00
 Afternoon coverage pairs HPE with Dell on “peak” AI sales-growth fears and a broader pullback, despite beat-and-raise quarters in furnished materials.
 Headlines reiterate margin pressure, a memory shortage cited through 2028, and CEO comments on server pricing; contrarian bullish bank pieces and cash-vs-Dell comparisons also appear.
+No new SEC filings since the 23 November 8-K; periodic reports in the set still end at the Q3 10-Q.
+
+### 2026-11-25T22:00:08.875702+00:00
+Evening headlines extend Dell/HPE “peak AI spending” worries despite beat-and-raise quarters; TheStreet stresses a post-record-quarter “hidden catch”.
+Coverage notes mixed Q3 13F adds versus trims and contrasts HP Inc’s margin narrative with HPE’s sell-off.
 No new SEC filings since the 23 November 8-K; periodic reports in the set still end at the Q3 10-Q.

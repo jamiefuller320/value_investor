@@ -1,6 +1,6 @@
 # Woodside Energy Group Ltd (WDS.AX) — Research memo
 
-_Version 3 · Updated 2026-11-25T18:16:59.251612+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-25T22:02:14.982685+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -23,3 +23,8 @@ Yahoo OCF−CapEx FCF remains negative; quarterly cash-flow still empty, so scre
 Afternoon source refresh; filing library still 104 items with nothing new on ASX since 5 Nov.  
 Six Yahoo/Kalkine items since the morning run (price pullback, valuation commentary)—no company disclosures.  
 Yahoo OCF−CapEx FCF remains negative US$782m; quarterly cashflow still empty, so screen TTM FCF is unverified.
+
+### 2026-11-25T22:02:14.982685+00:00
+No material change: the news batch since 18:16 UTC is empty—no new headlines or company disclosures.  
+Filing library unchanged at 104 items; no new ASX announcements since 5 Nov.  
+Yahoo OCF−CapEx FCF still negative US$782m; quarterly cashflow still empty, so screen TTM FCF is unverified.

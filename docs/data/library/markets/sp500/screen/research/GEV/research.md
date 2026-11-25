@@ -1,6 +1,6 @@
 # GE Vernova Inc. (GEV) — Research memo
 
-_Version 8 · Updated 2026-11-25T18:00:44.739376+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-25T21:46:13.720937+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: Commentary revisits the planned Trench deal and AI-power selloff; no new filings and filed FY25 FCF still far below Yahoo TTM behind the screen, so research still weakens the buy case.
+Rationale: Commentary mixes raised 2026 outlook with further analyst target cuts; no new filings and filed FY25 FCF still far below Yahoo TTM behind the screen, so research still weakens the buy case.
 RiskTags: cyclical, regulatory, liquidity, pension, accounting, leverage
 
 ## Weekly updates
@@ -48,3 +48,8 @@ Wind execution and the FCF-basis gap noted in prior updates remain unresolved.
 New batch is mostly commentary and options noise; press revisits the planned $9bn Trench deal and GEV’s move with AI-power peers after a recent selloff.  
 No new SEC filings; filed FY2025 OCF $4.99bn and FCF $3.71bn unchanged, with Yahoo TTM FCF (~$17.1bn) still far above annual filed cash flow underpinning the screen.  
 Wind execution and the FCF-basis gap from prior updates remain unresolved.
+
+### 2026-11-25T21:46:13.720937+00:00
+Latest batch is commentary-only: press recaps raised 2026 revenue, EBITDA and FCF outlook after Q3 Power/Electrification strength, while Wind execution and demand risks persist.  
+Headlines highlight Baird, BNP Paribas and Erste Group target cuts or downgrades; a Jim Cramer buy mention is sentiment-only.  
+No new SEC filings; filed FY2025 OCF $4.99bn and FCF $3.71bn are unchanged, and Yahoo TTM FCF (~$17.1bn) still far exceeds annual filed cash flow behind the screen.

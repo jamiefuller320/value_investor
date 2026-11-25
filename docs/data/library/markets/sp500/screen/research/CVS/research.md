@@ -1,6 +1,6 @@
 # CVS Health Corporation (CVS) — Research memo
 
-_Version 10 · Updated 2026-11-25T17:54:35.742470+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-25T21:39:49.280942+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -58,3 +58,8 @@ No material change to the accumulate overlay versus the 21:39 refresh.
 25 Nov headlines add Zacks search interest, duplicate Trefis/yfinance upside commentary, Barron’s Part D plan changes and Dr Oz Medicare-for-All rhetoric; nothing new on the retail–Aetna split.  
 No new SEC extracts beyond the 4 Nov Q3 10-Q.  
 No material change to the accumulate overlay versus the 04:39 refresh.
+
+### 2026-11-25T21:39:49.280942+00:00
+Since 17:54 UTC the news batch is empty; no new CVS headlines in the supplied pack.  
+No new SEC extracts beyond the 4 Nov Q3 10-Q.  
+No material change to the accumulate overlay versus the 17:54 refresh.

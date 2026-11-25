@@ -1,6 +1,6 @@
 # China Life Insurance Company Limited (2628.HK) — Research memo
 
-_Version 22 · Updated 2026-11-25T17:49:35.659926+00:00 · Mode: structured_verdict_update_
+_Version 23 · Updated 2026-11-25T21:35:24.558361+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.46
-Rationale: Research weakens the strong buy: HKEX 9M adjusted profit +15.8% is unchanged after the 25 Nov refresh, but Yahoo Q3 loss and negative revenue still leave screen cheapness unconfirmed.
+Rationale: Research weakens the strong buy: HKEX 9M adjusted profit +15.8% is unchanged at the 21:35 UTC refresh, but Yahoo Q3 loss and negative revenue still leave screen cheapness unconfirmed.
 RiskTags: regulatory, cyclical, accounting, governance
 
 ## Weekly updates
@@ -117,4 +117,9 @@ Screen–Yahoo FCF and earnings divergences versus the strong-buy signal are unc
 ### 2026-11-25T17:49:35.659926+00:00
 News batch since the 25 Nov 04:34 UTC run adds one unrelated Google News hit only; no discrete China Life developments in supplied sources.  
 HKEX index refreshed at 17:49 UTC—2026 Q3 still cites 9M equity-adjusted net profit up 15.8% year on year; Yahoo’s 30 Sep 2026 negative revenue and Q3 statutory loss are unchanged.  
+Screen–Yahoo FCF and earnings divergences versus the strong-buy signal are unchanged.
+
+### 2026-11-25T21:35:24.558361+00:00
+News batch since the 25 Nov 17:49 UTC run adds one unrelated Google News hit only; no discrete China Life developments in supplied sources.  
+HKEX index refreshed at 21:35 UTC—2026 Q3 still cites 9M equity-adjusted net profit up 15.8% year on year; Yahoo’s 30 Sep 2026 negative revenue and Q3 statutory loss are unchanged.  
 Screen–Yahoo FCF and earnings divergences versus the strong-buy signal are unchanged.
