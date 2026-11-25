@@ -60,6 +60,7 @@ from value_investor.research.filings import (
     fetch_filings_asx_direct,
     fetch_filings_esef_direct,
     fetch_filings_euro_news,
+    fetch_filings_google_news,
     fetch_filings_investegate_company,
     fetch_filings_ir_allowlist,
     fetch_rns_filing_body,
@@ -10741,6 +10742,84 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         assert rows, ticker
         assert all(row["source"] == "ir_allowlist" for row in rows)
         assert any(host_fragment in row["url"] for row in rows), ticker
+
+
+def test_fetch_filings_ir_allowlist_post_vi_q1_3_2026_interim(tmp_path: Path):
+    """POST.VI no_key_bodies — FY2025 annual plus the Q1–3 2026 interim report."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("POST.VI", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    by_period = {row["period"]: row["url"] for row in rows}
+    assert by_period["annual"].endswith("AustrianPost_Annual_Report_2025.pdf")
+    assert by_period["interim"].endswith("Q1-3-2026-Austrian-Post-Interim-Report.pdf")
+
+
+def test_google_news_drops_recirculated_austrian_post_q1_2012():
+    """The bodiless Q1 2012 Wiener Börse hit is not a current interim."""
+    from value_investor.research.filings import (
+        _drop_stale_google_news_rows,
+        _google_news_results_year_is_stale,
+    )
+
+    headline = (
+        "EANS-Adhoc: Österreichische Post AG / AUSTRIAN POST Q1 2012: "
+        "Revenue growth (+6.0%) and earnings improvement (EBITDA +7.0%) in Q1 - Wiener Börse"
+    )
+    published = "2026-08-25T04:45:02+00:00"
+    assert _google_news_results_year_is_stale(headline, published)
+    assert not _google_news_results_year_is_stale(
+        "Österreichische Post AG Q1-3 2026 Interim Results",
+        "2026-11-12T07:00:00+00:00",
+    )
+    kept = _drop_stale_google_news_rows(
+        [
+            {
+                "source": "google_news_euro",
+                "headline": headline,
+                "published_at": published,
+                "period": "interim",
+                "has_body": False,
+            },
+            {
+                "source": "ir_allowlist",
+                "headline": "IR allowlist document — Q1-3-2026-Austrian-Post-Interim-Report.pdf",
+                "published_at": None,
+                "period": "interim",
+                "has_body": True,
+            },
+        ]
+    )
+    assert len(kept) == 1
+    assert kept[0]["source"] == "ir_allowlist"
+
+
+@patch("value_investor.research.filings._http_get")
+def test_fetch_filings_google_news_skips_stale_results_year(mock_get):
+    rss = """<?xml version="1.0"?>
+    <rss><channel>
+      <item>
+        <title>EANS-Adhoc: Österreichische Post AG / AUSTRIAN POST Q1 2012: Revenue growth - Wiener Börse</title>
+        <link>https://news.google.com/rss/articles/stale</link>
+        <pubDate>Tue, 25 Aug 2026 04:45:02 GMT</pubDate>
+      </item>
+      <item>
+        <title>Österreichische Post AG Q1-3 2026 Interim Results</title>
+        <link>https://news.google.com/rss/articles/current</link>
+        <pubDate>Thu, 12 Nov 2026 07:00:00 GMT</pubDate>
+      </item>
+    </channel></rss>"""
+    mock_get.return_value = rss.encode()
+    rows = fetch_filings_google_news(
+        company_name="Österreichische Post AG",
+        ticker="POST.VI",
+        lookback_days=400,
+    )
+    headlines = [row["headline"] for row in rows]
+    assert not any("2012" in headline for headline in headlines)
+    assert any("Q1-3 2026" in headline for headline in headlines)
 
 
 @patch("value_investor.research.filings._fetch_filings_investegate_company_for_epic")
