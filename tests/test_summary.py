@@ -2288,7 +2288,17 @@ def test_build_company_reports_fcf_basis_overlay_caps_sbry_style_buy(tmp_path: P
     body_path = filings / "annual.txt"
     body_path.write_text("Retail free cash flow of £574m in the year", encoding="utf-8")
     (sources / "filings" / "filings_index.json").write_text(
-        json.dumps({"filings": [{"body_path": str(body_path), "period": "annual"}]}),
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
         encoding="utf-8",
     )
 
