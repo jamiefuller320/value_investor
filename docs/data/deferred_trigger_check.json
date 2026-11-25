@@ -1,10 +1,38 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-25T02:36:06.363663+00:00",
+  "generated_at": "2026-11-25T07:53:54.864396+00:00",
   "observe_only": true,
-  "open_ideas": 697,
+  "open_ideas": 698,
   "with_trigger": 39,
   "met": [
+    {
+      "id": "N220",
+      "title": "Archive pack incomplete-unit retry / leftover queue",
+      "status": "open",
+      "first_met_at": "2026-11-25T07:53:54.864396+00:00",
+      "conditions": [
+        {
+          "condition": {
+            "file": "docs/data/universe_filing_archive_pack_run.json",
+            "path": "unit_status_counts.no_bodies",
+            "op": ">=",
+            "value": 2
+          },
+          "state": "met",
+          "actual": 12
+        },
+        {
+          "condition": {
+            "file": "docs/data/universe_filing_archive_status.json",
+            "path": "capacity_isolation.isolation_ok",
+            "op": "==",
+            "value": true
+          },
+          "state": "met",
+          "actual": true
+        }
+      ]
+    },
     {
       "id": "L625",
       "title": "Cold-store skip-already-packed + rotate pilot tickers",
@@ -76,7 +104,7 @@
             "value": 30
           },
           "state": "met",
-          "actual": 154
+          "actual": 158
         }
       ]
     },
@@ -100,17 +128,6 @@
     }
   ],
   "unknown": [
-    {
-      "id": "N220",
-      "title": "Archive pack incomplete-unit retry / leftover queue",
-      "status": "open",
-      "unknown_since": "2026-11-24T07:50:40.595065+00:00",
-      "invalid": false,
-      "reasons": [
-        "unit_status_counts.no_bodies not in docs/data/universe_filing_archive_pack_run.json",
-        "capacity_isolation.isolation_ok not in docs/data/universe_filing_archive_status.json"
-      ]
-    },
     {
       "id": "L701",
       "title": "Memo model comparison: add grok-4.7 as a challenger",

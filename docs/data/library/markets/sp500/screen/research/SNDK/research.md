@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 21 · Updated 2026-11-25T04:53:23.207734+00:00 · Mode: structured_verdict_update_
+_Version 22 · Updated 2026-11-25T07:49:42.089241+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -97,3 +97,8 @@ No new SNDK issuer filings in the batch; on-file financials still show very stro
 Early 25 November press clusters post-split officer sales and tax withholding on vesting (CAO sale, CEO/CFO/legal chief, CTO plan sale); no new issuer filings in the batch.  
 Futures pieces still frame an AI chip retreat after the late-24-Nov selloff; SNDK is not the focus of new NAND guidance.  
 On-file financials still show very strong free cash flow.
+
+### 2026-11-25T07:49:42.089241+00:00
+This refresh’s news batch adds no articles since the early 25 November update; no new SNDK issuer disclosures in that slice.
+Refreshed on-file financials (fetched 25 November) still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).
+The 2027 NAND oversupply debate, semis estimate-cut headlines and post-split officer-sale press are unchanged in the file set.
