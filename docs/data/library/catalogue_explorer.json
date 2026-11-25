@@ -6351,28 +6351,10 @@
     "21PD_EQ",
     "22ED_EQ",
     "22FD_EQ",
-    "22UAD_EQ"
+    "22UAD_EQ",
+    "22ZD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "1FHd_EQ",
-      "venue": "DE",
-      "yahoo": "1FH.DE",
-      "isin": "CA3565001086",
-      "name": "1FH",
-      "seconds": 87.433,
-      "outcome": "miss",
-      "at": "2026-11-25T21:37:23.440463+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.736
-      },
-      "screen_seconds": 85.736,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "1FW2d_EQ",
       "venue": "DE",
@@ -7113,6 +7095,25 @@
       },
       "screen_seconds": 0.816,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "22Zd_EQ",
+      "venue": "DE",
+      "yahoo": "22Z.DE",
+      "isin": "DK0060257814",
+      "name": "22Z",
+      "seconds": 1.955,
+      "outcome": "miss",
+      "at": "2026-11-25T22:56:52.778375+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.925
+      },
+      "screen_seconds": 0.925,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -86056,43 +86057,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T21:58:33.573846+00:00"
+    },
+    {
+      "t212_ticker": "22Zd_EQ",
+      "yahoo": "22Z.DE",
+      "name": "22Z",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T22:56:52.778375+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "22UAd_EQ",
+    "t212_ticker": "22Zd_EQ",
     "venue": "DE",
-    "yahoo": "22UA.DE",
-    "isin": "US09075V1026",
-    "name": "22UA",
-    "seconds": 1.838,
+    "yahoo": "22Z.DE",
+    "isin": "DK0060257814",
+    "name": "22Z",
+    "seconds": 1.955,
     "outcome": "miss",
-    "at": "2026-11-25T22:56:43.392423+00:00",
+    "at": "2026-11-25T22:56:52.778375+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 0.816
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.925
     },
-    "screen_seconds": 0.816,
-    "signal": "avoid"
+    "screen_seconds": 0.925,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "22Zd_EQ"
+    }
   },
-  "updated_at": "2026-11-25T22:56:43.392423+00:00",
+  "updated_at": "2026-11-25T22:56:52.778375+00:00",
   "totals": {
-    "screened": 6350,
+    "screened": 6351,
     "signals": {
-      "buy": 1890,
+      "buy": 1891,
       "avoid": 1485,
       "hold": 1375,
       "insufficient_data": 1563,
       "strong_buy": 37
     },
-    "signals_n": 6350,
-    "screen_seconds_sum": 66481.68400000023,
-    "screen_seconds_n": 6350,
+    "signals_n": 6351,
+    "screen_seconds_sum": 66482.60900000023,
+    "screen_seconds_n": 6351,
     "outcomes": {
-      "miss": 2536,
+      "miss": 2537,
       "saved": 3814
     }
   },
