@@ -6326,28 +6326,10 @@
     "1NWD_EQ",
     "1OCD_EQ",
     "1PZD_EQ",
-    "1Q3D_EQ"
+    "1Q3D_EQ",
+    "1Q5D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "108d_EQ",
-      "venue": "DE",
-      "yahoo": "108.DE",
-      "isin": "JP3404200002",
-      "name": "108",
-      "seconds": 87.782,
-      "outcome": "miss",
-      "at": "2026-11-25T21:07:08.083355+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.757
-      },
-      "screen_seconds": 85.757,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "11Cd_EQ",
       "venue": "DE",
@@ -7088,6 +7070,25 @@
       },
       "screen_seconds": 85.614,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "1Q5d_EQ",
+      "venue": "DE",
+      "yahoo": "1Q5.DE",
+      "isin": "US26210C1045",
+      "name": "1Q5",
+      "seconds": 2.407,
+      "outcome": "miss",
+      "at": "2026-11-25T21:58:33.573846+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.85,
+        "seconds": 0.995
+      },
+      "screen_seconds": 0.995,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -86023,43 +86024,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T21:45:34.251497+00:00"
+    },
+    {
+      "t212_ticker": "1Q5d_EQ",
+      "yahoo": "1Q5.DE",
+      "name": "1Q5",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T21:58:33.573846+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "1Q3d_EQ",
+    "t212_ticker": "1Q5d_EQ",
     "venue": "DE",
-    "yahoo": "1Q3.DE",
-    "isin": "CH0406705126",
-    "name": "1Q3",
-    "seconds": 87.088,
+    "yahoo": "1Q5.DE",
+    "isin": "US26210C1045",
+    "name": "1Q5",
+    "seconds": 2.407,
     "outcome": "miss",
-    "at": "2026-11-25T21:58:22.354028+00:00",
+    "at": "2026-11-25T21:58:33.573846+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.614
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.85,
+      "seconds": 0.995
     },
-    "screen_seconds": 85.614,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.995,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "1Q5d_EQ"
+    }
   },
-  "updated_at": "2026-11-25T21:58:22.354028+00:00",
+  "updated_at": "2026-11-25T21:58:33.573846+00:00",
   "totals": {
-    "screened": 6325,
+    "screened": 6326,
     "signals": {
-      "buy": 1889,
+      "buy": 1890,
       "avoid": 1482,
       "hold": 1374,
       "insufficient_data": 1543,
       "strong_buy": 37
     },
-    "signals_n": 6325,
-    "screen_seconds_sum": 65825.53000000019,
-    "screen_seconds_n": 6325,
+    "signals_n": 6326,
+    "screen_seconds_sum": 65826.52500000018,
+    "screen_seconds_n": 6326,
     "outcomes": {
-      "miss": 2511,
+      "miss": 2512,
       "saved": 3814
     }
   },
