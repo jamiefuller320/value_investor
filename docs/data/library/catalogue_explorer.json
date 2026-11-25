@@ -5049,28 +5049,10 @@
     "SHRG_US_EQ",
     "SHRMF_US_EQ",
     "SHWDY_US_EQ",
-    "SHWZ_US_EQ"
+    "SHWZ_US_EQ",
+    "SHZHY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SGC_US_EQ",
-      "venue": "US",
-      "yahoo": "SGC",
-      "isin": "US8683581024",
-      "name": "SGC",
-      "seconds": 1.842,
-      "outcome": "saved",
-      "at": "2026-11-25T08:26:00.440939+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.816
-      },
-      "screen_seconds": 0.816,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "SGD_US_EQ",
       "venue": "US",
@@ -5811,6 +5793,25 @@
       },
       "screen_seconds": 0.694,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "SHZHY_US_EQ",
+      "venue": "US",
+      "yahoo": "SHZHY",
+      "isin": "US82322R1095",
+      "name": "SHZHY",
+      "seconds": 0.993,
+      "outcome": "miss",
+      "at": "2026-11-25T08:47:13.402404+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.84
+      },
+      "screen_seconds": 0.84,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -68281,43 +68282,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T08:44:47.659078+00:00"
+    },
+    {
+      "t212_ticker": "SHZHY_US_EQ",
+      "yahoo": "SHZHY",
+      "name": "SHZHY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T08:47:13.402404+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SHWZ_US_EQ",
+    "t212_ticker": "SHZHY_US_EQ",
     "venue": "US",
-    "yahoo": "SHWZ",
-    "isin": "US58468U1060",
-    "name": "SHWZ",
-    "seconds": 0.869,
+    "yahoo": "SHZHY",
+    "isin": "US82322R1095",
+    "name": "SHZHY",
+    "seconds": 0.993,
     "outcome": "miss",
-    "at": "2026-11-25T08:47:00.898346+00:00",
+    "at": "2026-11-25T08:47:13.402404+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 0.694
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.84
     },
-    "screen_seconds": 0.694,
-    "signal": "avoid"
+    "screen_seconds": 0.84,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SHZHY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T08:47:11.992625+00:00",
+  "updated_at": "2026-11-25T08:47:13.402404+00:00",
   "totals": {
-    "screened": 5048,
+    "screened": 5049,
     "signals": {
-      "buy": 1527,
+      "buy": 1528,
       "avoid": 1179,
       "hold": 1100,
       "insufficient_data": 1214,
       "strong_buy": 28
     },
-    "signals_n": 5048,
-    "screen_seconds_sum": 50521.78600000024,
-    "screen_seconds_n": 5048,
+    "signals_n": 5049,
+    "screen_seconds_sum": 50522.62600000024,
+    "screen_seconds_n": 5049,
     "outcomes": {
-      "miss": 1957,
+      "miss": 1958,
       "saved": 3091
     }
   },
