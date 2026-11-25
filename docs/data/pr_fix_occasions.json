@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-25T15:53:19.391313+00:00",
-  "occasion_count": 402,
+  "updated_at": "2026-11-25T16:24:37.120198+00:00",
+  "occasion_count": 404,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -7294,7 +7294,27 @@
     },
     {
       "id": "prf-20261125-001",
-      "recorded_at": "2026-11-25T15:53:19.391313+00:00",
+      "recorded_at": "2026-11-25T15:48:36.424336+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "CI test shards failed: gap-scan screen pins and SBRY filing-primary note drifted",
+      "pr_number": 1479,
+      "branch": null,
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1479",
+      "task_id": null,
+      "head_sha": "c0a7cd543ce99a7e6a5c25b7268896b277de918e",
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (0)",
+        "CI / test (1)"
+      ],
+      "notes": "test_ftse_gap_scan pinned yields/discounts/PEs/FCF no longer match stored screen rows; test_summary SBRY action note lacks 'filing (primary)'.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-002",
+      "recorded_at": "2026-11-25T16:24:37.051534+00:00",
       "source": "human_request",
       "kind": "ci_check",
       "failure_reason": "pytest: stored screen figures drifted (test_ftse_gap_scan, test_summary SBRY filing primary)",
@@ -7309,7 +7329,24 @@
         "test (0)",
         "test (1)"
       ],
-      "notes": "James asked to fix and merge. Failures pin docs/data screen figures that catalogue refreshes change, plus SBRY company-adj read from live research instead of the fixture.",
+      "notes": "James asked to fix and merge. Re-recorded after main also logged the same drift on PR 1479.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-003",
+      "recorded_at": "2026-11-25T16:24:37.120198+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "merge conflict with main on deferred ideas, gap-scan pins, and pr_fix_occasions",
+      "pr_number": 1478,
+      "branch": "cursor/tighten-floor-on-thesis-break-edc1",
+      "title": "Queue N279: do not sell a rising thesis break",
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1478",
+      "task_id": null,
+      "head_sha": "ea4a8f898698ccaa5d30306bf6e709dca787b782",
+      "mergeable_state": "dirty",
+      "failed_check_names": [],
+      "notes": "PR 1479 landed the same files after the green CI run. Kept N279 and the unpinned screen checks.",
       "details": {}
     }
   ],
@@ -7556,11 +7593,11 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 213
+        "count": 214
       },
       {
         "kind": "merge_conflict",
-        "count": 188
+        "count": 189
       },
       {
         "kind": "ci_and_merge",
@@ -7570,7 +7607,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 396
+        "count": 398
       },
       {
         "source": "traffic_controller",
