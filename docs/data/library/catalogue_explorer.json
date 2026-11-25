@@ -5540,28 +5540,10 @@
     "TLIH_US_EQ",
     "TLK_US_EQ",
     "TLNC_US_EQ",
-    "TLNE_US_EQ"
+    "TLNE_US_EQ",
+    "TLPFY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "THVB_US_EQ",
-      "venue": "US",
-      "yahoo": "THVB",
-      "isin": "US8846081003",
-      "name": "THVB",
-      "seconds": 1.094,
-      "outcome": "miss",
-      "at": "2026-11-25T15:25:41.242838+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.7,
-        "seconds": 0.954
-      },
-      "screen_seconds": 0.954,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "THYCY_US_EQ",
       "venue": "US",
@@ -6302,6 +6284,25 @@
       },
       "screen_seconds": 4.501,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "TLPFY_US_EQ",
+      "venue": "US",
+      "yahoo": "TLPFY",
+      "isin": "US87946F1003",
+      "name": "TLPFY",
+      "seconds": 0.833,
+      "outcome": "miss",
+      "at": "2026-11-25T16:53:02.370406+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.691
+      },
+      "screen_seconds": 0.691,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -74898,43 +74899,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T16:51:45.985310+00:00"
+    },
+    {
+      "t212_ticker": "TLPFY_US_EQ",
+      "yahoo": "TLPFY",
+      "name": "TLPFY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T16:53:02.370406+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "TLNE_US_EQ",
+    "t212_ticker": "TLPFY_US_EQ",
     "venue": "US",
-    "yahoo": "TLNE",
-    "isin": "US87422Q1094",
-    "name": "TLN",
-    "seconds": 4.575,
+    "yahoo": "TLPFY",
+    "isin": "US87946F1003",
+    "name": "TLPFY",
+    "seconds": 0.833,
     "outcome": "miss",
-    "at": "2026-11-25T16:52:56.189900+00:00",
+    "at": "2026-11-25T16:53:02.370406+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.501
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.691
     },
-    "screen_seconds": 4.501,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.691,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "TLPFY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T16:52:56.189900+00:00",
+  "updated_at": "2026-11-25T16:53:02.370406+00:00",
   "totals": {
-    "screened": 5539,
+    "screened": 5540,
     "signals": {
-      "buy": 1672,
+      "buy": 1673,
       "avoid": 1296,
       "hold": 1215,
       "insufficient_data": 1326,
       "strong_buy": 30
     },
-    "signals_n": 5539,
-    "screen_seconds_sum": 55307.05800000014,
-    "screen_seconds_n": 5539,
+    "signals_n": 5540,
+    "screen_seconds_sum": 55307.74900000014,
+    "screen_seconds_n": 5540,
     "outcomes": {
-      "miss": 2168,
+      "miss": 2169,
       "saved": 3371
     }
   },
