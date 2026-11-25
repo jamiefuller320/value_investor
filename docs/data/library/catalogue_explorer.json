@@ -4892,28 +4892,10 @@
     "SBC_US_EQ",
     "SBEA_US_EQ",
     "SBEV_US_EQ",
-    "SBE_US_EQ"
+    "SBE_US_EQ",
+    "SBFFY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "RZAI_US_EQ",
-      "venue": "US",
-      "yahoo": "RZAI",
-      "isin": "CA7810701077",
-      "name": "RZAI",
-      "seconds": 1.019,
-      "outcome": "miss",
-      "at": "2026-11-25T07:56:10.090824+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.85,
-        "seconds": 0.677
-      },
-      "screen_seconds": 0.677,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "RZLTD_US_EQ",
       "venue": "US",
@@ -5654,6 +5636,25 @@
       },
       "screen_seconds": 3.717,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SBFFY_US_EQ",
+      "venue": "US",
+      "yahoo": "SBFFY",
+      "isin": "US78404D1090",
+      "name": "SBFFY",
+      "seconds": 0.765,
+      "outcome": "miss",
+      "at": "2026-11-25T08:01:59.015992+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.669
+      },
+      "screen_seconds": 0.669,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -63353,43 +63354,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T08:01:23.439861+00:00"
+    },
+    {
+      "t212_ticker": "SBFFY_US_EQ",
+      "yahoo": "SBFFY",
+      "name": "SBFFY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T08:01:59.015992+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SBE_US_EQ",
+    "t212_ticker": "SBFFY_US_EQ",
     "venue": "US",
-    "yahoo": "SBE",
-    "isin": "US15961R3030",
-    "name": "CHPT",
-    "seconds": 4.096,
+    "yahoo": "SBFFY",
+    "isin": "US78404D1090",
+    "name": "SBFFY",
+    "seconds": 0.765,
     "outcome": "miss",
-    "at": "2026-11-25T08:01:51.666137+00:00",
+    "at": "2026-11-25T08:01:59.015992+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.717
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.669
     },
-    "screen_seconds": 3.717,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.669,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SBFFY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T08:01:51.666137+00:00",
+  "updated_at": "2026-11-25T08:01:59.015992+00:00",
   "totals": {
-    "screened": 4891,
+    "screened": 4892,
     "signals": {
-      "buy": 1472,
+      "buy": 1473,
       "avoid": 1154,
       "hold": 1065,
       "insufficient_data": 1173,
       "strong_buy": 27
     },
-    "signals_n": 4891,
-    "screen_seconds_sum": 49072.56400000024,
-    "screen_seconds_n": 4891,
+    "signals_n": 4892,
+    "screen_seconds_sum": 49073.23300000024,
+    "screen_seconds_n": 4892,
     "outcomes": {
-      "miss": 1878,
+      "miss": 1879,
       "saved": 3013
     }
   },
