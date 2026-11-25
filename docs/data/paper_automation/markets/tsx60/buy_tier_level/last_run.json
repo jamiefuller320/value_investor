@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-24T10:21:40.613345-05:00",
+    "local_time": "2026-11-25T10:20:33.058255-05:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-11-24T09:30:00-05:00",
-    "settle_at": "2026-11-24T10:00:00-05:00",
+    "market_open_at": "2026-11-25T09:30:00-05:00",
+    "settle_at": "2026-11-25T10:00:00-05:00",
     "can_act": true,
     "reason": "ok"
   },
@@ -46,18 +46,18 @@
         "price": 178.13
       },
       {
-        "ticker": "OTEX.TO",
-        "name": "Open Text Corporation",
-        "signal": "strong_buy",
-        "conviction_score": 0.8550000000000001,
-        "price": 32.5
-      },
-      {
         "ticker": "TECK-B.TO",
         "name": "Teck Resources Limited",
         "signal": "strong_buy",
         "conviction_score": 0.8094,
         "price": 69.39
+      },
+      {
+        "ticker": "OTEX.TO",
+        "name": "Open Text Corporation",
+        "signal": "strong_buy",
+        "conviction_score": 0.68425,
+        "price": 32.5
       },
       {
         "ticker": "L.TO",
@@ -124,7 +124,7 @@
         "reason": "Already near equal-weight target",
         "value": 105.61,
         "target_value": 106.0,
-        "conviction_score": 0.8550000000000001,
+        "conviction_score": 0.68425,
         "signal": "strong_buy"
       },
       {
@@ -4015,9 +4015,26 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-25T10:20:33.058255-05:00",
+        "portfolio_value": 512.2,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 9,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CAD": 0.5369
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-24T10:21:40.613345-05:00",
+    "last_mark_at": "2026-11-25T10:20:33.058255-05:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -4030,7 +4047,7 @@
     "schema_version": 2,
     "market_id": "tsx60",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T15:21:40.790439+00:00",
+    "generated_at": "2026-11-25T15:20:33.154670+00:00",
     "observe_only": true,
     "open_count": 24,
     "closed_count": 0,
@@ -4109,7 +4126,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T15:21:40.793025+00:00",
+    "generated_at": "2026-11-25T15:20:33.157314+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -4206,7 +4223,7 @@
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -4214,8 +4231,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-24T15:21:40.830878+00:00",
-    "as_of": "2026-11-24T10:21:40.613345-05:00",
+    "updated_at": "2026-11-25T15:20:33.161631+00:00",
+    "as_of": "2026-11-25T10:20:33.058255-05:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -4230,8 +4247,8 @@
     "holding_count": 9,
     "underwater_count": 3,
     "thesis_status_counts": {
-      "intact": 5,
-      "weakening": 4,
+      "intact": 4,
+      "weakening": 5,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -4390,8 +4407,8 @@
       {
         "ticker": "OTEX.TO",
         "name": "Open Text Corporation",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
         "unrealized_pct": -0.0292,
@@ -4399,7 +4416,7 @@
         "avg_cost": 33.4791,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.855,
+        "conviction_score": 0.6843,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -4409,22 +4426,21 @@
           "risk"
         ],
         "failed_families": [],
-        "research_verdict": "accumulate",
+        "research_verdict": "caution",
         "reasons": [
+          "research verdict caution",
           "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 86%"
+          "cheapness family still passes"
         ],
         "intact_reasons": [
           "still strong_buy",
-          "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 86%"
+          "conviction 68%"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "research verdict caution"
+        ],
         "broken_reasons": []
       },
       {
@@ -4636,7 +4652,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T15:21:40.836615+00:00",
+    "generated_at": "2026-11-25T15:20:33.166711+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -4710,7 +4726,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-24T15:21:40.849399+00:00",
+    "generated_at": "2026-11-25T15:20:33.179380+00:00",
     "open_count": 1,
     "closed_count": 32,
     "scored_count": 22,
@@ -4779,7 +4795,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T10:21:40.613345-05:00",
+    "generated_at": "2026-11-25T10:20:33.058255-05:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -4803,16 +4819,16 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 21,
-    "closed_count": 2,
+    "open_count": 20,
+    "closed_count": 3,
     "open_by_capital_status": {
       "on_book": 9,
-      "off_book": 10,
+      "off_book": 9,
       "never_funded": 2
     },
     "closed_by_capital_status": {
       "on_book": 0,
-      "off_book": 2,
+      "off_book": 3,
       "never_funded": 0
     },
     "readiness": {
@@ -4820,7 +4836,7 @@
       "closed_per_tag_target": 15,
       "gaps": [
         "on_book closed=0 (target>=15)",
-        "off_book closed=2 (target>=15)",
+        "off_book closed=3 (target>=15)",
         "never_funded closed=0 (target>=15)"
       ],
       "note": "Probability / nested counterfactual promotion waits until each capital_status tag has a thick closed cohort."
@@ -4828,7 +4844,7 @@
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
       "opened": 0,
-      "closed": 0,
+      "closed": 1,
       "tagged_on_book": 0,
       "tagged_off_book": 0
     }
@@ -4836,7 +4852,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T10:21:40.613345-05:00",
+    "generated_at": "2026-11-25T10:20:33.058255-05:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -4935,8 +4951,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-24T10:21:40.613345-05:00",
-        "proposal_id": "buy_tier_level:SAP.TO:rebuy_skip:2026-11-24T10:21:40.613345-05:00",
+        "logged_at": "2026-11-25T10:20:33.058255-05:00",
+        "proposal_id": "buy_tier_level:SAP.TO:rebuy_skip:2026-11-25T10:20:33.058255-05:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": 0,
@@ -4960,7 +4976,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-24T10:21:40.613345-05:00",
+      "generated_at": "2026-11-25T10:20:33.058255-05:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
@@ -4995,7 +5011,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-11-24T15:21:40.866657+00:00",
+  "generated_at": "2026-11-25T15:20:33.196275+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
