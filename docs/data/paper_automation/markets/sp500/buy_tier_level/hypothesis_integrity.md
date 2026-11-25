@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-24T15:21:37.469709+00:00
+Track: `buy_tier_level` · updated 2026-11-25T15:20:28.321172+00:00
 
 ## Portfolio loser feedback
 
@@ -499,11 +499,6 @@ Track: `buy_tier_level` · updated 2026-11-24T15:21:37.469709+00:00
 - data_quality 1.00
 - conviction 47%
 
-### LULU — weakening / watch_review (-2.9%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
 ### IR — intact / hold_tolerate (-2.2%)
 - still buy
 - research accumulate
@@ -566,13 +561,6 @@ Track: `buy_tier_level` · updated 2026-11-24T15:21:37.469709+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 46%
-
-### FDX — intact / hold_tolerate (-1.4%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 37%
 
 ### VRSK — intact / hold_tolerate (-1.2%)
 - still buy
@@ -688,6 +676,20 @@ Track: `buy_tier_level` · updated 2026-11-24T15:21:37.469709+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 46%
+
+### CAH — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.90
+- conviction 70%
+
+### REGN — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 65%
 
 ### PHM — intact / hold_tolerate (+0.2%)
 - still strong_buy
