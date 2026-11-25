@@ -1,6 +1,6 @@
 # Trainline plc (TRN.L) — Research memo
 
-_Version 5 · Updated 2026-11-01T09:05:59.156624+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-25T13:07:30.473197+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.63
-Rationale: Research is neutral on hold: buybacks continue but CMA scrutiny, retail-code/ORR uncertainty and UK consumer weakness from H1 are still unresolved without new disclosures.
+Confidence: 0.62
+Rationale: Research is neutral on hold: sell-side downgrades and UK-growth warnings add noise but no new RNS; CMA, retail-code and H1 UK consumer headwinds remain unresolved.
 RiskTags: regulatory, competitive, leverage, cyclical, governance, key_person, accounting
 
 ## Weekly updates
@@ -31,3 +31,8 @@ No RNS or trading update since the 11 Sep H1 statement; CMA fees probe and UK co
 ### 2026-11-01T09:05:59.156624+00:00
 No RNS or trading update since 18 Oct; only routine “Transaction in Own Shares” notices (19 and 26 Oct) under the £100m programme.  
 News flow since mid-October is not Trainline-specific; CMA fees probe, ORR/retail-code uncertainty and H1 UK consumer pressure are unchanged.
+
+### 2026-11-25T13:07:30.473197+00:00
+No RNS or trading update since 1 Nov; the news batch is mostly routine (major-holdings notice, 23 Nov) plus options and unrelated items.  
+Early-Nov commentary includes a Peel Hunt downgrade and broker notes on UK growth risks; recycled H1 call themes (buyback, Ian Brown as CEO, regulatory uncertainty).  
+CMA fees probe, ORR/retail-code uncertainty and H1 UK consumer pressure are unchanged; no new primary outcomes in the supplied files.

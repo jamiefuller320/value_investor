@@ -1,6 +1,6 @@
 # Lion Finance Group PLC (BGEO.L) — Research memo
 
-_Version 6 · Updated 2026-11-15T08:35:42.455836+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-25T11:23:30.670391+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: Strong-buy cheapness and cash-flow screen inputs hold, but unchanged statutory EPS decline, Piotroski 3/9, and banking leverage still cap research below the screen signal.
+Rationale: Strong-buy cheapness and filing-aligned FCF persist, but statutory EPS decline, Piotroski 3/9, and banking leverage still cap research below the screen signal.
 RiskTags: regulatory, leverage, cyclical, other
 
 ## Weekly updates
@@ -37,4 +37,9 @@ Screen fail set unchanged: statutory basic EPS decline, Piotroski 3/9, and Graha
 ### 2026-11-15T08:35:42.455836+00:00
 News since 10 Nov is Yahoo quote-page hits only; no new RNS or company disclosures in the supplied sources.  
 Strong buy screen is week nine (8/22 models, stable); filing-aligned FY2025 FCF yield and net dividend cover are unchanged.  
+Screen fail set unchanged: statutory basic EPS decline, Piotroski 3/9, and Graham/financial-health leverage.
+
+### 2026-11-25T11:23:30.670391+00:00
+Since 15 Nov, supplied news is third-party Yahoo coverage (Q3 earnings-call highlights, fair-value commentary) and quote pages; no new RNS or company filings in the batch.
+Strong buy screen is week ten (8/22 models, stable); filing-aligned FY2025 FCF yield and net dividend cover are unchanged.
 Screen fail set unchanged: statutory basic EPS decline, Piotroski 3/9, and Graham/financial-health leverage.

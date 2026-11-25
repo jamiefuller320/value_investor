@@ -1,6 +1,6 @@
 # PPHE Hotel Group Limited (PPH.L) — Research memo
 
-_Version 15 · Updated 2026-11-10T01:34:59.032845+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-25T10:37:44.645254+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: Q3 RNS still supports the buy screen on trading and in-line FY guidance, but leverage, liquidity, governance and weak statutory EPS growth continue to limit conviction.
+Rationale: Q3 trading RNS and the persistent buy screen still support accumulation, but the Nov AGM governance update plus leverage, liquidity and weak statutory EPS growth continue to limit conviction.
 RiskTags: governance, leverage, cyclical, regulatory, accounting, competitive, liquidity, key_person
 
 ## Weekly updates
@@ -83,3 +83,8 @@ Q3 trading RNS is still the filing anchor; leverage, governance, liquidity and e
 No new RNS or company-specific press since the 8 November refresh; the 10 November news batch is empty.  
 Buy screen is now twenty-three weeks persistent (7/22 models, stable); timing remains neutral.  
 Q3 trading RNS is still the filing anchor; leverage, governance, liquidity and earnings-basis concerns are unchanged.
+
+### 2026-11-25T10:37:44.645254+00:00
+19 November RNS: AGM voting update — ~22% of independent votes against re-electing the Remuneration Committee chair; board cites remuneration/performance-review concerns and is recruiting an additional independent non-executive director.  
+No new trading or results filings since 29 October Q3 RNS; 25 November news batch is third-party Kalkine commentary (occupancy/rates, Waterloo) only.  
+Buy screen is 25 weeks persistent (7/22 models, stable); timing neutral; screening metrics broadly unchanged versus 10 November.

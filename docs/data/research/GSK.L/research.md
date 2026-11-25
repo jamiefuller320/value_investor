@@ -1,6 +1,6 @@
 # GSK plc (GSK.L) — Research memo
 
-_Version 8 · Updated 2026-11-15T07:41:48.589097+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-25T10:52:31.410528+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.73
-Rationale: Moderna settlement and specialty pipeline headlines modestly support the buy screen, but Q3 vaccine weakness, earnings-basis gaps, and unresolved Pfizer appeals cap conviction.
+Confidence: 0.74
+Rationale: Nelkarmi FDA approval and Bexsero EMA backing modestly confirm specialty growth, but Q3 vaccine weakness, earnings-basis gaps, and unresolved vaccine IP litigation still limit conviction.
 RiskTags: regulatory, competitive, litigation, leverage, pension, accounting, key_person
 
 ## Weekly updates
@@ -48,3 +48,8 @@ No material change to guidance, leverage, litigation, or patent-cliff risks in s
 GSK reported a cross-licensing settlement with Moderna on COVID-19 vaccine patents and a broad European injunction against Pfizer–BioNTech on liposome delivery IP; appeals and related actions are still expected.
 The batch adds the Alamar proteomics collaboration and mostly recaps Jemperli/Mo-Rez oncology, respiratory COPD work, and prior Q3 themes—no new company guidance or filings.
 The buy screen stays persistent (21 weeks) with FCF bridge resolved; Q3 vaccine weakness and statutory/adjusted earnings divergence warnings are unchanged.
+
+### 2026-11-25T10:52:31.410528+00:00
+FDA accelerated approval for Nelkarmi in ALK-positive NSCLC and CHMP backing for a Bexsero booster from age 10 modestly strengthen oncology/vaccine pipeline headlines since 15 November.  
+Conference commentary on the £40bn sales ambition, the HIV cliff, and Nigeria counterfeit Augmentin packaging is not new company guidance.  
+Buy screen remains persistent (22 weeks) with FCF bridge resolved; Q3 vaccine weakness and statutory/adjusted earnings divergence are unchanged.

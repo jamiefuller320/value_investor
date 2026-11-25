@@ -1,6 +1,6 @@
 # Kingfisher plc (KGF.L) — Research memo
 
-_Version 5 · Updated 2026-11-01T08:22:58.885534+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-25T11:49:27.005779+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.68
-Rationale: Named CEO with home-improvement pedigree closes the leadership gap, but B&Q/France weakness, FCF definition noise and cyclical risks leave research neutral on the buy screen.
+Confidence: 0.70
+Rationale: Q3 raised FY PBT/FCF guidance on trade and Screwfix momentum, but B&Q/France cyclicality and unchanged FCF/earnings basis warnings keep research neutral on the hold screen.
 RiskTags: cyclical, competitive, governance, pension, leverage, accounting
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Quant screen buy persists with unchanged FCF/earnings basis warnings—no materi
 13 Oct RNS: Sebastian Gundel (ex-OBI) appointed CEO from 1 Feb 2027; Thierry Garnier to 31 Dec 2026, CFO Bhavesh Mistry interim CEO in Jan 2027.  
 Since 11 Oct, filings are routine buybacks, PDMR notices and 27 Oct ShareSave block admission—no trading update or guidance change.  
 News batch is thin (generic analyst/quote pages); quant buy persists with unchanged FCF/earnings basis warnings.
+
+### 2026-11-25T11:49:27.005779+00:00
+24 Nov Q3 RNS: underlying LFL +0.8%; FY adjusted PBT raised to c.£610–640m and FCF to c.£490–520m; Screwfix, Poland and Iberia led, while B&Q LFL −1% and Brico Dépôt −5.3%.  
+Otherwise routine buybacks and PDMR since 1 Nov; Gundel CEO timetable unchanged.  
+Quant hold persists with wait timing and unchanged FCF/earnings definition warnings.

@@ -1,6 +1,6 @@
 # ME Group International plc (MEGP.L) — Research memo
 
-_Version 9 · Updated 2026-11-14T02:36:50.731952+00:00 · Mode: structured_verdict_update_
+_Version 26 · Updated 2026-11-25T04:47:37.286513+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -52,4 +52,89 @@ H1 softness, the FY26 guidance cut and prior accounting/governance flags are unc
 ### 2026-11-14T02:36:50.731952+00:00
 No company filings or news in the batch since the 25 Oct refresh (empty articles).  
 Quantitative screen remains strong buy (33 weeks, stable); dividend-family models still fail on statutory FCF cover below 1×.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-17T00:58:02.088308+00:00
+No company filings or news in the batch since the 14 Nov refresh (empty articles).  
+Quantitative screen remains strong buy (34 weeks, stable); dividend-family models still fail on statutory FCF cover below 1×.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-17T17:55:01.316478+00:00
+No company filings or news in the batch since the morning refresh (empty articles).  
+Quantitative screen remains strong buy (34 weeks, stable); dividend-family models still fail on statutory FCF cover below 1×.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-17T21:40:07.654840+00:00
+No company filings or news in the batch since the evening refresh (empty articles).  
+Quantitative screen remains strong buy (34 weeks, stable); dividend-family models still fail on statutory FCF cover below 1×.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-18T00:05:12.848629+00:00
+No company filings or news in the batch since the 17 Nov evening refresh (empty articles).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-18T03:10:15.498266+00:00
+No company filings or news in the batch since the 00:05 refresh (empty articles).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-18T17:54:04.563081+00:00
+No company filings or news in the batch since the 03:10 refresh (empty articles).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-18T21:42:13.586937+00:00
+No company filings or news in the batch since the 17:54 refresh (empty articles).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-18T23:44:51.881016+00:00
+No company filings or news in the batch since the 21:42 refresh (empty articles).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-19T02:53:41.699484+00:00
+No company filings or news in the batch since the 18 Nov refresh (empty articles).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-19T17:55:50.133959+00:00
+One third-party Kalkine outlook piece (19 Nov); no new company filings in the batch since the 02:53 refresh.  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-19T21:47:24.176085+00:00
+No company filings or news in the batch since the 17:55 refresh (`articles` empty as of 21:47 UTC).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-23T18:04:12.169658+00:00
+No company filings or news in the batch since the 19 Nov refresh (`articles` empty as of 18:03 UTC).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-23T21:46:39.408871+00:00
+No company filings or news in the batch since the 18:04 refresh (`articles` empty as of 21:46 UTC).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-24T05:42:17.818775+00:00
+No company filings or news in the batch since the 23 Nov refresh (`articles` empty as of 05:41 UTC).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-24T18:03:20.550028+00:00
+No company filings or news in the batch since the 05:42 refresh (`articles` empty as of 18:02 UTC).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-24T21:47:43.214732+00:00
+No company filings or news in the batch since the 18:03 refresh (`articles` empty as of 21:47 UTC).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-25T04:47:37.286513+00:00
+No company filings or news in the batch since the 24 Nov refresh (`articles` empty as of 04:47 UTC).  
+Quantitative screen remains strong buy (34 weeks, stable); statutory FCF cover is still below 1× on the screen basis.  
 H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.

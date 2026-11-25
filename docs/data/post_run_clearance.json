@@ -2,20 +2,45 @@
   "schema_version": 1,
   "last_run": {
     "schema_version": 1,
-    "trigger": "analysis_review_follow_up",
-    "evaluated_at": "2026-11-22T10:38:38.639667+00:00",
-    "review_source": "latest.json",
-    "fingerprint": "d2a4854898f76016e054",
-    "skipped": true,
-    "skip_reason": "clearance already ran for fingerprint+trigger (analysis_review_follow_up)",
-    "applied": false,
+    "trigger": "post_run_review_email",
+    "evaluated_at": "2026-11-25T13:25:45.021028+00:00",
+    "review_source": "output/post_run_review.md",
+    "fingerprint": "393f82b54a22af2016dd",
+    "skipped": false,
+    "skip_reason": null,
+    "applied": true,
     "lanes": {
       "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
     },
-    "should_dispatch_engineering": false,
+    "should_dispatch_engineering": true,
     "lane_c_recommended": false,
     "actions": [],
-    "last_duplicate_of": "d2a4854898f76016e054"
+    "queue_before": {
+      "open_count": 3,
+      "pr_open_count": 0
+    },
+    "compile_cap_audit": {
+      "candidate_count": 5,
+      "truncated_count": 0,
+      "post_run_plan_beyond_cap": [
+        "Enforce automatic signal cap when `fcf_definition_divergence` exceeds configured threshold OR statutory OCF−CapEx dividend cover &lt; 1.0× (interim-quality path"
+      ]
+    },
+    "plan_alignment": {
+      "unlinked_plan_titles": [
+        "Backfill RNS/PDF bodies for buy-tier indexed-without-body rows (INCH.L 16, IMB.L 26, BGEO.L 3)—use Investegate/LSE direct URLs, not Google News wrappers",
+        "Enforce automatic signal cap when `fcf_definition_divergence` exceeds configured threshold OR statutory OCF−CapEx dividend cover &lt; 1.0× (interim-quality path per MEGP.L)"
+      ],
+      "terminal_only_titles": []
+    },
+    "compile_cap_drain_skipped": "priority engineering queue not empty",
+    "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+    "queue_after": {
+      "open_count": 3,
+      "pr_open_count": 0
+    },
+    "tasks_added_estimate": 0,
+    "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
   },
   "runs": [
     {
@@ -792,6 +817,48 @@
       "lane_c_recommended": false,
       "actions": [],
       "last_duplicate_of": "d2a4854898f76016e054"
+    },
+    {
+      "schema_version": 1,
+      "trigger": "post_run_review_email",
+      "evaluated_at": "2026-11-25T13:25:45.021028+00:00",
+      "review_source": "output/post_run_review.md",
+      "fingerprint": "393f82b54a22af2016dd",
+      "skipped": false,
+      "skip_reason": null,
+      "applied": true,
+      "lanes": {
+        "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
+      },
+      "should_dispatch_engineering": true,
+      "lane_c_recommended": false,
+      "actions": [],
+      "queue_before": {
+        "open_count": 3,
+        "pr_open_count": 0
+      },
+      "compile_cap_audit": {
+        "candidate_count": 5,
+        "truncated_count": 0,
+        "post_run_plan_beyond_cap": [
+          "Enforce automatic signal cap when `fcf_definition_divergence` exceeds configured threshold OR statutory OCF−CapEx dividend cover &lt; 1.0× (interim-quality path"
+        ]
+      },
+      "plan_alignment": {
+        "unlinked_plan_titles": [
+          "Backfill RNS/PDF bodies for buy-tier indexed-without-body rows (INCH.L 16, IMB.L 26, BGEO.L 3)—use Investegate/LSE direct URLs, not Google News wrappers",
+          "Enforce automatic signal cap when `fcf_definition_divergence` exceeds configured threshold OR statutory OCF−CapEx dividend cover &lt; 1.0× (interim-quality path per MEGP.L)"
+        ],
+        "terminal_only_titles": []
+      },
+      "compile_cap_drain_skipped": "priority engineering queue not empty",
+      "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+      "queue_after": {
+        "open_count": 3,
+        "pr_open_count": 0
+      },
+      "tasks_added_estimate": 0,
+      "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     }
   ]
 }

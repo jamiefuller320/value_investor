@@ -1,6 +1,6 @@
 # B&M European Value Retail plc (BME.L) — Research memo
 
-_Version 5 · Updated 2026-10-30T23:25:41.920858+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-25T11:36:04.837929+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.65
-Rationale: Research confirms hold: no trading update ahead of 12 Nov H1; screen FCF/yield gaps and leverage concerns unchanged; sources since 7 Oct add no new operating evidence.
+Confidence: 0.68
+Rationale: Research is neutral on hold: H1 FY27 RNS confirms UK LFL recovery and lower leverage, but the quant screen’s FCF mismatch and post-results valuation/timing gaps are unchanged.
 RiskTags: cyclical, competitive, governance, leverage, accounting, key_person
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Press reiterates Mike Iddon NED appointment and UK/EU import-duty commentary; qu
 No trading statement or profit warning; H1 FY27 interim results remain scheduled for 12 November 2026.  
 Since 7 October the only company RNS is a 14 October major-holdings TR1 notice; the news batch is quote pages or mis-attributed Madrid listings (Aena, Endesa).  
 Quant screen still **Hold** (3/22); FCF filing vs TTM divergence and wait timing are unchanged.
+
+### 2026-11-25T11:36:04.837929+00:00
+FY27 interim results on 12 Nov: revenue +3.6%, UK Q2 LFL +3.2%, adjusted PBT +16.6%, net debt/EBITDA 1.3×; FY27 adjusted PBT guidance £280–330m.  
+RNS (24 Nov) confirms Q3 FY27 trading statement timing; since 30 Oct, material company news is H1-led, with press largely on the post-results share rebound.  
+Quant screen still **Hold** (2/22); FCF filing vs TTM divergence and neutral, elevated-RSI timing unchanged.

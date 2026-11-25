@@ -1,6 +1,6 @@
 # Serco Group plc (SRP.L) — Research memo
 
-_Version 5 · Updated 2026-11-01T08:37:29.150055+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-25T11:56:34.416133+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.67
-Rationale: Since 11 Oct only buyback RNS; the FCF filing vs company-adjusted gap is unchanged—research is neutral on the screen hold, with wait timing (RSI 75) not a fresh add trigger.
+Confidence: 0.68
+Rationale: Nov RNS adds QQUS acquisition (~0.6× leverage, FY26 guidance unchanged); screen hold 18w with neutral timing—research neutral on hold, accumulate overlay unchanged; FCF basis gap persists.
 RiskTags: regulatory, cyclical, customer_concentration, leverage, pension, governance, competitive, accounting
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Screen remains **hold** (2/22, eight weeks); FCF/earnings basis overlays unchang
 Since 11 Oct, RNS is limited to share repurchases (through 30 Oct, including ~1.33m shares in five days per trade press); no trading update or results.
 Press repeats the 2026 buyback; no new filing guidance.
 Screen remains **hold** (1/22, 13 weeks; timing **wait**, RSI 75); FCF and earnings-basis overlays unchanged.
+
+### 2026-11-25T11:56:34.416133+00:00
+12 Nov RNS: cash acquisition of QinetiQ’s US business (~£218m, ~0.6× leverage add, Q1 2027 close); 2026 guidance unchanged per filing; next trading update 10 Dec.
+Buybacks continue through 20 Nov; treasury-share cancellation 23 Nov.
+Screen still **hold** (1/22, 18 weeks); timing moved from wait (RSI 75) to neutral (RSI 44); FCF basis overlays unchanged.

@@ -1,6 +1,6 @@
 # RS Group plc (RS1.L) — Research memo
 
-_Version 5 · Updated 2026-11-01T08:31:38.603386+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-25T11:50:22.733028+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.66
-Rationale: Steady buyback RNS support capital returns, but with no trading or interim filing the unresolved FCF-basis gap and cyclical risks leave research neutral on the screen’s hold stance.
+Confidence: 0.70
+Rationale: H1 interim shows revenue and profit momentum with encouraging outlook, but FCF-definition divergence vs the screen and cyclical exposure keep research neutral on the hold stance.
 RiskTags: cyclical, competitive, accounting, other
 
 ## Weekly updates
@@ -33,3 +33,8 @@ No trading update or interim filing; the FY26 fundamentals picture and cyclical/
 Since the 11 October refresh, buyback RNS report ~185k shares in the week to 9 October, ~176k to 16 October and ~178k to 23 October (~5.91m cumulative under the £100m programme); a 19 October holdings-in-company RNS also landed.  
 News is mostly third-party valuation or product commentary (including panel integration); no trading update or interim filing.  
 The FY26 fundamentals picture and cyclical/competitive debate are unchanged.
+
+### 2026-11-25T11:50:22.733028+00:00
+Since the 1 November refresh, H1 interim results and the earnings call landed (~5 November); coverage cites ~10% revenue growth, higher profit, a raised interim dividend and an encouraging outlook.  
+News is mostly third-party H1 recap, analyst estimates and manufacturing-sentiment commentary; summaries also note a £35m+ buyback completion.  
+The screen’s FCF-basis mismatch and cyclical/competitive risks are unchanged despite a fuller interim picture.

@@ -1,6 +1,6 @@
 # 4imprint Group plc (FOUR.L) — Research memo
 
-_Version 5 · Updated 2026-10-30T23:26:47.533044+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-25T04:45:09.465004+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.68
-Rationale: No new RNS; buy timing improved on the screen but unresolved FCF/dividend definitions and mixed quality metrics leave research neutral on the buy case.
+Confidence: 0.70
+Rationale: The 10 November trading update supports FY26 guidance and $152m cash, but dual FCF/dividend definitions and tariff or cycle risks keep research neutral versus the buy screen.
 RiskTags: cyclical, competitive, accounting, key_person, regulatory
 
 ## Weekly updates
@@ -32,3 +32,43 @@ The filing-led view is unchanged: H1 2026 tariff margin pressure, ~$130m FY2026 
 No new 4imprint RNS or company-specific press in the 30 October news batch (false-positive “four” headlines only).  
 The quantitative screen is **buy** (8/22 models, ~50% composite, 3 weeks, stable trend; timing accumulate).  
 The filing-led view is unchanged: H1 2026 tariff margin pressure, ~$130m FY2026 adjusted PBT guidance, and dual FCF/dividend cover definitions.
+
+### 2026-11-23T02:35:37.447899+00:00
+10 November RNS reaffirms FY2026 guidance (~$130m adjusted PBT, revenue slightly above $1.35bn); ten-month revenue +2%, cash $152m, new-customer orders still −5% YTD but improving in Q3.  
+Quantitative **buy** unchanged (8/22 models, eight weeks, stable trend; neutral timing); FCF/dividend definition divergence on the screen persists.  
+Yahoo cash-flow piece (12 Nov) and a false-positive “four session” market headline; no other material 4imprint press since 30 October.
+
+### 2026-11-23T18:01:41.740668+00:00
+No new 4imprint RNS or company-specific press in the 23 November evening news batch since the 02:35 refresh.
+Quantitative **buy** unchanged (8/22 models, eight weeks, stable trend; neutral timing).
+Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.
+
+### 2026-11-23T21:44:42.588695+00:00
+No new 4imprint RNS or company-specific press in the 23 November late-evening news batch since the earlier same-day refresh.  
+Quantitative **buy** unchanged (8/22 models, eight weeks, stable trend; neutral timing).  
+Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.
+
+### 2026-11-24T00:52:20.199520+00:00
+No new 4imprint RNS or company-specific press in the 24 November news batch since the 23 November refresh.  
+Quantitative **buy** unchanged (8/22 models, eight weeks, stable trend; neutral timing; FCF basis mismatch on screen).  
+Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.
+
+### 2026-11-24T05:40:24.391116+00:00
+No new 4imprint RNS or company-specific press in the 24 November morning news batch since the 00:52 refresh.
+Quantitative **buy** unchanged (8 models, eight weeks, stable trend; neutral timing; FCF basis mismatch on screen).
+Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.
+
+### 2026-11-24T18:01:04.078379+00:00
+No new 4imprint RNS or company-specific press in the 24 November evening news batch since the 05:40 refresh (only a false-positive “four in ten” headline).
+Quantitative **buy** unchanged (8 models, eight weeks, stable trend; neutral timing; FCF basis mismatch on screen).
+Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.
+
+### 2026-11-24T21:45:13.484885+00:00
+No new 4imprint RNS or company-specific press in the 24 November late-evening news batch since the 18:01 refresh.
+Quantitative **buy** unchanged (8 models, eight weeks, stable trend; neutral timing; FCF basis mismatch on screen).
+Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.
+
+### 2026-11-25T04:45:09.465004+00:00
+No new 4imprint RNS or company-specific press in the 25 November news batch since the 24 November refresh.
+Quantitative **buy** unchanged (8 models, eight weeks, stable trend; neutral timing; FCF basis mismatch on screen).
+Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.

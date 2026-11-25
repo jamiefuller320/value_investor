@@ -1,6 +1,6 @@
 # Gamma Communications plc (GAMA.L) — Research memo
 
-_Version 1 · Updated 2026-11-01T12:40:04.439648+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-11-25T13:16:44.160595+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,5 +9,12 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.66
-Rationale: FY2025 filings support adjusted quality and statutory FCF dividend cover (~£64.1m vs £18.9m), but Epiris’s final 1,120p scheme caps standalone upside; filing FCF vs screen TTM (£83.2m) and statutory EPS decline vs adjusted growth weaken...
+Rationale: Research neutrally confirms hold—FY2025 quality and statutory FCF dividend cover stand, but Epiris’s 1,120p scheme caps standalone upside and stake churn does not resolve filing–screen FCF or EPS-basis gaps.
 RiskTags: competitive, leverage, other
+
+## Weekly updates
+
+### 2026-11-25T13:16:44.160595+00:00
+Shareholders had already approved the Epiris scheme (early Nov); headlines since then mainly say the deal is advancing, with no new accounts in this batch.
+Morgan Stanley crossed above 7.56% (24–25 Nov); UBS fell below the 5% voting-rights threshold (16 Nov).
+Quantitative screen unchanged: hold, persistent FCF filing vs TTM mismatch and leverage gap.

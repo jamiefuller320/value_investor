@@ -1,6 +1,6 @@
 # OSB Group Plc (OSB.L) — Research memo
 
-_Version 5 · Updated 2026-11-10T01:39:58.095904+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-25T10:49:40.094237+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: No new disclosures since the nine-month update; cheapness/yield still align with strong buy, but unchanged lowered NIM/RoTE guidance and statutory EPS decline continue to weaken the case.
+Rationale: Cheapness and yield still align with strong buy, but with no new disclosures the unchanged H1 NIM/RoTE guidance cut and statutory EPS decline keep research only partially supportive.
 RiskTags: regulatory, cyclical, leverage, competitive
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Strong-buy screen stable at seven weeks; cheapness, dividend and risk families s
 Strong-buy screen stable at eight weeks; cheapness, dividend and risk families still pass (~7.1% yield).  
 Since 8 Nov, the news batch is empty—no new RNS, trading update or results; last material disclosure remains the 5 Nov nine-month update.  
 Fundamental picture unchanged: unchanged 2026 guidance, H1 NIM/RoTE guide-down and statutory EPS decline still offset screen cheapness/yield.
+
+### 2026-11-25T10:49:40.094237+00:00
+Strong-buy screen stable at ten weeks; cheapness, dividend and risk families still pass (~7.4% quoted yield in the latest screen snapshot).
+Since 10 Nov the incremental news batch is empty—no new RNS, trading update or results; last material disclosure remains the 5 Nov nine-month trading update.
+Fundamental picture unchanged: 2026 guidance still as at interim, with H1 NIM/RoTE guide-down and statutory EPS decline unchanged offsets to screen cheapness/yield.

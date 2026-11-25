@@ -1,6 +1,6 @@
 # Vesuvius plc (VSVS.L) — Research memo
 
-_Version 5 · Updated 2026-11-01T08:34:03.734863+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-25T11:54:20.177707+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,9 +8,9 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.63
-Rationale: Research confirms hold: no operating RNS since H1, only bid-related disclosures; an unsettled RHI approach plus unchanged cyclical and FCF–dividend risks argue for waiting.
-RiskTags: cyclical, leverage, competitive, litigation, regulatory, other
+Confidence: 0.65
+Rationale: Research confirms hold: 24 Nov PUSU extension signals bid progress but no Rule 2.7 offer; operating risks and FCF–dividend cover divergence are unchanged since 30 Jul H1.
+RiskTags: cyclical, leverage, competitive, regulatory, other
 
 ## Weekly updates
 
@@ -33,3 +33,8 @@ Aberforth Partners reported ~6.9% voting rights (2 Oct); no new trading or resul
 No trading or results RNS since the 30 Jul H1 release; late-October flow is Takeover Code Form 8.3/8.5 only, including RHI Magnesita holding disclosures.
 October press repeats the RHI Magnesita approach; no firm offer terms appear in sourced company filings.
 Hold screen unchanged; timing is neutral (RSI ~64 vs wait at ~71); statutory vs management FCF–dividend cover divergence is unchanged.
+
+### 2026-11-25T11:54:20.177707+00:00
+24 Nov RNS extended the RHI Magnesita PUSU deadline to 30 Nov; diligence and deal docs advanced, but financial terms remain open and no firm offer was announced.  
+November flow is mainly Takeover Code Form 8.3/8.5 (including Man Group); no new trading or results RNS appears in sourced filings since 30 Jul H1.  
+Hold screen unchanged (neutral timing, RSI ~64); statutory vs management FCF–dividend cover divergence is unchanged.

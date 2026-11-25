@@ -1,6 +1,6 @@
 # Victrex plc (VCT.L) — Research memo
 
-_Version 9 · Updated 2026-11-15T08:51:38.296630+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-25T11:34:28.644584+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,8 +9,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Buy screen holds (13w, stable); only a routine 12 Nov director RNS since 10 Nov — research neutrally confirms measured accumulation on intact FY26 guidance and the Sep capital-return framework.
-RiskTags: cyclical, competitive, liquidity, leverage, accounting, customer_concentration, key_person, other
+Rationale: Buy screen holds (14w, stable); CFO and results-calendar RNS only—no trading change—so research neutrally confirms measured accumulation on intact FY26 guidance and the Sep capital-return framework.
+RiskTags: cyclical, competitive, liquidity, leverage, accounting, customer_concentration, key_person, governance, other
 
 ## Weekly updates
 
@@ -53,3 +53,8 @@ Quantitative buy signal unchanged (twelfth week, stable); FY26 PBT guidance and 
 12 Nov RNS: routine director external appointment (Senior Independent Director at Porvair); not a trading or results update.  
 News batch since 10 Nov is empty.  
 Quantitative buy signal unchanged (thirteenth week, stable); FY26 PBT guidance and the 24 Sep dividend/capital-return framework are unchanged.
+
+### 2026-11-25T11:34:28.644584+00:00
+16 Nov RNS: Adam Butcher appointed CFO and executive director from 15 Feb 2027; Chris Gilbert remains interim CFO pending handover.  
+19 Nov notice sets FY26 full-year results for 1 Dec 2026; 24 Nov RNS: Senior Independent Director Ros Rivaz to step down after the 5 Feb 2027 AGM — not a trading update.  
+Quantitative buy signal unchanged (fourteenth week, stable); FY26 underlying PBT guidance and the Sep capital-return framework are unchanged.

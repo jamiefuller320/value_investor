@@ -1,6 +1,6 @@
 # J Sainsbury plc (SBRY.L) — Research memo
 
-_Version 5 · Updated 2026-11-01T08:59:43.236800+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-25T12:56:04.106739+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: H1 filing raised continuing profit guidance and reaffirmed cash flow, modestly supporting value; screen hold still fits FCF-definition mismatch and neutral timing.
+Rationale: Research is neutral on hold: H1 uplift unchanged, only routine RNS since; accumulate overlay stands, but FCF-definition divergence and leverage still warrant neutral screen timing.
 RiskTags: competitive, regulatory, leverage, pension, accounting, cyclical, governance
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Thesis, FY2027 guidance, and known risks (Argos exit, leverage, FCF definitions,
 22 Oct half-year results: continuing underlying operating profit up 3.6%; FY27 guidance raised to £1,025m–£1,065m; >£500m free cash flow reaffirmed.  
 Argos is discontinued (statutory H1 loss); comparatives restated for deferred tax and net debt; second buyback tranche from 23 Oct.  
 Subsequent news is commentary on the interim; competitive, leverage, pension and restatement risks are unchanged.
+
+### 2026-11-25T12:56:04.106739+00:00
+No new interim or annual filings since the 22 October half-year results; FY27 guidance and cash-flow thesis in the memo are unchanged.  
+Routine RNS since 1 November: Total Voting Rights (2 Nov), ongoing share buyback disclosures, and Remuneration Committee chair succession from 1 January 2027 (19 Nov).  
+News is commentary-only (Forbes how-to-buy, 17 Nov; Yahoo quote page, 24 Nov).

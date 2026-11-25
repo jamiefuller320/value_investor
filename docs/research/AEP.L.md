@@ -1,6 +1,6 @@
 # AEP Plantations Plc (AEP.L) — Research memo
 
-_Version 6 · Updated 2026-10-30T22:51:50.492331+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-24T05:52:43.392897+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Q3 RNS still backs Strong Buy on output and FY guidance; oversold screen timing helps, but 2027 weather risk and no new ops news keep a phased accumulate overlay.
+Rationale: October Q3 filings and timing still support Strong Buy, but no new disclosures, 2027 weather risk and filing–screen FCF divergence limit conviction to accumulate.
 RiskTags: cyclical, regulatory, customer_concentration, competitive, other
 
 ## Weekly updates
@@ -38,3 +38,18 @@ Strong Buy screen ~79% composite (3 weeks, stable); 13–23 Oct RNS is buybacks 
 No new results or trading updates since the 12 Oct Q3 RNS; 26–30 Oct RNS is routine transaction-in-own-shares under the buyback only.  
 26–30 Oct news is US “American Electric Power” and options-page ticker noise—no verified Indonesia operating or policy items.  
 Strong Buy screen ~80% composite (5 weeks, stable); timing overlay Accumulate (RSI oversold, below 200-day MA).
+
+### 2026-11-23T18:12:51.383844+00:00
+No new results or trading updates since the 12 Oct Q3 RNS; 31 Oct–23 Nov RNS is routine transaction-in-own-shares under the £8m buyback (e.g. 20 Nov ~32k shares at VWAP ~142.8p; ~4.16m shares in treasury since Jul).  
+12–20 Nov coverage is syndicated Kalkine buyback, dividend and Pinago/ninth-mill commentary plus palm-oil volatility; no verified Indonesia operating or policy news.  
+Strong Buy screen stable (~10 weeks); timing overlay Accumulate (~13% below 200-day MA); statutory vs screen FCF basis mismatch unchanged.
+
+### 2026-11-23T21:55:44.485000+00:00
+No new group results or trading updates since the 12 October nine-month RNS; late October–23 November RNS is buybacks (including 20 November ~32k shares at VWAP ~142.8p), voting rights, interim-dividend sterling confirmation, and abridged UK parent interim accounts to 30 September—no new Indonesia operating disclosure.  
+This news pull since the prior memo is empty; no verified Indonesia policy or operating news.  
+Strong Buy screen remains stable (~10 weeks); timing overlay Accumulate (~13% below 200-day MA); statutory versus screen FCF basis mismatch unchanged.
+
+### 2026-11-24T05:52:43.392897+00:00
+No material change: the news pull since the 23 November memo is empty and there are no new group results or trading updates after the 12 October nine‑month RNS.  
+Filings remain routine buybacks and admin (latest 23 November transaction in own shares in the index); no verified Indonesia operating or policy news.  
+Strong Buy screen stable at ~10 weeks with Accumulate timing (~13% below 200‑day MA); statutory versus screen FCF basis mismatch unchanged.

@@ -1,6 +1,6 @@
 # Softcat plc (SCT.L) — Research memo
 
-_Version 4 · Updated 2026-11-15T07:39:43.557538+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-25T10:50:25.190995+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.71
-Rationale: Persistent screen buy and filing-aligned FCF support accumulation, but rich valuation, margin pressure, GDT leverage and thin cash dividend cover keep research from fully endorsing the signal.
+Rationale: Persistent buy screen and unchanged filing-aligned FCF support accumulation, but rich valuation, ~7.6% margin, GDT leverage, Piotroski 6/9 and weak gross FCF dividend cover keep research from fully endorsing the signal.
 RiskTags: leverage, competitive, cyclical, accounting
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Prior overlays unchanged: GDT funding/leverage, ~7.6% net margin, Piotroski **6/
 Since 8 Nov the batch adds only a 12 Nov RNS headline on holding(s) in company (no holder detail in the feed); no results or trading update in scope.  
 Screen remains **buy** (7/22, stable); persistence is **10 weeks** (was 8); snapshot yield **2.6%**, filing-aligned FCF **£150.9m** unchanged.  
 Overlays unchanged: GDT/leverage, ~7.6% net margin, Piotroski **6/9**, weak gross FCF dividend cover.
+
+### 2026-11-25T10:50:25.190995+00:00
+Since 15 Nov the news batch has no new RNS—only generic Yahoo Finance and Simply Wall St aggregator links; no results or trading update in scope.  
+Screen remains **buy** (7/22, stable); persistence is **11 weeks** (was 10); timing is **accumulate** (RSI ~42, price ~2% below SMA200).  
+Filing-aligned FCF **£150.9m**, yield **2.7%**, net margin **7.6%** unchanged; GDT/leverage and Piotroski **6/9** overlays unchanged.

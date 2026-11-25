@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-11-22T10:36:40.662759+00:00",
+  "updated_at": "2026-11-25T13:18:28.870397+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -18,22 +18,22 @@
     "promotion": "recommend rows are human-gate only — never auto-apply knobs, config, or engineering tasks"
   },
   "context": {
-    "history_run_count": 34,
+    "history_run_count": 35,
     "backtest_run_count": 32,
-    "trajectory_labeled_events": 1621,
+    "trajectory_labeled_events": 1634,
     "exit_shadow_closed_total": 0,
     "experimental_track_count": 2,
     "entry_dca_scored": 324,
     "entry_dca_ready": true
   },
   "summary": {
-    "recommend": 11,
-    "observing": 1,
     "proposed": 7,
-    "continue": 6,
+    "continue": 8,
+    "recommend": 20,
+    "observing": 2,
     "fail": 0,
-    "human_ack_pending": 10,
-    "total": 25
+    "human_ack_pending": 19,
+    "total": 37
   },
   "experiments": [
     {
@@ -98,48 +98,48 @@
       "promote_to": "manual",
       "forward_evidence": {
         "trajectory": {
-          "labeled_event_count": 1621,
+          "labeled_event_count": 1634,
           "model_focus_candidates": [
             {
               "kind": "transition_key",
               "key": "strong_buy->buy",
               "horizon": "1w",
-              "count": 40,
-              "positive_rate": 0.325,
-              "mean_forward_return": -0.010612,
-              "why": "strong_buy->buy 1w positive_rate=0.325 mean=-0.010612 n=40 — opinion flip did not match next-week price"
+              "count": 43,
+              "positive_rate": 0.3256,
+              "mean_forward_return": -0.012327,
+              "why": "strong_buy->buy 1w positive_rate=0.3256 mean=-0.012327 n=43 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "hold->buy",
               "horizon": "1w",
-              "count": 80,
-              "positive_rate": 0.3375,
-              "mean_forward_return": -0.00511,
-              "why": "hold->buy 1w positive_rate=0.3375 mean=-0.00511 n=80 — opinion flip did not match next-week price"
+              "count": 81,
+              "positive_rate": 0.3457,
+              "mean_forward_return": -0.004734,
+              "why": "hold->buy 1w positive_rate=0.3457 mean=-0.004734 n=81 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "signal_unchanged",
               "horizon": "1w",
-              "count": 1206,
-              "positive_rate": 0.374,
-              "mean_forward_return": -0.003271,
-              "why": "signal_unchanged 1w positive_rate=0.374 mean=-0.003271 n=1206 — opinion flip did not match next-week price"
+              "count": 1209,
+              "positive_rate": 0.3755,
+              "mean_forward_return": -0.003207,
+              "why": "signal_unchanged 1w positive_rate=0.3755 mean=-0.003207 n=1209 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "avoid->hold",
               "horizon": "1w",
-              "count": 71,
-              "positive_rate": 0.4225,
-              "mean_forward_return": -0.002266,
-              "why": "avoid->hold 1w positive_rate=0.4225 mean=-0.002266 n=71 — opinion flip did not match next-week price"
+              "count": 72,
+              "positive_rate": 0.4306,
+              "mean_forward_return": -0.001534,
+              "why": "avoid->hold 1w positive_rate=0.4306 mean=-0.001534 n=72 — opinion flip did not match next-week price"
             }
           ]
         },
         "archive": {
-          "history_run_count": 34,
+          "history_run_count": 35,
           "backtest_run_count": 32,
           "simulation_ready": true
         },
@@ -180,48 +180,48 @@
       "promote_to": "engineering_queue",
       "forward_evidence": {
         "trajectory": {
-          "labeled_event_count": 1621,
+          "labeled_event_count": 1634,
           "model_focus_candidates": [
             {
               "kind": "transition_key",
               "key": "strong_buy->buy",
               "horizon": "1w",
-              "count": 40,
-              "positive_rate": 0.325,
-              "mean_forward_return": -0.010612,
-              "why": "strong_buy->buy 1w positive_rate=0.325 mean=-0.010612 n=40 — opinion flip did not match next-week price"
+              "count": 43,
+              "positive_rate": 0.3256,
+              "mean_forward_return": -0.012327,
+              "why": "strong_buy->buy 1w positive_rate=0.3256 mean=-0.012327 n=43 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "hold->buy",
               "horizon": "1w",
-              "count": 80,
-              "positive_rate": 0.3375,
-              "mean_forward_return": -0.00511,
-              "why": "hold->buy 1w positive_rate=0.3375 mean=-0.00511 n=80 — opinion flip did not match next-week price"
+              "count": 81,
+              "positive_rate": 0.3457,
+              "mean_forward_return": -0.004734,
+              "why": "hold->buy 1w positive_rate=0.3457 mean=-0.004734 n=81 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "signal_unchanged",
               "horizon": "1w",
-              "count": 1206,
-              "positive_rate": 0.374,
-              "mean_forward_return": -0.003271,
-              "why": "signal_unchanged 1w positive_rate=0.374 mean=-0.003271 n=1206 — opinion flip did not match next-week price"
+              "count": 1209,
+              "positive_rate": 0.3755,
+              "mean_forward_return": -0.003207,
+              "why": "signal_unchanged 1w positive_rate=0.3755 mean=-0.003207 n=1209 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "avoid->hold",
               "horizon": "1w",
-              "count": 71,
-              "positive_rate": 0.4225,
-              "mean_forward_return": -0.002266,
-              "why": "avoid->hold 1w positive_rate=0.4225 mean=-0.002266 n=71 — opinion flip did not match next-week price"
+              "count": 72,
+              "positive_rate": 0.4306,
+              "mean_forward_return": -0.001534,
+              "why": "avoid->hold 1w positive_rate=0.4306 mean=-0.001534 n=72 — opinion flip did not match next-week price"
             }
           ],
           "recommend_candidate": {
             "key": "strong_buy->buy",
-            "count": 40
+            "count": 43
           }
         },
         "loser_cards": {
@@ -261,48 +261,48 @@
       "promote_to": "manual",
       "forward_evidence": {
         "trajectory": {
-          "labeled_event_count": 1621,
+          "labeled_event_count": 1634,
           "model_focus_candidates": [
             {
               "kind": "transition_key",
               "key": "strong_buy->buy",
               "horizon": "1w",
-              "count": 40,
-              "positive_rate": 0.325,
-              "mean_forward_return": -0.010612,
-              "why": "strong_buy->buy 1w positive_rate=0.325 mean=-0.010612 n=40 — opinion flip did not match next-week price"
+              "count": 43,
+              "positive_rate": 0.3256,
+              "mean_forward_return": -0.012327,
+              "why": "strong_buy->buy 1w positive_rate=0.3256 mean=-0.012327 n=43 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "hold->buy",
               "horizon": "1w",
-              "count": 80,
-              "positive_rate": 0.3375,
-              "mean_forward_return": -0.00511,
-              "why": "hold->buy 1w positive_rate=0.3375 mean=-0.00511 n=80 — opinion flip did not match next-week price"
+              "count": 81,
+              "positive_rate": 0.3457,
+              "mean_forward_return": -0.004734,
+              "why": "hold->buy 1w positive_rate=0.3457 mean=-0.004734 n=81 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "signal_unchanged",
               "horizon": "1w",
-              "count": 1206,
-              "positive_rate": 0.374,
-              "mean_forward_return": -0.003271,
-              "why": "signal_unchanged 1w positive_rate=0.374 mean=-0.003271 n=1206 — opinion flip did not match next-week price"
+              "count": 1209,
+              "positive_rate": 0.3755,
+              "mean_forward_return": -0.003207,
+              "why": "signal_unchanged 1w positive_rate=0.3755 mean=-0.003207 n=1209 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "avoid->hold",
               "horizon": "1w",
-              "count": 71,
-              "positive_rate": 0.4225,
-              "mean_forward_return": -0.002266,
-              "why": "avoid->hold 1w positive_rate=0.4225 mean=-0.002266 n=71 — opinion flip did not match next-week price"
+              "count": 72,
+              "positive_rate": 0.4306,
+              "mean_forward_return": -0.001534,
+              "why": "avoid->hold 1w positive_rate=0.4306 mean=-0.001534 n=72 — opinion flip did not match next-week price"
             }
           ]
         },
         "archive": {
-          "history_run_count": 34,
+          "history_run_count": 35,
           "backtest_run_count": 32,
           "simulation_ready": true
         },
@@ -371,21 +371,6 @@
       "initiated_at": "2026-09-22T08:29:44.051706+00:00"
     },
     {
-      "experiment_id": "ana-sgap-research_skipped_already_done",
-      "kind": "analysis_task",
-      "title": "Research skipped as already-done while the learning path may still be hungry [system-gap:research_skipped_already_done]",
-      "area": "coverage",
-      "pipeline": "analysis_review",
-      "status": "proposed",
-      "source_status": "proposed",
-      "human_ack_required": false,
-      "task_status": "proposed",
-      "promote_to": "engineering_queue",
-      "forward_evidence": null,
-      "evidence_path": "docs/data/analysis_tasks.json",
-      "initiated_at": "2026-11-09T08:51:12.468428+00:00"
-    },
-    {
       "experiment_id": "ana-20261108-01",
       "kind": "analysis_task",
       "title": "Offline family-weight stress on avoid cohort dividend/garp failures (loser cards + **hold->buy** / **strong_buy->buy** trajectory keys) — human ack **ana-20260921-02** — expected learning value: test ",
@@ -398,48 +383,48 @@
       "promote_to": "engineering_queue",
       "forward_evidence": {
         "trajectory": {
-          "labeled_event_count": 1621,
+          "labeled_event_count": 1634,
           "model_focus_candidates": [
             {
               "kind": "transition_key",
               "key": "strong_buy->buy",
               "horizon": "1w",
-              "count": 40,
-              "positive_rate": 0.325,
-              "mean_forward_return": -0.010612,
-              "why": "strong_buy->buy 1w positive_rate=0.325 mean=-0.010612 n=40 — opinion flip did not match next-week price"
+              "count": 43,
+              "positive_rate": 0.3256,
+              "mean_forward_return": -0.012327,
+              "why": "strong_buy->buy 1w positive_rate=0.3256 mean=-0.012327 n=43 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "hold->buy",
               "horizon": "1w",
-              "count": 80,
-              "positive_rate": 0.3375,
-              "mean_forward_return": -0.00511,
-              "why": "hold->buy 1w positive_rate=0.3375 mean=-0.00511 n=80 — opinion flip did not match next-week price"
+              "count": 81,
+              "positive_rate": 0.3457,
+              "mean_forward_return": -0.004734,
+              "why": "hold->buy 1w positive_rate=0.3457 mean=-0.004734 n=81 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "signal_unchanged",
               "horizon": "1w",
-              "count": 1206,
-              "positive_rate": 0.374,
-              "mean_forward_return": -0.003271,
-              "why": "signal_unchanged 1w positive_rate=0.374 mean=-0.003271 n=1206 — opinion flip did not match next-week price"
+              "count": 1209,
+              "positive_rate": 0.3755,
+              "mean_forward_return": -0.003207,
+              "why": "signal_unchanged 1w positive_rate=0.3755 mean=-0.003207 n=1209 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "avoid->hold",
               "horizon": "1w",
-              "count": 71,
-              "positive_rate": 0.4225,
-              "mean_forward_return": -0.002266,
-              "why": "avoid->hold 1w positive_rate=0.4225 mean=-0.002266 n=71 — opinion flip did not match next-week price"
+              "count": 72,
+              "positive_rate": 0.4306,
+              "mean_forward_return": -0.001534,
+              "why": "avoid->hold 1w positive_rate=0.4306 mean=-0.001534 n=72 — opinion flip did not match next-week price"
             }
           ],
           "recommend_candidate": {
             "key": "strong_buy->buy",
-            "count": 40
+            "count": 43
           }
         },
         "loser_cards": {
@@ -504,48 +489,48 @@
       "promote_to": "manual",
       "forward_evidence": {
         "trajectory": {
-          "labeled_event_count": 1621,
+          "labeled_event_count": 1634,
           "model_focus_candidates": [
             {
               "kind": "transition_key",
               "key": "strong_buy->buy",
               "horizon": "1w",
-              "count": 40,
-              "positive_rate": 0.325,
-              "mean_forward_return": -0.010612,
-              "why": "strong_buy->buy 1w positive_rate=0.325 mean=-0.010612 n=40 — opinion flip did not match next-week price"
+              "count": 43,
+              "positive_rate": 0.3256,
+              "mean_forward_return": -0.012327,
+              "why": "strong_buy->buy 1w positive_rate=0.3256 mean=-0.012327 n=43 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "hold->buy",
               "horizon": "1w",
-              "count": 80,
-              "positive_rate": 0.3375,
-              "mean_forward_return": -0.00511,
-              "why": "hold->buy 1w positive_rate=0.3375 mean=-0.00511 n=80 — opinion flip did not match next-week price"
+              "count": 81,
+              "positive_rate": 0.3457,
+              "mean_forward_return": -0.004734,
+              "why": "hold->buy 1w positive_rate=0.3457 mean=-0.004734 n=81 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "signal_unchanged",
               "horizon": "1w",
-              "count": 1206,
-              "positive_rate": 0.374,
-              "mean_forward_return": -0.003271,
-              "why": "signal_unchanged 1w positive_rate=0.374 mean=-0.003271 n=1206 — opinion flip did not match next-week price"
+              "count": 1209,
+              "positive_rate": 0.3755,
+              "mean_forward_return": -0.003207,
+              "why": "signal_unchanged 1w positive_rate=0.3755 mean=-0.003207 n=1209 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "avoid->hold",
               "horizon": "1w",
-              "count": 71,
-              "positive_rate": 0.4225,
-              "mean_forward_return": -0.002266,
-              "why": "avoid->hold 1w positive_rate=0.4225 mean=-0.002266 n=71 — opinion flip did not match next-week price"
+              "count": 72,
+              "positive_rate": 0.4306,
+              "mean_forward_return": -0.001534,
+              "why": "avoid->hold 1w positive_rate=0.4306 mean=-0.001534 n=72 — opinion flip did not match next-week price"
             }
           ]
         },
         "archive": {
-          "history_run_count": 34,
+          "history_run_count": 35,
           "backtest_run_count": 32,
           "simulation_ready": true
         },
@@ -612,6 +597,301 @@
       },
       "evidence_path": "docs/data/analysis_tasks.json",
       "initiated_at": "2026-11-09T08:51:12.468428+00:00"
+    },
+    {
+      "experiment_id": "ana-20261122-01",
+      "kind": "analysis_task",
+      "title": "Offline family-weight stress on **dividend/garp** failures in avoid + failed-buy alumni (pattern **ADM.L** opinion-flip / “passes cheapness while failed”) — expected learning: tighten family composite",
+      "area": "scoring",
+      "pipeline": "analysis_review",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "engineering_queue",
+      "forward_evidence": {
+        "trajectory": {
+          "labeled_event_count": 1634,
+          "model_focus_candidates": [
+            {
+              "kind": "transition_key",
+              "key": "strong_buy->buy",
+              "horizon": "1w",
+              "count": 43,
+              "positive_rate": 0.3256,
+              "mean_forward_return": -0.012327,
+              "why": "strong_buy->buy 1w positive_rate=0.3256 mean=-0.012327 n=43 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "hold->buy",
+              "horizon": "1w",
+              "count": 81,
+              "positive_rate": 0.3457,
+              "mean_forward_return": -0.004734,
+              "why": "hold->buy 1w positive_rate=0.3457 mean=-0.004734 n=81 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "signal_unchanged",
+              "horizon": "1w",
+              "count": 1209,
+              "positive_rate": 0.3755,
+              "mean_forward_return": -0.003207,
+              "why": "signal_unchanged 1w positive_rate=0.3755 mean=-0.003207 n=1209 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "avoid->hold",
+              "horizon": "1w",
+              "count": 72,
+              "positive_rate": 0.4306,
+              "mean_forward_return": -0.001534,
+              "why": "avoid->hold 1w positive_rate=0.4306 mean=-0.001534 n=72 — opinion flip did not match next-week price"
+            }
+          ],
+          "recommend_candidate": {
+            "key": "strong_buy->buy",
+            "count": 43
+          }
+        },
+        "loser_cards": {
+          "top_failed_families": [
+            [
+              "garp",
+              49
+            ],
+            [
+              "dividend",
+              46
+            ],
+            [
+              "quality",
+              27
+            ],
+            [
+              "cheapness",
+              20
+            ]
+          ]
+        }
+      },
+      "evidence_path": "docs/data/analysis_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
+    },
+    {
+      "experiment_id": "ana-20261122-02",
+      "kind": "analysis_task",
+      "title": "Exclusion-universe prior replay for step **u2** (avoid + timing wait; **ready_for_priors** true, α **-0.00237**, 33 week-pairs) vs baseline **u0** and positive rung **u5** (+0.002344) — expected learn",
+      "area": "offline_sim",
+      "pipeline": "analysis_review",
+      "status": "continue",
+      "source_status": "proposed",
+      "human_ack_required": false,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "trajectory": {
+          "labeled_event_count": 1634,
+          "model_focus_candidates": [
+            {
+              "kind": "transition_key",
+              "key": "strong_buy->buy",
+              "horizon": "1w",
+              "count": 43,
+              "positive_rate": 0.3256,
+              "mean_forward_return": -0.012327,
+              "why": "strong_buy->buy 1w positive_rate=0.3256 mean=-0.012327 n=43 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "hold->buy",
+              "horizon": "1w",
+              "count": 81,
+              "positive_rate": 0.3457,
+              "mean_forward_return": -0.004734,
+              "why": "hold->buy 1w positive_rate=0.3457 mean=-0.004734 n=81 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "signal_unchanged",
+              "horizon": "1w",
+              "count": 1209,
+              "positive_rate": 0.3755,
+              "mean_forward_return": -0.003207,
+              "why": "signal_unchanged 1w positive_rate=0.3755 mean=-0.003207 n=1209 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "avoid->hold",
+              "horizon": "1w",
+              "count": 72,
+              "positive_rate": 0.4306,
+              "mean_forward_return": -0.001534,
+              "why": "avoid->hold 1w positive_rate=0.4306 mean=-0.001534 n=72 — opinion flip did not match next-week price"
+            }
+          ]
+        },
+        "archive": {
+          "history_run_count": 35,
+          "backtest_run_count": 32,
+          "simulation_ready": true
+        },
+        "loser_cards": {
+          "top_failed_families": [
+            [
+              "garp",
+              49
+            ],
+            [
+              "dividend",
+              46
+            ],
+            [
+              "quality",
+              27
+            ],
+            [
+              "cheapness",
+              20
+            ]
+          ]
+        }
+      },
+      "evidence_path": "docs/data/analysis_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
+    },
+    {
+      "experiment_id": "ana-20261122-03",
+      "kind": "analysis_task",
+      "title": "Thesis-tolerant loser review on primary per **hypothesis_integrity** (`within_tolerance` false, **41%** loser_share, **hold_intact_review_selection**, 7 intact underwater) — expected learning: rotatio",
+      "area": "paper_churn",
+      "pipeline": "analysis_review",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        },
+        "entry_dca": {
+          "ready_for_cadence_analysis": true,
+          "leading_cadence": "dca_4x_weekly",
+          "scored_count": 324
+        }
+      },
+      "evidence_path": "docs/data/analysis_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
+    },
+    {
+      "experiment_id": "ana-20261122-04",
+      "kind": "analysis_task",
+      "title": "Trajectory **1w** calibration: **`strong_buy→buy`** and **`hold→buy`** transition panels vs **prediction_hit_rate** **0.3729** — expected learning: whether conviction upgrades should delay or require ",
+      "area": "offline_sim",
+      "pipeline": "analysis_review",
+      "status": "continue",
+      "source_status": "proposed",
+      "human_ack_required": false,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "trajectory": {
+          "labeled_event_count": 1634,
+          "model_focus_candidates": [
+            {
+              "kind": "transition_key",
+              "key": "strong_buy->buy",
+              "horizon": "1w",
+              "count": 43,
+              "positive_rate": 0.3256,
+              "mean_forward_return": -0.012327,
+              "why": "strong_buy->buy 1w positive_rate=0.3256 mean=-0.012327 n=43 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "hold->buy",
+              "horizon": "1w",
+              "count": 81,
+              "positive_rate": 0.3457,
+              "mean_forward_return": -0.004734,
+              "why": "hold->buy 1w positive_rate=0.3457 mean=-0.004734 n=81 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "signal_unchanged",
+              "horizon": "1w",
+              "count": 1209,
+              "positive_rate": 0.3755,
+              "mean_forward_return": -0.003207,
+              "why": "signal_unchanged 1w positive_rate=0.3755 mean=-0.003207 n=1209 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "avoid->hold",
+              "horizon": "1w",
+              "count": 72,
+              "positive_rate": 0.4306,
+              "mean_forward_return": -0.001534,
+              "why": "avoid->hold 1w positive_rate=0.4306 mean=-0.001534 n=72 — opinion flip did not match next-week price"
+            }
+          ]
+        },
+        "archive": {
+          "history_run_count": 35,
+          "backtest_run_count": 32,
+          "simulation_ready": true
+        },
+        "loser_cards": {
+          "top_failed_families": [
+            [
+              "garp",
+              49
+            ],
+            [
+              "dividend",
+              46
+            ],
+            [
+              "quality",
+              27
+            ],
+            [
+              "cheapness",
+              20
+            ]
+          ]
+        }
+      },
+      "evidence_path": "docs/data/analysis_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
+    },
+    {
+      "experiment_id": "ana-20261122-05",
+      "kind": "analysis_task",
+      "title": "Acknowledge open **experiment_assessment** queue (**ana-20260921-02**, **ana-20260921-04**, **ana-20261108-01**–**05**, **plr-20261108-01**–**03**, **ldr-20261108-02**, **ldr-20261108-04**) — human_ac",
+      "area": "monitoring",
+      "pipeline": "analysis_review",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        },
+        "entry_dca": {
+          "ready_for_cadence_analysis": true,
+          "leading_cadence": "dca_4x_weekly",
+          "scored_count": 324
+        }
+      },
+      "evidence_path": "docs/data/analysis_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
     },
     {
       "experiment_id": "plr-20261108-01",
@@ -689,6 +969,81 @@
       "initiated_at": "2026-11-09T08:51:12.468428+00:00"
     },
     {
+      "experiment_id": "plr-20261122-01",
+      "kind": "paper_learning_task",
+      "title": "Extend `ftse-rebalance-log buffered-hold` to `buy_tier_level` and `buy_tier_level_dca` with `--exit-confirm-variants 1,2` and `--lookback-days 28` — expected learning value: quantify whether high life",
+      "area": "paper_churn",
+      "pipeline": "paper_learning_review",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        },
+        "entry_dca": {
+          "ready_for_cadence_analysis": true,
+          "leading_cadence": "dca_4x_weekly",
+          "scored_count": 324
+        }
+      },
+      "evidence_path": "docs/data/paper_learning_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
+    },
+    {
+      "experiment_id": "plr-20261122-02",
+      "kind": "paper_learning_task",
+      "title": "Re-run buffered-hold on `ai_judgment_matched30_fair` and `buy_tier_matched30_fair` with `--lookback-days 28` and variants 1,2 only — expected learning value: test whether the current 7d tie (`trade_co",
+      "area": "paper_churn",
+      "pipeline": "paper_learning_review",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        },
+        "entry_dca": {
+          "ready_for_cadence_analysis": true,
+          "leading_cadence": "dca_4x_weekly",
+          "scored_count": 324
+        }
+      },
+      "evidence_path": "docs/data/paper_learning_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
+    },
+    {
+      "experiment_id": "plr-20261122-03",
+      "kind": "paper_learning_task",
+      "title": "Cross-read matched-30 `exit_shadow` open cohorts (control `open_count` 26 vs primary `open_count` 9; all `closed_count` 0) against churn `full_exits_in_window` 0 on both matched-30 books in the 7d rep",
+      "area": "monitoring",
+      "pipeline": "paper_learning_review",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        },
+        "entry_dca": {
+          "ready_for_cadence_analysis": true,
+          "leading_cadence": "dca_4x_weekly",
+          "scored_count": 324
+        }
+      },
+      "evidence_path": "docs/data/paper_learning_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
+    },
+    {
       "experiment_id": "ldr-20260823-02",
       "kind": "learning_director_task",
       "title": "Forward observation pass on ai_judgment_exclusion_u4 shadow vs live primary — expected learning value: validate whether u4 ladder filtering converts archive alpha (`exclusion_universe.ladder_results[u",
@@ -726,48 +1081,48 @@
       "promote_to": "manual",
       "forward_evidence": {
         "trajectory": {
-          "labeled_event_count": 1621,
+          "labeled_event_count": 1634,
           "model_focus_candidates": [
             {
               "kind": "transition_key",
               "key": "strong_buy->buy",
               "horizon": "1w",
-              "count": 40,
-              "positive_rate": 0.325,
-              "mean_forward_return": -0.010612,
-              "why": "strong_buy->buy 1w positive_rate=0.325 mean=-0.010612 n=40 — opinion flip did not match next-week price"
+              "count": 43,
+              "positive_rate": 0.3256,
+              "mean_forward_return": -0.012327,
+              "why": "strong_buy->buy 1w positive_rate=0.3256 mean=-0.012327 n=43 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "hold->buy",
               "horizon": "1w",
-              "count": 80,
-              "positive_rate": 0.3375,
-              "mean_forward_return": -0.00511,
-              "why": "hold->buy 1w positive_rate=0.3375 mean=-0.00511 n=80 — opinion flip did not match next-week price"
+              "count": 81,
+              "positive_rate": 0.3457,
+              "mean_forward_return": -0.004734,
+              "why": "hold->buy 1w positive_rate=0.3457 mean=-0.004734 n=81 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "signal_unchanged",
               "horizon": "1w",
-              "count": 1206,
-              "positive_rate": 0.374,
-              "mean_forward_return": -0.003271,
-              "why": "signal_unchanged 1w positive_rate=0.374 mean=-0.003271 n=1206 — opinion flip did not match next-week price"
+              "count": 1209,
+              "positive_rate": 0.3755,
+              "mean_forward_return": -0.003207,
+              "why": "signal_unchanged 1w positive_rate=0.3755 mean=-0.003207 n=1209 — opinion flip did not match next-week price"
             },
             {
               "kind": "transition_key",
               "key": "avoid->hold",
               "horizon": "1w",
-              "count": 71,
-              "positive_rate": 0.4225,
-              "mean_forward_return": -0.002266,
-              "why": "avoid->hold 1w positive_rate=0.4225 mean=-0.002266 n=71 — opinion flip did not match next-week price"
+              "count": 72,
+              "positive_rate": 0.4306,
+              "mean_forward_return": -0.001534,
+              "why": "avoid->hold 1w positive_rate=0.4306 mean=-0.001534 n=72 — opinion flip did not match next-week price"
             }
           ]
         },
         "archive": {
-          "history_run_count": 34,
+          "history_run_count": 35,
           "backtest_run_count": 32,
           "simulation_ready": true
         },
@@ -807,7 +1162,7 @@
       "promote_to": "manual",
       "forward_evidence": {
         "archive": {
-          "history_run_count": 34,
+          "history_run_count": 35,
           "backtest_run_count": 32
         }
       },
@@ -893,6 +1248,116 @@
       "forward_evidence": null,
       "evidence_path": "docs/data/learning_director_tasks.json",
       "initiated_at": "2026-11-09T08:51:12.468428+00:00"
+    },
+    {
+      "experiment_id": "ldr-20261122-01",
+      "kind": "learning_director_task",
+      "title": "Human-ack `experiment_assessment.recommend` queue (start **ana-20261108-05** bundle: **ana-20260921-02**, **ana-20260921-04**, **ana-20261108-01**–**02**) — unlocks scoring/churn work already assessed",
+      "area": "monitoring",
+      "pipeline": "learning_director",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        },
+        "entry_dca": {
+          "ready_for_cadence_analysis": true,
+          "leading_cadence": "dca_4x_weekly",
+          "scored_count": 324
+        }
+      },
+      "evidence_path": "docs/data/learning_director_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
+    },
+    {
+      "experiment_id": "ldr-20261122-02",
+      "kind": "learning_director_task",
+      "title": "Proposal-only activate vision phase `regime_slices_8_16_24` (**ldr-20261108-02**) — expected learning value: window-specific vs structural exclusion-alpha decay before any `u2`→`u3` offline_sim promot",
+      "area": "monitoring",
+      "pipeline": "learning_director",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        },
+        "entry_dca": {
+          "ready_for_cadence_analysis": true,
+          "leading_cadence": "dca_4x_weekly",
+          "scored_count": 324
+        }
+      },
+      "evidence_path": "docs/data/learning_director_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
+    },
+    {
+      "experiment_id": "ldr-20261122-03",
+      "kind": "learning_director_task",
+      "title": "Merge/park duplicate discretionary paper-churn lines (`plr-20261108-*` vs `plr-20261122-*`; keep **ldr-20261108-03** intent) — expected learning value: restore operator focus while `complexity.needs_a",
+      "area": "ops",
+      "pipeline": "learning_director",
+      "status": "proposed",
+      "source_status": "proposed",
+      "human_ack_required": false,
+      "task_status": "proposed",
+      "promote_to": "engineering_queue",
+      "forward_evidence": null,
+      "evidence_path": "docs/data/learning_director_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
+    },
+    {
+      "experiment_id": "ldr-20261122-04",
+      "kind": "learning_director_task",
+      "title": "Ack/run **plr-20261108-01**–**03** per **ldr-20261108-04** — expected learning value: buffered-hold and exit-shadow thickness on matched-30 while all exit_shadow `closed_count` 0.",
+      "area": "paper_churn",
+      "pipeline": "learning_director",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        },
+        "entry_dca": {
+          "ready_for_cadence_analysis": true,
+          "leading_cadence": "dca_4x_weekly",
+          "scored_count": 324
+        }
+      },
+      "evidence_path": "docs/data/learning_director_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
+    },
+    {
+      "experiment_id": "ldr-20261122-05",
+      "kind": "learning_director_task",
+      "title": "Trajectory scoring for `strong_buy->buy` / `hold->buy` already queued as **ana-20261108-01** + **ana-20260921-03** (recommend/**proposed**) — expected learning value: confirm human ack on **ana-202611",
+      "area": "analysis",
+      "pipeline": "learning_director",
+      "status": "observing",
+      "source_status": "proposed",
+      "human_ack_required": false,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "archive": {
+          "history_run_count": 35,
+          "backtest_run_count": 32
+        }
+      },
+      "evidence_path": "docs/data/learning_director_tasks.json",
+      "initiated_at": "2026-11-25T13:18:28.868499+00:00"
     },
     {
       "experiment_id": "entry_dca_timing_shift_overlay",
@@ -999,6 +1464,36 @@
       "area": "monitoring"
     },
     {
+      "experiment_id": "ana-20261122-01",
+      "kind": "analysis_task",
+      "title": "Offline family-weight stress on **dividend/garp** failures in avoid + failed-buy alumni (pattern **ADM.L** opinion-flip / “passes cheapness while failed”) — expected learning: tighten family composite",
+      "pipeline": "analysis_review",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "scoring"
+    },
+    {
+      "experiment_id": "ana-20261122-03",
+      "kind": "analysis_task",
+      "title": "Thesis-tolerant loser review on primary per **hypothesis_integrity** (`within_tolerance` false, **41%** loser_share, **hold_intact_review_selection**, 7 intact underwater) — expected learning: rotatio",
+      "pipeline": "analysis_review",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "paper_churn"
+    },
+    {
+      "experiment_id": "ana-20261122-05",
+      "kind": "analysis_task",
+      "title": "Acknowledge open **experiment_assessment** queue (**ana-20260921-02**, **ana-20260921-04**, **ana-20261108-01**–**05**, **plr-20261108-01**–**03**, **ldr-20261108-02**, **ldr-20261108-04**) — human_ac",
+      "pipeline": "analysis_review",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "monitoring"
+    },
+    {
       "experiment_id": "plr-20261108-01",
       "kind": "paper_learning_task",
       "title": "Run `ftse-rebalance-log buffered-hold` on `buy_tier_level` and `buy_tier_level_dca` with `--exit-confirm-variants 1,2` and `--lookback-days 28` (paper root `output/paper_automation`) — expected learni",
@@ -1029,6 +1524,36 @@
       "area": "monitoring"
     },
     {
+      "experiment_id": "plr-20261122-01",
+      "kind": "paper_learning_task",
+      "title": "Extend `ftse-rebalance-log buffered-hold` to `buy_tier_level` and `buy_tier_level_dca` with `--exit-confirm-variants 1,2` and `--lookback-days 28` — expected learning value: quantify whether high life",
+      "pipeline": "paper_learning_review",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "paper_churn"
+    },
+    {
+      "experiment_id": "plr-20261122-02",
+      "kind": "paper_learning_task",
+      "title": "Re-run buffered-hold on `ai_judgment_matched30_fair` and `buy_tier_matched30_fair` with `--lookback-days 28` and variants 1,2 only — expected learning value: test whether the current 7d tie (`trade_co",
+      "pipeline": "paper_learning_review",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "paper_churn"
+    },
+    {
+      "experiment_id": "plr-20261122-03",
+      "kind": "paper_learning_task",
+      "title": "Cross-read matched-30 `exit_shadow` open cohorts (control `open_count` 26 vs primary `open_count` 9; all `closed_count` 0) against churn `full_exits_in_window` 0 on both matched-30 books in the 7d rep",
+      "pipeline": "paper_learning_review",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "monitoring"
+    },
+    {
       "experiment_id": "ldr-20261108-02",
       "kind": "learning_director_task",
       "title": "Proposal to activate vision phase `regime_slices_8_16_24` — expected learning value: detect whether exclusion-alpha decay is window-specific vs structural before any ladder step change.",
@@ -1042,6 +1567,36 @@
       "experiment_id": "ldr-20261108-04",
       "kind": "learning_director_task",
       "title": "Ack/run paper-learning tasks `plr-20261108-01`–`03` — expected learning value: buffered-hold and exit-shadow thickness on matched-30 books while primary marks stay thin.",
+      "pipeline": "learning_director",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "paper_churn"
+    },
+    {
+      "experiment_id": "ldr-20261122-01",
+      "kind": "learning_director_task",
+      "title": "Human-ack `experiment_assessment.recommend` queue (start **ana-20261108-05** bundle: **ana-20260921-02**, **ana-20260921-04**, **ana-20261108-01**–**02**) — unlocks scoring/churn work already assessed",
+      "pipeline": "learning_director",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "monitoring"
+    },
+    {
+      "experiment_id": "ldr-20261122-02",
+      "kind": "learning_director_task",
+      "title": "Proposal-only activate vision phase `regime_slices_8_16_24` (**ldr-20261108-02**) — expected learning value: window-specific vs structural exclusion-alpha decay before any `u2`→`u3` offline_sim promot",
+      "pipeline": "learning_director",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "monitoring"
+    },
+    {
+      "experiment_id": "ldr-20261122-04",
+      "kind": "learning_director_task",
+      "title": "Ack/run **plr-20261108-01**–**03** per **ldr-20261108-04** — expected learning value: buffered-hold and exit-shadow thickness on matched-30 while all exit_shadow `closed_count` 0.",
       "pipeline": "learning_director",
       "track_id": null,
       "gate_marks": null,
@@ -1106,7 +1661,7 @@
         "parent_id": "still_in_buy_set",
         "instrument": "twin_already_open",
         "graduation_signal": "twin_present",
-        "noted_at": "2026-11-22T10:36:40.661056+00:00",
+        "noted_at": "2026-11-25T13:18:28.869987+00:00",
         "title": "Sell-gate churn twin already open",
         "note": "still_in_buy_set Suite A twin is the capital-path churn instrument; do not spawn a duplicate sell-gate refinement book."
       }
@@ -1144,34 +1699,7 @@
     "lanes_path": "docs/data/refinement_lanes.json",
     "note": "On graduation/adoption success, auto-registers the next observe refinement child (parent_id / refinement_of). Never mid-flight rewrites live books; LLM challenger stays fail-closed without a disagreement theme."
   },
-  "task_sync": {
-    "updated": [
-      "ana-20260728-04",
-      "ana-20260921-01",
-      "ana-20260921-03",
-      "ana-20260921-05",
-      "ana-sgap-research_skipped_already_done",
-      "ana-20261108-03",
-      "ana-20261108-04",
-      "ldr-20260823-02",
-      "ldr-20260823-03",
-      "ldr-20261108-01",
-      "ldr-20261108-03",
-      "ldr-20261108-05"
-    ],
-    "skipped": [
-      "ana-20260921-02",
-      "ana-20260921-04",
-      "ana-20261108-01",
-      "ana-20261108-02",
-      "ana-20261108-05",
-      "plr-20261108-01",
-      "plr-20261108-02",
-      "plr-20261108-03",
-      "ldr-20261108-02",
-      "ldr-20261108-04"
-    ]
-  },
+  "task_sync": null,
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
     "analysis_tasks": "docs/data/analysis_tasks.json",

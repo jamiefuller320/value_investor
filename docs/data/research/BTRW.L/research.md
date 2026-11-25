@@ -1,6 +1,6 @@
 # Barratt Redrow plc (BTRW.L) — Research memo
 
-_Version 5 · Updated 2026-11-01T08:35:52.049479+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-25T11:55:34.362258+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: medium
-Confidence: 0.63
-Rationale: Net cash and sub-book P/B still fit a hold, but thin statutory FCF and unchanged FY27 completion guidance leave cyclical and cash-quality risks open—research is neutral on upgrading the hold case.
+Confidence: 0.64
+Rationale: Sub-book P/B and net cash suit the screen, but the AGM update shows softer underlying demand and weaker forward cover with unchanged FY27 guidance—research does not confirm a full buy upgrade.
 RiskTags: regulatory, cyclical, governance, liquidity, accounting, competitive, key_person, other
 
 ## Weekly updates
@@ -33,3 +33,8 @@ No material operational or regulatory change since the 23 Sep refresh.
 £386m buyback continues via late-October transaction-in-own-shares RNS; syndicated pieces cite share count near 1.38bn.
 Filings since 11 Oct are buybacks, a 16 Oct holdings disclosure, and routine voting-rights notices; AGM remains 4 Nov with no new trading RNS.
 Press mostly replays FY26 results, buyback-versus-dividend framing, and UK housing-policy commentary—no fresh operational metrics.
+
+### 2026-11-25T11:55:34.362258+00:00
+4 Nov AGM trading update (17 weeks to 25 Oct): underlying private reservation rate 0.53 (FY26: 0.57), completions −12.1%, FY27 private forward-sold 56% vs 60% a year ago; FY27 guidance unchanged.
+AGM (4 Nov): all resolutions passed; disapplication of pre-emption for acquisitions (Res 21) at 79.6% for—board to engage shareholders per the UK Governance Code.
+Filings since 1 Nov are mainly buybacks, voting rights and a holdings notice; press is thin syndicated forecast commentary only.

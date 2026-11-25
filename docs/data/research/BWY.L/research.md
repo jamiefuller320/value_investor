@@ -1,6 +1,6 @@
 # Bellway p.l.c. (BWY.L) — Research memo
 
-_Version 4 · Updated 2026-11-15T07:40:52.405344+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-25T10:51:24.363596+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Partially confirms buy: FY26 cash and FCF still match the screen, but thin news and unchanged FY27 cyclical, safety-provision and litigation risks favour accumulate over full buy conviction.
+Rationale: Partially confirms buy: five-week persistent screen and filing-aligned FY26 FCF hold, but news is secondary-only and FY27 cyclical, safety-provision and litigation risks are unchanged.
 RiskTags: cyclical, regulatory, litigation
 
 ## Weekly updates
@@ -28,3 +28,8 @@ FY27 volume/margin guidance, legacy safety provision and litigation overhangs ar
 No articles in the 15 Nov news batch since the 8 Nov verdict; only routine RNS (e.g. 9 Nov transaction in own shares) appears in the filing index.
 Buy screen unchanged at 11/22 models with filing-aligned FY26 FCF; signal now four weeks persistent with stable trend per the latest screening snapshot.
 FY27 volume and margin guidance, legacy safety provision and litigation overhangs are unchanged from prior research.
+
+### 2026-11-25T10:51:24.363596+00:00
+Buy screen unchanged at 11/22 models with filing-aligned FY26 FCF; five weeks persistent and stable on the 25 Nov snapshot.
+Post–15 Nov flow is secondary media (buyback, dividend, valuation) and routine own-share RNS (16 and 23 Nov); no new trading update or results.
+FY27 guidance, legacy safety provision and litigation overhangs are unchanged from prior research.
