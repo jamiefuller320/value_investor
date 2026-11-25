@@ -5178,28 +5178,10 @@
     "SNYR_US_EQ",
     "SNY_US_EQ",
     "SN_US_EQ",
-    "SOAC_US_EQ"
+    "SOAC_US_EQ",
+    "SOBKY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SMSI_US_EQ",
-      "venue": "US",
-      "yahoo": "SMSI",
-      "isin": "US8321545043",
-      "name": "SMSI",
-      "seconds": 1.688,
-      "outcome": "saved",
-      "at": "2026-11-25T09:18:59.993850+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.615
-      },
-      "screen_seconds": 0.615,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "SMSMY_US_EQ",
       "venue": "US",
@@ -5940,6 +5922,25 @@
       },
       "screen_seconds": 4.833,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SOBKY_US_EQ",
+      "venue": "US",
+      "yahoo": "SOBKY",
+      "isin": "US83405K1025",
+      "name": "SOBKY",
+      "seconds": 1.116,
+      "outcome": "miss",
+      "at": "2026-11-25T10:51:44.709765+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.053
+      },
+      "screen_seconds": 1.053,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -70380,43 +70381,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T10:51:26.787588+00:00"
+    },
+    {
+      "t212_ticker": "SOBKY_US_EQ",
+      "yahoo": "SOBKY",
+      "name": "SOBKY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T10:51:44.709765+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SOAC_US_EQ",
+    "t212_ticker": "SOBKY_US_EQ",
     "venue": "US",
-    "yahoo": "SOAC",
-    "isin": "CA87261Y1060",
-    "name": "TMC",
-    "seconds": 4.89,
+    "yahoo": "SOBKY",
+    "isin": "US83405K1025",
+    "name": "SOBKY",
+    "seconds": 1.116,
     "outcome": "miss",
-    "at": "2026-11-25T10:51:37.532111+00:00",
+    "at": "2026-11-25T10:51:44.709765+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.833
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.053
     },
-    "screen_seconds": 4.833,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.053,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SOBKY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T10:51:37.532111+00:00",
+  "updated_at": "2026-11-25T10:51:44.709765+00:00",
   "totals": {
-    "screened": 5177,
+    "screened": 5178,
     "signals": {
-      "buy": 1566,
+      "buy": 1567,
       "avoid": 1218,
       "hold": 1129,
       "insufficient_data": 1235,
       "strong_buy": 29
     },
-    "signals_n": 5177,
-    "screen_seconds_sum": 52300.494000000195,
-    "screen_seconds_n": 5177,
+    "signals_n": 5178,
+    "screen_seconds_sum": 52301.547000000195,
+    "screen_seconds_n": 5178,
     "outcomes": {
-      "miss": 2004,
+      "miss": 2005,
       "saved": 3173
     }
   },
