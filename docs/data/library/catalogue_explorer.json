@@ -4940,28 +4940,10 @@
     "SCTX_US_EQ",
     "SCUA_US_EQ",
     "SCU_US_EQ",
-    "SCVL_US_EQ"
+    "SCVL_US_EQ",
+    "SCVPY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SBKO_US_EQ",
-      "venue": "US",
-      "yahoo": "SBKO",
-      "isin": "US86603R1005",
-      "name": "SBKO",
-      "seconds": 0.888,
-      "outcome": "miss",
-      "at": "2026-11-25T08:03:05.703354+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.7,
-        "seconds": 0.74
-      },
-      "screen_seconds": 0.74,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "SBLK_US_EQ",
       "venue": "US",
@@ -5702,6 +5684,25 @@
       },
       "screen_seconds": 2.057,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SCVPY_US_EQ",
+      "venue": "US",
+      "yahoo": "SCVPY",
+      "isin": "US8257101068",
+      "name": "SCVPY",
+      "seconds": 0.871,
+      "outcome": "miss",
+      "at": "2026-11-25T08:09:01.635973+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.78
+      },
+      "screen_seconds": 0.78,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -63569,43 +63570,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T08:08:03.867969+00:00"
+    },
+    {
+      "t212_ticker": "SCVPY_US_EQ",
+      "yahoo": "SCVPY",
+      "name": "SCVPY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T08:09:01.635973+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SCVL_US_EQ",
+    "t212_ticker": "SCVPY_US_EQ",
     "venue": "US",
-    "yahoo": "SCVL",
-    "isin": "US8248891090",
-    "name": "SHOE",
-    "seconds": 2.142,
+    "yahoo": "SCVPY",
+    "isin": "US8257101068",
+    "name": "SCVPY",
+    "seconds": 0.871,
     "outcome": "miss",
-    "at": "2026-11-25T08:08:54.520415+00:00",
+    "at": "2026-11-25T08:09:01.635973+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 2.057
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.78
     },
-    "screen_seconds": 2.057,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.78,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SCVPY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T08:08:54.520415+00:00",
+  "updated_at": "2026-11-25T08:09:01.635973+00:00",
   "totals": {
-    "screened": 4939,
+    "screened": 4940,
     "signals": {
-      "buy": 1492,
+      "buy": 1493,
       "avoid": 1159,
       "hold": 1075,
       "insufficient_data": 1185,
       "strong_buy": 28
     },
-    "signals_n": 4939,
-    "screen_seconds_sum": 49144.88600000024,
-    "screen_seconds_n": 4939,
+    "signals_n": 4940,
+    "screen_seconds_sum": 49145.66600000024,
+    "screen_seconds_n": 4940,
     "outcomes": {
-      "miss": 1903,
+      "miss": 1904,
       "saved": 3036
     }
   },
