@@ -1,48 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-24T09:47:03.709074+01:00",
+    "local_time": "2026-11-25T09:47:09.039891+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-11-24T09:00:00+01:00",
-    "settle_at": "2026-11-24T09:30:00+01:00",
+    "market_open_at": "2026-11-25T09:00:00+01:00",
+    "settle_at": "2026-11-25T09:30:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [
-    {
-      "id": "43906e70-5f93-4e7a-b0ef-940f206dfc70",
-      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
-      "acted_at": "2026-11-24T09:47:03.709074+01:00",
-      "ticker": "AD.AS",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 0.915418,
-      "price": 34.58,
-      "gross": 31.66,
-      "cost": 0.06,
-      "net_cash": 31.6,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Koninklijke Ahold Delhaize N.V.",
-      "avg_cost_at_exit": 31.14,
-      "position_closed": true
-    },
-    {
-      "id": "4f90c9d6-b8df-422b-b3ac-3f52ba15e5f7",
-      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
-      "acted_at": "2026-11-24T09:47:03.709074+01:00",
-      "ticker": "PHIA.AS",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.908733,
-      "price": 26.39,
-      "gross": 23.98,
-      "cost": 0.04,
-      "net_cash": -24.03,
-      "note": "Automated buy",
-      "name": "Koninklijke Philips N.V."
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -7216,24 +7183,41 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-25T09:47:09.039891+01:00",
+        "portfolio_value": 697.77,
+        "cash": 7.57,
+        "contributed_capital": 1000.0,
+        "positions": 32,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CHF": 0.9147,
+            "EUR": 0.83657,
+            "SEK": 0.07418
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-24T09:47:03.709074+01:00",
+    "last_mark_at": "2026-11-25T09:47:09.039891+01:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {
-        "AD.AS": 1
-      }
+      "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (2 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "euro_depth",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T08:47:04.233574+00:00",
+    "generated_at": "2026-11-25T08:47:09.645610+00:00",
     "observe_only": true,
     "open_count": 58,
     "closed_count": 0,
@@ -7306,13 +7290,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
-    "checkpoints_added_this_pass": 4
+    "ingested_this_pass": 0,
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T08:47:04.238350+00:00",
+    "generated_at": "2026-11-25T08:47:09.650317+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -7405,11 +7389,11 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 3
+      "swap_rotations": 0
     }
   },
   "hypothesis_integrity": {
@@ -7417,8 +7401,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-24T08:47:04.245933+00:00",
-    "as_of": "2026-11-24T09:47:03.709074+01:00",
+    "updated_at": "2026-11-25T08:47:09.657815+00:00",
+    "as_of": "2026-11-25T09:47:09.039891+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -8780,7 +8764,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T08:47:04.257902+00:00",
+    "generated_at": "2026-11-25T08:47:09.670311+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -8855,15 +8839,15 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-24T08:47:04.319069+00:00",
-    "open_count": 10,
-    "closed_count": 60,
+    "generated_at": "2026-11-25T08:47:09.731362+00:00",
+    "open_count": 9,
+    "closed_count": 61,
     "scored_count": 41,
-    "scored_count_all": 60,
-    "recommit_scored_count": 19,
+    "scored_count_all": 61,
+    "recommit_scored_count": 20,
     "entry_kind_counts": {
       "first_entry": 41,
-      "recommit": 19
+      "recommit": 20
     },
     "any_de_risk_count": 24,
     "winning_cadence_counts": {
@@ -8914,17 +8898,17 @@
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
       "first_entry_scored": 41,
-      "recommit_scored": 19
+      "recommit_scored": 20
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
     "marked_this_pass": 10,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T09:47:03.709074+01:00",
+    "generated_at": "2026-11-25T09:47:09.039891+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -8973,15 +8957,15 @@
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
       "opened": 0,
-      "closed": 1,
+      "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 1
+      "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-24T09:47:03.709074+01:00",
+    "generated_at": "2026-11-25T09:47:09.039891+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -8989,251 +8973,36 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 2,
-    "card_count": 2,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 1,
-      "veto": 1,
+      "agree": 0,
+      "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "sell": {
-        "agree": 0,
-        "veto": 1,
-        "abstain": 0
-      },
-      "buy": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
+    "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
-    "cards": [
-      {
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
-        "algo_action": "sell",
-        "algo_reason": "Automated exit \u2014 left target set",
-        "shadow_verdict": "veto",
-        "reasons": [
-          "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated exit \u2014 left target set"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 3
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 3
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.8619
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-24T09:47:03.709074+01:00",
-        "proposal_id": "buy_tier_level:AD.AS:sell:2026-11-24T09:47:03.709074+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      },
-      {
-        "ticker": "PHIA.AS",
-        "name": "Koninklijke Philips N.V.",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Buy into buyish target set \u2014 agree with algo selection."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 32
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 32
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.3359
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-24T09:47:03.709074+01:00",
-        "proposal_id": "buy_tier_level:PHIA.AS:buy:2026-11-24T09:47:03.709074+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      }
-    ],
+    "cards": [],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-24T09:47:03.709074+01:00",
+      "generated_at": "2026-11-25T09:47:09.039891+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 2,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 1,
-        "veto": 1,
+        "agree": 0,
+        "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "sell": {
-          "agree": 0,
-          "veto": 1,
-          "abstain": 0
-        },
-        "buy": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
-      "veto_sell_count": 1,
-      "veto_sell_tickers": [
-        "AD.AS"
-      ],
+      "by_algo_action": {},
+      "veto_sell_count": 0,
+      "veto_sell_tickers": [],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -9247,7 +9016,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-11-24T08:47:04.383855+00:00",
+  "generated_at": "2026-11-25T08:47:09.798818+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
