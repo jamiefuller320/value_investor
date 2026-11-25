@@ -1,6 +1,6 @@
 # Hewlett Packard Enterprise Company (HPE) — Research memo
 
-_Version 6 · Updated 2026-11-24T21:57:37.307882+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-25T04:56:30.545766+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.63
-Rationale: Raised FY outlook, buybacks and AI orders still support the screen buy, but the sharp post-earnings fall on thinner AI-server margins slightly weakens near-term conviction; leverage overlays are unchanged.
+Confidence: 0.62
+Rationale: Furnished beat-and-raise Q4 and buybacks still support the screen buy, but margin-led selling and thin periodic filing depth slightly weaken near-term conviction; leverage risks unchanged.
 RiskTags: cyclical, leverage, competitive, accounting, litigation, customer_concentration, governance, liquidity
 
 ## Weekly updates
@@ -37,4 +37,9 @@ No new SEC filings since the 23 November 8-K; periodic reports in the set still 
 ### 2026-11-24T21:57:37.307882+00:00
 Late 24 November headlines consolidate a ~16–17% regular-session fall despite beat-and-raise, centred on shrinking AI-server margins overshadowing upbeat guidance (Reuters, Yahoo, Benzinga).
 CEO interview reiterates raised outlook on infrastructure upgrades, inference demand and hyperscaler spend; HPE appears on a Morgan Stanley 2027 server-stock list while peer Dell reports strong AI demand.
+No new SEC filings since the 23 November 8-K; periodic reports in the set still end at the Q3 10-Q.
+
+### 2026-11-25T04:56:30.545766+00:00
+Early 25 November coverage extends the post-Q4 sell-off story (~16% session fall, ~$40.19 close cited) despite revenue and EPS beats in furnished materials.  
+Headlines stress thinner Cloud & AI margins (FY2027 near ~14%), supply doubts and peer Dell contrast; WSJ recap keeps HPE on the AI-hardware watchlist.  
 No new SEC filings since the 23 November 8-K; periodic reports in the set still end at the Q3 10-Q.

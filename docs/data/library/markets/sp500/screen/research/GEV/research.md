@@ -1,6 +1,6 @@
 # GE Vernova Inc. (GEV) — Research memo
 
-_Version 6 · Updated 2026-11-24T21:45:38.569245+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-25T04:45:34.614060+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: Yahoo debut-gain stories and a Nov dip headline add no filings; filed FY25 FCF still trails screen TTM, so research only partly supports the buy signal.
+Rationale: No new filings or news since the last run; filed FY25 FCF still far below Yahoo TTM behind the screen, so research does not strengthen the buy case.
 RiskTags: cyclical, regulatory, liquidity, pension, accounting
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Wind execution and the FCF-basis gap from prior updates are not resolved in this
 Commentary-only batch: Yahoo recaps post-spin gains; TradingKey cites a ~5.4% 24 Nov slide; a Coatue-holdings listicle and a Bloom Energy piece add no GEV fundamentals.  
 No new SEC filings; sourced FY2025 cash flow is unchanged (OCF $4.99bn, FCF $3.71bn) and Yahoo TTM FCF (~$17.1bn) still far exceeds filed annual FCF underpinning the screen.  
 Wind execution and the FCF-basis gap from prior updates remain unresolved.
+
+### 2026-11-25T04:45:34.614060+00:00
+Incremental news batch since 24 Nov is empty; no new SEC filings or sourced financial changes.  
+Filed FY2025 OCF $4.99bn and FCF $3.71bn unchanged; Yahoo TTM FCF (~$17.1bn) still far above filed annual FCF underpinning the screen.  
+Wind execution and the FCF-basis gap noted in prior updates remain unresolved.

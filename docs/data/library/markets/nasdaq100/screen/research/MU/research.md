@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 7 · Updated 2026-11-24T21:49:36.644046+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T04:49:36.584751+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.71
-Rationale: Sourced ~$59bn TTM FCF still backs the screen, but zero model passes and 24 Nov's selloff plus downgrade headlines leave research at accumulate, not full strong-buy alignment.
+Rationale: Sourced ~$59bn TTM FCF still supports the screen, but zero model passes and fresh bearish MU coverage plus ongoing chip profit-taking keep research at accumulate, not full strong-buy alignment.
 RiskTags: cyclical, competitive, leverage, customer_concentration
 
 ## Weekly updates
@@ -41,3 +41,8 @@ Screen remains strong buy with ~$59bn TTM FCF and zero models passed; filing-bas
 Evening coverage adds a DEFA14A filing headline, more analyst PT-cut and downgrade stories on the 24 Nov chip selloff, and mixed Seeking Alpha / Barron’s bull–bear debate.  
 A Coatue holdings piece is fund-flow colour only; no new sourced financials in the batch.  
 Screen remains strong buy with ~$59bn TTM FCF and zero models passed; filing-based cyclical, leverage and concentration risks unchanged.
+
+### 2026-11-25T04:49:36.584751+00:00
+Follow-on coverage adds profit-taking on MU with peer chips, a podcast explicitly selling Micron, and Dell/HP headlines on AI-driven memory tightness; no new filings or sourced financials.  
+Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed.  
+Filing-based cyclical, leverage and customer-concentration risks are unchanged.

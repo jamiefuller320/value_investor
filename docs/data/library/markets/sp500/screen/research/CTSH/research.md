@@ -1,6 +1,6 @@
 # Cognizant Technology Solutions Corporation (CTSH) — Research memo
 
-_Version 8 · Updated 2026-11-24T21:39:09.147202+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-25T04:39:25.154980+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Q3 revenue and quarter FCF in refreshed sources still anchor Strong Buy; the 21:38 batch is peer-sector noise only—no EDGAR after 29 Oct—so research confirms the screen without added conviction.
+Rationale: Q3 revenue and quarter FCF still anchor Strong Buy; the 25 Nov GuruFocus valuation headline adds no disclosures—no EDGAR after 29 Oct—so research confirms the screen without added conviction.
 RiskTags: regulatory, competitive, cyclical, customer_concentration, litigation, accounting, leverage
 
 ## Weekly updates
@@ -46,5 +46,10 @@ No material change to fundamentals, guidance, or sell-side themes in the supplie
 
 ### 2026-11-24T21:39:09.147202+00:00
 The 24 Nov 21:38 batch adds one Leidos peer-sector headline (IT services peers up); no CTSH-specific disclosures.  
+Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged with last EDGAR on 29 Oct 2026.  
+No material change to fundamentals, guidance, or sell-side themes in the supplied pack.
+
+### 2026-11-25T04:39:25.154980+00:00
+The 25 Nov batch adds one GuruFocus headline (GF Value $89.26 versus $60.98 after a 4.1% move); valuation commentary only.  
 Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged with last EDGAR on 29 Oct 2026.  
 No material change to fundamentals, guidance, or sell-side themes in the supplied pack.

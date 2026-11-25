@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 20 · Updated 2026-11-24T21:53:37.830348+00:00 · Mode: structured_verdict_update_
+_Version 21 · Updated 2026-11-25T04:53:23.207734+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.58
-Rationale: On-file FCF stays exceptional, but late-24-Nov semis estimate-cut headlines and a storage selloff with Micron leave 2027 NAND risk and no fresh SNDK guidance, weakening the strong-buy screen.
+Rationale: On-file FCF remains exceptional, but 2027 NAND oversupply debate, semis estimate cuts and post-split officer-sale headlines leave no fresh guidance, weakening the strong-buy screen.
 RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
@@ -92,3 +92,8 @@ No new SNDK issuer filings in the batch; refreshed on-file financials still show
 Late 24 November press links SNDK to a wider AI chip and storage selloff after BNP’s Micron downgrade and Bank of America flagging semis estimate cuts through 2028.  
 Micron-versus-Sandisk and NAND outlook commentary continues; one piece frames SNDK among laggards versus Q3 earnings winners.  
 No new SNDK issuer filings in the batch; on-file financials still show very strong free cash flow.
+
+### 2026-11-25T04:53:23.207734+00:00
+Early 25 November press clusters post-split officer sales and tax withholding on vesting (CAO sale, CEO/CFO/legal chief, CTO plan sale); no new issuer filings in the batch.  
+Futures pieces still frame an AI chip retreat after the late-24-Nov selloff; SNDK is not the focus of new NAND guidance.  
+On-file financials still show very strong free cash flow.

@@ -1,6 +1,6 @@
 # Yangzijiang Shipbuilding (Holdings) Ltd. (BS6.SI) — Research memo
 
-_Version 19 · Updated 2026-11-24T21:37:01.140866+00:00 · Mode: structured_verdict_update_
+_Version 20 · Updated 2026-11-25T04:36:49.544810+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -102,4 +102,9 @@ Screen still shows zero filed metrics; filing corpus unchanged (five bodies)—n
 ### 2026-11-24T21:37:01.140866+00:00
 No new articles in the 21:36 UTC news batch since the 17:52 refresh.  
 Yahoo annuals at 21:36 UTC unchanged: FY2025 free cash flow (~CNY 2.51bn) still below cash dividends (~CNY 2.61bn); quarterly cashflow empty (TTM suppressed).  
+Screen still shows zero filed metrics; filing corpus unchanged (five bodies)—no material change.
+
+### 2026-11-25T04:36:49.544810+00:00
+No new articles in the 25 Nov 04:36 UTC news batch since the 24 Nov evening refresh.  
+Yahoo annuals at 04:36 UTC unchanged: FY2025 free cash flow (~CNY 2.51bn) still below cash dividends (~CNY 2.61bn); quarterly cashflow empty (TTM suppressed).  
 Screen still shows zero filed metrics; filing corpus unchanged (five bodies)—no material change.

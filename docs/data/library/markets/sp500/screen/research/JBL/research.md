@@ -1,6 +1,6 @@
 # Jabil Inc. (JBL) — Research memo
 
-_Version 6 · Updated 2026-11-24T21:46:51.896948+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-25T04:46:43.941434+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.67
-Rationale: TTM cash and rising quarterly EPS partly support the buy screen, but leverage, EMS cyclicality, sparse screen metrics and unresolved filing–screen earnings still weaken alignment.
+Rationale: A post-close headline flags a sharper sell-off than the market; unchanged TTM cash only partly supports the buy screen, and filing–screen earnings tension remains unresolved.
 RiskTags: cyclical, leverage, customer_concentration
 
 ## Weekly updates
@@ -37,4 +37,9 @@ Screen–filing earnings reconciliation remains unresolved; filing-backed risk p
 ### 2026-11-24T21:46:51.896948+00:00
 No Jabil-specific headlines since the 18:02 refresh; the batch only covers peer EMS names (Flex, Bel Fuse) falling on an AI chip selloff.  
 21:46 financial pull unchanged: TTM operating cash flow ~$2.0bn, free cash flow ~$1.37bn; leverage and negative tangible book persist.  
+Screen–filing earnings reconciliation remains unresolved; filing-backed risk profile unchanged.
+
+### 2026-11-25T04:46:43.941434+00:00
+One yfinance piece notes JBL closed −6.42% versus the broader market on 24 Nov ($226.69); no company-specific catalyst in the batch.  
+04:46 financial pull unchanged: TTM operating cash flow ~$2.0bn and free cash flow ~$1.37bn; net debt ~$1.64bn and negative tangible book persist.  
 Screen–filing earnings reconciliation remains unresolved; filing-backed risk profile unchanged.

@@ -1,6 +1,6 @@
 # Fortescue Ltd (FMG.AX) — Research memo
 
-_Version 17 · Updated 2026-11-24T21:44:38.948706+00:00 · Mode: structured_verdict_update_
+_Version 18 · Updated 2026-11-25T04:44:35.515041+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.64
-Rationale: Screen value on yield and multiples holds, but Q1 miss, CMRG and cyclical iron-ore risks partly offset strong buy; empty 24 Nov 21:43 UTC incremental news batch.
+Rationale: Screen value on yield and multiples holds, but Q1 miss, CMRG and cyclical iron-ore risks partly offset strong buy; empty 25 Nov 04:43 UTC incremental news batch.
 RiskTags: cyclical, regulatory, governance, litigation, key_person, customer_concentration, competitive, accounting
 
 ## Weekly updates
@@ -91,5 +91,10 @@ No material change; no new indexed filing bodies in the pack.
 
 ### 2026-11-24T21:44:38.948706+00:00
 No new articles in the 24 Nov 21:43 incremental news batch since the 18:00 refresh.  
+Q1 FY27 shipment miss, iron-ore softness, CMRG overhang and US$1.5bn note issue remain the active narrative from the pack.  
+No material change; no new indexed filing bodies in the pack.
+
+### 2026-11-25T04:44:35.515041+00:00
+No new articles in the 25 Nov 04:43 incremental news batch since the 24 Nov 21:44 refresh.  
 Q1 FY27 shipment miss, iron-ore softness, CMRG overhang and US$1.5bn note issue remain the active narrative from the pack.  
 No material change; no new indexed filing bodies in the pack.

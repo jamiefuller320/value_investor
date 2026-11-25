@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 19 · Updated 2026-11-24T21:37:44.805636+00:00 · Mode: structured_verdict_update_
+_Version 20 · Updated 2026-11-25T04:37:54.893695+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: Filing-backed FCF still supports Strong Buy, but the latest news only repeats pre-earnings cheapness talk and leaves agent and leverage worries unresolved versus the screen.
+Rationale: Filing-backed FCF still supports Strong Buy, but the latest batch is sector-only and leaves leverage and competitive AI worries unresolved ahead of earnings.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -100,3 +100,8 @@ No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy scr
 The 21:37 UTC batch adds pre-earnings Yahoo commentary on CRM looking cheap versus earnings, plus ~4% move wrap; peer tickers moved without CRM-specific news.  
 No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
 Leverage and competitive themes are unchanged from the prior refresh.
+
+### 2026-11-25T04:37:54.893695+00:00
+The 04:37 UTC batch adds one sector-only Yahoo piece on Anthropic’s IPO and Nvidia moves; no CRM-specific headlines.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
+Leverage and competitive pre-earnings themes are unchanged.
