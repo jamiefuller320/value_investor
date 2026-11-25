@@ -10,7 +10,7 @@ input leaves ``learning_point`` null. Nothing here walks, sells, or sets
 from __future__ import annotations
 
 from datetime import UTC, date, datetime
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Any
 
 from value_investor.strategy_book_rules import (
