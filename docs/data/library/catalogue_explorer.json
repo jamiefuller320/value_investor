@@ -4885,28 +4885,10 @@
     "SARO_US_EQ",
     "SAR_US_EQ",
     "SAUHY_US_EQ",
-    "SAVA_US_EQ"
+    "SAVA_US_EQ",
+    "SAXPY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "RYB_US_EQ",
-      "venue": "US",
-      "yahoo": "RYB",
-      "isin": "US6289881079",
-      "name": "MYND",
-      "seconds": 3.784,
-      "outcome": "miss",
-      "at": "2026-11-25T07:55:15.785656+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.591
-      },
-      "screen_seconds": 3.591,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "RYCEY_US_EQ",
       "venue": "US",
@@ -5647,6 +5629,25 @@
       },
       "screen_seconds": 4.058,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SAXPY_US_EQ",
+      "venue": "US",
+      "yahoo": "SAXPY",
+      "isin": "US79588J1025",
+      "name": "SAXPY",
+      "seconds": 0.787,
+      "outcome": "miss",
+      "at": "2026-11-25T08:00:57.575926+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.706
+      },
+      "screen_seconds": 0.706,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -63322,43 +63323,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T08:00:40.681538+00:00"
+    },
+    {
+      "t212_ticker": "SAXPY_US_EQ",
+      "yahoo": "SAXPY",
+      "name": "SAXPY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T08:00:57.575926+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SAVA_US_EQ",
+    "t212_ticker": "SAXPY_US_EQ",
     "venue": "US",
-    "yahoo": "SAVA",
-    "isin": "US14817C1071",
-    "name": "FLNA",
-    "seconds": 4.141,
+    "yahoo": "SAXPY",
+    "isin": "US79588J1025",
+    "name": "SAXPY",
+    "seconds": 0.787,
     "outcome": "miss",
-    "at": "2026-11-25T08:00:50.853939+00:00",
+    "at": "2026-11-25T08:00:57.575926+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.058
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.706
     },
-    "screen_seconds": 4.058,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.706,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SAXPY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T08:00:50.853939+00:00",
+  "updated_at": "2026-11-25T08:00:57.575926+00:00",
   "totals": {
-    "screened": 4884,
+    "screened": 4885,
     "signals": {
-      "buy": 1469,
+      "buy": 1470,
       "avoid": 1153,
       "hold": 1064,
       "insufficient_data": 1171,
       "strong_buy": 27
     },
-    "signals_n": 4884,
-    "screen_seconds_sum": 49061.17800000024,
-    "screen_seconds_n": 4884,
+    "signals_n": 4885,
+    "screen_seconds_sum": 49061.88400000024,
+    "screen_seconds_n": 4885,
     "outcomes": {
-      "miss": 1874,
+      "miss": 1875,
       "saved": 3010
     }
   },
