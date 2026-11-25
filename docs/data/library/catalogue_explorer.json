@@ -5167,28 +5167,10 @@
     "SNOA_US_EQ",
     "SNOW_US_EQ",
     "SNPHY_US_EQ",
-    "SNPX_US_EQ"
+    "SNPX_US_EQ",
+    "SNSC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SMHI_US_EQ",
-      "venue": "US",
-      "yahoo": "SMHI",
-      "isin": "US78413P1012",
-      "name": "SMHI",
-      "seconds": 2.025,
-      "outcome": "saved",
-      "at": "2026-11-25T09:17:27.076631+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.789
-      },
-      "screen_seconds": 0.789,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "SMID_US_EQ",
       "venue": "US",
@@ -5929,6 +5911,25 @@
       },
       "screen_seconds": 83.255,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SNSC_US_EQ",
+      "venue": "US",
+      "yahoo": "SNSC",
+      "isin": "KYG8589M1069",
+      "name": "SNSC",
+      "seconds": 1.638,
+      "outcome": "saved",
+      "at": "2026-11-25T09:30:14.836026+00:00",
+      "rows": 3,
+      "screen": {
+        "signal": "avoid",
+        "fits": false,
+        "data_quality_score": 0.9,
+        "seconds": 0.632
+      },
+      "screen_seconds": 0.632,
+      "signal": "avoid"
     }
   ],
   "handoffs": [
@@ -70348,41 +70349,60 @@
     }
   ],
   "last": {
-    "t212_ticker": "SNPX_US_EQ",
+    "t212_ticker": "SNSC_US_EQ",
     "venue": "US",
-    "yahoo": "SNPX",
-    "isin": "US87167T3005",
-    "name": "TAOX",
-    "seconds": 83.437,
-    "outcome": "miss",
-    "at": "2026-11-25T09:30:06.484692+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "SNSC",
+    "isin": "KYG8589M1069",
+    "name": "SNSC",
+    "seconds": 1.638,
+    "outcome": "saved",
+    "at": "2026-11-25T09:30:14.836026+00:00",
+    "rows": 3,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2101240/000121390026119954/ea0311015-20f_sunscout.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2101240/000121390026113292/ea0309837-6k_sunscout.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/2101240/000121390026089389/ea0302070-6k_sunscout.htm",
+        "has_body": true
+      }
+    ],
     "screen": {
-      "signal": "insufficient_data",
+      "signal": "avoid",
       "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 83.255
+      "data_quality_score": 0.9,
+      "seconds": 0.632
     },
-    "screen_seconds": 83.255,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.632,
+    "signal": "avoid"
   },
-  "updated_at": "2026-11-25T09:30:06.484692+00:00",
+  "updated_at": "2026-11-25T09:30:14.836026+00:00",
   "totals": {
-    "screened": 5166,
+    "screened": 5167,
     "signals": {
       "buy": 1563,
-      "avoid": 1214,
+      "avoid": 1215,
       "hold": 1128,
       "insufficient_data": 1232,
       "strong_buy": 29
     },
-    "signals_n": 5166,
-    "screen_seconds_sum": 52119.344000000216,
-    "screen_seconds_n": 5166,
+    "signals_n": 5167,
+    "screen_seconds_sum": 52119.97600000021,
+    "screen_seconds_n": 5167,
     "outcomes": {
       "miss": 1999,
-      "saved": 3167
+      "saved": 3168
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
