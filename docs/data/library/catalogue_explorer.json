@@ -5982,28 +5982,10 @@
     "WAVE_US_EQ",
     "WAVS_US_EQ",
     "WAY_US_EQ",
-    "WBAI_US_EQ"
+    "WBAI_US_EQ",
+    "WBBW_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "VSTM_US_EQ",
-      "venue": "US",
-      "yahoo": "VSTM",
-      "isin": "US92337C2035",
-      "name": "VSTM",
-      "seconds": 3.743,
-      "outcome": "saved",
-      "at": "2026-11-25T19:03:37.511125+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.9,
-        "seconds": 0.607
-      },
-      "screen_seconds": 0.607,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "VSTS_US_EQ",
       "venue": "US",
@@ -6744,6 +6726,25 @@
       },
       "screen_seconds": 84.372,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "WBBW_US_EQ",
+      "venue": "US",
+      "yahoo": "WBBW",
+      "isin": "US95727P1066",
+      "name": "WBBW",
+      "seconds": 0.574,
+      "outcome": "miss",
+      "at": "2026-11-25T19:16:08.174332+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.5,
+        "seconds": 0.437
+      },
+      "screen_seconds": 0.437,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -81724,43 +81725,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T19:14:31.116001+00:00"
+    },
+    {
+      "t212_ticker": "WBBW_US_EQ",
+      "yahoo": "WBBW",
+      "name": "WBBW",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T19:16:08.174332+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "WBAI_US_EQ",
+    "t212_ticker": "WBBW_US_EQ",
     "venue": "US",
-    "yahoo": "WBAI",
-    "isin": "US0554743080",
-    "name": "SLAIY",
-    "seconds": 84.668,
+    "yahoo": "WBBW",
+    "isin": "US95727P1066",
+    "name": "WBBW",
+    "seconds": 0.574,
     "outcome": "miss",
-    "at": "2026-11-25T19:16:01.421142+00:00",
+    "at": "2026-11-25T19:16:08.174332+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.372
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.5,
+      "seconds": 0.437
     },
-    "screen_seconds": 84.372,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.437,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "WBBW_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T19:16:01.421142+00:00",
+  "updated_at": "2026-11-25T19:16:08.174332+00:00",
   "totals": {
-    "screened": 5981,
+    "screened": 5982,
     "signals": {
-      "buy": 1808,
+      "buy": 1809,
       "avoid": 1407,
       "hold": 1310,
       "insufficient_data": 1424,
       "strong_buy": 32
     },
-    "signals_n": 5981,
-    "screen_seconds_sum": 60178.081000000195,
-    "screen_seconds_n": 5981,
+    "signals_n": 5982,
+    "screen_seconds_sum": 60178.51800000019,
+    "screen_seconds_n": 5982,
     "outcomes": {
-      "miss": 2335,
+      "miss": 2336,
       "saved": 3646
     }
   },
