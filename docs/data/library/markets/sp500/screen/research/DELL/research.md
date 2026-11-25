@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 12 · Updated 2026-11-24T21:41:11.180622+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-25T04:41:19.325635+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Filed Q3 FY2027 8-K confirms sharp revenue and EPS growth and higher FY guidance, strengthening strong_buy; leverage and cyclical AI-hardware risks are unchanged.
+Confidence: 0.73
+Rationale: Post-earnings press reinforces the filed Q3 beat-and-raise and AI backlog, supporting strong_buy; muted trading, target cuts and AI-sector selling leave leverage and cyclical risks unchanged.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -68,3 +68,8 @@ Screen remains **strong_buy**; leverage and cyclical AI-margin risks are unchang
 The 21:40 UTC batch and after-close press report Q3 beats and raised FY27 guidance, citing roughly $132bn AI backlog; the 24 Nov 8-K shows Q3 revenue $54.9bn and diluted EPS $9.45.  
 Tuesday’s pre-earnings sell-off and HPE margin spillover preceded results; AI-hardware sentiment remains volatile.  
 Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchanged.
+
+### 2026-11-25T04:41:19.325635+00:00
+The 04:40 UTC batch covers Q3 aftermath: beat-and-raise headlines, press citing roughly $132bn AI backlog, muted share reaction, and a sharp Evercore price-target cut despite record results.  
+Call coverage emphasises firm AI demand and vetted orders; wider AI-hardware selling, chip-capacity pressure on PCs, and Nvidia diversion headlines add sector noise.  
+On-file Q3 FY2027 8-K figures are unchanged; screen remains **strong_buy**; leverage and cyclical AI-server risks are unchanged.

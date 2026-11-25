@@ -1,6 +1,6 @@
 # Open Text Corporation (OTEX.TO) — Research memo
 
-_Version 1 · Updated 2026-11-25T00:15:07.582806+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-11-25T04:50:53.849171+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,13 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: high
-Confidence: 0.58
-Rationale: FY26 screen FCF/yield lean on Yahoo (~$808M FCF); filings show strong 9M OCF and earnings but truncated 10-Ks block full annual tie-out, leverage ~$5.7B LT debt remains, and Q1 FY27 revenue fell YoY.
+Confidence: 0.56
+Rationale: Weakens the strong buy case: screen FCF/yield look solid on Yahoo, but ~$5.7bn long-term debt, Q1 FY27 revenue down YoY, negative tangible equity, and no filing text limit verification.
 RiskTags: leverage, competitive, accounting
+
+## Weekly updates
+
+### 2026-11-25T04:50:53.849171+00:00
+No new articles in the 2026-11-25 news batch since the overnight structured verdict refresh.
+Yahoo financials (pulled 04:50 UTC) still show FY26 FCF ~$808m and TTM ~$845m underpinning the strong buy screen.
+TSX filing discovery returned zero bodies, so issuer-side annual/interim tie-out remains unavailable in this pack.

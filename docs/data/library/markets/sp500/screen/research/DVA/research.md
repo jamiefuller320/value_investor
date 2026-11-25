@@ -1,6 +1,6 @@
 # DaVita Inc. (DVA) — Research memo
 
-_Version 12 · Updated 2026-11-24T21:41:26.631593+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-25T04:41:41.437227+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -68,3 +68,8 @@ Regulatory, leverage and litigation overlays are unchanged; the quantitative scr
 No material change since the 17:57 UTC refresh on 24 November.  
 The 21:41 UTC batch adds only a Guardian Pharmacy S&P SmallCap headline unrelated to DaVita; no new filings.  
 Regulatory, leverage and litigation overlays are unchanged; the quantitative screen remains **strong_buy**.
+
+### 2026-11-25T04:41:41.437227+00:00
+No material change since the 24 November 21:41 UTC refresh.  
+The 04:41 UTC news batch adds no articles; regulatory, leverage and litigation overlays are unchanged.  
+The quantitative screen remains **strong_buy**; the filing pack is unchanged.

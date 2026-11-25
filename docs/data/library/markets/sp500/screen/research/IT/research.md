@@ -1,6 +1,6 @@
 # Gartner, Inc. (IT) — Research memo
 
-_Version 7 · Updated 2026-11-24T21:46:34.302153+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T04:46:21.507054+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: No new filings since 19 Nov and no Gartner-specific news in the evening batch; on-file Q3 results and earlier contract-growth commentary still confirm the strong-buy screen signal.
+Rationale: Fresh commentary on contract value and engagement aligns with on-file Q3; no new filings; accumulate still moderates the strong-buy screen on leverage, competitive and cyclical risks.
 RiskTags: competitive, leverage, cyclical, litigation
 
 ## Weekly updates
@@ -43,3 +43,8 @@ Uber Freight reportedly will no longer cooperate on future Magic Quadrant work�
 No new SEC filings since the 19 Nov executive RSU 8-K; Q3 2026 Form 10-Q and the 3 Nov earnings 8-K remain the latest on file.  
 The 24 Nov evening news batch has no Gartner-specific items—only generic “IT” ticker noise (Nvidia, Anthropic, etc.).  
 No material change.
+
+### 2026-11-25T04:46:21.507054+00:00
+No new SEC filings since the 19 Nov executive RSU 8-K; the Q3 2026 Form 10-Q and 3 Nov earnings 8-K remain the latest on file.  
+The 25 Nov batch adds Gartner-specific Yahoo Finance commentary on improved contract value growth, higher client engagement, and a CISO executive summit—secondary to filed Q3 metrics.  
+Remaining headlines are generic “IT” ticker noise; leverage, competitive, cyclical and litigation themes are unchanged.

@@ -1,6 +1,6 @@
 # Adobe Inc. (ADBE) — Research memo
 
-_Version 10 · Updated 2026-11-24T21:35:40.883517+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-25T04:35:17.605170+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: Commentary-only headlines on AI expansion and a Tuesday rebound partly confirm the buy case; unchanged Q3 filings still back revenue and ARR, whilst competition and leverage cap conviction.
+Rationale: No new Adobe disclosures or company-specific news; unchanged Q3 filings still support revenue and ARR, whilst competition and leverage cap conviction on the buy screen.
 RiskTags: competitive, regulatory, litigation, leverage
 
 ## Weekly updates
@@ -56,5 +56,10 @@ The quantitative screen signal remains **buy**.
 
 ### 2026-11-24T21:35:40.883517+00:00
 Since the 17:51 UTC refresh, the 21:35 news batch adds two Adobe-relevant items (Simply Wall St AI bull-case framing, Benzinga Tuesday rebound) plus one unrelated consumer-fraud piece; no new SEC filings.  
+Q3 FY2026 10-Q (Aug 2026) remains the latest interim disclosure; filing-backed revenue, ARR and cash flow are unchanged.  
+Quantitative screen signal remains **buy**.
+
+### 2026-11-25T04:35:17.605170+00:00
+Since the 24 Nov 21:35 UTC refresh, the 04:34 news batch adds one macro AI-market video (Nvidia, Anthropic, Dell); the summary has no Adobe-specific detail.  
 Q3 FY2026 10-Q (Aug 2026) remains the latest interim disclosure; filing-backed revenue, ARR and cash flow are unchanged.  
 Quantitative screen signal remains **buy**.

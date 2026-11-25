@@ -1,6 +1,6 @@
 # Premier Foods plc (PFD.L) — Research memo
 
-_Version 11 · Updated 2026-11-24T21:51:58.817416+00:00 · Mode: structured_verdict_update_
+_Version 12 · Updated 2026-11-25T04:51:32.651979+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -61,5 +61,10 @@ Strong-buy screen persists; accumulate overlay unchanged, with screen FCF, ROE a
 
 ### 2026-11-24T21:51:58.817416+00:00
 No new RNS or indexed filings since the 18:06 UTC refresh; the 21:51 UTC news batch is empty.  
+12 Nov H1 themes (Oct bond redemption, top-end FY guidance, 1.12p interim dividend) remain the only material disclosures in sources.  
+Strong-buy screen persists; accumulate overlay unchanged, with screen FCF, ROE and liquidity optics still unresolved.
+
+### 2026-11-25T04:51:32.651979+00:00
+No new RNS or indexed filings since the 24 Nov refresh; the 04:50 UTC news batch is empty.  
 12 Nov H1 themes (Oct bond redemption, top-end FY guidance, 1.12p interim dividend) remain the only material disclosures in sources.  
 Strong-buy screen persists; accumulate overlay unchanged, with screen FCF, ROE and liquidity optics still unresolved.

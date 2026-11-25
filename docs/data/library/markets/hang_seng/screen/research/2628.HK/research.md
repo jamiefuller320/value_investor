@@ -1,6 +1,6 @@
 # China Life Insurance Company Limited (2628.HK) — Research memo
 
-_Version 20 · Updated 2026-11-24T21:35:01.438789+00:00 · Mode: structured_verdict_update_
+_Version 21 · Updated 2026-11-25T04:34:09.913909+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -107,4 +107,9 @@ Screen–Yahoo FCF and earnings divergences versus the strong-buy signal are unc
 ### 2026-11-24T21:35:01.438789+00:00
 News batch since the 17:50 UTC run returned no articles; supplied sources show no discrete China Life developments.  
 HKEX index refreshed at 21:34 UTC—2026 Q3 still cites 9M equity-adjusted net profit up 15.8% year on year; Yahoo’s 30 Sep 2026 negative revenue is unchanged.  
+Screen–Yahoo FCF and earnings divergences versus the strong-buy signal are unchanged.
+
+### 2026-11-25T04:34:09.913909+00:00
+News batch since the 24 Nov 21:35 UTC run returned no articles; supplied sources show no discrete China Life developments.  
+HKEX index refreshed at 04:34 UTC on 25 Nov—2026 Q3 still cites 9M equity-adjusted net profit up 15.8% year on year; Yahoo’s 30 Sep 2026 negative revenue is unchanged.  
 Screen–Yahoo FCF and earnings divergences versus the strong-buy signal are unchanged.

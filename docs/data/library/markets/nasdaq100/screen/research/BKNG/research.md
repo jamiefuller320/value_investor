@@ -1,6 +1,6 @@
 # Booking Holdings Inc. (BKNG) — Research memo
 
-_Version 7 · Updated 2026-11-24T21:36:27.296642+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T04:36:16.049706+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: One low-material peer-comparison headline plus unchanged filing-backed screen metrics still confirm the buy case; regulatory, cyclical, competitive and leverage risks persist.
+Rationale: OpenTable–me&u deal headlines are immaterial to group economics; unchanged filing-backed screen metrics still confirm the buy case; regulatory, cyclical, competitive and leverage risks persist.
 RiskTags: regulatory, cyclical, competitive, leverage
 
 ## Weekly updates
@@ -43,3 +43,8 @@ Filing-backed fundamentals and the buy screen are unchanged; news flow is noise 
 One Yahoo article since the 17:52 UTC pull compares BKNG to Chewy on quarterly revenue volatility; no new fundamental disclosures.  
 EDGAR re-fetch at 21:36 UTC still shows 22 filing bodies with no new extracts.  
 No material change.
+
+### 2026-11-25T04:36:16.049706+00:00
+Two articles since the 24 Nov 21:36 UTC pull report OpenTable’s proposed acquisition of Australian restaurant-tech firm me&u; deal terms are not in the supplied headlines.
+EDGAR re-fetch at 04:35 UTC still shows 23 filings and 22 bodies with no new extracts.
+Filing-backed fundamentals and the buy screen are unchanged.

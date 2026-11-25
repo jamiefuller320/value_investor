@@ -1,6 +1,6 @@
 # Teradyne, Inc. (TER) — Research memo
 
-_Version 6 · Updated 2026-11-24T21:54:14.752262+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-25T04:54:04.966780+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: Research weakens the buy case: sympathy semicap selling and unresolved screen quality gates outweigh ~$800m TTM FCF and generic AI-infrastructure mentions.
+Rationale: Research still weakens the buy: the batch is empty and no filings arrived after the 30 Oct 10-Q; ~$800m TTM FCF does not clear prior valuation and earnings-quality concerns.
 RiskTags: cyclical, customer_concentration, competitive
 
 ## Weekly updates
@@ -38,3 +38,8 @@ TTM free cash flow remains about $800m; the buy screen is unchanged and prior va
 Since the last refresh, coverage is only a Tuesday semicap-equipment selloff (KLA, ICHR, Lam); nothing Teradyne-specific landed in this batch.  
 The filings index was refreshed with no new SEC bodies after the 30 Oct 2026 10-Q; Yahoo still shows TTM free cash flow near $800m.  
 The buy screen is unchanged and prior valuation and earnings-quality concerns remain unresolved.
+
+### 2026-11-25T04:54:04.966780+00:00
+No material change. The 25 Nov news batch has no Teradyne-specific articles since the 24 Nov refresh.  
+The filings index was refreshed; there are still no SEC bodies after the 30 Oct 2026 10-Q.  
+Yahoo TTM free cash flow remains about $800m; the buy screen and prior valuation and earnings-quality concerns are unchanged.

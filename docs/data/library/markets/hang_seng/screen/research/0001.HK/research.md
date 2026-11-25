@@ -1,6 +1,6 @@
 # CK Hutchison Holdings Limited (0001.HK) — Research memo
 
-_Version 1 · Updated 2026-11-02T07:45:47.813196+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-11-25T04:32:48.643251+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,13 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: FY2025 HKEX results show post-IFRS 16 OCF HK$62.6bn and positive FCF after capex, supporting a 5% full-year dividend lift; cheapness holds, but unverified screen TTM FCF (−US$14.5bn) and Yahoo ~30% earnings growth diverge from filing und...
+Confidence: 0.65
+Rationale: HKEX-aligned OCF/FCF and dividend still support the buy screen, but Panama’s criminal PPC complaint and delayed AS Watson listing add litigation and monetisation risk without fresh filings.
 RiskTags: regulatory, leverage, governance, litigation, cyclical, key_person
+
+## Weekly updates
+
+### 2026-11-25T04:32:48.643251+00:00
+Panama’s comptroller filed a criminal complaint (18 Nov) over suspected irregularities in the audit of Panama Ports Company’s state concession, extending the ports dispute.
+WSJ reports CK Hutchison has delayed AS Watson’s planned dual listing (11 Nov); outcome and timing are not in the supplied filings.
+Screen cash-flow inputs are unchanged (OCF HK$62.6bn, FCF HK$41.7bn); Yahoo quarterly cash flow remains empty, so TTM FCF is still unverified.
