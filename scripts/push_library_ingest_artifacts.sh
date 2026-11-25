@@ -5,10 +5,19 @@
 # dirty and unstashed, so `git checkout -B main origin/main` aborted. Stash every
 # allowlisted path, then restore only files this job actually changed so a
 # concurrent engineering-queue update is not clobbered.
+#
+# Catalogue screens and handoff buys also commit through this script, one name
+# at a time. On 23 Nov 2026 a finished BWA screen (run 45187088011) and a
+# finished AROW buy (run 45163550295) were rejected four times — fetch first /
+# cannot lock ref — while other catalogue commits kept landing on main. Those
+# rejections retry until this commit lands or the same artifacts are already
+# on main. Stopping early drops the finished screen or buy.
 set -euo pipefail
 
 COMMIT_MESSAGE="${1:-chore: euro_depth ingest loop [skip ci]}"
 MAX_ATTEMPTS="${MAX_ATTEMPTS:-4}"
+# Main-moved rejections only. A hook or auth failure still uses MAX_ATTEMPTS.
+RACE_MAX_ATTEMPTS="${RACE_MAX_ATTEMPTS:-40}"
 
 # Only these paths may be restored from the stash and committed.
 LIBRARY_INGEST_ARTIFACT_PATHS=(
@@ -99,6 +108,78 @@ stage_library_ingest_artifacts() {
   done
 }
 
+# Stage the files this job changed. Walking the whole library tree on every
+# retry keeps the fetch-to-push gap open while the next catalogue screen lands.
+stage_dirty_artifacts() {
+  local path
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    if ! path_is_allowed "$path"; then
+      continue
+    fi
+    if [ -e "$path" ] || [ -L "$path" ]; then
+      git add -- "$path" 2>/dev/null || true
+    else
+      git add -u -- "$path" 2>/dev/null || true
+    fi
+  done < "$DIRTY_LIST"
+  if [ -d "$USAGE_DIR" ]; then
+    git add -- "$USAGE_DIR" 2>/dev/null || true
+  fi
+}
+
+# True when every path this job changed already matches HEAD (origin/main
+# after the sync checkout). A new screen or buy file that is not on HEAD
+# must not take the empty-diff skip.
+artifacts_already_on_main() {
+  local path
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    if [ -e "$path" ] || [ -L "$path" ]; then
+      if ! git cat-file -e "HEAD:$path" 2>/dev/null; then
+        return 1
+      fi
+      if ! git diff --quiet HEAD -- "$path"; then
+        return 1
+      fi
+    elif git cat-file -e "HEAD:$path" 2>/dev/null; then
+      return 1
+    fi
+  done < "$DIRTY_LIST"
+  return 0
+}
+
+main_moved_under_push() {
+  grep -E -q 'fetch first|cannot lock ref|non-fast-forward|remote contains work that you do' "$1"
+}
+
+race_pause() {
+  local base="${RACE_RETRY_SLEEP:-1}"
+  if [ "$base" = "0" ]; then
+    return 0
+  fi
+  # Whole seconds plus a short jitter so two retries do not push together.
+  sleep "$base.$((RANDOM % 400))"
+}
+
+finish_synced() {
+  local ref="$1" reason="$2"
+  echo "$reason"
+  if [ -n "$ref" ]; then
+    git stash drop "$ref" 2>/dev/null || true
+  fi
+  exit 0
+}
+
+skip_or_refuse() {
+  local ref="$1" reason="$2"
+  if artifacts_already_on_main; then
+    finish_synced "$ref" "$reason"
+  fi
+  echo "Finished library artifacts are not on main; refusing to skip the commit" >&2
+  exit 1
+}
+
 collect_dirty_artifact_paths() {
   {
     git diff --name-only HEAD -- "${LIBRARY_INGEST_ARTIFACT_PATHS[@]}"
@@ -113,7 +194,7 @@ stash_ref_for_label() {
 
 STASH_LABEL="library-ingest-artifacts-$(date +%s)"
 DIRTY_LIST="$(mktemp)"
-trap 'rm -f "$DIRTY_LIST"' EXIT
+trap 'rm -f "$DIRTY_LIST" "${push_log:-}"' EXIT
 
 stage_library_ingest_artifacts
 if git diff --cached --quiet && [ -z "$(git status --porcelain -- "${LIBRARY_INGEST_ARTIFACT_PATHS[@]}" 2>/dev/null || true)" ]; then
@@ -127,8 +208,13 @@ collect_dirty_artifact_paths > "$DIRTY_LIST"
 git stash push -u -m "$STASH_LABEL" -- docs/data/
 
 attempt=1
+race_attempt=0
 while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
-  echo "Push attempt $attempt/$MAX_ATTEMPTS"
+  if [ "$race_attempt" -gt 0 ]; then
+    echo "Push attempt $((race_attempt + 1))/$RACE_MAX_ATTEMPTS after main moved"
+  else
+    echo "Push attempt $attempt/$MAX_ATTEMPTS"
+  fi
   git_clean_state
   git fetch origin main
   git checkout -B main origin/main
@@ -146,13 +232,10 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
   fi
 
   restore_usage_shards
-  stage_library_ingest_artifacts
+  stage_dirty_artifacts
   if git diff --cached --quiet; then
-    echo "No library ingest artifact changes after sync"
-    if [ -n "${ref:-}" ]; then
-      git stash drop "$ref" 2>/dev/null || true
-    fi
-    exit 0
+    skip_or_refuse "${ref:-}" \
+      "No library ingest artifact changes after sync — finished artifacts already on main"
   fi
 
   while IFS= read -r path; do
@@ -165,15 +248,15 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
   done < <(git diff --cached --name-only)
 
   if git diff --cached --quiet; then
-    echo "No library ingest artifact changes after allowlist filter"
-    if [ -n "${ref:-}" ]; then
-      git stash drop "$ref" 2>/dev/null || true
-    fi
-    exit 0
+    skip_or_refuse "${ref:-}" \
+      "No library ingest artifact changes after allowlist filter — finished artifacts already on main"
   fi
 
   git commit -m "$COMMIT_MESSAGE"
-  if git push origin HEAD:main; then
+  push_log="$(mktemp)"
+  if git push origin HEAD:main >"$push_log" 2>&1; then
+    cat "$push_log"
+    rm -f "$push_log"
     echo "Library ingest artifacts pushed to main"
     if [ -n "${ref:-}" ]; then
       git stash drop "$ref" 2>/dev/null || true
@@ -183,9 +266,27 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
     fi
     exit 0
   fi
+  cat "$push_log" >&2
 
+  if main_moved_under_push "$push_log"; then
+    rm -f "$push_log"
+    race_attempt=$((race_attempt + 1))
+    if [ "$race_attempt" -ge "$RACE_MAX_ATTEMPTS" ]; then
+      echo "Failed to push library ingest artifacts after $RACE_MAX_ATTEMPTS attempts while main moved" >&2
+      exit 1
+    fi
+    echo "Main moved — retrying so the finished screen or buy is not dropped"
+    race_pause
+    continue
+  fi
+
+  rm -f "$push_log"
+  if [ "$attempt" -ge "$MAX_ATTEMPTS" ]; then
+    echo "Failed to push library ingest artifacts after $MAX_ATTEMPTS attempts" >&2
+    exit 1
+  fi
   echo "Push failed — retrying after backoff"
-  sleep $((4 * attempt))
+  sleep "${PUSH_BACKOFF_SECONDS:-$((4 * attempt))}"
   attempt=$((attempt + 1))
 done
 
