@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-25T06:06:21+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-25T14:21:02+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -306,6 +306,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | N276 | **Strategy-book memos cite decline and sector evidence** | Plan step 4.2 asks memos to cite evidence for or against operating decline and sector headwinds, and to calibrate confidence on outcomes. The plan named N173 and N210, which are the live LLM sell overlay and the N210 AI-judgment book. This is that step. It does not change the sealed memo filter or the primary exit until the owner says so at a version review. | At the strategy-book version review, once the thickness gate is ready (48 counted mature episodes), the owner decides whether memos must cite those gates. _(machine-checked)_ |
 | N277 | **Third catalogue screener after screened seconds show room** | Add another catalogue screen slot only after catalogue_explorer.json has screened seconds per name and any 429 or SEC refusals still sit under the written source limits. SEC fair access is 10 requests a second and the companyfacts client sleeps 0.2 seconds. Companies House sleeps 0.6 seconds. Yahoo retries three times, starting at 2 seconds, on a 429. | The state file has screened seconds per name and source-limit refusals still leave room under those written ceilings |
 | N278 | **Composer sift then Grok on would-buy names** | Daily observe memos stay on Composer. A second Grok memo runs only for names the strategy book would buy, as an observe shadow. It does not block a live buy. Judge it on fair-cost episode percent, same as the L694 memo ranking. Blind ratings are still 0/4. | After the 30 Nov 2026 L694 memo-ceiling review, and once the memo-model blind ratings exist _(machine-checked)_ |
+| N279 | **Tighten the floor on a thesis break** | After entry, a thesis-break signal would tighten the ratcheting profit floor instead of selling at once, so a rise can continue. Entry cost is sunk. Observe-only candidate for the version review. Does not replace the sealed exit. | Strategy-book version review after 48 mature episodes _(machine-checked)_ |
 
 ---
 
