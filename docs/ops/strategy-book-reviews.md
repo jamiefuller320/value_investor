@@ -24,6 +24,7 @@ the primary closes. Strategy-book closes therefore have a sibling store:
 | File | What it is |
 |---|---|
 | `docs/data/strategy_book_review_queue.json` | One row per closed episode. Rebuilt each ops-monitor run. |
+| `docs/data/strategy_book_post_sale_notes.json` | One note per closed primary episode. Rebuilt by the same ops-monitor check. This is the collation the version review reads. |
 | `docs/data/strategy_book_review_labels.json` | Optional Accept history, via the same label helper as the sealed queue. The daily refresh does not create it. |
 
 The stable id of a row is the episode id
@@ -131,9 +132,31 @@ ftse-strategy-book-reviews
 ftse-strategy-book-reviews --json
 ```
 
+## Post-sale notes
+
+The same daily check writes `docs/data/strategy_book_post_sale_notes.json`.
+One note per closed primary episode. Comparison, control, shadow and bench
+closes stay on the review queue and do not get a note.
+
+Each note carries the ticker, the fill date, the session the rule fired, the
+exit date, the exit reason, the fair-cost return, the matched excess, the
+sessions held, the maturity flag, and a short learning point. The point is
+assembled from those fields and from the decision-log line whose action is
+the exit reason (dated on or before the exit). A thesis break also requires
+a registered reason code (`declining`, `headwind`, `screen_avoid`,
+`research_failed`). A floor exit requires the floor on that line.
+
+A missing date, return, excess, session count, maturity flag, provenance, or
+rule line leaves `learning_point` null and lists `missing_inputs`. The check
+does not invent a point. `influences_live` is false. The note does not change
+the registered exit.
+
+The version review reads this file with the review queue. There is no
+separate daily human review.
+
 ## What this is not
 
 No new model spend. No mid-run tune. No change to a knob, a fill, or the
-sealed registration. The version review is the human step that reads this
-store. It is already on the human tasks checklist
+sealed registration. The version review is the human step that reads the
+queue and the post-sale notes. It is already on the human tasks checklist
 (`adhoc-strategy-version-review`). There is no separate daily human review.

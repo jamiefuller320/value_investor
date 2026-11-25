@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from value_investor.human_tasks_checklist import (
@@ -118,6 +120,22 @@ def test_weekday_parked_backlog_quiet_auto_ack_policy():
     assert "auto-acks" in summary.lower() or "auto-ack" in summary.lower()
     assert "list-parked" in summary
     assert "recover-queue" in summary
+
+
+def test_version_review_reads_post_sale_notes():
+    payload = load_human_tasks_checklist()
+    tasks = [task for section in payload["sections"] for task in section["tasks"]]
+    row = next(task for task in tasks if task["id"] == "adhoc-strategy-version-review")
+    assert row["automated"] is False
+    summary = row["summary"]
+    assert "strategy_book_post_sale_notes.json" in summary
+    assert "learning point" in summary
+    assert "do not change the registered exit" in summary
+    md = (Path(__file__).resolve().parents[1] / "docs/ops/human-tasks-checklist.md").read_text(
+        encoding="utf-8"
+    )
+    assert "strategy_book_post_sale_notes.json" in md
+    assert "learning point grounded in the rule that fired" in md
 
 
 def test_sprint2_workflow_pat_is_a_human_task():

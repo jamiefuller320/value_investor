@@ -3220,8 +3220,11 @@ def check_strategy_book_reviews(
 ) -> list[OpsFinding]:
     """Refresh strategy-book close reviews. Does not walk or change the book.
 
-    Writes ``docs/data/strategy_book_review_queue.json``. Observe-only
-    (``auto_fixable=False``). No model spend. See docs/ops/strategy-book-reviews.md.
+    Writes ``docs/data/strategy_book_review_queue.json`` and one post-sale
+    note per closed primary episode in
+    ``docs/data/strategy_book_post_sale_notes.json``. Observe-only
+    (``auto_fixable=False``). No model spend. A missing input leaves the
+    learning point null. See docs/ops/strategy-book-reviews.md.
     """
     from value_investor.strategy_book_reviews import (
         STORE_FAILED_TITLE,

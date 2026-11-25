@@ -406,9 +406,10 @@ instrument), L723 ranking-lab follow-up.
 
 Closed episodes are not reviewed inside this walker. The daily ops-monitor
 check reads this store and the gate log and writes
-`docs/data/strategy_book_review_queue.json`. See
-[strategy-book-reviews.md](strategy-book-reviews.md). The walker does not
-write that queue, and a review never changes the book.
+`docs/data/strategy_book_review_queue.json` and one post-sale note per
+closed primary episode in `docs/data/strategy_book_post_sale_notes.json`.
+See [strategy-book-reviews.md](strategy-book-reviews.md). The walker does not
+write that queue or those notes, and a review never changes the book.
 
 ## Findings
 

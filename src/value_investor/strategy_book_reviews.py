@@ -14,6 +14,10 @@ control, with its own attention window. Strategy-book closes, including
 comparison, shadow, control and bench columns, live in a sibling store so
 they do not crowd that queue. Primary closes are the attention list here.
 Other columns are queued beside them.
+
+The same refresh writes one post-sale note per closed primary episode
+(``strategy_book_post_sale_notes.json``). The learning point is grounded in
+the rule that fired. A missing input leaves the point null.
 """
 
 from __future__ import annotations
@@ -1189,34 +1193,59 @@ def refresh_strategy_book_reviews(
     now: datetime | None = None,
     persist: bool = True,
 ) -> dict[str, Any]:
-    """Read the observe store and rewrite the sibling review queue."""
+    """Read the observe store and rewrite the review queue and post-sale notes."""
+    from value_investor.strategy_book_post_sale_notes import (
+        NOTES_FILENAME,
+        build_strategy_book_post_sale_notes,
+    )
+
     root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
     observe_file = Path(observe_path) if observe_path is not None else root / DEFAULT_OBSERVE_NAME
     gate_file = Path(gate_log_path) if gate_log_path is not None else root / DEFAULT_GATE_LOG_NAME
     dest = Path(store_path) if store_path is not None else root / DEFAULT_STORE_NAME
     moment = now or _utcnow()
+    observe_obj: dict[str, Any] | None = None
     if not observe_file.is_file():
         payload = build_strategy_book_review_queue(
             None,
             now=moment,
             observe_status="missing",
         )
+        observe_status = "missing"
     else:
-        observe = _load_json(observe_file)
-        if observe is None:
+        loaded = _load_json(observe_file)
+        if loaded is None:
             raise ValueError(f"strategy book observe store is not a JSON object: {observe_file}")
+        observe_obj = loaded
         payload = build_strategy_book_review_queue(
-            observe,
+            observe_obj,
             gate_rows=_load_gate_log(gate_file),
             labels=load_post_sale_review_labels(dest.parent, filename=LABELS_FILENAME),
             now=moment,
             observe_status="ok",
         )
+        observe_status = "ok"
+    notes = build_strategy_book_post_sale_notes(
+        observe_obj,
+        now=moment,
+        observe_status=observe_status,
+    )
+    notes_dest = dest.parent / NOTES_FILENAME
+    note_counts = notes.get("counts") if isinstance(notes.get("counts"), dict) else {}
+    payload["post_sale_notes"] = {
+        "store": NOTES_FILENAME,
+        "path": str(notes_dest),
+        "notes": int(note_counts.get("notes") or 0),
+        "grounded": int(note_counts.get("grounded") or 0),
+        "fail_closed": int(note_counts.get("fail_closed") or 0),
+        "influences_live": False,
+    }
     payload["observe_path"] = str(observe_file)
     payload["gate_log_path"] = str(gate_file)
     if persist:
         dest.parent.mkdir(parents=True, exist_ok=True)
         write_json(dest, payload, compact=False)
+        write_json(notes_dest, notes, compact=False)
         payload["path"] = str(dest)
     return payload
 
@@ -1243,7 +1272,8 @@ def ops_findings_from_strategy_book_reviews(
                 "title": STORE_FAILED_TITLE,
                 "summary": (
                     "Strategy book observe store is missing, so no close can be "
-                    "reviewed. Fail closed."
+                    "reviewed and no post-sale learning point is written. "
+                    "Fail closed."
                 ),
                 "auto_fixable": False,
             }
@@ -1262,6 +1292,15 @@ def ops_findings_from_strategy_book_reviews(
         "and bench closes are queued beside them. influences_live=false. "
         "Opinion model off. Evidence for the version review only."
     )
+    notes = payload.get("post_sale_notes") if isinstance(payload.get("post_sale_notes"), dict) else {}
+    if notes:
+        summary += (
+            f" Post-sale notes: notes={int(notes.get('notes') or 0)} "
+            f"grounded={int(notes.get('grounded') or 0)} "
+            f"fail_closed={int(notes.get('fail_closed') or 0)}. "
+            "One note per closed primary episode. A missing input has no "
+            "learning point. influences_live=false."
+        )
     if closed == 0:
         summary += " Awaiting first close."
     findings = [
@@ -1300,6 +1339,17 @@ def ops_findings_from_strategy_book_reviews(
     return findings
 
 
+def _notes_text(payload: dict[str, Any]) -> str:
+    notes = payload.get("post_sale_notes") if isinstance(payload.get("post_sale_notes"), dict) else {}
+    if not notes:
+        return ""
+    return (
+        f" post_sale_notes={int(notes.get('notes') or 0)}"
+        f" grounded={int(notes.get('grounded') or 0)}"
+        f" fail_closed={int(notes.get('fail_closed') or 0)}"
+    )
+
+
 def format_strategy_book_reviews_text(payload: dict[str, Any]) -> str:
     counts = payload.get("counts") if isinstance(payload.get("counts"), dict) else {}
     return (
@@ -1311,6 +1361,7 @@ def format_strategy_book_reviews_text(payload: dict[str, Any]) -> str:
         f"missing={counts.get('missing', 0)} "
         f"observe_status={payload.get('observe_status')} "
         f"influences_live=false opinion_llm=false"
+        + _notes_text(payload)
     )
 
 
