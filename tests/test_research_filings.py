@@ -1572,6 +1572,35 @@ def test_eng_20261115_04_ingest_supplement_uses_cashflow_metrics_without_cash_fl
     assert metrics.operating_cashflow == pytest.approx(90_762_000.0)
 
 
+def test_eng_20261125_05_apply_cashflow_fallback_reads_ifrs_rows_from_annual_json():
+    """Regression (eng-20261125-05): annual JSON cash_flow rows must backfill OCF without live fetch."""
+    from value_investor.research.ingest import (
+        apply_cashflow_metrics_fallback,
+        enrich_screening_snapshot_with_yahoo_quarterly,
+    )
+
+    financials = {
+        "ticker": "MEGP.L",
+        "cash_flow": {
+            "2025": {
+                "Free Cash Flow": 25_153_000.0,
+                "Cash Flowsfromusedin Operating Activities Direct": 90_762_000.0,
+            },
+        },
+        "cashflow_metrics": {},
+    }
+    metrics = {"operating_cashflow": None, "free_cashflow": None}
+    filled = apply_cashflow_metrics_fallback(metrics, financials)
+    assert filled == ["operating_cashflow", "free_cashflow"]
+    assert metrics["operating_cashflow"] == pytest.approx(90_762_000.0)
+    assert metrics["free_cashflow"] == pytest.approx(25_153_000.0)
+
+    snapshot = {"ticker": "MEGP.L", "operating_cashflow": None, "free_cashflow": None}
+    enriched = enrich_screening_snapshot_with_yahoo_quarterly(snapshot, financials)
+    assert enriched["operating_cashflow"] == pytest.approx(90_762_000.0)
+    assert enriched["cashflow_metrics"]["operating_cashflow"] == pytest.approx(90_762_000.0)
+
+
 def test_fetch_annual_financials_includes_cashflow_metrics(monkeypatch):
     cashflow_df = pd.DataFrame(
         {"2024": [90_800_000.0, 55_000_000.0]},
