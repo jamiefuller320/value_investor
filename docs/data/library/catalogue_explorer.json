@@ -6369,28 +6369,10 @@
     "2CKD_EQ",
     "2CLD_EQ",
     "2CPD_EQ",
-    "2DGD_EQ"
+    "2DGD_EQ",
+    "2G2D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "1RHd_EQ",
-      "venue": "DE",
-      "yahoo": "1RH.DE",
-      "isin": "JP3970300004",
-      "name": "1RH",
-      "seconds": 86.823,
-      "outcome": "miss",
-      "at": "2026-11-25T22:03:20.279053+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.537
-      },
-      "screen_seconds": 85.537,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "1SBd_EQ",
       "venue": "DE",
@@ -7131,6 +7113,25 @@
       },
       "screen_seconds": 2.598,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "2G2d_EQ",
+      "venue": "DE",
+      "yahoo": "2G2.DE",
+      "isin": "LU0974299876",
+      "name": "2G2",
+      "seconds": 3.764,
+      "outcome": "miss",
+      "at": "2026-11-25T23:00:22.421798+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 2.626
+      },
+      "screen_seconds": 2.626,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -86082,43 +86083,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T22:56:52.778375+00:00"
+    },
+    {
+      "t212_ticker": "2G2d_EQ",
+      "yahoo": "2G2.DE",
+      "name": "2G2",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T23:00:22.421798+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "2DGd_EQ",
+    "t212_ticker": "2G2d_EQ",
     "venue": "DE",
-    "yahoo": "2DG.DE",
-    "isin": "SE0003917798",
-    "name": "2DG",
-    "seconds": 3.654,
+    "yahoo": "2G2.DE",
+    "isin": "LU0974299876",
+    "name": "2G2",
+    "seconds": 3.764,
     "outcome": "miss",
-    "at": "2026-11-25T23:00:11.018952+00:00",
+    "at": "2026-11-25T23:00:22.421798+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.8,
-      "seconds": 2.598
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 2.626
     },
-    "screen_seconds": 2.598,
-    "signal": "avoid"
+    "screen_seconds": 2.626,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "2G2d_EQ"
+    }
   },
-  "updated_at": "2026-11-25T23:00:11.018952+00:00",
+  "updated_at": "2026-11-25T23:00:22.421798+00:00",
   "totals": {
-    "screened": 6368,
+    "screened": 6369,
     "signals": {
-      "buy": 1891,
+      "buy": 1892,
       "avoid": 1487,
       "hold": 1377,
       "insufficient_data": 1576,
       "strong_buy": 37
     },
-    "signals_n": 6368,
-    "screen_seconds_sum": 66536.13400000024,
-    "screen_seconds_n": 6368,
+    "signals_n": 6369,
+    "screen_seconds_sum": 66538.76000000024,
+    "screen_seconds_n": 6369,
     "outcomes": {
-      "miss": 2554,
+      "miss": 2555,
       "saved": 3814
     }
   },
