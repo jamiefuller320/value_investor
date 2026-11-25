@@ -6375,28 +6375,10 @@
     "2GFD_EQ",
     "2HQD_EQ",
     "2HRAD_EQ",
-    "2HXD_EQ"
+    "2HXD_EQ",
+    "2INVD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "1T5d_EQ",
-      "venue": "DE",
-      "yahoo": "1T5.DE",
-      "isin": "PLTAURN00011",
-      "name": "1T5",
-      "seconds": 87.24,
-      "outcome": "miss",
-      "at": "2026-11-25T22:10:10.013279+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.718
-      },
-      "screen_seconds": 85.718,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "1VUd_EQ",
       "venue": "DE",
@@ -7137,6 +7119,25 @@
       },
       "screen_seconds": 4.022,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "2INVd_EQ",
+      "venue": "DE",
+      "yahoo": "2INV.DE",
+      "isin": "DE000A3H3L44",
+      "name": "2INV",
+      "seconds": 1.764,
+      "outcome": "miss",
+      "at": "2026-11-25T23:01:25.515246+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.8,
+        "seconds": 0.645
+      },
+      "screen_seconds": 0.645,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -86104,43 +86105,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T23:01:03.456399+00:00"
+    },
+    {
+      "t212_ticker": "2INVd_EQ",
+      "yahoo": "2INV.DE",
+      "name": "2INV",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T23:01:25.515246+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "2HXd_EQ",
+    "t212_ticker": "2INVd_EQ",
     "venue": "DE",
-    "yahoo": "2HX.DE",
-    "isin": "NO0003067902",
-    "name": "2HX",
-    "seconds": 5.28,
+    "yahoo": "2INV.DE",
+    "isin": "DE000A3H3L44",
+    "name": "2INV",
+    "seconds": 1.764,
     "outcome": "miss",
-    "at": "2026-11-25T23:01:16.248938+00:00",
+    "at": "2026-11-25T23:01:25.515246+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.022
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.8,
+      "seconds": 0.645
     },
-    "screen_seconds": 4.022,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.645,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "2INVd_EQ"
+    }
   },
-  "updated_at": "2026-11-25T23:01:16.248938+00:00",
+  "updated_at": "2026-11-25T23:01:25.515246+00:00",
   "totals": {
-    "screened": 6374,
+    "screened": 6375,
     "signals": {
-      "buy": 1893,
+      "buy": 1894,
       "avoid": 1487,
       "hold": 1379,
       "insufficient_data": 1578,
       "strong_buy": 37
     },
-    "signals_n": 6374,
-    "screen_seconds_sum": 66549.00200000026,
-    "screen_seconds_n": 6374,
+    "signals_n": 6375,
+    "screen_seconds_sum": 66549.64700000026,
+    "screen_seconds_n": 6375,
     "outcomes": {
-      "miss": 2560,
+      "miss": 2561,
       "saved": 3814
     }
   },
