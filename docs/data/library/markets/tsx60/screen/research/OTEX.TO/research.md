@@ -1,28 +1,13 @@
 # Open Text Corporation (OTEX.TO) — Research memo
 
-_Version 4 · Updated 2026-11-24T21:51:29.668108+00:00 · Mode: structured_verdict_update_
+_Version 1 · Updated 2026-11-25T00:15:07.582806+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
-Verdict: accumulate
-Risk: medium
-Confidence: 0.65
-Rationale: TTM FCF (~$845m) still covers dividends, but ~$6.0bn debt and an unloaded screen (0 models) mean research only partly confirms the strong_buy case; the 21:50 news batch adds nothing.
+Verdict: caution
+Risk: high
+Confidence: 0.58
+Rationale: FY26 screen FCF/yield lean on Yahoo (~$808M FCF); filings show strong 9M OCF and earnings but truncated 10-Ks block full annual tie-out, leverage ~$5.7B LT debt remains, and Q1 FY27 revenue fell YoY.
 RiskTags: leverage, competitive, accounting
-
-## Weekly updates
-
-### 2026-11-24T05:43:36.309799+00:00
-No new articles in the 2026-11-24 news batch since the prior structured verdict.
-Filings still show TTM FCF ~$845m against ~$6.0bn total debt; screen remains strong_buy with model metrics unloaded.
-
-### 2026-11-24T18:06:06.620748+00:00
-One syndicated Kalkine piece on recurring revenue and AI arrived since the 05:43 verdict; it adds no new company disclosure.
-Filing roll still shows TTM FCF ~$845m against ~$6.0bn total debt; the screen remains **strong_buy** with model metrics unloaded.
-
-### 2026-11-24T21:51:29.668108+00:00
-No new articles in the 21:50 news batch since the 18:06 verdict.
-Financial and filing rolls are unchanged (TTM FCF ~$845m, ~$6.0bn debt, zero filing bodies indexed).
-Screen remains **strong_buy** with model metrics still unloaded.
