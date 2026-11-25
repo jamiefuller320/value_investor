@@ -4857,28 +4857,10 @@
     "RZLTD_US_EQ",
     "RZRA_US_EQ",
     "R_US_EQ",
-    "SAABY_US_EQ"
+    "SAABY_US_EQ",
+    "SABK_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "RTTR_US_EQ",
-      "venue": "US",
-      "yahoo": "RTTR",
-      "isin": "US74754R3012",
-      "name": "FFR",
-      "seconds": 4.075,
-      "outcome": "miss",
-      "at": "2026-11-25T07:51:21.346118+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.96
-      },
-      "screen_seconds": 3.96,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "RUBI1_US_EQ",
       "venue": "US",
@@ -5619,6 +5601,25 @@
       },
       "screen_seconds": 0.641,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "SABK_US_EQ",
+      "venue": "US",
+      "yahoo": "SABK",
+      "isin": "US83636T1043",
+      "name": "SABK",
+      "seconds": 1.106,
+      "outcome": "miss",
+      "at": "2026-11-25T07:56:51.521934+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 1.004
+      },
+      "screen_seconds": 1.004,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -63230,43 +63231,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T07:56:37.352656+00:00"
+    },
+    {
+      "t212_ticker": "SABK_US_EQ",
+      "yahoo": "SABK",
+      "name": "SABK",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T07:56:51.521934+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SAABY_US_EQ",
+    "t212_ticker": "SABK_US_EQ",
     "venue": "US",
-    "yahoo": "SAABY",
-    "isin": "US78516J1016",
-    "name": "SAABY",
-    "seconds": 0.715,
+    "yahoo": "SABK",
+    "isin": "US83636T1043",
+    "name": "SABK",
+    "seconds": 1.106,
     "outcome": "miss",
-    "at": "2026-11-25T07:56:44.535723+00:00",
+    "at": "2026-11-25T07:56:51.521934+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 0.641
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 1.004
     },
-    "screen_seconds": 0.641,
-    "signal": "hold"
+    "screen_seconds": 1.004,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SABK_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T07:56:44.535723+00:00",
+  "updated_at": "2026-11-25T07:56:51.521934+00:00",
   "totals": {
-    "screened": 4856,
+    "screened": 4857,
     "signals": {
-      "buy": 1461,
+      "buy": 1462,
       "avoid": 1149,
       "hold": 1055,
       "insufficient_data": 1164,
       "strong_buy": 27
     },
-    "signals_n": 4856,
-    "screen_seconds_sum": 49019.482000000244,
-    "screen_seconds_n": 4856,
+    "signals_n": 4857,
+    "screen_seconds_sum": 49020.486000000245,
+    "screen_seconds_n": 4857,
     "outcomes": {
-      "miss": 1862,
+      "miss": 1863,
       "saved": 2994
     }
   },
