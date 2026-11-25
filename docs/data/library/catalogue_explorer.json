@@ -4868,28 +4868,10 @@
     "SAH_US_EQ",
     "SAIA_US_EQ",
     "SAIC_US_EQ",
-    "SAIL1_US_EQ"
+    "SAIL1_US_EQ",
+    "SALRY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "RVSB_US_EQ",
-      "venue": "US",
-      "yahoo": "RVSB",
-      "isin": "US7693971001",
-      "name": "RVSB",
-      "seconds": 2.25,
-      "outcome": "saved",
-      "at": "2026-11-25T07:52:56.748056+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.65,
-        "seconds": 0.942
-      },
-      "screen_seconds": 0.942,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "RVSN_US_EQ",
       "venue": "US",
@@ -5630,6 +5612,25 @@
       },
       "screen_seconds": 3.834,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SALRY_US_EQ",
+      "venue": "US",
+      "yahoo": "SALRY",
+      "isin": "US79547H1068",
+      "name": "SALRY",
+      "seconds": 0.852,
+      "outcome": "miss",
+      "at": "2026-11-25T07:58:24.929306+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.709
+      },
+      "screen_seconds": 0.709,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -63265,43 +63266,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T07:58:07.700812+00:00"
+    },
+    {
+      "t212_ticker": "SALRY_US_EQ",
+      "yahoo": "SALRY",
+      "name": "SALRY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T07:58:24.929306+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SAIL1_US_EQ",
+    "t212_ticker": "SALRY_US_EQ",
     "venue": "US",
-    "yahoo": "SAIL1",
-    "isin": "US78781J1097",
-    "name": "SAIL",
-    "seconds": 3.986,
+    "yahoo": "SALRY",
+    "isin": "US79547H1068",
+    "name": "SALRY",
+    "seconds": 0.852,
     "outcome": "miss",
-    "at": "2026-11-25T07:58:17.658782+00:00",
+    "at": "2026-11-25T07:58:24.929306+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.834
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.709
     },
-    "screen_seconds": 3.834,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.709,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SALRY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T07:58:17.658782+00:00",
+  "updated_at": "2026-11-25T07:58:24.929306+00:00",
   "totals": {
-    "screened": 4867,
+    "screened": 4868,
     "signals": {
-      "buy": 1464,
+      "buy": 1465,
       "avoid": 1149,
       "hold": 1061,
       "insufficient_data": 1166,
       "strong_buy": 27
     },
-    "signals_n": 4867,
-    "screen_seconds_sum": 49032.75700000024,
-    "screen_seconds_n": 4867,
+    "signals_n": 4868,
+    "screen_seconds_sum": 49033.46600000024,
+    "screen_seconds_n": 4868,
     "outcomes": {
-      "miss": 1866,
+      "miss": 1867,
       "saved": 3001
     }
   },
