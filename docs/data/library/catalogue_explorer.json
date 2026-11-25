@@ -4957,28 +4957,10 @@
     "SD_US_EQ",
     "SEAC_US_EQ",
     "SEAH_US_EQ",
-    "SEAS_US_EQ"
+    "SEAS_US_EQ",
+    "SEBC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SCGLY_US_EQ",
-      "venue": "US",
-      "yahoo": "SCGLY",
-      "isin": "US83364L1098",
-      "name": "SCGLY",
-      "seconds": 1.035,
-      "outcome": "miss",
-      "at": "2026-11-25T08:05:29.049255+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.7,
-        "seconds": 0.939
-      },
-      "screen_seconds": 0.939,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "SCHL_US_EQ",
       "venue": "US",
@@ -5719,6 +5701,25 @@
       },
       "screen_seconds": 3.699,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SEBC_US_EQ",
+      "venue": "US",
+      "yahoo": "SEBC",
+      "isin": "US84158P1084",
+      "name": "SEBC",
+      "seconds": 0.733,
+      "outcome": "miss",
+      "at": "2026-11-25T08:11:30.188777+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.6,
+        "seconds": 0.655
+      },
+      "screen_seconds": 0.655,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -63618,43 +63619,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T08:10:55.552805+00:00"
+    },
+    {
+      "t212_ticker": "SEBC_US_EQ",
+      "yahoo": "SEBC",
+      "name": "SEBC",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T08:11:30.188777+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SEAS_US_EQ",
+    "t212_ticker": "SEBC_US_EQ",
     "venue": "US",
-    "yahoo": "SEAS",
-    "isin": "US81282V1008",
-    "name": "PRKS",
-    "seconds": 3.942,
+    "yahoo": "SEBC",
+    "isin": "US84158P1084",
+    "name": "SEBC",
+    "seconds": 0.733,
     "outcome": "miss",
-    "at": "2026-11-25T08:11:23.303157+00:00",
+    "at": "2026-11-25T08:11:30.188777+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.699
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.6,
+      "seconds": 0.655
     },
-    "screen_seconds": 3.699,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.655,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SEBC_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T08:11:23.303157+00:00",
+  "updated_at": "2026-11-25T08:11:30.188777+00:00",
   "totals": {
-    "screened": 4956,
+    "screened": 4957,
     "signals": {
-      "buy": 1496,
+      "buy": 1497,
       "avoid": 1162,
       "hold": 1079,
       "insufficient_data": 1191,
       "strong_buy": 28
     },
-    "signals_n": 4956,
-    "screen_seconds_sum": 49172.52700000023,
-    "screen_seconds_n": 4956,
+    "signals_n": 4957,
+    "screen_seconds_sum": 49173.182000000226,
+    "screen_seconds_n": 4957,
     "outcomes": {
-      "miss": 1914,
+      "miss": 1915,
       "saved": 3042
     }
   },
