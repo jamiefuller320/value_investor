@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-25T06:15:36.771189+00:00",
+  "source": "strategy_book",
+  "registration_id": "owner-strategy-book-v0",
+  "scoring_date": "2026-11-25",
+  "observe_status": "ok",
+  "influences_live": false,
+  "observe_only": true,
+  "opinion_llm": false,
+  "auto_fixable": false,
+  "mid_run_tunes": false,
+  "version_review_only": true,
+  "learning_question": "After each closed primary strategy-book episode, what did the registered exit rule that fired show, using only that episode's dates, exit reason, fair-cost return, matched excess, sessions held and maturity flag?",
+  "ops_doc": "docs/ops/strategy-book-reviews.md",
+  "maturity_sessions": 63,
+  "fail_closed": "A missing date, exit reason, fair-cost return, matched excess, sessions held, maturity flag, provenance, or the decision-log line for the rule that fired leaves learning_point null. No point is invented.",
+  "counts": {
+    "primary_closed": 1,
+    "notes": 1,
+    "grounded": 1,
+    "fail_closed": 0,
+    "skipped_blank_id": 0
+  },
+  "notes": [
+    {
+      "note_id": "nasdaq100:GOOG:primary:2026-11-19",
+      "episode_id": "nasdaq100:GOOG:primary:2026-11-19",
+      "ticker": "GOOG",
+      "market": "nasdaq100",
+      "column": "primary",
+      "fill_session": "2026-11-20",
+      "exit_signal_session": "2026-11-23",
+      "exit_session": "2026-11-24",
+      "entry_fill": 264.0,
+      "exit_fill": 276.58,
+      "exit_reason": "thesis_break",
+      "rule_reasons": [
+        "headwind"
+      ],
+      "fair_cost_return": 0.04415151515151511,
+      "fair_cost_return_pct": 4.415,
+      "matched_excess": 0.003775934570071783,
+      "matched_excess_pp": 0.378,
+      "held_sessions": 2,
+      "mature": false,
+      "learning_point": "GOOG: the registered thesis break fired on 2026-11-23 (sector verdict headwind). The sale filled on 2026-11-24 at 276.58 after the 2026-11-20 fill at 264. Fair-cost return +4.415%. Matched excess +0.378 percentage points. Held 2 sessions. The episode is not mature. Maturity is 63 sessions from the fill to the scoring date.",
+      "learning_point_status": "grounded",
+      "missing_inputs": [],
+      "cites": [
+        "ticker=GOOG",
+        "fill_session=2026-11-20",
+        "exit_session=2026-11-24",
+        "rule_session=2026-11-23",
+        "exit_reason=thesis_break",
+        "rule_reasons=headwind",
+        "fair_cost_return=0.04415151515151511",
+        "matched_excess=0.003775934570071783",
+        "held_sessions=2",
+        "mature=false"
+      ],
+      "influences_live": false,
+      "observe_only": true,
+      "counts_as_evidence": true
+    }
+  ]
+}

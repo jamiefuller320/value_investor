@@ -7,6 +7,7 @@
   "use strict";
 
   const QUEUE_PATH = "../data/strategy_book_review_queue.json";
+  const NOTES_PATH = "../data/strategy_book_post_sale_notes.json";
   const PAGE_SIZE = 12;
   const NOT_MEASURED = "not yet measured";
   const INSUFFICIENT = "insufficient data";
@@ -125,6 +126,44 @@
     return row.data;
   }
 
+  function notesIndex(ctx) {
+    const row = ctx && ctx.data && ctx.data.strategy_book_post_sale_notes;
+    if (!row || row.ok !== true || !isObject(row.data)) return null;
+    const list = Array.isArray(row.data.notes) ? row.data.notes : [];
+    const map = Object.create(null);
+    list.forEach(function (note) {
+      if (!isObject(note)) return;
+      const id = String(note.episode_id || note.note_id || "");
+      if (id) map[id] = note;
+    });
+    const counts = isObject(row.data.counts) ? row.data.counts : {};
+    return {
+      present: true,
+      map: map,
+      influencesLive: row.data.influences_live === true,
+      grounded: countField(counts, "grounded"),
+      failClosed: countField(counts, "fail_closed"),
+    };
+  }
+
+  function learningHtml(helpers, notes, row) {
+    if (row.attention !== "primary") return "";
+    if (!notes) {
+      return '<p class="v2-rev-learn">Learning point: ' + helpers.esc(NOT_MEASURED) + ".</p>";
+    }
+    const note = notes.map[row.id];
+    if (!note) {
+      return '<p class="v2-rev-learn">Learning point: ' + helpers.esc(NOT_MEASURED) + ".</p>";
+    }
+    const text = note.learning_point ? String(note.learning_point) : "";
+    if (note.learning_point_status !== "grounded" || !text) {
+      const missing = Array.isArray(note.missing_inputs) ? note.missing_inputs.filter(Boolean) : [];
+      const gap = missing.length ? " Missing inputs: " + missing.join(", ") + "." : "";
+      return '<p class="v2-rev-learn">Learning point withheld.' + helpers.esc(gap) + "</p>";
+    }
+    return '<p class="v2-rev-learn"><strong>Learning point.</strong> ' + helpers.esc(text) + "</p>";
+  }
+
   function slimRow(row) {
     if (!isObject(row)) return null;
     const attribution = isObject(row.attribution) ? row.attribution : {};
@@ -230,7 +269,7 @@
       + '</span><strong>' + helpers.esc(countText(value)) + "</strong></div>";
   }
 
-  function cardHtml(helpers, row) {
+  function cardHtml(helpers, row, notes) {
     const open = !!state.expanded[row.id];
     const chart = state.charts[row.id];
     const evidence = row.provenanceMissing || row.countsAsEvidence === false
@@ -269,11 +308,12 @@
       + "<p>Fair-cost return " + helpers.esc(row.fairCostText)
       + " · matched excess " + helpers.esc(row.excessText)
       + " · cause " + helpers.esc(row.causeLabel) + "</p>"
+      + learningHtml(helpers, notes, row)
       + detail
       + "</article>";
   }
 
-  function listHtml(helpers, rows, limit, listName) {
+  function listHtml(helpers, rows, limit, listName, notes) {
     if (!rows.length) {
       return '<p class="v2-muted">None in this list.</p>';
     }
@@ -283,11 +323,12 @@
         + helpers.esc(listName) + '">Show more ('
         + helpers.esc(String(rows.length - shown.length)) + " left)</button></p>"
       : "";
-    return shown.map(function (row) { return cardHtml(helpers, row); }).join("") + more;
+    return shown.map(function (row) { return cardHtml(helpers, row, notes); }).join("") + more;
   }
 
   function renderReviews(ctx, helpers) {
     const queue = slotQueue(ctx);
+    const notes = notesIndex(ctx);
     const view = reviewView(queue);
     const parts = [];
     parts.push('<section class="v2-panel v2-rev">');
@@ -298,6 +339,11 @@
       + (view.influencesLive
         ? " The published file is marked as influencing live capital. This page still does not send orders."
         : " The published file says these reviews do not influence live capital.")
+      + (notes && notes.influencesLive
+        ? " The post-sale notes file is marked as influencing live capital. This page still does not send orders."
+        : notes
+          ? " Post-sale notes do not influence live capital."
+          : "")
       + "</div>");
     if (!view.present) {
       parts.push('<p class="v2-rev-missing">Closed-episode reviews: ' + helpers.esc(NOT_MEASURED) + ".</p>");
@@ -311,6 +357,10 @@
       parts.push(stat(helpers, "Beside the book", view.counts.companion));
       parts.push(stat(helpers, "Open, skipped", view.counts.openSkipped));
       parts.push(stat(helpers, "Missing a review", view.counts.missing));
+      if (notes) {
+        parts.push(stat(helpers, "Learning points", notes.grounded));
+        parts.push(stat(helpers, "Points withheld", notes.failClosed));
+      }
       parts.push("</div>");
     }
     parts.push("</div>");
@@ -323,7 +373,7 @@
     } else if (!view.primary.length) {
       parts.push("<p>No primary closes are on the attention list. Open trades are counted above and skipped until they close.</p>");
     } else {
-      parts.push(listHtml(helpers, view.primary, state.primaryLimit, "primary"));
+      parts.push(listHtml(helpers, view.primary, state.primaryLimit, "primary", notes));
     }
     parts.push("</div>");
 
@@ -335,7 +385,7 @@
     } else if (!view.companion.length) {
       parts.push("<p>No companion closes in this refresh.</p>");
     } else {
-      parts.push(listHtml(helpers, view.companion, state.companionLimit, "companion"));
+      parts.push(listHtml(helpers, view.companion, state.companionLimit, "companion", notes));
     }
     parts.push("</div>");
 
@@ -457,6 +507,7 @@
     label: "Reviews",
     dataPaths: {
       strategy_book_review: QUEUE_PATH,
+      strategy_book_post_sale_notes: NOTES_PATH,
     },
     render: render,
     bind: bind,

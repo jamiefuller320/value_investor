@@ -160,6 +160,110 @@ console.log(JSON.stringify({
     assert payload["liveFalse"] is True
 
 
+def test_reviews_tab_shows_primary_learning_point_and_withholds_a_blank() -> None:
+    payload = _node(r"""
+const helpers = {
+  esc: function (s) { return String(s == null ? "" : s); },
+  parseIsoMs: function () { return null; },
+  nowMs: function () { return 0; },
+  displayDate: function (v) { return String(v || ""); },
+  ageLabelFromMs: function () { return "0h"; },
+  freshnessDailyStore: function () { return { cls: "v2-badge", label: "fresh" }; },
+  freshnessChartBar: function () { return { cls: "v2-badge", label: "fresh" }; },
+};
+const queue = {
+  generated_at: "2026-11-25T06:00:00Z",
+  scoring_date: "2026-11-24",
+  influences_live: false,
+  observe_only: true,
+  counts: { episodes: 2, closed: 2, primary: 2, companion: 0, active: 2, open_skipped: 0, provenance_missing: 0, missing: 0 },
+  active: [{
+    review_id: "nasdaq100:GOOG:primary:2026-11-19",
+    ticker: "GOOG",
+    market: "nasdaq100",
+    column: "primary",
+    column_role: "primary",
+    attention: "primary",
+    fill_session: "2026-11-20",
+    exit_session: "2026-11-24",
+    exit_reason: "thesis_break",
+    fair_cost_return_pct: 4.415,
+    matched_excess_pct: 0.378,
+    attribution: { label: "thesis_break", because: "registered_thesis_break", counts_as_evidence: true },
+    provenance_missing: false,
+    influences_live: false,
+    levers: [],
+    cited_inputs: [],
+    hindsight: [],
+  }, {
+    review_id: "ftse350:ZZZ.L:primary:2026-01-01",
+    ticker: "ZZZ.L",
+    market: "ftse350",
+    column: "primary",
+    column_role: "primary",
+    attention: "primary",
+    fill_session: "2026-01-02",
+    exit_session: "2026-01-06",
+    exit_reason: "thesis_break",
+    fair_cost_return_pct: null,
+    matched_excess_pct: null,
+    attribution: { label: "insufficient_data", because: "exit_reason_or_return_missing", counts_as_evidence: false },
+    provenance_missing: false,
+    influences_live: false,
+    levers: [],
+    cited_inputs: [],
+    hindsight: [],
+  }],
+  companion: [],
+};
+const notes = {
+  influences_live: false,
+  observe_only: true,
+  counts: { notes: 2, grounded: 1, fail_closed: 1 },
+  notes: [
+    {
+      episode_id: "nasdaq100:GOOG:primary:2026-11-19",
+      learning_point_status: "grounded",
+      learning_point: "GOOG: the registered thesis break fired on 2026-11-23 (sector verdict headwind).",
+      missing_inputs: [],
+    },
+    {
+      episode_id: "ftse350:ZZZ.L:primary:2026-01-01",
+      learning_point_status: "insufficient_data",
+      learning_point: null,
+      missing_inputs: ["decision_log.reasons"],
+    },
+  ],
+};
+const html = api.renderReviews({
+  data: {
+    strategy_book_review: { ok: true, data: queue },
+    strategy_book_post_sale_notes: { ok: true, data: notes },
+  },
+}, helpers);
+const bare = api.renderReviews({
+  data: { strategy_book_review: { ok: true, data: queue } },
+}, helpers);
+console.log(JSON.stringify({
+  showsPoint: html.includes("sector verdict headwind"),
+  showsWithheld: html.includes("Learning point withheld"),
+  showsMissing: html.includes("decision_log.reasons"),
+  notesDoNotInfluence: html.includes("Post-sale notes do not influence live capital"),
+  noInventedWhenFileMissing: bare.includes("Learning point: not yet measured"),
+  bareHasNoHeadwind: !bare.includes("headwind"),
+  path: api.QUEUE_PATH,
+}));
+""")
+    if payload.get("skipped"):
+        return
+    assert payload["showsPoint"] is True
+    assert payload["showsWithheld"] is True
+    assert payload["showsMissing"] is True
+    assert payload["notesDoNotInfluence"] is True
+    assert payload["noInventedWhenFileMissing"] is True
+    assert payload["bareHasNoHeadwind"] is True
+
+
 def test_review_queue_nan_tokens_parse_and_list_companion() -> None:
     """The published queue contains bare NaN. The loader must still show the rows.
 

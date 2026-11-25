@@ -515,6 +515,7 @@ def _check_dashboard_v2_stores_present_and_fresh(
         "human_tasks_board.json",
         "daily_focus.json",
         "strategy_book_review_queue.json",
+        "strategy_book_post_sale_notes.json",
     )
 
     if not index_path.is_file():

@@ -279,6 +279,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "strategy_book_memo_log.jsonl" in optional_line
     assert "strategy_book_memo_job.json" in optional_line
     assert "strategy_book_review_queue.json" in optional_line
+    assert "strategy_book_post_sale_notes.json" in optional_line
     assert "strategy_book_review_labels.json" in optional_line
     assert "strategy_book_observe.json" not in optional_line
     assert "strategy_book_replay.json" not in optional_line
@@ -333,6 +334,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "paper_halt.json" not in owned_line
     assert "sector_label_history.jsonl" not in owned_line
     assert "strategy_book_review_queue.json" not in owned_line
+    assert "strategy_book_post_sale_notes.json" not in owned_line
     assert "strategy_book_review_labels.json" not in owned_line
     assert "strategy_book_observe.json" not in owned_line
     assert "strategy_book_replay.json" not in owned_line
