@@ -5513,28 +5513,10 @@
     "TINLY_US_EQ",
     "TINV_US_EQ",
     "TIPT_US_EQ",
-    "TIRX_US_EQ"
+    "TIRX_US_EQ",
+    "TISCY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "TGHL_US_EQ",
-      "venue": "US",
-      "yahoo": "TGHL",
-      "isin": "KYG4149Y1026",
-      "name": "TGHL",
-      "seconds": 2.124,
-      "outcome": "saved",
-      "at": "2026-11-25T12:02:10.929719+00:00",
-      "rows": 21,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.85,
-        "seconds": 1.19
-      },
-      "screen_seconds": 1.19,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "TGIFF_US_EQ",
       "venue": "US",
@@ -6275,6 +6257,25 @@
       },
       "screen_seconds": 83.497,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "TISCY_US_EQ",
+      "venue": "US",
+      "yahoo": "TISCY",
+      "isin": "US8740182030",
+      "name": "TISCY",
+      "seconds": 1.371,
+      "outcome": "miss",
+      "at": "2026-11-25T12:17:19.125310+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.242
+      },
+      "screen_seconds": 1.242,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -74906,43 +74907,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T12:14:00.686222+00:00"
+    },
+    {
+      "t212_ticker": "TISCY_US_EQ",
+      "yahoo": "TISCY",
+      "name": "TISCY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T12:17:19.125310+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "TIRX_US_EQ",
+    "t212_ticker": "TISCY_US_EQ",
     "venue": "US",
-    "yahoo": "TIRX",
-    "isin": "KYG8884K1360",
-    "name": "TIRXF",
-    "seconds": 83.617,
+    "yahoo": "TISCY",
+    "isin": "US8740182030",
+    "name": "TISCY",
+    "seconds": 1.371,
     "outcome": "miss",
-    "at": "2026-11-25T12:17:11.615798+00:00",
+    "at": "2026-11-25T12:17:19.125310+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 83.497
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.242
     },
-    "screen_seconds": 83.497,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.242,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "TISCY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T12:17:11.615798+00:00",
+  "updated_at": "2026-11-25T12:17:19.125310+00:00",
   "totals": {
-    "screened": 5512,
+    "screened": 5513,
     "signals": {
-      "buy": 1664,
+      "buy": 1665,
       "avoid": 1291,
       "hold": 1208,
       "insufficient_data": 1319,
       "strong_buy": 30
     },
-    "signals_n": 5512,
-    "screen_seconds_sum": 55122.65900000026,
-    "screen_seconds_n": 5512,
+    "signals_n": 5513,
+    "screen_seconds_sum": 55123.90100000026,
+    "screen_seconds_n": 5513,
     "outcomes": {
-      "miss": 2152,
+      "miss": 2153,
       "saved": 3360
     }
   },
