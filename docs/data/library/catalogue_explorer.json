@@ -5998,28 +5998,10 @@
     "WDH_US_EQ",
     "WD_US_EQ",
     "WEBC_US_EQ",
-    "WEGRY_US_EQ"
+    "WEGRY_US_EQ",
+    "WEGZY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "VVOS_US_EQ",
-      "venue": "US",
-      "yahoo": "VVOS",
-      "isin": "US92859E2072",
-      "name": "VVOS",
-      "seconds": 2.558,
-      "outcome": "saved",
-      "at": "2026-11-25T19:08:39.647020+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.632
-      },
-      "screen_seconds": 0.632,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "VVPR_US_EQ",
       "venue": "US",
@@ -6760,6 +6742,25 @@
       },
       "screen_seconds": 0.698,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "WEGZY_US_EQ",
+      "venue": "US",
+      "yahoo": "WEGZY",
+      "isin": "US94858P2092",
+      "name": "WEGZY",
+      "seconds": 0.71,
+      "outcome": "miss",
+      "at": "2026-11-25T19:19:43.482828+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.478
+      },
+      "screen_seconds": 0.478,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -81796,43 +81797,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T19:19:30.785208+00:00"
+    },
+    {
+      "t212_ticker": "WEGZY_US_EQ",
+      "yahoo": "WEGZY",
+      "name": "WEGZY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T19:19:43.482828+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "WEGRY_US_EQ",
+    "t212_ticker": "WEGZY_US_EQ",
     "venue": "US",
-    "yahoo": "WEGRY",
-    "isin": "US94876Q2057",
-    "name": "WEGRY",
-    "seconds": 1.064,
+    "yahoo": "WEGZY",
+    "isin": "US94858P2092",
+    "name": "WEGZY",
+    "seconds": 0.71,
     "outcome": "miss",
-    "at": "2026-11-25T19:19:37.313186+00:00",
+    "at": "2026-11-25T19:19:43.482828+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 1.0,
-      "seconds": 0.698
+      "seconds": 0.478
     },
-    "screen_seconds": 0.698,
-    "signal": "hold"
+    "screen_seconds": 0.478,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "WEGZY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T19:19:37.313186+00:00",
+  "updated_at": "2026-11-25T19:19:43.482828+00:00",
   "totals": {
-    "screened": 5997,
+    "screened": 5998,
     "signals": {
-      "buy": 1813,
+      "buy": 1814,
       "avoid": 1409,
       "hold": 1316,
       "insufficient_data": 1425,
       "strong_buy": 34
     },
-    "signals_n": 5997,
-    "screen_seconds_sum": 60272.0640000002,
-    "screen_seconds_n": 5997,
+    "signals_n": 5998,
+    "screen_seconds_sum": 60272.542000000205,
+    "screen_seconds_n": 5998,
     "outcomes": {
-      "miss": 2342,
+      "miss": 2343,
       "saved": 3655
     }
   },
