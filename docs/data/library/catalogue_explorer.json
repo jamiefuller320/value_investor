@@ -5479,28 +5479,10 @@
     "TGLS_US_EQ",
     "TGL_US_EQ",
     "TGODF_US_EQ",
-    "TGOPY_US_EQ"
+    "TGOPY_US_EQ",
+    "TGOSY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "TDAC1_US_EQ",
-      "venue": "US",
-      "yahoo": "TDAC1",
-      "isin": "KYG9008W1050",
-      "name": "TDAC",
-      "seconds": 85.222,
-      "outcome": "miss",
-      "at": "2026-11-25T11:48:00.636756+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.149
-      },
-      "screen_seconds": 85.149,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "TDAC_US_EQ",
       "venue": "US",
@@ -6241,6 +6223,25 @@
       },
       "screen_seconds": 1.185,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "TGOSY_US_EQ",
+      "venue": "US",
+      "yahoo": "TGOSY",
+      "isin": "US8923161009",
+      "name": "TGOSY",
+      "seconds": 1.321,
+      "outcome": "miss",
+      "at": "2026-11-25T12:04:20.187049+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.242
+      },
+      "screen_seconds": 1.242,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -74752,43 +74753,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T12:02:34.304759+00:00"
+    },
+    {
+      "t212_ticker": "TGOSY_US_EQ",
+      "yahoo": "TGOSY",
+      "name": "TGOSY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T12:04:20.187049+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "TGOPY_US_EQ",
+    "t212_ticker": "TGOSY_US_EQ",
     "venue": "US",
-    "yahoo": "TGOPY",
-    "isin": "US88579N1054",
-    "name": "TGOPY",
-    "seconds": 1.283,
+    "yahoo": "TGOSY",
+    "isin": "US8923161009",
+    "name": "TGOSY",
+    "seconds": 1.321,
     "outcome": "miss",
-    "at": "2026-11-25T12:04:12.924386+00:00",
+    "at": "2026-11-25T12:04:20.187049+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.8,
-      "seconds": 1.185
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.242
     },
-    "screen_seconds": 1.185,
-    "signal": "hold"
+    "screen_seconds": 1.242,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "TGOSY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T12:04:12.924386+00:00",
+  "updated_at": "2026-11-25T12:04:20.187049+00:00",
   "totals": {
-    "screened": 5478,
+    "screened": 5479,
     "signals": {
-      "buy": 1649,
+      "buy": 1650,
       "avoid": 1286,
       "hold": 1200,
       "insufficient_data": 1313,
       "strong_buy": 30
     },
-    "signals_n": 5478,
-    "screen_seconds_sum": 54581.12700000027,
-    "screen_seconds_n": 5478,
+    "signals_n": 5479,
+    "screen_seconds_sum": 54582.36900000027,
+    "screen_seconds_n": 5479,
     "outcomes": {
-      "miss": 2135,
+      "miss": 2136,
       "saved": 3343
     }
   },
