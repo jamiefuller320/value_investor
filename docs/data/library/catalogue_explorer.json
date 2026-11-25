@@ -5607,28 +5607,10 @@
     "TRAXV_US_EQ",
     "TRBG_US_EQ",
     "TRCA_US_EQ",
-    "TRCH_US_EQ"
+    "TRCH_US_EQ",
+    "TRCY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "TNON_US_EQ",
-      "venue": "US",
-      "yahoo": "TNON",
-      "isin": "US88066N4025",
-      "name": "TNON",
-      "seconds": 3.337,
-      "outcome": "saved",
-      "at": "2026-11-25T16:56:43.251146+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.729
-      },
-      "screen_seconds": 0.729,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "TNP_US_EQ",
       "venue": "US",
@@ -6369,6 +6351,25 @@
       },
       "screen_seconds": 4.088,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "TRCY_US_EQ",
+      "venue": "US",
+      "yahoo": "TRCY",
+      "isin": "US8953641078",
+      "name": "TRCY",
+      "seconds": 0.95,
+      "outcome": "miss",
+      "at": "2026-11-25T17:02:39.215753+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.65,
+        "seconds": 0.84
+      },
+      "screen_seconds": 0.84,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -75125,43 +75126,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T17:01:54.385015+00:00"
+    },
+    {
+      "t212_ticker": "TRCY_US_EQ",
+      "yahoo": "TRCY",
+      "name": "TRCY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T17:02:39.215753+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "TRCH_US_EQ",
+    "t212_ticker": "TRCY_US_EQ",
     "venue": "US",
-    "yahoo": "TRCH",
-    "isin": "US59134N3026",
-    "name": "MMATQ",
-    "seconds": 4.207,
+    "yahoo": "TRCY",
+    "isin": "US8953641078",
+    "name": "TRCY",
+    "seconds": 0.95,
     "outcome": "miss",
-    "at": "2026-11-25T17:02:32.865342+00:00",
+    "at": "2026-11-25T17:02:39.215753+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.088
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.65,
+      "seconds": 0.84
     },
-    "screen_seconds": 4.088,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.84,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "TRCY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T17:02:32.865342+00:00",
+  "updated_at": "2026-11-25T17:02:39.215753+00:00",
   "totals": {
-    "screened": 5606,
+    "screened": 5607,
     "signals": {
-      "buy": 1692,
+      "buy": 1693,
       "avoid": 1314,
       "hold": 1228,
       "insufficient_data": 1342,
       "strong_buy": 30
     },
-    "signals_n": 5606,
-    "screen_seconds_sum": 55427.53100000018,
-    "screen_seconds_n": 5606,
+    "signals_n": 5607,
+    "screen_seconds_sum": 55428.371000000174,
+    "screen_seconds_n": 5607,
     "outcomes": {
-      "miss": 2198,
+      "miss": 2199,
       "saved": 3408
     }
   },
