@@ -4588,28 +4588,10 @@
     "QCRH_US_EQ",
     "QDEL_US_EQ",
     "QD_US_EQ",
-    "QELL_US_EQ"
+    "QELL_US_EQ",
+    "QEPC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "PTMN_US_EQ",
-      "venue": "US",
-      "yahoo": "PTMN",
-      "isin": "US73688F2011",
-      "name": "BCIC",
-      "seconds": 5.091,
-      "outcome": "miss",
-      "at": "2026-11-25T01:26:19.575637+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.974
-      },
-      "screen_seconds": 4.974,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "PTN_US_EQ",
       "venue": "US",
@@ -5350,6 +5332,25 @@
       },
       "screen_seconds": 4.472,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "QEPC_US_EQ",
+      "venue": "US",
+      "yahoo": "QEPC",
+      "isin": "US74727K1025",
+      "name": "QEPC",
+      "seconds": 1.094,
+      "outcome": "miss",
+      "at": "2026-11-25T01:34:01.679296+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.922
+      },
+      "screen_seconds": 0.922,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -60365,43 +60366,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T01:33:24.551605+00:00"
+    },
+    {
+      "t212_ticker": "QEPC_US_EQ",
+      "yahoo": "QEPC",
+      "name": "QEPC",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T01:34:01.679296+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "QELL_US_EQ",
+    "t212_ticker": "QEPC_US_EQ",
     "venue": "US",
-    "yahoo": "QELL",
-    "isin": "NL0015000F41",
-    "name": "LILMF",
-    "seconds": 4.594,
+    "yahoo": "QEPC",
+    "isin": "US74727K1025",
+    "name": "QEPC",
+    "seconds": 1.094,
     "outcome": "miss",
-    "at": "2026-11-25T01:33:53.876538+00:00",
+    "at": "2026-11-25T01:34:01.679296+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.472
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.922
     },
-    "screen_seconds": 4.472,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.922,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "QEPC_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T01:33:53.876538+00:00",
+  "updated_at": "2026-11-25T01:34:01.679296+00:00",
   "totals": {
-    "screened": 4587,
+    "screened": 4588,
     "signals": {
-      "buy": 1384,
+      "buy": 1385,
       "avoid": 1084,
       "hold": 988,
       "insufficient_data": 1104,
       "strong_buy": 27
     },
-    "signals_n": 4587,
-    "screen_seconds_sum": 46216.381000000176,
-    "screen_seconds_n": 4587,
+    "signals_n": 4588,
+    "screen_seconds_sum": 46217.303000000175,
+    "screen_seconds_n": 4588,
     "outcomes": {
-      "miss": 1767,
+      "miss": 1768,
       "saved": 2820
     }
   },
