@@ -6,6 +6,8 @@ Bounded apply path under ``archive_lane_gate``:
 - Separate archive budget IDs (never ``critical_path:*``)
 - Writes only under ``docs/data/archive/universe_filings`` (not live research)
 - No memo / scoring / eng-spray (N181); not a fourth equal sprint (N180)
+- Skip hydrated ``pack_index`` hits and fill the ticker cap with the next
+  uncovered universe rows (L625). Local scan only; HTTP caps stay put.
 
 Network discovery is injectable for tests. Production uses primary filing
 discover + ``fetch_filing_body`` with hard per-run fetch budgets.
@@ -122,40 +124,100 @@ def _compress_normalized(text: str) -> tuple[bytes, str]:
         return data, "utf-8"
 
 
-def select_pilot_tickers(
+def pack_is_hydrated(market_id: str, ticker: str, *, cold_root: Path) -> bool:
+    """True when the cold pack hydrates (``pack_index`` hit). Local read only."""
+    return try_hydrate_pack(market_id, ticker, cold_root=cold_root).status == "hit"
+
+
+def select_archive_tickers(
     market_id: str,
     *,
     max_tickers: int = DEFAULT_MAX_TICKERS_PER_UNIT,
     library_root: Path = DEFAULT_LIBRARY_ROOT,
     universe_csv: Path | None = None,
-) -> list[dict[str, str]]:
-    """Pick a tiny stable ticker roster for one market (library universe CSV)."""
+    cold_root: Path | None = None,
+    skip_hydrated: bool = True,
+) -> dict[str, Any]:
+    """Fill the ticker cap from the universe CSV, skipping hydrated cold packs.
+
+    Hydrated means ``try_hydrate_pack`` status ``hit`` (a pack index that
+    already has objects). Empty or unreadable indexes are retried. The walk is
+    local and stops once ``max_tickers`` uncovered names are chosen, so a
+    nightly assemble rotates onto uncovered tickers without rewriting successful
+    packs and without raising the archive HTTP budget (still preemptible).
+    """
     mid = str(market_id or "").strip()
     cap = max(0, int(max_tickers))
+    empty: dict[str, Any] = {
+        "tickers": [],
+        "skipped_hydrated": 0,
+        "scanned": 0,
+        "skip_hydrated": False,
+    }
     if not mid or cap <= 0:
-        return []
+        return empty
     path = (
         Path(universe_csv)
         if universe_csv is not None
         else (Path(library_root) / "markets" / mid / "screen" / "latest_universe.csv")
     )
     if not path.exists():
-        return []
+        return empty
+    do_skip = bool(skip_hydrated) and cold_root is not None
+    root = Path(cold_root) if cold_root is not None else None
     out: list[dict[str, str]] = []
+    skipped = 0
+    scanned = 0
+    seen: set[str] = set()
     try:
         with path.open(encoding="utf-8", newline="") as fh:
             reader = csv.DictReader(fh)
             for row in reader:
                 tick = str(row.get("ticker") or "").strip().upper()
-                if not tick:
+                if not tick or tick in seen:
+                    continue
+                seen.add(tick)
+                scanned += 1
+                if do_skip and root is not None and pack_is_hydrated(mid, tick, cold_root=root):
+                    skipped += 1
                     continue
                 name = str(row.get("name") or row.get("company_name") or tick).strip()
                 out.append({"ticker": tick, "name": name, "market_id": mid})
                 if len(out) >= cap:
                     break
     except OSError:
-        return []
-    return out
+        return empty
+    return {
+        "tickers": out,
+        "skipped_hydrated": skipped,
+        "scanned": scanned,
+        "skip_hydrated": do_skip,
+    }
+
+
+def select_pilot_tickers(
+    market_id: str,
+    *,
+    max_tickers: int = DEFAULT_MAX_TICKERS_PER_UNIT,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    universe_csv: Path | None = None,
+    cold_root: Path | None = None,
+    skip_hydrated: bool = True,
+) -> list[dict[str, str]]:
+    """Pick up to ``max_tickers`` names from the library universe CSV.
+
+    With ``cold_root``, hydrated packs are skipped and the cap fills from the
+    next uncovered rows (L625). Without a cold root, this is the first N rows.
+    """
+    selected = select_archive_tickers(
+        market_id,
+        max_tickers=max_tickers,
+        library_root=library_root,
+        universe_csv=universe_csv,
+        cold_root=cold_root,
+        skip_hydrated=skip_hydrated,
+    )
+    return list(selected["tickers"])
 
 
 def _default_discover(market_id: str, ticker: str, company_name: str) -> list[dict[str, Any]]:
@@ -316,6 +378,8 @@ def assemble_archive_pack_units(
     completed = 0
     objects_written = 0
     tickers_touched = 0
+    tickers_selected = 0
+    skipped_hydrated = 0
     hydrate_hits = 0
     unit_results: list[dict[str, Any]] = []
     errors: list[str] = []
@@ -334,17 +398,23 @@ def assemble_archive_pack_units(
         attempted += 1
         mid = str(unit.get("market_id") or "").strip()
         unit_id = str(unit.get("unit_id") or f"{mid}")
-        tickers = select_pilot_tickers(
+        selection = select_archive_tickers(
             mid,
             max_tickers=max_tickers_per_unit,
             library_root=library_root,
+            cold_root=cold_root,
         )
+        tickers = list(selection.get("tickers") or [])
+        unit_skipped = int(selection.get("skipped_hydrated") or 0)
+        skipped_hydrated += unit_skipped
+        tickers_selected += len(tickers)
         if not tickers:
             unit_results.append(
                 {
                     "unit_id": unit_id,
-                    "status": "skipped_no_tickers",
+                    "status": "skipped_hydrated" if unit_skipped else "skipped_no_tickers",
                     "market_id": mid,
+                    "skipped_hydrated": unit_skipped,
                 }
             )
             continue
@@ -395,6 +465,7 @@ def assemble_archive_pack_units(
                         "status": "no_bodies",
                         "market_id": mid,
                         "ticker": tick,
+                        "skipped_hydrated": unit_skipped,
                     }
                 )
                 continue
@@ -414,6 +485,7 @@ def assemble_archive_pack_units(
             if hit.status == "hit":
                 hydrate_hits += 1
 
+        selected_symbols = [str(row.get("ticker") or "") for row in tickers]
         if unit_objects > 0:
             completed += 1
             unit_results.append(
@@ -422,6 +494,8 @@ def assemble_archive_pack_units(
                     "status": "completed",
                     "market_id": mid,
                     "objects": unit_objects,
+                    "tickers": selected_symbols,
+                    "skipped_hydrated": unit_skipped,
                 }
             )
         elif not any(r.get("unit_id") == unit_id for r in unit_results):
@@ -430,6 +504,8 @@ def assemble_archive_pack_units(
                     "unit_id": unit_id,
                     "status": "empty",
                     "market_id": mid,
+                    "tickers": selected_symbols,
+                    "skipped_hydrated": unit_skipped,
                 }
             )
 
@@ -441,6 +517,8 @@ def assemble_archive_pack_units(
         "units_attempted": attempted,
         "units_completed": completed,
         "tickers_touched": tickers_touched,
+        "tickers_selected": tickers_selected,
+        "tickers_skipped_hydrated": skipped_hydrated,
         "objects_written": objects_written,
         "hydrate_hits": hydrate_hits,
         "by_source": by_source,
@@ -459,7 +537,9 @@ def assemble_archive_pack_units(
         "eng_spray": False,
         "note": (
             "Thin quiet cold-store assemble — archive budgets only; "
-            "fail-open hydrate; no live deepen/memo (N180/N181)."
+            "skip hydrated pack_index hits and rotate to uncovered tickers "
+            "within the ticker and HTTP caps; fail-open hydrate; "
+            "no live deepen/memo (N180/N181)."
         ),
     }
 
@@ -487,6 +567,8 @@ __all__ = [
     "ArchiveFetchBudget",
     "SCHEMA_VERSION",
     "assemble_archive_pack_units",
+    "pack_is_hydrated",
+    "select_archive_tickers",
     "select_pilot_tickers",
     "write_cold_objects",
 ]
