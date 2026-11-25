@@ -4764,28 +4764,10 @@
     "RNGR_US_EQ",
     "RNG_US_EQ",
     "RNLSY_US_EQ",
-    "RNLX_US_EQ"
+    "RNLX_US_EQ",
+    "RNMBY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "RICK_US_EQ",
-      "venue": "US",
-      "yahoo": "RICK",
-      "isin": "US74934Q1085",
-      "name": "RICK",
-      "seconds": 3.203,
-      "outcome": "saved",
-      "at": "2026-11-25T02:05:02.438094+00:00",
-      "rows": 18,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.963
-      },
-      "screen_seconds": 0.963,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "RICOY_US_EQ",
       "venue": "US",
@@ -5526,6 +5508,25 @@
       },
       "screen_seconds": 85.641,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "RNMBY_US_EQ",
+      "venue": "US",
+      "yahoo": "RNMBY",
+      "isin": "US76206K1079",
+      "name": "RNMBY",
+      "seconds": 1.19,
+      "outcome": "miss",
+      "at": "2026-11-25T02:22:14.364258+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.061
+      },
+      "screen_seconds": 1.061,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -62993,43 +62994,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T02:20:27.410581+00:00"
+    },
+    {
+      "t212_ticker": "RNMBY_US_EQ",
+      "yahoo": "RNMBY",
+      "name": "RNMBY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T02:22:14.364258+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "RNLX_US_EQ",
+    "t212_ticker": "RNMBY_US_EQ",
     "venue": "US",
-    "yahoo": "RNLX",
-    "isin": "US75973T2006",
-    "name": "RNLXY",
-    "seconds": 85.814,
+    "yahoo": "RNMBY",
+    "isin": "US76206K1079",
+    "name": "RNMBY",
+    "seconds": 1.19,
     "outcome": "miss",
-    "at": "2026-11-25T02:22:06.796034+00:00",
+    "at": "2026-11-25T02:22:14.364258+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.641
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.061
     },
-    "screen_seconds": 85.641,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.061,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "RNMBY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T02:22:06.796034+00:00",
+  "updated_at": "2026-11-25T02:22:14.364258+00:00",
   "totals": {
-    "screened": 4763,
+    "screened": 4764,
     "signals": {
-      "buy": 1443,
+      "buy": 1444,
       "avoid": 1133,
       "hold": 1028,
       "insufficient_data": 1132,
       "strong_buy": 27
     },
-    "signals_n": 4763,
-    "screen_seconds_sum": 47376.06800000024,
-    "screen_seconds_n": 4763,
+    "signals_n": 4764,
+    "screen_seconds_sum": 47377.12900000024,
+    "screen_seconds_n": 4764,
     "outcomes": {
-      "miss": 1818,
+      "miss": 1819,
       "saved": 2945
     }
   },
