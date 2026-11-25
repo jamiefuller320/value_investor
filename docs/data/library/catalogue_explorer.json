@@ -5350,28 +5350,10 @@
     "SVIN_US_EQ",
     "SVMH_US_EQ",
     "SVM_US_EQ",
-    "SVNDY_US_EQ"
+    "SVNDY_US_EQ",
+    "SVNLY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "STRN_US_EQ",
-      "venue": "US",
-      "yahoo": "STRN",
-      "isin": "US86260J1025",
-      "name": "SWAG",
-      "seconds": 3.201,
-      "outcome": "miss",
-      "at": "2026-11-25T11:09:52.903000+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.075,
-        "seconds": 3.107
-      },
-      "screen_seconds": 3.107,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "STRO_US_EQ",
       "venue": "US",
@@ -6112,6 +6094,25 @@
       },
       "screen_seconds": 1.066,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "SVNLY_US_EQ",
+      "venue": "US",
+      "yahoo": "SVNLY",
+      "isin": "US86959C1036",
+      "name": "SVNLY",
+      "seconds": 1.27,
+      "outcome": "miss",
+      "at": "2026-11-25T11:15:36.683143+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.65,
+        "seconds": 1.211
+      },
+      "screen_seconds": 1.211,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -70976,43 +70977,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T11:15:22.663909+00:00"
+    },
+    {
+      "t212_ticker": "SVNLY_US_EQ",
+      "yahoo": "SVNLY",
+      "name": "SVNLY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T11:15:36.683143+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SVNDY_US_EQ",
+    "t212_ticker": "SVNLY_US_EQ",
     "venue": "US",
-    "yahoo": "SVNDY",
-    "isin": "US81783H1059",
-    "name": "SVNDY",
-    "seconds": 1.203,
+    "yahoo": "SVNLY",
+    "isin": "US86959C1036",
+    "name": "SVNLY",
+    "seconds": 1.27,
     "outcome": "miss",
-    "at": "2026-11-25T11:15:29.707667+00:00",
+    "at": "2026-11-25T11:15:36.683143+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 1.0,
-      "seconds": 1.066
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.65,
+      "seconds": 1.211
     },
-    "screen_seconds": 1.066,
-    "signal": "hold"
+    "screen_seconds": 1.211,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SVNLY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T11:15:29.707667+00:00",
+  "updated_at": "2026-11-25T11:15:36.683143+00:00",
   "totals": {
-    "screened": 5349,
+    "screened": 5350,
     "signals": {
-      "buy": 1618,
+      "buy": 1619,
       "avoid": 1258,
       "hold": 1163,
       "insufficient_data": 1280,
       "strong_buy": 30
     },
-    "signals_n": 5349,
-    "screen_seconds_sum": 52630.90300000022,
-    "screen_seconds_n": 5349,
+    "signals_n": 5350,
+    "screen_seconds_sum": 52632.11400000022,
+    "screen_seconds_n": 5350,
     "outcomes": {
-      "miss": 2079,
+      "miss": 2080,
       "saved": 3270
     }
   },
