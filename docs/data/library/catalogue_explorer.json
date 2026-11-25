@@ -5374,28 +5374,10 @@
     "SXTC_US_EQ",
     "SXTP_US_EQ",
     "SXT_US_EQ",
-    "SXYAY_US_EQ"
+    "SXYAY_US_EQ",
+    "SYANY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SURG_US_EQ",
-      "venue": "US",
-      "yahoo": "SURG",
-      "isin": "US86882L2043",
-      "name": "SURG",
-      "seconds": 1.856,
-      "outcome": "saved",
-      "at": "2026-11-25T11:13:15.048221+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.849
-      },
-      "screen_seconds": 0.849,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "SUTNY_US_EQ",
       "venue": "US",
@@ -6136,6 +6118,25 @@
       },
       "screen_seconds": 0.774,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "SYANY_US_EQ",
+      "venue": "US",
+      "yahoo": "SYANY",
+      "isin": "US87124G1022",
+      "name": "SYANY",
+      "seconds": 0.972,
+      "outcome": "miss",
+      "at": "2026-11-25T11:19:04.515417+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.896
+      },
+      "screen_seconds": 0.896,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -71064,43 +71065,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T11:18:18.346888+00:00"
+    },
+    {
+      "t212_ticker": "SYANY_US_EQ",
+      "yahoo": "SYANY",
+      "name": "SYANY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T11:19:04.515417+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SXYAY_US_EQ",
+    "t212_ticker": "SYANY_US_EQ",
     "venue": "US",
-    "yahoo": "SXYAY",
-    "isin": "US82674R1032",
-    "name": "SXYAY",
-    "seconds": 0.85,
+    "yahoo": "SYANY",
+    "isin": "US87124G1022",
+    "name": "SYANY",
+    "seconds": 0.972,
     "outcome": "miss",
-    "at": "2026-11-25T11:18:57.677584+00:00",
+    "at": "2026-11-25T11:19:04.515417+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.9,
-      "seconds": 0.774
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.896
     },
-    "screen_seconds": 0.774,
-    "signal": "hold"
+    "screen_seconds": 0.896,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SYANY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T11:18:57.677584+00:00",
+  "updated_at": "2026-11-25T11:19:04.515417+00:00",
   "totals": {
-    "screened": 5373,
+    "screened": 5374,
     "signals": {
-      "buy": 1626,
+      "buy": 1627,
       "avoid": 1265,
       "hold": 1169,
       "insufficient_data": 1283,
       "strong_buy": 30
     },
-    "signals_n": 5373,
-    "screen_seconds_sum": 52663.61400000024,
-    "screen_seconds_n": 5373,
+    "signals_n": 5374,
+    "screen_seconds_sum": 52664.51000000024,
+    "screen_seconds_n": 5374,
     "outcomes": {
-      "miss": 2088,
+      "miss": 2089,
       "saved": 3285
     }
   },
