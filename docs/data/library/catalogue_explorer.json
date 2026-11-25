@@ -5717,28 +5717,10 @@
     "UBSI_US_EQ",
     "UBXG_US_EQ",
     "UCAR_US_EQ",
-    "UCBI_US_EQ"
+    "UCBI_US_EQ",
+    "UCBJY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "TV_US_EQ",
-      "venue": "US",
-      "yahoo": "TV",
-      "isin": "US40049J2069",
-      "name": "TV",
-      "seconds": 1.673,
-      "outcome": "saved",
-      "at": "2026-11-25T17:13:15.560538+00:00",
-      "rows": 40,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.8
-      },
-      "screen_seconds": 0.8,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "TWCT_US_EQ",
       "venue": "US",
@@ -6479,6 +6461,25 @@
       },
       "screen_seconds": 3.995,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "UCBJY_US_EQ",
+      "venue": "US",
+      "yahoo": "UCBJY",
+      "isin": "US9034801012",
+      "name": "UCBJY",
+      "seconds": 0.811,
+      "outcome": "miss",
+      "at": "2026-11-25T17:18:56.713584+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.67
+      },
+      "screen_seconds": 0.67,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -75531,43 +75532,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T17:18:21.115630+00:00"
+    },
+    {
+      "t212_ticker": "UCBJY_US_EQ",
+      "yahoo": "UCBJY",
+      "name": "UCBJY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T17:18:56.713584+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "UCBI_US_EQ",
+    "t212_ticker": "UCBJY_US_EQ",
     "venue": "US",
-    "yahoo": "UCBI",
-    "isin": "US90984P3038",
-    "name": "UCB",
-    "seconds": 4.292,
+    "yahoo": "UCBJY",
+    "isin": "US9034801012",
+    "name": "UCBJY",
+    "seconds": 0.811,
     "outcome": "miss",
-    "at": "2026-11-25T17:18:47.214802+00:00",
+    "at": "2026-11-25T17:18:56.713584+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.995
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.67
     },
-    "screen_seconds": 3.995,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.67,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "UCBJY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T17:18:47.214802+00:00",
+  "updated_at": "2026-11-25T17:18:56.713584+00:00",
   "totals": {
-    "screened": 5716,
+    "screened": 5717,
     "signals": {
-      "buy": 1729,
+      "buy": 1730,
       "avoid": 1335,
       "hold": 1251,
       "insufficient_data": 1371,
       "strong_buy": 30
     },
-    "signals_n": 5716,
-    "screen_seconds_sum": 55610.38300000018,
-    "screen_seconds_n": 5716,
+    "signals_n": 5717,
+    "screen_seconds_sum": 55611.05300000018,
+    "screen_seconds_n": 5717,
     "outcomes": {
-      "miss": 2243,
+      "miss": 2244,
       "saved": 3473
     }
   },
