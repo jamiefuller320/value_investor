@@ -6161,7 +6161,9 @@ def _ir_allowlist_unfetchable_may_retry(
     if reason == "allowlist_removed":
         canon = _resolve_ir_allowlist_canonical(url, ticker)
         fetch_url = _resolve_ir_allowlist_fetch_url(canon)
-        if canon != url and any(candidate in allowlist_urls for candidate in (canon, fetch_url)):
+        # eng-20261125-02: EVN.VI live evn.at getmedia rows stayed skipped_unfetchable when
+        # stale allowlist_removed survived URL migration (igc-20261102-01 refetch 0/0).
+        if any(candidate in allowlist_urls for candidate in (url, canon, fetch_url)):
             return True
         return False
     canon = _resolve_ir_allowlist_canonical(url, ticker)

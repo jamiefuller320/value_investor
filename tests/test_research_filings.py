@@ -15012,6 +15012,64 @@ def test_refetch_euro_filings_primary_bodies_evn_vi_library_index_eng_20261122_0
     assert annual and annual[0].get("has_body")
 
 
+def test_refetch_ir_allowlist_evn_vi_stale_allowlist_removed_on_live_pdfs_eng_20261125_02(
+    tmp_path: Path,
+    monkeypatch,
+):
+    """eng-20261125-02: live evn.at getmedia rows must refetch after stale allowlist_removed."""
+    annual = _BUILTIN_IR_URLS["EVN.VI"][0]
+    interim = _BUILTIN_IR_URLS["EVN.VI"][1]
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "bodies").mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_dead_annual",
+                        "source": "ir_allowlist",
+                        "url": annual,
+                        "period": "annual",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "allowlist_removed",
+                    },
+                    {
+                        "id": "ir_dead_interim",
+                        "source": "ir_allowlist",
+                        "url": interim,
+                        "period": "interim",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "allowlist_removed",
+                    },
+                ],
+                "summary": {"total": 2, "with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return "EVN AG Jahresfinanzbericht consolidated revenue earnings " * 30, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(filings_dir, "EVN.VI", max_bodies=5)
+    assert result["attempted"] >= 2
+    assert int(result.get("skipped_unfetchable") or 0) == 0
+    assert int(result.get("retry_cleared") or 0) >= 2
+    assert result.get("note") != "no missing IR allowlist bodies"
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ir_rows = [row for row in saved["filings"] if row.get("source") == "ir_allowlist"]
+    assert len(ir_rows) >= 2
+    assert all(row.get("unfetchable") is not True for row in ir_rows)
+    assert any(row.get("has_body") for row in ir_rows)
+
+
 def test_parked_source_hunter_evn_vi_euro_depth_has_fetchable_ir():
     """eng-20261121-02: EVN.VI evn.at statutory PDFs fetch and validate (hunter confirmed)."""
     assert "EVN.VI" not in PARKED_SOURCE_HUNTER_SKIP
