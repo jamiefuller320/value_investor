@@ -4897,28 +4897,10 @@
     "SBFG_US_EQ",
     "SBFM_US_EQ",
     "SBGI_US_EQ",
-    "SBGL_US_EQ"
+    "SBGL_US_EQ",
+    "SBGSY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SABK_US_EQ",
-      "venue": "US",
-      "yahoo": "SABK",
-      "isin": "US83636T1043",
-      "name": "SABK",
-      "seconds": 1.106,
-      "outcome": "miss",
-      "at": "2026-11-25T07:56:51.521934+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.7,
-        "seconds": 1.004
-      },
-      "screen_seconds": 1.004,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "SABR_US_EQ",
       "venue": "US",
@@ -5659,6 +5641,25 @@
       },
       "screen_seconds": 4.031,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SBGSY_US_EQ",
+      "venue": "US",
+      "yahoo": "SBGSY",
+      "isin": "US80687P1066",
+      "name": "SBGSY",
+      "seconds": 1.195,
+      "outcome": "miss",
+      "at": "2026-11-25T08:02:40.907838+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.024
+      },
+      "screen_seconds": 1.024,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -63374,43 +63375,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T08:02:07.407876+00:00"
+    },
+    {
+      "t212_ticker": "SBGSY_US_EQ",
+      "yahoo": "SBGSY",
+      "name": "SBGSY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T08:02:40.907838+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SBGL_US_EQ",
+    "t212_ticker": "SBGSY_US_EQ",
     "venue": "US",
-    "yahoo": "SBGL",
-    "isin": "US82575P1075",
-    "name": "SBSW",
-    "seconds": 4.144,
+    "yahoo": "SBGSY",
+    "isin": "US80687P1066",
+    "name": "SBGSY",
+    "seconds": 1.195,
     "outcome": "miss",
-    "at": "2026-11-25T08:02:33.752713+00:00",
+    "at": "2026-11-25T08:02:40.907838+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.031
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.024
     },
-    "screen_seconds": 4.031,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.024,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SBGSY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T08:02:33.752713+00:00",
+  "updated_at": "2026-11-25T08:02:40.907838+00:00",
   "totals": {
-    "screened": 4896,
+    "screened": 4897,
     "signals": {
-      "buy": 1474,
+      "buy": 1475,
       "avoid": 1155,
       "hold": 1066,
       "insufficient_data": 1174,
       "strong_buy": 27
     },
-    "signals_n": 4896,
-    "screen_seconds_sum": 49079.670000000246,
-    "screen_seconds_n": 4896,
+    "signals_n": 4897,
+    "screen_seconds_sum": 49080.69400000024,
+    "screen_seconds_n": 4897,
     "outcomes": {
-      "miss": 1880,
+      "miss": 1881,
       "saved": 3016
     }
   },
