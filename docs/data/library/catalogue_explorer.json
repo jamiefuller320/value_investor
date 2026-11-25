@@ -4824,28 +4824,10 @@
     "RUBY_US_EQ",
     "RUN_US_EQ",
     "RUSHA1_US_EQ",
-    "RVAC_US_EQ"
+    "RVAC_US_EQ",
+    "RVCB_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ROSS_US_EQ",
-      "venue": "US",
-      "yahoo": "ROSS",
-      "isin": "KYG7641C1069",
-      "name": "ROSS",
-      "seconds": 87.5,
-      "outcome": "saved",
-      "at": "2026-11-25T02:36:26.118739+00:00",
-      "rows": 16,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.346
-      },
-      "screen_seconds": 85.346,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "ROSYY_US_EQ",
       "venue": "US",
@@ -5586,6 +5568,25 @@
       },
       "screen_seconds": 3.848,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "RVCB_US_EQ",
+      "venue": "US",
+      "yahoo": "RVCB",
+      "isin": "US76848L1098",
+      "name": "RVCB",
+      "seconds": 0.823,
+      "outcome": "miss",
+      "at": "2026-11-25T07:52:24.372501+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.65,
+        "seconds": 0.728
+      },
+      "screen_seconds": 0.728,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -63149,43 +63150,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T02:49:59.099176+00:00"
+    },
+    {
+      "t212_ticker": "RVCB_US_EQ",
+      "yahoo": "RVCB",
+      "name": "RVCB",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T07:52:24.372501+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "RVAC_US_EQ",
+    "t212_ticker": "RVCB_US_EQ",
     "venue": "US",
-    "yahoo": "RVAC",
-    "isin": "US96145W1036",
-    "name": "WEST",
-    "seconds": 3.918,
+    "yahoo": "RVCB",
+    "isin": "US76848L1098",
+    "name": "RVCB",
+    "seconds": 0.823,
     "outcome": "miss",
-    "at": "2026-11-25T07:52:17.426003+00:00",
+    "at": "2026-11-25T07:52:24.372501+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.848
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.65,
+      "seconds": 0.728
     },
-    "screen_seconds": 3.848,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.728,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "RVCB_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T07:52:17.426003+00:00",
+  "updated_at": "2026-11-25T07:52:24.372501+00:00",
   "totals": {
-    "screened": 4823,
+    "screened": 4824,
     "signals": {
-      "buy": 1455,
+      "buy": 1456,
       "avoid": 1141,
       "hold": 1042,
       "insufficient_data": 1158,
       "strong_buy": 27
     },
-    "signals_n": 4823,
-    "screen_seconds_sum": 48978.70900000025,
-    "screen_seconds_n": 4823,
+    "signals_n": 4824,
+    "screen_seconds_sum": 48979.43700000025,
+    "screen_seconds_n": 4824,
     "outcomes": {
-      "miss": 1847,
+      "miss": 1848,
       "saved": 2976
     }
   },
