@@ -12957,6 +12957,12 @@ def refresh_sources_yahoo_cashflow_metrics(
         if merged_metrics.get(key) is None:
             merged_metrics[key] = value
 
+    overlay = resolve_filing_aligned_fcf_canonical(
+        sources_dir=sources_dir,
+        financials={**financials, "cashflow_metrics": merged_metrics},
+    )
+    merged_metrics = _merge_fcf_canonical_overlay(merged_metrics, overlay)
+
     if not any(
         merged_metrics.get(key) is not None
         for key in (
@@ -13001,6 +13007,7 @@ def refresh_sources_yahoo_cashflow_metrics(
         "financials_updated": financials_updated,
         "snapshot_updated": snapshot_updated,
         "operating_cashflow": merged_metrics.get("operating_cashflow"),
+        "fcf_canonical_overlay": overlay,
         "ticker": normalized,
     }
 
@@ -13115,6 +13122,145 @@ def _extract_yahoo_statement_cashflow_metrics(financials: dict[str, Any]) -> dic
             metrics.setdefault("free_cashflow_prev", fcf_prev)
 
     return metrics
+
+
+def _load_sources_json_payload(sources_dir: Path, filename: str) -> dict[str, Any] | None:
+    from value_investor.storage import read_json, resolve_json_path
+
+    resolved = resolve_json_path(sources_dir / filename)
+    if resolved is None:
+        return None
+    try:
+        payload = read_json(resolved)
+    except (OSError, ValueError, TypeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def _millions_to_absolute(millions: Any) -> float | None:
+    coerced = _coerce_cashflow_metric_number(millions)
+    if coerced is None:
+        return None
+    return float(coerced) * 1_000_000.0
+
+
+def _statutory_fcf_from_ir_presentation(sources_dir: Path) -> tuple[float | None, str | None]:
+    """Prefer statutory FCF lines from cached ``ir_presentation_metrics.json`` bridges."""
+    payload = _load_sources_json_payload(sources_dir, "ir_presentation_metrics.json")
+    if not payload:
+        return None, None
+    from value_investor.scoring.fcf import _annual_period_label
+
+    best_amount: float | None = None
+    best_rank = (1, 1)
+    for bridge in payload.get("bridges") or []:
+        if not isinstance(bridge, dict):
+            continue
+        derived = bridge.get("derived") or {}
+        if not isinstance(derived, dict):
+            continue
+        amount = _millions_to_absolute(derived.get("statutory_free_cash_flow_millions"))
+        if amount is None:
+            continue
+        period = str(bridge.get("period") or "")
+        annual_rank = 0 if _annual_period_label(period) else 1
+        bridge_rank = (
+            0 if str(bridge.get("bridge_type") or "") == "statutory_to_adjusted_cash_flow" else 1
+        )
+        rank = (bridge_rank, annual_rank)
+        if best_amount is None or rank < best_rank:
+            best_amount = amount
+            best_rank = rank
+    if best_amount is not None:
+        return best_amount, "ir_presentation_statutory"
+    return None, None
+
+
+def _statutory_fcf_from_filing_interim(sources_dir: Path) -> tuple[float | None, str | None]:
+    payload = _load_sources_json_payload(sources_dir, "filing_interim_financials.json")
+    if not payload:
+        return None, None
+    highlights = payload.get("interim_highlights")
+    if not isinstance(highlights, dict):
+        return None, None
+    amount = _millions_to_absolute(highlights.get("free_cash_flow_millions"))
+    if amount is None:
+        return None, None
+    return amount, "filing_interim_bodies"
+
+
+def resolve_filing_aligned_fcf_canonical(
+    *,
+    sources_dir: Path | None,
+    financials: dict[str, Any],
+) -> dict[str, Any]:
+    """
+    Filing-aligned statutory FCF plus Yahoo TTM delta for overlay payloads.
+
+    Priority: Yahoo annual ``cash_flow`` OCF−CapEx, SEC companyfacts, IR statutory
+    bridges, then half-year statutory prose on ``filing_interim_financials.json``.
+    """
+    from value_investor.research.ingest import extract_cashflow_metrics_from_annual_financials
+    from value_investor.scoring.fcf import compute_filing_aligned_fcf
+
+    overlay: dict[str, Any] = {
+        "filing_aligned": None,
+        "filing_aligned_source": None,
+        "yahoo_ttm": None,
+        "filing_vs_yahoo_ttm_delta": None,
+        "fiscal_year": None,
+    }
+
+    filing_aligned, fiscal_year = compute_filing_aligned_fcf(financials)
+    source: str | None = "financials_annual" if filing_aligned is not None else None
+
+    if filing_aligned is None and sources_dir is not None:
+        sources_dir = Path(sources_dir)
+        derived = _filing_derived_cashflow_metrics(sources_dir)
+        if derived.get("free_cashflow") is not None:
+            filing_aligned = float(derived["free_cashflow"])
+            source = "sec_companyfacts"
+        if filing_aligned is None:
+            filing_aligned, source = _statutory_fcf_from_ir_presentation(sources_dir)
+        if filing_aligned is None:
+            filing_aligned, source = _statutory_fcf_from_filing_interim(sources_dir)
+
+    metrics = extract_cashflow_metrics_from_annual_financials(financials)
+    yahoo_ttm = _coerce_cashflow_metric_number(metrics.get("free_cashflow_ttm"))
+    if yahoo_ttm is None:
+        stored_metrics = financials.get("cashflow_metrics") or {}
+        yahoo_ttm = _coerce_cashflow_metric_number(stored_metrics.get("free_cashflow_ttm"))
+
+    overlay["filing_aligned"] = filing_aligned
+    overlay["filing_aligned_source"] = source
+    overlay["yahoo_ttm"] = yahoo_ttm
+    overlay["fiscal_year"] = fiscal_year
+    if filing_aligned is not None and yahoo_ttm is not None:
+        overlay["filing_vs_yahoo_ttm_delta"] = float(filing_aligned) - float(yahoo_ttm)
+    return overlay
+
+
+def _merge_fcf_canonical_overlay(
+    cashflow_metrics: dict[str, Any],
+    overlay: dict[str, Any],
+) -> dict[str, Any]:
+    merged = dict(cashflow_metrics)
+    filing_aligned = overlay.get("filing_aligned")
+    if isinstance(filing_aligned, (int, float)) and filing_aligned == filing_aligned:
+        merged["filing_aligned_fcf_canonical"] = float(filing_aligned)
+    source = overlay.get("filing_aligned_source")
+    if source:
+        merged["filing_aligned_fcf_source"] = str(source)
+    delta = overlay.get("filing_vs_yahoo_ttm_delta")
+    if isinstance(delta, (int, float)) and delta == delta:
+        merged["filing_vs_yahoo_ttm_delta"] = float(delta)
+    yahoo_ttm = overlay.get("yahoo_ttm")
+    if isinstance(yahoo_ttm, (int, float)) and yahoo_ttm == yahoo_ttm:
+        merged.setdefault("free_cashflow_ttm", float(yahoo_ttm))
+    compact_overlay = {key: value for key, value in overlay.items() if value is not None}
+    if compact_overlay:
+        merged["fcf_canonical_overlay"] = compact_overlay
+    return merged
 
 
 def _coerce_cashflow_metric_number(value: Any) -> float | None:
@@ -13245,6 +13391,15 @@ def _financials_with_merged_yahoo_cashflow(
         if merged_metrics.get(key) is None:
             merged_metrics[key] = value
             changed = True
+
+    overlay = resolve_filing_aligned_fcf_canonical(
+        sources_dir=sources_dir,
+        financials={**financials, "cashflow_metrics": merged_metrics},
+    )
+    merged_with_overlay = _merge_fcf_canonical_overlay(merged_metrics, overlay)
+    if merged_with_overlay != merged_metrics:
+        merged_metrics = merged_with_overlay
+        changed = True
 
     if not changed:
         return financials

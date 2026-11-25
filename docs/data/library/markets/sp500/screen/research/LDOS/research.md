@@ -1,6 +1,6 @@
 # Leidos Holdings, Inc. (LDOS) — Research memo
 
-_Version 7 · Updated 2026-11-25T04:47:09.156571+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T18:02:41.081657+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.76
-Rationale: Undervaluation and Goldman conference commentary add no filing evidence; Q3 earnings beat and raised cash guidance still support the strong-buy screen, but VBA recompete and probes keep accumulate.
+Rationale: Headlines cite Moderate Buy consensus, State Street sales and earnings-valuation debate only—no new filings; Q3 beat and TTM FCF still support the strong-buy screen, but VBA, probes and leverage keep accumulate.
 RiskTags: customer_concentration, regulatory, litigation, leverage, competitive, accounting
 
 ## Weekly updates
@@ -42,3 +42,8 @@ VBA 2027 recompete, open DOJ/SEC probes, and post-Entrust leverage remain the ma
 One indexed headline cites ~15% undervaluation and Goldman Sachs conference Q&A with CEO Tom Bell—no new filings or results; a second item is a generic quote page.  
 Strong-buy screen and Q3 snapshot (revenue ~$4.63bn, EPS ~$3.28, TTM FCF ~$1.96bn) are unchanged.  
 VBA 2027 recompete, open DOJ/SEC probes, and post-Entrust leverage remain the main research offsets.
+
+### 2026-11-25T18:02:41.081657+00:00
+This batch adds indexed headlines on Moderate Buy consensus, State Street share sales and a Yahoo piece on whether earnings justify the price—no new filings or results.  
+Strong-buy screen and Q3 snapshot (revenue ~$4.63bn, EPS ~$3.28, TTM FCF ~$1.96bn) are unchanged.  
+VBA 2027 recompete, open DOJ/SEC probes and post-Entrust leverage remain the main research offsets.

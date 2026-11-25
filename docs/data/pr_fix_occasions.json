@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-25T15:54:36.769140+00:00",
-  "occasion_count": 402,
+  "updated_at": "2026-11-25T19:28:31.228723+00:00",
+  "occasion_count": 406,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -7294,14 +7294,71 @@
     },
     {
       "id": "prf-20261125-001",
-      "recorded_at": "2026-11-25T15:54:36.769140+00:00",
+      "recorded_at": "2026-11-25T15:48:36.424336+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "CI test shards failed: gap-scan screen pins and SBRY filing-primary note drifted",
+      "pr_number": 1479,
+      "branch": null,
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1479",
+      "task_id": null,
+      "head_sha": "c0a7cd543ce99a7e6a5c25b7268896b277de918e",
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (0)",
+        "CI / test (1)"
+      ],
+      "notes": "test_ftse_gap_scan pinned yields/discounts/PEs/FCF no longer match stored screen rows; test_summary SBRY action note lacks 'filing (primary)'.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-002",
+      "recorded_at": "2026-11-25T15:52:25.237124+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "Pytest shards test (0) and test (1) failed: gap-scan goldens drifted from latest.json and SBRY overlay test read committed filings",
+      "pr_number": 1476,
+      "branch": "cursor/eng-20261125-03-1de3",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1476",
+      "task_id": "eng-20261125-03",
+      "head_sha": "8a474b1b89e25f811f57a0097e9c484dcebc0e7f",
+      "mergeable_state": null,
+      "failed_check_names": [
+        "test (0)",
+        "test (1)"
+      ],
+      "notes": "Failures reproduce on main filings.py; not introduced by the FCF canonical overlay. Gap-scan pins and the SBRY fixture isolation need a refresh so the required suite can go green.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-003",
+      "recorded_at": "2026-11-25T16:25:43.519760+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR 1476 conflicted with main after the screen-pin refresh landed",
+      "pr_number": 1476,
+      "branch": "cursor/eng-20261125-03-1de3",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1476",
+      "task_id": "eng-20261125-03",
+      "head_sha": "04f64455919eb83b56f6f95e302d4c767d23dea1",
+      "mergeable_state": "dirty",
+      "failed_check_names": [],
+      "notes": "Kept main's SBRY fixture bridge guard and prf-20261125-001. Renumbered this PR's CI occasion to prf-20261125-002. Feature diff stays filings.py and test_research_filings.py.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-004",
+      "recorded_at": "2026-11-25T19:28:31.164848+00:00",
       "source": "human_request",
       "kind": "ci_check",
       "failure_reason": "pytest: gap-scan goldens stale and SBRY fixture read live filings",
       "pr_number": 1477,
       "branch": "cursor/eng-20261125-04-1de3",
       "title": null,
-      "url": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1477",
       "task_id": "eng-20261125-04",
       "head_sha": "2dfd766fb36c34ce0758ac56c677eef9c12b0c4e",
       "mergeable_state": null,
@@ -7309,7 +7366,24 @@
         "test (0)",
         "test (1)"
       ],
-      "notes": "Hunter-fix reverted the sector-override commit after unrelated pytest failures. Restored that commit onto main, pinned gap-scan examples to current docs/data, and marked the SBRY filing fixture has_body so it does not read live research.",
+      "notes": "Hunter-fix reverted the sector-override commit. Restored it. Gap-scan pins and SBRY has_body were the pytest failures. Re-recorded after the occasion log conflicted with main.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-005",
+      "recorded_at": "2026-11-25T19:28:31.228723+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "pr_fix_occasions.json and test_summary.py conflicted with main",
+      "pr_number": 1477,
+      "branch": "cursor/eng-20261125-04-1de3",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1477",
+      "task_id": "eng-20261125-04",
+      "head_sha": "1eb661c4e69edeb78272c3327b4137c4ce574ce0",
+      "mergeable_state": "dirty",
+      "failed_check_names": [],
+      "notes": "Kept main's SBRY fcf_bridge fixture guard and main's occasion ids. Re-added this PR's CI occasion after the id collision with prf-20261125-001.",
       "details": {}
     }
   ],
@@ -7556,11 +7630,11 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 213
+        "count": 215
       },
       {
         "kind": "merge_conflict",
-        "count": 188
+        "count": 190
       },
       {
         "kind": "ci_and_merge",
@@ -7570,7 +7644,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 396
+        "count": 400
       },
       {
         "source": "traffic_controller",

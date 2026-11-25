@@ -2292,13 +2292,19 @@ def test_build_company_reports_fcf_basis_overlay_caps_sbry_style_buy(tmp_path: P
             {
                 "filings": [
                     {
+                        "body_path": str(body_path),
                         "period": "annual",
                         "has_body": True,
-                        "body_path": str(body_path),
                     }
                 ]
             }
         ),
+        encoding="utf-8",
+    )
+    # Keep the fixture off the committed SBRY bridge, which otherwise supplies
+    # a drifted company-adjusted figure ahead of this body.
+    (sources / "fcf_bridge.json").write_text(
+        json.dumps({"ticker": "SBRY.L", "resolved": False}),
         encoding="utf-8",
     )
 

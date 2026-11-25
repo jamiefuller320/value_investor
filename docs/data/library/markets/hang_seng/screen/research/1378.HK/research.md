@@ -1,6 +1,6 @@
 # China Hongqiao Group Limited (1378.HK) — Research memo
 
-_Version 16 · Updated 2026-11-25T07:49:29.972398+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-25T17:49:19.756854+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Research confirms the strong_buy screen: FY2025 metrics show modest profit growth, strong operating cash flow and dividends; cyclical and leverage risks persist, and quarterly TTM cash flow is unverified.
+Rationale: Filing-aligned FY2025 cash flow and dividends still confirm the strong_buy screen; cyclical and leverage risks persist, and this refresh adds no new HKEX disclosures—Yahoo TTM cash flow remains unverified.
 RiskTags: cyclical, leverage, regulatory, governance, key_person, other
 
 ## Weekly updates
@@ -87,4 +87,9 @@ Yahoo quarterly cash flow is still empty; screen TTM free cash flow remains unve
 ### 2026-11-25T07:49:29.972398+00:00
 Sources refreshed 25 Nov 2026 (~07:49 UTC); filing-aligned FY2025 metrics unchanged (modest attributable profit growth, ~RMB39.0bn operating cash flow, HK165c proposed final dividend per filings).
 News batch since the early memo is empty; no new HKEX results or trading updates in sources.
+Yahoo quarterly cash flow is still empty; screen TTM free cash flow remains unverified against filings.
+
+### 2026-11-25T17:49:19.756854+00:00
+Sources refreshed 25 Nov 2026 (~17:48 UTC); filing-aligned FY2025 metrics unchanged (modest attributable profit growth, ~RMB39.0bn operating cash flow, HK165c proposed final dividend per filings).  
+Afternoon news batch since the morning memo is empty; no new HKEX results or trading updates in sources.  
 Yahoo quarterly cash flow is still empty; screen TTM free cash flow remains unverified against filings.

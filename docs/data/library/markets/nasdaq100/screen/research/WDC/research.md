@@ -1,6 +1,6 @@
 # Western Digital Corporation (WDC) — Research memo
 
-_Version 8 · Updated 2026-11-25T04:55:08.176490+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-25T18:12:19.009175+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: high
-Confidence: 0.65
-Rationale: Q1 FY26 revenue and ~$4.3bn TTM FCF still support the buy screen; the empty batch leaves cyclical and accounting risks unchanged and unresolved.
+Confidence: 0.63
+Rationale: Q1 FY26 revenue and ~$4.3bn TTM FCF still confirm the buy screen; Wednesday’s memory selloff and valuation press weaken near-term conviction without updating supplied fundamentals.
 RiskTags: cyclical, customer_concentration, competitive, accounting
 
 ## Weekly updates
@@ -48,3 +48,8 @@ Sector selloff colour reinforces cyclical risk but does not resolve customer con
 No material change. The batch since the last refresh contains no new articles.
 Q1 FY26 revenue of $4.38bn and TTM free cash flow of about $4.29bn are unchanged in the screening snapshot.
 No new WDC filing appears in the supplied sources beyond the 20 Nov 8-K already on file.
+
+### 2026-11-25T18:12:19.009175+00:00
+Wednesday’s batch reports a broad chip/memory selloff (WDC down about 7%) alongside tariff concerns and softer memory demand forecasts; GuruFocus flags the shares as significantly overvalued after the drop.
+Q1 FY26 revenue of $4.38bn and TTM free cash flow of about $4.29bn are unchanged in the screening snapshot.
+No new WDC filing appears in the supplied sources since the 20 Nov 8-K.

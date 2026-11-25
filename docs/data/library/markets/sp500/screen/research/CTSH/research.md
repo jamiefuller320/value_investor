@@ -1,6 +1,6 @@
 # Cognizant Technology Solutions Corporation (CTSH) — Research memo
 
-_Version 9 · Updated 2026-11-25T04:39:25.154980+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-25T17:54:17.680874+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.73
-Rationale: Q3 revenue and quarter FCF still anchor Strong Buy; the 25 Nov GuruFocus valuation headline adds no disclosures—no EDGAR after 29 Oct—so research confirms the screen without added conviction.
+Confidence: 0.72
+Rationale: Q3 revenue and $925m quarter FCF still underpin Strong Buy; Reuters-linked Capital IQ talks and Wedbush Outperform are unconfirmed—no EDGAR after 29 Oct—so research confirms without added conviction.
 RiskTags: regulatory, competitive, cyclical, customer_concentration, litigation, accounting, leverage
 
 ## Weekly updates
@@ -53,3 +53,8 @@ No material change to fundamentals, guidance, or sell-side themes in the supplie
 The 25 Nov batch adds one GuruFocus headline (GF Value $89.26 versus $60.98 after a 4.1% move); valuation commentary only.  
 Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged with last EDGAR on 29 Oct 2026.  
 No material change to fundamentals, guidance, or sell-side themes in the supplied pack.
+
+### 2026-11-25T17:54:17.680874+00:00
+The 25 Nov 17:53 batch cites Reuters-linked talks for parts of S&P Global’s Capital IQ unit (~1,500 staff); nothing in the filing pack confirms a deal.  
+GuruFocus also notes Wedbush assuming Outperform; earlier GuruFocus valuation and Deutsche Hold / BofA Neutral themes are otherwise unchanged.  
+Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; last EDGAR in the index is 29 Oct 2026.

@@ -1,6 +1,6 @@
 # Jabil Inc. (JBL) — Research memo
 
-_Version 7 · Updated 2026-11-25T04:46:43.941434+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T18:02:20.559781+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.67
-Rationale: A post-close headline flags a sharper sell-off than the market; unchanged TTM cash only partly supports the buy screen, and filing–screen earnings tension remains unresolved.
+Rationale: Yahoo pieces question whether earnings support the five-year rerating and cite a non-binding India AI MoU; unchanged TTM cash does not resolve filing–screen EPS tension, mildly weakening the buy case.
 RiskTags: cyclical, leverage, customer_concentration
 
 ## Weekly updates
@@ -42,4 +42,9 @@ Screen–filing earnings reconciliation remains unresolved; filing-backed risk p
 ### 2026-11-25T04:46:43.941434+00:00
 One yfinance piece notes JBL closed −6.42% versus the broader market on 24 Nov ($226.69); no company-specific catalyst in the batch.  
 04:46 financial pull unchanged: TTM operating cash flow ~$2.0bn and free cash flow ~$1.37bn; net debt ~$1.64bn and negative tangible book persist.  
+Screen–filing earnings reconciliation remains unresolved; filing-backed risk profile unchanged.
+
+### 2026-11-25T18:02:20.559781+00:00
+Yahoo coverage asks whether profits justify the five-year share run and reports a non-binding Adani JV MoU for India AI and data-centre equipment; one peer EMS AI piece only.  
+18:02 financial pull unchanged: TTM operating cash flow ~$2.0bn, free cash flow ~$1.37bn; net debt ~$1.64bn and negative tangible book persist.  
 Screen–filing earnings reconciliation remains unresolved; filing-backed risk profile unchanged.

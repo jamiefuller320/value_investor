@@ -83,6 +83,8 @@ The 22:00 UTC job runs under `archive_lane_gate`. `head_needs_fat_slot` and a sp
 
 Apply caps resolve from committed `stage_ladder` (floor stage 2 = 8/32; ceiling stage 4 = 32/128): ≤2 tickers/unit, ≤1 body/ticker, archive budget IDs only (`universe_filing_archive:*`), preemptible, `fourth_equal_sprint_stream=false`. Ladder: pilot 2/8 → stage 1 4/16 → stage 2 8/32 → stage 3 16/64 → stage 4 32/128.
 
+Each unit fills that ticker cap from the market universe CSV after skipping names whose cold `pack_index` already hydrates (`try_hydrate_pack` status `hit`). Empty or unreadable indexes are retried. The walk is local and stops at the cap, so the nightly job rotates onto uncovered tickers instead of rewriting the same first rows. HTTP caps, the quiet-window gate, and `cancel-in-progress` are unchanged (L625).
+
 ## Shipped scaffolds
 
 | Piece | Module / artifact | Role |
@@ -90,7 +92,7 @@ Apply caps resolve from committed `stage_ladder` (floor stage 2 = 8/32; ceiling 
 | Isolation firewall + quiet window | `universe_filing_archive_isolation.py` → `archive_lane_gate` | Separate budget IDs, preemptible, focus-pressure auto-suspend, quiet-window preference |
 | Week-first pack order | `universe_filing_archive_pack_order.py` | Archive-only coverage order |
 | Gated pack run | `universe_filing_archive_pack_run.py` + workflow | Gate → plan → dry or thin apply → bottleneck review |
-| Thin writers | `universe_filing_archive_writer.py` | Bounded fetch + cold `pack_index` / raw / normalized |
+| Thin writers | `universe_filing_archive_writer.py` | Bounded fetch + cold `pack_index` / raw / normalized; skip hydrated packs and rotate to uncovered tickers inside the ticker/HTTP caps |
 | Miss-rate observe | `universe_filing_archive_miss_rate.py` → `docs/data/universe_filing_archive_miss_rate.json` | Outcome proxy only — **not** a writer start gate |
 | Fail-open hydrate | `universe_filing_archive_hydrate.py` → `try_hydrate_pack` | Pack hit accelerates; miss/error always continues live deepen |
 | Stage ladder + quiet streak | `universe_filing_archive_stage.py` → status `stage_ladder` | Auto-promote one documented stage after 5 clean nights; hard ceiling stage 4; fail-closed streak reset |
