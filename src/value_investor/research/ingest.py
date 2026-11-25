@@ -1527,11 +1527,16 @@ def ingest_research_sources(
                     ir_refetch = dict(ir_allowlist_ensure.get("ir_refetch") or {})
                     if ir_refetch:
                         filings_meta["ir_refetch"] = ir_refetch
-                    merge_added = int((ir_allowlist_ensure.get("merge") or {}).get("added") or 0)
+                    merge_meta = dict(
+                        ir_allowlist_ensure.get("merge") or ir_refetch.get("merge") or {}
+                    )
+                    merge_touched = int(merge_meta.get("added") or 0) or int(
+                        merge_meta.get("migrated_urls") or 0
+                    )
                     if (
                         int(ir_allowlist_ensure.get("fetched") or 0)
                         or int(ir_refetch.get("fetched") or 0)
-                        or merge_added > 0
+                        or merge_touched > 0
                     ):
                         index_path = sources_dir / "filings" / "filings_index.json"
                         resolved_index = resolve_json_path(index_path)
@@ -1665,11 +1670,14 @@ def ingest_research_sources(
                     )
                 filings_meta["ir_refetch"] = ir_refetch
                 filings_meta["residual_refetch"] = residual_refetch
-                merge_added = int((ir_refetch.get("merge") or {}).get("added") or 0)
+                merge_meta = dict(ir_refetch.get("merge") or {})
+                merge_touched = int(merge_meta.get("added") or 0) or int(
+                    merge_meta.get("migrated_urls") or 0
+                )
                 if (
                     int(ir_refetch.get("fetched") or 0)
                     or int(residual_refetch.get("fetched") or 0)
-                    or merge_added > 0
+                    or merge_touched > 0
                 ):
                     index_path = sources_dir / "filings" / "filings_index.json"
                     resolved_index = resolve_json_path(index_path)
@@ -1716,8 +1724,11 @@ def ingest_research_sources(
                         deadline_monotonic=deadline_monotonic,
                     )
                     filings_meta["ir_refetch"] = ir_refetch
-                merge_added = int((ir_refetch.get("merge") or {}).get("added") or 0)
-                if int(ir_refetch.get("fetched") or 0) or merge_added > 0:
+                merge_meta = dict(ir_refetch.get("merge") or {})
+                merge_touched = int(merge_meta.get("added") or 0) or int(
+                    merge_meta.get("migrated_urls") or 0
+                )
+                if int(ir_refetch.get("fetched") or 0) or merge_touched > 0:
                     index_path = sources_dir / "filings" / "filings_index.json"
                     resolved_index = resolve_json_path(index_path)
                     if resolved_index is not None:

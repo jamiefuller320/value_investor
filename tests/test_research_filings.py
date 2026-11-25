@@ -14950,6 +14950,81 @@ def test_parked_source_hunter_evn_vi_euro_depth_has_fetchable_ir():
     assert valid, reason
 
 
+def test_filings_index_ir_allowlist_direct_gap_evn_vi_stale_publications_hub():
+    """eng-20261125-01: dead evn.at hub must count as an IR allowlist gap until migrated."""
+    from value_investor.research.filings import (
+        _filings_index_has_stale_ir_allowlist_urls,
+        filings_index_ir_allowlist_direct_gap,
+    )
+
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    payload = {
+        "ticker": "EVN.VI",
+        "filings": [
+            {
+                "id": "ir_07bb52dd9c03b279",
+                "source": "ir_allowlist",
+                "url": dead,
+                "period": "other",
+                "has_body": False,
+            }
+        ],
+        "summary": {"total": 3, "with_body": 2},
+    }
+    assert _filings_index_has_stale_ir_allowlist_urls(payload)
+    assert filings_index_ir_allowlist_direct_gap(payload)
+
+
+def test_listing_merge_post_ir_sync_enables_evn_vi_refetch_eng_20261125_01(
+    tmp_path: Path,
+    monkeypatch,
+):
+    """Prior listing rows + fresh allowlist URLs must migrate before deepen refetch."""
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    live = _BUILTIN_IR_URLS["EVN.VI"][0]
+    prior = [
+        {
+            "id": "ir_07bb52dd9c03b279",
+            "source": "ir_allowlist",
+            "url": dead,
+            "period": "other",
+            "has_body": False,
+        }
+    ]
+    discovered = fetch_filings_ir_allowlist("EVN.VI")
+    merged = merge_filings(prior, discovered)
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "EVN.VI",
+                "filings": merged,
+                "summary": {"total": len(merged), "with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    merge_meta = merge_ir_allowlist_filings("EVN.VI", filings_dir)
+    assert int(merge_meta.get("migrated_urls") or 0) >= 1
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return "EVN AG Jahresfinanzbericht consolidated revenue earnings " * 25, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(filings_dir, "EVN.VI", max_bodies=5)
+    assert int(result.get("attempted") or 0) >= 1
+    assert int(result.get("fetched") or 0) >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ir_urls = [row["url"] for row in saved["filings"] if row.get("source") == "ir_allowlist"]
+    assert dead not in ir_urls
+    assert live in ir_urls
+
+
 def test_parked_source_hunter_cai_vi_atx_has_fetchable_ir():
     """eng-20261021-08: CAI.VI caimmo.com FY2025 annual + H1 2026 interim PDFs fetch and validate."""
     assert "CAI.VI" not in PARKED_SOURCE_HUNTER_SKIP

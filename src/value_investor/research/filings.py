@@ -12381,6 +12381,33 @@ def filings_index_hkex_direct_gap(payload: dict[str, Any]) -> bool:
     return with_body < max(3, total // 2)
 
 
+def _filings_index_has_stale_ir_allowlist_urls(
+    payload: dict[str, Any],
+    *,
+    ticker: str = "",
+) -> bool:
+    """True when indexed IR rows still point at URLs replaced on the live allowlist."""
+    ticker_key = str(ticker or payload.get("ticker") or "").strip().upper()
+    if not ticker_key:
+        return False
+    live_urls = {
+        str(row.get("url") or "").strip()
+        for row in fetch_filings_ir_allowlist(ticker_key)
+        if str(row.get("url") or "").strip()
+    }
+    if not live_urls:
+        return False
+    for row in list(payload.get("filings") or []):
+        if not _is_ir_allowlist_row(row):
+            continue
+        url = str(row.get("url") or "").strip()
+        if not url or row.get("has_body"):
+            continue
+        if url not in live_urls:
+            return True
+    return False
+
+
 def filings_index_ir_allowlist_direct_gap(payload: dict[str, Any]) -> bool:
     """True when a ticker with builtin IR URLs still lacks key statutory bodies."""
     from value_investor.filings_index_dating import key_bodies
@@ -12392,6 +12419,8 @@ def filings_index_ir_allowlist_direct_gap(payload: dict[str, Any]) -> bool:
     filings = list(payload.get("filings") or [])
     ir_rows = [row for row in filings if _is_ir_allowlist_row(row)]
     if ir_rows and not any(row.get("has_body") for row in ir_rows):
+        return True
+    if _filings_index_has_stale_ir_allowlist_urls(payload):
         return True
     return int((payload.get("summary") or {}).get("with_body") or 0) == 0
 
@@ -12825,12 +12854,27 @@ def ingest_filings(
     if unextractable_urls:
         index[UNEXTRACTABLE_BODY_URLS_KEY] = unextractable_urls
 
-    from value_investor.storage import resolve_json_path, write_json
+    from value_investor.storage import read_json, resolve_json_path, write_json
 
     index_path = filings_dir / "filings_index.json"
     write_json(index_path, index, compact=True, compress=False)
     prune_orphaned_filing_bodies(filings_dir)
     written = resolve_json_path(index_path) or index_path
+
+    ir_allowlist_merge: dict[str, Any] = {}
+    # eng-20261125-01: euro_depth EVN.VI kept a dead evn.at hub across listing re-ingest
+    # because prior rows were merged before allowlist canonical PDFs shipped — sync after write.
+    if ir_allowlist_direct_eligible(ticker):
+        ir_allowlist_merge = merge_ir_allowlist_filings(ticker, filings_dir)
+        if int(ir_allowlist_merge.get("added") or 0) or int(
+            ir_allowlist_merge.get("migrated_urls") or 0
+        ):
+            resolved_index = resolve_json_path(index_path)
+            if resolved_index is not None:
+                try:
+                    index = read_json(resolved_index)
+                except (OSError, ValueError, TypeError):
+                    pass
 
     cashflow_refresh = refresh_sources_yahoo_cashflow_metrics(
         ticker=ticker,
@@ -12859,6 +12903,7 @@ def ingest_filings(
         "companies_house_pdf_supplement": ch_pdf_supplement,
         "yahoo_cashflow_metrics_refresh": cashflow_refresh,
         "sec_companyfacts_refresh": companyfacts_refresh,
+        "ir_allowlist_merge": ir_allowlist_merge,
     }
 
 

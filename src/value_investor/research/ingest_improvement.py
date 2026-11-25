@@ -103,7 +103,7 @@ BODY_GAP_BATCH_TICKERS = frozenset(
         "MEGP.L",
         "HIK.L",
         "TRST.L",
-        # eng-20261123-01: euro_depth EVN.VI recurring indexed_without_body on stale IR hub.
+        # eng-20261125-01: euro_depth EVN.VI recurring indexed_without_body on stale IR hub.
         "EVN.VI",
     }
 )
