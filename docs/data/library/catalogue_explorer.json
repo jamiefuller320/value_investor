@@ -5188,28 +5188,10 @@
     "SOHVY_US_EQ",
     "SOI_US_EQ",
     "SOLS_US_EQ",
-    "SOLVY_US_EQ"
+    "SOLVY_US_EQ",
+    "SOMC_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SNAP_US_EQ",
-      "venue": "US",
-      "yahoo": "SNAP",
-      "isin": "US83304A1060",
-      "name": "SNAP",
-      "seconds": 2.56,
-      "outcome": "saved",
-      "at": "2026-11-25T09:20:25.542915+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.791
-      },
-      "screen_seconds": 0.791,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "SNBP_US_EQ",
       "venue": "US",
@@ -5950,6 +5932,25 @@
       },
       "screen_seconds": 4.622,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SOMC_US_EQ",
+      "venue": "US",
+      "yahoo": "SOMC",
+      "isin": "US84336P1030",
+      "name": "SOMC",
+      "seconds": 0.958,
+      "outcome": "miss",
+      "at": "2026-11-25T10:53:00.357994+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.55,
+        "seconds": 0.842
+      },
+      "screen_seconds": 0.842,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -70422,43 +70423,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T10:52:26.230393+00:00"
+    },
+    {
+      "t212_ticker": "SOMC_US_EQ",
+      "yahoo": "SOMC",
+      "name": "SOMC",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T10:53:00.357994+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SOLVY_US_EQ",
+    "t212_ticker": "SOMC_US_EQ",
     "venue": "US",
-    "yahoo": "SOLVY",
-    "isin": "US8344374025",
-    "name": "SLVYY",
-    "seconds": 4.678,
+    "yahoo": "SOMC",
+    "isin": "US84336P1030",
+    "name": "SOMC",
+    "seconds": 0.958,
     "outcome": "miss",
-    "at": "2026-11-25T10:52:53.395360+00:00",
+    "at": "2026-11-25T10:53:00.357994+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.622
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.55,
+      "seconds": 0.842
     },
-    "screen_seconds": 4.622,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.842,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SOMC_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T10:52:53.395360+00:00",
+  "updated_at": "2026-11-25T10:53:00.357994+00:00",
   "totals": {
-    "screened": 5187,
+    "screened": 5188,
     "signals": {
-      "buy": 1570,
+      "buy": 1571,
       "avoid": 1219,
       "hold": 1132,
       "insufficient_data": 1237,
       "strong_buy": 29
     },
-    "signals_n": 5187,
-    "screen_seconds_sum": 52317.03700000021,
-    "screen_seconds_n": 5187,
+    "signals_n": 5188,
+    "screen_seconds_sum": 52317.879000000205,
+    "screen_seconds_n": 5188,
     "outcomes": {
-      "miss": 2010,
+      "miss": 2011,
       "saved": 3177
     }
   },
