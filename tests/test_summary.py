@@ -2288,7 +2288,23 @@ def test_build_company_reports_fcf_basis_overlay_caps_sbry_style_buy(tmp_path: P
     body_path = filings / "annual.txt"
     body_path.write_text("Retail free cash flow of £574m in the year", encoding="utf-8")
     (sources / "filings" / "filings_index.json").write_text(
-        json.dumps({"filings": [{"body_path": str(body_path), "period": "annual"}]}),
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "body_path": str(body_path),
+                        "period": "annual",
+                        "has_body": True,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    # Keep the fixture off the committed SBRY bridge, which otherwise supplies
+    # a drifted company-adjusted figure ahead of this body.
+    (sources / "fcf_bridge.json").write_text(
+        json.dumps({"ticker": "SBRY.L", "resolved": False}),
         encoding="utf-8",
     )
 
