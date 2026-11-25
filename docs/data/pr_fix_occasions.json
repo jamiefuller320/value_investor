@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-25T19:42:33.721786+00:00",
-  "occasion_count": 409,
+  "updated_at": "2026-11-25T20:05:24.561320+00:00",
+  "occasion_count": 411,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -7351,22 +7351,21 @@
     },
     {
       "id": "prf-20261125-004",
-      "recorded_at": "2026-11-25T16:24:37.051534+00:00",
+      "recorded_at": "2026-11-25T19:41:22.066886+00:00",
       "source": "human_request",
       "kind": "ci_check",
-      "failure_reason": "pytest: stored screen figures drifted (test_ftse_gap_scan, test_summary SBRY filing primary)",
-      "pr_number": 1478,
-      "branch": "cursor/tighten-floor-on-thesis-break-edc1",
-      "title": "Queue N279: do not sell a rising thesis break",
-      "url": "https://github.com/jamiefuller320/value_investor/pull/1478",
+      "failure_reason": "CI / test (0): committed GOOG post-sale matched_excess drifted from the observe store",
+      "pr_number": 1480,
+      "branch": "cursor/record-memo-calibration-5641",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1480",
       "task_id": null,
-      "head_sha": "9d427bbad8e3e995b984670a47250607e229a678",
-      "mergeable_state": "unstable",
+      "head_sha": "8d43a9681e",
+      "mergeable_state": null,
       "failed_check_names": [
-        "test (0)",
-        "test (1)"
+        "CI / test (0)"
       ],
-      "notes": "James asked to fix and merge. Re-recorded after main also logged the same drift on PR 1479.",
+      "notes": "tests/test_strategy_book_post_sale_notes.py::test_committed_notes_match_the_observe_store. Recorded after merging origin/main so the occasion id follows main.",
       "details": {}
     },
     {
@@ -7436,6 +7435,43 @@
       "failed_check_names": [
         "test (0)"
       ],
+      "notes": null,
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-009",
+      "recorded_at": "2026-11-25T16:24:37.051534+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "pytest: stored screen figures drifted (test_ftse_gap_scan, test_summary SBRY filing primary)",
+      "pr_number": 1478,
+      "branch": "cursor/tighten-floor-on-thesis-break-edc1",
+      "title": "Queue N279: do not sell a rising thesis break",
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1478",
+      "task_id": null,
+      "head_sha": "9d427bbad8e3e995b984670a47250607e229a678",
+      "mergeable_state": "unstable",
+      "failed_check_names": [
+        "test (0)",
+        "test (1)"
+      ],
+      "notes": "James asked to fix and merge. Re-recorded after main also logged the same drift on PR 1479. Renumbered from prf-20261125-004 because main already used that id.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-010",
+      "recorded_at": "2026-11-25T20:05:24.561320+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "dirty against main in pr_fix_occasions after the GOOG note alignment",
+      "pr_number": 1478,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
       "notes": null,
       "details": {}
     }
@@ -7683,11 +7719,11 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 216
+        "count": 217
       },
       {
         "kind": "merge_conflict",
-        "count": 192
+        "count": 193
       },
       {
         "kind": "ci_and_merge",
@@ -7697,7 +7733,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 403
+        "count": 405
       },
       {
         "source": "traffic_controller",
