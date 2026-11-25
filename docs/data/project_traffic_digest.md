@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-25T17:33:11.133133+00:00`
+Generated: `2026-11-25T21:57:04.184469+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,10 +33,13 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `ingest_narrow`/verified PR #1481 `eng-20261125-05` — Populate `CompanyMetrics.operating_cashflow` from Yahoo cash-flow statements when annual JSON already contains OCF (MEGP.L-class false Piotroski/Earnings Qualit
+- `human`/human PR #1475 `eng-20261125-02` — dividend: Enforce automatic signal cap when `fcf_definition_divergence` exceeds configured threshold OR statutory OCF−CapEx dividend cover &lt; 1.0× (interim-qu
+- `human`/human PR #1477 `eng-20261125-04` — Sector override registry for non-standard UK issuers (e.g. plantation/agriculture off Consumer Defensive for AEP.L) plus persist `uk_contractor` / `public_capex
 - `human`/human PR #1476 `eng-20261125-03` — Implement filing-aligned FCF canonical field (statutory cash flow from annual/interim bodies or `financials_annual.json`) and expose filing vs Yahoo TTM delta o
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 404
+- Occasion count: 416
 - `validate failed` — 9×
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate check failed` — 6×

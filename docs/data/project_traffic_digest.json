@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-25T17:33:11.133133+00:00",
+  "generated_at": "2026-11-25T21:57:04.184469+00:00",
   "role": "end_of_day_project_traffic",
   "trajectory": "on_track",
   "pause_active": false,
@@ -97,6 +97,39 @@
   },
   "merges_today": [
     {
+      "task_id": "eng-20261125-05",
+      "title": "Populate `CompanyMetrics.operating_cashflow` from Yahoo cash-flow statements when annual JSON already contains OCF (MEGP.L-class false Piotroski/Earnings Qualit",
+      "area": "ingest",
+      "pr_number": 1481,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1481",
+      "merged_at": "2026-11-25T21:24:29.656423+00:00",
+      "merge_class": "ingest_narrow",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20261125-02",
+      "title": "dividend: Enforce automatic signal cap when `fcf_definition_divergence` exceeds configured threshold OR statutory OCF−CapEx dividend cover &lt; 1.0× (interim-qu",
+      "area": "scoring",
+      "pr_number": 1475,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1475",
+      "merged_at": "2026-11-25T21:01:59.780260+00:00",
+      "merge_class": "human",
+      "auto_merge": false,
+      "independently_verified": false
+    },
+    {
+      "task_id": "eng-20261125-04",
+      "title": "Sector override registry for non-standard UK issuers (e.g. plantation/agriculture off Consumer Defensive for AEP.L) plus persist `uk_contractor` / `public_capex",
+      "area": "scoring",
+      "pr_number": 1477,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1477",
+      "merged_at": "2026-11-25T21:01:37.372950+00:00",
+      "merge_class": "human",
+      "auto_merge": false,
+      "independently_verified": false
+    },
+    {
       "task_id": "eng-20261125-03",
       "title": "Implement filing-aligned FCF canonical field (statutory cash flow from annual/interim bodies or `financials_annual.json`) and expose filing vs Yahoo TTM delta o",
       "area": "ingest",
@@ -108,9 +141,21 @@
       "independently_verified": false
     }
   ],
-  "verified_merges_today": [],
+  "verified_merges_today": [
+    {
+      "task_id": "eng-20261125-05",
+      "title": "Populate `CompanyMetrics.operating_cashflow` from Yahoo cash-flow statements when annual JSON already contains OCF (MEGP.L-class false Piotroski/Earnings Qualit",
+      "area": "ingest",
+      "pr_number": 1481,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1481",
+      "merged_at": "2026-11-25T21:24:29.656423+00:00",
+      "merge_class": "ingest_narrow",
+      "auto_merge": false,
+      "independently_verified": true
+    }
+  ],
   "pr_fix_common_issues": {
-    "occasion_count": 404,
+    "occasion_count": 416,
     "by_reason": [
       {
         "failure_reason": "validate failed",
@@ -248,11 +293,11 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 214
+        "count": 219
       },
       {
         "kind": "merge_conflict",
-        "count": 189
+        "count": 196
       },
       {
         "kind": "ci_and_merge",
@@ -262,7 +307,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 398
+        "count": 410
       },
       {
         "source": "traffic_controller",
