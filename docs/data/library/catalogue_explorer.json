@@ -5991,28 +5991,10 @@
     "WBUY_US_EQ",
     "WB_US_EQ",
     "WCC_US_EQ",
-    "WCFB_US_EQ"
+    "WCFB_US_EQ",
+    "WCRS_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "VTOL_US_EQ",
-      "venue": "US",
-      "yahoo": "VTOL",
-      "isin": "US11040G1031",
-      "name": "VTOL",
-      "seconds": 1.651,
-      "outcome": "saved",
-      "at": "2026-11-25T19:06:15.921151+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 0.491
-      },
-      "screen_seconds": 0.491,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "VTSI_US_EQ",
       "venue": "US",
@@ -6753,6 +6735,25 @@
       },
       "screen_seconds": 0.526,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "WCRS_US_EQ",
+      "venue": "US",
+      "yahoo": "WCRS",
+      "isin": "US9578813035",
+      "name": "WCRS",
+      "seconds": 0.755,
+      "outcome": "miss",
+      "at": "2026-11-25T19:18:44.759068+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.633
+      },
+      "screen_seconds": 0.633,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -81757,43 +81758,56 @@
       "signal": "strong_buy",
       "status": "pending",
       "queued_at": "2026-11-25T19:18:23.312111+00:00"
+    },
+    {
+      "t212_ticker": "WCRS_US_EQ",
+      "yahoo": "WCRS",
+      "name": "WCRS",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T19:18:44.759068+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "WCFB_US_EQ",
+    "t212_ticker": "WCRS_US_EQ",
     "venue": "US",
-    "yahoo": "WCFB",
-    "isin": "US92940L1035",
-    "name": "WCFB",
-    "seconds": 0.654,
+    "yahoo": "WCRS",
+    "isin": "US9578813035",
+    "name": "WCRS",
+    "seconds": 0.755,
     "outcome": "miss",
-    "at": "2026-11-25T19:18:38.093329+00:00",
+    "at": "2026-11-25T19:18:44.759068+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.5,
-      "seconds": 0.526
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.633
     },
-    "screen_seconds": 0.526,
-    "signal": "hold"
+    "screen_seconds": 0.633,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "WCRS_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T19:18:38.093329+00:00",
+  "updated_at": "2026-11-25T19:18:44.759068+00:00",
   "totals": {
-    "screened": 5990,
+    "screened": 5991,
     "signals": {
-      "buy": 1810,
+      "buy": 1811,
       "avoid": 1408,
       "hold": 1314,
       "insufficient_data": 1425,
       "strong_buy": 33
     },
-    "signals_n": 5990,
-    "screen_seconds_sum": 60267.708000000195,
-    "screen_seconds_n": 5990,
+    "signals_n": 5991,
+    "screen_seconds_sum": 60268.3410000002,
+    "screen_seconds_n": 5991,
     "outcomes": {
-      "miss": 2339,
+      "miss": 2340,
       "saved": 3651
     }
   },
