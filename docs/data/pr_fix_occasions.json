@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-25T19:44:12.129063+00:00",
-  "occasion_count": 407,
+  "updated_at": "2026-11-25T20:14:37.697835+00:00",
+  "occasion_count": 409,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -7351,7 +7351,26 @@
     },
     {
       "id": "prf-20261125-004",
-      "recorded_at": "2026-11-25T19:28:31.164848+00:00",
+      "recorded_at": "2026-11-25T19:41:22.066886+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "CI / test (0): committed GOOG post-sale matched_excess drifted from the observe store",
+      "pr_number": 1480,
+      "branch": "cursor/record-memo-calibration-5641",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1480",
+      "task_id": null,
+      "head_sha": "8d43a9681e",
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (0)"
+      ],
+      "notes": "tests/test_strategy_book_post_sale_notes.py::test_committed_notes_match_the_observe_store. Recorded after merging origin/main so the occasion id follows main.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-005",
+      "recorded_at": "2026-11-25T20:14:37.530406+00:00",
       "source": "human_request",
       "kind": "ci_check",
       "failure_reason": "pytest: gap-scan goldens stale and SBRY fixture read live filings",
@@ -7366,12 +7385,12 @@
         "test (0)",
         "test (1)"
       ],
-      "notes": "Hunter-fix reverted the sector-override commit. Restored it. Gap-scan pins and SBRY has_body were the pytest failures. Re-recorded after the occasion log conflicted with main.",
+      "notes": "Re-recorded after the occasion log conflicted with main again. Gap-scan and SBRY fixture fixes are already on main.",
       "details": {}
     },
     {
-      "id": "prf-20261125-005",
-      "recorded_at": "2026-11-25T19:28:31.228723+00:00",
+      "id": "prf-20261125-006",
+      "recorded_at": "2026-11-25T20:14:37.589724+00:00",
       "source": "human_request",
       "kind": "merge_conflict",
       "failure_reason": "pr_fix_occasions.json and test_summary.py conflicted with main",
@@ -7383,12 +7402,12 @@
       "head_sha": "1eb661c4e69edeb78272c3327b4137c4ce574ce0",
       "mergeable_state": "dirty",
       "failed_check_names": [],
-      "notes": "Kept main's SBRY fcf_bridge fixture guard and main's occasion ids. Re-added this PR's CI occasion after the id collision with prf-20261125-001.",
+      "notes": "Re-recorded after a later id collision. Kept main's SBRY fixture and occasion ids.",
       "details": {}
     },
     {
-      "id": "prf-20261125-006",
-      "recorded_at": "2026-11-25T19:44:12.129063+00:00",
+      "id": "prf-20261125-007",
+      "recorded_at": "2026-11-25T20:14:37.645656+00:00",
       "source": "human_request",
       "kind": "ci_check",
       "failure_reason": "test (0): committed GOOG post-sale note matched_excess drifted from the observe store",
@@ -7402,7 +7421,24 @@
       "failed_check_names": [
         "test (0)"
       ],
-      "notes": "tests/test_strategy_book_post_sale_notes.py::test_committed_notes_match_the_observe_store. Notes file has 0.003775934570071783; rebuild from strategy_book_observe.json is 0.0037753141718754046. Percentage points stay 0.378.",
+      "notes": "Same drift PR 1480 already corrected on main. Re-recorded for this PR after the occasion-log conflict.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-008",
+      "recorded_at": "2026-11-25T20:14:37.697835+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "pr_fix_occasions.json conflicted with main after the GOOG note fix landed",
+      "pr_number": 1477,
+      "branch": "cursor/eng-20261125-04-1de3",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1477",
+      "task_id": "eng-20261125-04",
+      "head_sha": "035744082912ab6cf32d1a0ad2ef54988320b4fa",
+      "mergeable_state": "dirty",
+      "failed_check_names": [],
+      "notes": "Kept main's prf-20261125-004 for PR 1480. Re-added this PR's earlier occasions under new ids. Notes file already matches main, so the task allowlist stays on the feature paths.",
       "details": {}
     }
   ],
@@ -7649,11 +7685,11 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 216
+        "count": 217
       },
       {
         "kind": "merge_conflict",
-        "count": 190
+        "count": 191
       },
       {
         "kind": "ci_and_merge",
@@ -7663,7 +7699,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 401
+        "count": 403
       },
       {
         "source": "traffic_controller",
