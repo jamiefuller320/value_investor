@@ -6133,28 +6133,10 @@
     "XGN_US_EQ",
     "XHLD_US_EQ",
     "XHR_US_EQ",
-    "XIN_US_EQ"
+    "XIN_US_EQ",
+    "XISHY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "WTMA_US_EQ",
-      "venue": "US",
-      "yahoo": "WTMA",
-      "isin": "US30054B1070",
-      "name": "EMAT",
-      "seconds": 84.835,
-      "outcome": "miss",
-      "at": "2026-11-25T19:58:00.220526+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.67
-      },
-      "screen_seconds": 84.67,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "WTM_US_EQ",
       "venue": "US",
@@ -6895,6 +6877,25 @@
       },
       "screen_seconds": 84.52,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "XISHY_US_EQ",
+      "venue": "US",
+      "yahoo": "XISHY",
+      "isin": "US98421F1012",
+      "name": "XISHY",
+      "seconds": 0.879,
+      "outcome": "miss",
+      "at": "2026-11-25T20:14:10.090424+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.747
+      },
+      "screen_seconds": 0.747,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -82267,43 +82268,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T20:06:31.140749+00:00"
+    },
+    {
+      "t212_ticker": "XISHY_US_EQ",
+      "yahoo": "XISHY",
+      "name": "XISHY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T20:14:10.090424+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "XIN_US_EQ",
+    "t212_ticker": "XISHY_US_EQ",
     "venue": "US",
-    "yahoo": "XIN",
-    "isin": "US98417P2048",
-    "name": "XIN",
-    "seconds": 84.674,
+    "yahoo": "XISHY",
+    "isin": "US98421F1012",
+    "name": "XISHY",
+    "seconds": 0.879,
     "outcome": "miss",
-    "at": "2026-11-25T20:14:02.625511+00:00",
+    "at": "2026-11-25T20:14:10.090424+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.52
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.747
     },
-    "screen_seconds": 84.52,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.747,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "XISHY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T20:14:02.625511+00:00",
+  "updated_at": "2026-11-25T20:14:10.090424+00:00",
   "totals": {
-    "screened": 6132,
+    "screened": 6133,
     "signals": {
-      "buy": 1855,
+      "buy": 1856,
       "avoid": 1447,
       "hold": 1348,
       "insufficient_data": 1448,
       "strong_buy": 34
     },
-    "signals_n": 6132,
-    "screen_seconds_sum": 62283.391000000236,
-    "screen_seconds_n": 6132,
+    "signals_n": 6133,
+    "screen_seconds_sum": 62284.13800000024,
+    "screen_seconds_n": 6133,
     "outcomes": {
-      "miss": 2385,
+      "miss": 2386,
       "saved": 3747
     }
   },
