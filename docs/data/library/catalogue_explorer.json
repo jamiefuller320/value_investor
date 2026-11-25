@@ -5500,28 +5500,10 @@
     "THRD_US_EQ",
     "THRM_US_EQ",
     "THRY_US_EQ",
-    "THUPY_US_EQ"
+    "THUPY_US_EQ",
+    "THVB_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "TETC_US_EQ",
-      "venue": "US",
-      "yahoo": "TETC",
-      "isin": "US87823R1023",
-      "name": "TETC",
-      "seconds": 85.247,
-      "outcome": "miss",
-      "at": "2026-11-25T11:56:13.742138+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.19
-      },
-      "screen_seconds": 85.19,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "TETE_US_EQ",
       "venue": "US",
@@ -6262,6 +6244,25 @@
       },
       "screen_seconds": 1.092,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "THVB_US_EQ",
+      "venue": "US",
+      "yahoo": "THVB",
+      "isin": "US8846081003",
+      "name": "THVB",
+      "seconds": 1.322,
+      "outcome": "miss",
+      "at": "2026-11-25T12:12:45.675254+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 1.226
+      },
+      "screen_seconds": 1.226,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -74853,43 +74854,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T12:12:22.508153+00:00"
+    },
+    {
+      "t212_ticker": "THVB_US_EQ",
+      "yahoo": "THVB",
+      "name": "THVB",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T12:12:45.675254+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "THUPY_US_EQ",
+    "t212_ticker": "THVB_US_EQ",
     "venue": "US",
-    "yahoo": "THUPY",
-    "isin": "US88604M1062",
-    "name": "THUPY",
-    "seconds": 1.164,
+    "yahoo": "THVB",
+    "isin": "US8846081003",
+    "name": "THVB",
+    "seconds": 1.322,
     "outcome": "miss",
-    "at": "2026-11-25T12:12:38.255835+00:00",
+    "at": "2026-11-25T12:12:45.675254+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 1.092
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 1.226
     },
-    "screen_seconds": 1.092,
-    "signal": "hold"
+    "screen_seconds": 1.226,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "THVB_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T12:12:38.255835+00:00",
+  "updated_at": "2026-11-25T12:12:45.675254+00:00",
   "totals": {
-    "screened": 5499,
+    "screened": 5500,
     "signals": {
-      "buy": 1659,
+      "buy": 1660,
       "avoid": 1287,
       "hold": 1206,
       "insufficient_data": 1317,
       "strong_buy": 30
     },
-    "signals_n": 5499,
-    "screen_seconds_sum": 54942.61500000027,
-    "screen_seconds_n": 5499,
+    "signals_n": 5500,
+    "screen_seconds_sum": 54943.84100000027,
+    "screen_seconds_n": 5500,
     "outcomes": {
-      "miss": 2146,
+      "miss": 2147,
       "saved": 3353
     }
   },
