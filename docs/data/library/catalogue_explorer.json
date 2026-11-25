@@ -4655,28 +4655,10 @@
     "RCMT_US_EQ",
     "RCM_US_EQ",
     "RCON_US_EQ",
-    "RCRT_US_EQ"
+    "RCRT_US_EQ",
+    "RCRUY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "RACY_US_EQ",
-      "venue": "US",
-      "yahoo": "RACY",
-      "isin": "KYG4860C1078",
-      "name": "BIOT",
-      "seconds": 4.746,
-      "outcome": "miss",
-      "at": "2026-11-25T01:39:54.952661+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.602
-      },
-      "screen_seconds": 4.602,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "RADX_US_EQ",
       "venue": "US",
@@ -5417,6 +5399,25 @@
       },
       "screen_seconds": 4.478,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "RCRUY_US_EQ",
+      "venue": "US",
+      "yahoo": "RCRUY",
+      "isin": "US75629J1016",
+      "name": "RCRUY",
+      "seconds": 1.029,
+      "outcome": "miss",
+      "at": "2026-11-25T01:48:22.932058+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.889
+      },
+      "screen_seconds": 0.889,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -62044,43 +62045,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T01:47:13.380454+00:00"
+    },
+    {
+      "t212_ticker": "RCRUY_US_EQ",
+      "yahoo": "RCRUY",
+      "name": "RCRUY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T01:48:22.932058+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "RCRT_US_EQ",
+    "t212_ticker": "RCRUY_US_EQ",
     "venue": "US",
-    "yahoo": "RCRT",
-    "isin": "US75630B5012",
-    "name": "NIXX",
-    "seconds": 4.597,
+    "yahoo": "RCRUY",
+    "isin": "US75629J1016",
+    "name": "RCRUY",
+    "seconds": 1.029,
     "outcome": "miss",
-    "at": "2026-11-25T01:48:08.308707+00:00",
+    "at": "2026-11-25T01:48:22.932058+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.478
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.889
     },
-    "screen_seconds": 4.478,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.889,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "RCRUY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T01:48:08.308707+00:00",
+  "updated_at": "2026-11-25T01:48:22.932058+00:00",
   "totals": {
-    "screened": 4654,
+    "screened": 4655,
     "signals": {
-      "buy": 1404,
+      "buy": 1405,
       "avoid": 1102,
       "hold": 1003,
       "insufficient_data": 1118,
       "strong_buy": 27
     },
-    "signals_n": 4654,
-    "screen_seconds_sum": 46326.858000000204,
-    "screen_seconds_n": 4654,
+    "signals_n": 4655,
+    "screen_seconds_sum": 46327.74700000021,
+    "screen_seconds_n": 4655,
     "outcomes": {
-      "miss": 1790,
+      "miss": 1791,
       "saved": 2864
     }
   },
