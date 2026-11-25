@@ -6251,28 +6251,10 @@
     "021D_EQ",
     "02GD_EQ",
     "02VD_EQ",
-    "038D_EQ"
+    "038D_EQ",
+    "04QD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ZENA_US_EQ",
-      "venue": "US",
-      "yahoo": "ZENA",
-      "isin": "CA98936T2083",
-      "name": "ZENA",
-      "seconds": 2.804,
-      "outcome": "saved",
-      "at": "2026-11-25T20:45:40.536763+00:00",
-      "rows": 40,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.145
-      },
-      "screen_seconds": 1.145,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "ZENV_US_EQ",
       "venue": "US",
@@ -7013,6 +6995,25 @@
       },
       "screen_seconds": 4.867,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "04Qd_EQ",
+      "venue": "DE",
+      "yahoo": "04Q.DE",
+      "isin": "FI4000297767",
+      "name": "04Q",
+      "seconds": 2.475,
+      "outcome": "miss",
+      "at": "2026-11-25T20:55:39.421475+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.7,
+        "seconds": 0.998
+      },
+      "screen_seconds": 0.998,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -85429,43 +85430,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T20:53:30.113131+00:00"
+    },
+    {
+      "t212_ticker": "04Qd_EQ",
+      "yahoo": "04Q.DE",
+      "name": "04Q",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T20:55:39.421475+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "038d_EQ",
+    "t212_ticker": "04Qd_EQ",
     "venue": "DE",
-    "yahoo": "038.DE",
-    "isin": "JE00BYSS4X48",
-    "name": "038",
-    "seconds": 6.107,
+    "yahoo": "04Q.DE",
+    "isin": "FI4000297767",
+    "name": "04Q",
+    "seconds": 2.475,
     "outcome": "miss",
-    "at": "2026-11-25T20:55:27.856387+00:00",
+    "at": "2026-11-25T20:55:39.421475+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.867
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.7,
+      "seconds": 0.998
     },
-    "screen_seconds": 4.867,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.998,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "04Qd_EQ"
+    }
   },
-  "updated_at": "2026-11-25T20:55:34.602322+00:00",
+  "updated_at": "2026-11-25T20:55:39.421475+00:00",
   "totals": {
-    "screened": 6250,
+    "screened": 6251,
     "signals": {
-      "buy": 1886,
+      "buy": 1887,
       "avoid": 1475,
       "hold": 1369,
       "insufficient_data": 1483,
       "strong_buy": 37
     },
-    "signals_n": 6250,
-    "screen_seconds_sum": 62849.2410000002,
-    "screen_seconds_n": 6250,
+    "signals_n": 6251,
+    "screen_seconds_sum": 62850.2390000002,
+    "screen_seconds_n": 6251,
     "outcomes": {
-      "miss": 2436,
+      "miss": 2437,
       "saved": 3814
     }
   },
