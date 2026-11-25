@@ -128,10 +128,7 @@ def _held_text(held: int) -> str:
 
 def _mature_text(mature: bool) -> str:
     flag = "The episode is mature." if mature else "The episode is not mature."
-    return (
-        f"{flag} Maturity is {MATURITY_SESSIONS} sessions from the fill "
-        "to the scoring date."
-    )
+    return f"{flag} Maturity is {MATURITY_SESSIONS} sessions from the fill to the scoring date."
 
 
 def _is_closed(episode: dict[str, Any]) -> bool:
@@ -296,8 +293,7 @@ def _learning_point(
     if exit_reason == EXIT_THESIS:
         phrases = [_REASON_PHRASE[code] for code in evidence["reasons"]]
         head = (
-            f"{ticker}: the registered thesis break fired on {rule_session} "
-            f"({'; '.join(phrases)})."
+            f"{ticker}: the registered thesis break fired on {rule_session} ({'; '.join(phrases)})."
         )
     elif exit_reason == EXIT_FLOOR:
         head = (

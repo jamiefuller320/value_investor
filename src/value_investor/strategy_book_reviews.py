@@ -1292,7 +1292,9 @@ def ops_findings_from_strategy_book_reviews(
         "and bench closes are queued beside them. influences_live=false. "
         "Opinion model off. Evidence for the version review only."
     )
-    notes = payload.get("post_sale_notes") if isinstance(payload.get("post_sale_notes"), dict) else {}
+    notes = (
+        payload.get("post_sale_notes") if isinstance(payload.get("post_sale_notes"), dict) else {}
+    )
     if notes:
         summary += (
             f" Post-sale notes: notes={int(notes.get('notes') or 0)} "
@@ -1340,7 +1342,9 @@ def ops_findings_from_strategy_book_reviews(
 
 
 def _notes_text(payload: dict[str, Any]) -> str:
-    notes = payload.get("post_sale_notes") if isinstance(payload.get("post_sale_notes"), dict) else {}
+    notes = (
+        payload.get("post_sale_notes") if isinstance(payload.get("post_sale_notes"), dict) else {}
+    )
     if not notes:
         return ""
     return (
@@ -1360,8 +1364,7 @@ def format_strategy_book_reviews_text(payload: dict[str, Any]) -> str:
         f"provenance_missing={counts.get('provenance_missing', 0)} "
         f"missing={counts.get('missing', 0)} "
         f"observe_status={payload.get('observe_status')} "
-        f"influences_live=false opinion_llm=false"
-        + _notes_text(payload)
+        f"influences_live=false opinion_llm=false" + _notes_text(payload)
     )
 
 

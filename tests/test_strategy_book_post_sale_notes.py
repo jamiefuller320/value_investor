@@ -206,7 +206,12 @@ def test_only_closed_primary_episodes_are_collated() -> None:
         "influences_live": True,
         "episodes": [
             _goog(),
-            _goog(episode_id="nasdaq100:GOOG:primary:open", status="open", exit_session=None, exit_reason=None),
+            _goog(
+                episode_id="nasdaq100:GOOG:primary:open",
+                status="open",
+                exit_session=None,
+                exit_reason=None,
+            ),
             _goog(
                 episode_id="nasdaq100:GOOG:buy_on_signal:2026-11-17",
                 column="buy_on_signal",
@@ -228,7 +233,9 @@ def test_only_closed_primary_episodes_are_collated() -> None:
     assert payload["notes"][0]["episode_id"] == GOOG_ID
 
 
-def test_refresh_writes_the_notes_store_and_clears_it_when_observe_is_missing(tmp_path: Path) -> None:
+def test_refresh_writes_the_notes_store_and_clears_it_when_observe_is_missing(
+    tmp_path: Path,
+) -> None:
     data = tmp_path / "data"
     data.mkdir()
     observe = data / "strategy_book_observe.json"
@@ -259,7 +266,9 @@ def test_refresh_writes_the_notes_store_and_clears_it_when_observe_is_missing(tm
 
 
 def test_committed_notes_match_the_observe_store() -> None:
-    observe = json.loads((REPO / "docs/data/strategy_book_observe.json").read_text(encoding="utf-8"))
+    observe = json.loads(
+        (REPO / "docs/data/strategy_book_observe.json").read_text(encoding="utf-8")
+    )
     committed = json.loads(
         (REPO / "docs/data/strategy_book_post_sale_notes.json").read_text(encoding="utf-8")
     )
