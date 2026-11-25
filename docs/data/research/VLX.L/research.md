@@ -1,6 +1,6 @@
 # Volex plc (VLX.L) — Research memo
 
-_Version 8 · Updated 2026-11-25T04:54:57.427459+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-25T18:12:04.873493+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: Strong-buy screen fits filing-backed quality/GARP, but the three-way FCF gap and missing interim P&L/cash in extracts still block full alignment with the screen until half-year figures are reconciled.
+Confidence: 0.66
+Rationale: Buy screen aligns with filing-backed quality/GARP, but a deteriorating trend, unresolved three-way FCF gap and empty interim P&L extract still temper conviction versus the quant call.
 RiskTags: cyclical, customer_concentration, key_person, governance, regulatory, accounting
 
 ## Weekly updates
@@ -48,3 +48,8 @@ The 12 Nov half-year report remains indexed with a body; interim P&L/cash is sti
 No material change since the 21:55 UTC refresh: **strong_buy** screen and the three-way FCF gap (£35M filing / £6M screen TTM / company-adj $22.3M) are unchanged.  
 The 04:54 news batch has **no articles**—no new RNS or headlines.  
 The 12 Nov half-year report remains indexed; interim P&L/cash is still absent from the financials extract.
+
+### 2026-11-25T18:12:04.873493+00:00
+Quant screen eased to **buy** (deteriorating trend); FCF basis mismatch unchanged (filing £35M / screen TTM £38.7M / company-adj $22.3M).
+The 18:11 news batch has **no articles** since the 04:54 UTC run—no new RNS.
+The 12 Nov half-year report remains indexed; interim P&L is still absent from the financials extract.

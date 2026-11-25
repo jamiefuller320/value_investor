@@ -1,6 +1,6 @@
 # Baker Hughes Company (BKR) — Research memo
 
-_Version 9 · Updated 2026-11-25T04:36:34.306946+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-25T17:52:03.778855+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Q3 revenue ~$8.0bn and TTM FCF ~$3.2bn with the Jul Chart close per the 20 Nov 8-K still support the strong-buy screen; latest Ichthys piece is rehashed commentary and normalised earnings remain unverified.
+Rationale: Q3 revenue ~$8.0bn and TTM FCF ~$3.2bn with the Jul Chart close per the 20 Nov 8-K still support the strong-buy screen; latest HOOPP flow piece is noise and normalised earnings remain unverified.
 RiskTags: cyclical, leverage, competitive, regulatory
 
 ## Weekly updates
@@ -52,4 +52,9 @@ Normalised post-Chart BKR earnings remain unverified in supplied primary filings
 ### 2026-11-25T04:36:34.306946+00:00
 25 Nov batch adds only a Simply Wall St Ichthys LNG rehash—no new SEC filing bodies.
 Strong-buy screen unchanged with Q3 2026 revenue ~$8.0bn and TTM FCF ~$3.2bn.
+Normalised post-Chart BKR earnings remain unverified in supplied primary filings.
+
+### 2026-11-25T17:52:03.778855+00:00
+Afternoon 25 Nov batch adds only a HOOPP pension-fund buying headline—no new SEC filing bodies.  
+Strong-buy screen unchanged with Q3 2026 revenue ~$8.0bn and TTM FCF ~$3.2bn.  
 Normalised post-Chart BKR earnings remain unverified in supplied primary filings.

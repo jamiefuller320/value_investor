@@ -1,6 +1,6 @@
 # NIKE, Inc. (NKE) — Research memo
 
-_Version 7 · Updated 2026-11-25T04:50:22.419956+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T18:06:48.523844+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: medium
-Confidence: 0.68
-Rationale: Upgrade and undervaluation headlines add little beyond prior channel read-through; filed revenue decline and reaffirmed FY27 reset still weaken the screen buy.
+Confidence: 0.67
+Rationale: Commentary-only batch adds sceptical turnaround and long-dated growth-reset themes without new filings; Aug-2026 10-Q pressure still weakens the screen buy.
 RiskTags: cyclical, competitive, regulatory, customer_concentration
 
 ## Weekly updates
@@ -42,4 +42,9 @@ Q2 FY27 on 17 Dec remains outside the supplied sources.
 ### 2026-11-25T04:50:22.419956+00:00
 Morning batch is commentary only: a possible ~14% undervaluation and product-rollout piece, plus repeated upgrade/Dick's Q3 themes already in the prior refresh—no new SEC filings.
 Aug-2026 10-Q revenue decline, weak Q1 cash flow, and FY27 reset commentary are unchanged in the file set.
+Q2 FY27 on 17 Dec remains outside the supplied sources.
+
+### 2026-11-25T18:06:48.523844+00:00
+Afternoon batch is commentary only; no new SEC filings since the morning refresh.  
+Headlines stress sceptical turnaround themes (innovation talent, Mbappé exit), Black Friday pressure after large YTD share declines, and mixed dip-buying vs no market growth until FY29 in cited plan commentary.  
 Q2 FY27 on 17 Dec remains outside the supplied sources.

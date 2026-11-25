@@ -1,6 +1,6 @@
 # Cisco Systems, Inc. (CSCO) — Research memo
 
-_Version 7 · Updated 2026-11-25T04:38:57.923046+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T17:53:56.909727+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Buy screen and Q1 FY27 snapshot are unchanged; Shirudo headlines add AI-security colour but do not alter filings, so research still confirms accumulate amid lingering margin and governance noise.
+Rationale: Buy screen and Q1 FY27 snapshot are unchanged; AI-networking versus HPE/ANET headlines add colour but no new filings, so research still confirms accumulate amid margin and governance noise.
 RiskTags: competitive, cyclical, leverage, governance
 
 ## Weekly updates
@@ -42,4 +42,9 @@ Post-earnings margin, insider-sale and router-security narratives from earlier 2
 ### 2026-11-25T04:38:57.923046+00:00
 Coverage expands Shirudo/OpenAI open-source AI cyber defence detail and repeats ~29% undervaluation angles after the chart pullback.  
 MarketBeat cites a ~2.9% session drop alongside broader Nasdaq weakness; no new SEC filing bodies in this batch.  
+Q1 FY27 EPS $1.14 on ~$18.5bn revenue and the buy screen are unchanged.
+
+### 2026-11-25T17:53:56.909727+00:00
+Coverage frames AI networking momentum versus HPE and Arista; generic dividend pieces and a reported congressional CSCO sale are colour only.  
+Pre-Thanksgiving macro sell-off headlines lack company-specific triggers; no new SEC filing bodies in this batch.  
 Q1 FY27 EPS $1.14 on ~$18.5bn revenue and the buy screen are unchanged.

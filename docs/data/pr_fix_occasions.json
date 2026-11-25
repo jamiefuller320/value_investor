@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-25T15:48:36.424336+00:00",
-  "occasion_count": 402,
+  "updated_at": "2026-11-25T16:25:43.519760+00:00",
+  "occasion_count": 404,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -7311,6 +7311,43 @@
       ],
       "notes": "test_ftse_gap_scan pinned yields/discounts/PEs/FCF no longer match stored screen rows; test_summary SBRY action note lacks 'filing (primary)'.",
       "details": {}
+    },
+    {
+      "id": "prf-20261125-002",
+      "recorded_at": "2026-11-25T15:52:25.237124+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "Pytest shards test (0) and test (1) failed: gap-scan goldens drifted from latest.json and SBRY overlay test read committed filings",
+      "pr_number": 1476,
+      "branch": "cursor/eng-20261125-03-1de3",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1476",
+      "task_id": "eng-20261125-03",
+      "head_sha": "8a474b1b89e25f811f57a0097e9c484dcebc0e7f",
+      "mergeable_state": null,
+      "failed_check_names": [
+        "test (0)",
+        "test (1)"
+      ],
+      "notes": "Failures reproduce on main filings.py; not introduced by the FCF canonical overlay. Gap-scan pins and the SBRY fixture isolation need a refresh so the required suite can go green.",
+      "details": {}
+    },
+    {
+      "id": "prf-20261125-003",
+      "recorded_at": "2026-11-25T16:25:43.519760+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR 1476 conflicted with main after the screen-pin refresh landed",
+      "pr_number": 1476,
+      "branch": "cursor/eng-20261125-03-1de3",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/1476",
+      "task_id": "eng-20261125-03",
+      "head_sha": "04f64455919eb83b56f6f95e302d4c767d23dea1",
+      "mergeable_state": "dirty",
+      "failed_check_names": [],
+      "notes": "Kept main's SBRY fixture bridge guard and prf-20261125-001. Renumbered this PR's CI occasion to prf-20261125-002. Feature diff stays filings.py and test_research_filings.py.",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -7556,11 +7593,11 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 213
+        "count": 214
       },
       {
         "kind": "merge_conflict",
-        "count": 188
+        "count": 189
       },
       {
         "kind": "ci_and_merge",
@@ -7570,7 +7607,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 396
+        "count": 398
       },
       {
         "source": "traffic_controller",

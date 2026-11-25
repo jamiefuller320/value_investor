@@ -1,6 +1,6 @@
 # Prosus N.V. (PRX.AS) — Research memo
 
-_Version 12 · Updated 2026-11-25T04:52:52.581517+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-25T18:09:06.385710+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,9 +8,9 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: medium
-Confidence: 0.60
-Rationale: Research still weakens the buy: a 25 Nov Simply Wall St headline flags a cut EPS outlook; interim filing detail is not in the pack and screen TTM FCF remains unverified.
-RiskTags: governance, customer_concentration, accounting, leverage
+Confidence: 0.58
+Rationale: Research weakens the buy: 25 Nov headlines flag weaker H1 operating profit and cash flow and smaller Tencent disposal gains; screen TTM FCF remains unverified despite interim statements in the pack.
+RiskTags: governance, customer_concentration, accounting, leverage, competitive
 
 ## Weekly updates
 
@@ -67,4 +67,9 @@ Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.
 ### 2026-11-25T04:52:52.581517+00:00
 The incremental batch adds a Simply Wall St headline (25 Nov) citing a cut EPS outlook while a fair-value narrative is still in play; detail is not in the pack.  
 Interim statements were due 25 November; no new filing bodies on this refresh.  
+Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.
+
+### 2026-11-25T18:09:06.385710+00:00
+25 Nov news reports weaker first-half operating profit and cash flow, food-delivery spend to defend share, and shares at a 2½-year low; WSJ links lower net profit to smaller Tencent disposal gains.  
+HY2026 interim statements remain in the pack with positive ecommerce aEBITDA commentary, but the incremental flow stresses profitability headwinds.  
 Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.
