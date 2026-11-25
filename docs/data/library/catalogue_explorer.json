@@ -6171,28 +6171,10 @@
     "YAMHY_US_EQ",
     "YARIY_US_EQ",
     "YASKY_US_EQ",
-    "YATRY_US_EQ"
+    "YATRY_US_EQ",
+    "YB_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "XHR_US_EQ",
-      "venue": "US",
-      "yahoo": "XHR",
-      "isin": "US9840171030",
-      "name": "XHR",
-      "seconds": 3.205,
-      "outcome": "saved",
-      "at": "2026-11-25T20:12:31.150740+00:00",
-      "rows": 19,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 0.782
-      },
-      "screen_seconds": 0.782,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "XIN_US_EQ",
       "venue": "US",
@@ -6933,6 +6915,25 @@
       },
       "screen_seconds": 1.005,
       "signal": "buy"
+    },
+    {
+      "t212_ticker": "YB_US_EQ",
+      "venue": "US",
+      "yahoo": "YB",
+      "isin": "US9879101064",
+      "name": "YB",
+      "seconds": 4.897,
+      "outcome": "saved",
+      "at": "2026-11-25T20:35:26.552571+00:00",
+      "rows": 7,
+      "screen": {
+        "signal": "strong_buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 1.204
+      },
+      "screen_seconds": 1.204,
+      "signal": "strong_buy"
     }
   ],
   "handoffs": [
@@ -82656,49 +82657,100 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T20:35:13.031477+00:00"
+    },
+    {
+      "t212_ticker": "YB_US_EQ",
+      "yahoo": "YB",
+      "name": "YB",
+      "signal": "strong_buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T20:35:26.552571+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "YATRY_US_EQ",
+    "t212_ticker": "YB_US_EQ",
     "venue": "US",
-    "yahoo": "YATRY",
-    "isin": "US98463V1052",
-    "name": "YATRY",
-    "seconds": 1.22,
-    "outcome": "miss",
-    "at": "2026-11-25T20:35:13.031477+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "YB",
+    "isin": "US9879101064",
+    "name": "YB",
+    "seconds": 4.897,
+    "outcome": "saved",
+    "at": "2026-11-25T20:35:26.552571+00:00",
+    "rows": 7,
+    "filings": [
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1995520/000117184326005971/f6k_091026.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1995520/000117184326004026/f6k_061026.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1995520/000110465926052096/yb-20251231x20f.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1995520/000117184326001705/f6k_031826.htm",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1995520/000117184325007732/f6k_120325.htm",
+        "has_body": false
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1995520/000117184325005618/f6k_082725.htm",
+        "has_body": false
+      },
+      {
+        "title": null,
+        "date": null,
+        "url": "https://www.sec.gov/Archives/edgar/data/1995520/000117184325003743/f6k_060525.htm",
+        "has_body": false
+      }
+    ],
     "screen": {
-      "signal": "buy",
+      "signal": "strong_buy",
       "fits": true,
-      "data_quality_score": 1.0,
-      "seconds": 1.005
+      "data_quality_score": 0.95,
+      "seconds": 1.204
     },
-    "screen_seconds": 1.005,
-    "signal": "buy",
+    "screen_seconds": 1.204,
+    "signal": "strong_buy",
     "handoff": {
       "status": "pending",
-      "signal": "buy",
-      "t212_ticker": "YATRY_US_EQ"
+      "signal": "strong_buy",
+      "t212_ticker": "YB_US_EQ"
     }
   },
-  "updated_at": "2026-11-25T20:35:13.031477+00:00",
+  "updated_at": "2026-11-25T20:35:26.552571+00:00",
   "totals": {
-    "screened": 6170,
+    "screened": 6171,
     "signals": {
       "buy": 1868,
       "avoid": 1457,
       "hold": 1353,
       "insufficient_data": 1456,
-      "strong_buy": 36
+      "strong_buy": 37
     },
-    "signals_n": 6170,
-    "screen_seconds_sum": 62669.178000000225,
-    "screen_seconds_n": 6170,
+    "signals_n": 6171,
+    "screen_seconds_sum": 62670.38200000022,
+    "screen_seconds_n": 6171,
     "outcomes": {
       "miss": 2400,
-      "saved": 3770
+      "saved": 3771
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
