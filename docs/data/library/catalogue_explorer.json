@@ -6373,28 +6373,10 @@
     "2G2D_EQ",
     "2GBD_EQ",
     "2GFD_EQ",
-    "2HQD_EQ"
+    "2HQD_EQ",
+    "2HRAD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "1SOd_EQ",
-      "venue": "DE",
-      "yahoo": "1SO.DE",
-      "isin": "LU0633102719",
-      "name": "1SO",
-      "seconds": 86.999,
-      "outcome": "miss",
-      "at": "2026-11-25T22:06:57.818644+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.727
-      },
-      "screen_seconds": 85.727,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "1SXP1d_EQ",
       "venue": "DE",
@@ -7135,6 +7117,25 @@
       },
       "screen_seconds": 0.888,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "2HRAd_EQ",
+      "venue": "DE",
+      "yahoo": "2HRA.DE",
+      "isin": "DE000A2E4T77",
+      "name": "2HRA",
+      "seconds": 2.09,
+      "outcome": "miss",
+      "at": "2026-11-25T23:01:03.456399+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.797
+      },
+      "screen_seconds": 0.797,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -86094,43 +86095,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T23:00:22.421798+00:00"
+    },
+    {
+      "t212_ticker": "2HRAd_EQ",
+      "yahoo": "2HRA.DE",
+      "name": "2HRA",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T23:01:03.456399+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "2HQd_EQ",
+    "t212_ticker": "2HRAd_EQ",
     "venue": "DE",
-    "yahoo": "2HQ.DE",
-    "isin": "US88688T2096",
-    "name": "2HQ0",
-    "seconds": 1.958,
+    "yahoo": "2HRA.DE",
+    "isin": "DE000A2E4T77",
+    "name": "2HRA",
+    "seconds": 2.09,
     "outcome": "miss",
-    "at": "2026-11-25T23:00:53.749813+00:00",
+    "at": "2026-11-25T23:01:03.456399+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.9,
-      "seconds": 0.888
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.797
     },
-    "screen_seconds": 0.888,
-    "signal": "hold"
+    "screen_seconds": 0.797,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "2HRAd_EQ"
+    }
   },
-  "updated_at": "2026-11-25T23:00:53.749813+00:00",
+  "updated_at": "2026-11-25T23:01:03.456399+00:00",
   "totals": {
-    "screened": 6372,
+    "screened": 6373,
     "signals": {
-      "buy": 1892,
+      "buy": 1893,
       "avoid": 1487,
       "hold": 1379,
       "insufficient_data": 1577,
       "strong_buy": 37
     },
-    "signals_n": 6372,
-    "screen_seconds_sum": 66544.18300000025,
-    "screen_seconds_n": 6372,
+    "signals_n": 6373,
+    "screen_seconds_sum": 66544.98000000026,
+    "screen_seconds_n": 6373,
     "outcomes": {
-      "miss": 2558,
+      "miss": 2559,
       "saved": 3814
     }
   },
