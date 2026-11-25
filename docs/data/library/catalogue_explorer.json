@@ -5424,28 +5424,10 @@
     "TBPH_US_EQ",
     "TBTC_US_EQ",
     "TCAC_US_EQ",
-    "TCBC_US_EQ"
+    "TCBC_US_EQ",
+    "TCBI_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SYTA_US_EQ",
-      "venue": "US",
-      "yahoo": "SYTA",
-      "isin": "CA83013Q8719",
-      "name": "CHAI",
-      "seconds": 4.0,
-      "outcome": "miss",
-      "at": "2026-11-25T14:29:18.327176+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.912
-      },
-      "screen_seconds": 3.912,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "SYTE_US_EQ",
       "venue": "US",
@@ -6186,6 +6168,25 @@
       },
       "screen_seconds": 85.201,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "TCBI_US_EQ",
+      "venue": "US",
+      "yahoo": "TCBI",
+      "isin": "US88224Q1076",
+      "name": "TXCP",
+      "seconds": 0.867,
+      "outcome": "miss",
+      "at": "2026-11-25T14:48:16.486945+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.65,
+        "seconds": 0.778
+      },
+      "screen_seconds": 0.778,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -74494,43 +74495,56 @@
         "error": null
       },
       "finished_at": "2026-11-25T14:46:39.853817+00:00"
+    },
+    {
+      "t212_ticker": "TCBI_US_EQ",
+      "yahoo": "TCBI",
+      "name": "TXCP",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T14:48:16.486945+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "TCBC_US_EQ",
+    "t212_ticker": "TCBI_US_EQ",
     "venue": "US",
-    "yahoo": "TCBC",
-    "isin": "US87224V1089",
-    "name": "TCBC",
-    "seconds": 85.376,
+    "yahoo": "TCBI",
+    "isin": "US88224Q1076",
+    "name": "TXCP",
+    "seconds": 0.867,
     "outcome": "miss",
-    "at": "2026-11-25T14:48:04.874520+00:00",
+    "at": "2026-11-25T14:48:16.486945+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.201
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.65,
+      "seconds": 0.778
     },
-    "screen_seconds": 85.201,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.778,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "TCBI_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T14:48:04.874520+00:00",
+  "updated_at": "2026-11-25T14:48:16.486945+00:00",
   "totals": {
-    "screened": 5423,
+    "screened": 5424,
     "signals": {
-      "buy": 1636,
+      "buy": 1637,
       "avoid": 1277,
       "hold": 1181,
       "insufficient_data": 1299,
       "strong_buy": 30
     },
-    "signals_n": 5423,
-    "screen_seconds_sum": 53340.63100000015,
-    "screen_seconds_n": 5423,
+    "signals_n": 5424,
+    "screen_seconds_sum": 53341.409000000145,
+    "screen_seconds_n": 5424,
     "outcomes": {
-      "miss": 2113,
+      "miss": 2114,
       "saved": 3310
     }
   },
