@@ -6082,28 +6082,10 @@
     "WSHP_US_EQ",
     "WSO/B_US_EQ",
     "WSO_US_EQ",
-    "WSTG_US_EQ"
+    "WSTG_US_EQ",
+    "WSTL_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "WLFC_US_EQ",
-      "venue": "US",
-      "yahoo": "WLFC",
-      "isin": "US9706461053",
-      "name": "WLFC",
-      "seconds": 2.681,
-      "outcome": "saved",
-      "at": "2026-11-25T19:37:03.097171+00:00",
-      "rows": 20,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 0.579
-      },
-      "screen_seconds": 0.579,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "WLGS_US_EQ",
       "venue": "US",
@@ -6844,6 +6826,25 @@
       },
       "screen_seconds": 84.631,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "WSTL_US_EQ",
+      "venue": "US",
+      "yahoo": "WSTL",
+      "isin": "US9575413037",
+      "name": "WSTL",
+      "seconds": 0.836,
+      "outcome": "miss",
+      "at": "2026-11-25T19:55:07.675869+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.75,
+        "seconds": 0.652
+      },
+      "screen_seconds": 0.652,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -82112,43 +82113,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T19:53:30.244795+00:00"
+    },
+    {
+      "t212_ticker": "WSTL_US_EQ",
+      "yahoo": "WSTL",
+      "name": "WSTL",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T19:55:07.675869+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "WSTG_US_EQ",
+    "t212_ticker": "WSTL_US_EQ",
     "venue": "US",
-    "yahoo": "WSTG",
-    "isin": "US9467601053",
-    "name": "CLMB",
-    "seconds": 84.981,
+    "yahoo": "WSTL",
+    "isin": "US9575413037",
+    "name": "WSTL",
+    "seconds": 0.836,
     "outcome": "miss",
-    "at": "2026-11-25T19:55:01.040794+00:00",
+    "at": "2026-11-25T19:55:07.675869+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.631
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.75,
+      "seconds": 0.652
     },
-    "screen_seconds": 84.631,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.652,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "WSTL_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T19:55:01.040794+00:00",
+  "updated_at": "2026-11-25T19:55:07.675869+00:00",
   "totals": {
-    "screened": 6081,
+    "screened": 6082,
     "signals": {
-      "buy": 1842,
+      "buy": 1843,
       "avoid": 1427,
       "hold": 1336,
       "insufficient_data": 1442,
       "strong_buy": 34
     },
-    "signals_n": 6081,
-    "screen_seconds_sum": 61748.45700000022,
-    "screen_seconds_n": 6081,
+    "signals_n": 6082,
+    "screen_seconds_sum": 61749.10900000022,
+    "screen_seconds_n": 6082,
     "outcomes": {
-      "miss": 2371,
+      "miss": 2372,
       "saved": 3710
     }
   },
