@@ -7,23 +7,28 @@
 # overwrite untracked research bodies, and the library-grow race where a lone
 # rebase-push still loses to concurrent main writers.
 #
-# Owned pathspecs always overlay. Optional pathspecs overlay only when
+# Owned pathspecs overlay the files this job actually changed (git status:
+# tracked edits and untracked files, including under globs). Unmodified files
+# stay at origin/<ref> after reset, so a concurrent catalogue-explorer or
+# ingest commit is not rewound. Optional pathspecs overlay only when
 # origin/<ref> has not changed that exact file since START_SHA (ops-monitor
-# queue/health guard). Excluded pathspecs are never restored from a broad
-# owned dir (email-report must not clobber fresher ops_status.json /
-# progress_report.json).
+# queue/health guard). Excluded pathspecs are never restored (email-report
+# must not clobber fresher ops_status.json / progress_report.json).
 #
-# JSON freshness: when restoring an owned *.json file, if origin/<ref> already
-# has a strictly newer top-level `generated_at` than the job snapshot, skip the
-# overlay. That stops long dashboard jobs from resurrecting stale foreign-owned
-# artifacts (progress-report, ops-monitor, etc.) without listing every path.
+# JSON freshness: when restoring an owned *.json file this job changed, if
+# origin/<ref> already has a strictly newer top-level `generated_at` than the
+# job snapshot, skip the overlay. That stops a long screen from resurrecting
+# a stale copy of a file it rewrote (market_status, progress-report, etc.).
 #
-# Byte-identical snapshots are left off the commit. Owned trees such as
-# buy_tier_level/** are ~200MB; a per-file `git show` + generated_at parse of
-# every JSON made each retry longer than catalogue-explorer's one-name push
-# interval, so every attempt lost with "fetch first" (Library epoch-0 weekday
-# run 45136445860, 2026-11-23). Blob hashes are compared to HEAD instead, and
-# the freshness check runs only for files that actually differ.
+# Do not copy or freshness-check the whole owned tree. email-report owns
+# docs/data (~96k files, 3.2GB). Copying that tree and `git show`'ing every
+# JSON took ~45 min per attempt, longer than catalogue-explorer's one-name
+# push interval (~90s, ~10s in bursts), so every push was rejected and attempt
+# 3/5 was still overlaying when the 6h job limit cancelled the run
+# (email-report 45048271823, 2026-11-22). The same full-tree `git show` lost
+# Library epoch-0 weekday run 45136445860 (2026-11-23) on a smaller tree.
+# Snapshot only the dirty delta; compare those blob hashes to HEAD; freshness
+# check the JSON that differ in one `git cat-file --batch`.
 #
 # docs/data/latest.json is the screen bundle. Its run_at is the screen clock
 # and outranks generated_at: a queue refresh can stamp generated_at on a stale
@@ -49,6 +54,7 @@
 #   GHA_COMMIT_REMOTE      default origin
 #   GHA_COMMIT_ATTEMPTS    default 5
 #   GHA_COMMIT_SLEEP_BASE  default 3
+#   GHA_COMMIT_SLEEP_CAP   default 15 — max seconds between push retries
 #   GHA_COMMIT_LABEL       log label (default artifacts)
 #   GHA_COMMIT_RESULT_FILE optional path written with "pushed" or "noop"
 
@@ -58,6 +64,7 @@ REMOTE="${GHA_COMMIT_REMOTE:-origin}"
 REF="${GHA_COMMIT_REF:-main}"
 MAX_ATTEMPTS="${GHA_COMMIT_ATTEMPTS:-5}"
 SLEEP_BASE="${GHA_COMMIT_SLEEP_BASE:-3}"
+SLEEP_CAP="${GHA_COMMIT_SLEEP_CAP:-15}"
 LABEL="${GHA_COMMIT_LABEL:-artifacts}"
 COMMIT_MESSAGE="${COMMIT_MESSAGE:-}"
 PRESERVE_NEWER_GENERATED_AT="${GHA_COMMIT_PRESERVE_NEWER_GENERATED_AT:-1}"
@@ -102,105 +109,6 @@ blob_at() {
   git rev-parse --verify --quiet "${rev}:${path}" 2>/dev/null || true
 }
 
-# Extract a top-level JSON string field (ISO-8601). Empty if missing/unparseable.
-json_top_string() {
-  local path="$1"
-  local key="$2"
-  if [ ! -f "$path" ]; then
-    return 0
-  fi
-  case "$path" in
-    *.json) ;;
-    *) return 0 ;;
-  esac
-  python3 - "$path" "$key" <<'PY' 2>/dev/null || true
-import json, sys
-from pathlib import Path
-try:
-    data = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
-except Exception:
-    raise SystemExit(0)
-if isinstance(data, dict):
-    value = data.get(sys.argv[2])
-    if isinstance(value, str) and value.strip():
-        print(value.strip())
-PY
-}
-
-json_generated_at() {
-  json_top_string "$1" generated_at
-}
-
-# Return 0 when remote_iso is strictly newer than local_iso (both ISO-8601).
-remote_generated_at_is_newer() {
-  local local_iso="$1"
-  local remote_iso="$2"
-  if [ -z "$local_iso" ] || [ -z "$remote_iso" ]; then
-    return 1
-  fi
-  python3 - "$local_iso" "$remote_iso" <<'PY' 2>/dev/null
-import sys
-from datetime import datetime
-
-def parse(value: str):
-    text = value.strip().replace("Z", "+00:00")
-    try:
-        return datetime.fromisoformat(text)
-    except ValueError:
-        return None
-
-local = parse(sys.argv[1])
-remote = parse(sys.argv[2])
-if local is None or remote is None:
-    raise SystemExit(1)
-raise SystemExit(0 if remote > local else 1)
-PY
-}
-
-should_skip_stale_json_overlay() {
-  local path="$1"
-  local remote_rev="$2"
-  if [ "$PRESERVE_NEWER_GENERATED_AT" = "0" ]; then
-    return 1
-  fi
-  case "$path" in
-    *.json) ;;
-    *) return 1 ;;
-  esac
-  local local_iso remote_file remote_iso
-  remote_file="$(mktemp "$WORKDIR/remote_json.XXXXXX.json")"
-  if ! git show "${remote_rev}:${path}" >"$remote_file" 2>/dev/null; then
-    rm -f "$remote_file"
-    return 1
-  fi
-  if [ "$path" = "docs/data/latest.json" ]; then
-    local local_run remote_run
-    local_run="$(json_top_string "$WORKDIR/$path" run_at)"
-    remote_run="$(json_top_string "$remote_file" run_at)"
-    if [ -n "$local_run" ] && [ -n "$remote_run" ]; then
-      if remote_generated_at_is_newer "$remote_run" "$local_run"; then
-        # Job snapshot screen is newer than origin. Land it.
-        rm -f "$remote_file"
-        return 1
-      fi
-      if remote_generated_at_is_newer "$local_run" "$remote_run"; then
-        # Origin already has a newer screen. Do not put the stale bundle back.
-        rm -f "$remote_file"
-        return 0
-      fi
-    fi
-  fi
-  local_iso="$(json_generated_at "$WORKDIR/$path")"
-  remote_iso="$(json_generated_at "$remote_file")"
-  rm -f "$remote_file"
-  if [ -z "$local_iso" ]; then
-    return 1
-  fi
-  if remote_generated_at_is_newer "$local_iso" "$remote_iso"; then
-    return 0
-  fi
-  return 1
-}
 
 emit_result() {
   local result="$1"
@@ -321,70 +229,138 @@ PY
   restore_file "$path"
 }
 
-# Expand pathspecs to concrete files currently in the working tree (including
-# untracked). Supports exact files, directories, and bash globs (including **).
-expand_to_files() {
-  local spec="$1"
-  local f
-  if [ -f "$spec" ]; then
-    printf '%s\n' "$spec"
-    return 0
-  fi
-  if [ -d "$spec" ]; then
-    find "$spec" -type f -print
-    return 0
-  fi
-  (
-    shopt -s nullglob globstar
-    # shellcheck disable=SC2086
-    for f in $spec; do
-      if [ -f "$f" ]; then
-        printf '%s\n' "$f"
-      elif [ -d "$f" ]; then
-        find "$f" -type f -print
-      fi
-    done
-  )
-}
+# Snapshot only the owned files this job changed. A full-tree copy of
+# docs/data is what made each email-report retry take ~45 minutes.
+OWNED_SPECS_FILE="$WORKDIR/owned_specs.txt"
+EXCLUDE_SPECS_FILE="$WORKDIR/exclude_specs.txt"
+OPTIONAL_EXACT_FILE="$WORKDIR/optional_exact.txt"
+COLLECTED_FILE="$WORKDIR/collected.txt"
+printf '%s\n' "${OWNED_SPECS[@]}" >"$OWNED_SPECS_FILE"
+: >"$EXCLUDE_SPECS_FILE"
+if [ "${#EXCLUDE_SPECS[@]}" -gt 0 ]; then
+  printf '%s\n' "${EXCLUDE_SPECS[@]}" >"$EXCLUDE_SPECS_FILE"
+fi
+: >"$OPTIONAL_EXACT_FILE"
+if [ "${#OPTIONAL_SPECS[@]}" -gt 0 ]; then
+  printf '%s\n' "${OPTIONAL_SPECS[@]}" >"$OPTIONAL_EXACT_FILE"
+fi
 
-is_optional_path() {
-  local path="$1"
-  local opt
-  for opt in "${OPTIONAL_SPECS[@]+"${OPTIONAL_SPECS[@]}"}"; do
-    if [ "$path" = "$opt" ]; then
-      return 0
-    fi
-  done
-  return 1
-}
+python3 - \
+  "$OWNED_SPECS_FILE" \
+  "$EXCLUDE_SPECS_FILE" \
+  "$OPTIONAL_EXACT_FILE" \
+  "$COLLECTED_FILE" \
+  "$LABEL" <<'PY'
+import os
+import subprocess
+import sys
+from pathlib import Path
 
-is_excluded_path() {
-  local path="$1"
-  local opt
-  for opt in "${EXCLUDE_SPECS[@]+"${EXCLUDE_SPECS[@]}"}"; do
-    if [ "$path" = "$opt" ]; then
-      return 0
-    fi
-    case "$opt" in
-      */) case "$path" in "$opt"*) return 0 ;; esac ;;
-    esac
-  done
-  return 1
-}
+specs_file, exclude_file, optional_file, out_file, label = sys.argv[1:6]
 
-for spec in "${OWNED_SPECS[@]}"; do
-  while IFS= read -r path; do
-    [ -n "$path" ] || continue
-    if is_optional_path "$path"; then
-      continue
-    fi
-    if is_excluded_path "$path"; then
-      echo "Excluding $path from ${LABEL} owned overlay" >&2
-      continue
-    fi
-    save_file "$path" "$OWNED_MANIFEST"
-  done < <(expand_to_files "$spec")
-done
+def read_lines(path: str) -> list[str]:
+    return [line for line in Path(path).read_text(encoding="utf-8").splitlines() if line]
+
+specs = read_lines(specs_file)
+excludes = read_lines(exclude_file)
+optional = set(read_lines(optional_file))
+
+def is_excluded(path: str) -> bool:
+    for opt in excludes:
+        if path == opt or (opt.endswith("/") and path.startswith(opt)):
+            return True
+    return False
+
+def parse_status(blob: bytes) -> list[str]:
+    parts = blob.split(b"\0")
+    if parts and parts[-1] == b"":
+        parts.pop()
+    paths: list[str] = []
+    index = 0
+    while index < len(parts):
+        raw = parts[index]
+        index += 1
+        if len(raw) < 4:
+            continue
+        status = raw[:2].decode("ascii", "replace")
+        path = raw[3:].decode("utf-8", "surrogateescape")
+        if "R" in status or "C" in status:
+            if index < len(parts):
+                index += 1
+        if "D" in status and "R" not in status and "C" not in status:
+            continue
+        paths.append(path)
+    return paths
+
+def git_status(pathspecs: list[str]) -> bytes:
+    proc = subprocess.run(
+        ["git", "status", "--porcelain=v1", "-z", "-uall", "--", *pathspecs],
+        capture_output=True,
+    )
+    if proc.returncode != 0:
+        sys.stderr.buffer.write(proc.stderr)
+        raise SystemExit(proc.returncode)
+    return proc.stdout
+
+literals: list[str] = []
+globs: list[str] = []
+for spec in specs:
+    if any(char in spec for char in "*?["):
+        globs.append(spec)
+    else:
+        literals.append(spec)
+
+found: list[str] = []
+if literals:
+    found.extend(parse_status(git_status(literals)))
+for spec in globs:
+    found.extend(parse_status(git_status([f":(glob){spec}"])))
+
+seen: set[str] = set()
+kept: list[str] = []
+for opt in excludes:
+    if opt.endswith("/"):
+        continue
+    if Path(opt).is_file():
+        print(f"Excluding {opt} from {label} owned overlay", file=sys.stderr)
+        seen.add(opt)
+for path in found:
+    if path in seen:
+        continue
+    seen.add(path)
+    if path in optional:
+        continue
+    if is_excluded(path):
+        print(f"Excluding {path} from {label} owned overlay", file=sys.stderr)
+        continue
+    candidate = Path(path)
+    if candidate.is_dir():
+        for dirpath, _, names in os.walk(path):
+            for name in names:
+                child = str(Path(dirpath) / name)
+                if child in seen or child in optional or is_excluded(child):
+                    if is_excluded(child):
+                        print(
+                            f"Excluding {child} from {label} owned overlay",
+                            file=sys.stderr,
+                        )
+                    continue
+                seen.add(child)
+                if Path(child).is_file():
+                    kept.append(child)
+        continue
+    if candidate.is_file():
+        kept.append(path)
+
+Path(out_file).write_text("\n".join(kept) + ("\n" if kept else ""), encoding="utf-8")
+noun = "file" if len(kept) == 1 else "files"
+print(f"{label} snapshot {len(kept)} changed owned {noun}")
+PY
+
+while IFS= read -r path; do
+  [ -n "$path" ] || continue
+  save_file "$path" "$OWNED_MANIFEST"
+done <"$COLLECTED_FILE"
 
 for spec in "${OPTIONAL_SPECS[@]+"${OPTIONAL_SPECS[@]}"}"; do
   save_file "$spec" "$OPTIONAL_MANIFEST"
@@ -470,6 +446,175 @@ snapshot_matches_head() {
   [ -n "${UNCHANGED_BLOBS[$path]:-}" ]
 }
 
+# One cat-file batch for the dirty owned set. Prints:
+#   UNCHANGED <n>
+#   RESTORE <path>
+# Skip messages go to stderr (same text as the old per-file freshness check).
+classify_owned_overlays() {
+  local remote_rev="$1"
+  # Not `local listing=$(...)`: bash makes `local` succeed even when python fails.
+  python3 - \
+    "$SNAPSHOT_INDEX" \
+    "$remote_rev" \
+    "$PRESERVE_NEWER_GENERATED_AT" \
+    "$WORKDIR" \
+    "$LABEL" \
+    "$OWNED_MANIFEST" <<'PY'
+import json
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+index_path, remote_rev, preserve, workdir, label, owned_manifest = sys.argv[1:7]
+root = Path(workdir)
+owned = {
+    line.strip()
+    for line in Path(owned_manifest).read_text(encoding="utf-8").splitlines()
+    if line.strip()
+}
+
+def parse_iso(value: str):
+    text = value.strip().replace("Z", "+00:00")
+    try:
+        return datetime.fromisoformat(text)
+    except ValueError:
+        return None
+
+def remote_newer(local_iso: str, remote_iso: str) -> bool:
+    if not local_iso or not remote_iso:
+        return False
+    local = parse_iso(local_iso)
+    remote = parse_iso(remote_iso)
+    if local is None or remote is None:
+        return False
+    return remote > local
+
+def top_string(data, key: str) -> str:
+    if isinstance(data, dict):
+        value = data.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return ""
+
+def load_json(blob: bytes):
+    try:
+        return json.loads(blob.decode("utf-8"))
+    except Exception:
+        return None
+
+rows: list[tuple[str, str]] = []
+for line in Path(index_path).read_text(encoding="utf-8").splitlines():
+    if not line or "\t" not in line:
+        continue
+    digest, path = line.split("\t", 1)
+    if path not in owned:
+        continue
+    rows.append((digest, path))
+
+unchanged: list[str] = []
+differ: list[str] = []
+if rows:
+    proc = subprocess.run(
+        ["git", "cat-file", "--batch-check"],
+        input="".join(f"HEAD:{path}\n" for _, path in rows),
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    lines = proc.stdout.splitlines()
+    if len(lines) != len(rows):
+        raise SystemExit(
+            f"git cat-file returned {len(lines)} lines for {len(rows)} paths"
+        )
+    for (digest, path), line in zip(rows, lines):
+        oid = line.split(" ", 1)[0]
+        if oid == digest:
+            unchanged.append(path)
+        else:
+            differ.append(path)
+
+restore: list[str] = []
+need: list[str] = []
+if preserve == "0":
+    restore.extend(differ)
+else:
+    for path in differ:
+        if path.endswith(".json"):
+            need.append(path)
+        else:
+            restore.append(path)
+
+remote_blobs: dict[str, bytes | None] = {}
+if need:
+    proc = subprocess.run(
+        ["git", "cat-file", "--batch"],
+        input="".join(f"{remote_rev}:{path}\n" for path in need).encode(),
+        capture_output=True,
+        check=True,
+    )
+    data = proc.stdout
+    pos = 0
+    for path in need:
+        newline = data.find(b"\n", pos)
+        if newline < 0:
+            raise SystemExit("truncated cat-file batch")
+        header = data[pos:newline].decode("utf-8", "replace")
+        pos = newline + 1
+        if header.endswith(" missing"):
+            remote_blobs[path] = None
+            continue
+        parts = header.split()
+        if len(parts) < 3:
+            raise SystemExit(f"bad cat-file header: {header}")
+        size = int(parts[-1])
+        blob = data[pos : pos + size]
+        pos += size
+        if pos < len(data) and data[pos : pos + 1] == b"\n":
+            pos += 1
+        remote_blobs[path] = blob
+    if pos != len(data) and data[pos:] not in (b"", b"\n"):
+        raise SystemExit("cat-file batch did not consume cleanly")
+
+for path in need:
+    remote = remote_blobs.get(path)
+    if remote is None:
+        restore.append(path)
+        continue
+    local_doc = load_json((root / path).read_bytes())
+    remote_doc = load_json(remote)
+    if path == "docs/data/latest.json":
+        local_run = top_string(local_doc, "run_at")
+        remote_run = top_string(remote_doc, "run_at")
+        if local_run and remote_run:
+            if remote_newer(remote_run, local_run):
+                # Job snapshot screen is newer than origin. Land it.
+                restore.append(path)
+                continue
+            if remote_newer(local_run, remote_run):
+                print(
+                    f"Preserving newer {remote_rev} {path} "
+                    f"(generated_at ahead of {label} snapshot)",
+                    file=sys.stderr,
+                )
+                continue
+    local_iso = top_string(local_doc, "generated_at")
+    remote_iso = top_string(remote_doc, "generated_at")
+    if local_iso and remote_newer(local_iso, remote_iso):
+        print(
+            f"Preserving newer {remote_rev} {path} "
+            f"(generated_at ahead of {label} snapshot)",
+            file=sys.stderr,
+        )
+        continue
+    restore.append(path)
+
+print(f"UNCHANGED {len(unchanged)}")
+for path in restore:
+    print(f"RESTORE {path}")
+PY
+}
+
 git config user.name "${GIT_AUTHOR_NAME:-github-actions[bot]}"
 git config user.email "${GIT_AUTHOR_EMAIL:-41898282+github-actions[bot]@users.noreply.github.com}"
 
@@ -478,25 +623,35 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
   echo "${LABEL} commit attempt $attempt/$MAX_ATTEMPTS"
   git fetch "$REMOTE" "$REF"
   git reset --hard "${REMOTE}/${REF}"
-  refresh_unchanged_set
+  if [ -s "$OPTIONAL_MANIFEST" ]; then
+    refresh_unchanged_set
+  fi
 
   restored=()
   unchanged=0
-  while IFS= read -r path; do
-    [ -n "$path" ] || continue
-    if snapshot_matches_head "$path"; then
-      unchanged=$((unchanged + 1))
-      continue
-    fi
-    if should_skip_stale_json_overlay "$path" "${REMOTE}/${REF}"; then
-      echo "Preserving newer ${REMOTE}/${REF} $path (generated_at ahead of ${LABEL} snapshot)" >&2
-      continue
-    fi
-    restore_or_merge_owned_file "$path" "${REMOTE}/${REF}"
-    if [ -e "$path" ]; then
-      restored+=("$path")
-    fi
-  done <"$OWNED_MANIFEST"
+  classify_file="$WORKDIR/classify.txt"
+  classify_owned_overlays "${REMOTE}/${REF}" >"$classify_file"
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      UNCHANGED\ *)
+        unchanged="${line#UNCHANGED }"
+        ;;
+      RESTORE\ *)
+        path="${line#RESTORE }"
+        [ -n "$path" ] || continue
+        restore_or_merge_owned_file "$path" "${REMOTE}/${REF}"
+        if [ -e "$path" ]; then
+          restored+=("$path")
+        fi
+        ;;
+      "")
+        ;;
+      *)
+        echo "::error::Unexpected overlay classify line: $line" >&2
+        exit 1
+        ;;
+    esac
+  done <"$classify_file"
 
   while IFS= read -r path; do
     [ -n "$path" ] || continue
@@ -552,6 +707,9 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
     break
   fi
   delay=$((SLEEP_BASE * attempt))
+  if [ "$delay" -gt "$SLEEP_CAP" ]; then
+    delay="$SLEEP_CAP"
+  fi
   echo "Retrying in ${delay}s…" >&2
   sleep "$delay"
   attempt=$((attempt + 1))
