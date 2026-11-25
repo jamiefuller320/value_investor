@@ -413,45 +413,6 @@ def enforce_fcf_basis_in_snapshot(
     )
 
 
-def _sector_cyclical_overlay_registry_stale(registry: object) -> bool:
-    if not isinstance(registry, dict):
-        return True
-    if registry.get("registry_version") != 1:
-        return True
-    hooks = registry.get("hooks")
-    return not isinstance(hooks, list) or len(hooks) == 0
-
-
-def _ensure_sector_cyclical_overlay_snapshot_fields(
-    snapshot: dict[str, Any],
-    *,
-    output_dir: Path | None = None,
-) -> dict[str, Any]:
-    """Backfill uk_contractor / public_capex taxonomy and rebuild stale sector registries."""
-    from value_investor.scoring.fcf import (
-        enforce_sector_cyclical_overlay_registry_in_snapshot,
-        fcf_bundle_for_sector_overlay_registry,
-    )
-    from value_investor.scoring.uk_contractor_overlay import (
-        persist_sector_override_and_contractor_snapshot_fields,
-    )
-
-    updated = dict(snapshot)
-    if updated.get("uk_contractor") is None or updated.get("public_capex") is None:
-        updated = persist_sector_override_and_contractor_snapshot_fields(
-            updated,
-            output_dir=output_dir,
-        )
-    if _sector_cyclical_overlay_registry_stale(updated.get("sector_cyclical_overlay_registry")):
-        fcf_export = updated.get("fcf") if isinstance(updated.get("fcf"), dict) else None
-        bundle = fcf_bundle_for_sector_overlay_registry(updated, fcf_export)
-        updated = enforce_sector_cyclical_overlay_registry_in_snapshot(
-            updated,
-            fcf_bundle=bundle or None,
-        )
-    return updated
-
-
 def merge_research_verdict_into_snapshot(
     snapshot: dict[str, Any],
     *,
@@ -496,7 +457,6 @@ def write_screening_snapshot(sources_dir: Path, snapshot: dict[str, Any]) -> Pat
         payload,
         output_dir=output_dir,
     )
-    payload = _ensure_sector_cyclical_overlay_snapshot_fields(payload, output_dir=output_dir)
     write_json(
         path,
         payload,

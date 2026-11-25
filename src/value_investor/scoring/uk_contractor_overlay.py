@@ -684,44 +684,6 @@ def apply_uk_contractor_cash_conversion_export_enforcement(
     return True, _more_conservative_signal(adjusted_signal, capped)
 
 
-UK_CONTRACTOR_SNAPSHOT_PERSIST_KEYS = (
-    "uk_contractor",
-    "public_capex_exposure_detected",
-    "public_capex",
-    "filing_mix_notes_confirmed",
-    "uk_contractor_revenue_fcf_warning",
-    "uk_contractor_ch_backlog_margin_cyclical_detected",
-    "scoring_sector",
-    "peer_group_override",
-)
-
-
-def persist_sector_override_and_contractor_snapshot_fields(
-    snapshot: dict[str, Any],
-    *,
-    output_dir: Path | None = None,
-) -> dict[str, Any]:
-    """Persist UK contractor taxonomy and sector override registry fields on export rows."""
-    from value_investor.scoring.sector_overrides import resolve_scoring_sector
-
-    updated = dict(snapshot)
-    flags = resolve_uk_contractor_overlay_inputs(updated, output_dir=output_dir)
-    updated.update(flags)
-    updated["public_capex"] = bool(flags.get("public_capex_exposure_detected"))
-
-    ticker = updated.get("ticker")
-    sector = updated.get("sector")
-    name = updated.get("name")
-    scoring_sector = resolve_scoring_sector(ticker, sector, name)
-    if scoring_sector is not None:
-        updated["scoring_sector"] = scoring_sector
-    sector_label = _as_text(sector)
-    updated["peer_group_override"] = bool(
-        scoring_sector and sector_label and scoring_sector != sector_label
-    )
-    return updated
-
-
 def enforce_uk_contractor_overlays_in_snapshot(
     snapshot: dict[str, Any],
     *,
@@ -772,7 +734,4 @@ def enforce_uk_contractor_overlays_in_snapshot(
     elif cash_adjusted != adjusted:
         updated["adjusted_signal"] = cash_adjusted
 
-    return persist_sector_override_and_contractor_snapshot_fields(
-        updated,
-        output_dir=output_dir,
-    )
+    return updated

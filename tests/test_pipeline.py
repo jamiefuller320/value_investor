@@ -1269,64 +1269,6 @@ def test_enforce_fcf_basis_in_snapshot_backfills_uk_contractor_taxonomy():
     assert enforced["adjusted_signal"] == "buy"
 
 
-def test_enforce_fcf_basis_in_snapshot_persists_uk_contractor_and_scoring_sector():
-    """eng-20261125-04: stale export rows must persist contractor taxonomy and sector override."""
-    snapshot = {
-        "ticker": "AEP.L",
-        "name": "AEP Plantations Plc",
-        "sector": "Consumer Defensive",
-        "signal": "strong_buy",
-        "adjusted_signal": "buy",
-        "sector_cyclical_overlay_registry": {},
-    }
-    enforced = enforce_fcf_basis_in_snapshot(snapshot)
-    assert enforced["uk_contractor"] is False
-    assert enforced["public_capex_exposure_detected"] is False
-    assert enforced["public_capex"] is False
-    assert enforced["scoring_sector"] == AGRICULTURE_COMMODITIES_SECTOR
-    assert enforced["peer_group_override"] is True
-    registry = enforced["sector_cyclical_overlay_registry"]
-    assert HOOK_AGRICULTURE_COMMODITIES_PLANTATION in registry["active_hook_ids"]
-    plantation = next(
-        h for h in registry["hooks"] if h["id"] == HOOK_AGRICULTURE_COMMODITIES_PLANTATION
-    )
-    assert plantation["scoring_sector"] == AGRICULTURE_COMMODITIES_SECTOR
-    assert plantation["peer_group_override"] is True
-
-
-def test_write_screening_snapshot_persists_contractor_taxonomy_from_stale_report(
-    tmp_path: Path,
-):
-    """eng-20261125-04: research-sync writes must not drop uk_contractor / public_capex."""
-
-    from value_investor.storage import read_json
-
-    sources = tmp_path / "research" / "COST.L" / "sources"
-    snapshot = {
-        "ticker": "COST.L",
-        "name": "Costain Group PLC",
-        "sector": "Industrials",
-        "signal": "strong_buy",
-        "adjusted_signal": "strong_buy",
-        "passed_families": "cheapness,quality,dividend,garp,risk",
-        "public_capex_exposure_detected": True,
-        "revenue_growth_filing_pct": -0.16,
-        "free_cashflow": 63.1e6,
-        "free_cashflow_prev": 40.0e6,
-        "filing_mix_notes_confirmed": False,
-        "sector_cyclical_overlay_registry": {},
-    }
-    write_screening_snapshot(sources, snapshot)
-    persisted = read_json(sources / "screening_snapshot.json")
-    assert persisted["uk_contractor"] is True
-    assert persisted["public_capex_exposure_detected"] is True
-    assert persisted["public_capex"] is True
-    assert (
-        HOOK_UK_CONTRACTOR_BACKLOG_MARGIN
-        in persisted["sector_cyclical_overlay_registry"]["active_hook_ids"]
-    )
-
-
 def test_enrich_signals_with_healthcare_overlay_caps_adjusted_signal():
     signals = pd.DataFrame(
         [
