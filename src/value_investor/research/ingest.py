@@ -364,25 +364,42 @@ def extract_cashflow_metrics_from_annual_financials(
     return apply_ttm_cashflow_gate(financials, metrics)
 
 
+def _reference_cashflow_metrics_from_financials(
+    financials: dict[str, Any],
+) -> dict[str, float | None]:
+    """Resolve OCF/FCF from Yahoo rows, IFRS labels, and stored ``cashflow_metrics``."""
+    from value_investor.research.filings import (
+        _coerce_cashflow_metric_number,
+        _extract_yahoo_statement_cashflow_metrics,
+    )
+
+    reference: dict[str, float | None] = dict(
+        extract_cashflow_metrics_from_annual_financials(financials) or {}
+    )
+    for key, value in _extract_yahoo_statement_cashflow_metrics(financials).items():
+        if reference.get(key) is None:
+            reference[key] = value
+
+    stored = financials.get("cashflow_metrics") or {}
+    for key in CASHFLOW_METRIC_KEYS:
+        if reference.get(key) is not None:
+            continue
+        coerced = _coerce_cashflow_metric_number(stored.get(key))
+        if coerced is not None:
+            reference[key] = coerced
+        if reference.get(key) is None:
+            coerced_top = _coerce_cashflow_metric_number(financials.get(key))
+            if coerced_top is not None:
+                reference[key] = coerced_top
+    return reference
+
+
 def apply_cashflow_metrics_fallback(
     metrics: dict[str, Any],
     financials: dict[str, Any],
 ) -> list[str]:
     """Fill missing cash-flow fields on a metrics dict from annual Yahoo statements."""
-    extracted = extract_cashflow_metrics_from_annual_financials(financials)
-    stored = financials.get("cashflow_metrics") or {}
-    for key in CASHFLOW_METRIC_KEYS:
-        if extracted.get(key) is not None:
-            continue
-        value = stored.get(key)
-        if value is None:
-            continue
-        try:
-            number = float(value)
-        except (TypeError, ValueError):
-            continue
-        if pd.notna(number):
-            extracted[key] = number
+    extracted = _reference_cashflow_metrics_from_financials(financials)
     filled: list[str] = []
     for key in CASHFLOW_METRIC_KEYS:
         if metrics.get(key) is not None:
@@ -404,20 +421,7 @@ def validate_company_metrics_cashflow_against_financials(
     relative_tolerance: float = CASHFLOW_VALIDATION_REL_TOLERANCE,
 ) -> dict[str, Any]:
     """Compare OCF/FCF on a metrics dict with values mirrored in ``financials_annual.json``."""
-    reference = extract_cashflow_metrics_from_annual_financials(financials)
-    stored = financials.get("cashflow_metrics") or {}
-    for key in CASHFLOW_METRIC_KEYS:
-        if reference.get(key) is not None:
-            continue
-        value = stored.get(key)
-        if value is None:
-            continue
-        try:
-            number = float(value)
-        except (TypeError, ValueError):
-            continue
-        if pd.notna(number):
-            reference[key] = number
+    reference = _reference_cashflow_metrics_from_financials(financials)
 
     mismatches: dict[str, dict[str, float]] = {}
     for key in CASHFLOW_METRIC_KEYS:
@@ -460,7 +464,7 @@ def _sync_snapshot_cashflow_metrics_block(
         if nested.get(key) != top:
             nested[key] = top
             changed = True
-    extracted = extract_cashflow_metrics_from_annual_financials(financials)
+    extracted = _reference_cashflow_metrics_from_financials(financials)
     for key in CASHFLOW_METRIC_KEYS:
         value = extracted.get(key)
         if value is not None and nested.get(key) is None:
@@ -472,13 +476,14 @@ def _sync_snapshot_cashflow_metrics_block(
 
 def _financials_with_merged_cashflow_metrics(financials: dict[str, Any]) -> dict[str, Any]:
     """Ensure ``cashflow_metrics`` reflects Yahoo ``cash_flow`` rows for fetch backfill."""
-    extracted = extract_cashflow_metrics_from_annual_financials(financials)
-    if not extracted:
+    extracted = _reference_cashflow_metrics_from_financials(financials)
+    if not any(extracted.get(key) is not None for key in CASHFLOW_METRIC_KEYS):
         return financials
 
     merged_metrics = dict(financials.get("cashflow_metrics") or {})
     changed = False
-    for key, value in extracted.items():
+    for key in CASHFLOW_METRIC_KEYS:
+        value = extracted.get(key)
         if value is not None and merged_metrics.get(key) != value:
             merged_metrics[key] = value
             changed = True
@@ -1161,7 +1166,11 @@ def fetch_annual_financials(ticker: str, *, years: int = FINANCIAL_YEARS) -> dic
         payload["quarterly_income_source"] = quarterly_income_source
     if quarterly_source:
         payload["quarterly_cashflow_source"] = quarterly_source
-    cashflow_metrics = extract_cashflow_metrics_from_annual_financials(payload)
+    cashflow_metrics = dict(extract_cashflow_metrics_from_annual_financials(payload) or {})
+    reference = _reference_cashflow_metrics_from_financials(payload)
+    for key in CASHFLOW_METRIC_KEYS:
+        if reference.get(key) is not None:
+            cashflow_metrics[key] = reference[key]
     if cashflow_metrics:
         payload["cashflow_metrics"] = cashflow_metrics
     return payload
