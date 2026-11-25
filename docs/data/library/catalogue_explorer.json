@@ -5883,28 +5883,10 @@
     "VIVK_US_EQ",
     "VIV_US_EQ",
     "VKTX_US_EQ",
-    "VLCN_US_EQ"
+    "VLCN_US_EQ",
+    "VLEEY_US_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "VFRM_US_EQ",
-      "venue": "US",
-      "yahoo": "VFRM",
-      "isin": "US92347N2071",
-      "name": "VFRM",
-      "seconds": 1.115,
-      "outcome": "miss",
-      "at": "2026-11-25T18:08:59.379666+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.854
-      },
-      "screen_seconds": 0.854,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "VG1_US_EQ",
       "venue": "US",
@@ -6645,6 +6627,25 @@
       },
       "screen_seconds": 85.004,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "VLEEY_US_EQ",
+      "venue": "US",
+      "yahoo": "VLEEY",
+      "isin": "US9191343048",
+      "name": "VLEEY",
+      "seconds": 0.91,
+      "outcome": "miss",
+      "at": "2026-11-25T18:31:00.902180+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.725
+      },
+      "screen_seconds": 0.725,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -80617,43 +80618,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-25T18:29:13.468214+00:00"
+    },
+    {
+      "t212_ticker": "VLEEY_US_EQ",
+      "yahoo": "VLEEY",
+      "name": "VLEEY",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T18:31:00.902180+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "VLCN_US_EQ",
+    "t212_ticker": "VLEEY_US_EQ",
     "venue": "US",
-    "yahoo": "VLCN",
-    "isin": "US92864V6083",
-    "name": "EMPD",
-    "seconds": 85.092,
+    "yahoo": "VLEEY",
+    "isin": "US9191343048",
+    "name": "VLEEY",
+    "seconds": 0.91,
     "outcome": "miss",
-    "at": "2026-11-25T18:30:51.180166+00:00",
+    "at": "2026-11-25T18:31:00.902180+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.004
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.725
     },
-    "screen_seconds": 85.004,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.725,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "VLEEY_US_EQ"
+    }
   },
-  "updated_at": "2026-11-25T18:30:51.180166+00:00",
+  "updated_at": "2026-11-25T18:31:00.902180+00:00",
   "totals": {
-    "screened": 5882,
+    "screened": 5883,
     "signals": {
-      "buy": 1782,
+      "buy": 1783,
       "avoid": 1378,
       "hold": 1286,
       "insufficient_data": 1405,
       "strong_buy": 31
     },
-    "signals_n": 5882,
-    "screen_seconds_sum": 58609.22200000019,
-    "screen_seconds_n": 5882,
+    "signals_n": 5883,
+    "screen_seconds_sum": 58609.94700000019,
+    "screen_seconds_n": 5883,
     "outcomes": {
-      "miss": 2298,
+      "miss": 2299,
       "saved": 3584
     }
   },
