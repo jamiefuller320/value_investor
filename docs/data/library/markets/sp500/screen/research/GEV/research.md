@@ -1,6 +1,6 @@
 # GE Vernova Inc. (GEV) — Research memo
 
-_Version 7 · Updated 2026-11-25T04:45:34.614060+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T18:00:44.739376+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,8 +9,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: No new filings or news since the last run; filed FY25 FCF still far below Yahoo TTM behind the screen, so research does not strengthen the buy case.
-RiskTags: cyclical, regulatory, liquidity, pension, accounting
+Rationale: Commentary revisits the planned Trench deal and AI-power selloff; no new filings and filed FY25 FCF still far below Yahoo TTM behind the screen, so research still weakens the buy case.
+RiskTags: cyclical, regulatory, liquidity, pension, accounting, leverage
 
 ## Weekly updates
 
@@ -43,3 +43,8 @@ Wind execution and the FCF-basis gap from prior updates remain unresolved.
 Incremental news batch since 24 Nov is empty; no new SEC filings or sourced financial changes.  
 Filed FY2025 OCF $4.99bn and FCF $3.71bn unchanged; Yahoo TTM FCF (~$17.1bn) still far above filed annual FCF underpinning the screen.  
 Wind execution and the FCF-basis gap noted in prior updates remain unresolved.
+
+### 2026-11-25T18:00:44.739376+00:00
+New batch is mostly commentary and options noise; press revisits the planned $9bn Trench deal and GEV’s move with AI-power peers after a recent selloff.  
+No new SEC filings; filed FY2025 OCF $4.99bn and FCF $3.71bn unchanged, with Yahoo TTM FCF (~$17.1bn) still far above annual filed cash flow underpinning the screen.  
+Wind execution and the FCF-basis gap from prior updates remain unresolved.

@@ -1,6 +1,6 @@
 # Teradyne, Inc. (TER) — Research memo
 
-_Version 7 · Updated 2026-11-25T04:54:04.966780+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-25T18:10:52.603036+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: Research still weakens the buy: the batch is empty and no filings arrived after the 30 Oct 10-Q; ~$800m TTM FCF does not clear prior valuation and earnings-quality concerns.
+Rationale: Research still weakens the buy: dip-buy press and Gen 7 AI vision headlines do not offset cyclical selloff risk; ~$800m TTM FCF leaves valuation and earnings-quality screen gates unresolved.
 RiskTags: cyclical, customer_concentration, competitive
 
 ## Weekly updates
@@ -43,3 +43,8 @@ The buy screen is unchanged and prior valuation and earnings-quality concerns re
 No material change. The 25 Nov news batch has no Teradyne-specific articles since the 24 Nov refresh.  
 The filings index was refreshed; there are still no SEC bodies after the 30 Oct 2026 10-Q.  
 Yahoo TTM free cash flow remains about $800m; the buy screen and prior valuation and earnings-quality concerns are unchanged.
+
+### 2026-11-25T18:10:52.603036+00:00
+Wednesday’s batch links Teradyne to a wider AI-led chip selloff and dip-buy lists; Gen 7 AI vision headlines are thin product commentary.  
+The filings index was refreshed; there are still no SEC bodies after the 30 Oct 2026 10-Q.  
+Yahoo TTM free cash flow remains about $800m; failed screen gates and prior valuation and earnings-quality concerns are unchanged.

@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 22 · Updated 2026-11-25T07:49:42.089241+00:00 · Mode: structured_verdict_update_
+_Version 23 · Updated 2026-11-25T18:10:11.760411+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: high
-Confidence: 0.58
-Rationale: On-file FCF remains exceptional, but 2027 NAND oversupply debate, semis estimate cuts and post-split officer-sale headlines leave no fresh guidance, weakening the strong-buy screen.
+Confidence: 0.57
+Rationale: On-file FCF is still exceptional and Cantor flags buybacks, but today’s memory selloff, TrendForce’s lower 2027 outlook and no new guidance still weaken the strong-buy screen.
 RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
@@ -102,3 +102,8 @@ On-file financials still show very strong free cash flow.
 This refresh’s news batch adds no articles since the early 25 November update; no new SNDK issuer disclosures in that slice.
 Refreshed on-file financials (fetched 25 November) still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).
 The 2027 NAND oversupply debate, semis estimate-cut headlines and post-split officer-sale press are unchanged in the file set.
+
+### 2026-11-25T18:10:11.760411+00:00
+On 25 November SNDK fell roughly 10–13% as Nvidia-led chip names sold off; TrendForce cut 2027 memory forecasts after Chinese cloud order cuts and lowered DRAM pricing views.  
+Press stresses NAND demand and pricing worries plus tariff fears; Cantor’s CJ Muse still cites potential buybacks from exceptional on-file cash generation.  
+No new SNDK issuer filings in the batch; refreshed on-file financials still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).
