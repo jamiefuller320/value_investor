@@ -6411,28 +6411,10 @@
     "39EAD_EQ",
     "3AG1D_EQ",
     "3BXD_EQ",
-    "3CPD_EQ"
+    "3CPD_EQ",
+    "3E1D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "2GFd_EQ",
-      "venue": "DE",
-      "yahoo": "2GF.DE",
-      "isin": "AU000000TER9",
-      "name": "2GF",
-      "seconds": 4.909,
-      "outcome": "miss",
-      "at": "2026-11-25T23:00:44.176636+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.863
-      },
-      "screen_seconds": 3.863,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "2HQd_EQ",
       "venue": "DE",
@@ -7173,6 +7155,25 @@
       },
       "screen_seconds": 84.744,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "3E1d_EQ",
+      "venue": "DE",
+      "yahoo": "3E1.DE",
+      "isin": "NL0013056914",
+      "name": "3E1",
+      "seconds": 2.202,
+      "outcome": "miss",
+      "at": "2026-11-25T23:27:46.278921+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.767
+      },
+      "screen_seconds": 0.767,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -86428,43 +86429,56 @@
         "error": null
       },
       "finished_at": "2026-11-25T23:12:09.548848+00:00"
+    },
+    {
+      "t212_ticker": "3E1d_EQ",
+      "yahoo": "3E1.DE",
+      "name": "3E1",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-25T23:27:46.278921+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "3CPd_EQ",
+    "t212_ticker": "3E1d_EQ",
     "venue": "DE",
-    "yahoo": "3CP.DE",
-    "isin": "KYG9830T1067",
-    "name": "3CP",
-    "seconds": 85.968,
+    "yahoo": "3E1.DE",
+    "isin": "NL0013056914",
+    "name": "3E1",
+    "seconds": 2.202,
     "outcome": "miss",
-    "at": "2026-11-25T23:27:36.530907+00:00",
+    "at": "2026-11-25T23:27:46.278921+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.744
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.767
     },
-    "screen_seconds": 84.744,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.767,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "3E1d_EQ"
+    }
   },
-  "updated_at": "2026-11-25T23:27:36.530907+00:00",
+  "updated_at": "2026-11-25T23:27:46.278921+00:00",
   "totals": {
-    "screened": 6410,
+    "screened": 6411,
     "signals": {
-      "buy": 1895,
+      "buy": 1896,
       "avoid": 1487,
       "hold": 1380,
       "insufficient_data": 1610,
       "strong_buy": 38
     },
-    "signals_n": 6410,
-    "screen_seconds_sum": 67806.87100000025,
-    "screen_seconds_n": 6410,
+    "signals_n": 6411,
+    "screen_seconds_sum": 67807.63800000025,
+    "screen_seconds_n": 6411,
     "outcomes": {
-      "miss": 2596,
+      "miss": 2597,
       "saved": 3814
     }
   },
