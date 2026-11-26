@@ -6662,28 +6662,10 @@
     "A8XD_EQ",
     "A980D_EQ",
     "AA2D_EQ",
-    "AADD_EQ"
+    "AADD_EQ",
+    "AAGD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "9CD1d_EQ",
-      "venue": "DE",
-      "yahoo": "9CD1.DE",
-      "isin": "JE00BF0XVB15",
-      "name": "9CD1",
-      "seconds": 5.963,
-      "outcome": "miss",
-      "at": "2026-11-26T10:58:54.798261+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.61
-      },
-      "screen_seconds": 4.61,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "9CHd_EQ",
       "venue": "DE",
@@ -7424,6 +7406,25 @@
       },
       "screen_seconds": 0.929,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "AAGd_EQ",
+      "venue": "DE",
+      "yahoo": "AAG.DE",
+      "isin": "DE000A2DAM03",
+      "name": "AAG",
+      "seconds": 2.812,
+      "outcome": "miss",
+      "at": "2026-11-26T11:27:38.840965+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.953
+      },
+      "screen_seconds": 0.953,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87130,43 +87131,56 @@
         "error": null
       },
       "finished_at": "2026-11-26T11:22:14.188704+00:00"
+    },
+    {
+      "t212_ticker": "AAGd_EQ",
+      "yahoo": "AAG.DE",
+      "name": "AAG",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T11:27:38.840965+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "AADd_EQ",
+    "t212_ticker": "AAGd_EQ",
     "venue": "DE",
-    "yahoo": "AAD.DE",
-    "isin": "DE0005093108",
-    "name": "AAD",
-    "seconds": 2.843,
+    "yahoo": "AAG.DE",
+    "isin": "DE000A2DAM03",
+    "name": "AAG",
+    "seconds": 2.812,
     "outcome": "miss",
-    "at": "2026-11-26T11:27:29.189921+00:00",
+    "at": "2026-11-26T11:27:38.840965+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 0.929
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.953
     },
-    "screen_seconds": 0.929,
-    "signal": "avoid"
+    "screen_seconds": 0.953,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "AAGd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T11:27:29.189921+00:00",
+  "updated_at": "2026-11-26T11:27:38.840965+00:00",
   "totals": {
-    "screened": 6661,
+    "screened": 6662,
     "signals": {
-      "buy": 1906,
+      "buy": 1907,
       "avoid": 1510,
       "hold": 1389,
       "insufficient_data": 1818,
       "strong_buy": 38
     },
-    "signals_n": 6661,
-    "screen_seconds_sum": 78104.68100000035,
-    "screen_seconds_n": 6661,
+    "signals_n": 6662,
+    "screen_seconds_sum": 78105.63400000034,
+    "screen_seconds_n": 6662,
     "outcomes": {
-      "miss": 2847,
+      "miss": 2848,
       "saved": 3814
     }
   },
