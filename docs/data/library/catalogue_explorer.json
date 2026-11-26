@@ -6815,28 +6815,10 @@
     "CBAD_EQ",
     "CBGBD_EQ",
     "CBHDD_EQ",
-    "CBRD_EQ"
+    "CBRD_EQ",
+    "CDM1D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "BVFd_EQ",
-      "venue": "DE",
-      "yahoo": "BVF.DE",
-      "isin": "CA0717341071",
-      "name": "BVF",
-      "seconds": 6.449,
-      "outcome": "miss",
-      "at": "2026-11-26T14:02:33.061714+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.714
-      },
-      "screen_seconds": 4.714,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "BWBd_EQ",
       "venue": "DE",
@@ -7577,6 +7559,25 @@
       },
       "screen_seconds": 85.414,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CDM1d_EQ",
+      "venue": "DE",
+      "yahoo": "CDM1.DE",
+      "isin": "US1921085049",
+      "name": "CDM1",
+      "seconds": 2.692,
+      "outcome": "miss",
+      "at": "2026-11-26T14:35:59.060790+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.047
+      },
+      "screen_seconds": 1.047,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -88193,43 +88194,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T14:34:13.462399+00:00"
+    },
+    {
+      "t212_ticker": "CDM1d_EQ",
+      "yahoo": "CDM1.DE",
+      "name": "CDM1",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T14:35:59.060790+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CBRd_EQ",
+    "t212_ticker": "CDM1d_EQ",
     "venue": "DE",
-    "yahoo": "CBR.DE",
-    "isin": "JP3511800009",
-    "name": "CBR",
-    "seconds": 87.143,
+    "yahoo": "CDM1.DE",
+    "isin": "US1921085049",
+    "name": "CDM1",
+    "seconds": 2.692,
     "outcome": "miss",
-    "at": "2026-11-26T14:35:48.766541+00:00",
+    "at": "2026-11-26T14:35:59.060790+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.414
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.047
     },
-    "screen_seconds": 85.414,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.047,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CDM1d_EQ"
+    }
   },
-  "updated_at": "2026-11-26T14:35:48.766541+00:00",
+  "updated_at": "2026-11-26T14:35:59.060790+00:00",
   "totals": {
-    "screened": 6814,
+    "screened": 6815,
     "signals": {
-      "buy": 1928,
+      "buy": 1929,
       "avoid": 1518,
       "hold": 1407,
       "insufficient_data": 1922,
       "strong_buy": 39
     },
-    "signals_n": 6814,
-    "screen_seconds_sum": 83234.95000000042,
-    "screen_seconds_n": 6814,
+    "signals_n": 6815,
+    "screen_seconds_sum": 83235.99700000043,
+    "screen_seconds_n": 6815,
     "outcomes": {
-      "miss": 2999,
+      "miss": 3000,
       "saved": 3815
     }
   },
