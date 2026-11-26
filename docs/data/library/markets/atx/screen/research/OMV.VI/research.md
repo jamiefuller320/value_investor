@@ -1,6 +1,6 @@
 # OMV Aktiengesellschaft (OMV.VI) — Research memo
 
-_Version 5 · Updated 2026-11-26T04:11:36.493785+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-26T18:19:46.293169+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.69
-Rationale: Q3 results and ~€2.53bn TTM FCF still support the strong-buy screen; fresh UBS €70 target headlines extend broker caution on oil and Libya, without changing the on-file fundamentals.
+Rationale: Q3 EPS €3.14 and ~€2.53bn TTM FCF still support the strong-buy screen; fresh Stone/chemistry press is headline-only and leaves on-file fundamentals unchanged.
 RiskTags: cyclical, governance, regulatory, key_person
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Strong_buy screen and accumulate overlay stand.
 `news_batch_20261126_041117` adds one item: press coverage of a UBS analyst €70 price target (26 Nov).  
 On-file Q3 2026 EPS €3.14, revenue €8.96bn and TTM free cash flow ~€2.53bn are unchanged; indexed filings are unchanged.  
 Strong_buy screen and accumulate overlay stand; broker-caution theme is reinforced but fundamentals are not.
+
+### 2026-11-26T18:19:46.293169+00:00
+`news_batch_20261126_181912` adds one headline: Stone giving the chemicals business more time (26 Nov); the article body is not in sources.  
+On-file Q3 2026 EPS €3.14, revenue €8.96bn and TTM free cash flow ~€2.53bn are unchanged; indexed filings are unchanged.  
+Strong_buy screen and accumulate overlay stand; chemistry-strategy noise does not alter disclosed fundamentals.

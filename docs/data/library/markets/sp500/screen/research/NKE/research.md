@@ -1,6 +1,6 @@
 # NIKE, Inc. (NKE) — Research memo
 
-_Version 11 · Updated 2026-11-26T04:03:10.619163+00:00 · Mode: structured_verdict_update_
+_Version 12 · Updated 2026-11-26T18:10:35.790661+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.66
-Rationale: Empty 04:02 news batch and no new filings; Aug-2026 10-Q revenue decline and weak Q1 cash flow still weaken the screen buy.
+Rationale: 26 Nov commentary-only headlines and no new filings; Aug-2026 10-Q revenue decline and weak Q1 cash flow still weaken the screen buy.
 RiskTags: cyclical, competitive, regulatory, customer_concentration
 
 ## Weekly updates
@@ -62,4 +62,9 @@ Q2 FY27 on 17 Dec remains outside the supplied sources.
 ### 2026-11-26T04:03:10.619163+00:00
 News batch since the 01:30 refresh is empty; no new company filings or headlines.  
 Aug-2026 10-Q revenue and Q1 cash-flow pressure, plus prior FY27 reset and channel themes, are unchanged in the file set.  
+Q2 FY27 on 17 Dec remains outside the supplied sources.
+
+### 2026-11-26T18:10:35.790661+00:00
+Afternoon batch is commentary only; no new SEC filings since the 04:03 refresh.  
+Headlines cite NKE near ~$34, peer apparel comparison, and price crossing the 50-day moving average—no new company disclosures.  
 Q2 FY27 on 17 Dec remains outside the supplied sources.

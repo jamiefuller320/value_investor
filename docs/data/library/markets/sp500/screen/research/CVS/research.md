@@ -1,6 +1,6 @@
 # CVS Health Corporation (CVS) — Research memo
 
-_Version 13 · Updated 2026-11-26T03:51:43.956476+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-26T17:55:27.915464+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.64
-Rationale: Nine-month filing profits and cash still support the screen, but breakup and MA policy noise outweigh unverified bullish headlines—research weakens pure strong-buy conviction.
+Rationale: Nine-month filing profits and cash still support the screen, but breakup, MA policy and Q3 segment-concern commentary outweigh unverified bullish headlines—research weakens pure strong-buy conviction.
 RiskTags: regulatory, competitive, leverage, litigation, cyclical, customer_concentration, pension, governance
 
 ## Weekly updates
@@ -73,3 +73,8 @@ No material change to the accumulate overlay versus the 25 Nov refresh.
 Since 26 Nov 01:18 UTC the news batch is empty; no new CVS headlines in the supplied pack.  
 No new SEC extracts beyond the 4 Nov Q3 10-Q.  
 No material change to the accumulate overlay versus the 01:18 refresh.
+
+### 2026-11-26T17:55:27.915464+00:00
+Since 03:51 UTC the batch adds Pzena Q3 commentary on segment-specific concerns and MarketBeat headlines on HOOPP and Dodge & Cox share sales (news only, not filings).
+Thanksgiving hours and US soccer sponsorship items are operational noise; nothing on retail–Aetna split economics.
+No new SEC extracts beyond the 4 Nov Q3 10-Q; no material change to the accumulate overlay versus the 03:51 refresh.

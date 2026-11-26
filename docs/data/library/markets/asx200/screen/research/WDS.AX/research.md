@@ -1,6 +1,6 @@
 # Woodside Energy Group Ltd (WDS.AX) — Research memo
 
-_Version 6 · Updated 2026-11-26T04:13:01.966895+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-26T18:21:26.004071+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: FY25 filings show underlying NPAT US$2.6bn and company FCF US$1.9bn at ~80% payout, supporting the buy screen, but Yahoo OCF−CapEx FCF is negative and H1 2026 FCF US$352m trails dividends—cover tension persists.
+Rationale: FY25 results in the library support the buy screen, but negative Yahoo OCF−CapEx FCF and suppressed TTM cashflow weaken conviction until filing-aligned FCF is reconciled.
 RiskTags: cyclical, leverage, regulatory
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Buy screen and accumulate overlay stand; quarterly cashflow still empty so scree
 One Kalkine headline on a Trafigura LNG deal since 01:42 UTC is third-party commentary, not a company disclosure.  
 The 04:12 financial refresh still shows Yahoo OCF−CapEx FCF at negative US$782m; quarterly cashflow remains empty, so screen TTM FCF is unverified.  
 The filing library is still 104 items, with no new ASX announcements since 5 Nov.
+
+### 2026-11-26T18:21:26.004071+00:00
+Two Kalkine headlines since the 04:13 UTC run (QatarEnergy LNG, Scarborough/Louisiana)—commentary only, not new company disclosures.  
+18:20 UTC financial and filing refresh unchanged: 104 items, no ASX announcements since 5 Nov.  
+Yahoo OCF−CapEx FCF still negative US$782m; quarterly cashflow empty, so screen TTM FCF is unverified.

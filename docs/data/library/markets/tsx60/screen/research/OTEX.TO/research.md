@@ -1,6 +1,6 @@
 # Open Text Corporation (OTEX.TO) — Research memo
 
-_Version 6 · Updated 2026-11-26T04:03:54.794713+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-26T18:11:28.104648+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -37,4 +37,9 @@ TSX filing discovery still reports zero bodies, so leverage, amortisation and qu
 ### 2026-11-26T04:03:54.794713+00:00
 No new articles in the 04:03 UTC news batch since the 01:31 structured verdict refresh.  
 Yahoo financials (pulled 04:03 UTC) are unchanged: FY26 FCF ~$808m and TTM ~$845m still underpin the strong buy screen.  
+TSX filing discovery still reports zero bodies, so leverage, amortisation and quarterly revenue remain unverified in this pack.
+
+### 2026-11-26T18:11:28.104648+00:00
+No new articles in the 18:11 UTC news batch since the 04:03 structured verdict refresh.  
+Yahoo financials (pulled 18:11 UTC) are unchanged: FY26 FCF ~$808m and TTM ~$845m still underpin the strong buy screen.  
 TSX filing discovery still reports zero bodies, so leverage, amortisation and quarterly revenue remain unverified in this pack.

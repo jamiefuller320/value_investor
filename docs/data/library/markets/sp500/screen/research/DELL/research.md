@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 17 · Updated 2026-11-26T03:53:13.589295+00:00 · Mode: structured_verdict_update_
+_Version 18 · Updated 2026-11-26T17:57:28.266153+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: On-file Q3 beat still supports strong_buy; overnight copy only recycles record AI backlog—leverage, cyclicality and post-earnings scepticism unchanged; no new SEC data.
+Confidence: 0.71
+Rationale: On-file Q3 beat still supports strong_buy; export-pause headlines name Dell as an Nvidia partner—regulatory noise only; backlog copy and upgrades recur; no new SEC extracts.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -93,3 +93,8 @@ Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchang
 The 03:52 UTC batch adds duplicate Yahoo/Motley Fool copy on record AI backlog and Nvidia-linked orders—no new Dell datapoints beyond prior Q3 themes.  
 On-file Q3 FY2027 8-K figures ($54.9bn revenue, $9.45 EPS, ~$132bn backlog) are unchanged; no new SEC extracts.  
 Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchanged.
+
+### 2026-11-26T17:57:28.266153+00:00
+The 17:56 UTC batch adds Nvidia-linked US export-control copy pausing AI server shipments to four south-east Asian markets, naming Dell among manufacturing partners.  
+Post-Q3 themes persist (~$132bn backlog, Clarke “different company” copy, scattered buy ratings) alongside prior peak-AI and margin scepticism.  
+On-file Q3 FY2027 8-K figures are unchanged; no new SEC extracts.

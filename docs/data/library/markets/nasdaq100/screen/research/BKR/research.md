@@ -1,6 +1,6 @@
 # Baker Hughes Company (BKR) — Research memo
 
-_Version 13 · Updated 2026-11-26T03:49:18.557610+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-26T17:52:51.147088+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -72,4 +72,9 @@ Normalised post-Chart BKR earnings remain unverified in supplied primary filings
 ### 2026-11-26T03:49:18.557610+00:00
 No BKR articles in the 26 Nov 03:49 news batch since the early-morning refresh; no new SEC filing bodies in supplied sources.  
 Strong-buy screen unchanged with Q3 2026 revenue ~$8.0bn and TTM FCF ~$3.2bn per the screening snapshot.  
+Normalised post-Chart BKR earnings remain unverified in supplied primary filings.
+
+### 2026-11-26T17:52:51.147088+00:00
+Afternoon 26 Nov batch adds post-earnings pullback, OFS sector-listicle, and Dodge & Cox trimming headlines only—no new SEC filing bodies in supplied sources.
+Strong-buy screen unchanged with Q3 2026 revenue ~$8.0bn and TTM FCF ~$3.2bn per the screening snapshot.
 Normalised post-Chart BKR earnings remain unverified in supplied primary filings.

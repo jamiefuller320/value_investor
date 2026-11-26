@@ -1,6 +1,6 @@
 # Gartner, Inc. (IT) — Research memo
 
-_Version 12 · Updated 2026-11-26T03:58:39.606059+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-26T18:03:34.617334+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: No Gartner-specific news and no new filings; on-file Q3 supports cash economics but accumulate still moderates the strong-buy screen on leverage, competitive, cyclical and litigation risks.
+Rationale: On-file Q3 supports cash economics; secondary Yahoo analyst piece on underperformance does not alter filings—accumulate still moderates the strong-buy screen on leverage, competitive, cyclical and litigation risks.
 RiskTags: competitive, leverage, cyclical, litigation
 
 ## Weekly updates
@@ -68,3 +68,8 @@ Other headlines are generic “IT” ticker noise; leverage, competitive, cyclic
 No new SEC filings since the 19 Nov executive RSU 8-K; the Q3 2026 Form 10-Q and 3 Nov earnings 8-K remain the latest on file.  
 The 26 Nov 03:58 news batch has no Gartner-specific items—only generic “IT” ticker noise (Oracle, Apple, Nvidia).  
 No material change to Q3 metrics, guidance or prior leverage, competitive, cyclical and litigation themes.
+
+### 2026-11-26T18:03:34.617334+00:00
+No new SEC filings since the 19 Nov executive RSU 8-K; the Q3 2026 Form 10-Q and 3 Nov earnings 8-K remain the latest on file.  
+The 18:03 news batch adds one Gartner-specific Yahoo piece on analyst target prices and uncertainty after market underperformance—secondary to filed Q3.  
+Other headlines are generic “IT” ticker noise; leverage, competitive, cyclical and litigation themes are unchanged.

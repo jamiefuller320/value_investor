@@ -1,6 +1,6 @@
 # 4imprint Group plc (FOUR.L) — Research memo
 
-_Version 17 · Updated 2026-11-26T03:57:19.880234+00:00 · Mode: structured_verdict_update_
+_Version 18 · Updated 2026-11-26T18:02:07.743150+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -90,5 +90,10 @@ Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash
 
 ### 2026-11-26T03:57:19.880234+00:00
 No new 4imprint RNS or company-specific press in the 26 November (03:56) news batch since the 01:24 refresh.  
+Quantitative **buy** unchanged (8 models, nine weeks, stable trend; neutral timing; FCF basis mismatch on screen).  
+Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.
+
+### 2026-11-26T18:02:07.743150+00:00
+No new 4imprint RNS or company-specific press in the 26 November evening news batch since the 03:57 refresh.  
 Quantitative **buy** unchanged (8 models, nine weeks, stable trend; neutral timing; FCF basis mismatch on screen).  
 Filing-led view unchanged: 10 November guidance (~$130m adjusted PBT, $152m cash) and unresolved FCF/dividend definition divergence.

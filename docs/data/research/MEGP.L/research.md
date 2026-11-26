@@ -1,6 +1,6 @@
 # ME Group International plc (MEGP.L) — Research memo
 
-_Version 30 · Updated 2026-11-26T04:00:05.144735+00:00 · Mode: structured_verdict_update_
+_Version 31 · Updated 2026-11-26T18:05:15.550081+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.76
-Rationale: Empty 03:59 news batch; unchanged statutory FCF cover, H1 softness and FY26 guidance cut still partly weaken the strong-buy screen.
+Rationale: Empty 18:04 news batch; unchanged statutory FCF cover, H1 softness and FY26 guidance cut still partly weaken the strong-buy screen.
 RiskTags: accounting, cyclical, governance, competitive, key_person
 
 ## Weekly updates
@@ -157,4 +157,9 @@ H1 softness, the FY26 guidance cut and prior accounting/governance flags are unc
 ### 2026-11-26T04:00:05.144735+00:00
 No company filings or news in the batch since the 01:26 refresh (`articles` empty as of 03:59 UTC).  
 The quantitative screen remains strong buy (35 weeks, stable); statutory FCF cover is still below 1× on the screen basis (0.84× statutory vs 1.68× management).  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
+
+### 2026-11-26T18:05:15.550081+00:00
+No company filings or news in the batch since the 04:00 refresh (`articles` empty as of 18:04 UTC).  
+The quantitative screen remains strong buy (35 weeks, stable); statutory FCF cover is still below 1× (0.84× statutory vs 1.68× management).  
 H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.

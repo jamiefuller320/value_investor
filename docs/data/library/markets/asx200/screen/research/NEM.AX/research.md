@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM.AX) — Research memo
 
-_Version 5 · Updated 2026-11-26T04:02:49.842457+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-26T18:10:17.702844+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: Sourced ~$7.3bn and ~$10.1bn TTM free cash flow remain steady; empty 04:02 news and an unchanged hold screen with zero model passes leave research neutral on the hold case.
+Rationale: Steady sourced ~$7.3bn and ~$10.1bn TTM free cash flow support the overlay; development and macro gold headlines add no filing-grade change—research stays neutral on the unchanged hold screen.
 RiskTags: cyclical, key_person, regulatory, other
 
 ## Weekly updates
@@ -33,3 +33,8 @@ No new indexed filing bodies since the prior verdict.
 News batch since the 01:30 refresh is empty; no new articles in the supplied sources.  
 Hold signal and zero model passes are unchanged; filing-aligned ~$7.3bn and TTM ~$10.1bn FCF in the file set are steady.  
 Filings index refreshed at 04:02 with 20 items; no new indexed filing bodies since the prior verdict.
+
+### 2026-11-26T18:10:17.702844+00:00
+Since the 04:02 refresh, the batch adds Kalkine on Tanami and Red Chris mine development and a macro piece on GLD lagging in the current equity drawdown; other items are generic ETF flow headlines, not NEM-specific news.  
+Hold signal and zero model passes are unchanged; filing-aligned ~$7.3bn and TTM ~$10.1bn FCF in the file set are steady.  
+Filings index refreshed at 18:09 with 20 items; no new company-specific disclosure in the batch.

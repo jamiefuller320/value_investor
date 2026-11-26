@@ -1,6 +1,6 @@
 # Kuaishou Technology (1024.HK) — Research memo
 
-_Version 28 · Updated 2026-11-26T03:46:16.987929+00:00 · Mode: structured_verdict_update_
+_Version 29 · Updated 2026-11-26T17:49:16.411398+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.72
-Rationale: Filed Q3 operating loss and higher Kling AI spend still weaken the strong-buy screen; Yahoo shows Sep-26 EPS −0.22 but quarterly cash flow is empty, so TTM FCF remains unverified.
+Rationale: Filed Q3 operating loss and higher Kling AI spend still weaken the buy screen; Sep-26 EPS −0.22 aligns with HKEX but quarterly cash flow is empty, so TTM FCF remains unverified.
 RiskTags: regulatory, competitive, leverage, key_person, other
 
 ## Weekly updates
@@ -148,3 +148,8 @@ HKEX index refreshed at 01:12 UTC; Q3/nine-month to 30 Sep 2026 unchanged; no ne
 No material change: the 03:45 UTC news batch since the 01:12 refresh returned no Kuaishou articles—only unrelated “1024” query matches (e.g. broad HK market headlines).  
 Yahoo pack refreshed at 03:45 UTC: quarterly income still through Sep 2026 (Q3 diluted EPS −0.22); quarterly cash flow remains empty (TTM suppressed).  
 HKEX index refreshed at 03:46 UTC; Q3/nine-month results to 30 Sep 2026 unchanged; no new in-window filings.
+
+### 2026-11-26T17:49:16.411398+00:00
+No material change: the 17:48 UTC news batch since the 03:46 refresh returned zero Kuaishou articles.  
+Yahoo pack refreshed at 17:48 UTC—quarterly income still through Sep 2026 (Q3 diluted EPS −0.22); quarterly cash flow remains empty (TTM suppressed).  
+HKEX index refreshed at 17:48 UTC; Q3/nine-month results to 30 Sep 2026 unchanged; no new in-window filings.

@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 24 · Updated 2026-11-26T03:50:34.373905+00:00 · Mode: structured_verdict_update_
+_Version 25 · Updated 2026-11-26T17:54:02.092502+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Simply Wall St pre-earnings cheapness piece joins filing-backed FCF and reiterated Buys mildly confirming Strong Buy; Informatica leverage and AI competition stay unresolved until 2 Dec results.
+Rationale: Yahoo Q3 key-metrics pre-earnings coverage joins filing-backed FCF mildly confirming Strong Buy; Tocqueville trim is non-filing; Informatica leverage and AI competition stay unresolved until 2 Dec.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -125,3 +125,8 @@ Leverage and competitive pre-earnings themes are unchanged ahead of 2 Dec result
 Simply Wall St (26 Nov) adds pre-earnings AI-pressure versus cheapness commentary ahead of 2 Dec results.  
 No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
 Leverage and competitive pre-earnings themes are unchanged.
+
+### 2026-11-26T17:54:02.092502+00:00
+The 26 Nov batch adds Yahoo pre-earnings Q3 key-metrics commentary and MarketBeat on Tocqueville trimming CRM; other headlines are peer noise.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
+Leverage and competitive pre-earnings themes are unchanged ahead of 2 Dec results.
