@@ -6143,6 +6143,21 @@ def _migrate_ir_allowlist_row_url(
     return item, True
 
 
+def _sync_ir_allowlist_row_id(row: dict[str, Any]) -> tuple[dict[str, Any], bool]:
+    """Align ``ir_*`` row ids with the indexed URL digest so body validation can pass."""
+    item = dict(row)
+    if not _is_ir_allowlist_row(item):
+        return item, False
+    url = str(item.get("url") or "").strip()
+    if not url:
+        return item, False
+    expected = f"ir_{hashlib.sha256(url.encode('utf-8')).hexdigest()[:16]}"
+    if str(item.get("id") or "") == expected:
+        return item, False
+    item["id"] = expected
+    return item, True
+
+
 def _ir_allowlist_unfetchable_may_retry(
     row: dict[str, Any],
     *,
@@ -7115,6 +7130,7 @@ def merge_ir_allowlist_filings(
         item, migrated = _migrate_ir_allowlist_row_url(row, ticker)
         if migrated:
             migrated_urls += 1
+        item, _id_synced = _sync_ir_allowlist_row_id(item)
         refreshed_filings.append(item)
     filings = refreshed_filings
     filings, url_deduped = _dedupe_ir_allowlist_rows_by_url(filings)
@@ -7191,6 +7207,7 @@ def refetch_ir_allowlist_filing_bodies(
                 item, migrated = _migrate_ir_allowlist_row_url(row, ticker)
                 if migrated:
                     pre_merge_migrated += 1
+                item, _ = _sync_ir_allowlist_row_id(item)
                 refreshed_pre.append(item)
             refreshed_pre, pre_deduped = _dedupe_ir_allowlist_rows_by_url(refreshed_pre)
             if pre_merge_migrated or pre_deduped:
@@ -7233,6 +7250,18 @@ def refetch_ir_allowlist_filing_bodies(
     from value_investor.library_ingest_budget import deadline_reached
 
     filings = list(payload.get("filings") or [])
+    id_synced = 0
+    synced_filings: list[dict[str, Any]] = []
+    for row in filings:
+        item, synced = _sync_ir_allowlist_row_id(row)
+        if synced:
+            id_synced += 1
+        synced_filings.append(item)
+    filings = synced_filings
+    if id_synced:
+        payload["filings"] = filings
+        payload["summary"] = summarize_filings(filings)
+        index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     filings, ir_url_deduped = _dedupe_ir_allowlist_rows_by_url(filings)
     if ir_url_deduped:
         payload["filings"] = filings
@@ -7284,6 +7313,10 @@ def refetch_ir_allowlist_filing_bodies(
                     allowlist_urls=allowlist_urls,
                     ticker=ticker,
                 ):
+                    # eng-20261126-02: migrate dead evn.at hub rows before retrying body fetch
+                    # (igc-20261102-01 refetch 0/0 when unfetchable cleared but URL still stale).
+                    item, _url_migrated = _migrate_ir_allowlist_row_url(item, ticker)
+                    item, _ = _sync_ir_allowlist_row_id(item)
                     for key in ("unfetchable", "unfetchable_reason", "unfetchable_at"):
                         item.pop(key, None)
                     retry_cleared += 1

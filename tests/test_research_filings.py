@@ -15200,6 +15200,130 @@ def test_refetch_ir_allowlist_evn_vi_stale_allowlist_removed_on_live_pdfs_eng_20
     assert any(row.get("has_body") for row in ir_rows)
 
 
+def test_refetch_ir_allowlist_syncs_stale_row_id_eng_20261126_02(
+    tmp_path: Path,
+    monkeypatch,
+):
+    """eng-20261126-02: migrated evn.at URL with legacy ir_* id must refetch (not id_hash_mismatch)."""
+    import hashlib
+
+    live = _BUILTIN_IR_URLS["EVN.VI"][0]
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_07bb52dd9c03b279",
+                        "source": "ir_allowlist",
+                        "url": live,
+                        "period": "annual",
+                        "has_body": False,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(row, *, ticker, company_name="", investegate_cache=None):
+        url = str(row.get("url") or "")
+        expected = f"ir_{hashlib.sha256(url.encode('utf-8')).hexdigest()[:16]}"
+        assert str(row.get("id") or "") == expected
+        return "EVN AG Jahresfinanzbericht consolidated revenue earnings " * 25, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(filings_dir, "EVN.VI", max_bodies=3)
+    assert int(result.get("attempted") or 0) >= 1
+    assert int(result.get("fetched") or 0) >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    annual = [row for row in saved["filings"] if row.get("period") == "annual"]
+    assert annual and annual[0].get("has_body")
+    assert annual[0]["id"] != "ir_07bb52dd9c03b279"
+
+
+def test_refetch_euro_filings_primary_bodies_evn_vi_igc_stale_hub_eng_20261126_02(
+    tmp_path: Path,
+    monkeypatch,
+):
+    """eng-20261126-02: euro_depth library index with stale hub must not 0/0 IR refetch (igc-20261102-01)."""
+    dead = "https://www.evn.at/en/investor-relations/publications/"
+    live = _BUILTIN_IR_URLS["EVN.VI"][0]
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_07bb52dd9c03b279",
+                        "source": "ir_allowlist",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "allowlist_removed",
+                    },
+                    {
+                        "id": "1de226c8c5dad0db",
+                        "source": "esef_direct",
+                        "url": "https://filings.xbrl.org/529900P4JZBFEVNEAE60/2024-09-30/ESEF/AT/0/evnag-2024-09-30-0-en/reports/evnag-2024-09-30-0-en.xhtml",
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(bodies_dir / "1de226c8c5dad0db.txt"),
+                    },
+                    {
+                        "id": "fbabed6c96deae7a",
+                        "source": "esef_direct",
+                        "url": "https://filings.xbrl.org/529900P4JZBFEVNEAE60/2025-09-30/ESEF/AT/0/evnag-2025-09-30-2-en/reports/evnag-2025-09-30-2-en.xhtml",
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(bodies_dir / "fbabed6c96deae7a.txt"),
+                    },
+                ],
+                "summary": {"total": 3, "with_body": 2},
+            }
+        ),
+        encoding="utf-8",
+    )
+    (bodies_dir / "1de226c8c5dad0db.txt").write_text("esef " * 500, encoding="utf-8")
+    (bodies_dir / "fbabed6c96deae7a.txt").write_text("esef " * 500, encoding="utf-8")
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return "EVN AG Jahresfinanzbericht consolidated revenue earnings " * 30, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+
+    from value_investor.research.filings import refetch_euro_filings_primary_bodies
+
+    result = refetch_euro_filings_primary_bodies(
+        filings_dir,
+        ticker="EVN.VI",
+        company_name="EVN AG",
+        max_bodies=5,
+    )
+    ir = result.get("ir_allowlist") or {}
+    assert int(ir.get("attempted") or 0) >= 1
+    assert int(ir.get("skipped_unfetchable") or 0) == 0
+    assert ir.get("note") != "no missing IR allowlist bodies"
+    assert int(result.get("fetched") or 0) >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ir_urls = [row["url"] for row in saved["filings"] if row.get("source") == "ir_allowlist"]
+    assert dead not in ir_urls
+    assert live in ir_urls
+    annual = [row for row in saved["filings"] if row.get("period") == "annual"]
+    assert annual and annual[0].get("has_body")
+
+
 def test_parked_source_hunter_evn_vi_euro_depth_has_fetchable_ir():
     """eng-20261121-02: EVN.VI evn.at statutory PDFs fetch and validate (hunter confirmed)."""
     assert "EVN.VI" not in PARKED_SOURCE_HUNTER_SKIP
