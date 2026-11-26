@@ -67,15 +67,24 @@ Registration section 12 asks for a warn when `memo_not_ready` exceeds a fifth of
 
 Generosity at switch-on is not a silent default. Every 4 weeks (first 2026-12-08; the date is `operational_switches[].review.next_review_on` on the seal) the owner reviews spend against use ([human task](human-tasks-checklist.md#monthly) `monthly-strategy-book-memo-spend-review`) and keeps, lowers or raises `budget.strategy_book_memo_raise`.
 
-Input: the info finding **Strategy book memo spend this week** (`strategy_book_memo_spend.memo_spend_finding`, called from `check_strategy_book_memo_job`). It reports the latest ISO week's `requested` memos and their $0.40 estimate, budget skips, memo-needed count, the total since switch-on, the `weekly_ops` cap and remaining headroom, and whether the review is due. It is silent while spend is off.
+Input: the info finding **Strategy book memo spend this week** (`strategy_book_memo_spend.memo_spend_finding`, called from `check_strategy_book_memo_job`). It reports the latest ISO week's `requested` memos and their $0.40 estimate, budget skips, memo-needed count, the total since switch-on, the `weekly_ops` cap and remaining headroom, whether the review is due, and used/unused counts for that week and since switch-on. It is silent while spend is off.
 
-Whether a memo then fed an entry decision (a fill, or `memo_blocked`) or went unused is not tracked yet (queued with `ftse-defer`). Until it is, judge use from the forward book's filled versus `memo_not_ready` counts once `forward_live` is on.
+Each requested row in the memo log carries `fed`, written by the same ops-monitor pass (`strategy_book_memo_use.apply_strategy_book_memo_use`). The pass reads the forward book's stored events and does not walk it again.
+
+| `fed` | What the memo fed |
+|-------|-------------------|
+| `fill` | The primary entry filled on this memo. It had finished by the fill session's cash close, the verdict did not block, and the episode records that signal-job memo (or no episode is stored). |
+| `memo_blocked` | The memo had finished by that close and its verdict blocked the entry. |
+| `memo_not_ready` | The memo finished after the fill close, or it was older than 21 days at that close. |
+| `nothing` | The signal never reached one of those decisions, or a different memo was the one the book used. Already open, still pending, a shadow column, and the buy-on-signal control are `nothing`. |
+
+Used is `fill` plus `memo_blocked`. Unused is `memo_not_ready` plus `nothing`. A review-date request is `nothing`: it is not an entry decision. Tags follow the primary column only. The pass does not rememo, ingest, or change a fill, a bench slot, or an exit challenger. `ftse-strategy-book-memo --show-use` prints the totals and does not write.
 
 ## Stores and findings
 
 | Path | Role |
 |------|------|
-| `docs/data/strategy_book_memo_log.jsonl` | Append-only. Ticker, market, kind (`signal_day` / `review_date`), session, action (`dry_run` / `requested` / `skipped`), skip reason, memo finish time and verdict when a model ran, estimated spend, `inputs` (repo-relative path and SHA-256 of each file read), `data_commit`. |
+| `docs/data/strategy_book_memo_log.jsonl` | Append-only for new requests. Ticker, market, kind (`signal_day` / `review_date`), session, action (`dry_run` / `requested` / `skipped`), skip reason, memo finish time and verdict when a model ran, estimated spend, `inputs` (repo-relative path and SHA-256 of each file read), `data_commit`. A requested row also has `fed` (`fill`, `memo_blocked`, `memo_not_ready`, or `nothing`), rewritten in place when that tag changes. |
 | `docs/data/strategy_book_memo_job.json` | Last run per market, counts by ISO week and market (signals, all-but-memo, memo needed, dry-run requests, estimated spend), and that week's memo-needed count versus the 25–35 estimate (registration section 11). |
 
 Both paths are in `GHA_COMMIT_OPTIONAL` (`scripts/gha_commit_ops_monitor.sh`). Ops-monitor commits them with the other observe stores. The memo files themselves (`research/<ticker>/` under the FTSE data folder or the name's library screen folder, not `sources/`) are listed in the summary's `written_paths` for that run, and the same script commits them as owned paths. Before 2026-11-10 they were not committed: the first three paid memos (SCT.L, ASY.L, NWS.AX on the forced run of 2026-11-10) were logged as `requested` but their files were lost with the runner.
@@ -88,7 +97,7 @@ Findings (`category: research`, `auto_fixable: false`):
 | Strategy book memo job failed | warn | The job raised, or a market reported an error. |
 | Strategy book memo job not run on a weekday | warn | UTC weekday and `last_run_at` is missing or before today. A weekend does not warn. |
 | Strategy book memo routine falling behind | warn | Spend is on and budget skips exceed one fifth of the week's otherwise-eligible signals. Inert while spend is off. |
-| Strategy book memo spend this week | info | Spend is on. Week's requested memos and estimated spend, budget skips, total since switch-on, `weekly_ops` headroom, review date ([spend review](#spend-review)). |
+| Strategy book memo spend this week | info | Spend is on. Week's requested memos and estimated spend, budget skips, total since switch-on, `weekly_ops` headroom, review date, and used/unused counts ([spend review](#spend-review)). |
 
 None of these findings rememo, ingest, or mint an engineering task.
 
