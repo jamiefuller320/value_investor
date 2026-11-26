@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-26T12:33:44.911706+00:00`
+Generated: `2026-11-26T17:33:43.494919+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -36,10 +36,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 417
-- `validate failed` — 9×
+- Occasion count: 419
+- `validate failed` — 10×
 - `PR mergeable=CONFLICTING against main` — 7×
-- `validate check failed` — 6×
+- `validate check failed` — 7×
 - `merge_conflict:dirty` — 6×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate job failed` — 3×
