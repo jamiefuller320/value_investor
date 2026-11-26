@@ -367,15 +367,15 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 596.3,
-    "estimated_spend_usd_this_week": 266.8,
+    "estimated_spend_usd_this_cycle": 598.3,
+    "estimated_spend_usd_this_week": 268.8,
     "week_id": "2026-W48",
     "cycle_id": "2026-11-d8",
     "weekly_ops_cap_usd": 640.0,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "token_usage_weekly_warning_raw_usd": null,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 240.4,
+    "estimated_spend_weekly_ops_usd_this_week": 242.4,
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder) and strategy-book memos. On 2026-11-22 the owner lifted the practical memo cap because Composer credit is spare. The safety ceiling is $640 a week, four times the busier of the previous $160 L694 observe ceiling and the $124.50 weekly_ops cap. Current memo volume cannot reach it. A cycle-surplus revert stays at this ceiling. Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
@@ -574,7 +574,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-11-26T04:13:43.287218+00:00",
+  "updated_at": "2026-11-26T07:46:31.011303+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -586,8 +586,12 @@
     "omxs30",
     "psi20"
   ],
-  "ingest_parallel_sprint": [],
-  "ingest_parallel_sprint_2": [],
+  "ingest_parallel_sprint": [
+    "sp500"
+  ],
+  "ingest_parallel_sprint_2": [
+    "tsx60"
+  ],
   "ladder": {
     "enabled": true,
     "layers": [
@@ -600,13 +604,13 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-11-22T06:23:16.911480+00:00",
+      "run_at": "2026-11-26T06:53:57.526156+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 40,
+      "screen_shortlist": 42,
       "research": {
         "model": "composer-2.5",
-        "research_cap": 20,
+        "research_cap": 100,
         "research_markets": [
           "euro_depth",
           "sp500",
@@ -637,18 +641,18 @@
         "unrestricted_budget": false,
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
-        "weekly_ops_cap_usd": 124.5,
-        "estimated_spend_weekly_ops_usd_this_week": 117.2,
+        "weekly_ops_cap_usd": 640.0,
+        "estimated_spend_weekly_ops_usd_this_week": 242.4,
         "constraining": false,
-        "near_limit": true,
-        "budget_flag": "near_limit",
-        "remaining_usd_before": 8.1,
+        "near_limit": false,
+        "budget_flag": "enforced",
+        "remaining_usd_before": 399.6,
         "dedupe": {
-          "already_researched_count": 561,
-          "fresh_skipped_count": 561,
+          "already_researched_count": 563,
+          "fresh_skipped_count": 563,
           "rememo_eligible_count": 0,
           "rememo_eligible_sample": [],
-          "skipped_count": 310,
+          "skipped_count": 390,
           "skipped_sample": [
             {
               "market": "euro_depth",
@@ -672,6 +676,11 @@
             },
             {
               "market": "euro_depth",
+              "ticker": "ANDR.VI",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
               "ticker": "C5H.IR",
               "reason": "fresh_memo"
             },
@@ -682,7 +691,7 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "ERIC-B.ST",
+              "ticker": "OIZ.IR",
               "reason": "fresh_memo"
             },
             {
@@ -692,12 +701,7 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "OIZ.IR",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "ANDR.VI",
+              "ticker": "ERIC-B.ST",
               "reason": "fresh_memo"
             },
             {
@@ -712,11 +716,6 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "MELE.BR",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "VOE.VI",
               "reason": "fresh_memo"
             },
@@ -727,12 +726,12 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "SKF-B.ST",
+              "ticker": "EVN.VI",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "RAND.AS",
+              "ticker": "SKF-B.ST",
               "reason": "fresh_memo"
             },
             {
@@ -742,12 +741,17 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "SAN.PA",
+              "ticker": "RAND.AS",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
               "ticker": "SKA-B.ST",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "SHELL.AS",
               "reason": "fresh_memo"
             }
           ],
@@ -757,25 +761,46 @@
         "targets": [
           {
             "market": "sp500",
-            "ticker": "CEG",
-            "name": "Constellation Energy Corporation",
+            "ticker": "RL",
+            "name": "Ralph Lauren Corporation",
             "signal": "buy",
-            "conviction_score": 0.3982
+            "conviction_score": 0.345
           },
           {
             "market": "asx200",
-            "ticker": "RDX.AX",
-            "name": "Redox Limited",
+            "ticker": "A2M.AX",
+            "name": "The a2 Milk Company Limited",
             "signal": "buy",
-            "conviction_score": 0.3766
+            "conviction_score": 0.2635
+          },
+          {
+            "market": "aim",
+            "ticker": "YNGA.L",
+            "name": "Young & Co.'s Brewery, P.L.C.",
+            "signal": "buy",
+            "conviction_score": 0.3455
+          },
+          {
+            "market": "ftse_mib",
+            "ticker": "TIT.MI",
+            "name": "Telecom Italia S.p.A.",
+            "signal": "buy",
+            "conviction_score": 0.2073
+          },
+          {
+            "market": "sti",
+            "ticker": "5E2.SI",
+            "name": "Seatrium Limited",
+            "signal": "buy",
+            "conviction_score": 0.3526
           }
         ],
-        "executed": 2,
-        "created": 2,
+        "executed": 5,
+        "created": 5,
         "updated": 0,
         "errors": [],
-        "estimated_spend_usd": 0.8,
-        "remaining_usd_after": 7.3
+        "estimated_spend_usd": 2.0,
+        "remaining_usd_after": 397.6
       },
       "graduation": {
         "graduated": false,
@@ -873,38 +898,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "reseeded": true,
-        "market_queue_appended": false,
-        "at": "2026-11-09T10:37:49.028911+00:00",
-        "parallel_stream": 2,
-        "from_market": null,
-        "to_market": "asx200",
-        "stream_markets_after": [
-          "asx200"
-        ],
-        "ingest_parity_recorded": false,
-        "screen_refresh": {
-          "refreshed": true,
-          "market_id": "asx200",
-          "forced": true,
-          "prior_screen_at": "2026-11-09T06:53:19.890728+00:00",
-          "prior_age_days": 0,
-          "run_at": "2026-11-09T10:37:49.028926+00:00",
-          "shortlist_count": 35,
-          "ticker_count": 196
-        }
-      },
-      {
-        "at": "2026-11-09T21:12:25.208507+00:00",
-        "parallel_stream": 1,
-        "from_market": "sp500",
-        "to_market": "dax",
-        "stream_markets_after": [
-          "dax"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-11-09T21:29:33.289163+00:00",
         "parallel_stream": 2,
@@ -1752,6 +1745,96 @@
           "thin": 0,
           "indexed_without_body": 0,
           "filing_gaps": 0
+        }
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-11-26T07:43:16.310740+00:00",
+        "parallel_stream": 1,
+        "from_market": null,
+        "to_market": "sp500",
+        "stream_markets_after": [
+          "sp500"
+        ],
+        "ingest_parity_recorded": false,
+        "gap_market_id": "sp500",
+        "window_days": 2,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 18,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 18,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "sp500",
+          "forced": true,
+          "prior_screen_at": "2026-11-26T06:53:57.526156+00:00",
+          "prior_age_days": 0,
+          "run_at": "2026-11-26T07:43:16.312094+00:00",
+          "shortlist_count": 146,
+          "ticker_count": 503
+        }
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-11-26T07:43:33.713534+00:00",
+        "parallel_stream": 2,
+        "from_market": null,
+        "to_market": "tsx60",
+        "stream_markets_after": [
+          "tsx60"
+        ],
+        "ingest_parity_recorded": false,
+        "gap_market_id": "tsx60",
+        "window_days": 2,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 2,
+          "indexed_without_body": 117,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 2,
+          "indexed_without_body": 117,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "tsx60",
+          "forced": true,
+          "prior_screen_at": "2026-11-26T06:53:57.526156+00:00",
+          "prior_age_days": 0,
+          "run_at": "2026-11-26T07:43:33.714732+00:00",
+          "shortlist_count": 17,
+          "ticker_count": 59
         }
       }
     ]

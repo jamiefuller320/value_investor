@@ -1,33 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-22T08:18:49.649789+01:00",
+    "local_time": "2026-11-26T08:41:00.549651+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-22T09:00:00+01:00",
-    "settle_at": "2026-11-22T09:30:00+01:00",
+    "market_open_at": "2026-11-26T09:00:00+01:00",
+    "settle_at": "2026-11-26T09:30:00+01:00",
     "can_act": false,
     "reason": "before market open"
   },
-  "trades": [
-    {
-      "id": "dabac62f-a7c7-4d2e-8ac7-9e77801fbbcb",
-      "fund_id": "209e7801-81df-4109-938c-1715d2dcffbd",
-      "acted_at": "2026-11-22T08:18:49.649789+01:00",
-      "ticker": "DTE.DE",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 8.397131,
-      "price": 26.34,
-      "gross": 221.18,
-      "cost": 0.41,
-      "net_cash": 220.77,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Deutsche Telekom AG",
-      "avg_cost_at_exit": 25.92,
-      "position_closed": true
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -43,8 +25,8 @@
       "Never-left-candidates rebuy block: do not rebuy a name that has remained in the buy candidate pool continuously since exit.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1087.76,
-    "cash": 662.99,
+    "nav": 1082.23,
+    "cash": 446.46,
     "max_positions": 5,
     "min_conviction": 0.0,
     "sector_cap": 0.3,
@@ -56,21 +38,21 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": true,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 217.55,
+    "target_sleeve_value": 216.45,
     "targets": [
       {
         "ticker": "UMI.BR",
         "name": "Umicore SA",
         "signal": "strong_buy",
-        "conviction_score": 0.9424,
-        "price": 15.84
+        "conviction_score": 0.9417000000000001,
+        "price": 16.1
       },
       {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "signal": "strong_buy",
-        "conviction_score": 0.8619,
-        "price": 34.58
+        "conviction_score": 0.8574,
+        "price": 35.35
       },
       {
         "ticker": "C5H.IR",
@@ -83,15 +65,15 @@
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7501,
-        "price": 19.2
+        "conviction_score": 0.7335,
+        "price": 19.25
       },
       {
-        "ticker": "ERIC-B.ST",
-        "name": "Telefonaktiebolaget LM Ericsson (publ)",
-        "signal": "strong_buy",
+        "ticker": "BOL.ST",
+        "name": "Boliden AB (publ)",
+        "signal": "buy",
         "conviction_score": 0.7023,
-        "price": 101.7
+        "price": 450.2
       }
     ],
     "anticipated_exits": [],
@@ -101,10 +83,20 @@
     "anticipated_holds": [
       {
         "action": "hold",
+        "ticker": "BOL.ST",
+        "name": "Boliden AB (publ)",
+        "reason": "Already near equal-weight target",
+        "value": 216.13,
+        "target_value": 216.45,
+        "conviction_score": 0.7023,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "reason": "Still-in-buy-set hold \u2014 capacity bump with insufficient rank drop (drop 1 < 3)",
-        "value": 207.48,
+        "value": 208.88,
         "conviction_score": null,
         "signal": null
       },
@@ -112,8 +104,8 @@
         "action": "hold",
         "ticker": "OIZ.IR",
         "name": "Origin Enterprises plc",
-        "reason": "Still-in-buy-set hold \u2014 capacity bump with insufficient rank drop (drop 1 < 3)",
-        "value": 217.29,
+        "reason": "Still-in-buy-set hold \u2014 capacity bump with insufficient rank drop (drop -1 < 3)",
+        "value": 210.76,
         "conviction_score": null,
         "signal": null
       }
@@ -123,23 +115,23 @@
         "ticker": "UMI.BR",
         "name": "Umicore SA",
         "reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
-        "target_value": 217.55,
-        "conviction_score": 0.9424,
+        "target_value": 216.45,
+        "conviction_score": 0.9417000000000001,
         "signal": "strong_buy"
       },
       {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
-        "target_value": 217.55,
-        "conviction_score": 0.8619,
+        "target_value": 216.45,
+        "conviction_score": 0.8574,
         "signal": "strong_buy"
       },
       {
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
         "reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
-        "target_value": 217.55,
+        "target_value": 216.45,
         "conviction_score": 0.7562000000000001,
         "signal": "strong_buy"
       },
@@ -147,21 +139,13 @@
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
         "reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
-        "target_value": 217.55,
-        "conviction_score": 0.7501,
-        "signal": "strong_buy"
-      },
-      {
-        "ticker": "ERIC-B.ST",
-        "name": "Telefonaktiebolaget LM Ericsson (publ)",
-        "reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
-        "target_value": 217.55,
-        "conviction_score": 0.7023,
+        "target_value": 216.45,
+        "conviction_score": 0.7335,
         "signal": "strong_buy"
       }
     ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -170,7 +154,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 111.0,
+      "mark": 111.75,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -181,7 +165,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 4.329999923706055,
+      "mark": 4.199999809265137,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "BOL.ST",
+      "name": "Boliden AB (publ)",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 450.20001220703125,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -202,7 +197,7 @@
       "id": "209e7801-81df-4109-938c-1715d2dcffbd",
       "created_at": "2026-10-04T07:05:34.607421+00:00"
     },
-    "cash": 662.99,
+    "cash": 446.46,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -227,6 +222,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-11-06T08:43:22.990969+01:00"
+      },
+      "BOL.ST": {
+        "ticker": "BOL.ST",
+        "shares": 0.48007,
+        "avg_cost": 450.2,
+        "name": "Boliden AB (publ)",
+        "sector": "Basic Materials",
+        "currency": "SEK",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-11-26T08:22:17.504886+01:00"
       }
     },
     "trades": [
@@ -674,6 +680,21 @@
         "name": "Deutsche Telekom AG",
         "avg_cost_at_exit": 25.92,
         "position_closed": true
+      },
+      {
+        "id": "5635483e-8883-4134-9c7c-b26511813493",
+        "fund_id": "209e7801-81df-4109-938c-1715d2dcffbd",
+        "acted_at": "2026-11-26T08:22:17.504886+01:00",
+        "ticker": "BOL.ST",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.48007,
+        "price": 450.2,
+        "gross": 216.13,
+        "cost": 0.4,
+        "net_cash": -216.53,
+        "note": "Automated buy",
+        "name": "Boliden AB (publ)"
       }
     ],
     "equity_curve": [
@@ -1741,17 +1762,52 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-26T08:22:17.504886+01:00",
+        "portfolio_value": 813.76,
+        "cash": 446.46,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.837,
+            "SEK": 0.07429
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-26T08:41:00.549651+01:00",
+        "portfolio_value": 813.77,
+        "cash": 446.46,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83702,
+            "SEK": 0.07428
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-22T08:18:49.649789+01:00",
+    "last_mark_at": "2026-11-26T08:41:00.549651+01:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {
-        "DTE.DE": 2
-      },
+      "reentry_cooldown": {},
       "entry_candidate_rank": {
         "DG.PA": 1,
-        "OIZ.IR": 12
+        "OIZ.IR": 12,
+        "BOL.ST": 9
       },
       "still_in_candidates_block": {
         "EG7.IR": true,
@@ -1768,12 +1824,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (1 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "euro_depth",
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-11-22T07:18:55.485906+00:00",
+    "generated_at": "2026-11-26T07:41:06.757133+00:00",
     "observe_only": true,
     "open_count": 12,
     "closed_count": 0,
@@ -1846,13 +1902,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-11-22T07:18:55.487252+00:00",
+    "generated_at": "2026-11-26T07:41:06.758582+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1958,8 +2014,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "still_in_buy_set",
-    "updated_at": "2026-11-22T07:18:55.488758+00:00",
-    "as_of": "2026-11-22T08:18:49.649789+01:00",
+    "updated_at": "2026-11-26T07:41:06.760189+00:00",
+    "as_of": "2026-11-26T08:41:00.549651+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1971,16 +2027,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 2,
+    "holding_count": 3,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 2,
+      "intact": 3,
       "weakening": 0,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 2,
+      "holding_count": 3,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -1999,7 +2055,7 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.5,
+        "quality": 0.3333,
         "dividend": 0.0,
         "garp": 0.0,
         "risk": 0.0
@@ -2010,14 +2066,54 @@
     },
     "holdings": [
       {
+        "ticker": "BOL.ST",
+        "name": "Boliden AB (publ)",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 450.2,
+        "avg_cost": 450.2,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.7023,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 70%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 70%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "OIZ.IR",
         "name": "Origin Enterprises plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0334,
-        "mark": 4.33,
+        "unrealized_pct": 0.0024,
+        "mark": 4.2,
         "avg_cost": 4.19,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -2057,12 +2153,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0393,
-        "mark": 111.0,
+        "unrealized_pct": 0.0463,
+        "mark": 111.75,
         "avg_cost": 106.8,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.888,
+        "conviction_score": 0.8755,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2078,14 +2174,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 89%"
+          "conviction 88%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 89%"
+          "conviction 88%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2098,7 +2194,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-11-22T07:18:55.490682+00:00",
+    "generated_at": "2026-11-26T07:41:06.762233+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2173,8 +2269,8 @@
     "schema_version": 1,
     "track_id": "still_in_buy_set",
     "observe_only": true,
-    "generated_at": "2026-11-22T07:18:55.496540+00:00",
-    "open_count": 1,
+    "generated_at": "2026-11-26T07:41:06.768290+00:00",
+    "open_count": 2,
     "closed_count": 13,
     "scored_count": 13,
     "scored_count_all": 13,
@@ -2237,12 +2333,12 @@
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
     "marked_this_pass": 2,
-    "closed_this_pass": 1
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-11-22T08:18:49.649789+01:00",
+    "generated_at": "2026-11-26T08:41:00.549651+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2267,16 +2363,16 @@
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
     "open_count": 57,
-    "closed_count": 7,
+    "closed_count": 8,
     "open_by_capital_status": {
-      "on_book": 2,
+      "on_book": 3,
       "off_book": 12,
-      "never_funded": 43
+      "never_funded": 42
     },
     "closed_by_capital_status": {
       "on_book": 0,
       "off_book": 0,
-      "never_funded": 7
+      "never_funded": 8
     },
     "readiness": {
       "ready_for_sleeve_timing_analysis": false,
@@ -2284,7 +2380,7 @@
       "gaps": [
         "on_book closed=0 (target>=15)",
         "off_book closed=0 (target>=15)",
-        "never_funded closed=7 (target>=15)"
+        "never_funded closed=8 (target>=15)"
       ],
       "note": "Probability / nested counterfactual promotion waits until each capital_status tag has a thick closed cohort."
     },
@@ -2293,13 +2389,13 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 1
+      "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-11-22T08:18:49.649789+01:00",
+    "generated_at": "2026-11-26T08:41:00.549651+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -2307,21 +2403,16 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 6,
-    "card_count": 6,
+    "proposal_count": 4,
+    "card_count": 4,
     "verdict_counts": {
-      "agree": 6,
+      "agree": 4,
       "veto": 0,
       "abstain": 0
     },
     "by_algo_action": {
       "rebuy_skip": {
-        "agree": 5,
-        "veto": 0,
-        "abstain": 0
-      },
-      "sell": {
-        "agree": 1,
+        "agree": 4,
         "veto": 0,
         "abstain": 0
       }
@@ -2335,9 +2426,10 @@
         "algo_reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
         "shadow_verdict": "agree",
         "reasons": [
-          "Still-in-candidates rebuy block matches never having left the buy candidate pool since exit.",
-          "strong_buy with still_buyish true and rank_drop 0 below hold gate 3 \u2014 no decisive deterioration vs entry_rank.",
-          "Research overlay bound with accumulate verdict supports skipping churn rebuy."
+          "Explicit still-in-candidates rebuy block matches never having left the buy pool since exit.",
+          "still_buyish true with screen_signal strong_buy \u2014 skipping rebuy avoids churn while conviction remains aligned.",
+          "rank_drop 0 and entry_rank equals conviction_rank 1 \u2014 no material rank deterioration versus hold gate.",
+          "research_verdict accumulate with overlay_bound true supports continued buyish treatment without forced rebuy."
         ],
         "evidence": [
           {
@@ -2393,8 +2485,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "still_in_buy_set",
-        "logged_at": "2026-11-22T08:18:49.649789+01:00",
-        "proposal_id": "still_in_buy_set:UMI.BR:rebuy_skip:2026-11-22T08:18:49.649789+01:00",
+        "logged_at": "2026-11-26T08:41:00.549651+01:00",
+        "proposal_id": "still_in_buy_set:UMI.BR:rebuy_skip:2026-11-26T08:41:00.549651+01:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -2429,9 +2521,10 @@
         "algo_reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
         "shadow_verdict": "agree",
         "reasons": [
-          "Explicit still-in-candidates rebuy block aligns with continued candidate membership.",
-          "strong_buy, still_buyish true, conviction_rank equals entry_rank with rank_drop 0 \u2014 insufficient rank_drop for forced exit logic.",
-          "Overlay-bound accumulate supports low-churn rebuy_skip."
+          "Still-in-candidates rebuy block is consistent with name remaining in the buy candidate pool since exit.",
+          "still_buyish true and strong_buy at decision time \u2014 rebuy_skip is low-churn versus redundant re-entry.",
+          "rank_drop 0 with conviction_rank 3 unchanged from entry_rank \u2014 insufficient rank_drop to justify different treatment.",
+          "accumulate research_verdict and overlay_bound true support agree on skip-rebuy."
         ],
         "evidence": [
           {
@@ -2487,8 +2580,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "still_in_buy_set",
-        "logged_at": "2026-11-22T08:18:49.649789+01:00",
-        "proposal_id": "still_in_buy_set:AD.AS:rebuy_skip:2026-11-22T08:18:49.649789+01:00",
+        "logged_at": "2026-11-26T08:41:00.549651+01:00",
+        "proposal_id": "still_in_buy_set:AD.AS:rebuy_skip:2026-11-26T08:41:00.549651+01:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -2523,9 +2616,10 @@
         "algo_reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
         "shadow_verdict": "agree",
         "reasons": [
-          "Rebuy_skip consistent with still-in-candidates rule and unchanged buy-cohort presence.",
-          "rank_drop 0 with stable rank vs entry; still_buyish and strong_buy at decision.",
-          "No evidence of leave-buy-cohort \u2014 block rebuy is appropriate."
+          "Algo rebuy block cites continuous membership in buy candidates since exit; evidence does not contradict.",
+          "still_buyish true with strong_buy \u2014 leave-buy-cohort is not decisive; skip-rebuy is appropriate.",
+          "rank_drop 0 at conviction_rank 6 matching entry_rank \u2014 below hold-gate rank_drop threshold per supplied detail.",
+          "research_verdict accumulate and overlay_bound true; fcf_basis_overlay false does not contradict agree."
         ],
         "evidence": [
           {
@@ -2543,13 +2637,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 5
+            "value": 6
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 5
+            "value": 6
           },
           {
             "kind": "rank_drop",
@@ -2558,9 +2652,27 @@
             "value": 0
           },
           {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
             "value": true
           }
         ],
@@ -2569,8 +2681,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "still_in_buy_set",
-        "logged_at": "2026-11-22T08:18:49.649789+01:00",
-        "proposal_id": "still_in_buy_set:C5H.IR:rebuy_skip:2026-11-22T08:18:49.649789+01:00",
+        "logged_at": "2026-11-26T08:41:00.549651+01:00",
+        "proposal_id": "still_in_buy_set:C5H.IR:rebuy_skip:2026-11-26T08:41:00.549651+01:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -2605,85 +2717,10 @@
         "algo_reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
         "shadow_verdict": "agree",
         "reasons": [
-          "Still-in-candidates rebuy block; name remains in buy candidate pool per algo_reason.",
-          "rank_drop 0 and still_buyish with strong_buy \u2014 not a capacity-bump sell scenario.",
-          "Agree: hold/skip rebuy avoids unnecessary turnover while fundamentals screen remains buyish."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "still_in_buy_set",
-        "logged_at": "2026-11-22T08:18:49.649789+01:00",
-        "proposal_id": "still_in_buy_set:EG7.IR:rebuy_skip:2026-11-22T08:18:49.649789+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "ERIC-B.ST",
-        "name": "Telefonaktiebolaget LM Ericsson (publ)",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Rebuy_skip under still-in-candidates block matches supplied plan rationale.",
-          "Entry and current conviction rank both 8 with rank_drop 0 \u2014 no decisive rank deterioration.",
-          "still_buyish with strong_buy and bound research accumulate supports agree."
+          "Still-in-candidates rebuy block aligns with sustained buy-pool presence per algo_reason.",
+          "still_buyish true and screen_signal strong_buy \u2014 veto on rebuy_skip not warranted under sell/rank_drop heuristics (action is not sell).",
+          "rank_drop 0 with entry_rank 7 equal to current conviction_rank \u2014 no rank_drop-driven exit signal.",
+          "accumulate with overlay_bound true; conviction_score 0.7335 is in supplied evidence only as context for agree."
         ],
         "evidence": [
           {
@@ -2701,13 +2738,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 8
+            "value": 7
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 8
+            "value": 7
           },
           {
             "kind": "rank_drop",
@@ -2720,6 +2757,12 @@
             "source": "candidates",
             "detail": "Research overlay verdict at decision time",
             "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.7335
           },
           {
             "kind": "still_buyish",
@@ -2739,8 +2782,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "still_in_buy_set",
-        "logged_at": "2026-11-22T08:18:49.649789+01:00",
-        "proposal_id": "still_in_buy_set:ERIC-B.ST:rebuy_skip:2026-11-22T08:18:49.649789+01:00",
+        "logged_at": "2026-11-26T08:41:00.549651+01:00",
+        "proposal_id": "still_in_buy_set:EG7.IR:rebuy_skip:2026-11-26T08:41:00.549651+01:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -2767,94 +2810,6 @@
         },
         "schema_version": 1,
         "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "DTE.DE",
-        "name": "Deutsche Telekom AG",
-        "algo_action": "sell",
-        "algo_reason": "Automated exit \u2014 left target set",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Automated exit for leaving target set is supported by rank_drop 17, well above hold gate 3 \u2014 decisive vs entry_rank 7.",
-          "Despite still_buyish and strong_buy on screen, conviction_rank 24 vs entry 7 indicates material sleeve-relative degradation.",
-          "Veto not warranted: rank_drop is sufficient; capacity-bump-only hold case does not apply."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated exit \u2014 left target set"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 24
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 7
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 17
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "still_in_buy_set",
-        "logged_at": "2026-11-22T08:18:49.649789+01:00",
-        "proposal_id": "still_in_buy_set:DTE.DE:sell:2026-11-22T08:18:49.649789+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 17,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Rank drop 17 \u2265 3 \u2014 cohort leave looks decisive."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
       }
     ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
@@ -2862,32 +2817,27 @@
       "attempted": true,
       "ok": true,
       "fallback": null,
-      "llm_card_count": 6
+      "llm_card_count": 4
     },
     "review": {
       "schema_version": 1,
       "track_id": "still_in_buy_set",
-      "generated_at": "2026-11-22T08:18:49.649789+01:00",
+      "generated_at": "2026-11-26T08:41:00.549651+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 6,
+      "card_count": 4,
       "verdict_counts": {
-        "agree": 6,
+        "agree": 4,
         "veto": 0,
         "abstain": 0
       },
       "by_algo_action": {
         "rebuy_skip": {
-          "agree": 5,
-          "veto": 0,
-          "abstain": 0
-        },
-        "sell": {
-          "agree": 1,
+          "agree": 4,
           "veto": 0,
           "abstain": 0
         }
@@ -2907,7 +2857,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-22T07:19:04.529888+00:00",
+  "generated_at": "2026-11-26T07:41:13.376987+00:00",
   "track_id": "still_in_buy_set",
   "track_label": "Still-in-buy-set hold twin (rank-drop<3, never-left-candidates, CD2; Suite A)",
   "is_primary_learning_track": false,

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-25T15:21:11.170945+00:00
+Track: `buy_tier_level` · updated 2026-11-26T07:39:02.022401+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level` · updated 2026-11-25T15:21:11.170945+00:00
 
 ## Holding reviews
 
-### UMI.BR — intact / hold_tolerate (-7.3%)
+### UMI.BR — intact / hold_tolerate (-9.5%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate

@@ -1,62 +1,72 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-22T07:16:18.921106+00:00
+Track: `buy_tier_level_native` · updated 2026-11-26T07:36:47.317448+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **2** / 8 (25% count, 26% NAV)
+- Losers: **2** / 10 (20% count, 20% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
-### TECK-B.TO — intact / watch_review (-18.6%)
-- deep drawdown (-18.6%) — re-check facts; thesis still intact
+### TECK-B.TO — intact / hold_tolerate (-13.9%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
+- conviction 81%
 
-### ABX.TO — intact / watch_review (-16.0%)
-- deep drawdown (-16.0%) — re-check facts; thesis still intact
+### ABX.TO — intact / hold_tolerate (-8.9%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
+- conviction 59%
 
-### MG.TO — weakening / watch_review (-3.6%)
-- research verdict neutral
+### SAP.TO — weakening / watch_review (-0.2%)
+- research verdict caution
 - still buy
 - cheapness family still passes
 
-### OTEX.TO — weakening / watch_review (-2.2%)
+### NTR.TO — weakening / watch_review (+0.0%)
+- conviction 32% below intact floor
+- still buy
+- research accumulate
+
+### OTEX.TO — weakening / watch_review (+1.4%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
 
-### WSP.TO — intact / hold_tolerate (-1.0%)
-- still strong_buy
-- research accumulate
+### MG.TO — weakening / watch_review (+3.0%)
+- research verdict neutral
+- still buy
 - cheapness family still passes
-- data_quality 1.00
-- conviction 88%
 
-### CP.TO — weakening / watch_review (+1.9%)
+### CP.TO — weakening / watch_review (+4.8%)
 - research verdict neutral
 - cheapness family no longer passes
 - still buy
 - data_quality 1.00
 
-### L.TO — intact / hold_tolerate (+5.0%)
+### MRU.TO — weakening / watch_review (+5.4%)
+- conviction 29% below intact floor
+- still buy
+- research accumulate
+
+### WSP.TO — intact / hold_tolerate (+5.4%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 82%
+
+### L.TO — intact / hold_tolerate (+5.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
-
-### MRU.TO — weakening / watch_review (+5.3%)
-- conviction 29% below intact floor
-- still buy
-- research accumulate
+- conviction 61%

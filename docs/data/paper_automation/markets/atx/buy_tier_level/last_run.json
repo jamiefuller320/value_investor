@@ -1,15 +1,32 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-25T15:21:15.749148+00:00",
+    "local_time": "2026-11-26T07:39:35.319440+00:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-11-25T08:00:00+00:00",
-    "settle_at": "2026-11-25T09:15:00+00:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-11-26T08:00:00+00:00",
+    "settle_at": "2026-11-26T09:15:00+00:00",
+    "can_act": false,
+    "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "8fd3c86c-488e-4020-8ec9-7149e07b45d0",
+      "fund_id": "4fccad73-35ea-4c28-9c2b-6a42c72f3a4d",
+      "acted_at": "2026-11-26T07:39:35.319440+00:00",
+      "ticker": "CAI.VI",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.741876,
+      "price": 21.0,
+      "gross": 15.58,
+      "cost": 0.03,
+      "net_cash": 15.55,
+      "note": "Automated trim",
+      "name": "CA Immobilien Anlagen AG",
+      "avg_cost_at_exit": 21.3164
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +40,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 956.13,
-    "cash": 0.0,
+    "nav": 940.43,
+    "cash": 15.55,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,80 +53,95 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 191.23,
+    "target_sleeve_value": 188.09,
     "targets": [
       {
         "ticker": "OMV.VI",
         "name": "OMV Aktiengesellschaft",
         "signal": "strong_buy",
-        "conviction_score": 0.6804,
-        "price": 68.95
+        "conviction_score": 0.6797000000000001,
+        "price": 66.65
       },
       {
         "ticker": "ANDR.VI",
         "name": "Andritz AG",
         "signal": "buy",
-        "conviction_score": 0.562,
-        "price": 77.5
+        "conviction_score": 0.65,
+        "price": 75.9
       },
       {
         "ticker": "VOE.VI",
         "name": "Voestalpine AG",
         "signal": "buy",
-        "conviction_score": 0.5441,
-        "price": 32.56
+        "conviction_score": 0.5387000000000001,
+        "price": 31.5
       },
       {
         "ticker": "CAI.VI",
         "name": "CA Immobilien Anlagen AG",
         "signal": "buy",
-        "conviction_score": 0.5389,
-        "price": 20.4
+        "conviction_score": 0.5258,
+        "price": 21.0
       },
       {
         "ticker": "STR.VI",
         "name": "Strabag SE",
-        "signal": "buy",
-        "conviction_score": 0.46249999999999997,
-        "price": 103.8
+        "signal": "strong_buy",
+        "conviction_score": 0.4875,
+        "price": 101.0
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "VOE.VI",
+        "name": "Voestalpine AG",
+        "reason": "Top-up to equal weight",
+        "value": 12.96,
+        "price": 31.5,
+        "target_value": 188.09,
+        "conviction_score": 0.5387000000000001,
+        "signal": "buy"
+      }
+    ],
     "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "OMV.VI",
         "name": "OMV Aktiengesellschaft",
-        "reason": "Already near equal-weight target",
-        "value": 190.97,
-        "target_value": 191.23,
-        "conviction_score": 0.6804,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 184.6,
+        "target_value": 188.09,
+        "conviction_score": 0.6797000000000001,
         "signal": "strong_buy"
-      }
-    ],
-    "skipped": [
+      },
       {
+        "action": "hold",
         "ticker": "ANDR.VI",
         "name": "Andritz AG",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 191.23,
-        "conviction_score": 0.562,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 184.59,
+        "target_value": 188.09,
+        "conviction_score": 0.65,
         "signal": "buy"
       },
       {
-        "ticker": "VOE.VI",
-        "name": "Voestalpine AG",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 191.23,
-        "conviction_score": 0.5441,
+        "action": "hold",
+        "ticker": "CAI.VI",
+        "name": "CA Immobilien Anlagen AG",
+        "reason": "Already near equal-weight target",
+        "value": 188.06,
+        "target_value": 188.09,
+        "conviction_score": 0.5258,
         "signal": "buy"
       }
     ],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 5 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -118,7 +150,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 103.8,
+      "mark": 101.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -129,18 +161,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 20.4,
+      "mark": 21.0,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "OMV.VI",
       "name": "OMV Aktiengesellschaft",
       "source": "paper",
       "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 68.95,
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
+      "mark": 66.65,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -149,12 +181,12 @@
       "ticker": "VOE.VI",
       "name": "Voestalpine AG",
       "source": "paper",
-      "severity": "info",
-      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 32.56,
+      "severity": "watch",
+      "message": "Underwater \u2014 re-check hypothesis: deep drawdown (-17.0%) \u2014 re-check facts; thesis still intact; price drawdown alone does not invalidate value thesis",
+      "mark": 31.5,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "ANDR.VI",
@@ -162,7 +194,7 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 77.5,
+      "mark": 75.9,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -183,7 +215,7 @@
       "id": "4fccad73-35ea-4c28-9c2b-6a42c72f3a4d",
       "created_at": "2026-10-02T19:58:56.465993+00:00"
     },
-    "cash": 0.0,
+    "cash": 15.55,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -200,7 +232,7 @@
       },
       "CAI.VI": {
         "ticker": "CAI.VI",
-        "shares": 9.697293,
+        "shares": 8.955417,
         "avg_cost": 21.3164,
         "name": "CA Immobilien Anlagen AG",
         "sector": "Real Estate",
@@ -881,6 +913,22 @@
         "net_cash": -0.07,
         "note": "Automated buy",
         "name": "Voestalpine AG"
+      },
+      {
+        "id": "8fd3c86c-488e-4020-8ec9-7149e07b45d0",
+        "fund_id": "4fccad73-35ea-4c28-9c2b-6a42c72f3a4d",
+        "acted_at": "2026-11-26T07:39:35.319440+00:00",
+        "ticker": "CAI.VI",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.741876,
+        "price": 21.0,
+        "gross": 15.58,
+        "cost": 0.03,
+        "net_cash": 15.55,
+        "note": "Automated trim",
+        "name": "CA Immobilien Anlagen AG",
+        "avg_cost_at_exit": 21.3164
       }
     ],
     "equity_curve": [
@@ -1723,9 +1771,26 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-26T07:39:35.319440+00:00",
+        "portfolio_value": 789.67,
+        "cash": 15.55,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.837
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-25T15:21:15.749148+00:00",
+    "last_mark_at": "2026-11-26T07:39:35.319440+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1733,12 +1798,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "atx",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-25T15:21:15.800332+00:00",
+    "generated_at": "2026-11-26T07:39:35.395516+00:00",
     "observe_only": true,
     "open_count": 4,
     "closed_count": 0,
@@ -1812,12 +1877,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "checkpoints_added_this_pass": 2
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-25T15:21:15.801463+00:00",
+    "generated_at": "2026-11-26T07:39:35.396683+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1913,8 +1978,8 @@
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 0
+      "hold_episodes": 3,
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -1922,8 +1987,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-25T15:21:15.803109+00:00",
-    "as_of": "2026-11-25T15:21:15.749148+00:00",
+    "updated_at": "2026-11-26T07:39:35.398404+00:00",
+    "as_of": "2026-11-26T07:39:35.319440+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1936,7 +2001,7 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 5,
-    "underwater_count": 2,
+    "underwater_count": 3,
     "thesis_status_counts": {
       "intact": 5,
       "weakening": 0,
@@ -1945,32 +2010,30 @@
     },
     "portfolio_feedback": {
       "holding_count": 5,
-      "loser_count": 2,
-      "loser_share": 0.4,
-      "loser_nav_share": 0.3865,
+      "loser_count": 3,
+      "loser_share": 0.6,
+      "loser_nav_share": 0.5885,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": false,
-      "intact_loser_count": 2,
+      "intact_loser_count": 3,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
-        "cheapness": 0.0,
-        "quality": 0.0,
-        "dividend": 0.0,
-        "garp": 1.0,
-        "risk": 0.0
-      },
-      "family_fail_rate_non_losers": {
         "cheapness": 0.0,
         "quality": 0.3333,
         "dividend": 0.0,
         "garp": 0.3333,
         "risk": 0.0
       },
-      "selection_feedback_flags": [
-        "garp fails more often among losers (100% vs 33%)"
-      ],
+      "family_fail_rate_non_losers": {
+        "cheapness": 0.0,
+        "quality": 0.0,
+        "dividend": 0.0,
+        "garp": 0.5,
+        "risk": 0.0
+      },
+      "selection_feedback_flags": [],
       "balancing_hint": "hold_intact_review_selection",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
@@ -1979,15 +2042,15 @@
         "ticker": "VOE.VI",
         "name": "Voestalpine AG",
         "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "recommended_action": "watch_review",
         "underwater": true,
-        "deep_underwater": false,
-        "unrealized_pct": -0.1421,
-        "mark": 32.56,
+        "deep_underwater": true,
+        "unrealized_pct": -0.1701,
+        "mark": 31.5,
         "avg_cost": 37.9542,
         "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5441,
+        "timing_signal": "accumulate",
+        "conviction_score": 0.5387,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2000,12 +2063,12 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
+          "deep drawdown (-17.0%) \u2014 re-check facts; thesis still intact",
           "price drawdown alone does not invalidate value thesis",
           "still buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 54%"
+          "data_quality 1.00"
         ],
         "intact_reasons": [
           "still buy",
@@ -2024,22 +2087,21 @@
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0707,
-        "mark": 77.5,
+        "unrealized_pct": -0.0899,
+        "mark": 75.9,
         "avg_cost": 83.4,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.562,
+        "conviction_score": 0.65,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
           "quality",
           "dividend",
+          "garp",
           "risk"
         ],
-        "failed_families": [
-          "garp"
-        ],
+        "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
           "price drawdown alone does not invalidate value thesis",
@@ -2047,14 +2109,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 56%"
+          "conviction 65%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 56%"
+          "conviction 65%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2064,14 +2126,14 @@
         "name": "OMV Aktiengesellschaft",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
-        "underwater": false,
+        "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0494,
-        "mark": 68.95,
+        "unrealized_pct": -0.0811,
+        "mark": 66.65,
         "avg_cost": 72.5304,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6804,
+        "conviction_score": 0.6797,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2084,6 +2146,7 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
+          "price drawdown alone does not invalidate value thesis",
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
@@ -2107,12 +2170,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.043,
-        "mark": 20.4,
+        "unrealized_pct": -0.0148,
+        "mark": 21.0,
         "avg_cost": 21.3164,
         "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5389,
+        "timing_signal": "accumulate",
+        "conviction_score": 0.5258,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2129,14 +2192,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 54%"
+          "conviction 53%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 54%"
+          "conviction 53%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2148,12 +2211,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0242,
-        "mark": 103.8,
+        "unrealized_pct": -0.0034,
+        "mark": 101.0,
         "avg_cost": 101.3473,
-        "signal": "buy",
+        "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4625,
+        "conviction_score": 0.4875,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2165,18 +2228,18 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 46%"
+          "conviction 49%"
         ],
         "intact_reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 46%"
+          "conviction 49%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2189,7 +2252,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-25T15:21:15.805340+00:00",
+    "generated_at": "2026-11-26T07:39:35.400599+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2264,7 +2327,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-25T15:21:15.809236+00:00",
+    "generated_at": "2026-11-26T07:39:35.404487+00:00",
     "open_count": 3,
     "closed_count": 6,
     "scored_count": 6,
@@ -2332,7 +2395,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-25T15:21:15.749148+00:00",
+    "generated_at": "2026-11-26T07:39:35.319440+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2389,245 +2452,47 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-25T15:21:15.749148+00:00",
+    "generated_at": "2026-11-26T07:39:35.319440+00:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "evidence_heuristic",
-    "judge_spec_id": "heuristic.v1",
-    "parent_spec_id": null,
+    "judge_backend": "llm",
+    "judge_spec_id": "llm.v1",
+    "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 2,
-    "card_count": 2,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 2,
+      "agree": 0,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "rebuy_skip": {
-        "agree": 2,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
+    "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
-    "cards": [
-      {
-        "ticker": "ANDR.VI",
-        "name": "Andritz AG",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 2
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 2
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.562
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-25T15:21:15.749148+00:00",
-        "proposal_id": "buy_tier_level:ANDR.VI:rebuy_skip:2026-11-25T15:21:15.749148+00:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      },
-      {
-        "ticker": "VOE.VI",
-        "name": "Voestalpine AG",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 3
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 3
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.5441
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-25T15:21:15.749148+00:00",
-        "proposal_id": "buy_tier_level:VOE.VI:rebuy_skip:2026-11-25T15:21:15.749148+00:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      }
-    ],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
+    "cards": [],
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
+    "llm_judge": {
+      "attempted": true,
+      "ok": true,
+      "fallback": null
+    },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-25T15:21:15.749148+00:00",
+      "generated_at": "2026-11-26T07:39:35.319440+00:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "evidence_heuristic",
-      "judge_spec_id": "heuristic.v1",
-      "parent_spec_id": null,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 2,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 2,
+        "agree": 0,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "rebuy_skip": {
-          "agree": 2,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
+      "by_algo_action": {},
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -2640,10 +2505,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-25T15:21:15.815533+00:00",
+  "generated_at": "2026-11-26T07:39:35.410791+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

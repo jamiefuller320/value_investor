@@ -1,15 +1,95 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-25T15:21:13.093865+00:00",
+    "local_time": "2026-11-26T07:39:03.957660+00:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-11-25T08:00:00+00:00",
-    "settle_at": "2026-11-25T09:15:00+00:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-11-26T08:00:00+00:00",
+    "settle_at": "2026-11-26T09:15:00+00:00",
+    "can_act": false,
+    "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "ef2bc04a-214d-4ff2-86c4-c649733707b2",
+      "fund_id": "5afead07-6d66-42c8-8752-b60608c63fab",
+      "acted_at": "2026-11-26T07:39:03.957660+00:00",
+      "ticker": "1099.HK",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.404318,
+      "price": 16.91,
+      "gross": 6.84,
+      "cost": 0.01,
+      "net_cash": -6.85,
+      "note": "Automated buy",
+      "name": "Sinopharm Group Co. Ltd."
+    },
+    {
+      "id": "70a02cd0-deb8-4bb5-b7fb-05a5ab873861",
+      "fund_id": "5afead07-6d66-42c8-8752-b60608c63fab",
+      "acted_at": "2026-11-26T07:39:03.957660+00:00",
+      "ticker": "2382.HK",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.241662,
+      "price": 61.55,
+      "gross": 14.87,
+      "cost": 0.03,
+      "net_cash": 14.85,
+      "note": "Automated trim",
+      "name": "Sunny Optical Technology (Group) Company Limited",
+      "avg_cost_at_exit": 62.9058
+    },
+    {
+      "id": "9ee9f159-49d4-4ce4-83c7-2da168e0d9ac",
+      "fund_id": "5afead07-6d66-42c8-8752-b60608c63fab",
+      "acted_at": "2026-11-26T07:39:03.957660+00:00",
+      "ticker": "0001.HK",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.168415,
+      "price": 64.15,
+      "gross": 10.8,
+      "cost": 0.02,
+      "net_cash": 10.78,
+      "note": "Automated trim",
+      "name": "CK Hutchison Holdings Limited",
+      "avg_cost_at_exit": 65.9153
+    },
+    {
+      "id": "c0116ebe-f608-431a-a184-e1f08391cda6",
+      "fund_id": "5afead07-6d66-42c8-8752-b60608c63fab",
+      "acted_at": "2026-11-26T07:39:03.957660+00:00",
+      "ticker": "6862.HK",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 1.063893,
+      "price": 9.72,
+      "gross": 10.34,
+      "cost": 0.02,
+      "net_cash": 10.32,
+      "note": "Automated trim",
+      "name": "Haidilao International Holding Ltd.",
+      "avg_cost_at_exit": 9.388
+    },
+    {
+      "id": "3250a304-d467-433f-bb9e-89b592fc9266",
+      "fund_id": "5afead07-6d66-42c8-8752-b60608c63fab",
+      "acted_at": "2026-11-26T07:39:03.957660+00:00",
+      "ticker": "6618.HK",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.294431,
+      "price": 34.88,
+      "gross": 10.27,
+      "cost": 0.02,
+      "net_cash": 10.25,
+      "note": "Automated trim",
+      "name": "JD Health International Inc.",
+      "avg_cost_at_exit": 32.6
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +103,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 930.42,
-    "cash": 6.85,
+    "nav": 926.75,
+    "cash": 46.2,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,197 +116,205 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 71.57,
+    "target_sleeve_value": 66.2,
     "targets": [
       {
         "ticker": "1378.HK",
         "name": "China Hongqiao Group Limited",
         "signal": "strong_buy",
         "conviction_score": 0.8250000000000001,
-        "price": 17.27
+        "price": 16.57
       },
       {
-        "ticker": "2382.HK",
-        "name": "Sunny Optical Technology (Group) Company Limited",
-        "signal": "buy",
-        "conviction_score": 0.6792,
-        "price": 58.5
+        "ticker": "1099.HK",
+        "name": "Sinopharm Group Co. Ltd.",
+        "signal": "strong_buy",
+        "conviction_score": 0.6897,
+        "price": 16.91
       },
       {
         "ticker": "1113.HK",
         "name": "CK Asset Holdings Limited",
         "signal": "buy",
-        "conviction_score": 0.6616,
-        "price": 49.2
+        "conviction_score": 0.6394,
+        "price": 49.06
       },
       {
         "ticker": "6690.HK",
         "name": "Haier Smart Home Co., Ltd.",
         "signal": "strong_buy",
-        "conviction_score": 0.6111000000000001,
-        "price": 22.36
+        "conviction_score": 0.6211000000000001,
+        "price": 21.92
       },
       {
         "ticker": "1093.HK",
         "name": "CSPC Pharmaceutical Group Limited",
         "signal": "strong_buy",
-        "conviction_score": 0.5549,
-        "price": 7.92
+        "conviction_score": 0.579,
+        "price": 7.685
       },
       {
-        "ticker": "1024.HK",
-        "name": "Kuaishou Technology",
-        "signal": "strong_buy",
-        "conviction_score": 0.546805,
-        "price": 20.42
+        "ticker": "2382.HK",
+        "name": "Sunny Optical Technology (Group) Company Limited",
+        "signal": "buy",
+        "conviction_score": 0.5533,
+        "price": 61.55
       },
       {
         "ticker": "0001.HK",
         "name": "CK Hutchison Holdings Limited",
         "signal": "buy",
         "conviction_score": 0.5148,
-        "price": 65.15
+        "price": 64.15
       },
       {
         "ticker": "2628.HK",
         "name": "China Life Insurance Company Limited",
         "signal": "strong_buy",
         "conviction_score": 0.45797999999999994,
-        "price": 21.52
+        "price": 21.6
       },
       {
         "ticker": "6862.HK",
         "name": "Haidilao International Holding Ltd.",
         "signal": "buy",
-        "conviction_score": 0.441065,
-        "price": 9.735
+        "conviction_score": 0.42593499999999995,
+        "price": 9.72
       },
       {
         "ticker": "6618.HK",
         "name": "JD Health International Inc.",
         "signal": "buy",
-        "conviction_score": 0.331,
-        "price": 32.6
+        "conviction_score": 0.3872,
+        "price": 34.88
       },
       {
         "ticker": "2618.HK",
         "name": "JD Logistics, Inc.",
         "signal": "buy",
         "conviction_score": 0.3217,
-        "price": 9.135
+        "price": 8.675
       },
       {
         "ticker": "0101.HK",
         "name": "Hang Lung Properties Limited",
         "signal": "buy",
-        "conviction_score": 0.30974,
-        "price": 6.185
+        "conviction_score": 0.32104499999999997,
+        "price": 6.1
       },
       {
         "ticker": "0291.HK",
         "name": "China Resources Beer (Holdings) Company Limited",
         "signal": "buy",
         "conviction_score": 0.295035,
-        "price": 20.78
+        "price": 21.12
+      },
+      {
+        "ticker": "1024.HK",
+        "name": "Kuaishou Technology",
+        "signal": "buy",
+        "conviction_score": 0.282285,
+        "price": 19.81
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "1099.HK",
+        "name": "Sinopharm Group Co. Ltd.",
+        "reason": "Top-up to equal weight",
+        "value": 46.2,
+        "price": 16.91,
+        "target_value": 66.2,
+        "conviction_score": 0.6897,
+        "signal": "strong_buy"
+      }
+    ],
     "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "1378.HK",
         "name": "China Hongqiao Group Limited",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 66.35,
-        "target_value": 71.57,
+        "value": 63.66,
+        "target_value": 66.2,
         "conviction_score": 0.8250000000000001,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "1093.HK",
-        "name": "CSPC Pharmaceutical Group Limited",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 70.19,
-        "target_value": 71.57,
-        "conviction_score": 0.5549,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "1024.HK",
-        "name": "Kuaishou Technology",
+        "ticker": "2382.HK",
+        "name": "Sunny Optical Technology (Group) Company Limited",
         "reason": "Already near equal-weight target",
-        "value": 71.57,
-        "target_value": 71.57,
-        "conviction_score": 0.546805,
-        "signal": "strong_buy"
+        "value": 66.18,
+        "target_value": 66.2,
+        "conviction_score": 0.5533,
+        "signal": "buy"
       },
       {
         "action": "hold",
-        "ticker": "2628.HK",
-        "name": "China Life Insurance Company Limited",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 63.81,
-        "target_value": 71.57,
-        "conviction_score": 0.45797999999999994,
-        "signal": "strong_buy"
+        "ticker": "0001.HK",
+        "name": "CK Hutchison Holdings Limited",
+        "reason": "Already near equal-weight target",
+        "value": 66.18,
+        "target_value": 66.2,
+        "conviction_score": 0.5148,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "6862.HK",
+        "name": "Haidilao International Holding Ltd.",
+        "reason": "Already near equal-weight target",
+        "value": 66.18,
+        "target_value": 66.2,
+        "conviction_score": 0.42593499999999995,
+        "signal": "buy"
       },
       {
         "action": "hold",
         "ticker": "6618.HK",
         "name": "JD Health International Inc.",
         "reason": "Already near equal-weight target",
-        "value": 71.46,
-        "target_value": 71.57,
-        "conviction_score": 0.331,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "2618.HK",
-        "name": "JD Logistics, Inc.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 63.11,
-        "target_value": 71.57,
-        "conviction_score": 0.3217,
+        "value": 66.18,
+        "target_value": 66.2,
+        "conviction_score": 0.3872,
         "signal": "buy"
       },
       {
         "action": "hold",
         "ticker": "0101.HK",
         "name": "Hang Lung Properties Limited",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 67.34,
-        "target_value": 71.57,
-        "conviction_score": 0.30974,
+        "reason": "Already near equal-weight target",
+        "value": 66.41,
+        "target_value": 66.2,
+        "conviction_score": 0.32104499999999997,
         "signal": "buy"
+      }
+    ],
+    "skipped": [
+      {
+        "ticker": "2628.HK",
+        "name": "China Life Insurance Company Limited",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 66.2,
+        "conviction_score": 0.45797999999999994,
+        "signal": "strong_buy"
       },
       {
-        "action": "hold",
-        "ticker": "0291.HK",
-        "name": "China Resources Beer (Holdings) Company Limited",
-        "reason": "Already near equal-weight target",
-        "value": 71.22,
-        "target_value": 71.57,
-        "conviction_score": 0.295035,
+        "ticker": "2618.HK",
+        "name": "JD Logistics, Inc.",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 66.2,
+        "conviction_score": 0.3217,
         "signal": "buy"
       }
     ],
-    "skipped": [],
-    "waitlisted": [
-      {
-        "ticker": "1099.HK",
-        "name": "Sinopharm Group Co. Ltd.",
-        "signal": "strong_buy",
-        "conviction_score": 0.6897,
-        "reason": "timing_signal=wait \u2014 skipped until timing improves"
-      }
-    ],
-    "summary": "Next rebalance would target 13 equal-weight sleeve(s); leave 8 near-target holding(s)."
+    "waitlisted": [],
+    "summary": "Next rebalance would target 14 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 6 near-target holding(s)."
   },
   "alerts": [
     {
@@ -235,7 +323,7 @@
       "source": "paper",
       "severity": "watch",
       "message": "Underwater \u2014 re-check hypothesis: research verdict neutral; still strong_buy",
-      "mark": 7.92,
+      "mark": 7.685,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -246,7 +334,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 9.735,
+      "mark": 9.72,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -257,29 +345,29 @@
       "source": "paper",
       "severity": "watch",
       "message": "Underwater \u2014 re-check hypothesis: research verdict caution; still strong_buy",
-      "mark": 21.52,
+      "mark": 21.6,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "1024.HK",
       "name": "Kuaishou Technology",
       "source": "paper",
       "severity": "watch",
-      "message": "Underwater \u2014 re-check hypothesis: research verdict caution; still strong_buy",
-      "mark": 20.42,
+      "message": "Underwater \u2014 re-check hypothesis: research verdict caution; conviction 28% below intact floor",
+      "mark": 19.81,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "1378.HK",
       "name": "China Hongqiao Group Limited",
       "source": "paper",
       "severity": "watch",
-      "message": "Underwater \u2014 re-check hypothesis: deep drawdown (-16.4%) \u2014 re-check facts; thesis still intact; price drawdown alone does not invalidate value thesis",
-      "mark": 17.27,
+      "message": "Underwater \u2014 re-check hypothesis: deep drawdown (-19.8%) \u2014 re-check facts; thesis still intact; price drawdown alone does not invalidate value thesis",
+      "mark": 16.57,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -290,18 +378,18 @@
       "source": "paper",
       "severity": "watch",
       "message": "Underwater \u2014 re-check hypothesis: research verdict neutral; conviction 32% below intact floor",
-      "mark": 9.135,
+      "mark": 8.675,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "0101.HK",
       "name": "Hang Lung Properties Limited",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 6.185,
+      "severity": "watch",
+      "message": "Underwater \u2014 re-check hypothesis: research verdict caution; conviction 32% below intact floor",
+      "mark": 6.1,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -312,7 +400,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 20.78,
+      "mark": 21.12,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -323,7 +411,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 65.15,
+      "mark": 64.15,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -334,7 +422,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 49.2,
+      "mark": 49.06,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -345,7 +433,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 22.36,
+      "mark": 21.92,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -355,8 +443,8 @@
       "name": "Sunny Optical Technology (Group) Company Limited",
       "source": "paper",
       "severity": "info",
-      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 58.5,
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 61.55,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -367,7 +455,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 32.6,
+      "mark": 34.88,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "1099.HK",
+      "name": "Sinopharm Group Co. Ltd.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 16.91,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -388,7 +487,7 @@
       "id": "5afead07-6d66-42c8-8752-b60608c63fab",
       "created_at": "2026-10-01T19:31:44.275715+00:00"
     },
-    "cash": 6.85,
+    "cash": 46.2,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -405,7 +504,7 @@
       },
       "6862.HK": {
         "ticker": "6862.HK",
-        "shares": 7.872912,
+        "shares": 6.809019,
         "avg_cost": 9.388,
         "name": "Haidilao International Holding Ltd.",
         "sector": "Consumer Cyclical",
@@ -482,7 +581,7 @@
       },
       "0001.HK": {
         "ticker": "0001.HK",
-        "shares": 1.200103,
+        "shares": 1.031688,
         "avg_cost": 65.9153,
         "name": "CK Hutchison Holdings Limited",
         "sector": "Industrials",
@@ -515,7 +614,7 @@
       },
       "2382.HK": {
         "ticker": "2382.HK",
-        "shares": 1.316805,
+        "shares": 1.075143,
         "avg_cost": 62.9058,
         "name": "Sunny Optical Technology (Group) Company Limited",
         "sector": "Technology",
@@ -526,7 +625,7 @@
       },
       "6618.HK": {
         "ticker": "6618.HK",
-        "shares": 2.191902,
+        "shares": 1.897471,
         "avg_cost": 32.6,
         "name": "JD Health International Inc.",
         "sector": "Healthcare",
@@ -534,6 +633,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-11-22T07:17:05.466782+00:00"
+      },
+      "1099.HK": {
+        "ticker": "1099.HK",
+        "shares": 0.404318,
+        "avg_cost": 16.91,
+        "name": "Sinopharm Group Co. Ltd.",
+        "sector": "Healthcare",
+        "currency": "HKD",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-11-26T07:39:03.957660+00:00"
       }
     },
     "trades": [
@@ -2393,6 +2503,85 @@
         "net_cash": -65.42,
         "note": "Automated buy",
         "name": "JD Health International Inc."
+      },
+      {
+        "id": "ef2bc04a-214d-4ff2-86c4-c649733707b2",
+        "fund_id": "5afead07-6d66-42c8-8752-b60608c63fab",
+        "acted_at": "2026-11-26T07:39:03.957660+00:00",
+        "ticker": "1099.HK",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.404318,
+        "price": 16.91,
+        "gross": 6.84,
+        "cost": 0.01,
+        "net_cash": -6.85,
+        "note": "Automated buy",
+        "name": "Sinopharm Group Co. Ltd."
+      },
+      {
+        "id": "70a02cd0-deb8-4bb5-b7fb-05a5ab873861",
+        "fund_id": "5afead07-6d66-42c8-8752-b60608c63fab",
+        "acted_at": "2026-11-26T07:39:03.957660+00:00",
+        "ticker": "2382.HK",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.241662,
+        "price": 61.55,
+        "gross": 14.87,
+        "cost": 0.03,
+        "net_cash": 14.85,
+        "note": "Automated trim",
+        "name": "Sunny Optical Technology (Group) Company Limited",
+        "avg_cost_at_exit": 62.9058
+      },
+      {
+        "id": "9ee9f159-49d4-4ce4-83c7-2da168e0d9ac",
+        "fund_id": "5afead07-6d66-42c8-8752-b60608c63fab",
+        "acted_at": "2026-11-26T07:39:03.957660+00:00",
+        "ticker": "0001.HK",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.168415,
+        "price": 64.15,
+        "gross": 10.8,
+        "cost": 0.02,
+        "net_cash": 10.78,
+        "note": "Automated trim",
+        "name": "CK Hutchison Holdings Limited",
+        "avg_cost_at_exit": 65.9153
+      },
+      {
+        "id": "c0116ebe-f608-431a-a184-e1f08391cda6",
+        "fund_id": "5afead07-6d66-42c8-8752-b60608c63fab",
+        "acted_at": "2026-11-26T07:39:03.957660+00:00",
+        "ticker": "6862.HK",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 1.063893,
+        "price": 9.72,
+        "gross": 10.34,
+        "cost": 0.02,
+        "net_cash": 10.32,
+        "note": "Automated trim",
+        "name": "Haidilao International Holding Ltd.",
+        "avg_cost_at_exit": 9.388
+      },
+      {
+        "id": "3250a304-d467-433f-bb9e-89b592fc9266",
+        "fund_id": "5afead07-6d66-42c8-8752-b60608c63fab",
+        "acted_at": "2026-11-26T07:39:03.957660+00:00",
+        "ticker": "6618.HK",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.294431,
+        "price": 34.88,
+        "gross": 10.27,
+        "cost": 0.02,
+        "net_cash": 10.25,
+        "note": "Automated trim",
+        "name": "JD Health International Inc.",
+        "avg_cost_at_exit": 32.6
       }
     ],
     "equity_curve": [
@@ -3252,9 +3441,26 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-26T07:39:03.957660+00:00",
+        "portfolio_value": 131.83,
+        "cash": 46.2,
+        "contributed_capital": 1000.0,
+        "positions": 14,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "HKD": 0.09724
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-25T15:21:13.093865+00:00",
+    "last_mark_at": "2026-11-26T07:39:03.957660+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -3262,12 +3468,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (5 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "hang_seng",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-25T15:21:13.190433+00:00",
+    "generated_at": "2026-11-26T07:39:04.086170+00:00",
     "observe_only": true,
     "open_count": 21,
     "closed_count": 0,
@@ -3341,12 +3547,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 1
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-25T15:21:13.192658+00:00",
+    "generated_at": "2026-11-26T07:39:04.088674+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -3427,9 +3633,9 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 18,
+        "count": 19,
         "verdicts": {
-          "open": 18
+          "open": 19
         }
       },
       "closed": {
@@ -3439,11 +3645,11 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 2
+      "hold_episodes": 1,
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -3451,8 +3657,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-25T15:21:13.196644+00:00",
-    "as_of": "2026-11-25T15:21:13.093865+00:00",
+    "updated_at": "2026-11-26T07:39:04.092910+00:00",
+    "as_of": "2026-11-26T07:39:03.957660+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3464,37 +3670,37 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 13,
+    "holding_count": 14,
     "underwater_count": 6,
     "thesis_status_counts": {
-      "intact": 4,
+      "intact": 5,
       "weakening": 9,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 13,
+      "holding_count": 14,
       "loser_count": 6,
-      "loser_share": 0.4615,
-      "loser_nav_share": 0.4462,
+      "loser_share": 0.4286,
+      "loser_nav_share": 0.4447,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": false,
-      "intact_loser_count": 2,
-      "weakening_loser_count": 4,
+      "intact_loser_count": 1,
+      "weakening_loser_count": 5,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
-        "quality": 0.0,
+        "quality": 0.1667,
         "dividend": 0.1667,
-        "garp": 0.6667,
+        "garp": 0.8333,
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.4286,
-        "dividend": 0.1429,
-        "garp": 0.5714,
+        "quality": 0.25,
+        "dividend": 0.25,
+        "garp": 0.5,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -3509,12 +3715,12 @@
         "recommended_action": "watch_review",
         "underwater": true,
         "deep_underwater": true,
-        "unrealized_pct": -0.2487,
-        "mark": 20.42,
+        "unrealized_pct": -0.2711,
+        "mark": 19.81,
         "avg_cost": 27.1784,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5468,
+        "signal": "buy",
+        "timing_signal": "accumulate",
+        "conviction_score": 0.2823,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3528,18 +3734,60 @@
         "research_verdict": "caution",
         "reasons": [
           "research verdict caution",
-          "still strong_buy",
+          "conviction 28% below intact floor",
+          "still buy",
           "cheapness family still passes"
         ],
         "intact_reasons": [
-          "still strong_buy",
+          "still buy",
           "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 55%"
+          "data_quality 1.00"
         ],
         "weaken_reasons": [
-          "research verdict caution"
+          "research verdict caution",
+          "conviction 28% below intact floor"
         ],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "1378.HK",
+        "name": "China Hongqiao Group Limited",
+        "thesis_status": "intact",
+        "recommended_action": "watch_review",
+        "underwater": true,
+        "deep_underwater": true,
+        "unrealized_pct": -0.1984,
+        "mark": 16.57,
+        "avg_cost": 20.6702,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.825,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "deep drawdown (-19.8%) \u2014 re-check facts; thesis still intact",
+          "price drawdown alone does not invalidate value thesis",
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 82%"
+        ],
+        "weaken_reasons": [],
         "broken_reasons": []
       },
       {
@@ -3549,11 +3797,11 @@
         "recommended_action": "watch_review",
         "underwater": true,
         "deep_underwater": true,
-        "unrealized_pct": -0.1799,
-        "mark": 21.52,
+        "unrealized_pct": -0.1769,
+        "mark": 21.6,
         "avg_cost": 26.2407,
         "signal": "strong_buy",
-        "timing_signal": "neutral",
+        "timing_signal": "accumulate",
         "conviction_score": 0.458,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -3583,59 +3831,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "1378.HK",
-        "name": "China Hongqiao Group Limited",
-        "thesis_status": "intact",
-        "recommended_action": "watch_review",
-        "underwater": true,
-        "deep_underwater": true,
-        "unrealized_pct": -0.1645,
-        "mark": 17.27,
-        "avg_cost": 20.6702,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.825,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "deep drawdown (-16.4%) \u2014 re-check facts; thesis still intact",
-          "price drawdown alone does not invalidate value thesis",
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 82%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "1093.HK",
         "name": "CSPC Pharmaceutical Group Limited",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.1093,
-        "mark": 7.92,
+        "unrealized_pct": -0.1357,
+        "mark": 7.685,
         "avg_cost": 8.8921,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5549,
+        "conviction_score": 0.579,
         "data_quality_score": 0.9,
         "passed_families": [
           "cheapness",
@@ -3656,7 +3863,7 @@
           "still strong_buy",
           "cheapness family still passes",
           "data_quality 0.90",
-          "conviction 55%"
+          "conviction 58%"
         ],
         "weaken_reasons": [
           "research verdict neutral"
@@ -3670,11 +3877,11 @@
         "recommended_action": "watch_review",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0806,
-        "mark": 9.135,
+        "unrealized_pct": -0.1269,
+        "mark": 8.675,
         "avg_cost": 9.936,
         "signal": "buy",
-        "timing_signal": "neutral",
+        "timing_signal": "accumulate",
         "conviction_score": 0.3217,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -3705,59 +3912,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "2382.HK",
-        "name": "Sunny Optical Technology (Group) Company Limited",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": true,
-        "deep_underwater": false,
-        "unrealized_pct": -0.07,
-        "mark": 58.5,
-        "avg_cost": 62.9058,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.6792,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "price drawdown alone does not invalidate value thesis",
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 68%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 68%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "0101.HK",
         "name": "Hang Lung Properties Limited",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
-        "underwater": false,
+        "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0464,
-        "mark": 6.185,
+        "unrealized_pct": -0.0595,
+        "mark": 6.1,
         "avg_cost": 6.4857,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.3097,
+        "conviction_score": 0.321,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3771,7 +3937,7 @@
         "research_verdict": "caution",
         "reasons": [
           "research verdict caution",
-          "conviction 31% below intact floor",
+          "conviction 32% below intact floor",
           "still buy",
           "cheapness family still passes"
         ],
@@ -3782,7 +3948,7 @@
         ],
         "weaken_reasons": [
           "research verdict caution",
-          "conviction 31% below intact floor"
+          "conviction 32% below intact floor"
         ],
         "broken_reasons": []
       },
@@ -3793,8 +3959,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0116,
-        "mark": 65.15,
+        "unrealized_pct": -0.0268,
+        "mark": 64.15,
         "avg_cost": 65.9153,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -3828,18 +3994,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "6618.HK",
-        "name": "JD Health International Inc.",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
+        "ticker": "2382.HK",
+        "name": "Sunny Optical Technology (Group) Company Limited",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 32.6,
-        "avg_cost": 32.6,
+        "unrealized_pct": -0.0216,
+        "mark": 61.55,
+        "avg_cost": 62.9058,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.331,
+        "conviction_score": 0.5533,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3852,18 +4018,59 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "conviction 33% below intact floor",
           "still buy",
-          "research accumulate"
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 55%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 1.00"
+          "data_quality 1.00",
+          "conviction 55%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "1099.HK",
+        "name": "Sinopharm Group Co. Ltd.",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 16.91,
+        "avg_cost": 16.91,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6897,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "neutral",
+        "reasons": [
+          "research verdict neutral",
+          "still strong_buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 69%"
         ],
         "weaken_reasons": [
-          "conviction 33% below intact floor"
+          "research verdict neutral"
         ],
         "broken_reasons": []
       },
@@ -3874,12 +4081,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.037,
-        "mark": 9.735,
+        "unrealized_pct": 0.0354,
+        "mark": 9.72,
         "avg_cost": 9.388,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4411,
+        "conviction_score": 0.4259,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3900,11 +4107,93 @@
           "still buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 44%"
+          "conviction 43%"
         ],
         "weaken_reasons": [
           "research verdict caution"
         ],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "6618.HK",
+        "name": "JD Health International Inc.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0699,
+        "mark": 34.88,
+        "avg_cost": 32.6,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.3872,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "dividend"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 39%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 39%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "6690.HK",
+        "name": "Haier Smart Home Co., Ltd.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0828,
+        "mark": 21.92,
+        "avg_cost": 20.2433,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6211,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 62%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 62%"
+        ],
+        "weaken_reasons": [],
         "broken_reasons": []
       },
       {
@@ -3914,8 +4203,8 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0741,
-        "mark": 20.78,
+        "unrealized_pct": 0.0917,
+        "mark": 21.12,
         "avg_cost": 19.3458,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -3955,12 +4244,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.1023,
-        "mark": 49.2,
+        "unrealized_pct": 0.0991,
+        "mark": 49.06,
         "avg_cost": 44.6351,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6616,
+        "conviction_score": 0.6394,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3980,52 +4269,11 @@
           "still buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 66%"
+          "conviction 64%"
         ],
         "weaken_reasons": [
           "research verdict neutral"
         ],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "6690.HK",
-        "name": "Haier Smart Home Co., Ltd.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.1046,
-        "mark": 22.36,
-        "avg_cost": 20.2433,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.6111,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 61%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 61%"
-        ],
-        "weaken_reasons": [],
         "broken_reasons": []
       }
     ],
@@ -4036,7 +4284,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-25T15:21:13.201669+00:00",
+    "generated_at": "2026-11-26T07:39:04.098361+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -4111,8 +4359,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-25T15:21:13.214312+00:00",
-    "open_count": 2,
+    "generated_at": "2026-11-26T07:39:04.111126+00:00",
+    "open_count": 3,
     "closed_count": 32,
     "scored_count": 28,
     "scored_count_all": 32,
@@ -4173,14 +4421,14 @@
       "recommit_scored": 4
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 2,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-25T15:21:13.093865+00:00",
+    "generated_at": "2026-11-26T07:39:03.957660+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -4207,8 +4455,8 @@
     "open_count": 26,
     "closed_count": 3,
     "open_by_capital_status": {
-      "on_book": 13,
-      "off_book": 12,
+      "on_book": 14,
+      "off_book": 11,
       "never_funded": 1
     },
     "closed_by_capital_status": {
@@ -4230,49 +4478,372 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 0,
+      "tagged_on_book": 1,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-25T15:21:13.093865+00:00",
+    "generated_at": "2026-11-26T07:39:03.957660+00:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "evidence_heuristic",
-    "judge_spec_id": "heuristic.v1",
-    "parent_spec_id": null,
+    "judge_backend": "llm",
+    "judge_spec_id": "llm.v1",
+    "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 3,
+    "card_count": 3,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 3,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
-    "disagree_vs_heuristic_count": 0,
-    "cards": [],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
-    "review": {
-      "schema_version": 1,
-      "track_id": "buy_tier_level",
-      "generated_at": "2026-11-25T15:21:13.093865+00:00",
-      "observe_only": true,
-      "influences_live": false,
-      "judge_backend": "evidence_heuristic",
-      "judge_spec_id": "heuristic.v1",
-      "parent_spec_id": null,
-      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
-      "verdict_counts": {
-        "agree": 0,
+    "by_algo_action": {
+      "rebuy_skip": {
+        "agree": 2,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
+    "disagree_vs_heuristic_count": 0,
+    "cards": [
+      {
+        "ticker": "2628.HK",
+        "name": "China Life Insurance Company Limited",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Rebuy skip is driven by explicit insufficient-cash after higher-conviction fills, not a leave-buy-cohort signal.",
+          "still_buyish remains true with screen_signal buy and rank_drop 0 versus entry_rank, so skipping rebuy avoids churn without treating the name as exited.",
+          "research_verdict caution is noted but overlay_bound applies; no decisive deterioration in rank or signal to veto a cash-priority skip."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 8
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 8
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-26T07:39:03.957660+00:00",
+        "proposal_id": "buy_tier_level:2628.HK:rebuy_skip:2026-11-26T07:39:03.957660+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "2618.HK",
+        "name": "JD Logistics, Inc.",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Rebuy skip matches algo_reason insufficient cash after higher-conviction fills \u2014 a portfolio constraint, not a sell thesis.",
+          "still_buyish true, screen_signal buy, conviction_rank equals entry_rank with rank_drop 0, consistent with low-churn hold/skip semantics.",
+          "research_verdict neutral and overlay_bound true do not contradict deferring rebuy when cash is allocated elsewhere."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 11
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 11
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "neutral"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-26T07:39:03.957660+00:00",
+        "proposal_id": "buy_tier_level:2618.HK:rebuy_skip:2026-11-26T07:39:03.957660+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "neutral",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "1099.HK",
+        "name": "Sinopharm Group Co. Ltd.",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Automated buy aligns with strong_buy screen_signal and still_buyish true.",
+          "conviction_rank 2 with rank_drop 0 supports high-conviction entry into the buyish cohort.",
+          "research_verdict neutral with overlay_bound and no fcf_basis_overlay flag do not block the proposed buy on supplied evidence."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 2
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 2
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "neutral"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.6897
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-26T07:39:03.957660+00:00",
+        "proposal_id": "buy_tier_level:1099.HK:buy:2026-11-26T07:39:03.957660+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "neutral",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
+    "llm_judge": {
+      "attempted": true,
+      "ok": true,
+      "fallback": null,
+      "llm_card_count": 3
+    },
+    "review": {
+      "schema_version": 1,
+      "track_id": "buy_tier_level",
+      "generated_at": "2026-11-26T07:39:03.957660+00:00",
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
+      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+      "card_count": 3,
+      "verdict_counts": {
+        "agree": 3,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 2,
+          "veto": 0,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -4285,10 +4856,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-25T15:21:13.231592+00:00",
+  "generated_at": "2026-11-26T07:39:10.103680+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
