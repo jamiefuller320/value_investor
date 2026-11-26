@@ -6143,6 +6143,21 @@ def _migrate_ir_allowlist_row_url(
     return item, True
 
 
+def _sync_ir_allowlist_row_id(row: dict[str, Any]) -> tuple[dict[str, Any], bool]:
+    """Align ``ir_*`` row ids with the indexed URL digest so body validation can pass."""
+    item = dict(row)
+    if not _is_ir_allowlist_row(item):
+        return item, False
+    url = str(item.get("url") or "").strip()
+    if not url:
+        return item, False
+    expected = f"ir_{hashlib.sha256(url.encode('utf-8')).hexdigest()[:16]}"
+    if str(item.get("id") or "") == expected:
+        return item, False
+    item["id"] = expected
+    return item, True
+
+
 def _ir_allowlist_unfetchable_may_retry(
     row: dict[str, Any],
     *,
@@ -7115,6 +7130,7 @@ def merge_ir_allowlist_filings(
         item, migrated = _migrate_ir_allowlist_row_url(row, ticker)
         if migrated:
             migrated_urls += 1
+        item, _id_synced = _sync_ir_allowlist_row_id(item)
         refreshed_filings.append(item)
     filings = refreshed_filings
     filings, url_deduped = _dedupe_ir_allowlist_rows_by_url(filings)
@@ -7191,6 +7207,7 @@ def refetch_ir_allowlist_filing_bodies(
                 item, migrated = _migrate_ir_allowlist_row_url(row, ticker)
                 if migrated:
                     pre_merge_migrated += 1
+                item, _ = _sync_ir_allowlist_row_id(item)
                 refreshed_pre.append(item)
             refreshed_pre, pre_deduped = _dedupe_ir_allowlist_rows_by_url(refreshed_pre)
             if pre_merge_migrated or pre_deduped:
@@ -7233,6 +7250,18 @@ def refetch_ir_allowlist_filing_bodies(
     from value_investor.library_ingest_budget import deadline_reached
 
     filings = list(payload.get("filings") or [])
+    id_synced = 0
+    synced_filings: list[dict[str, Any]] = []
+    for row in filings:
+        item, synced = _sync_ir_allowlist_row_id(row)
+        if synced:
+            id_synced += 1
+        synced_filings.append(item)
+    filings = synced_filings
+    if id_synced:
+        payload["filings"] = filings
+        payload["summary"] = summarize_filings(filings)
+        index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     filings, ir_url_deduped = _dedupe_ir_allowlist_rows_by_url(filings)
     if ir_url_deduped:
         payload["filings"] = filings
@@ -12426,6 +12455,33 @@ def filings_index_hkex_direct_gap(payload: dict[str, Any]) -> bool:
     return with_body < max(3, total // 2)
 
 
+def _filings_index_has_stale_ir_allowlist_urls(
+    payload: dict[str, Any],
+    *,
+    ticker: str = "",
+) -> bool:
+    """True when indexed IR rows still point at URLs replaced on the live allowlist."""
+    ticker_key = str(ticker or payload.get("ticker") or "").strip().upper()
+    if not ticker_key:
+        return False
+    live_urls = {
+        str(row.get("url") or "").strip()
+        for row in fetch_filings_ir_allowlist(ticker_key)
+        if str(row.get("url") or "").strip()
+    }
+    if not live_urls:
+        return False
+    for row in list(payload.get("filings") or []):
+        if not _is_ir_allowlist_row(row):
+            continue
+        url = str(row.get("url") or "").strip()
+        if not url or row.get("has_body"):
+            continue
+        if url not in live_urls:
+            return True
+    return False
+
+
 def filings_index_ir_allowlist_direct_gap(payload: dict[str, Any]) -> bool:
     """True when a ticker with builtin IR URLs still lacks key statutory bodies."""
     from value_investor.filings_index_dating import key_bodies
@@ -12437,6 +12493,9 @@ def filings_index_ir_allowlist_direct_gap(payload: dict[str, Any]) -> bool:
     filings = list(payload.get("filings") or [])
     ir_rows = [row for row in filings if _is_ir_allowlist_row(row)]
     if ir_rows and not any(row.get("has_body") for row in ir_rows):
+        return True
+    # eng-20261126-01: EVN.VI stale evn.at hub must still trigger IR deepen after listing scans.
+    if _filings_index_has_stale_ir_allowlist_urls(payload):
         return True
     return int((payload.get("summary") or {}).get("with_body") or 0) == 0
 
@@ -12870,12 +12929,27 @@ def ingest_filings(
     if unextractable_urls:
         index[UNEXTRACTABLE_BODY_URLS_KEY] = unextractable_urls
 
-    from value_investor.storage import resolve_json_path, write_json
+    from value_investor.storage import read_json, resolve_json_path, write_json
 
     index_path = filings_dir / "filings_index.json"
     write_json(index_path, index, compact=True, compress=False)
     prune_orphaned_filing_bodies(filings_dir)
     written = resolve_json_path(index_path) or index_path
+
+    ir_allowlist_merge: dict[str, Any] = {}
+    # eng-20261126-01: euro_depth EVN.VI kept dead evn.at hub across listing re-ingest when
+    # builtins shipped after the initial scan — sync canonical PDF rows after each listing write.
+    if ir_allowlist_direct_eligible(ticker):
+        ir_allowlist_merge = merge_ir_allowlist_filings(ticker, filings_dir)
+        if int(ir_allowlist_merge.get("added") or 0) or int(
+            ir_allowlist_merge.get("migrated_urls") or 0
+        ):
+            resolved_index = resolve_json_path(index_path)
+            if resolved_index is not None:
+                try:
+                    index = read_json(resolved_index)
+                except (OSError, ValueError, TypeError):
+                    pass
 
     cashflow_refresh = refresh_sources_yahoo_cashflow_metrics(
         ticker=ticker,
@@ -12904,6 +12978,7 @@ def ingest_filings(
         "companies_house_pdf_supplement": ch_pdf_supplement,
         "yahoo_cashflow_metrics_refresh": cashflow_refresh,
         "sec_companyfacts_refresh": companyfacts_refresh,
+        "ir_allowlist_merge": ir_allowlist_merge,
     }
 
 
