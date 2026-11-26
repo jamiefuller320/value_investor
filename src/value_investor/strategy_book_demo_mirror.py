@@ -44,8 +44,7 @@ STORE_NAME = "strategy_book_demo_ledger.json"
 STRIP_STORE_NAME = "strategy_book_demo_slippage.json"
 SCHEMA_VERSION = 1
 SLIPPAGE_STRIP_NOTE = (
-    "Observe-only. Does not feed the strategy book. "
-    "The assumed half-spread is not replaced."
+    "Observe-only. Does not feed the strategy book. The assumed half-spread is not replaced."
 )
 SLIPPAGE_PRICE_BASIS = "raw_fill_vs_book_adjusted_close"
 PRIMARY = "primary"
