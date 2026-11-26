@@ -13259,6 +13259,106 @@ def test_parked_source_hunter_imd_ax_asx200_has_fetchable_ir():
     assert "imdex" in interim_body.lower()
 
 
+def test_fetch_filings_ir_allowlist_paf_l_aim_builtin(tmp_path: Path):
+    """eng-20261104-01: AIM PAF.L unfetchable_iwb — FY2026 integrated annual report."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("PAF.L", path=allowlist_path)
+    assert len(rows) == 1
+    assert rows[0]["source"] == "ir_allowlist"
+    assert rows[0]["period"] == "annual"
+    assert rows[0]["url"].endswith(
+        "Pan-African-Resources-integrated-annual-report-2026.pdf"
+    )
+    assert "panafricanresources.com" in rows[0]["url"]
+    assert "PAF.L" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_paf_l_ir_fetch_sends_financial_reports_referer(monkeypatch):
+    """eng-20261104-01: bare GET is Cloudflare 403; the IR page Referer returns the PDF."""
+    url = (
+        "https://www.panafricanresources.com/wp-content/uploads/2026/09/"
+        "Pan-African-Resources-integrated-annual-report-2026.pdf"
+    )
+    captured: dict[str, str] = {}
+
+    class _Resp:
+        headers: dict[str, str] = {}
+
+        def read(self) -> bytes:
+            return b"%PDF-1.4\n"
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+    def _urlopen(request, timeout=30):
+        captured["referer"] = request.get_header("Referer") or ""
+        captured["url"] = request.full_url
+        return _Resp()
+
+    monkeypatch.setattr("urllib.request.urlopen", _urlopen)
+    fetch_filing_body(url)
+    assert captured["url"] == url
+    assert captured["referer"] == (
+        "https://www.panafricanresources.com/investors/financial-reports/"
+    )
+
+
+def test_parked_source_hunter_paf_l_aim_has_fetchable_ir():
+    """eng-20261104-01: PAF.L FY2026 integrated annual report live-fetches with the IR Referer."""
+    assert "PAF.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("PAF.L")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    body = _live_fetch_filing_body(rows[0]["url"])
+    if not body:
+        pytest.skip("Pan African FY2026 integrated annual report fetch unavailable (network)")
+    assert len(body) >= 5000
+    assert "pan african" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(rows[0], body, ticker="PAF.L")
+    assert valid, reason
+
+
+def test_fetch_filings_ir_allowlist_smr_ax_asx200_builtin(tmp_path: Path):
+    """eng-20261103-09: SMR.AX unfetchable_iwb — 1H26 half-year report / Appendix 4D."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("SMR.AX", path=allowlist_path)
+    assert len(rows) == 1
+    assert rows[0]["source"] == "ir_allowlist"
+    assert rows[0]["period"] == "interim"
+    assert "6.-Website-Report.pdf" in rows[0]["url"]
+    assert "stanmore.au" in rows[0]["url"]
+    assert _IR_ALLOWLIST_URL_PERIOD[rows[0]["url"]] == "interim"
+    assert "SMR.AX" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_parked_source_hunter_smr_ax_asx200_has_fetchable_ir():
+    """eng-20261103-09: SMR.AX 1H26 Appendix 4D live-fetches; do not bind the 2025 annual."""
+    from value_investor.research.filings import _ESEF_ENTITY_SEARCH_ALIASES
+
+    assert "SMR.AX" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("SMR.AX")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "interim"
+    assert "2025" not in rows[0]["url"]
+    aliases = _ESEF_ENTITY_SEARCH_ALIASES.get("SMR") or ()
+    assert any("Stanmore" in alias for alias in aliases)
+    body = _live_fetch_filing_body(rows[0]["url"])
+    if not body:
+        pytest.skip("Stanmore 1H26 half-year report fetch unavailable (network)")
+    assert len(body) >= 5000
+    assert "stanmore" in body.lower()
+    assert "appendix 4d" in body.lower() or "half-year" in body.lower() or "half year" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(rows[0], body, ticker="SMR.AX")
+    assert valid, reason
+
+
 def test_parked_source_hunter_fmg_ax_asx200_has_fetchable_ir():
     """eng-20261009-02: FMG.AX leftover IWB — Markit/ASX PDFs in _BUILTIN_IR_URLS."""
     from value_investor.research.filings import _ESEF_ENTITY_SEARCH_ALIASES
