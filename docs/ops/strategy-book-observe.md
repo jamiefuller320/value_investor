@@ -244,6 +244,15 @@ primary exit without the memo bind, and it records early marks at 10 and 20
 sessions. It does not write this store and it does not count here. See
 [strategy-book-memo-free-shadow.md](strategy-book-memo-free-shadow.md).
 
+## Outcome-scored memo model shadow (L703)
+
+Observe-only. `composer-2.5` and `grok-4.6` write shadow memos on real
+strategy-book signals. A block or pass scores against the same 63-session
+outcome this book's early marks use. It does not write this store, rememo a
+live name, or change the live model. `decision.json` outcome
+`inconclusive_keep` leaves `composer-2.5` in place. See
+[strategy-book-memo-model-shadow.md](strategy-book-memo-model-shadow.md).
+
 ## Memo-led ranking shadow (L694)
 
 Observe-only. `influences_live` is false. The shadow does not read or write

@@ -2954,6 +2954,47 @@ def check_strategy_book_memo_ranking_shadow(
     ]
 
 
+def check_strategy_book_memo_model_shadow(
+    *,
+    repo_root: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Read the outcome-scored memo model shadow. Does not write or call a model.
+
+    Observe-only (``auto_fixable=False``). Info when the store is fresh.
+    Warns when it is missing, stale, or unreadable, and when the comparison
+    decision evidence is missing. See docs/ops/strategy-book-memo-model-shadow.md.
+    """
+    from value_investor.strategy_book_memo_model_shadow import (
+        TITLE_UNREADABLE,
+        check_findings,
+    )
+
+    moment = now or datetime.now(UTC)
+    try:
+        rows = check_findings(repo_root=repo_root, now=moment)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=TITLE_UNREADABLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or TITLE_UNREADABLE),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in rows
+    ]
+
+
 def check_strategy_book_demo_mirror(
     *,
     repo_root: Path | None = None,
@@ -5572,6 +5613,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_ch_failed_name_statements))
     findings.extend(_guarded_check(check_strategy_book_memo_free_shadow))
     findings.extend(_guarded_check(check_strategy_book_memo_ranking_shadow))
+    findings.extend(_guarded_check(check_strategy_book_memo_model_shadow))
     findings.extend(_guarded_check(check_n200_tech_timing_observe))
     findings.extend(_guarded_check(check_n201_value_mom_observe))
     findings.extend(_guarded_check(check_n210_ai_judgment_observe))

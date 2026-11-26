@@ -159,6 +159,36 @@ jobs:
           PY
           fi
 
+      # Observe-only L703. Both models write shadow memos on signals whose
+      # fill close is still ahead. Scores need a 63-session outcome and a
+      # cite that was in force at that close. Does not rememo live names,
+      # feed the book, or switch composer-2.5.
+      # A failure must not stop the forward commit.
+      # See docs/ops/strategy-book-memo-model-shadow.md.
+      - name: Outcome-scored memo model shadow
+        continue-on-error: true
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ "${DRY_RUN}" = "true" ]; then
+            ftse-strategy-book-memo-model-shadow --repo-root .
+            echo 0 > "${RUNNER_TEMP:-/tmp}/l703_observe_spend_usd.txt"
+          else
+            ftse-strategy-book-memo-model-shadow --repo-root . --apply --request-memos \
+              > "${RUNNER_TEMP:-/tmp}/l703_observe_summary.json"
+            python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          root = Path(os.environ.get("RUNNER_TEMP", "/tmp"))
+          summary = json.loads((root / "l703_observe_summary.json").read_text(encoding="utf-8"))
+          amount = summary.get("observe_memo_spend_usd") or 0
+          (root / "l703_observe_spend_usd.txt").write_text(str(amount), encoding="utf-8")
+          PY
+          fi
+
       # Practice-account mirror only. Missing demo secrets plan rows and exit 0.
       # Never uses the live catalogue key. See docs/ops/strategy-book-demo-mirror.md.
       # A mirror failure must not stop the commit of the forward store and gate log.
@@ -268,6 +298,8 @@ jobs:
           docs/data/strategy_book_memo_free_shadow.json
           docs/data/strategy_book_memo_ranking_shadow.json
           docs/data/strategy_book_memo_ranking_shadow_memos.jsonl
+          docs/data/strategy_book_memo_model_shadow.json
+          docs/data/strategy_book_memo_model_shadow_memos.jsonl
           docs/data/charts
           ${MEMO_WRITTEN}
           ${USAGE_WRITTEN}"
@@ -279,8 +311,19 @@ jobs:
       - name: Record observe-memo spend on weekly_ops
         run: |
           set -euo pipefail
-          STAMP="${RUNNER_TEMP:-/tmp}/l694_observe_spend_usd.txt"
-          AMOUNT="$(cat "$STAMP" 2>/dev/null || echo 0)"
+          L694="${RUNNER_TEMP:-/tmp}/l694_observe_spend_usd.txt"
+          L703="${RUNNER_TEMP:-/tmp}/l703_observe_spend_usd.txt"
+          AMOUNT="$(python3 - "${L694}" "${L703}" <<'PY'
+          import pathlib, sys
+          total = 0.0
+          for path in sys.argv[1:]:
+              try:
+                  total += float(pathlib.Path(path).read_text(encoding="utf-8") or 0)
+              except (OSError, ValueError):
+                  pass
+          print(total)
+          PY
+          )"
           python3 -c 'import sys; raise SystemExit(0 if float(sys.argv[1]) > 0 else 1)' "$AMOUNT" \
             || { echo "No observe-memo spend to record"; exit 0; }
           for attempt in 1 2 3 4 5; do
