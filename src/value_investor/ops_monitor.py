@@ -2723,8 +2723,10 @@ def check_strategy_book_memo_job(
     """Signal-day memo job after the decline and sector gates.
 
     Spend follows the registration seal's ``spend_enabled`` (on since
-    2026-11-10; ``forward_live`` is separate). Observe-only (``auto_fixable=False``). Does not rememo or ingest from the
-    finding. See docs/ops/strategy-book-memo-job.md.
+    2026-11-10; ``forward_live`` is separate). The same pass tags each
+    requested memo with what it fed and adds used/unused counts to the spend
+    finding. Observe-only (``auto_fixable=False``). Does not rememo, ingest,
+    or change a fill. See docs/ops/strategy-book-memo-job.md.
     """
     from value_investor.strategy_book_memo_job import (
         TITLE_FAILED,
@@ -2750,7 +2752,16 @@ def check_strategy_book_memo_job(
             )
         ]
     findings = findings_from_memo_job(summary, now=moment)
-    spend = _strategy_book_memo_spend(summary, repo_root=repo_root, now=moment)
+    from value_investor.strategy_book_memo_use import apply_strategy_book_memo_use
+
+    use = apply_strategy_book_memo_use(repo_root=repo_root, persist=persist)
+    spend = _strategy_book_memo_spend(
+        summary,
+        repo_root=repo_root,
+        now=moment,
+        memo_rows=use["rows"],
+        use_note=use.get("note"),
+    )
     if spend is not None:
         findings.append(spend)
     return [
@@ -2795,7 +2806,12 @@ def check_memo_model_comparison(
 
 
 def _strategy_book_memo_spend(
-    summary: dict[str, Any], *, repo_root: Path | None, now: datetime
+    summary: dict[str, Any],
+    *,
+    repo_root: Path | None,
+    now: datetime,
+    memo_rows: list[Any] | None = None,
+    use_note: str | None = None,
 ) -> dict[str, Any] | None:
     from value_investor.agent_model_policy import weekly_ops_budget_status
     from value_investor.strategy_book_memo_job import ESTIMATED_MEMO_USD
@@ -2813,6 +2829,8 @@ def _strategy_book_memo_spend(
         registration_record(paths.registration),
         weekly_ops=weekly_ops,
         now=now,
+        memo_rows=memo_rows,
+        use_note=use_note,
     )
 
 

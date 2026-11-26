@@ -1,9 +1,9 @@
 """Weekly memo spend for the strategy book, against the owner's review cadence.
 
-Observe-only. Reads the memo job summary and the registration's
-``operational_switches`` log. It does not change the flag, the budget, or
-a memo. Whether a memo fed an entry decision is not tracked yet, so the
-finding reports spend and skips only.
+Observe-only. Reads the memo job summary, the registration's
+``operational_switches`` log, and (when supplied) the tagged memo log.
+It does not change the flag, the budget, a memo, or a fill. Used and unused
+counts come from ``fed`` on requested rows.
 """
 
 from __future__ import annotations
@@ -12,6 +12,7 @@ from datetime import UTC, date, datetime
 from typing import Any
 
 from value_investor.strategy_book_memo_job import ESTIMATED_MEMO_USD
+from value_investor.strategy_book_memo_use import use_totals
 
 TITLE_SPEND = "Strategy book memo spend this week"
 
@@ -41,12 +42,49 @@ def _week_key(day: date) -> str:
     return f"{iso.year}-W{iso.week:02d}"
 
 
+def _use_sentences(
+    memo_rows: list[Any] | None,
+    *,
+    week_key: str,
+    since_key: str | None,
+    note: str | None,
+) -> list[str]:
+    if memo_rows is None:
+        return [
+            "Memo use was not read on this run. "
+            "Observe-only; no rememo, ingest, or fill change from this finding."
+        ]
+    totals = use_totals(memo_rows, week_key=week_key, since_key=since_key)
+    week = totals["week"]
+    since = totals["since"]
+    parts = [
+        (
+            f"{week_key} use: {week['used']} used "
+            f"({week['fill']} fill, {week['memo_blocked']} memo_blocked), "
+            f"{week['unused']} unused "
+            f"({week['memo_not_ready']} memo_not_ready, {week['nothing']} nothing)."
+        ),
+        f"Since switch-on: {since['used']} used, {since['unused']} unused.",
+    ]
+    if note:
+        parts.append(note)
+    parts.append(
+        "Used is a memo that fed a fill or memo_blocked. "
+        "Unused is memo_not_ready (finished after the close) or nothing "
+        "(the signal never reached a decision). "
+        "Observe-only; no rememo, ingest, or fill change from this finding."
+    )
+    return parts
+
+
 def memo_spend_finding(
     summary: dict[str, Any],
     registration: dict[str, Any] | None,
     *,
     weekly_ops: dict[str, Any] | None = None,
     now: datetime | None = None,
+    memo_rows: list[Any] | None = None,
+    use_note: str | None = None,
 ) -> dict[str, Any] | None:
     """Info finding with the latest week's requested memos and spend. None while spend is off."""
     if not summary.get("spend_enabled"):
@@ -83,10 +121,7 @@ def memo_spend_finding(
     if due is not None:
         state = "due" if moment.date() >= due else "next"
         parts.append(f"Spend-vs-use review {state} {due.isoformat()}.")
-    parts.append(
-        "Whether a memo fed an entry decision is not tracked yet. "
-        "Observe-only; no rememo or ingest from this finding."
-    )
+    parts.extend(_use_sentences(memo_rows, week_key=week_key, since_key=since_key, note=use_note))
     return {
         "severity": "info",
         "category": "research",

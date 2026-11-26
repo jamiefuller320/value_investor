@@ -11,6 +11,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.strategy_book_memo_job import run_strategy_book_memo_job
+from value_investor.strategy_book_memo_use import show_memo_use
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -37,8 +38,16 @@ def main(argv: list[str] | None = None) -> int:
         help="Score closes more than 5 calendar days behind the decision date",
     )
     parser.add_argument("--no-persist", action="store_true")
+    parser.add_argument(
+        "--show-use",
+        action="store_true",
+        help="Print used and unused memo counts and exit. Does not request a memo or write the log.",
+    )
     parser.add_argument("--now", help="Override the run timestamp (ISO-8601)")
     args = parser.parse_args(argv)
+    if args.show_use:
+        print(json.dumps(show_memo_use(repo_root=args.repo_root), indent=2))
+        return 0
     now = None
     if args.now:
         now = datetime.fromisoformat(args.now.replace("Z", "+00:00"))
