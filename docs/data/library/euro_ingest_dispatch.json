@@ -1,68 +1,86 @@
 {
-  "market_id": "sti",
+  "market_id": "euro_depth",
   "focus_market": "euro_depth",
   "mode": "sprint",
-  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=0, indexed_without_body=7)",
+  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=8, indexed_without_body=5)",
   "ingest_parity_met": false,
   "ingest_exhausted": false,
   "ingest_sprint_complete": false,
   "parked_tickers": [
-    "ME8U.SI",
-    "N2IU.SI",
-    "U14.SI"
+    "ACKB.BR",
+    "APAM.AS",
+    "BAS.DE",
+    "DQ7A.IR",
+    "ESSITY-B.ST",
+    "EVN.VI",
+    "UCB.BR"
   ],
   "phase3_ready": false,
-  "current_phase": 0,
-  "next_phase": 1,
+  "current_phase": 3,
+  "next_phase": 3,
   "phase_blockers": [
-    "no benchmark configured for sti"
+    "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-11-26T23:03:16.412428+00:00",
-    "market_id": "sti",
-    "buy_tier_count": 9,
-    "unmeasured_buy_tier": 1,
+    "snapshot_at": "2026-11-26T23:21:36.309576+00:00",
+    "market_id": "euro_depth",
+    "buy_tier_count": 42,
+    "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 0,
-    "indexed_without_body": 7,
-    "bodies_min": 4,
-    "bodies_median": 7.0,
-    "bodies_max": 14,
+    "thin_body_buy_tier": 8,
+    "indexed_without_body": 5,
+    "bodies_min": 1,
+    "bodies_median": 4.5,
+    "bodies_max": 150,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
-    "unmeasured_tickers": [
-      "5E2.SI"
-    ],
+    "unmeasured_tickers": [],
     "zero_body_tickers": [],
-    "thin_body_tickers": [],
+    "thin_body_tickers": [
+      "ACKB.BR",
+      "APAM.AS",
+      "EVN.VI",
+      "BAS.DE",
+      "UCB.BR",
+      "GL9.IR",
+      "DQ7A.IR",
+      "IFX.DE"
+    ],
     "indexed_without_body_tickers": [
-      "U14.SI",
-      "ME8U.SI",
-      "N2IU.SI"
+      "EVN.VI",
+      "ESSITY-B.ST",
+      "UCB.BR"
     ],
     "indexed_without_body_by_ticker": {
-      "U14.SI": 4,
-      "ME8U.SI": 2,
-      "N2IU.SI": 1
+      "EVN.VI": 3,
+      "ESSITY-B.ST": 1,
+      "UCB.BR": 1
     },
     "parked_tickers": [
-      "ME8U.SI",
-      "N2IU.SI",
-      "U14.SI"
+      "ACKB.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "DQ7A.IR",
+      "ESSITY-B.ST",
+      "EVN.VI",
+      "UCB.BR"
     ],
-    "parked_count": 3,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
+    "parked_count": 7,
+    "effective_thin_body_buy_tier": 2,
+    "effective_thin_body_tickers": [
+      "GL9.IR",
+      "IFX.DE"
+    ],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
   },
-  "filing_gaps": 1,
+  "filing_gaps": 0,
   "max_daily_successes": 4,
-  "max_targets": 24,
-  "priority_slot_width": null,
-  "priority_slot_unfilled": null,
-  "priority_slot_ceiling": null,
+  "max_targets": 2,
+  "priority_slot_width": 2,
+  "priority_slot_unfilled": 2,
+  "priority_slot_ceiling": 24,
   "cron_morning": true,
   "cron_afternoon": true,
   "cron_midafternoon": true,
@@ -72,7 +90,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-11-26T23:03:16.417184+00:00",
+  "evaluated_at": "2026-11-26T23:21:36.325122+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -143,7 +161,7 @@
         "no benchmark configured for ftse_mib"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-26T23:03:41.303766+00:00",
+        "snapshot_at": "2026-11-26T23:22:10.915782+00:00",
         "market_id": "ftse_mib",
         "buy_tier_count": 8,
         "unmeasured_buy_tier": 1,
@@ -191,7 +209,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-26T23:03:41.307662+00:00",
+      "evaluated_at": "2026-11-26T23:22:10.920696+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -219,7 +237,7 @@
         "no benchmark configured for sti"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-26T23:03:41.739936+00:00",
+        "snapshot_at": "2026-11-26T23:22:11.534845+00:00",
         "market_id": "sti",
         "buy_tier_count": 9,
         "unmeasured_buy_tier": 1,
@@ -273,7 +291,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-26T23:03:41.744613+00:00",
+      "evaluated_at": "2026-11-26T23:22:11.540731+00:00",
       "should_run_parallel_ingest": true
     }
   ],
