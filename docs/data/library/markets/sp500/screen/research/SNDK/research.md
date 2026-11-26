@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 26 · Updated 2026-11-26T04:06:52.914537+00:00 · Mode: structured_verdict_update_
+_Version 27 · Updated 2026-11-26T07:49:19.147386+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: high
-Confidence: 0.57
-Rationale: Very strong on-file FCF is unchanged after the 26 Nov source refresh, but an empty news slice and still no issuer guidance leave research weakening—not confirming—the strong-buy screen.
+Confidence: 0.58
+Rationale: On-file FCF remains very strong; fresh press only lifts the sector on Nvidia–Kioxia NAND demand—not SNDK guidance—so research still weakens the strong-buy screen amid cyclical and governance overhangs.
 RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
@@ -121,4 +121,9 @@ Refreshed on-file financials (fetched 26 November) still show very strong free c
 ### 2026-11-26T04:06:52.914537+00:00
 No material change.
 The news batch since the 01:34 refresh adds no articles and no new SNDK issuer disclosures.
+On-file financials (fetched 26 November) still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).
+
+### 2026-11-26T07:49:19.147386+00:00
+26 November headlines lift SNDK with Micron and SK Hynix after Nvidia–Kioxia flash tests in an AI rack; press cites buyback pressure on memory names.  
+No new SNDK issuer filings in the batch.  
 On-file financials (fetched 26 November) still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).
