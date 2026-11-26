@@ -6820,28 +6820,10 @@
     "CDZ0D_EQ",
     "CE2D_EQ",
     "CEAD_EQ",
-    "CECGD_EQ"
+    "CECGD_EQ",
+    "CEKD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "BYW6d_EQ",
-      "venue": "DE",
-      "yahoo": "BYW6.DE",
-      "isin": "DE0005194062",
-      "name": "BYW6",
-      "seconds": 2.352,
-      "outcome": "miss",
-      "at": "2026-11-26T14:03:31.978951+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.9,
-        "seconds": 1.022
-      },
-      "screen_seconds": 1.022,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "BZ9d_EQ",
       "venue": "DE",
@@ -7582,6 +7564,25 @@
       },
       "screen_seconds": 85.519,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CEKd_EQ",
+      "venue": "DE",
+      "yahoo": "CEK.DE",
+      "isin": "DE0005407407",
+      "name": "CEK",
+      "seconds": 2.82,
+      "outcome": "miss",
+      "at": "2026-11-26T14:39:40.496293+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.934
+      },
+      "screen_seconds": 0.934,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -88214,43 +88215,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T14:36:09.323113+00:00"
+    },
+    {
+      "t212_ticker": "CEKd_EQ",
+      "yahoo": "CEK.DE",
+      "name": "CEK",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T14:39:40.496293+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CECGd_EQ",
+    "t212_ticker": "CEKd_EQ",
     "venue": "DE",
-    "yahoo": "CECG.DE",
-    "isin": "DE0007257503",
-    "name": "CEC",
-    "seconds": 87.391,
+    "yahoo": "CEK.DE",
+    "isin": "DE0005407407",
+    "name": "CEK",
+    "seconds": 2.82,
     "outcome": "miss",
-    "at": "2026-11-26T14:39:29.748062+00:00",
+    "at": "2026-11-26T14:39:40.496293+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.519
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.934
     },
-    "screen_seconds": 85.519,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.934,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CEKd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T14:39:29.748062+00:00",
+  "updated_at": "2026-11-26T14:39:40.496293+00:00",
   "totals": {
-    "screened": 6819,
+    "screened": 6820,
     "signals": {
-      "buy": 1930,
+      "buy": 1931,
       "avoid": 1518,
       "hold": 1408,
       "insufficient_data": 1924,
       "strong_buy": 39
     },
-    "signals_n": 6819,
-    "screen_seconds_sum": 83408.88400000043,
-    "screen_seconds_n": 6819,
+    "signals_n": 6820,
+    "screen_seconds_sum": 83409.81800000042,
+    "screen_seconds_n": 6820,
     "outcomes": {
-      "miss": 3004,
+      "miss": 3005,
       "saved": 3815
     }
   },
