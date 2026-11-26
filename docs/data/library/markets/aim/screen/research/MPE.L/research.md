@@ -1,6 +1,6 @@
 # M.P. Evans Group PLC (MPE.L) — Research memo
 
-_Version 10 · Updated 2026-11-26T01:28:35.295336+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-26T02:36:07.410733+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -56,5 +56,10 @@ Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal and accu
 
 ### 2026-11-26T01:28:35.295336+00:00
 News batch since the 25 Nov evening refresh is empty; no new articles in the supplied sources.  
+No new RNS after 25 Nov “transaction in own shares”; last substantive disclosure remains 14 Sep 2026 interim results.  
+Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal and accumulate overlay unchanged.
+
+### 2026-11-26T02:36:07.410733+00:00
+News batch since the 26 Nov 01:28 refresh is empty; no new articles in the supplied sources.  
 No new RNS after 25 Nov “transaction in own shares”; last substantive disclosure remains 14 Sep 2026 interim results.  
 Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal and accumulate overlay unchanged.

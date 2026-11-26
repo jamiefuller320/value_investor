@@ -1,6 +1,6 @@
 # Prosus N.V. (PRX.AS) — Research memo
 
-_Version 15 · Updated 2026-11-26T01:33:30.341230+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-26T02:34:54.761472+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.58
-Rationale: Research still weakens the buy: empty 26 Nov news batch; H1 profit and cash-flow headlines persist and Yahoo quarterly cash flow stays empty, so screen TTM FCF remains unverified.
+Rationale: Research still weakens the buy: empty incremental batch; 25 Nov H1 profit and cash-flow headlines persist and Yahoo quarterly cash flow stays empty, so screen TTM FCF remains unverified.
 RiskTags: governance, customer_concentration, accounting, leverage, competitive
 
 ## Weekly updates
@@ -81,5 +81,10 @@ Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.
 
 ### 2026-11-26T01:33:30.341230+00:00
 No articles in the incremental news batch since the 25 Nov 21:54 refresh; filings index unchanged on re-fetch.  
+25 Nov headlines on weaker H1 operating profit and cash flow, food-delivery spend and smaller Tencent disposal gains remain the latest manifest items.  
+Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.
+
+### 2026-11-26T02:34:54.761472+00:00
+No articles in the incremental news batch since the 01:33 refresh; filings index unchanged on re-fetch.  
 25 Nov headlines on weaker H1 operating profit and cash flow, food-delivery spend and smaller Tencent disposal gains remain the latest manifest items.  
 Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.
