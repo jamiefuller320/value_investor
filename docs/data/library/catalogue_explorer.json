@@ -6588,28 +6588,10 @@
     "8B8D_EQ",
     "8BZD_EQ",
     "8C4D_EQ",
-    "8CFD_EQ"
+    "8CFD_EQ",
+    "8FRD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "7CDd_EQ",
-      "venue": "DE",
-      "yahoo": "7CD.DE",
-      "isin": "PLOPTTC00011",
-      "name": "7CD",
-      "seconds": 86.049,
-      "outcome": "miss",
-      "at": "2026-11-26T01:33:47.512003+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.725
-      },
-      "screen_seconds": 84.725,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "7CId_EQ",
       "venue": "DE",
@@ -7350,6 +7332,25 @@
       },
       "screen_seconds": 83.415,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "8FRd_EQ",
+      "venue": "DE",
+      "yahoo": "8FR.DE",
+      "isin": "US9264001028",
+      "name": "8FR",
+      "seconds": 5.324,
+      "outcome": "miss",
+      "at": "2026-11-26T10:52:00.384689+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 3.168
+      },
+      "screen_seconds": 3.168,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -86933,43 +86934,56 @@
         "error": null
       },
       "finished_at": "2026-11-26T08:47:11.971659+00:00"
+    },
+    {
+      "t212_ticker": "8FRd_EQ",
+      "yahoo": "8FR.DE",
+      "name": "8FR",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T10:52:00.384689+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "8CFd_EQ",
+    "t212_ticker": "8FRd_EQ",
     "venue": "DE",
-    "yahoo": "8CF.DE",
-    "isin": "US18915M1071",
-    "name": "8CF",
-    "seconds": 84.45,
+    "yahoo": "8FR.DE",
+    "isin": "US9264001028",
+    "name": "8FR",
+    "seconds": 5.324,
     "outcome": "miss",
-    "at": "2026-11-26T02:28:50.531100+00:00",
+    "at": "2026-11-26T10:52:00.384689+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.5,
-      "seconds": 83.415
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 3.168
     },
-    "screen_seconds": 83.415,
-    "signal": "avoid"
+    "screen_seconds": 3.168,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "8FRd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T08:47:11.971659+00:00",
+  "updated_at": "2026-11-26T10:52:00.384689+00:00",
   "totals": {
-    "screened": 6587,
+    "screened": 6588,
     "signals": {
-      "buy": 1903,
+      "buy": 1904,
       "avoid": 1501,
       "hold": 1386,
       "insufficient_data": 1759,
       "strong_buy": 38
     },
-    "signals_n": 6587,
-    "screen_seconds_sum": 76592.61600000031,
-    "screen_seconds_n": 6587,
+    "signals_n": 6588,
+    "screen_seconds_sum": 76595.78400000032,
+    "screen_seconds_n": 6588,
     "outcomes": {
-      "miss": 2773,
+      "miss": 2774,
       "saved": 3814
     }
   },
