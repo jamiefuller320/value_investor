@@ -1911,7 +1911,13 @@ def _step_lab(
             rule, close=close, peak=position.lab_peak, closes=closes, left_tier=left
         )
     return unlaunched_signal(
-        rule, index=index, close=close, closes=closes, entry_px=entry_px, left_tier=left
+        rule,
+        index=index,
+        close=close,
+        closes=closes,
+        entry_px=entry_px,
+        left_tier=left,
+        peak=position.lab_peak,
     )
 
 

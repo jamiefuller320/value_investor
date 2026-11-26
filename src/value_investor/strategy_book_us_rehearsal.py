@@ -87,6 +87,20 @@ EXIT_LAB_ROUNDS: dict[int, dict[str, Any]] = {
             "for the strategy book version review. Development signal sessions only; not evidence."
         ),
     },
+    3: {
+        "path": Path("docs/data/strategy_book_exit_lab_round3.json"),
+        "lab_id": "strategy-book-exit-lab-round-3",
+        "controls": (),
+        "purpose": (
+            "Score the N259 shape the first two rounds did not run: the same trend break "
+            "before and after launch, with no 63-session deadline, no recovery hold, no +5% "
+            "ratchet and no 252-session cap. Parameters are the round-1 trend definitions. "
+            "Before launch the 50-session average and the 55-session low use only closes on "
+            "or after the fill. A flat trade that has not broken that trend gives up its slot "
+            "only at a thesis break or a 63-session review. Development signal sessions only. "
+            "The choice rule is unchanged. This round seals nothing and is not evidence."
+        ),
+    },
 }
 RANKING_LAB_PATH = Path("docs/data") / ranking.LAB_STORE_NAME
 RANKING_LAB_PURPOSE = (
@@ -118,6 +132,7 @@ TITLE_DELETION_DUE = "Strategy-book US rehearsal: licensed data deletion due"
 TITLE_FAILED = "Strategy-book US rehearsal store unreadable"
 TITLE_EXIT_LAB = "Strategy-book exit lab: development-window scores committed"
 TITLE_EXIT_LAB_ROUND_2 = "Strategy-book exit lab round 2: development-window scores committed"
+TITLE_EXIT_LAB_ROUND_3 = "Strategy-book exit lab round 3: development-window scores committed"
 TITLE_RANKING_LAB = "Strategy-book slot-ranking lab: scores committed"
 
 
@@ -1490,8 +1505,8 @@ def exit_lab(
 
     Round 1 writes ``docs/data/strategy_book_exit_lab.json``; round 2 writes
     ``docs/data/strategy_book_exit_lab_round2.json`` and also boards the leave-tier
-    control. Never reads a confirmation signal session and never writes the
-    rehearsal store.
+    control; round 3 writes ``docs/data/strategy_book_exit_lab_round3.json``.
+    Never reads a confirmation signal session and never writes the rehearsal store.
     """
     spec = EXIT_LAB_ROUNDS[round_number]
     exits = tuple(exits) if exits is not None else lab.LAB_ROUNDS[round_number]
@@ -1814,6 +1829,25 @@ def findings(repo_root: Path = REPO_ROOT, now: datetime | None = None) -> list[d
             }
         )
     lab_store = _load_json(Path(repo_root) / EXIT_LAB_PATH)
+    round_three = _load_json(Path(repo_root) / EXIT_LAB_ROUNDS[3]["path"])
+    if round_three:
+        whole = (round_three.get("boards") or {}).get("whole") or {}
+        base = (whole.get("primary") or {}).get("capital_days_return")
+        choice = round_three.get("choice") or {}
+        out.append(
+            {
+                "severity": "info",
+                "title": TITLE_EXIT_LAB_ROUND_3,
+                "summary": (
+                    f"Exit lab round 3 computed {round_three.get('computed_at')} on development "
+                    f"signals ({len(round_three.get('variants') or [])} variants; development "
+                    f"reproduced: {round_three.get('development_reproduced')}; capital-days return "
+                    f"primary {base}; choice-rule pick: {choice.get('pick')}). Exploratory, not "
+                    "evidence. It seals nothing. A pick is the only N259-shaped rule a later "
+                    "version review may seal, and only after a bench slot is free."
+                ),
+            }
+        )
     round_two = _load_json(Path(repo_root) / EXIT_LAB_ROUNDS[2]["path"])
     if round_two:
         whole = (round_two.get("boards") or {}).get("whole") or {}
@@ -1917,7 +1951,10 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         choices=sorted(EXIT_LAB_ROUNDS),
         default=1,
-        help="1: the trend-led variants; 2: leave-tier hold and recovery variants",
+        help=(
+            "1: the trend-led variants; 2: leave-tier hold and recovery variants; "
+            "3: N259 trend break on both sides of launch"
+        ),
     )
     rank_p = sub.add_parser(
         "ranking-lab",

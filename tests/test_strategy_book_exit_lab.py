@@ -237,7 +237,11 @@ def test_round_two_variants_are_fixed_and_new():
     assert len(columns) == len(set(columns)) == 5
     assert not set(columns) & {rule.column for rule in lab.LAB_EXITS}
     assert all(rule.describe()["time_cap"] is None for rule in lab.LAB_EXITS_ROUND_2)
-    assert lab.LAB_ROUNDS == {1: lab.LAB_EXITS, 2: lab.LAB_EXITS_ROUND_2}
+    assert lab.LAB_ROUNDS == {
+        1: lab.LAB_EXITS,
+        2: lab.LAB_EXITS_ROUND_2,
+        3: lab.LAB_EXITS_ROUND_3,
+    }
 
 
 def test_round_two_tier_exit_fills_with_the_leave_tier_control(
@@ -294,3 +298,85 @@ def test_exit_lab_round_two_writes_its_own_file_with_the_control(
     titles = {row["title"] for row in rehearsal.findings(repo)}
     assert rehearsal.TITLE_EXIT_LAB_ROUND_2 in titles
     assert rehearsal.TITLE_EXIT_LAB not in titles
+
+
+def test_round_three_sells_on_the_post_entry_trend_only():
+    trail = lab.LabExit("t", "trail", 0.15, "trail", 0.15)
+    assert lab.unlaunched_signal(trail, index=0, close=80.0, closes=[80.0], peak=100.0) is None
+    assert (
+        lab.unlaunched_signal(trail, index=1, close=85.0, closes=[100.0, 85.0], peak=100.0)
+        == lab.EXIT_TRAIL
+    )
+    assert (
+        lab.unlaunched_signal(trail, index=1, close=85.1, closes=[100.0, 85.1], peak=100.0) is None
+    )
+    # Flat after the fill: the peak is the entry, and a small dip is not a break.
+    assert (
+        lab.unlaunched_signal(trail, index=20, close=99.0, closes=[100.0] * 21, peak=100.0) is None
+    )
+
+    sma = lab.LabExit("s", "sma", 3, "sma", 3)
+    # Pre-entry closes of 1 and a fill of 10. Index 0 must not sell on that older average.
+    assert lab.unlaunched_signal(sma, index=0, close=10.0, closes=[1.0, 1.0, 1.0, 10.0]) is None
+    assert (
+        lab.unlaunched_signal(sma, index=2, close=4.0, closes=[1.0, 10.0, 10.0, 4.0])
+        == lab.EXIT_TREND
+    )
+    assert lab.unlaunched_signal(sma, index=2, close=10.0, closes=[1.0, 10.0, 10.0, 10.0]) is None
+
+    low = lab.LabExit("l", "low", 2, "low", 2)
+    assert lab.unlaunched_signal(low, index=1, close=1.0, closes=[50.0, 50.0, 1.0]) is None
+    assert (
+        lab.unlaunched_signal(low, index=2, close=9.0, closes=[50.0, 10.0, 11.0, 9.0])
+        == lab.EXIT_CHANNEL_LOW
+    )
+
+
+def test_round_three_variants_are_fixed_and_new():
+    columns = [rule.column for rule in lab.LAB_EXITS_ROUND_3]
+    assert columns == [
+        "lab_trail15_both",
+        "lab_trail25_both",
+        "lab_sma50_both",
+        "lab_low55_both",
+    ]
+    earlier = {rule.column for rule in (*lab.LAB_EXITS, *lab.LAB_EXITS_ROUND_2)}
+    assert not set(columns) & earlier
+    for rule in lab.LAB_EXITS_ROUND_3:
+        described = rule.describe()
+        assert described["time_cap"] is None
+        assert described["launched"]["rule"] == described["unlaunched"]["rule"]
+        assert described["launched"]["param"] == described["unlaunched"]["param"]
+        assert "deadline" not in described["unlaunched"]
+        assert rule.launched not in ("ladder", "ladder_tier")
+
+
+def test_exit_lab_round_three_writes_its_own_file(
+    licensed: dict[str, Path],  # noqa: F811
+    tmp_path: Path,
+):
+    repo = make_repo(tmp_path / "repo")
+    paths = (licensed["build"], licensed["mid"], licensed["sharadar"])
+    rehearsal.develop(*paths, repo_root=repo)
+    before = (repo / rehearsal.STORE_PATH).read_bytes()
+    payload = rehearsal.exit_lab(*paths, repo_root=repo, round_number=3)["store"]
+    assert (repo / rehearsal.STORE_PATH).read_bytes() == before
+    assert not (repo / rehearsal.EXIT_LAB_PATH).exists()
+    assert not (repo / rehearsal.EXIT_LAB_ROUNDS[2]["path"]).exists()
+    text = (repo / rehearsal.EXIT_LAB_ROUNDS[3]["path"]).read_text()
+    assert payload["round"] == 3 and payload["evidence"] is False
+    assert payload["development_reproduced"] is True
+    assert "controls" not in payload
+    whole = payload["boards"]["whole"]
+    assert set(whole["variants"]) == {rule.column for rule in lab.LAB_EXITS_ROUND_3}
+    for board in whole["variants"].values():
+        assert board["mature"] == whole["primary"]["mature"]
+        assert board["paired"]["n"] == whole["primary"]["mature"]
+    for ticker in NAMES:
+        assert ticker not in text
+    table = rehearsal.exit_lab_table(payload)
+    assert len(table) == 1 + len(lab.LAB_EXITS_ROUND_3)
+    titles = {row["title"] for row in rehearsal.findings(repo)}
+    assert rehearsal.TITLE_EXIT_LAB_ROUND_3 in titles
+    assert rehearsal.TITLE_EXIT_LAB not in titles
+    assert rehearsal.TITLE_EXIT_LAB_ROUND_2 not in titles
