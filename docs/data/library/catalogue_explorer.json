@@ -6675,28 +6675,10 @@
     "ACXD_EQ",
     "AD2D_EQ",
     "ADED_EQ",
-    "ADH2D_EQ"
+    "ADH2D_EQ",
+    "ADI1D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "9MM1d_EQ",
-      "venue": "DE",
-      "yahoo": "9MM1.DE",
-      "isin": "CA59126M1068",
-      "name": "9MM1",
-      "seconds": 5.784,
-      "outcome": "miss",
-      "at": "2026-11-26T11:01:39.657683+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.484
-      },
-      "screen_seconds": 4.484,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "9NFd_EQ",
       "venue": "DE",
@@ -7437,6 +7419,25 @@
       },
       "screen_seconds": 85.47,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "ADI1d_EQ",
+      "venue": "DE",
+      "yahoo": "ADI1.DE",
+      "isin": "CH0012138605",
+      "name": "ADI1",
+      "seconds": 2.993,
+      "outcome": "miss",
+      "at": "2026-11-26T11:36:42.462929+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.151
+      },
+      "screen_seconds": 1.151,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87159,43 +87160,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T11:32:59.475955+00:00"
+    },
+    {
+      "t212_ticker": "ADI1d_EQ",
+      "yahoo": "ADI1.DE",
+      "name": "ADI1",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T11:36:42.462929+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ADH2d_EQ",
+    "t212_ticker": "ADI1d_EQ",
     "venue": "DE",
-    "yahoo": "ADH2.DE",
-    "isin": "CA0089118776",
-    "name": "ADH2",
-    "seconds": 86.771,
+    "yahoo": "ADI1.DE",
+    "isin": "CH0012138605",
+    "name": "ADI1",
+    "seconds": 2.993,
     "outcome": "miss",
-    "at": "2026-11-26T11:36:32.937833+00:00",
+    "at": "2026-11-26T11:36:42.462929+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.47
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.151
     },
-    "screen_seconds": 85.47,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.151,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ADI1d_EQ"
+    }
   },
-  "updated_at": "2026-11-26T11:36:32.937833+00:00",
+  "updated_at": "2026-11-26T11:36:42.462929+00:00",
   "totals": {
-    "screened": 6674,
+    "screened": 6675,
     "signals": {
-      "buy": 1908,
+      "buy": 1909,
       "avoid": 1513,
       "hold": 1392,
       "insufficient_data": 1823,
       "strong_buy": 38
     },
-    "signals_n": 6674,
-    "screen_seconds_sum": 78539.64500000034,
-    "screen_seconds_n": 6674,
+    "signals_n": 6675,
+    "screen_seconds_sum": 78540.79600000034,
+    "screen_seconds_n": 6675,
     "outcomes": {
-      "miss": 2860,
+      "miss": 2861,
       "saved": 3814
     }
   },
