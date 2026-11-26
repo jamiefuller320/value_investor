@@ -6813,28 +6813,10 @@
     "CAC1D_EQ",
     "CANAD_EQ",
     "CBAD_EQ",
-    "CBGBD_EQ"
+    "CBGBD_EQ",
+    "CBHDD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "BV3d_EQ",
-      "venue": "DE",
-      "yahoo": "BV3.DE",
-      "isin": "DK0015998017",
-      "name": "BV3",
-      "seconds": 2.801,
-      "outcome": "miss",
-      "at": "2026-11-26T14:02:07.825134+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 1.054
-      },
-      "screen_seconds": 1.054,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "BVBd_EQ",
       "venue": "DE",
@@ -7575,6 +7557,25 @@
       },
       "screen_seconds": 83.928,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CBHDd_EQ",
+      "venue": "DE",
+      "yahoo": "CBHD.DE",
+      "isin": "DK0060448595",
+      "name": "CBHD",
+      "seconds": 2.56,
+      "outcome": "miss",
+      "at": "2026-11-26T14:34:13.462399+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.064
+      },
+      "screen_seconds": 1.064,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -88183,43 +88184,56 @@
         "error": null
       },
       "finished_at": "2026-11-26T14:28:46.643798+00:00"
+    },
+    {
+      "t212_ticker": "CBHDd_EQ",
+      "yahoo": "CBHD.DE",
+      "name": "CBHD",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T14:34:13.462399+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CBGBd_EQ",
+    "t212_ticker": "CBHDd_EQ",
     "venue": "DE",
-    "yahoo": "CBGB.DE",
-    "isin": "DK0010181759",
-    "name": "CBGB",
-    "seconds": 85.698,
+    "yahoo": "CBHD.DE",
+    "isin": "DK0060448595",
+    "name": "CBHD",
+    "seconds": 2.56,
     "outcome": "miss",
-    "at": "2026-11-26T14:34:02.962967+00:00",
+    "at": "2026-11-26T14:34:13.462399+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.4125,
-      "seconds": 83.928
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.064
     },
-    "screen_seconds": 83.928,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.064,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CBHDd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T14:34:02.962967+00:00",
+  "updated_at": "2026-11-26T14:34:13.462399+00:00",
   "totals": {
-    "screened": 6812,
+    "screened": 6813,
     "signals": {
-      "buy": 1927,
+      "buy": 1928,
       "avoid": 1518,
       "hold": 1407,
       "insufficient_data": 1921,
       "strong_buy": 39
     },
-    "signals_n": 6812,
-    "screen_seconds_sum": 83148.47200000042,
-    "screen_seconds_n": 6812,
+    "signals_n": 6813,
+    "screen_seconds_sum": 83149.53600000041,
+    "screen_seconds_n": 6813,
     "outcomes": {
-      "miss": 2997,
+      "miss": 2998,
       "saved": 3815
     }
   },
