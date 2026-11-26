@@ -27830,8 +27830,46 @@
         "per_ticker": []
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261126-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "IFX.DE",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "EVN.VI"
+        ],
+        "market_id": "euro_depth",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261126-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-11-26T10:30:57.288708+00:00",
+      "completed_at": "2026-11-26T10:32:00.685794+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [],
+        "results": [],
+        "per_ticker": []
+      },
+      "trigger": "stall_slowdown",
+      "engineering_task_id": "eng-20261126-03"
     }
   ],
-  "updated_at": "2026-11-18T16:57:16.401773+00:00",
+  "updated_at": "2026-11-26T10:32:01.351397+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
