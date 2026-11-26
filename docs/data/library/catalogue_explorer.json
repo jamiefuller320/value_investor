@@ -6690,28 +6690,10 @@
     "AGTD_EQ",
     "AH2ND_EQ",
     "AH91D_EQ",
-    "AHZ0D_EQ"
+    "AHZ0D_EQ",
+    "AIXAD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "A6Ed_EQ",
-      "venue": "DE",
-      "yahoo": "A6E.DE",
-      "isin": "CA5504281067",
-      "name": "A6E",
-      "seconds": 87.237,
-      "outcome": "miss",
-      "at": "2026-11-26T11:14:13.488839+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.555
-      },
-      "screen_seconds": 85.555,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "A6Id_EQ",
       "venue": "DE",
@@ -7452,6 +7434,25 @@
       },
       "screen_seconds": 85.396,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "AIXAd_EQ",
+      "venue": "DE",
+      "yahoo": "AIXA.DE",
+      "isin": "DE000A0WMPJ6",
+      "name": "AIXA",
+      "seconds": 2.779,
+      "outcome": "miss",
+      "at": "2026-11-26T11:47:29.586063+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.933
+      },
+      "screen_seconds": 0.933,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87214,43 +87215,56 @@
       "signal": "strong_buy",
       "status": "pending",
       "queued_at": "2026-11-26T11:39:16.899483+00:00"
+    },
+    {
+      "t212_ticker": "AIXAd_EQ",
+      "yahoo": "AIXA.DE",
+      "name": "AIXA",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T11:47:29.586063+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "AHZ0d_EQ",
+    "t212_ticker": "AIXAd_EQ",
     "venue": "DE",
-    "yahoo": "AHZ0.DE",
-    "isin": "CA09261Q1072",
-    "name": "AHZ0",
-    "seconds": 86.713,
+    "yahoo": "AIXA.DE",
+    "isin": "DE000A0WMPJ6",
+    "name": "AIXA",
+    "seconds": 2.779,
     "outcome": "miss",
-    "at": "2026-11-26T11:47:19.120686+00:00",
+    "at": "2026-11-26T11:47:29.586063+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.396
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.933
     },
-    "screen_seconds": 85.396,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.933,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "AIXAd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T11:47:19.120686+00:00",
+  "updated_at": "2026-11-26T11:47:29.586063+00:00",
   "totals": {
-    "screened": 6689,
+    "screened": 6690,
     "signals": {
-      "buy": 1912,
+      "buy": 1913,
       "avoid": 1514,
       "hold": 1395,
       "insufficient_data": 1829,
       "strong_buy": 39
     },
-    "signals_n": 6689,
-    "screen_seconds_sum": 79058.92900000034,
-    "screen_seconds_n": 6689,
+    "signals_n": 6690,
+    "screen_seconds_sum": 79059.86200000034,
+    "screen_seconds_n": 6690,
     "outcomes": {
-      "miss": 2874,
+      "miss": 2875,
       "saved": 3815
     }
   },
