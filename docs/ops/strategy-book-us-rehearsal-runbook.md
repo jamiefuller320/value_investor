@@ -260,6 +260,38 @@ It needs the committed development block and the reveal, and refuses once `delet
 - Signals in the bottom fifth by distance above the 52-week low did worse per trade (kept minus dropped +1.2 points, t 1.2, in 2000–2012; +2.4, t 2.5, in 2013–2025). Skipping them did not raise the slot book, because the freed slots went to average trades.
 - `rank_lo252` is queued for the first version review as L723. It seals nothing.
 
+## 6e. Exit lab round 3 (N259 shape, exploratory, before deletion)
+
+Rounds 1 and 2 never scored the exit N259 describes. Round 1 sold an unlaunched trade on a new 252-session low or on the 63-session deadline, and it kept the checkpoint ladder on one variant. Round 2's pick, `lab_laddertier_tier`, keeps that +5% ratchet. Round 3 is the missing shape, on the same development signal sessions (2000–2012) only:
+
+- Before launch, sell when the post-entry trend breaks. There is no 63-session deadline and no recovery hold.
+- After launch, hold while that trend holds and sell when it breaks. There is no +5% ratchet and no 252-session cap.
+- A flat trade that has not broken the trend gives up its slot only at a thesis break or a 63-session review. No extra calendar give-up was added.
+- The 2013–2025 window is not read. The round seals nothing, does not change the bench, and is not evidence.
+
+The four variants were fixed before the first run (`LAB_EXITS_ROUND_3`). The numbers are the round-1 trend definitions, not a new search. Before launch, the 50-session average and the 55-session low ignore closes from before the fill, so a young trade is not sold on the pre-entry trend. After launch, those two rules are the round-1 rules, which may include pre-entry closes until the window is filled. The trails measure the drop from the highest close since the fill on both sides.
+
+| Column | After launch | Before launch |
+|---|---|---|
+| `lab_trail15_both` | Sell on a close 15% below the highest close since the fill | The same, from the post-entry peak |
+| `lab_trail25_both` | 25% below that peak | The same |
+| `lab_sma50_both` | A close below the 50-session average | The same, once 50 closes on or after the fill exist |
+| `lab_low55_both` | A close below the lowest close of the prior 55 sessions | The same, once those 55 closes are all on or after the fill |
+
+The round-1 choice rule is reported and is not changed. A pick is the only rule of this shape a later version review may seal, and only after a bench slot is free. No eligible variant means this shape does not clear the rule on the development window. Neither result seals a column, and neither frees a slot.
+
+```bash
+DATA_PATH=~/sharadar
+BUILD_PATH=~/hsr-build
+MID_BUILD_PATH=~/hsr-mid-build
+git checkout main && git pull
+pip install -e .
+ftse-strategy-book-rehearsal exit-lab --round 3 \
+  --build "$BUILD_PATH" --mid-build "$MID_BUILD_PATH" --sharadar-dir "$DATA_PATH"
+```
+
+It writes `docs/data/strategy_book_exit_lab_round3.json` (aggregates only; the privacy guard runs first) and leaves the round 1 and round 2 files and the rehearsal store untouched. Run it before step 7, and before N259's design-pass deadline of 2026-12-07. It refuses once `deleted_at` is stamped. Commit the JSON on its own branch. The ops-monitor info row **Strategy-book exit lab round 3: development-window scores committed** names the choice-rule pick.
+
 ## 7. Delete (by 2026-12-09 at the latest)
 
 ```bash
@@ -306,6 +338,7 @@ writes them. Both are excluded from GHA artifact commits.
 | Strategy-book US rehearsal store unreadable | warn | The store is not valid JSON |
 | Strategy-book exit lab: development-window scores committed | info | `strategy_book_exit_lab.json` exists (names the choice-rule pick) |
 | Strategy-book exit lab round 2: development-window scores committed | info | `strategy_book_exit_lab_round2.json` exists (names the capital-days returns) |
+| Strategy-book exit lab round 3: development-window scores committed | info | `strategy_book_exit_lab_round3.json` exists (names the choice-rule pick; seals nothing) |
 | Strategy-book slot-ranking lab: scores committed | info | `strategy_book_ranking_lab.json` exists (names the registered order's slot-book return per window and the choice-rule pick) |
 
 All are `auto_fixable=false`. None triggers rememo, ingest or engineering work.

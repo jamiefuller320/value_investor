@@ -44,7 +44,7 @@ EXIT_NEW_LOW = "new_low_exit"
 EXIT_LEFT_TIER = "left_tier_exit"
 EXIT_STOP = "stop_exit"
 
-UNLAUNCHED_KINDS = ("deadline", "new_low", "none", "tier", "stop")
+UNLAUNCHED_KINDS = ("deadline", "new_low", "none", "tier", "stop", "trail", "sma", "low")
 LAUNCHED_KINDS = ("ladder", "trail", "sma", "low", "tier", "ladder_tier")
 # Rules that read the screen runs: out of the value set for the confirm count of runs.
 TIER_KINDS = frozenset({"tier", "ladder_tier"})
@@ -118,7 +118,24 @@ LAB_EXITS_ROUND_2: tuple[LabExit, ...] = (
     LabExit("ladder_stop8_deadline63", "ladder", 0.0, "stop", 0.08, 0.0, FAIL_TO_LAUNCH_INDEX),
     LabExit("ladder_deadline32", "ladder", 0.0, "deadline", 32),
 )
-LAB_ROUNDS: dict[int, tuple[LabExit, ...]] = {1: LAB_EXITS, 2: LAB_EXITS_ROUND_2}
+# Round 3, fixed before it is first run. The N259 shape the earlier rounds did
+# not score: the same trend break before and after launch, with no 63-session
+# deadline, no recovery hold, no +5% ratchet and no 252-session cap. Parameters
+# are the round-1 trend definitions, not new ones. Before launch, ``sma`` and
+# ``low`` read only closes on or after the fill. A flat trade that has not
+# broken that trend gives up its slot only at a thesis break or a 63-session
+# review. This round seals nothing.
+LAB_EXITS_ROUND_3: tuple[LabExit, ...] = (
+    LabExit("trail15_both", "trail", 0.15, "trail", 0.15),
+    LabExit("trail25_both", "trail", 0.25, "trail", 0.25),
+    LabExit("sma50_both", "sma", 50, "sma", 50),
+    LabExit("low55_both", "low", 55, "low", 55),
+)
+LAB_ROUNDS: dict[int, tuple[LabExit, ...]] = {
+    1: LAB_EXITS,
+    2: LAB_EXITS_ROUND_2,
+    3: LAB_EXITS_ROUND_3,
+}
 
 
 def lab_by_column(exits: Sequence[LabExit]) -> dict[str, LabExit]:
@@ -160,6 +177,26 @@ def launched_signal(
     return None
 
 
+def _post_entry_closes(
+    closes: list[float], index: int, window: int, *, prior: bool
+) -> list[float] | None:
+    """A window that sits entirely on or after the fill, or None.
+
+    ``index`` is the session index after the fill (the fill is 0) and
+    ``closes`` ends at today's close. ``prior`` drops today, matching the
+    channel-low rule. A short trade does not borrow bars from before the fill.
+    """
+    if window < 1:
+        return None
+    if prior:
+        if index < window or len(closes) < window + 1:
+            return None
+        return closes[-window - 1 : -1]
+    if index + 1 < window or len(closes) < window:
+        return None
+    return closes[-window:]
+
+
 def unlaunched_signal(
     rule: LabExit,
     *,
@@ -168,10 +205,17 @@ def unlaunched_signal(
     closes: list[float],
     entry_px: float | None = None,
     left_tier: bool = False,
+    peak: float | None = None,
 ) -> str | None:
     """Exit reason for a trade that has not launched, or None."""
     reason = _unlaunched_rule(
-        rule, index=index, close=close, closes=closes, entry_px=entry_px, left_tier=left_tier
+        rule,
+        index=index,
+        close=close,
+        closes=closes,
+        entry_px=entry_px,
+        left_tier=left_tier,
+        peak=peak,
     )
     if reason is None and rule.unlaunched_deadline and index >= rule.unlaunched_deadline:
         return EXIT_FAIL_TO_LAUNCH
@@ -186,6 +230,7 @@ def _unlaunched_rule(
     closes: list[float],
     entry_px: float | None,
     left_tier: bool,
+    peak: float | None,
 ) -> str | None:
     if rule.unlaunched == "tier":
         return EXIT_LEFT_TIER if left_tier else None
@@ -195,6 +240,20 @@ def _unlaunched_rule(
         return EXIT_STOP if close <= entry_px * (1.0 - rule.unlaunched_param) else None
     if rule.unlaunched == "deadline":
         return EXIT_FAIL_TO_LAUNCH if index >= int(rule.unlaunched_param) else None
+    if rule.unlaunched == "trail":
+        if index < 1 or peak is None or peak <= 0:
+            return None
+        return EXIT_TRAIL if close <= peak * (1.0 - rule.unlaunched_param) else None
+    if rule.unlaunched == "sma":
+        window = _post_entry_closes(closes, index, int(rule.unlaunched_param), prior=False)
+        if window is None:
+            return None
+        return EXIT_TREND if close < statistics.fmean(window) else None
+    if rule.unlaunched == "low":
+        window = _post_entry_closes(closes, index, int(rule.unlaunched_param), prior=True)
+        if not window:
+            return None
+        return EXIT_CHANNEL_LOW if close < min(window) else None
     if rule.unlaunched == "new_low":
         if index < 1:
             return None
