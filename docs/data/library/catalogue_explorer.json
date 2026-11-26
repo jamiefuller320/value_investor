@@ -6745,28 +6745,10 @@
     "BC8D_EQ",
     "BDTD_EQ",
     "BEHVD_EQ",
-    "BEZD_EQ"
+    "BEZD_EQ",
+    "BFSAD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "AOYd_EQ",
-      "venue": "DE",
-      "yahoo": "AOY.DE",
-      "isin": "BMG6331P1041",
-      "name": "AOY",
-      "seconds": 87.673,
-      "outcome": "miss",
-      "at": "2026-11-26T12:02:31.351672+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.532
-      },
-      "screen_seconds": 85.532,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "APMd_EQ",
       "venue": "DE",
@@ -7507,6 +7489,25 @@
       },
       "screen_seconds": 0.919,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "BFSAd_EQ",
+      "venue": "DE",
+      "yahoo": "BFSA.DE",
+      "isin": "LU1704650164",
+      "name": "BFSA",
+      "seconds": 2.219,
+      "outcome": "miss",
+      "at": "2026-11-26T13:55:53.487347+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.925
+      },
+      "screen_seconds": 0.925,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87325,43 +87326,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T13:55:07.889728+00:00"
+    },
+    {
+      "t212_ticker": "BFSAd_EQ",
+      "yahoo": "BFSA.DE",
+      "name": "BFSA",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T13:55:53.487347+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "BEZd_EQ",
+    "t212_ticker": "BFSAd_EQ",
     "venue": "DE",
-    "yahoo": "BEZ.DE",
-    "isin": "DE0005201602",
-    "name": "BEZ",
-    "seconds": 2.802,
+    "yahoo": "BFSA.DE",
+    "isin": "LU1704650164",
+    "name": "BFSA",
+    "seconds": 2.219,
     "outcome": "miss",
-    "at": "2026-11-26T13:55:43.788537+00:00",
+    "at": "2026-11-26T13:55:53.487347+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 1.0,
-      "seconds": 0.919
+      "seconds": 0.925
     },
-    "screen_seconds": 0.919,
-    "signal": "hold"
+    "screen_seconds": 0.925,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "BFSAd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T13:55:43.788537+00:00",
+  "updated_at": "2026-11-26T13:55:53.487347+00:00",
   "totals": {
-    "screened": 6744,
+    "screened": 6745,
     "signals": {
-      "buy": 1919,
+      "buy": 1920,
       "avoid": 1515,
       "hold": 1402,
       "insufficient_data": 1869,
       "strong_buy": 39
     },
-    "signals_n": 6744,
-    "screen_seconds_sum": 81521.75600000039,
-    "screen_seconds_n": 6744,
+    "signals_n": 6745,
+    "screen_seconds_sum": 81522.68100000039,
+    "screen_seconds_n": 6745,
     "outcomes": {
-      "miss": 2929,
+      "miss": 2930,
       "saved": 3815
     }
   },
