@@ -1,0 +1,6615 @@
+{
+  "instrument": "strategy_book_memo_model_shadow",
+  "rule_id": "l703-outcome-score-v1",
+  "schema_version": 1,
+  "registration_id": "owner-strategy-book-v0",
+  "influences_live": false,
+  "feeds_strategy_book": false,
+  "rememo_live": false,
+  "generated_at": "2026-11-26T08:44:28.709374+00:00",
+  "scoring_date": "2026-11-26",
+  "models": {
+    "incumbent": "composer-2.5",
+    "challenger": "grok-4.6"
+  },
+  "live_model": "composer-2.5",
+  "live_model_changed": false,
+  "decision": {
+    "path": "docs/data/memo_model_comparison/decision.json",
+    "outcome": "inconclusive_keep",
+    "judge_trusted": false,
+    "governing": "owner_sample",
+    "status": "recorded",
+    "error": null,
+    "live_model": "composer-2.5",
+    "live_model_changed": false,
+    "switch_applied": false,
+    "composer_stays": true,
+    "feeds_strategy_book": false,
+    "note": "composer-2.5 stays on keep and inconclusive_keep. A switch in decision.json is not applied here. This shadow does not write the research store, the memo log, or the strategy book."
+  },
+  "rule": {
+    "id": "l703-outcome-score-v1",
+    "block_hit": "block and 63-session fair-cost return < 0",
+    "pass_hit": "pass and 63-session fair-cost return >= 0",
+    "min_scored": 8,
+    "outcome": "fair-cost return at 63 sessions after the fill, or the realized exit if it came first",
+    "early_marks": "strategy_book_memo_free_shadow.early_marks_for_series",
+    "fail_closed": "missing or stale evidence is no score and no effect"
+  },
+  "signals": [
+    {
+      "market": "ftse350",
+      "ticker": "ABDN.L",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "ATYM.L",
+      "signal_session": "2026-11-18",
+      "fill_session": "2026-11-19",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "BARC.L",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "BREE.L",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "BYIT.L",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "DATA.L",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "FOUR.L",
+      "signal_session": "2026-11-10",
+      "fill_session": "2026-11-11",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": true,
+          "sessions_after_fill": 10,
+          "session": "2026-11-25",
+          "return_from_fill": -0.03771760154738879,
+          "max_drawdown": -0.05077369439071566,
+          "launch_progress": -0.3771760154738879,
+          "launched": false,
+          "channel_direction_at_fill": "rising",
+          "channel_direction_at_mark": "rising",
+          "channel_direction_change": false,
+          "channel_window": "ch126",
+          "channel_status_at_mark": "ok"
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": true,
+        "s20_available": false,
+        "s10_return": -0.03771760154738879,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "FRES.L",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "GEN.L",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "GNS.L",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "HOC.L",
+      "signal_session": "2026-11-18",
+      "fill_session": "2026-11-19",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "IGG.L",
+      "signal_session": "2026-11-18",
+      "fill_session": "2026-11-19",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "ITV.L",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "KLR.L",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "MEGP.L",
+      "signal_session": "2026-11-10",
+      "fill_session": "2026-11-11",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": true,
+          "sessions_after_fill": 10,
+          "session": "2026-11-25",
+          "return_from_fill": -0.018677042801556465,
+          "max_drawdown": -0.07547169811320753,
+          "launch_progress": -0.18677042801556465,
+          "launched": false,
+          "channel_direction_at_fill": "sideways",
+          "channel_direction_at_mark": "sideways",
+          "channel_direction_change": false,
+          "channel_window": "ch126",
+          "channel_status_at_mark": "ok"
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": true,
+        "s20_available": false,
+        "s10_return": -0.018677042801556465,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "PAF.L",
+      "signal_session": "2026-11-18",
+      "fill_session": "2026-11-19",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "PFD.L",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "RIO.L",
+      "signal_session": "2026-11-17",
+      "fill_session": "2026-11-18",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "VLX.L",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "aex",
+      "ticker": "PRX.AS",
+      "signal_session": "2026-11-18",
+      "fill_session": "2026-11-19",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "aim",
+      "ticker": "MPE.L",
+      "signal_session": "2026-11-23",
+      "fill_session": "2026-11-24",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "bel20",
+      "ticker": "UMI.BR",
+      "signal_session": "2026-11-16",
+      "fill_session": "2026-11-17",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "dax",
+      "ticker": "FME.DE",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "hang_seng",
+      "ticker": "0001.HK",
+      "signal_session": "2026-11-24",
+      "fill_session": "2026-11-25",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "hang_seng",
+      "ticker": "1024.HK",
+      "signal_session": "2026-11-16",
+      "fill_session": "2026-11-17",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "hang_seng",
+      "ticker": "1378.HK",
+      "signal_session": "2026-11-18",
+      "fill_session": "2026-11-19",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "hang_seng",
+      "ticker": "2628.HK",
+      "signal_session": "2026-11-13",
+      "fill_session": "2026-11-16",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ibex35",
+      "ticker": "ACS.MC",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "iseq20",
+      "ticker": "GL9.IR",
+      "signal_session": "2026-11-23",
+      "fill_session": "2026-11-24",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "ADBE",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "BKNG",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "BKR",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "CSCO",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "GOOG",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": "2026-11-24",
+      "status": "closed",
+      "source": "primary_episode",
+      "outcome_63": 0.04415151515151511,
+      "outcome_63_basis": "realized_exit",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "MCHP",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "MU",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "NVDA",
+      "signal_session": "2026-11-13",
+      "fill_session": "2026-11-16",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "SNDK",
+      "signal_session": "2026-11-17",
+      "fill_session": "2026-11-18",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "STX",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "TER",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "WDC",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "CI",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "CMI",
+      "signal_session": "2026-11-16",
+      "fill_session": "2026-11-17",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "CRM",
+      "signal_session": "2026-11-10",
+      "fill_session": "2026-11-11",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": true,
+          "sessions_after_fill": 10,
+          "session": "2026-11-25",
+          "return_from_fill": -0.09540846750149068,
+          "max_drawdown": -0.17150589422503548,
+          "launch_progress": -0.9540846750149068,
+          "launched": false,
+          "channel_direction_at_fill": "rising",
+          "channel_direction_at_mark": "rising",
+          "channel_direction_change": false,
+          "channel_window": "ch126",
+          "channel_status_at_mark": "ok"
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": true,
+        "s20_available": false,
+        "s10_return": -0.09540846750149068,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "CTSH",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "CVS",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "DELL",
+      "signal_session": "2026-11-18",
+      "fill_session": "2026-11-19",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "DVA",
+      "signal_session": "2026-11-18",
+      "fill_session": "2026-11-19",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "FIS",
+      "signal_session": "2026-11-10",
+      "fill_session": "2026-11-11",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": true,
+          "sessions_after_fill": 10,
+          "session": "2026-11-25",
+          "return_from_fill": -0.08507116848725593,
+          "max_drawdown": -0.14498510427010936,
+          "launch_progress": -0.8507116848725593,
+          "launched": false,
+          "channel_direction_at_fill": "falling",
+          "channel_direction_at_mark": "falling",
+          "channel_direction_change": false,
+          "channel_window": "ch126",
+          "channel_status_at_mark": "ok"
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": true,
+        "s20_available": false,
+        "s10_return": -0.08507116848725593,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "GEV",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "IBM",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "IT",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "JBL",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "LDOS",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "NEM",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "NKE",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "NWSA",
+      "signal_session": "2026-11-12",
+      "fill_session": "2026-11-13",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "PFE",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "URI",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "CDA.AX",
+      "signal_session": "2026-11-17",
+      "fill_session": "2026-11-18",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "CSC.AX",
+      "signal_session": "2026-11-17",
+      "fill_session": "2026-11-18",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "FMG.AX",
+      "signal_session": "2026-11-17",
+      "fill_session": "2026-11-18",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "NEM.AX",
+      "signal_session": "2026-11-20",
+      "fill_session": "2026-11-23",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "PLS.AX",
+      "signal_session": "2026-11-19",
+      "fill_session": "2026-11-20",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "tsx60",
+      "ticker": "ABX.TO",
+      "signal_session": "2026-11-18",
+      "fill_session": "2026-11-19",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "tsx60",
+      "ticker": "OTEX.TO",
+      "signal_session": "2026-11-18",
+      "fill_session": "2026-11-19",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sti",
+      "ticker": "A17U.SI",
+      "signal_session": "2026-11-24",
+      "fill_session": "2026-11-25",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sti",
+      "ticker": "BS6.SI",
+      "signal_session": "2026-11-13",
+      "fill_session": "2026-11-16",
+      "exit_session": null,
+      "status": "open",
+      "source": "primary_episode",
+      "outcome_63": null,
+      "outcome_63_basis": "not_yet",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "not_yet",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "CSC.AX",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "GGP.AX",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_not_ready",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "GMD.AX",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_not_ready",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "NEM.AX",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "PLS.AX",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "RRL.AX",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "pending_fill",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "dax",
+      "ticker": "FME.DE",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "ABDN.L",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "BARC.L",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "BREE.L",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "BYIT.L",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "DATA.L",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "GEN.L",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "GNS.L",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "PFD.L",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "VLX.L",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse_mib",
+      "ticker": "MONC.MI",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_not_ready",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ibex35",
+      "ticker": "ACS.MC",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "BKNG",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "CSCO",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "INTU",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_not_ready",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "MCHP",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "MU",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "PYPL",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_not_ready",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "STX",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "TER",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "WDC",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "CTSH",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "CVS",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "GEV",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "IBM",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "IT",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "JBL",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "LDOS",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "NKE",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "URI",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sti",
+      "ticker": "A17U.SI",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "filled",
+      "source": "forward_status",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "SCT.L",
+      "signal_session": "2026-11-05",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "aim",
+      "ticker": "ASY.L",
+      "signal_session": "2026-11-09",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "asx200",
+      "ticker": "NWS.AX",
+      "signal_session": "2026-11-10",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "MEGP.L",
+      "signal_session": "2026-11-13",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "CRM",
+      "signal_session": "2026-11-17",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "FIS",
+      "signal_session": "2026-11-17",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "SNDK",
+      "signal_session": "2026-11-17",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "aex",
+      "ticker": "PRX.AS",
+      "signal_session": "2026-11-19",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "ADBE",
+      "signal_session": "2026-11-19",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "FOUR.L",
+      "signal_session": "2026-11-20",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "FOUR.L",
+      "signal_session": "2026-11-19",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "SNDK",
+      "signal_session": "2026-11-23",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "hang_seng",
+      "ticker": "1024.HK",
+      "signal_session": "2026-11-23",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "hang_seng",
+      "ticker": "1378.HK",
+      "signal_session": "2026-11-23",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "SNDK",
+      "signal_session": "2026-11-24",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "CI",
+      "signal_session": "2026-11-23",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "PFE",
+      "signal_session": "2026-11-23",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "ATYM.L",
+      "signal_session": "2026-11-24",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "aex",
+      "ticker": "PRX.AS",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    },
+    {
+      "market": "nasdaq100",
+      "ticker": "SNDK",
+      "signal_session": "2026-11-25",
+      "fill_session": null,
+      "exit_session": null,
+      "status": "memo_logged",
+      "source": "memo_log",
+      "outcome_63": null,
+      "outcome_63_basis": "no_fill",
+      "outcome_sessions": 63,
+      "early_marks": {
+        "s10": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 10
+        },
+        "s20": {
+          "available": false,
+          "reason": "no_fill",
+          "sessions_after_fill": 20
+        }
+      },
+      "early_indicator": {
+        "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+        "s10_available": false,
+        "s20_available": false,
+        "s10_return": null,
+        "s20_return": null
+      },
+      "models": {
+        "composer-2.5": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        },
+        "grok-4.6": {
+          "effect": null,
+          "hit": null,
+          "score_status": "no_memo",
+          "verdict": null,
+          "finished_at": null,
+          "live_influence_authorized": false,
+          "feeds_strategy_book": false
+        }
+      },
+      "feeds_strategy_book": false
+    }
+  ],
+  "by_model": {
+    "composer-2.5": {
+      "scored": 0,
+      "hits": 0,
+      "misses": 0,
+      "hit_rate": null,
+      "status": "insufficient_data",
+      "scored_with_s10": 0
+    },
+    "grok-4.6": {
+      "scored": 0,
+      "hits": 0,
+      "misses": 0,
+      "hit_rate": null,
+      "status": "insufficient_data",
+      "scored_with_s10": 0
+    }
+  },
+  "score_status_counts": {
+    "no_memo": 250
+  },
+  "early_indicator": {
+    "source": "strategy_book_memo_free_shadow.early_marks_for_series",
+    "signals_with_s10": 4,
+    "signals_with_outcome_63": 1,
+    "observe_store": "strategy_book_observe.json"
+  },
+  "memo_run": {
+    "requested": 0,
+    "estimated_spend_usd": 0.0,
+    "spent_before_usd": null,
+    "weekly_cap_usd": 24.0,
+    "skipped_reason": null,
+    "names": []
+  },
+  "observe_memo_spend_usd": 0.0,
+  "errors": []
+}
