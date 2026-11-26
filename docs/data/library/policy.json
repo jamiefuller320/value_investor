@@ -367,8 +367,8 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 600.7,
-    "estimated_spend_usd_this_week": 271.2,
+    "estimated_spend_usd_this_cycle": 599.5,
+    "estimated_spend_usd_this_week": 270.0,
     "week_id": "2026-W48",
     "cycle_id": "2026-11-d8",
     "weekly_ops_cap_usd": 640.0,
@@ -574,7 +574,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-11-26T08:24:14.360199+00:00",
+  "updated_at": "2026-11-26T08:46:55.369641+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -587,7 +587,7 @@
     "psi20"
   ],
   "ingest_parallel_sprint": [
-    "sp500"
+    "euro_stoxx50"
   ],
   "ingest_parallel_sprint_2": [
     "tsx60"
@@ -898,14 +898,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-11-09T21:29:33.289163+00:00",
-        "parallel_stream": 2,
-        "from_market": "asx200",
-        "to_market": null,
-        "stream_markets_after": [],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-11-09T23:15:10.353233+00:00",
         "parallel_stream": 1,
@@ -1835,6 +1827,39 @@
           "run_at": "2026-11-26T07:43:33.714732+00:00",
           "shortlist_count": 17,
           "ticker_count": 59
+        }
+      },
+      {
+        "at": "2026-11-26T07:51:20.608639+00:00",
+        "parallel_stream": 1,
+        "from_market": "sp500",
+        "to_market": "euro_stoxx50",
+        "stream_markets_after": [
+          "euro_stoxx50"
+        ],
+        "ingest_parity_recorded": false,
+        "gap_market_id": "sp500",
+        "window_days": 2,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 18,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 9,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": -9,
+          "filing_gaps": 0
         }
       }
     ]
