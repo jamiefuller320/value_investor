@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 18 · Updated 2026-11-26T17:57:28.266153+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-26T21:43:12.204540+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.71
-Rationale: On-file Q3 beat still supports strong_buy; export-pause headlines name Dell as an Nvidia partner—regulatory noise only; backlog copy and upgrades recur; no new SEC extracts.
+Confidence: 0.70
+Rationale: On-file Q3 still confirms strong_buy; this batch repeats south-east Asian shipment-pause copy and BofA’s $100 target cut—sell-side AI-cycle scepticism, not new filings.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -98,3 +98,8 @@ Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchang
 The 17:56 UTC batch adds Nvidia-linked US export-control copy pausing AI server shipments to four south-east Asian markets, naming Dell among manufacturing partners.  
 Post-Q3 themes persist (~$132bn backlog, Clarke “different company” copy, scattered buy ratings) alongside prior peak-AI and margin scepticism.  
 On-file Q3 FY2027 8-K figures are unchanged; no new SEC extracts.
+
+### 2026-11-26T21:43:12.204540+00:00
+The 21:42 UTC batch largely repeats Nvidia-linked shipment-pause headlines for four south-east Asian markets, naming Dell among partners, plus press on BofA cutting its price target by $100 after record Q3.  
+On-file Q3 FY2027 8-K figures ($54.9bn revenue, $9.45 EPS, ~$132bn backlog) are unchanged; no new SEC extracts.  
+Screen remains **strong_buy**; leverage, cyclical and regulatory risks are unchanged.

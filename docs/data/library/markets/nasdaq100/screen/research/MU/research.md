@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 13 · Updated 2026-11-26T18:09:19.841208+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-26T21:51:26.366895+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.69
-Rationale: Sourced ~$59bn TTM FCF supports the screen, but zero model passes and Huawei/TrendForce cyclical headlines leave research at accumulate versus strong buy.
+Rationale: Bullish cycle-peak and 2027 oversold pieces are headline-only; ~$59bn TTM FCF supports the screen but zero model passes and unchanged cyclical risks keep accumulate versus strong buy.
 RiskTags: cyclical, competitive, leverage, customer_concentration
 
 ## Weekly updates
@@ -70,4 +70,9 @@ Filing-based cyclical, leverage, competitive and customer-concentration risks ar
 ### 2026-11-26T18:09:19.841208+00:00
 Headlines add Huawei/China memory rivalry, TrendForce 2027 forecast cuts (MU down ~4.5%) and SK Hynix 3D DRAM competition, offset partly by UBS Buy, HPE scarcity and tariff-exemption pieces.  
 No new filings or sourced financials; screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed.  
+Filing-based cyclical, leverage, competitive and customer-concentration risks are unchanged.
+
+### 2026-11-26T21:51:26.366895+00:00
+Evening headlines add bullish memory cycle-peak commentary and a 2027 oversold-semiconductor list including MU, plus macro US-shut futures colour; no new filings or sourced financials.  
+Screen remains **strong buy** with ~$59bn TTM FCF and zero quantitative models passed.  
 Filing-based cyclical, leverage, competitive and customer-concentration risks are unchanged.

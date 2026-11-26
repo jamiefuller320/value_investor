@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 25 · Updated 2026-11-26T17:54:02.092502+00:00 · Mode: structured_verdict_update_
+_Version 26 · Updated 2026-11-26T21:39:50.174283+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: Yahoo Q3 key-metrics pre-earnings coverage joins filing-backed FCF mildly confirming Strong Buy; Tocqueville trim is non-filing; Informatica leverage and AI competition stay unresolved until 2 Dec.
+Confidence: 0.69
+Rationale: Yahoo per-answer billing commentary joins filing-backed FCF in mildly confirming Strong Buy; leverage and AI competition stay unresolved until 2 Dec results—no new primary filings in the pack.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -128,5 +128,10 @@ Leverage and competitive pre-earnings themes are unchanged.
 
 ### 2026-11-26T17:54:02.092502+00:00
 The 26 Nov batch adds Yahoo pre-earnings Q3 key-metrics commentary and MarketBeat on Tocqueville trimming CRM; other headlines are peer noise.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
+Leverage and competitive pre-earnings themes are unchanged ahead of 2 Dec results.
+
+### 2026-11-26T21:39:50.174283+00:00
+The 26 Nov batch adds Yahoo on shifting billing toward per-answer AI monetisation versus per-seat pricing, with Wall Street watching ahead of results.  
 No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
 Leverage and competitive pre-earnings themes are unchanged ahead of 2 Dec results.

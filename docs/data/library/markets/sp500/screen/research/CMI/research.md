@@ -1,6 +1,6 @@
 # Cummins Inc. (CMI) — Research memo
 
-_Version 22 · Updated 2026-11-26T17:53:41.452887+00:00 · Mode: structured_verdict_update_
+_Version 23 · Updated 2026-11-26T21:39:34.245820+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: The 17:53 UTC batch adds only flow and sentiment headlines; Q3 diluted EPS of $8.25 and about $3.2bn TTM free cash flow still modestly confirm the strong buy case.
+Rationale: The 21:39 UTC batch adds one Seeking Alpha Q3 sentiment piece without new disclosure; Q3 diluted EPS of $8.25 and about $3.5bn TTM free cash flow still modestly confirm the strong buy case.
 RiskTags: regulatory, cyclical, customer_concentration, litigation, leverage
 
 ## Weekly updates
@@ -118,3 +118,8 @@ Prior HOOPP, institutional-flow and sentiment themes are unchanged; filing risk 
 The 17:53 UTC news batch adds four items since 03:50 UTC: Jump Financial reportedly bought CMI, Rep. Kevin Hern disclosed a sale, plus generic hydrogen and trading-allocation headlines.  
 Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.2bn; the screen remains a strong buy.  
 No new verified filing disclosure; prior institutional-flow themes and filing risk tags are unchanged.
+
+### 2026-11-26T21:39:34.245820+00:00
+The 21:39 UTC news batch adds one Seeking Alpha Q3 review headline since 17:53 UTC; the syndicated snippet carries no verified company disclosure.  
+Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.5bn; the screen remains a strong buy.  
+Prior Jump Financial, HOOPP and institutional-flow themes are unchanged; filing risk tags are unchanged.

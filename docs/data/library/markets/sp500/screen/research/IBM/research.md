@@ -1,6 +1,6 @@
 # International Business Machines Corporation (IBM) — Research memo
 
-_Version 13 · Updated 2026-11-26T18:03:15.134710+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-26T21:48:09.059417+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.65
-Rationale: Stretched-momentum commentary and mixed institutional flows add no filing-backed change; legacy leverage, pension and competitive risks still warrant accumulate moderating the buy screen.
+Rationale: Wedbush initiation and price action are commentary only; unchanged leverage, pension and competitive risks from filings keep accumulate as a moderator on the buy screen.
 RiskTags: leverage, pension, competitive, cyclical, litigation, regulatory
 
 ## Weekly updates
@@ -71,5 +71,10 @@ Q3 2026 screening snapshot and cash-flow inputs are unchanged.
 
 ### 2026-11-26T18:03:15.134710+00:00
 Since the 03:58 run, headlines cite buyer-led gains with stretched momentum (Traders Union) and mixed institutional position changes; a Kyndryl spin-off piece adds no IBM issuer fundamentals.  
+No new SEC filing bodies beyond the 19 Nov yen-note 8-K already in the library.  
+Q3 2026 screening snapshot and cash-flow inputs are unchanged.
+
+### 2026-11-26T21:48:09.059417+00:00
+Since the 18:03 run, one headline reports Wedbush initiating coverage at Outperform with a $276 target alongside an ~3.3% share gain; it adds no filing-backed issuer fundamentals.  
 No new SEC filing bodies beyond the 19 Nov yen-note 8-K already in the library.  
 Q3 2026 screening snapshot and cash-flow inputs are unchanged.

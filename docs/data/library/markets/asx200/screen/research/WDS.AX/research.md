@@ -1,6 +1,6 @@
 # Woodside Energy Group Ltd (WDS.AX) — Research memo
 
-_Version 7 · Updated 2026-11-26T18:21:26.004071+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-26T22:00:49.200455+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -42,4 +42,9 @@ The filing library is still 104 items, with no new ASX announcements since 5 Nov
 ### 2026-11-26T18:21:26.004071+00:00
 Two Kalkine headlines since the 04:13 UTC run (QatarEnergy LNG, Scarborough/Louisiana)—commentary only, not new company disclosures.  
 18:20 UTC financial and filing refresh unchanged: 104 items, no ASX announcements since 5 Nov.  
+Yahoo OCF−CapEx FCF still negative US$782m; quarterly cashflow empty, so screen TTM FCF is unverified.
+
+### 2026-11-26T22:00:49.200455+00:00
+One Simply Wall St half-year results headline since 18:21 UTC is third-party commentary, not a company disclosure.  
+22:00 UTC financial and filing refresh unchanged: 104 items, no ASX announcements since 5 Nov.  
 Yahoo OCF−CapEx FCF still negative US$782m; quarterly cashflow empty, so screen TTM FCF is unverified.

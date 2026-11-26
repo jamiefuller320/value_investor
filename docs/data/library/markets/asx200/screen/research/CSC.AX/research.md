@@ -1,6 +1,6 @@
 # Capstone Copper Corp. (CSC.AX) — Research memo
 
-_Version 19 · Updated 2026-11-26T17:54:36.667616+00:00 · Mode: structured_verdict_update_
+_Version 20 · Updated 2026-11-26T21:40:22.207354+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.57
-Rationale: Three Kalkine pieces (25–26 Nov) revisit Q3, Pinto Valley and Cozamin; no new primary disclosure—research stays neutral on the hold signal.
+Rationale: Empty incremental news since the last refresh; no new indexed disclosure—research stays neutral on the screen hold signal.
 RiskTags: cyclical, regulatory, leverage, liquidity, litigation, other
 
 ## Weekly updates
@@ -103,3 +103,8 @@ No material change; primary interim financial disclosure gaps in the pack persis
 Three new Kalkine articles (25–26 Nov) recap Q3 results, Cozamin divestiture, revised production guidance and Pinto Valley rates; no indexed primary disclosure in the pack.
 Q3 record adjusted-EBITDA, low-end 2026 production guidance and an unsubstantiated Cozamin close in filing bodies remain the active narrative.
 Screen hold is unchanged; primary interim financial disclosure gaps in the pack persist.
+
+### 2026-11-26T21:40:22.207354+00:00
+No new articles in the 26 Nov 21:39 incremental news batch since the 17:54 refresh.  
+Q3 record adjusted-EBITDA, low-end 2026 production guidance and an unsubstantiated Cozamin close in filing bodies remain the active narrative.  
+No material change; primary interim financial disclosure gaps in the pack persist.

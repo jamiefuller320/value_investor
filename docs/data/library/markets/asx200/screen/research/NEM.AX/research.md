@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM.AX) — Research memo
 
-_Version 6 · Updated 2026-11-26T18:10:17.702844+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-26T21:52:28.711869+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: Steady sourced ~$7.3bn and ~$10.1bn TTM free cash flow support the overlay; development and macro gold headlines add no filing-grade change—research stays neutral on the unchanged hold screen.
+Rationale: Steady ~$7.3bn and ~$10.1bn TTM FCF support the overlay; 13F flow and peer capex headlines are non-filing—research stays neutral on the unchanged hold screen.
 RiskTags: cyclical, key_person, regulatory, other
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Filings index refreshed at 04:02 with 20 items; no new indexed filing bodies sin
 Since the 04:02 refresh, the batch adds Kalkine on Tanami and Red Chris mine development and a macro piece on GLD lagging in the current equity drawdown; other items are generic ETF flow headlines, not NEM-specific news.  
 Hold signal and zero model passes are unchanged; filing-aligned ~$7.3bn and TTM ~$10.1bn FCF in the file set are steady.  
 Filings index refreshed at 18:09 with 20 items; no new company-specific disclosure in the batch.
+
+### 2026-11-26T21:52:28.711869+00:00
+Since 18:10, yfinance adds a peer Agnico expansion/cost piece and a 13F note (11 funds bought, six sold NEM last quarter).  
+Hold and zero model passes unchanged; filing-aligned ~$7.3bn and TTM ~$10.1bn FCF steady in sources.  
+Filings index refreshed at 21:52 with 20 items; no new company-specific disclosure in the batch.

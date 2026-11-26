@@ -1,6 +1,6 @@
 # Pfizer, Inc. (PFE) — Research memo
 
-_Version 13 · Updated 2026-11-26T18:12:36.951236+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-26T21:54:19.607581+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.69
-Rationale: Research still weakens the buy case: the 18:12 batch has only Moderna comparison and options pages, no new filings; Japan/Canada LNP litigation, dividend-cliff debate and US pricing remain unresolved in-file.
+Rationale: Research still weakens the buy case: the 21:54 batch is empty since 18:12 with no new filings; Japan/Canada LNP litigation, dividend-cliff debate and US pricing remain unresolved in-file.
 RiskTags: regulatory, competitive, leverage, litigation, accounting
 
 ## Weekly updates
@@ -68,4 +68,9 @@ No new SEC filings since the 3 Nov Q3 packet; Japan/Canada LNP litigation and US
 ### 2026-11-26T18:12:36.951236+00:00
 No material change since the 04:04 refresh.  
 The 18:12 batch adds a Moderna vs Pfizer vaccine comparison and options quote pages only; Eli Lilly oncology is sector context.  
+No new SEC filings since the 3 Nov Q3 packet; Japan/Canada LNP litigation and US drug-pricing themes are unchanged in the file set.
+
+### 2026-11-26T21:54:19.607581+00:00
+No material change since the 18:12 refresh.  
+The 21:54 news batch has no articles; no Pfizer-specific fundamental news.  
 No new SEC filings since the 3 Nov Q3 packet; Japan/Canada LNP litigation and US drug-pricing themes are unchanged in the file set.

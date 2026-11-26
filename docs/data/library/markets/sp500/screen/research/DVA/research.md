@@ -1,6 +1,6 @@
 # DaVita Inc. (DVA) — Research memo
 
-_Version 18 · Updated 2026-11-26T17:57:45.824167+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-26T21:43:34.188259+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -98,3 +98,8 @@ Regulatory, leverage and litigation overlays are unchanged; the quantitative scr
 No material change since the 26 November 03:53 UTC refresh.  
 The 17:57 UTC news batch adds no articles; regulatory, leverage and litigation overlays are unchanged.  
 The quantitative screen remains **strong_buy**; the filing pack is unchanged.
+
+### 2026-11-26T21:43:34.188259+00:00
+No material change since the 26 November 17:57 UTC refresh.  
+The 21:43 UTC news batch adds no articles; HHS, leverage and litigation overlays are unchanged.  
+Screen remains **strong_buy**; filing pack unchanged.

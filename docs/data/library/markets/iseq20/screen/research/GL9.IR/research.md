@@ -1,6 +1,6 @@
 # Glanbia plc (GL9.IR) — Research memo
 
-_Version 13 · Updated 2026-11-26T18:02:47.706261+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-26T21:47:58.402843+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.64
-Rationale: No new inputs in the 18:02 batch; raised FY2026 adjusted-EPS outlook partly supports the buy screen, but Morgan Stanley competition/whey warnings and unverified TTM FCF still cap conviction.
+Rationale: Empty 21:47 batch; raised FY2026 adjusted-EPS outlook partly supports buy, but Morgan Stanley competition/whey warnings and unverified TTM FCF still cap conviction.
 RiskTags: leverage, accounting, pension, competitive
 
 ## Weekly updates
@@ -72,4 +72,9 @@ Raised FY2026 adjusted-EPS outlook versus Morgan Stanley competition and whey wa
 ### 2026-11-26T18:02:47.706261+00:00
 No new articles in the 26 Nov 18:02 news batch since the 03:57 refresh.  
 FY2025 screen OCF ($368.5m) and FCF (~$284m) are unchanged; Yahoo quarterly cashflow is still empty, so TTM FCF remains unverified.  
+Raised FY2026 adjusted-EPS outlook versus Morgan Stanley competition and whey-cost warnings is still the main tension in the file set.
+
+### 2026-11-26T21:47:58.402843+00:00
+No new articles in the 26 Nov 21:47 news batch since the 18:02 refresh.  
+FY2025 screen OCF ($368.5m) and FCF (~$284m) unchanged; Yahoo quarterly cashflow still empty, so TTM FCF remains unverified.  
 Raised FY2026 adjusted-EPS outlook versus Morgan Stanley competition and whey-cost warnings is still the main tension in the file set.

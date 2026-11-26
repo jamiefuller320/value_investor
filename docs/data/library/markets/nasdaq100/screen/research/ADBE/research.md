@@ -1,6 +1,6 @@
 # Adobe Inc. (ADBE) — Research memo
 
-_Version 16 · Updated 2026-11-26T17:51:27.207369+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-26T21:36:55.813431+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: Q3 FY2026 10-Q still backs revenue, ARR and cash flow; freemium/Firefly monetisation headlines flag AI competition but change no filings, neutrally confirming the buy screen with competitive, regulatory, litigation and leverage risks unc...
+Rationale: Q3 FY2026 10-Q still backs revenue, ARR and cash flow; no new filings or Adobe-specific news since the freemium headlines, neutrally confirming the buy screen with competitive, regulatory, litigation and leverage risks unchanged.
 RiskTags: competitive, regulatory, litigation, leverage
 
 ## Weekly updates
@@ -88,3 +88,8 @@ Quantitative screen signal remains **buy**; filing-backed fundamentals are uncha
 Since the 03:48 UTC refresh, the 17:51 news batch adds freemium-strategy coverage (Yahoo Finance; TradingView duplicate) on Firefly monetisation versus AI competition.  
 Q3 FY2026 10-Q (Aug 2026) remains the latest SEC disclosure; filing-backed revenue, ARR and cash flow are unchanged.  
 Quantitative screen signal remains **buy**.
+
+### 2026-11-26T21:36:55.813431+00:00
+No material change since the 17:51 UTC refresh.  
+The 21:36 news batch adds one unrelated holiday-retail headline (Amazon/Walmart); no new SEC filings.  
+Q3 FY2026 10-Q (Aug 2026) remains the latest disclosure; quantitative screen signal remains **buy**.

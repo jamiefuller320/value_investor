@@ -1,6 +1,6 @@
 # CVS Health Corporation (CVS) — Research memo
 
-_Version 14 · Updated 2026-11-26T17:55:27.915464+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-26T21:41:32.963749+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -78,3 +78,8 @@ No material change to the accumulate overlay versus the 01:18 refresh.
 Since 03:51 UTC the batch adds Pzena Q3 commentary on segment-specific concerns and MarketBeat headlines on HOOPP and Dodge & Cox share sales (news only, not filings).
 Thanksgiving hours and US soccer sponsorship items are operational noise; nothing on retail–Aetna split economics.
 No new SEC extracts beyond the 4 Nov Q3 10-Q; no material change to the accumulate overlay versus the 03:51 refresh.
+
+### 2026-11-26T21:41:32.963749+00:00
+Since 17:55 UTC the news batch is empty; no new CVS headlines in the supplied pack.  
+No new SEC extracts beyond the 4 Nov Q3 10-Q.  
+No material change to the accumulate overlay versus the 17:55 refresh.

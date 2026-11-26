@@ -1,6 +1,6 @@
 # Cognizant Technology Solutions Corporation (CTSH) — Research memo
 
-_Version 14 · Updated 2026-11-26T17:55:05.460437+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-26T21:41:13.375810+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Q3 revenue and $925m quarter FCF still underpin Strong Buy; new headlines are peer, fund-flow and technical only—Capital IQ unconfirmed, mixed sell-side, no EDGAR after 29 Oct—research confirms without added conviction.
+Rationale: Q3 revenue and $925m quarter FCF still underpin Strong Buy; incremental batch has no headlines—Capital IQ unconfirmed, mixed sell-side, no EDGAR after 29 Oct—research confirms without added conviction.
 RiskTags: regulatory, competitive, cyclical, customer_concentration, litigation, accounting, leverage
 
 ## Weekly updates
@@ -77,4 +77,9 @@ Unconfirmed Capital IQ talks and mixed sell-side themes are otherwise unchanged.
 ### 2026-11-26T17:55:05.460437+00:00
 The 26 Nov batch adds four items: Innodata peer comparison, Dodge & Cox trimming holdings, CNN quote boilerplate, and a 50-day moving-average note—no company disclosures.
 Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged, last EDGAR 29 Oct 2026.
+Unconfirmed Capital IQ talks and mixed sell-side themes are otherwise unchanged.
+
+### 2026-11-26T21:41:13.375810+00:00
+The 26 Nov 21:40 news batch since the 17:55 refresh contains no articles.  
+Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged, last EDGAR 29 Oct 2026.  
 Unconfirmed Capital IQ talks and mixed sell-side themes are otherwise unchanged.

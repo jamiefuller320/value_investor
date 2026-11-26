@@ -1,6 +1,6 @@
 # Booking Holdings Inc. (BKNG) — Research memo
 
-_Version 13 · Updated 2026-11-26T17:52:27.502606+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-26T21:37:50.250112+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: One syndicated cyclicals analyst round-up adds no BKNG fundamentals; unchanged EDGAR and Q3 screen metrics still confirm the buy case amid regulatory, cyclical, competitive and leverage risks.
+Rationale: No new news in this batch; unchanged EDGAR and Q3 screen metrics still confirm the buy case amid regulatory, cyclical, competitive and leverage risks.
 RiskTags: regulatory, cyclical, competitive, leverage
 
 ## Weekly updates
@@ -73,3 +73,8 @@ No material change.
 One Globe and Mail–syndicated piece on consumer cyclicals names BKNG among peers; the supplied summary adds no company-specific insight.  
 EDGAR re-fetch at 17:52 UTC still shows 23 filings and 22 bodies with no new extracts.  
 Filing-backed fundamentals and the buy screen are unchanged.
+
+### 2026-11-26T21:37:50.250112+00:00
+No articles in the 21:37 UTC news batch since the 17:52 UTC pull.  
+EDGAR re-fetch at 21:37 UTC still shows 23 filings and 22 bodies with no new extracts.  
+No material change.
