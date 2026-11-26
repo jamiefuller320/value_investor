@@ -6762,28 +6762,10 @@
     "BMW3D_EQ",
     "BNBD_EQ",
     "BNFD_EQ",
-    "BNND_EQ"
+    "BNND_EQ",
+    "BOGD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "B1V1d_EQ",
-      "venue": "DE",
-      "yahoo": "B1V1.DE",
-      "isin": "CH0531751755",
-      "name": "B1V1",
-      "seconds": 87.964,
-      "outcome": "miss",
-      "at": "2026-11-26T12:24:51.295239+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.621
-      },
-      "screen_seconds": 85.621,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "B2Wd_EQ",
       "venue": "DE",
@@ -7524,6 +7506,25 @@
       },
       "screen_seconds": 1.099,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "BOGd_EQ",
+      "venue": "DE",
+      "yahoo": "BOG.DE",
+      "isin": "DE000A0S9QZ8",
+      "name": "BOG",
+      "seconds": 2.996,
+      "outcome": "miss",
+      "at": "2026-11-26T13:59:34.710808+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 1.007
+      },
+      "screen_seconds": 1.007,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87366,43 +87367,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T13:56:40.979655+00:00"
+    },
+    {
+      "t212_ticker": "BOGd_EQ",
+      "yahoo": "BOG.DE",
+      "name": "BOG",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T13:59:34.710808+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "BNNd_EQ",
+    "t212_ticker": "BOGd_EQ",
     "venue": "DE",
-    "yahoo": "BNN.DE",
-    "isin": "DE0005203947",
-    "name": "BNN",
-    "seconds": 2.832,
+    "yahoo": "BOG.DE",
+    "isin": "DE000A0S9QZ8",
+    "name": "BOG",
+    "seconds": 2.996,
     "outcome": "miss",
-    "at": "2026-11-26T13:59:24.075921+00:00",
+    "at": "2026-11-26T13:59:34.710808+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.85,
-      "seconds": 1.099
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 1.007
     },
-    "screen_seconds": 1.099,
-    "signal": "hold"
+    "screen_seconds": 1.007,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "BOGd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T13:59:24.075921+00:00",
+  "updated_at": "2026-11-26T13:59:34.710808+00:00",
   "totals": {
-    "screened": 6761,
+    "screened": 6762,
     "signals": {
-      "buy": 1922,
+      "buy": 1923,
       "avoid": 1515,
       "hold": 1404,
       "insufficient_data": 1881,
       "strong_buy": 39
     },
-    "signals_n": 6761,
-    "screen_seconds_sum": 81580.87800000039,
-    "screen_seconds_n": 6761,
+    "signals_n": 6762,
+    "screen_seconds_sum": 81581.88500000039,
+    "screen_seconds_n": 6762,
     "outcomes": {
-      "miss": 2946,
+      "miss": 2947,
       "saved": 3815
     }
   },
