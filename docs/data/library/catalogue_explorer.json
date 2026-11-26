@@ -6570,28 +6570,10 @@
     "7USD_EQ",
     "7V0D_EQ",
     "7VSD_EQ",
-    "7WTD_EQ"
+    "7WTD_EQ",
+    "7XPD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "6WVd_EQ",
-      "venue": "DE",
-      "yahoo": "6WV.DE",
-      "isin": "PLDMDVL00012",
-      "name": "6WV",
-      "seconds": 85.938,
-      "outcome": "miss",
-      "at": "2026-11-26T01:07:09.927822+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.99
-      },
-      "screen_seconds": 84.99,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "6X5d_EQ",
       "venue": "DE",
@@ -7332,6 +7314,25 @@
       },
       "screen_seconds": 84.75,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "7XPd_EQ",
+      "venue": "DE",
+      "yahoo": "7XP.DE",
+      "isin": "US68622V1061",
+      "name": "7XP",
+      "seconds": 1.659,
+      "outcome": "miss",
+      "at": "2026-11-26T02:05:07.881594+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.71
+      },
+      "screen_seconds": 0.71,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -86841,43 +86842,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T02:01:52.963130+00:00"
+    },
+    {
+      "t212_ticker": "7XPd_EQ",
+      "yahoo": "7XP.DE",
+      "name": "7XP",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T02:05:07.881594+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "7WTd_EQ",
+    "t212_ticker": "7XPd_EQ",
     "venue": "DE",
-    "yahoo": "7WT.DE",
-    "isin": "CA95985D1006",
-    "name": "7WT",
-    "seconds": 85.709,
+    "yahoo": "7XP.DE",
+    "isin": "US68622V1061",
+    "name": "7XP",
+    "seconds": 1.659,
     "outcome": "miss",
-    "at": "2026-11-26T02:04:59.230616+00:00",
+    "at": "2026-11-26T02:05:07.881594+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.75
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.71
     },
-    "screen_seconds": 84.75,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.71,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "7XPd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T02:04:59.230616+00:00",
+  "updated_at": "2026-11-26T02:05:07.881594+00:00",
   "totals": {
-    "screened": 6569,
+    "screened": 6570,
     "signals": {
-      "buy": 1902,
+      "buy": 1903,
       "avoid": 1499,
       "hold": 1385,
       "insufficient_data": 1745,
       "strong_buy": 38
     },
-    "signals_n": 6569,
-    "screen_seconds_sum": 75319.5550000003,
-    "screen_seconds_n": 6569,
+    "signals_n": 6570,
+    "screen_seconds_sum": 75320.2650000003,
+    "screen_seconds_n": 6570,
     "outcomes": {
-      "miss": 2755,
+      "miss": 2756,
       "saved": 3814
     }
   },
