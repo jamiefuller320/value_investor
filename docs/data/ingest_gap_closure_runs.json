@@ -27868,8 +27868,121 @@
       },
       "trigger": "stall_slowdown",
       "engineering_task_id": "eng-20261126-03"
+    },
+    {
+      "id": "igc-20261126-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "NTR.TO",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "NTR.TO"
+        ],
+        "market_id": "tsx60",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261126-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-11-26T11:25:50.449565+00:00",
+      "completed_at": "2026-11-26T11:27:46.884386+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "NTR.TO"
+        ],
+        "results": [
+          {
+            "ticker": "NTR.TO",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 29,
+              "filings_with_body": 20,
+              "indexed_without_body": 9
+            },
+            "after": {
+              "filings_total": 29,
+              "filings_with_body": 20,
+              "indexed_without_body": 9
+            },
+            "improved": false,
+            "regime": "tsx_announcements",
+            "filings_summary": {
+              "total": 29,
+              "annual": 5,
+              "interim": 24,
+              "trading_update": 0,
+              "other": 0,
+              "with_body": 20,
+              "period_coverage": {
+                "annual": {
+                  "total": 5,
+                  "with_body": 5
+                },
+                "interim": {
+                  "total": 24,
+                  "with_body": 15
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 0,
+                  "with_body": 0
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "hang_stop": null,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 20,
+              "with_body_after": 20,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "retry_cleared": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "migrated_urls": 0,
+                "url_deduped": 0,
+                "total_allowlist": 2,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "NTR.TO",
+            "with_body_before": 20,
+            "with_body_after": 20,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-11-26T10:32:01.351397+00:00",
+  "updated_at": "2026-11-26T11:27:46.884399+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
