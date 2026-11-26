@@ -6773,28 +6773,10 @@
     "BSLD_EQ",
     "BSRD_EQ",
     "BST1D_EQ",
-    "BV0D_EQ"
+    "BV0D_EQ",
+    "BV3D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "B7Ud_EQ",
-      "venue": "DE",
-      "yahoo": "B7U.DE",
-      "isin": "CA36352H1001",
-      "name": "B7U",
-      "seconds": 6.3,
-      "outcome": "miss",
-      "at": "2026-11-26T13:53:24.313713+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.841
-      },
-      "screen_seconds": 4.841,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "B8FKd_EQ",
       "venue": "DE",
@@ -7535,6 +7517,25 @@
       },
       "screen_seconds": 1.054,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "BV3d_EQ",
+      "venue": "DE",
+      "yahoo": "BV3.DE",
+      "isin": "DK0015998017",
+      "name": "BV3",
+      "seconds": 2.801,
+      "outcome": "miss",
+      "at": "2026-11-26T14:02:07.825134+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.054
+      },
+      "screen_seconds": 1.054,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87401,43 +87402,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T14:01:06.414363+00:00"
+    },
+    {
+      "t212_ticker": "BV3d_EQ",
+      "yahoo": "BV3.DE",
+      "name": "BV3",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T14:02:07.825134+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "BV0d_EQ",
+    "t212_ticker": "BV3d_EQ",
     "venue": "DE",
-    "yahoo": "BV0.DE",
-    "isin": "SE0007491303",
-    "name": "BV0",
-    "seconds": 2.349,
+    "yahoo": "BV3.DE",
+    "isin": "DK0015998017",
+    "name": "BV3",
+    "seconds": 2.801,
     "outcome": "miss",
-    "at": "2026-11-26T14:01:54.539480+00:00",
+    "at": "2026-11-26T14:02:07.825134+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.85,
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
       "seconds": 1.054
     },
     "screen_seconds": 1.054,
-    "signal": "hold"
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "BV3d_EQ"
+    }
   },
-  "updated_at": "2026-11-26T14:01:54.539480+00:00",
+  "updated_at": "2026-11-26T14:02:07.825134+00:00",
   "totals": {
-    "screened": 6772,
+    "screened": 6773,
     "signals": {
-      "buy": 1925,
+      "buy": 1926,
       "avoid": 1515,
       "hold": 1405,
       "insufficient_data": 1888,
       "strong_buy": 39
     },
-    "signals_n": 6772,
-    "screen_seconds_sum": 81617.4280000004,
-    "screen_seconds_n": 6772,
+    "signals_n": 6773,
+    "screen_seconds_sum": 81618.4820000004,
+    "screen_seconds_n": 6773,
     "outcomes": {
-      "miss": 2957,
+      "miss": 2958,
       "saved": 3815
     }
   },
