@@ -6741,28 +6741,10 @@
     "BAJD_EQ",
     "BBDCD_EQ",
     "BBDD_EQ",
-    "BC51D_EQ"
+    "BC51D_EQ",
+    "BC8D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "AN5d_EQ",
-      "venue": "DE",
-      "yahoo": "AN5.DE",
-      "isin": "JP3126330004",
-      "name": "AN5",
-      "seconds": 86.772,
-      "outcome": "miss",
-      "at": "2026-11-26T11:57:39.986677+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.455
-      },
-      "screen_seconds": 85.455,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "ANGAd_EQ",
       "venue": "DE",
@@ -7503,6 +7485,25 @@
       },
       "screen_seconds": 4.799,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "BC8d_EQ",
+      "venue": "DE",
+      "yahoo": "BC8.DE",
+      "isin": "DE0005158703",
+      "name": "BC8",
+      "seconds": 2.512,
+      "outcome": "miss",
+      "at": "2026-11-26T13:55:07.889728+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.217
+      },
+      "screen_seconds": 1.217,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87313,43 +87314,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T12:09:15.127265+00:00"
+    },
+    {
+      "t212_ticker": "BC8d_EQ",
+      "yahoo": "BC8.DE",
+      "name": "BC8",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T13:55:07.889728+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "BC51d_EQ",
+    "t212_ticker": "BC8d_EQ",
     "venue": "DE",
-    "yahoo": "BC51.DE",
-    "isin": "MX01BM1B0000",
-    "name": "BC51",
-    "seconds": 6.097,
+    "yahoo": "BC8.DE",
+    "isin": "DE0005158703",
+    "name": "BC8",
+    "seconds": 2.512,
     "outcome": "miss",
-    "at": "2026-11-26T13:54:57.552176+00:00",
+    "at": "2026-11-26T13:55:07.889728+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.799
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.217
     },
-    "screen_seconds": 4.799,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.217,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "BC8d_EQ"
+    }
   },
-  "updated_at": "2026-11-26T13:54:57.552176+00:00",
+  "updated_at": "2026-11-26T13:55:07.889728+00:00",
   "totals": {
-    "screened": 6740,
+    "screened": 6741,
     "signals": {
-      "buy": 1918,
+      "buy": 1919,
       "avoid": 1515,
       "hold": 1400,
       "insufficient_data": 1868,
       "strong_buy": 39
     },
-    "signals_n": 6740,
-    "screen_seconds_sum": 81514.13700000038,
-    "screen_seconds_n": 6740,
+    "signals_n": 6741,
+    "screen_seconds_sum": 81515.35400000038,
+    "screen_seconds_n": 6741,
     "outcomes": {
-      "miss": 2925,
+      "miss": 2926,
       "saved": 3815
     }
   },
