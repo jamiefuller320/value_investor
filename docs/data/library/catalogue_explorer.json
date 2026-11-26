@@ -6748,28 +6748,10 @@
     "BEZD_EQ",
     "BFSAD_EQ",
     "BH6D_EQ",
-    "BIG1D_EQ"
+    "BIG1D_EQ",
+    "BIJD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ASAAd_EQ",
-      "venue": "DE",
-      "yahoo": "ASAA.DE",
-      "isin": "JP3111200006",
-      "name": "ASAA",
-      "seconds": 86.801,
-      "outcome": "miss",
-      "at": "2026-11-26T12:05:49.305346+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.322
-      },
-      "screen_seconds": 85.322,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "ASI1d_EQ",
       "venue": "DE",
@@ -7510,6 +7492,25 @@
       },
       "screen_seconds": 4.62,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "BIJd_EQ",
+      "venue": "DE",
+      "yahoo": "BIJ.DE",
+      "isin": "DE0005229504",
+      "name": "BIJ",
+      "seconds": 2.521,
+      "outcome": "miss",
+      "at": "2026-11-26T13:56:30.620641+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.108
+      },
+      "screen_seconds": 1.108,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87336,43 +87337,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T13:55:53.487347+00:00"
+    },
+    {
+      "t212_ticker": "BIJd_EQ",
+      "yahoo": "BIJ.DE",
+      "name": "BIJ",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T13:56:30.620641+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "BIG1d_EQ",
+    "t212_ticker": "BIJd_EQ",
     "venue": "DE",
-    "yahoo": "BIG1.DE",
-    "isin": "DE000BGAG0J3",
-    "name": "BIG",
-    "seconds": 6.501,
+    "yahoo": "BIJ.DE",
+    "isin": "DE0005229504",
+    "name": "BIJ",
+    "seconds": 2.521,
     "outcome": "miss",
-    "at": "2026-11-26T13:56:20.588121+00:00",
+    "at": "2026-11-26T13:56:30.620641+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.62
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.108
     },
-    "screen_seconds": 4.62,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.108,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "BIJd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T13:56:20.588121+00:00",
+  "updated_at": "2026-11-26T13:56:30.620641+00:00",
   "totals": {
-    "screened": 6747,
+    "screened": 6748,
     "signals": {
-      "buy": 1920,
+      "buy": 1921,
       "avoid": 1515,
       "hold": 1402,
       "insufficient_data": 1871,
       "strong_buy": 39
     },
-    "signals_n": 6747,
-    "screen_seconds_sum": 81531.91500000039,
-    "screen_seconds_n": 6747,
+    "signals_n": 6748,
+    "screen_seconds_sum": 81533.02300000038,
+    "screen_seconds_n": 6748,
     "outcomes": {
-      "miss": 2932,
+      "miss": 2933,
       "saved": 3815
     }
   },
