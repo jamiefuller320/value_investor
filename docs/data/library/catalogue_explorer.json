@@ -6704,28 +6704,10 @@
     "AMV0D_EQ",
     "AN5D_EQ",
     "ANGAD_EQ",
-    "ANKD_EQ"
+    "ANKD_EQ",
+    "AOFD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "AB9d_EQ",
-      "venue": "DE",
-      "yahoo": "AB9.DE",
-      "isin": "DE0005760029",
-      "name": "AB9",
-      "seconds": 2.055,
-      "outcome": "miss",
-      "at": "2026-11-26T11:27:56.662521+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.731
-      },
-      "screen_seconds": 0.731,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "ABBd_EQ",
       "venue": "DE",
@@ -7466,6 +7448,25 @@
       },
       "screen_seconds": 85.591,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "AOFd_EQ",
+      "venue": "DE",
+      "yahoo": "AOF.DE",
+      "isin": "DE0005104400",
+      "name": "AOF",
+      "seconds": 2.356,
+      "outcome": "miss",
+      "at": "2026-11-26T12:00:57.160389+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.9,
+        "seconds": 0.763
+      },
+      "screen_seconds": 0.763,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87244,43 +87245,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T11:47:38.068401+00:00"
+    },
+    {
+      "t212_ticker": "AOFd_EQ",
+      "yahoo": "AOF.DE",
+      "name": "AOF",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T12:00:57.160389+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ANKd_EQ",
+    "t212_ticker": "AOFd_EQ",
     "venue": "DE",
-    "yahoo": "ANK.DE",
-    "isin": "JP3165000005",
-    "name": "ANK",
-    "seconds": 87.489,
+    "yahoo": "AOF.DE",
+    "isin": "DE0005104400",
+    "name": "AOF",
+    "seconds": 2.356,
     "outcome": "miss",
-    "at": "2026-11-26T12:00:48.125659+00:00",
+    "at": "2026-11-26T12:00:57.160389+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.591
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.9,
+      "seconds": 0.763
     },
-    "screen_seconds": 85.591,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.763,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "AOFd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T12:00:48.125659+00:00",
+  "updated_at": "2026-11-26T12:00:57.160389+00:00",
   "totals": {
-    "screened": 6703,
+    "screened": 6704,
     "signals": {
-      "buy": 1914,
+      "buy": 1915,
       "avoid": 1515,
       "hold": 1398,
       "insufficient_data": 1837,
       "strong_buy": 39
     },
-    "signals_n": 6703,
-    "screen_seconds_sum": 79748.15500000035,
-    "screen_seconds_n": 6703,
+    "signals_n": 6704,
+    "screen_seconds_sum": 79748.91800000035,
+    "screen_seconds_n": 6704,
     "outcomes": {
-      "miss": 2888,
+      "miss": 2889,
       "saved": 3815
     }
   },
