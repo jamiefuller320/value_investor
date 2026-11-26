@@ -1,6 +1,6 @@
 # Hewlett Packard Enterprise Company (HPE) — Research memo
 
-_Version 10 · Updated 2026-11-26T01:40:26.423580+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-26T04:11:16.342285+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.57
-Rationale: Beat-and-raise Q4 and repurchase uplift in furnished materials still support the buy screen, but one echo headline on CFO margin framing adds no SEC depth and keeps research conviction below the quant call.
+Rationale: Furnished Q4 beat-and-raise and buybacks still align with the buy screen, but absent fresh news or filings since the 23 November 8-K leaves margin-compression worries unresolved versus the quant signal.
 RiskTags: cyclical, leverage, competitive, accounting, litigation, customer_concentration, governance, liquidity
 
 ## Weekly updates
@@ -58,3 +58,8 @@ No new SEC filings since the 23 November 8-K; periodic reports in the set still 
 One late headline reiterates the post-record-quarter sell-off and CFO commentary on server-buildout profit capture; content largely echoes prior evening coverage.
 No new SEC filings since the 23 November 8-K; periodic reports in the supplied set still end at the Q3 10-Q.
 No material change to the furnished beat-and-raise versus margin-compression debate.
+
+### 2026-11-26T04:11:16.342285+00:00
+No material change.  
+The news batch since the prior refresh returned no articles; the filing index still shows no SEC items after the 23 November 8-K.  
+Periodic reports in the supplied set still end at the Q3 10-Q; Q4 detail remains only in furnished 8-K materials.

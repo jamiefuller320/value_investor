@@ -1,6 +1,6 @@
 # Cognizant Technology Solutions Corporation (CTSH) — Research memo
 
-_Version 12 · Updated 2026-11-26T01:18:02.362003+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-26T03:51:31.754011+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Q3 revenue and $925m quarter FCF still underpin Strong Buy; empty news batch leaves unconfirmed Capital IQ talks and mixed sell-side—no EDGAR after 29 Oct—so research confirms without added conviction.
+Rationale: Q3 revenue and $925m quarter FCF still underpin Strong Buy; one Yahoo margin/reskilling headline is commentary-only—Capital IQ talks unconfirmed, mixed sell-side, no EDGAR after 29 Oct—research confirms without added conviction.
 RiskTags: regulatory, competitive, cyclical, customer_concentration, litigation, accounting, leverage
 
 ## Weekly updates
@@ -68,3 +68,8 @@ No material change to fundamentals, guidance, or sell-side themes in the supplie
 The 26 Nov 01:17 batch since the 25 Nov refresh contains no articles.  
 Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged, last EDGAR 29 Oct 2026.  
 No material change to fundamentals, guidance, or sell-side themes in the supplied pack.
+
+### 2026-11-26T03:51:31.754011+00:00
+The 26 Nov 03:51 batch adds one Yahoo headline on outcome-based pricing, reskilling and margin expansion—commentary only, not in filings.  
+Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged, last EDGAR 29 Oct 2026.  
+Unconfirmed Capital IQ talks and mixed sell-side themes are otherwise unchanged.

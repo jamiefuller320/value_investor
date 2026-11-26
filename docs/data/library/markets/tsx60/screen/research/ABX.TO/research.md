@@ -1,6 +1,6 @@
 # Barrick Mining Corporation (ABX.TO) — Research memo
 
-_Version 18 · Updated 2026-11-26T01:14:24.217333+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-26T03:47:54.775073+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Verified Q2 MD&A and net cash still support accumulate versus the buy screen; softer Q3 EPS and gold sentiment block full confirmation, and this refresh adds no new filing evidence.
+Rationale: Verified Q2 MD&A and net cash still support accumulate versus the buy screen; softer Q3 EPS and gold sentiment block full confirmation, and this pull adds no new filing evidence.
 RiskTags: cyclical, governance
 
 ## Weekly updates
@@ -96,5 +96,10 @@ No new Barrick regulatory filings with fundamentals in this pull.
 
 ### 2026-11-26T01:14:24.217333+00:00
 The 26 Nov batch adds one Kalkine item (25 Nov) on operational delivery as the S&P/TSX Composite dips; the summary discloses no new fundamentals.  
+Verified Q2 MD&A, three filing bodies, and Yahoo Q3 diluted EPS ($0.80) are unchanged.  
+No new Barrick regulatory filings with fundamentals in this pull.
+
+### 2026-11-26T03:47:54.775073+00:00
+No material change: the 03:47 news batch since the prior refresh returned zero Barrick articles.  
 Verified Q2 MD&A, three filing bodies, and Yahoo Q3 diluted EPS ($0.80) are unchanged.  
 No new Barrick regulatory filings with fundamentals in this pull.

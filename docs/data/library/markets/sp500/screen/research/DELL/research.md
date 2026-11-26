@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 16 · Updated 2026-11-26T01:20:17.065044+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-26T03:53:13.589295+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: On-file Q3 beat supports strong_buy; post-earnings selling and AI-cycle scepticism persist, partly offset by Seeking Alpha upgrades—leverage and cyclical risks unchanged; no new SEC data.
+Rationale: On-file Q3 beat still supports strong_buy; overnight copy only recycles record AI backlog—leverage, cyclicality and post-earnings scepticism unchanged; no new SEC data.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -87,4 +87,9 @@ Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchang
 ### 2026-11-26T01:20:17.065044+00:00
 The 01:19 UTC batch adds Seeking Alpha rating upgrades, Yahoo copy on a muted reaction to record Q3 ($54.9bn revenue, $9.45 EPS), and wider AI-hardware risk-off headlines.  
 On-file Q3 FY2027 8-K figures are unchanged; no new SEC extracts in this batch.  
+Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchanged.
+
+### 2026-11-26T03:53:13.589295+00:00
+The 03:52 UTC batch adds duplicate Yahoo/Motley Fool copy on record AI backlog and Nvidia-linked orders—no new Dell datapoints beyond prior Q3 themes.  
+On-file Q3 FY2027 8-K figures ($54.9bn revenue, $9.45 EPS, ~$132bn backlog) are unchanged; no new SEC extracts.  
 Screen remains **strong_buy**; leverage and cyclical AI-server risks are unchanged.

@@ -1,6 +1,6 @@
 # Eni S.p.A. (ENI.MI) — Research memo
 
-_Version 7 · Updated 2026-11-26T01:40:00.531059+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-26T04:10:59.458832+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -41,5 +41,15 @@ Venezuela/Argentina LNG, Indonesia Geliga, buybacks and broker themes in file ar
 
 ### 2026-11-26T01:40:00.531059+00:00
 No indexed news in the `news_batch_20261126_013928` pull since the prior 26 Nov refresh.  
+Venezuela/Argentina LNG, Indonesia Geliga, buybacks and broker themes in file are unchanged.  
+**Strong_buy** screen and ~€4.9bn TTM FCF in the pack are unchanged; accumulate overlay stands.
+
+### 2026-11-26T04:10:31.818034+00:00
+No indexed news in the `news_batch_20261126_040955` pull since the 01:40 UTC refresh.  
+Venezuela/Argentina LNG, Indonesia Geliga, buybacks and broker themes in file are unchanged.  
+**Strong_buy** screen and ~€4.9bn TTM FCF in the pack are unchanged; accumulate overlay stands.
+
+### 2026-11-26T04:10:59.458832+00:00
+No indexed news in the `news_batch_20261126_041032` pull since the 04:10 UTC refresh.  
 Venezuela/Argentina LNG, Indonesia Geliga, buybacks and broker themes in file are unchanged.  
 **Strong_buy** screen and ~€4.9bn TTM FCF in the pack are unchanged; accumulate overlay stands.

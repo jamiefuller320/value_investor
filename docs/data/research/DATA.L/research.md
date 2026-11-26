@@ -1,6 +1,6 @@
 # GlobalData Plc (DATA.L) — Research memo
 
-_Version 15 · Updated 2026-11-26T01:19:44.493221+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-26T03:52:48.402106+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: Strong-buy screen cheapness supports the case, but no new RNS since 2 Nov and the unresolved filing vs TTM FCF gap plus governance, leverage and key-person risks still cap conviction.
+Rationale: The 03:51 UTC news batch is empty; strong-buy cheapness still helps, but no RNS since 2 Nov and the unresolved filing vs TTM FCF gap plus governance, leverage and key-person risks cap conviction.
 RiskTags: cyclical, competitive, governance, leverage, key_person, accounting, other
 
 ## Weekly updates
@@ -82,4 +82,9 @@ Screen remains Strong Buy (7/22, improving); filing FCF £40M vs screen TTM £16
 ### 2026-11-26T01:19:44.493221+00:00
 No new GlobalData RNS since the 2 Nov total voting rights notice; the 26 Nov filing pull adds no results or trading updates.  
 News batch since the 25 Nov evening refresh is empty—no DATA.L-specific coverage.  
+Screen remains Strong Buy (7/22, improving); filing FCF £40M vs screen TTM £16.9M mismatch unchanged.
+
+### 2026-11-26T03:52:48.402106+00:00
+No new GlobalData RNS since the 2 Nov total voting rights notice; the 26 Nov filing pull adds no results or trading updates.  
+News batch since the 01:19 UTC refresh is empty—no DATA.L-specific coverage.  
 Screen remains Strong Buy (7/22, improving); filing FCF £40M vs screen TTM £16.9M mismatch unchanged.

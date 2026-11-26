@@ -1,6 +1,6 @@
 # PLS Group Limited (PLS.AX) — Research memo
 
-_Version 10 · Updated 2026-11-26T01:32:57.005679+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-26T04:05:34.850625+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.63
-Rationale: Research confirms hold: no incremental news or filings; cyclical lithium, leverage and offtake risks are unchanged; screen TTM FCF remains unverified.
+Rationale: Research confirms hold: empty incremental news; cyclical lithium, leverage and offtake risks unchanged; screen TTM FCF remains unverified.
 RiskTags: cyclical, leverage, customer_concentration, competitive
 
 ## Weekly updates
@@ -55,5 +55,10 @@ Screen stays hold; Yahoo quarterly cashflow is still empty, so TTM FCF is unveri
 
 ### 2026-11-26T01:32:57.005679+00:00
 No articles in the incremental news batch since the 25 Nov 21:53 UTC refresh; filing index unchanged on re-fetch at 01:32 UTC.  
+Latest operating disclosure remains the 28 Oct FY27 Sep-quarter pack plus 24 Nov AGM materials; no new ASX operating filings.  
+Screen stays hold; Yahoo quarterly cashflow is still empty, so TTM FCF is unverified.
+
+### 2026-11-26T04:05:34.850625+00:00
+No articles in the incremental news batch since the 01:32 UTC refresh; filing index unchanged on re-fetch at 04:05 UTC.  
 Latest operating disclosure remains the 28 Oct FY27 Sep-quarter pack plus 24 Nov AGM materials; no new ASX operating filings.  
 Screen stays hold; Yahoo quarterly cashflow is still empty, so TTM FCF is unverified.

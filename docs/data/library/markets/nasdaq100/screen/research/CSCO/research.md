@@ -1,6 +1,6 @@
 # Cisco Systems, Inc. (CSCO) — Research memo
 
-_Version 10 · Updated 2026-11-26T01:17:41.460797+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-26T03:50:59.733383+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: Empty 26 Nov news batch and no new SEC bodies; unchanged Q1 FY27 EPS $1.14 on ~$18.5bn revenue still confirms accumulate with the buy screen.
+Rationale: The 03:50 UTC batch adds no articles since 01:17 UTC; unchanged Q1 FY27 EPS $1.14 on ~$18.5bn revenue still confirms accumulate with the buy screen.
 RiskTags: competitive, cyclical, leverage, governance
 
 ## Weekly updates
@@ -56,5 +56,10 @@ Post-earnings margin, insider-sale and governance narratives from earlier passes
 
 ### 2026-11-26T01:17:41.460797+00:00
 No CSCO articles in the 26 Nov news batch since the 25 Nov evening pass; no new SEC filing bodies in supplied sources.  
+**Buy** screen unchanged with Q1 FY27 EPS $1.14 on ~$18.5bn revenue per the screening snapshot.  
+Post-earnings margin, insider-sale and governance narratives from earlier passes are unchanged.
+
+### 2026-11-26T03:50:59.733383+00:00
+The 03:50 UTC news batch has no CSCO articles since the 01:17 pass; no new SEC filing bodies in supplied sources.  
 **Buy** screen unchanged with Q1 FY27 EPS $1.14 on ~$18.5bn revenue per the screening snapshot.  
 Post-earnings margin, insider-sale and governance narratives from earlier passes are unchanged.

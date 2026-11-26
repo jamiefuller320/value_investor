@@ -1,6 +1,6 @@
 # Open Text Corporation (OTEX.TO) — Research memo
 
-_Version 5 · Updated 2026-11-26T01:31:17.371634+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-26T04:03:54.794713+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.56
-Rationale: Weakens the strong buy case: Yahoo FCF still screens well, but ~$5.7bn debt, Sep-26 revenue below prior year, negative tangible equity, and zero filing bodies block tie-out.
+Rationale: Weakens the strong buy case: Yahoo FCF still screens well, but ~$6.0bn debt, Sep-26 revenue below prior year, negative tangible equity, and zero filing bodies block tie-out.
 RiskTags: leverage, competitive, accounting
 
 ## Weekly updates
@@ -32,4 +32,9 @@ TSX filing discovery still reports zero bodies, so leverage, amortisation and qu
 ### 2026-11-26T01:31:17.371634+00:00
 Since the 21:52 UTC refresh, the batch adds one Kalkine Google News piece on a more challenging market; nothing issuer-specific or filing-grade.  
 Yahoo financials (pulled 01:30 UTC) are unchanged: FY26 FCF ~$808m and TTM ~$845m still underpin the strong buy screen.  
+TSX filing discovery still reports zero bodies, so leverage, amortisation and quarterly revenue remain unverified in this pack.
+
+### 2026-11-26T04:03:54.794713+00:00
+No new articles in the 04:03 UTC news batch since the 01:31 structured verdict refresh.  
+Yahoo financials (pulled 04:03 UTC) are unchanged: FY26 FCF ~$808m and TTM ~$845m still underpin the strong buy screen.  
 TSX filing discovery still reports zero bodies, so leverage, amortisation and quarterly revenue remain unverified in this pack.

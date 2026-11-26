@@ -1,6 +1,6 @@
 # CapitaLand Ascendas REIT (A17U.SI) — Research memo
 
-_Version 5 · Updated 2026-11-26T01:14:06.506933+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-26T03:47:44.635728+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.44
-Rationale: Research still weakens the buy screen: no SGX filing bodies, unverified TTM cash flow, and thin 3Q headlines; FY2025 OCF covers dividends but leverage and dilution have risen.
+Rationale: Research still weakens the buy screen: zero SGX filing bodies, unverified TTM cash flow, and no fresh 3Q figures; FY2025 OCF covers dividends but leverage and dilution have risen.
 RiskTags: leverage, cyclical, liquidity
 
 ## Weekly updates
@@ -31,5 +31,10 @@ FY2025 operating cash (~US$1.07bn) still exceeds cash dividends (~US$669m); net 
 
 ### 2026-11-26T01:14:06.506933+00:00
 The 26 Nov 01:13 UTC news batch adds no articles since the prior run; no new operating or DPU figures in supplied sources.  
+Filings index remains at zero SGX bodies; Yahoo quarterly cash flow is empty, so screen TTM cash flow is still unverified.  
+FY2025 operating cash (~US$1.07bn) still exceeds cash dividends (~US$669m); net debt and unit count remain above FY2024.
+
+### 2026-11-26T03:47:44.635728+00:00
+The 26 Nov 03:47 UTC news batch adds no articles since the 01:14 refresh; supplied sources still lack verified 3Q operating or DPU figures.  
 Filings index remains at zero SGX bodies; Yahoo quarterly cash flow is empty, so screen TTM cash flow is still unverified.  
 FY2025 operating cash (~US$1.07bn) still exceeds cash dividends (~US$669m); net debt and unit count remain above FY2024.

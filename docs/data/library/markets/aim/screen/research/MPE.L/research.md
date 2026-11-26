@@ -1,6 +1,6 @@
 # M.P. Evans Group PLC (MPE.L) — Research memo
 
-_Version 11 · Updated 2026-11-26T02:36:07.410733+00:00 · Mode: structured_verdict_update_
+_Version 12 · Updated 2026-11-26T04:01:24.262430+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: Sep-2026 interim and TTM OCF US$149.3m still underpin the strong-buy screen; empty 26 Nov news and no new RNS since 25 Nov buybacks—research confirms cash quality, not a full overlay upgrade.
+Rationale: Empty 04:00 news and no RNS after 25 Nov buybacks; Sep-2026 interim TTM OCF US$149.3m still supports the strong-buy screen—research confirms cash quality, not a full overlay upgrade.
 RiskTags: cyclical, regulatory, pension, liquidity
 
 ## Weekly updates
@@ -61,5 +61,10 @@ Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal and accu
 
 ### 2026-11-26T02:36:07.410733+00:00
 News batch since the 26 Nov 01:28 refresh is empty; no new articles in the supplied sources.  
+No new RNS after 25 Nov “transaction in own shares”; last substantive disclosure remains 14 Sep 2026 interim results.  
+Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal and accumulate overlay unchanged.
+
+### 2026-11-26T04:01:24.262430+00:00
+News batch since the 26 Nov 02:36 refresh is empty; no new articles in the supplied sources.  
 No new RNS after 25 Nov “transaction in own shares”; last substantive disclosure remains 14 Sep 2026 interim results.  
 Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal and accumulate overlay unchanged.

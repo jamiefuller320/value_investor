@@ -1,6 +1,6 @@
 # Adobe Inc. (ADBE) — Research memo
 
-_Version 14 · Updated 2026-11-26T01:14:37.152274+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-26T03:48:07.476085+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: Q3 FY2026 10-Q still backs revenue, ARR and cash flow; this pull’s lone non-fundamental headline and unchanged filings neutrally confirm the buy screen, with prior competitive and leverage risks unchanged.
+Rationale: Q3 FY2026 10-Q still backs revenue, ARR and cash flow; this refresh’s empty news batch and unchanged filings neutrally confirm the buy screen, with competitive, regulatory, litigation and leverage risks unchanged.
 RiskTags: competitive, regulatory, litigation, leverage
 
 ## Weekly updates
@@ -78,3 +78,8 @@ Quantitative screen signal remains **buy**; filing-backed fundamentals are uncha
 No material change since the 25 Nov 21:36 UTC refresh.  
 The 26 Nov news batch adds one options-quote headline (Yahoo Finance UK), not fundamental news; no new SEC filings.  
 Q3 FY2026 10-Q (Aug 2026) remains the latest disclosure; the quantitative screen signal remains **buy**.
+
+### 2026-11-26T03:48:07.476085+00:00
+No material change since the 25 Nov 21:36 UTC refresh.  
+The 03:47 news batch returned zero articles; no new SEC filings beyond the existing Q3 FY2026 10-Q pack.  
+Quantitative screen signal remains **buy**; filing-backed fundamentals are unchanged.

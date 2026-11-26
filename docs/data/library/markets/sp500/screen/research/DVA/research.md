@@ -1,6 +1,6 @@
 # DaVita Inc. (DVA) — Research memo
 
-_Version 16 · Updated 2026-11-26T01:20:32.413131+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-26T03:53:56.764905+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.65
-Rationale: Filing-backed cash yield still supports the screen; this batch adds no articles, so HHS, leverage and litigation risks stay unresolved and weaken full strong_buy alignment.
+Rationale: Filing-backed cash yield still supports the screen; one generic forecasts headline leaves HHS, leverage and litigation risks unresolved, weakening full strong_buy alignment.
 RiskTags: regulatory, leverage, litigation
 
 ## Weekly updates
@@ -88,3 +88,8 @@ Regulatory, leverage and litigation overlays are unchanged; the quantitative scr
 No material change since the 25 November 21:41 UTC refresh.  
 The 01:20 UTC news batch adds no articles; regulatory, leverage and litigation overlays are unchanged.  
 The quantitative screen remains **strong_buy**; the filing pack is unchanged.
+
+### 2026-11-26T03:53:56.764905+00:00
+No material change since the 26 November 01:20 UTC refresh.
+The 03:53 UTC batch adds only a generic Yahoo stock-forecasts headline; no new filings.
+Regulatory, leverage and litigation overlays are unchanged; the quantitative screen remains **strong_buy**.

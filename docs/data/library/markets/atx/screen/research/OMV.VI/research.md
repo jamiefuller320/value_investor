@@ -1,6 +1,6 @@
 # OMV Aktiengesellschaft (OMV.VI) — Research memo
 
-_Version 4 · Updated 2026-11-26T01:40:47.639028+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-26T04:11:36.493785+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.69
-Rationale: Q3 results and higher TTM free cash flow support the strong-buy screen, but oil-linked volatility, Libya outages, broker downgrades and weaker forward earnings views still cap conviction.
+Rationale: Q3 results and ~€2.53bn TTM FCF still support the strong-buy screen; fresh UBS €70 target headlines extend broker caution on oil and Libya, without changing the on-file fundamentals.
 RiskTags: cyclical, governance, regulatory, key_person
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Strong_buy screen and accumulate overlay stand.
 No material change: `news_batch_20261126_014028` since the 22:00 UTC refresh contains no articles.  
 On-file Q3 2026 EPS €3.14, TTM free cash flow ~€2.53bn, and mixed broker/Libya/oil-price themes are unchanged.  
 Strong_buy screen and accumulate overlay stand.
+
+### 2026-11-26T04:11:36.493785+00:00
+`news_batch_20261126_041117` adds one item: press coverage of a UBS analyst €70 price target (26 Nov).  
+On-file Q3 2026 EPS €3.14, revenue €8.96bn and TTM free cash flow ~€2.53bn are unchanged; indexed filings are unchanged.  
+Strong_buy screen and accumulate overlay stand; broker-caution theme is reinforced but fundamentals are not.
