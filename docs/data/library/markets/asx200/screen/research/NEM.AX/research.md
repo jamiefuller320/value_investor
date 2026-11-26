@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM.AX) — Research memo
 
-_Version 3 · Updated 2026-11-25T21:51:53.810559+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-26T01:30:21.555368+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: ~$7.3bn filing-aligned and ~$10.1bn TTM FCF still underpin dividends and cash quality; empty news and an unchanged hold screen leave cyclical sector stress capping overlay conviction.
+Rationale: Filing-aligned ~$7.3bn and ~$10.1bn TTM FCF still underpin dividends; empty 26 Nov news and an unchanged hold screen leave research neutral on the screen, with cyclical stress unchanged.
 RiskTags: cyclical, key_person, regulatory, other
 
 ## Weekly updates
@@ -22,4 +22,9 @@ Screening snapshot is unchanged (hold, zero model passes); file-set TTM FCF ~$10
 ### 2026-11-25T21:51:53.810559+00:00
 News batch since the 18:06 refresh is empty; no new articles in the supplied sources.
 Hold signal and zero model passes are unchanged; filing-aligned ~$7.3bn and TTM ~$10.1bn FCF in the file set are steady.
+No new indexed filing bodies since the prior verdict.
+
+### 2026-11-26T01:30:21.555368+00:00
+News batch since the 25 Nov 21:51 refresh is empty; no new articles in the supplied sources.  
+Hold signal and zero model passes are unchanged; filing-aligned ~$7.3bn and TTM ~$10.1bn FCF in the file set are steady.  
 No new indexed filing bodies since the prior verdict.

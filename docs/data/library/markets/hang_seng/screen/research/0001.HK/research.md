@@ -1,6 +1,6 @@
 # CK Hutchison Holdings Limited (0001.HK) — Research memo
 
-_Version 4 · Updated 2026-11-25T21:34:03.535117+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-26T01:12:09.505542+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.65
-Rationale: Filing-aligned cash flow still supports the buy screen; Panama litigation and deferred AS Watson listing keep medium risk, with no new filings or headlines to resolve them.
+Rationale: Filing-aligned OCF and FCF still support the buy screen; Panama litigation and deferred AS Watson listing leave risks unresolved, with no fresh filings or headlines to change that view.
 RiskTags: regulatory, leverage, governance, litigation, cyclical, key_person
 
 ## Weekly updates
@@ -27,4 +27,9 @@ Screen OCF HK$62.6bn and FCF HK$41.7bn are unchanged; Yahoo quarterly cash flow 
 ### 2026-11-25T21:34:03.535117+00:00
 No new CK Hutchison articles in the 21:33 UTC news batch since the earlier 25 Nov run.  
 Panama’s PPC criminal complaint (18 Nov) and deferred AS Watson dual listing (11 Nov) remain the latest substantive items; the HKEX filing set is unchanged.  
+Screen OCF HK$62.6bn and FCF HK$41.7bn are unchanged; Yahoo quarterly cash flow is still empty, so TTM FCF remains unverified.
+
+### 2026-11-26T01:12:09.505542+00:00
+The 26 Nov 01:11 UTC news batch adds no CK Hutchison headlines since the prior run.  
+Panama’s PPC criminal complaint (18 Nov) and deferred AS Watson dual listing (11 Nov) remain the latest substantive items; the HKEX set is unchanged (nine filings).  
 Screen OCF HK$62.6bn and FCF HK$41.7bn are unchanged; Yahoo quarterly cash flow is still empty, so TTM FCF remains unverified.

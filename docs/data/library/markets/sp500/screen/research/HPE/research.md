@@ -1,6 +1,6 @@
 # Hewlett Packard Enterprise Company (HPE) — Research memo
 
-_Version 9 · Updated 2026-11-25T22:00:08.875702+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-26T01:40:26.423580+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.58
-Rationale: Furnished beat-and-raise Q4 and buybacks still support the screen buy, but evening peak-AI and margin-framing headlines add little new filing depth and slightly weaken conviction.
+Confidence: 0.57
+Rationale: Beat-and-raise Q4 and repurchase uplift in furnished materials still support the buy screen, but one echo headline on CFO margin framing adds no SEC depth and keeps research conviction below the quant call.
 RiskTags: cyclical, leverage, competitive, accounting, litigation, customer_concentration, governance, liquidity
 
 ## Weekly updates
@@ -53,3 +53,8 @@ No new SEC filings since the 23 November 8-K; periodic reports in the set still 
 Evening headlines extend Dell/HPE “peak AI spending” worries despite beat-and-raise quarters; TheStreet stresses a post-record-quarter “hidden catch”.
 Coverage notes mixed Q3 13F adds versus trims and contrasts HP Inc’s margin narrative with HPE’s sell-off.
 No new SEC filings since the 23 November 8-K; periodic reports in the set still end at the Q3 10-Q.
+
+### 2026-11-26T01:40:26.423580+00:00
+One late headline reiterates the post-record-quarter sell-off and CFO commentary on server-buildout profit capture; content largely echoes prior evening coverage.
+No new SEC filings since the 23 November 8-K; periodic reports in the supplied set still end at the Q3 10-Q.
+No material change to the furnished beat-and-raise versus margin-compression debate.

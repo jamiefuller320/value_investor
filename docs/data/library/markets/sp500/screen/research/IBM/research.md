@@ -1,6 +1,6 @@
 # International Business Machines Corporation (IBM) — Research memo
 
-_Version 10 · Updated 2026-11-25T21:47:02.078315+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-26T01:25:07.797170+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.65
-Rationale: Intraday price headlines add no filing-backed change; standing leverage, pension and competitive risks leave accumulate moderating the buy screen.
+Rationale: No new headlines or filings in this batch; unchanged leverage, pension and competitive risks leave accumulate moderating the buy screen.
 RiskTags: leverage, pension, competitive, cyclical, litigation, regulatory
 
 ## Weekly updates
@@ -57,4 +57,9 @@ Q3 2026 screening snapshot and cash-flow inputs are unchanged.
 ### 2026-11-25T21:47:02.078315+00:00
 Since the 18:01 run, headlines cite modest same-day share gains (~3–3.5%); one peer piece carries no IBM fundamentals.
 No new SEC filing bodies beyond the 19 Nov yen-note 8-K already in the library.
+Q3 2026 screening snapshot and cash-flow inputs are unchanged.
+
+### 2026-11-26T01:25:07.797170+00:00
+The 26 Nov news batch has no IBM-specific articles since the 25 Nov structured run.  
+No new SEC filing bodies beyond the 19 Nov yen-note 8-K already in the library.  
 Q3 2026 screening snapshot and cash-flow inputs are unchanged.

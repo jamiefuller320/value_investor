@@ -1,6 +1,6 @@
 # Eni S.p.A. (ENI.MI) — Research memo
 
-_Version 5 · Updated 2026-11-25T21:59:43.906950+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-26T01:40:00.531059+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -33,3 +33,13 @@ Screen signal **strong_buy** and packaged cashflow metrics are unchanged; accumu
 No material change: the `news_batch_20261125_215910` pull since the prior run is empty.  
 Venezuela/Argentina LNG, Indonesia Geliga, buybacks and broker themes in file are unchanged.  
 **Strong_buy** screen and packaged cashflow metrics are unchanged.
+
+### 2026-11-26T01:39:27.670163+00:00
+No indexed news in the `news_batch_20261126_013838` pull since the 25 Nov evening refresh.  
+Venezuela/Argentina LNG, Indonesia Geliga, buybacks and broker themes in file are unchanged.  
+**Strong_buy** screen and ~€4.9bn TTM FCF in the pack are unchanged; accumulate overlay stands.
+
+### 2026-11-26T01:40:00.531059+00:00
+No indexed news in the `news_batch_20261126_013928` pull since the prior 26 Nov refresh.  
+Venezuela/Argentina LNG, Indonesia Geliga, buybacks and broker themes in file are unchanged.  
+**Strong_buy** screen and ~€4.9bn TTM FCF in the pack are unchanged; accumulate overlay stands.

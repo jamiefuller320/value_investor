@@ -1,6 +1,6 @@
 # OMV Aktiengesellschaft (OMV.VI) — Research memo
 
-_Version 3 · Updated 2026-11-25T22:00:32.244560+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-26T01:40:47.639028+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -22,4 +22,9 @@ Indexed filings are unchanged since September; no new filing bodies in this batc
 ### 2026-11-25T22:00:32.244560+00:00
 No material change: `news_batch_20261125_220010` since the 18:15 UTC refresh contains no articles.  
 On-file Q3 metrics and TTM free cash flow (~€2.53bn), plus mixed broker and Libya themes, are unchanged.  
+Strong_buy screen and accumulate overlay stand.
+
+### 2026-11-26T01:40:47.639028+00:00
+No material change: `news_batch_20261126_014028` since the 22:00 UTC refresh contains no articles.  
+On-file Q3 2026 EPS €3.14, TTM free cash flow ~€2.53bn, and mixed broker/Libya/oil-price themes are unchanged.  
 Strong_buy screen and accumulate overlay stand.

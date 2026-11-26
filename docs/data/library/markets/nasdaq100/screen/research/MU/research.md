@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 10 · Updated 2026-11-25T21:50:58.018166+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-26T01:29:02.245741+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.69
-Rationale: ~$59bn TTM FCF still supports the screen; mixed evening headlines—fund sizing, tariff relief and cyclical fear—do not resolve zero model passes, so research stays accumulate versus strong buy.
+Rationale: About $59bn TTM FCF still supports the screen, but record-margin scepticism and volatile chip sentiment do not fix zero model passes, so research stays accumulate versus strong buy.
 RiskTags: cyclical, competitive, leverage, customer_concentration
 
 ## Weekly updates
@@ -54,5 +54,10 @@ Filing-based cyclical, leverage, competitive and customer-concentration risks ar
 
 ### 2026-11-25T21:50:58.018166+00:00
 Evening headlines add mixed bull–bear colour—Seeking Alpha “fire sale” pieces, David Tepper sizing MU as a top holding, Barron’s chip tariff exemptions and Barchart on higher spending; no new filings or sourced financials.  
+Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed.  
+Filing-based cyclical, leverage, competitive and customer-concentration risks are unchanged.
+
+### 2026-11-26T01:29:02.245741+00:00
+Pre-holiday headlines mix sector volatility, a record-margin valuation debate, CEO proxy pay colour and a 2027 strong-buy list including MU; no new filings or sourced financials.  
 Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed.  
 Filing-based cyclical, leverage, competitive and customer-concentration risks are unchanged.

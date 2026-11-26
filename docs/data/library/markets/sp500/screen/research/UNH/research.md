@@ -1,6 +1,6 @@
 # UnitedHealth Group Incorporated (UNH) — Research memo
 
-_Version 12 · Updated 2026-11-25T22:01:31.832661+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-26T01:41:46.731181+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: Screen cash metrics hold but unquantified CMS star-rating and Medicare reform overhang still weaken the strong_buy case; this batch adds no new filing evidence.
+Rationale: Screen cash metrics hold but CMS star-rating litigation and unquantified Medicare policy headlines still weaken the strong_buy case; Trump private-insurer remarks add no filing evidence.
 RiskTags: regulatory, competitive, litigation, leverage, governance, accounting
 
 ## Weekly updates
@@ -68,3 +68,8 @@ Firm-specific CMS payment impact remains unquantified in the supplied sources.
 The evening batch adds only a Ken Fisher top-holdings dividend-yield piece citing UNH at 2.7%; CMS star-rating litigation and Medicare Advantage stress from earlier in the week are unchanged.  
 Screen strong_buy cash metrics and Q3 diluted EPS of $4.56 are unchanged; no new interim SEC filing body in this pack.  
 Firm-specific CMS payment impact remains unquantified in the supplied sources.
+
+### 2026-11-26T01:41:46.731181+00:00
+The overnight batch adds Trump Medicare remarks framing a compromise that could retain private insurers, plus a 2027 healthcare buy-list piece; reimbursement impact is not quantified in this pack.  
+CMS star-rating litigation and Medicare Advantage stress from earlier in the week are unchanged; screen strong_buy cash metrics and Q3 diluted EPS of $4.56 are unchanged.  
+No new interim SEC filing body in this pack.

@@ -1,6 +1,6 @@
 # Umicore SA (UMI.BR) — Research memo
 
-_Version 20 · Updated 2026-11-25T21:55:48.489057+00:00 · Mode: structured_verdict_update_
+_Version 21 · Updated 2026-11-26T01:35:23.705681+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Research partly confirms strong buy: no incremental news since 18:10; on-file H1 2026 and upgraded FY26 adj. EBITDA stand, but cyclicality, ~€1.5bn net debt and unverified TTM FCF temper full alignment.
+Rationale: Research partly confirms strong buy: empty 26 Nov news batch; on-file H1 2026 and upgraded FY26 adj. EBITDA stand, but cyclicality, ~€1.5bn net debt and unverified TTM FCF temper full alignment.
 RiskTags: cyclical, leverage, competitive
 
 ## Weekly updates
@@ -105,6 +105,11 @@ H1 2026 IR and upgraded FY26 adj. EBITDA guidance are unchanged in sources; the 
 Strong buy screen unchanged; quarterly cash flow absent so TTM FCF remains unverified.
 
 ### 2026-11-25T21:55:48.489057+00:00
+No material change: the indexed news batch since the prior refresh is empty.  
+H1 2026 IR and upgraded FY26 adj. EBITDA guidance are unchanged in sources; the structured interim extract remains empty.  
+Strong buy screen unchanged; quarterly cash flow absent so TTM FCF remains unverified.
+
+### 2026-11-26T01:35:23.705681+00:00
 No material change: the indexed news batch since the prior refresh is empty.  
 H1 2026 IR and upgraded FY26 adj. EBITDA guidance are unchanged in sources; the structured interim extract remains empty.  
 Strong buy screen unchanged; quarterly cash flow absent so TTM FCF remains unverified.

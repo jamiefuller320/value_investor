@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 22 · Updated 2026-11-25T21:38:57.094369+00:00 · Mode: structured_verdict_update_
+_Version 23 · Updated 2026-11-26T01:17:08.487989+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Filing-backed FCF and pre-earnings Buy/mispricing commentary mildly confirm Strong Buy; Informatica leverage and AI-sector competition stay unresolved until 2 Dec results.
+Rationale: Empty batch leaves filing-backed FCF and pre-earnings Buy/mispricing commentary mildly confirming Strong Buy; Informatica leverage and AI-sector competition stay unresolved until 2 Dec results.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -115,3 +115,8 @@ No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy scr
 Since the 17:53 UTC refresh, Yahoo adds Bank of America’s reiterated Buy ahead of 2 Dec results and a mispricing piece citing filing-backed FY26 FCF (~$14.4bn) after the AI sell-off.
 A Microsoft outage article is sector-only; no new primary filings in the supplied pack.
 Leverage and competitive pre-earnings themes are unchanged.
+
+### 2026-11-26T01:17:08.487989+00:00
+The 26 Nov news batch adds no articles since the 25 Nov 21:38 UTC refresh.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
+Leverage and competitive pre-earnings themes are unchanged ahead of 2 Dec results.

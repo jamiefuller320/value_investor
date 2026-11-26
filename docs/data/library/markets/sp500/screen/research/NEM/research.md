@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM) — Research memo
 
-_Version 9 · Updated 2026-11-25T21:51:18.563220+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-26T01:29:40.275772+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: File-set TTM cash generation still supports the screen buy; a same-day Benzinga fall headline adds cyclical noise without new filings or metrics to weaken fundamentals.
+Rationale: File-set TTM free cash flow (~$10.1bn) still supports the screen buy; the 26 Nov batch has no new headlines or filings, so research neither upgrades nor weakens the case.
 RiskTags: cyclical, regulatory, governance, litigation, customer_concentration
 
 ## Weekly updates
@@ -53,3 +53,8 @@ The headline adds cyclical colour only; no material operational change versus th
 Since the 18:05 refresh, the batch adds one Benzinga headline on NEM falling on Wednesday; the supplied summary has no operational detail.  
 No new SEC filings; screen TTM free cash flow (~$10.1bn) and quarterly cash flow in the file set are unchanged.  
 The headline is cyclical/market colour only; no material change versus the afternoon refresh.
+
+### 2026-11-26T01:29:40.275772+00:00
+News batch since the 25 Nov evening refresh is empty; no new articles in the supplied sources.  
+No new SEC filings; screen TTM free cash flow (~$10.1bn) and quarterly cash flow in the file set are unchanged.  
+No material change versus the prior refresh; buy screen and accumulate overlay unchanged.
