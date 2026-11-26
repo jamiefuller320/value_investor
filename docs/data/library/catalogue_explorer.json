@@ -6711,28 +6711,10 @@
     "ARCD_EQ",
     "ASAAD_EQ",
     "ASI1D_EQ",
-    "ASJAD_EQ"
+    "ASJAD_EQ",
+    "AT1D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ACXd_EQ",
-      "venue": "DE",
-      "yahoo": "ACX.DE",
-      "isin": "DE000A0DNAY5",
-      "name": "ACX",
-      "seconds": 2.152,
-      "outcome": "miss",
-      "at": "2026-11-26T11:33:16.952614+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.85,
-        "seconds": 0.826
-      },
-      "screen_seconds": 0.826,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "AD2d_EQ",
       "venue": "DE",
@@ -7473,6 +7455,25 @@
       },
       "screen_seconds": 85.554,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "AT1d_EQ",
+      "venue": "DE",
+      "yahoo": "AT1.DE",
+      "isin": "LU1673108939",
+      "name": "AT1",
+      "seconds": 2.335,
+      "outcome": "miss",
+      "at": "2026-11-26T12:09:06.016185+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.966
+      },
+      "screen_seconds": 0.966,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87267,43 +87268,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T12:02:41.334522+00:00"
+    },
+    {
+      "t212_ticker": "AT1d_EQ",
+      "yahoo": "AT1.DE",
+      "name": "AT1",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T12:09:06.016185+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ASJAd_EQ",
+    "t212_ticker": "AT1d_EQ",
     "venue": "DE",
-    "yahoo": "ASJA.DE",
-    "isin": "ID1000122807",
-    "name": "ASJA",
-    "seconds": 87.277,
+    "yahoo": "AT1.DE",
+    "isin": "LU1673108939",
+    "name": "AT1",
+    "seconds": 2.335,
     "outcome": "miss",
-    "at": "2026-11-26T12:08:56.732307+00:00",
+    "at": "2026-11-26T12:09:06.016185+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.554
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.966
     },
-    "screen_seconds": 85.554,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.966,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "AT1d_EQ"
+    }
   },
-  "updated_at": "2026-11-26T12:08:56.732307+00:00",
+  "updated_at": "2026-11-26T12:09:06.016185+00:00",
   "totals": {
-    "screened": 6710,
+    "screened": 6711,
     "signals": {
-      "buy": 1916,
+      "buy": 1917,
       "avoid": 1515,
       "hold": 1398,
       "insufficient_data": 1842,
       "strong_buy": 39
     },
-    "signals_n": 6710,
-    "screen_seconds_sum": 80177.33600000036,
-    "screen_seconds_n": 6710,
+    "signals_n": 6711,
+    "screen_seconds_sum": 80178.30200000036,
+    "screen_seconds_n": 6711,
     "outcomes": {
-      "miss": 2895,
+      "miss": 2896,
       "saved": 3815
     }
   },
