@@ -238,7 +238,14 @@ def test_collect_signals_prefers_the_book_episode() -> None:
                 "session": SIGNAL.isoformat(),
             },
         ],
-        [{"market": "ftse350", "ticker": "CCC.L", "session": SIGNAL.isoformat(), "outcome": "pending_fill"}],
+        [
+            {
+                "market": "ftse350",
+                "ticker": "CCC.L",
+                "session": SIGNAL.isoformat(),
+                "outcome": "pending_fill",
+            }
+        ],
     )
     by_ticker = {row["ticker"]: row for row in rows}
     assert by_ticker["AAA.L"]["source"] == "primary_episode"

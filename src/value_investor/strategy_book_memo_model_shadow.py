@@ -967,6 +967,7 @@ def run_shadow(
 
         def series_for(market: str, ticker: str):
             return _chart_series(paths, market, ticker, moment)
+
     scored = [
         score_signal(
             signal,
