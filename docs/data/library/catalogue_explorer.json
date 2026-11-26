@@ -6776,28 +6776,10 @@
     "BV0D_EQ",
     "BV3D_EQ",
     "BVBD_EQ",
-    "BVFD_EQ"
+    "BVFD_EQ",
+    "BWBD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "BAI0d_EQ",
-      "venue": "DE",
-      "yahoo": "BAI0.DE",
-      "isin": "CA1567881018",
-      "name": "BAI0",
-      "seconds": 5.865,
-      "outcome": "miss",
-      "at": "2026-11-26T13:54:01.582131+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.577
-      },
-      "screen_seconds": 4.577,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "BAJd_EQ",
       "venue": "DE",
@@ -7538,6 +7520,25 @@
       },
       "screen_seconds": 4.714,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "BWBd_EQ",
+      "venue": "DE",
+      "yahoo": "BWB.DE",
+      "isin": "DE0005088108",
+      "name": "BWB",
+      "seconds": 3.11,
+      "outcome": "miss",
+      "at": "2026-11-26T14:02:44.141726+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.6,
+        "seconds": 1.068
+      },
+      "screen_seconds": 1.068,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87412,43 +87413,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T14:02:07.825134+00:00"
+    },
+    {
+      "t212_ticker": "BWBd_EQ",
+      "yahoo": "BWB.DE",
+      "name": "BWB",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T14:02:44.141726+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "BVFd_EQ",
+    "t212_ticker": "BWBd_EQ",
     "venue": "DE",
-    "yahoo": "BVF.DE",
-    "isin": "CA0717341071",
-    "name": "BVF",
-    "seconds": 6.449,
+    "yahoo": "BWB.DE",
+    "isin": "DE0005088108",
+    "name": "BWB",
+    "seconds": 3.11,
     "outcome": "miss",
-    "at": "2026-11-26T14:02:33.061714+00:00",
+    "at": "2026-11-26T14:02:44.141726+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.714
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.6,
+      "seconds": 1.068
     },
-    "screen_seconds": 4.714,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.068,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "BWBd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T14:02:33.061714+00:00",
+  "updated_at": "2026-11-26T14:02:44.141726+00:00",
   "totals": {
-    "screened": 6775,
+    "screened": 6776,
     "signals": {
-      "buy": 1926,
+      "buy": 1927,
       "avoid": 1516,
       "hold": 1405,
       "insufficient_data": 1889,
       "strong_buy": 39
     },
-    "signals_n": 6775,
-    "screen_seconds_sum": 81624.18600000041,
-    "screen_seconds_n": 6775,
+    "signals_n": 6776,
+    "screen_seconds_sum": 81625.25400000041,
+    "screen_seconds_n": 6776,
     "outcomes": {
-      "miss": 2960,
+      "miss": 2961,
       "saved": 3815
     }
   },
