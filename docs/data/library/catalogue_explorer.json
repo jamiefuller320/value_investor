@@ -6682,28 +6682,10 @@
     "ADVD_EQ",
     "AEDD_EQ",
     "AEIND_EQ",
-    "AFTD_EQ"
+    "AFTD_EQ",
+    "AFXD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "9TOd_EQ",
-      "venue": "DE",
-      "yahoo": "9TO.DE",
-      "isin": "JP3635000007",
-      "name": "9TO",
-      "seconds": 6.241,
-      "outcome": "miss",
-      "at": "2026-11-26T11:03:07.207898+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.934
-      },
-      "screen_seconds": 4.934,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "9UVd_EQ",
       "venue": "DE",
@@ -7444,6 +7426,25 @@
       },
       "screen_seconds": 0.755,
       "signal": "buy"
+    },
+    {
+      "t212_ticker": "AFXd_EQ",
+      "venue": "DE",
+      "yahoo": "AFX.DE",
+      "isin": "DE0005313704",
+      "name": "AFX",
+      "seconds": 2.26,
+      "outcome": "miss",
+      "at": "2026-11-26T11:39:16.899483+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "strong_buy",
+        "fits": true,
+        "data_quality_score": 0.9,
+        "seconds": 0.955
+      },
+      "screen_seconds": 0.955,
+      "signal": "strong_buy"
     }
   ],
   "handoffs": [
@@ -87198,48 +87199,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T11:39:08.453537+00:00"
+    },
+    {
+      "t212_ticker": "AFXd_EQ",
+      "yahoo": "AFX.DE",
+      "name": "AFX",
+      "signal": "strong_buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T11:39:16.899483+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "AFTd_EQ",
+    "t212_ticker": "AFXd_EQ",
     "venue": "DE",
-    "yahoo": "AFT.DE",
-    "isin": "US0028962076",
-    "name": "AFT",
-    "seconds": 2.518,
+    "yahoo": "AFX.DE",
+    "isin": "DE0005313704",
+    "name": "AFX",
+    "seconds": 2.26,
     "outcome": "miss",
-    "at": "2026-11-26T11:39:08.453537+00:00",
+    "at": "2026-11-26T11:39:16.899483+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "buy",
+      "signal": "strong_buy",
       "fits": true,
-      "data_quality_score": 1.0,
-      "seconds": 0.755
+      "data_quality_score": 0.9,
+      "seconds": 0.955
     },
-    "screen_seconds": 0.755,
-    "signal": "buy",
+    "screen_seconds": 0.955,
+    "signal": "strong_buy",
     "handoff": {
       "status": "pending",
-      "signal": "buy",
-      "t212_ticker": "AFTd_EQ"
+      "signal": "strong_buy",
+      "t212_ticker": "AFXd_EQ"
     }
   },
-  "updated_at": "2026-11-26T11:39:08.453537+00:00",
+  "updated_at": "2026-11-26T11:39:16.899483+00:00",
   "totals": {
-    "screened": 6681,
+    "screened": 6682,
     "signals": {
       "buy": 1912,
       "avoid": 1514,
       "hold": 1393,
       "insufficient_data": 1824,
-      "strong_buy": 38
+      "strong_buy": 39
     },
-    "signals_n": 6681,
-    "screen_seconds_sum": 78630.66900000034,
-    "screen_seconds_n": 6681,
+    "signals_n": 6682,
+    "screen_seconds_sum": 78631.62400000035,
+    "screen_seconds_n": 6682,
     "outcomes": {
-      "miss": 2866,
+      "miss": 2867,
       "saved": 3815
     }
   },
