@@ -1,12 +1,12 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-26T07:35:40.154106+00:00
+Track: `buy_tier_level` · updated 2026-11-26T23:54:29.362454+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **11** / 31 (35% count, 33% NAV)
-- Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `tolerate_intact_losers`
+- Losers: **11** / 28 (39% count, 36% NAV)
+- Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
+- Balancing hint: `trim_weakening_losers`
 
 ## Holding reviews
 
@@ -115,11 +115,6 @@ Track: `buy_tier_level` · updated 2026-11-26T07:35:40.154106+00:00
 - still buy
 - cheapness family still passes
 
-### CLW.AX — weakening / watch_review (-0.8%)
-- research verdict neutral
-- still buy
-- cheapness family still passes
-
 ### BPT.AX — weakening / watch_review (+0.0%)
 - research verdict caution
 - conviction 33% below intact floor
@@ -144,6 +139,12 @@ Track: `buy_tier_level` · updated 2026-11-26T07:35:40.154106+00:00
 - still buy
 - research accumulate
 
+### PLS.AX — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 17% below intact floor
+- still buy
+- cheapness family still passes
+
 ### JBH.AX — intact / hold_tolerate (+1.0%)
 - still buy
 - research accumulate
@@ -165,23 +166,12 @@ Track: `buy_tier_level` · updated 2026-11-26T07:35:40.154106+00:00
 - data_quality 0.95
 - conviction 57%
 
-### AMC.AX — weakening / watch_review (+4.2%)
-- left buy tier (hold)
-- conviction 32% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### CYL.AX — intact / hold_tolerate (+4.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
 - conviction 50%
-
-### EBO.AX — weakening / watch_review (+6.1%)
-- research verdict neutral
-- still buy
-- cheapness family still passes
 
 ### RDX.AX — weakening / watch_review (+6.4%)
 - research verdict caution
@@ -195,13 +185,6 @@ Track: `buy_tier_level` · updated 2026-11-26T07:35:40.154106+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 59%
-
-### TUA.AX — weakening / watch_review (+11.0%)
-- left buy tier (hold)
-- research verdict caution
-- conviction 17% below intact floor
-- cheapness family still passes
-- data_quality 0.95
 
 ### RMD.AX — intact / hold_tolerate (+15.2%)
 - still buy
