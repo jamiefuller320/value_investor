@@ -6769,28 +6769,10 @@
     "BP1D_EQ",
     "BP8D_EQ",
     "BR30D_EQ",
-    "BSG0D_EQ"
+    "BSG0D_EQ",
+    "BSLD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "B5Hd_EQ",
-      "venue": "DE",
-      "yahoo": "B5H.DE",
-      "isin": "CH0025536027",
-      "name": "B5H",
-      "seconds": 5.824,
-      "outcome": "miss",
-      "at": "2026-11-26T13:52:33.297946+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.526
-      },
-      "screen_seconds": 4.526,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "B5Xd_EQ",
       "venue": "DE",
@@ -7531,6 +7513,25 @@
       },
       "screen_seconds": 4.562,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "BSLd_EQ",
+      "venue": "DE",
+      "yahoo": "BSL.DE",
+      "isin": "DE0005102008",
+      "name": "BSL",
+      "seconds": 2.825,
+      "outcome": "miss",
+      "at": "2026-11-26T14:01:06.414363+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.948
+      },
+      "screen_seconds": 0.948,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -87389,43 +87390,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T13:59:45.273420+00:00"
+    },
+    {
+      "t212_ticker": "BSLd_EQ",
+      "yahoo": "BSL.DE",
+      "name": "BSL",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T14:01:06.414363+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "BSG0d_EQ",
+    "t212_ticker": "BSLd_EQ",
     "venue": "DE",
-    "yahoo": "BSG0.DE",
-    "isin": "AU0000237554",
-    "name": "BSG0",
-    "seconds": 5.872,
+    "yahoo": "BSL.DE",
+    "isin": "DE0005102008",
+    "name": "BSL",
+    "seconds": 2.825,
     "outcome": "miss",
-    "at": "2026-11-26T14:00:55.853350+00:00",
+    "at": "2026-11-26T14:01:06.414363+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.562
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.948
     },
-    "screen_seconds": 4.562,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.948,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "BSLd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T14:00:55.853350+00:00",
+  "updated_at": "2026-11-26T14:01:06.414363+00:00",
   "totals": {
-    "screened": 6768,
+    "screened": 6769,
     "signals": {
-      "buy": 1924,
+      "buy": 1925,
       "avoid": 1515,
       "hold": 1404,
       "insufficient_data": 1886,
       "strong_buy": 39
     },
-    "signals_n": 6768,
-    "screen_seconds_sum": 81606.36500000038,
-    "screen_seconds_n": 6768,
+    "signals_n": 6769,
+    "screen_seconds_sum": 81607.31300000039,
+    "screen_seconds_n": 6769,
     "outcomes": {
-      "miss": 2953,
+      "miss": 2954,
       "saved": 3815
     }
   },
