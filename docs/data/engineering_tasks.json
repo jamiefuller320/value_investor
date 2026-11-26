@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-11-26T17:58:02.116152+00:00",
+  "compiled_at": "2026-11-26T18:29:13.176871+00:00",
   "run_at": null,
   "task_count": 317,
   "tasks": [
@@ -10579,6 +10579,102 @@
       "cancelled_policy": "resolved_gap_closure"
     },
     {
+      "id": "eng-20261002-14",
+      "area": "ingest",
+      "title": "Close library ingest filing gaps for Straits Times Index (sti): 1 buy-tier gaps after stalled weekday loop",
+      "summary": "Library market sti buy-tier filing deepen stalled with 1 unmeasured and 0 zero-body names (buy_tier_count=9). Improve euro_filings / ESEF / IR allowlist source coverage for representative tickers and add regression tests; verify with ftse-library ingest-loop --market sti. Sample unmeasured: 5E2.SI.",
+      "priority": "high",
+      "priority_score": 86.0,
+      "source": "library_ingest_stall",
+      "evidence": {
+        "market_id": "sti",
+        "library_market": "sti",
+        "universe": "library",
+        "filing_health": {
+          "snapshot_at": "2026-11-26T18:28:11.548685+00:00",
+          "market_id": "sti",
+          "buy_tier_count": 9,
+          "unmeasured_buy_tier": 1,
+          "zero_body_buy_tier": 0,
+          "thin_body_buy_tier": 0,
+          "indexed_without_body": 7,
+          "bodies_min": 4,
+          "bodies_median": 7.0,
+          "bodies_max": 14,
+          "coverage_scope": "canonical_plus_shards",
+          "ftse_equivalent": false,
+          "unmeasured_tickers": [
+            "5E2.SI"
+          ],
+          "zero_body_tickers": [],
+          "thin_body_tickers": [],
+          "indexed_without_body_tickers": [
+            "U14.SI",
+            "ME8U.SI",
+            "N2IU.SI"
+          ],
+          "indexed_without_body_by_ticker": {
+            "U14.SI": 4,
+            "ME8U.SI": 2,
+            "N2IU.SI": 1
+          },
+          "parked_tickers": [
+            "ME8U.SI",
+            "N2IU.SI",
+            "U14.SI"
+          ],
+          "parked_count": 3,
+          "effective_thin_body_buy_tier": 0,
+          "effective_thin_body_tickers": [],
+          "effective_indexed_without_body": 0,
+          "effective_indexed_without_body_tickers": [],
+          "ingest_exhausted": false
+        },
+        "filing_gaps": 1,
+        "sample_unmeasured": [
+          "5E2.SI"
+        ],
+        "sample_zero_body": [],
+        "rerun_library_ingest_loop": true,
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Representative sti buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
+        "ftse-library ingest-loop --market sti reports improved > 0 on a verification run",
+        "Add focused regression tests for the source/parser fix",
+        "No change to live FTSE 350 ingest path or blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20261002-14.md",
+      "branch_name": "cursor/eng-20261002-14-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/948",
+      "pr_number": 948,
+      "completed_at": "2026-10-02T12:10:01.741616+00:00",
+      "merged_at": "2026-10-02T12:36:28.266410+00:00",
+      "no_diff_count": 0
+    },
+    {
       "id": "eng-20261005-01",
       "area": "ingest",
       "title": "Close library ingest filing gaps for FTSE MIB (ftse_mib): 1 buy-tier gaps after stalled weekday loop",
@@ -10666,102 +10762,6 @@
       "pr_number": 974,
       "completed_at": "2026-10-05T23:31:31.921936+00:00",
       "merged_at": "2026-10-06T00:04:10.032945+00:00",
-      "no_diff_count": 0
-    },
-    {
-      "id": "eng-20261002-14",
-      "area": "ingest",
-      "title": "Close library ingest filing gaps for Straits Times Index (sti): 1 buy-tier gaps after stalled weekday loop",
-      "summary": "Library market sti buy-tier filing deepen stalled with 1 unmeasured and 0 zero-body names (buy_tier_count=9). Improve euro_filings / ESEF / IR allowlist source coverage for representative tickers and add regression tests; verify with ftse-library ingest-loop --market sti. Sample unmeasured: 5E2.SI.",
-      "priority": "high",
-      "priority_score": 86.0,
-      "source": "library_ingest_stall",
-      "evidence": {
-        "market_id": "sti",
-        "library_market": "sti",
-        "universe": "library",
-        "filing_health": {
-          "snapshot_at": "2026-11-26T17:20:37.552671+00:00",
-          "market_id": "sti",
-          "buy_tier_count": 9,
-          "unmeasured_buy_tier": 1,
-          "zero_body_buy_tier": 0,
-          "thin_body_buy_tier": 0,
-          "indexed_without_body": 7,
-          "bodies_min": 4,
-          "bodies_median": 7.0,
-          "bodies_max": 14,
-          "coverage_scope": "canonical_plus_shards",
-          "ftse_equivalent": false,
-          "unmeasured_tickers": [
-            "5E2.SI"
-          ],
-          "zero_body_tickers": [],
-          "thin_body_tickers": [],
-          "indexed_without_body_tickers": [
-            "U14.SI",
-            "ME8U.SI",
-            "N2IU.SI"
-          ],
-          "indexed_without_body_by_ticker": {
-            "U14.SI": 4,
-            "ME8U.SI": 2,
-            "N2IU.SI": 1
-          },
-          "parked_tickers": [
-            "ME8U.SI",
-            "N2IU.SI",
-            "U14.SI"
-          ],
-          "parked_count": 3,
-          "effective_thin_body_buy_tier": 0,
-          "effective_thin_body_tickers": [],
-          "effective_indexed_without_body": 0,
-          "effective_indexed_without_body_tickers": [],
-          "ingest_exhausted": false
-        },
-        "filing_gaps": 1,
-        "sample_unmeasured": [
-          "5E2.SI"
-        ],
-        "sample_zero_body": [],
-        "rerun_library_ingest_loop": true,
-        "doc": "docs/ops/library-ingest-escalation.md"
-      },
-      "acceptance_criteria": [
-        "Representative sti buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
-        "ftse-library ingest-loop --market sti reports improved > 0 on a verification run",
-        "Add focused regression tests for the source/parser fix",
-        "No change to live FTSE 350 ingest path or blocked_paths"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "merged",
-      "result_path": "output/engineering_result_eng-20261002-14.md",
-      "branch_name": "cursor/eng-20261002-14-1de3",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/948",
-      "pr_number": 948,
-      "completed_at": "2026-10-02T12:10:01.741616+00:00",
-      "merged_at": "2026-10-02T12:36:28.266410+00:00",
       "no_diff_count": 0
     },
     {
@@ -20805,38 +20805,44 @@
   "source_trial_id": "igc-20261102-01",
   "source_chain_root_id": "igc-20261102-01",
   "library_ingest_health": {
-    "snapshot_at": "2026-11-26T17:57:20.609344+00:00",
-    "market_id": "ftse_mib",
-    "buy_tier_count": 8,
+    "snapshot_at": "2026-11-26T18:28:11.548685+00:00",
+    "market_id": "sti",
+    "buy_tier_count": 9,
     "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 2,
-    "indexed_without_body": 0,
-    "bodies_min": 2,
-    "bodies_median": 4,
-    "bodies_max": 52,
+    "thin_body_buy_tier": 0,
+    "indexed_without_body": 7,
+    "bodies_min": 4,
+    "bodies_median": 7.0,
+    "bodies_max": 14,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
-      "TIT.MI"
+      "5E2.SI"
     ],
     "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "PST.MI",
-      "FCT.MI"
+    "thin_body_tickers": [],
+    "indexed_without_body_tickers": [
+      "U14.SI",
+      "ME8U.SI",
+      "N2IU.SI"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_by_ticker": {
+      "U14.SI": 4,
+      "ME8U.SI": 2,
+      "N2IU.SI": 1
+    },
     "parked_tickers": [
-      "FCT.MI",
-      "PST.MI"
+      "ME8U.SI",
+      "N2IU.SI",
+      "U14.SI"
     ],
-    "parked_count": 2,
+    "parked_count": 3,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
   },
-  "library_market_id": "ftse_mib"
+  "library_market_id": "sti"
 }
