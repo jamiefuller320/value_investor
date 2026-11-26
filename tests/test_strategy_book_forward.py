@@ -535,10 +535,14 @@ def test_dashboard_strip_is_read_only() -> None:
     assert "renderObservePathScoreboardPanel" not in fn
     assert "fair_cost" not in fn
     assert "No promote button" in fn
+    assert "renderStrategyBookDemoSlippageStrip" in fn
+    assert '["strategy_book_demo_slippage", "data/strategy_book_demo_slippage.json"]' in text
+    render = text.split("function renderDashboard(", 1)[1].split("\nasync function ", 1)[0]
+    assert "investmentModelId = normalizeInvestmentModel(parsed.model)" in render
     queue = text.split("function renderQueueHealthMonitor(", 1)[1].split("\nfunction ", 1)[0]
     assert "renderStrategyBookObserveSection(" in queue
     html = Path("docs/index.html").read_text(encoding="utf-8")
-    assert "app.js?v=strategy-book-forward-20261105" in html
+    assert "app.js?v=l709-demo-slippage-20261126" in html
     runbook = Path("docs/ops/strategy-book-observe.md").read_text(encoding="utf-8")
     assert "## Go-live" in runbook
     registration = Path("docs/ops/strategy-book-registration.md").read_text(encoding="utf-8")

@@ -454,6 +454,7 @@ without firing the same title twice for one missed run.
 - `docs/data/strategy_book_closes.json`
 - `docs/data/strategy_book_forward_status.json`
 - `docs/data/strategy_book_demo_ledger.json` (practice-account mirror; see [strategy-book-demo-mirror.md](strategy-book-demo-mirror.md))
+- `docs/data/strategy_book_demo_slippage.json` (observe-only copy of that ledger's slippage summary for the dashboard strip; same writers; does not feed the book)
 - `docs/data/strategy_book_proof_board.json` (step 3.2 proof bars; see [strategy-book-proof.md](strategy-book-proof.md))
 - `docs/data/strategy_book_fair_value.json` (step 4.1 fair-value range; see [strategy-book-fair-value.md](strategy-book-fair-value.md))
 - `docs/data/strategy_book_memo_free_shadow.json` (memo-free shadow; see [strategy-book-memo-free-shadow.md](strategy-book-memo-free-shadow.md))
@@ -467,7 +468,12 @@ still publishes charts. The JSON stores are not shared.
 
 Analysis → Observe, hash `#analysis/observe/strategy-book`. The strip reads
 `strategy_book_forward_status.json`: phase span, mature count, freshness.
-The same file's `candidates` roster is the per-name list for the strategy
+The same section reads `strategy_book_demo_slippage.json`: median
+practice-account slippage versus the book's adjusted close, with on-time
+entries, on-time exits and catch-ups kept apart. That file is a copy of the
+demo ledger summary. It does not feed the book and it does not replace the
+assumed half-spread. The Automation queue strip shows the same median on one
+line. The same file's `candidates` roster is the per-name list for the strategy
 dashboard's Candidates tab (field list under Go-live). Read-only. No promote
 button. No strand A writes. The score store is not rendered.
 

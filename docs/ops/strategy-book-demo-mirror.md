@@ -145,11 +145,13 @@ once more in the same run. The row keeps `quantity_requested`,
 `precision_retried` and `precision_detail`. A row rejected for precision before
 this retry existed is sent once more while its fill window is open. Any
 other rejection is final for that reference (whole-share resizing is queued
-as "Resize a rejected strategy-book demo order to whole shares"). A dashboard
-strip for the measured slippage is queued as "Show strategy-book demo slippage
-on the observe dashboard". The assumed half-spread is not replaced. The
-deferred idea "Mirror paper fills onto T212 demo account for measured
-execution" stays open.
+as "Resize a rejected strategy-book demo order to whole shares"). The observe
+dashboard (Analysis → Observe → Strategy book, and the compact Automation
+queue strip) shows median practice-account slippage versus the book's
+adjusted close from `strategy_book_demo_slippage.json`. The strip is
+observe-only: it does not feed the book and it does not replace the assumed
+half-spread. The deferred idea "Mirror paper fills onto T212 demo account for
+measured execution" stays open.
 
 The account-summary currency is checked only when a demo key is present and
 placement is on. The API documents that orders execute only in the account's
@@ -195,6 +197,12 @@ events. `STOCK_SPLIT` is stored as `split`.
 
 One store, `docs/data/strategy_book_demo_ledger.json`. `schema_version` 1.
 `influences_live` false. `base_url` is `https://demo.trading212.com`.
+
+Each ledger write also writes `docs/data/strategy_book_demo_slippage.json`:
+measured count, median slippage versus the book's adjusted close, and the
+on-time entry, on-time exit and catch-up medians. `influences_live` false,
+`feeds_strategy_book` false, `replaces_half_spread` false. The dashboard
+reads that file. The strategy book does not.
 
 | Array | Contents |
 |---|---|
@@ -368,9 +376,9 @@ write when no row is due, so idle slots commit nothing. Without the demo
 secrets the step prints that nothing was sent and exits 0.
 
 Both workflows share the concurrency group `strategy-book-forward`, so only
-one writes the ledger at a time. The ledger is on the forward workflow's
-`GHA_COMMIT_OWNED` list and on email-report's exclude list; the near-close
-workflow commits only the ledger.
+one writes the ledger at a time. The ledger and the slippage strip are on
+the forward workflow's `GHA_COMMIT_OWNED` list and on email-report's exclude
+list; the near-close workflow commits only those two files.
 
 Ops-monitor `check_strategy_book_demo_mirror` reads the ledger and does not
 place orders. All findings are `auto_fixable` false:

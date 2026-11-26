@@ -1,7 +1,9 @@
 """Mirror strategy-book primary orders onto the Trading 212 practice account.
 
 Observe-only. The ledger never feeds the book, its scores, the registration,
-or a knob. Order HTTP is allowed only against the demo host, and only with
+or a knob. The dashboard strip is a copy of measured slippage versus the
+book's adjusted close; it does not replace the assumed half-spread. Order
+HTTP is allowed only against the demo host, and only with
 ``TRADING212_DEMO_API_KEY`` / ``TRADING212_DEMO_API_SECRET``.
 
 See ``docs/ops/strategy-book-demo-mirror.md``.
@@ -39,7 +41,13 @@ logger = logging.getLogger(__name__)
 
 INSTRUMENT_ID = "strategy-book-demo-mirror-v0"
 STORE_NAME = "strategy_book_demo_ledger.json"
+STRIP_STORE_NAME = "strategy_book_demo_slippage.json"
 SCHEMA_VERSION = 1
+SLIPPAGE_STRIP_NOTE = (
+    "Observe-only. Does not feed the strategy book. "
+    "The assumed half-spread is not replaced."
+)
+SLIPPAGE_PRICE_BASIS = "raw_fill_vs_book_adjusted_close"
 PRIMARY = "primary"
 ORDER_CAP = 20
 CATCHUP_LEG = "exit_catchup"
@@ -525,6 +533,10 @@ def ledger_path(repo_root: Path) -> Path:
     return Path(repo_root) / "docs" / "data" / STORE_NAME
 
 
+def slippage_strip_path(repo_root: Path) -> Path:
+    return Path(repo_root) / "docs" / "data" / STRIP_STORE_NAME
+
+
 def load_ledger(repo_root: Path) -> dict[str, Any] | None:
     path = ledger_path(repo_root)
     if not path.is_file():
@@ -533,6 +545,68 @@ def load_ledger(repo_root: Path) -> dict[str, Any] | None:
     if not isinstance(payload, dict):
         raise ValueError(f"{STORE_NAME} is not an object")
     return payload
+
+
+def _count_field(raw: Mapping[str, Any], key: str) -> int:
+    try:
+        return int(raw.get(key) or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _pct_field(raw: Mapping[str, Any], key: str) -> float | None:
+    value = raw.get(key)
+    if value is None:
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(number):
+        return None
+    return number
+
+
+def slippage_dashboard_strip(ledger: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Observe-only copy of measured slippage for the dashboard strip.
+
+    Reads the ledger summary. Does not change fills, the assumed half-spread,
+    or anything the strategy book scores.
+    """
+    payload = ledger if isinstance(ledger, Mapping) else {}
+    raw = payload.get("slippage") if isinstance(payload.get("slippage"), Mapping) else None
+    if raw is None or "measured_count" not in raw:
+        fills = [row for row in (payload.get("fills") or []) if isinstance(row, dict)]
+        raw = slippage_summary(fills)
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "instrument": "strategy-book-demo-slippage-strip-v0",
+        "observe_only": True,
+        "influences_live": False,
+        "feeds_strategy_book": False,
+        "replaces_half_spread": False,
+        "price_basis": SLIPPAGE_PRICE_BASIS,
+        "generated_at": payload.get("generated_at"),
+        "source": f"docs/data/{STORE_NAME}",
+        "measured_count": _count_field(raw, "measured_count"),
+        "median_pct": _pct_field(raw, "median_pct"),
+        "entry_on_time_count": _count_field(raw, "entry_on_time_count"),
+        "entry_on_time_median_pct": _pct_field(raw, "entry_on_time_median_pct"),
+        "on_time_count": _count_field(raw, "on_time_count"),
+        "on_time_median_pct": _pct_field(raw, "on_time_median_pct"),
+        "catchup_count": _count_field(raw, "catchup_count"),
+        "catchup_median_pct": _pct_field(raw, "catchup_median_pct"),
+        "fx_fee_count": _count_field(raw, "fx_fee_count"),
+        "fx_fee_median_pct": _pct_field(raw, "fx_fee_median_pct"),
+        "note": SLIPPAGE_STRIP_NOTE,
+    }
+
+
+def _persist_ledger(root: Path, payload: dict[str, Any]) -> None:
+    """Write the raw-price ledger and the small dashboard strip together."""
+    payload["influences_live"] = False
+    _write_json(ledger_path(root), payload)
+    _write_json(slippage_strip_path(root), slippage_dashboard_strip(payload))
 
 
 def _write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -3133,7 +3207,7 @@ def run_mirror(
             error=f"observe store unreadable: {exc}",
         )
         if apply:
-            _write_json(ledger_path(root), payload)
+            _persist_ledger(root, payload)
         return payload
     if not isinstance(observe, dict):
         payload = _empty_store(
@@ -3143,7 +3217,7 @@ def run_mirror(
             error="observe store missing",
         )
         if apply:
-            _write_json(ledger_path(root), payload)
+            _persist_ledger(root, payload)
         return payload
     prior = None
     try:
@@ -3255,7 +3329,7 @@ def run_mirror(
         payload["execution"] = execution_summary(payload["orders"], events, episodes, moment)
         payload["summary"] = summarize(payload)
         if apply:
-            _write_json(ledger_path(root), payload)
+            _persist_ledger(root, payload)
 
     sent_box = [0]
     statement: dict[str, Any] | None = None
@@ -3299,7 +3373,7 @@ def run_mirror(
     payload["summary"] = summarize(payload)
     payload["influences_live"] = False
     if apply:
-        _write_json(ledger_path(root), payload)
+        _persist_ledger(root, payload)
     return payload
 
 
@@ -3311,7 +3385,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--apply",
         action="store_true",
-        help="Write docs/data/strategy_book_demo_ledger.json",
+        help=(
+            "Write docs/data/strategy_book_demo_ledger.json and the observe-only "
+            "dashboard strip docs/data/strategy_book_demo_slippage.json"
+        ),
     )
     parser.add_argument(
         "--place",
