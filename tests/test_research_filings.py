@@ -13268,9 +13268,7 @@ def test_fetch_filings_ir_allowlist_paf_l_aim_builtin(tmp_path: Path):
     assert len(rows) == 1
     assert rows[0]["source"] == "ir_allowlist"
     assert rows[0]["period"] == "annual"
-    assert rows[0]["url"].endswith(
-        "Pan-African-Resources-integrated-annual-report-2026.pdf"
-    )
+    assert rows[0]["url"].endswith("Pan-African-Resources-integrated-annual-report-2026.pdf")
     assert "panafricanresources.com" in rows[0]["url"]
     assert "PAF.L" not in PARKED_SOURCE_HUNTER_SKIP
 
@@ -13354,7 +13352,9 @@ def test_parked_source_hunter_smr_ax_asx200_has_fetchable_ir():
         pytest.skip("Stanmore 1H26 half-year report fetch unavailable (network)")
     assert len(body) >= 5000
     assert "stanmore" in body.lower()
-    assert "appendix 4d" in body.lower() or "half-year" in body.lower() or "half year" in body.lower()
+    assert (
+        "appendix 4d" in body.lower() or "half-year" in body.lower() or "half year" in body.lower()
+    )
     valid, reason = _validate_ir_allowlist_body_content(rows[0], body, ticker="SMR.AX")
     assert valid, reason
 
