@@ -6850,28 +6850,10 @@
     "CP9D_EQ",
     "CPKD_EQ",
     "CPWD_EQ",
-    "CRLND_EQ"
+    "CRLND_EQ",
+    "CRZKD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CANAd_EQ",
-      "venue": "DE",
-      "yahoo": "CANA.DE",
-      "isin": "CA1368421014",
-      "name": "CANA",
-      "seconds": 87.658,
-      "outcome": "miss",
-      "at": "2026-11-26T14:30:52.996790+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.531
-      },
-      "screen_seconds": 85.531,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "CBAd_EQ",
       "venue": "DE",
@@ -7612,6 +7594,25 @@
       },
       "screen_seconds": 85.314,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "CRZKd_EQ",
+      "venue": "DE",
+      "yahoo": "CRZK.DE",
+      "isin": "DE000A2GS625",
+      "name": "CRZK",
+      "seconds": 3.075,
+      "outcome": "miss",
+      "at": "2026-11-26T15:21:46.642987+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.85,
+        "seconds": 1.024
+      },
+      "screen_seconds": 1.024,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -88252,43 +88253,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-26T14:39:40.496293+00:00"
+    },
+    {
+      "t212_ticker": "CRZKd_EQ",
+      "yahoo": "CRZK.DE",
+      "name": "CRZK",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T15:21:46.642987+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "CRLNd_EQ",
+    "t212_ticker": "CRZKd_EQ",
     "venue": "DE",
-    "yahoo": "CRLN.DE",
-    "isin": "CH0008702190",
-    "name": "CRLN",
-    "seconds": 86.627,
+    "yahoo": "CRZK.DE",
+    "isin": "DE000A2GS625",
+    "name": "CRZK",
+    "seconds": 3.075,
     "outcome": "miss",
-    "at": "2026-11-26T15:21:36.061048+00:00",
+    "at": "2026-11-26T15:21:46.642987+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.314
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.85,
+      "seconds": 1.024
     },
-    "screen_seconds": 85.314,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.024,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "CRZKd_EQ"
+    }
   },
-  "updated_at": "2026-11-26T15:21:36.061048+00:00",
+  "updated_at": "2026-11-26T15:21:46.642987+00:00",
   "totals": {
-    "screened": 6849,
+    "screened": 6850,
     "signals": {
-      "buy": 1931,
+      "buy": 1932,
       "avoid": 1519,
       "hold": 1410,
       "insufficient_data": 1950,
       "strong_buy": 39
     },
-    "signals_n": 6849,
-    "screen_seconds_sum": 85636.83600000045,
-    "screen_seconds_n": 6849,
+    "signals_n": 6850,
+    "screen_seconds_sum": 85637.86000000045,
+    "screen_seconds_n": 6850,
     "outcomes": {
-      "miss": 3034,
+      "miss": 3035,
       "saved": 3815
     }
   },
