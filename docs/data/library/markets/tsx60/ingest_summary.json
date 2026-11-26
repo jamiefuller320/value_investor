@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-26T08:45:40.479846+00:00",
+  "run_at": "2026-11-26T11:20:14.371408+00:00",
   "market_id": "tsx60",
   "targets": [
     "NTR.TO"
@@ -7,10 +7,10 @@
   "target_details": [
     {
       "ticker": "NTR.TO",
-      "priority_score": 17.83,
+      "priority_score": 17.479999999999997,
       "filings_total": 29,
-      "filings_with_body": 19,
-      "indexed_without_body": 10,
+      "filings_with_body": 20,
+      "indexed_without_body": 9,
       "reason": "indexed_without_body"
     }
   ],
@@ -20,15 +20,15 @@
       "reason": "indexed_without_body",
       "before": {
         "filings_total": 29,
-        "filings_with_body": 19,
-        "indexed_without_body": 10
+        "filings_with_body": 20,
+        "indexed_without_body": 9
       },
       "after": {
         "filings_total": 29,
         "filings_with_body": 20,
         "indexed_without_body": 9
       },
-      "improved": true,
+      "improved": false,
       "regime": "tsx_announcements",
       "filings_summary": {
         "total": 29,
@@ -82,20 +82,18 @@
       }
     }
   ],
-  "improved": [
-    "NTR.TO"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-26T08:45:20.948917+00:00",
+    "snapshot_at": "2026-11-26T11:19:50.632808+00:00",
     "market_id": "tsx60",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 2,
-    "indexed_without_body": 117,
+    "indexed_without_body": 116,
     "bodies_min": 12,
     "bodies_median": 33,
     "bodies_max": 116,
@@ -125,7 +123,7 @@
       "SU.TO": 20,
       "CNQ.TO": 1,
       "MFC.TO": 31,
-      "NTR.TO": 10
+      "NTR.TO": 9
     },
     "parked_tickers": [
       "CNQ.TO",
@@ -139,14 +137,14 @@
     "parked_count": 7,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 10,
+    "effective_indexed_without_body": 9,
     "effective_indexed_without_body_tickers": [
       "NTR.TO"
     ],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-26T08:45:34.065840+00:00",
+    "snapshot_at": "2026-11-26T11:20:06.828098+00:00",
     "market_id": "tsx60",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
@@ -214,7 +212,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "tsx60",
-    "assessed_at": "2026-11-26T08:45:21.795873+00:00",
+    "assessed_at": "2026-11-26T11:19:51.906410+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -238,9 +236,9 @@
       },
       {
         "ticker": "NTR.TO",
-        "indexed_without_body": 10,
+        "indexed_without_body": 9,
         "filings_total": 29,
-        "filings_with_body": 19
+        "filings_with_body": 20
       },
       {
         "ticker": "CTC-A.TO",
@@ -285,21 +283,21 @@
       "GIB-A.TO"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (8 tickers, top: K.TO(45), MFC.TO(31), SU.TO(20), NTR.TO(10), CTC-A.TO(5))",
+      "Prefer indexed-without-body body refetch (8 tickers, top: K.TO(45), MFC.TO(31), SU.TO(20), NTR.TO(9), CTC-A.TO(5))",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 8,
-      "indexed_without_body_rows": 117,
+      "indexed_without_body_rows": 116,
       "thin_need_discovery": 0,
       "thin_need_bodies": 2
     }
   },
-  "used_seconds": 11.394304933000058,
-  "budget_seconds": 2068.93097615242,
-  "leftover_seconds": 2057.53667121942,
+  "used_seconds": 13.730207876999998,
+  "budget_seconds": 2057.5979101657867,
+  "leftover_seconds": 2043.8677022887869,
   "blocker_ticker": null,
   "per_ticker_max_seconds": null,
   "pin_tickers": [
@@ -309,9 +307,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "tsx60",
-    "updated_at": "2026-11-26T08:45:34.070936+00:00",
+    "updated_at": "2026-11-26T11:20:06.833999+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -402,7 +400,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "CNQ.TO",
       "CTC-A.TO",
@@ -428,7 +426,7 @@
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 75,
-    "candidate_count": 58,
+    "candidate_count": 59,
     "skipped_resolved_tickers": [
       "ACKB.BR",
       "APAM.AS",
@@ -452,6 +450,7 @@
       "MFC.TO",
       "CNQ.TO",
       "BAS.DE",
+      "IFX.DE",
       "PDD",
       "BAS.DE",
       "DTE.DE",
