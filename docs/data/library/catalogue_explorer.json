@@ -6567,28 +6567,10 @@
     "7S8D_EQ",
     "7SND_EQ",
     "7TCD_EQ",
-    "7USD_EQ"
+    "7USD_EQ",
+    "7V0D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "6RLd_EQ",
-      "venue": "DE",
-      "yahoo": "6RL.DE",
-      "isin": "CH0002178181",
-      "name": "6RL",
-      "seconds": 84.326,
-      "outcome": "miss",
-      "at": "2026-11-26T01:02:24.567701+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 83.37
-      },
-      "screen_seconds": 83.37,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "6TUd_EQ",
       "venue": "DE",
@@ -7329,6 +7311,25 @@
       },
       "screen_seconds": 84.81,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "7V0d_EQ",
+      "venue": "DE",
+      "yahoo": "7V0.DE",
+      "isin": "DE000A3C35W0",
+      "name": "7V0",
+      "seconds": 2.126,
+      "outcome": "miss",
+      "at": "2026-11-26T02:01:52.963130+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.9,
+        "seconds": 0.866
+      },
+      "screen_seconds": 0.866,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -86830,43 +86831,56 @@
         "error": null
       },
       "finished_at": "2026-11-26T01:05:41.876263+00:00"
+    },
+    {
+      "t212_ticker": "7V0d_EQ",
+      "yahoo": "7V0.DE",
+      "name": "7V0",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-26T02:01:52.963130+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "7USd_EQ",
+    "t212_ticker": "7V0d_EQ",
     "venue": "DE",
-    "yahoo": "7US.DE",
-    "isin": "CNE100006CQ4",
-    "name": "7US",
-    "seconds": 85.783,
+    "yahoo": "7V0.DE",
+    "isin": "DE000A3C35W0",
+    "name": "7V0",
+    "seconds": 2.126,
     "outcome": "miss",
-    "at": "2026-11-26T02:01:43.835149+00:00",
+    "at": "2026-11-26T02:01:52.963130+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.81
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.9,
+      "seconds": 0.866
     },
-    "screen_seconds": 84.81,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.866,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "7V0d_EQ"
+    }
   },
-  "updated_at": "2026-11-26T02:01:43.835149+00:00",
+  "updated_at": "2026-11-26T02:01:52.963130+00:00",
   "totals": {
-    "screened": 6566,
+    "screened": 6567,
     "signals": {
-      "buy": 1901,
+      "buy": 1902,
       "avoid": 1499,
       "hold": 1385,
       "insufficient_data": 1743,
       "strong_buy": 38
     },
-    "signals_n": 6566,
-    "screen_seconds_sum": 75148.91000000031,
-    "screen_seconds_n": 6566,
+    "signals_n": 6567,
+    "screen_seconds_sum": 75149.7760000003,
+    "screen_seconds_n": 6567,
     "outcomes": {
-      "miss": 2752,
+      "miss": 2753,
       "saved": 3814
     }
   },
