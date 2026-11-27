@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-11-26T07:36:33.850533+00:00",
-  "as_of": "2026-11-26T07:36:33.827660+00:00",
+  "updated_at": "2026-11-27T07:35:08.542979+00:00",
+  "as_of": "2026-11-27T07:35:08.523252+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,43 +16,43 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 5,
-  "underwater_count": 2,
+  "holding_count": 4,
+  "underwater_count": 1,
   "thesis_status_counts": {
     "intact": 2,
-    "weakening": 3,
+    "weakening": 2,
     "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 5,
-    "loser_count": 2,
-    "loser_share": 0.4,
-    "loser_nav_share": 0.4873,
+    "holding_count": 4,
+    "loser_count": 1,
+    "loser_share": 0.25,
+    "loser_nav_share": 0.3334,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
-    "within_tolerance": false,
+    "within_tolerance": true,
     "intact_loser_count": 1,
-    "weakening_loser_count": 1,
+    "weakening_loser_count": 0,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
-      "quality": 0.5,
-      "dividend": 0.5,
-      "garp": 0.5,
+      "quality": 0.0,
+      "dividend": 1.0,
+      "garp": 0.0,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
       "cheapness": 0.0,
-      "quality": 0.3333,
-      "dividend": 0.0,
+      "quality": 0.6667,
+      "dividend": 0.3333,
       "garp": 0.6667,
       "risk": 0.0
     },
     "selection_feedback_flags": [
-      "dividend fails more often among losers (50% vs 0%)"
+      "dividend fails more often among losers (100% vs 33%)"
     ],
-    "balancing_hint": "trim_weakening_losers",
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
@@ -63,21 +63,22 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.1123,
-      "mark": 96.0,
-      "avg_cost": 108.1485,
+      "unrealized_pct": -0.058,
+      "mark": 100.0,
+      "avg_cost": 106.1596,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.8292,
+      "conviction_score": 0.6733,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
-        "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [],
+      "failed_families": [
+        "dividend"
+      ],
       "research_verdict": "accumulate",
       "reasons": [
         "price drawdown alone does not invalidate value thesis",
@@ -85,14 +86,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 83%"
+        "conviction 67%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 83%"
+        "conviction 67%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -102,11 +103,11 @@
       "name": "Trifast plc",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
-      "underwater": true,
+      "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0544,
-      "mark": 67.0,
-      "avg_cost": 70.8582,
+      "unrealized_pct": -0.0294,
+      "mark": 68.0,
+      "avg_cost": 70.0615,
       "signal": "buy",
       "timing_signal": "accumulate",
       "conviction_score": 0.297,
@@ -144,9 +145,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.049,
-      "mark": 81.3,
-      "avg_cost": 85.4866,
+      "unrealized_pct": -0.0268,
+      "mark": 82.5,
+      "avg_cost": 84.7688,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.6872,
@@ -179,59 +180,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "LSL.L",
-      "name": "LSL Property Services plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0017,
-      "mark": 264.0,
-      "avg_cost": 264.447,
-      "signal": "hold",
-      "timing_signal": "neutral",
-      "conviction_score": 0.3016,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "left buy tier (hold)",
-        "conviction 30% below intact floor",
-        "research accumulate",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "left buy tier (hold)",
-        "conviction 30% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
       "ticker": "SBRE.L",
       "name": "Sabre Insurance Group plc",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 172.0,
+      "unrealized_pct": 0.0209,
+      "mark": 175.6,
       "avg_cost": 172.0,
-      "signal": "buy",
+      "signal": "hold",
       "timing_signal": "neutral",
-      "conviction_score": 0.2839,
+      "conviction_score": 0.2778,
       "data_quality_score": 0.85,
       "passed_families": [
         "cheapness",
@@ -244,17 +204,18 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
+        "left buy tier (hold)",
         "conviction 28% below intact floor",
-        "still buy",
-        "research accumulate"
+        "research accumulate",
+        "cheapness family still passes"
       ],
       "intact_reasons": [
-        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.85"
       ],
       "weaken_reasons": [
+        "left buy tier (hold)",
         "conviction 28% below intact floor"
       ],
       "broken_reasons": []

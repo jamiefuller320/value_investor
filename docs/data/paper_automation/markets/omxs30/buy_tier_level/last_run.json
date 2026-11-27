@@ -1,15 +1,31 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-26T07:39:50.785749+00:00",
+    "local_time": "2026-11-27T07:37:32.201279+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-26T08:00:00+00:00",
-    "settle_at": "2026-11-26T09:15:00+00:00",
+    "market_open_at": "2026-11-27T08:00:00+00:00",
+    "settle_at": "2026-11-27T09:15:00+00:00",
     "can_act": false,
     "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "1beb4021-137f-4347-811a-4125ad441f20",
+      "fund_id": "781d033e-101a-4d69-9975-f7564ee2b11e",
+      "acted_at": "2026-11-27T07:37:32.201279+00:00",
+      "ticker": "SKF-B.ST",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.000115,
+      "price": 260.0,
+      "gross": 0.03,
+      "cost": 0.0,
+      "net_cash": -0.03,
+      "note": "Automated buy",
+      "name": "AB SKF (publ)"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +39,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1024.52,
-    "cash": 0.03,
+    "nav": 1041.72,
+    "cash": -0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,168 +52,185 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 93.14,
+    "target_sleeve_value": 104.15,
     "targets": [
       {
         "ticker": "SKF-B.ST",
         "name": "AB SKF (publ)",
         "signal": "strong_buy",
-        "conviction_score": 0.8808,
-        "price": 263.4
+        "conviction_score": 0.8961,
+        "price": 260.0
       },
       {
         "ticker": "SKA-B.ST",
         "name": "Skanska AB (publ)",
         "signal": "strong_buy",
-        "conviction_score": 0.8500000000000001,
-        "price": 297.0
-      },
-      {
-        "ticker": "VOLV-B.ST",
-        "name": "AB Volvo (publ)",
-        "signal": "strong_buy",
-        "conviction_score": 0.8019000000000001,
-        "price": 315.6
+        "conviction_score": 0.8346,
+        "price": 302.7
       },
       {
         "ticker": "TEL2-B.ST",
         "name": "Tele2 AB (publ)",
         "signal": "strong_buy",
-        "conviction_score": 0.7975000000000001,
-        "price": 161.45
+        "conviction_score": 0.7927000000000001,
+        "price": 162.95
       },
       {
         "ticker": "BOL.ST",
         "name": "Boliden AB (publ)",
         "signal": "buy",
         "conviction_score": 0.7058000000000001,
-        "price": 447.1
+        "price": 462.6
       },
       {
         "ticker": "HM-B.ST",
         "name": "H & M Hennes & Mauritz AB (publ)",
         "signal": "buy",
-        "conviction_score": 0.6064,
-        "price": 182.5
+        "conviction_score": 0.6179,
+        "price": 184.15
       },
       {
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "signal": "buy",
-        "conviction_score": 0.6012000000000001,
-        "price": 103.1
+        "conviction_score": 0.5879000000000001,
+        "price": 105.5
       },
       {
         "ticker": "ESSITY-B.ST",
         "name": "Essity AB (publ)",
         "signal": "buy",
-        "conviction_score": 0.5794,
-        "price": 292.5
+        "conviction_score": 0.5814,
+        "price": 293.7
       },
       {
         "ticker": "SAND.ST",
         "name": "Sandvik AB (publ)",
         "signal": "buy",
         "conviction_score": 0.5438000000000001,
-        "price": 318.8
+        "price": 326.5
       },
       {
         "ticker": "ASSA-B.ST",
         "name": "ASSA ABLOY AB (publ)",
         "signal": "buy",
         "conviction_score": 0.4077,
-        "price": 385.8
+        "price": 390.8
       },
       {
         "ticker": "NIBE-B.ST",
         "name": "NIBE Industrier AB (publ)",
         "signal": "buy",
-        "conviction_score": 0.35011499999999995,
-        "price": 44.06
+        "conviction_score": 0.40018,
+        "price": 45.35
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "VOLV-B.ST",
+        "name": "AB Volvo (publ)",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.294389,
+        "price": 325.7,
+        "value": 95.88
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
+        "action": "buy",
         "ticker": "SKF-B.ST",
         "name": "AB SKF (publ)",
-        "reason": "Already near equal-weight target",
-        "value": 93.14,
-        "target_value": 93.14,
-        "conviction_score": 0.8808,
+        "reason": "Top-up to equal weight",
+        "value": 12.19,
+        "price": 260.0,
+        "target_value": 104.15,
+        "conviction_score": 0.8961,
         "signal": "strong_buy"
       },
+      {
+        "action": "buy",
+        "ticker": "TEL2-B.ST",
+        "name": "Tele2 AB (publ)",
+        "reason": "Top-up to equal weight",
+        "value": 11.44,
+        "price": 162.95,
+        "target_value": 104.15,
+        "conviction_score": 0.7927000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "SAND.ST",
+        "name": "Sandvik AB (publ)",
+        "reason": "Top-up to equal weight",
+        "value": 11.16,
+        "price": 326.5,
+        "target_value": 104.15,
+        "conviction_score": 0.5438000000000001,
+        "signal": "buy"
+      }
+    ],
+    "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "SKA-B.ST",
         "name": "Skanska AB (publ)",
-        "reason": "Already near equal-weight target",
-        "value": 93.24,
-        "target_value": 93.14,
-        "conviction_score": 0.8500000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "VOLV-B.ST",
-        "name": "AB Volvo (publ)",
-        "reason": "Already near equal-weight target",
-        "value": 92.91,
-        "target_value": 93.14,
-        "conviction_score": 0.8019000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "TEL2-B.ST",
-        "name": "Tele2 AB (publ)",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 91.86,
-        "target_value": 93.14,
-        "conviction_score": 0.7975000000000001,
+        "value": 95.03,
+        "target_value": 104.15,
+        "conviction_score": 0.8346,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
         "ticker": "BOL.ST",
         "name": "Boliden AB (publ)",
-        "reason": "Already near equal-weight target",
-        "value": 92.49,
-        "target_value": 93.14,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 95.7,
+        "target_value": 104.15,
         "conviction_score": 0.7058000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "HM-B.ST",
+        "name": "H & M Hennes & Mauritz AB (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 95.33,
+        "target_value": 104.15,
+        "conviction_score": 0.6179,
         "signal": "buy"
       },
       {
         "action": "hold",
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
-        "reason": "Already near equal-weight target",
-        "value": 93.62,
-        "target_value": 93.14,
-        "conviction_score": 0.6012000000000001,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 95.8,
+        "target_value": 104.15,
+        "conviction_score": 0.5879000000000001,
         "signal": "buy"
       },
       {
         "action": "hold",
-        "ticker": "SAND.ST",
-        "name": "Sandvik AB (publ)",
+        "ticker": "ESSITY-B.ST",
+        "name": "Essity AB (publ)",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 90.8,
-        "target_value": 93.14,
-        "conviction_score": 0.5438000000000001,
+        "value": 94.67,
+        "target_value": 104.15,
+        "conviction_score": 0.5814,
         "signal": "buy"
       },
       {
         "action": "hold",
         "ticker": "ASSA-B.ST",
         "name": "ASSA ABLOY AB (publ)",
-        "reason": "Already near equal-weight target",
-        "value": 93.71,
-        "target_value": 93.14,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 94.93,
+        "target_value": 104.15,
         "conviction_score": 0.4077,
         "signal": "buy"
       },
@@ -205,28 +238,36 @@
         "action": "hold",
         "ticker": "NIBE-B.ST",
         "name": "NIBE Industrier AB (publ)",
-        "reason": "Already near equal-weight target",
-        "value": 93.96,
-        "target_value": 93.14,
-        "conviction_score": 0.35011499999999995,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 96.71,
+        "target_value": 104.15,
+        "conviction_score": 0.40018,
         "signal": "buy"
       }
     ],
     "skipped": [],
-    "waitlisted": [],
-    "summary": "Next rebalance would target 11 equal-weight sleeve(s); leave 9 near-target holding(s)."
+    "waitlisted": [
+      {
+        "ticker": "VOLV-B.ST",
+        "name": "AB Volvo (publ)",
+        "signal": "strong_buy",
+        "conviction_score": 0.8019000000000001,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      }
+    ],
+    "summary": "Next rebalance would target 10 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 3 buy(s); leave 7 near-target holding(s)."
   },
   "alerts": [
     {
       "ticker": "VOLV-B.ST",
       "name": "AB Volvo (publ)",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 315.6,
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
+      "mark": 325.7,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
     },
     {
       "ticker": "ERIC-B.ST",
@@ -234,7 +275,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 103.1,
+      "mark": 105.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -245,7 +286,7 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 447.1,
+      "mark": 462.6,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -256,7 +297,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 385.8,
+      "mark": 390.8,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -267,7 +308,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 161.45,
+      "mark": 162.95,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -278,7 +319,7 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 318.8,
+      "mark": 326.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -289,7 +330,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 292.5,
+      "mark": 293.7,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -300,7 +341,7 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
-      "mark": 263.4,
+      "mark": 260.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -311,7 +352,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 44.06,
+      "mark": 45.35,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -322,7 +363,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 297.0,
+      "mark": 302.7,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -333,7 +374,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 182.5,
+      "mark": 184.15,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -354,7 +395,7 @@
       "id": "781d033e-101a-4d69-9975-f7564ee2b11e",
       "created_at": "2026-10-05T07:38:18.115741+00:00"
     },
-    "cash": 0.03,
+    "cash": -0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -437,8 +478,8 @@
       },
       "SKF-B.ST": {
         "ticker": "SKF-B.ST",
-        "shares": 0.35359,
-        "avg_cost": 277.6269,
+        "shares": 0.353705,
+        "avg_cost": 277.6212,
         "name": "AB SKF (publ)",
         "sector": "Industrials",
         "currency": "SEK",
@@ -1847,6 +1888,21 @@
         "net_cash": -92.36,
         "note": "Automated buy",
         "name": "H & M Hennes & Mauritz AB (publ)"
+      },
+      {
+        "id": "1beb4021-137f-4347-811a-4125ad441f20",
+        "fund_id": "781d033e-101a-4d69-9975-f7564ee2b11e",
+        "acted_at": "2026-11-27T07:37:32.201279+00:00",
+        "ticker": "SKF-B.ST",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.000115,
+        "price": 260.0,
+        "gross": 0.03,
+        "cost": 0.0,
+        "net_cash": -0.03,
+        "note": "Automated buy",
+        "name": "AB SKF (publ)"
       }
     ],
     "equity_curve": [
@@ -2672,22 +2728,41 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-27T07:37:32.201279+00:00",
+        "portfolio_value": 77.59,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "positions": 11,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "SEK": 0.07448
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-26T07:39:50.785749+00:00",
+    "last_mark_at": "2026-11-27T07:37:32.201279+00:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "VOLV-B.ST": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "omxs30",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-26T07:39:50.856046+00:00",
+    "generated_at": "2026-11-27T07:37:32.296947+00:00",
     "observe_only": true,
     "open_count": 8,
     "closed_count": 0,
@@ -2761,12 +2836,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "checkpoints_added_this_pass": 1
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-26T07:39:50.857591+00:00",
+    "generated_at": "2026-11-27T07:37:32.298316+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2862,7 +2937,7 @@
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 1
     }
   },
@@ -2871,8 +2946,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-26T07:39:50.860296+00:00",
-    "as_of": "2026-11-26T07:39:50.785749+00:00",
+    "updated_at": "2026-11-27T07:37:32.300685+00:00",
+    "as_of": "2026-11-27T07:37:32.201279+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2896,7 +2971,7 @@
       "holding_count": 11,
       "loser_count": 3,
       "loser_share": 0.2727,
-      "loser_nav_share": 0.2698,
+      "loser_nav_share": 0.2694,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
@@ -2923,55 +2998,14 @@
     },
     "holdings": [
       {
-        "ticker": "BOL.ST",
-        "name": "Boliden AB (publ)",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": true,
-        "deep_underwater": false,
-        "unrealized_pct": -0.127,
-        "mark": 447.1,
-        "avg_cost": 512.1711,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.7058,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "price drawdown alone does not invalidate value thesis",
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 71%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 71%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "SAND.ST",
         "name": "Sandvik AB (publ)",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.119,
-        "mark": 318.8,
+        "unrealized_pct": -0.0977,
+        "mark": 326.5,
         "avg_cost": 361.8452,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -3006,18 +3040,59 @@
         "broken_reasons": []
       },
       {
+        "ticker": "BOL.ST",
+        "name": "Boliden AB (publ)",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": true,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0968,
+        "mark": 462.6,
+        "avg_cost": 512.1711,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.7058,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "price drawdown alone does not invalidate value thesis",
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 71%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 71%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "SKF-B.ST",
         "name": "AB SKF (publ)",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0512,
-        "mark": 263.4,
-        "avg_cost": 277.6269,
+        "unrealized_pct": -0.0635,
+        "mark": 260.0,
+        "avg_cost": 277.6212,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.8808,
+        "conviction_score": 0.8961,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3034,14 +3109,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 88%"
+          "conviction 90%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 88%"
+          "conviction 90%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3053,12 +3128,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.031,
-        "mark": 44.06,
+        "unrealized_pct": -0.0026,
+        "mark": 45.35,
         "avg_cost": 45.47,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.3501,
+        "conviction_score": 0.4002,
         "data_quality_score": 1.0,
         "passed_families": [
           "quality",
@@ -3079,7 +3154,7 @@
         "intact_reasons": [
           "still buy",
           "data_quality 1.00",
-          "conviction 35%"
+          "conviction 40%"
         ],
         "weaken_reasons": [
           "research verdict caution",
@@ -3094,12 +3169,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0023,
-        "mark": 161.45,
+        "unrealized_pct": 0.007,
+        "mark": 162.95,
         "avg_cost": 161.8146,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.7975,
+        "conviction_score": 0.7927,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3115,14 +3190,54 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 80%"
+          "conviction 79%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 80%"
+          "conviction 79%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "SKA-B.ST",
+        "name": "Skanska AB (publ)",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0303,
+        "mark": 302.7,
+        "avg_cost": 293.8,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.8346,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 83%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 83%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3134,11 +3249,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0012,
-        "mark": 315.6,
+        "unrealized_pct": 0.0308,
+        "mark": 325.7,
         "avg_cost": 315.9751,
         "signal": "strong_buy",
-        "timing_signal": "neutral",
+        "timing_signal": "wait",
         "conviction_score": 0.8019,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3168,58 +3283,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "SKA-B.ST",
-        "name": "Skanska AB (publ)",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0109,
-        "mark": 297.0,
-        "avg_cost": 293.8,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.85,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 85%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 85%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "HM-B.ST",
         "name": "H & M Hennes & Mauritz AB (publ)",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0247,
-        "mark": 182.5,
+        "unrealized_pct": 0.034,
+        "mark": 184.15,
         "avg_cost": 178.1,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6064,
+        "conviction_score": 0.6179,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3235,55 +3310,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 61%"
+          "conviction 62%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 61%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "ERIC-B.ST",
-        "name": "Telefonaktiebolaget LM Ericsson (publ)",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0387,
-        "mark": 103.1,
-        "avg_cost": 99.2624,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.6012,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 60%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 60%"
+          "conviction 62%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3295,8 +3329,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0486,
-        "mark": 385.8,
+        "unrealized_pct": 0.0622,
+        "mark": 390.8,
         "avg_cost": 367.9042,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -3330,18 +3364,59 @@
         "broken_reasons": []
       },
       {
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0628,
+        "mark": 105.5,
+        "avg_cost": 99.2624,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.5879,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 59%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 59%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "ESSITY-B.ST",
         "name": "Essity AB (publ)",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0876,
-        "mark": 292.5,
+        "unrealized_pct": 0.092,
+        "mark": 293.7,
         "avg_cost": 268.9445,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5794,
+        "conviction_score": 0.5814,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3378,7 +3453,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-26T07:39:50.863660+00:00",
+    "generated_at": "2026-11-27T07:37:32.303564+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -3452,7 +3527,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-26T07:39:50.871358+00:00",
+    "generated_at": "2026-11-27T07:37:32.310046+00:00",
     "open_count": 3,
     "closed_count": 16,
     "scored_count": 13,
@@ -3521,7 +3596,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-26T07:39:50.785749+00:00",
+    "generated_at": "2026-11-27T07:37:32.201279+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -3578,7 +3653,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-26T07:39:50.785749+00:00",
+    "generated_at": "2026-11-27T07:37:32.201279+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -3586,39 +3661,159 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 1,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "SKF-B.ST",
+        "name": "AB SKF (publ)",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Screen shows strong_buy with still_buyish true, so the name remains in the buy cohort at decision time.",
+          "Conviction rank 1 with entry rank 1 and rank_drop 0 satisfies the hold gate and supports adding to the top of the buyish set.",
+          "Research overlay is bound with accumulate verdict and high conviction_score; fcf_basis_overlay is false so no FCF-bound friction on the overlay."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 1
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 1
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.8961
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-27T07:37:32.201279+00:00",
+        "proposal_id": "buy_tier_level:SKF-B.ST:buy:2026-11-27T07:37:32.201279+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null
+      "fallback": null,
+      "llm_card_count": 1
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-26T07:39:50.785749+00:00",
+      "generated_at": "2026-11-27T07:37:32.201279+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 1,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -3634,7 +3829,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-26T07:39:50.883023+00:00",
+  "generated_at": "2026-11-27T07:37:37.293921+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

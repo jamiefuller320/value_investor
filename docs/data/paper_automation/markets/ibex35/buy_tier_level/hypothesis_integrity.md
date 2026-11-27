@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-26T07:38:33.181802+00:00
+Track: `buy_tier_level` · updated 2026-11-27T07:36:39.621047+00:00
 
 ## Portfolio loser feedback
 
@@ -12,7 +12,7 @@ Track: `buy_tier_level` · updated 2026-11-26T07:38:33.181802+00:00
 
 ## Holding reviews
 
-### ACS.MC — intact / hold_tolerate (-12.2%)
+### ACS.MC — intact / hold_tolerate (-10.5%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
@@ -20,12 +20,12 @@ Track: `buy_tier_level` · updated 2026-11-26T07:38:33.181802+00:00
 - data_quality 1.00
 - conviction 52%
 
-### REP.MC — weakening / watch_review (-3.9%)
+### REP.MC — weakening / watch_review (-3.3%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
 
-### AENA.MC — intact / hold_tolerate (-1.5%)
+### AENA.MC — intact / hold_tolerate (+0.2%)
 - still buy
 - research accumulate
 - cheapness family still passes

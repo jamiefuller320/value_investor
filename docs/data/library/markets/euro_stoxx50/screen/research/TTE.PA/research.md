@@ -1,6 +1,6 @@
 # TotalEnergies SE (TTE.PA) — Research memo
 
-_Version 1 · Updated 2026-10-07T08:06:40.266288+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-11-27T07:21:09.450924+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,6 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.76
-Rationale: AMF/SEC filings support the strong-buy cash-yield case: FY25 IFRS FCF (~$10.4bn) covered dividends (~$8.1bn); H1 26 CFFO $18.4bn and gearing 13%, though screen metrics are thin vs filings and commodity/regulatory risks remain.
-RiskTags: cyclical, regulatory, litigation, leverage, governance
+Confidence: 0.74
+Rationale: FY25 filings show CFFO $27.8bn and dividend cover on IFRS FCF (~$10.4bn vs ~$8.1bn paid), supporting the dividend screen, but statutory/adjusted earnings fell YoY and screen TTM FCF/Yahoo ~1% growth are not filing-aligned; weak liquidity...
+RiskTags: cyclical, regulatory, liquidity, leverage

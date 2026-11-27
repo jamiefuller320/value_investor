@@ -1,31 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-26T07:38:49.411779+00:00",
+    "local_time": "2026-11-27T07:36:53.607273+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-26T08:00:00+00:00",
-    "settle_at": "2026-11-26T09:15:00+00:00",
+    "market_open_at": "2026-11-27T08:00:00+00:00",
+    "settle_at": "2026-11-27T09:15:00+00:00",
     "can_act": false,
     "reason": "before market open"
   },
-  "trades": [
-    {
-      "id": "f91da825-feb6-485a-8433-46c35687a2aa",
-      "fund_id": "af324a71-e4f3-4ff7-b2ad-98db75dee080",
-      "acted_at": "2026-11-26T07:38:49.411779+00:00",
-      "ticker": "AD.AS",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.120416,
-      "price": 35.73,
-      "gross": 4.3,
-      "cost": 0.01,
-      "net_cash": -4.31,
-      "note": "Automated buy",
-      "name": "Koninklijke Ahold Delhaize N.V."
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -39,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1050.68,
+    "nav": 1075.64,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -52,74 +36,74 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 131.31,
+    "target_sleeve_value": 134.42,
     "targets": [
       {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "signal": "strong_buy",
         "conviction_score": 0.8917,
-        "price": 35.73
+        "price": 35.96
       },
       {
         "ticker": "RAND.AS",
         "name": "Randstad N.V.",
         "signal": "buy",
         "conviction_score": 0.6833,
-        "price": 41.45
+        "price": 41.65
       },
       {
         "ticker": "WKL.AS",
         "name": "Wolters Kluwer N.V.",
         "signal": "strong_buy",
         "conviction_score": 0.6367,
-        "price": 86.54
+        "price": 88.2
       },
       {
         "ticker": "ASM.AS",
         "name": "ASM International NV",
         "signal": "buy",
         "conviction_score": 0.5813,
-        "price": 587.6
+        "price": 606.6
+      },
+      {
+        "ticker": "PRX.AS",
+        "name": "Prosus N.V.",
+        "signal": "buy",
+        "conviction_score": 0.567885,
+        "price": 30.035
+      },
+      {
+        "ticker": "AKZA.AS",
+        "name": "Akzo Nobel N.V.",
+        "signal": "strong_buy",
+        "conviction_score": 0.5487,
+        "price": 62.28
       },
       {
         "ticker": "KPN.AS",
         "name": "Koninklijke KPN N.V.",
         "signal": "buy",
         "conviction_score": 0.5373,
-        "price": 4.339
+        "price": 4.377
       },
       {
-        "ticker": "AKZA.AS",
-        "name": "Akzo Nobel N.V.",
-        "signal": "strong_buy",
-        "conviction_score": 0.4775,
-        "price": 60.74
-      },
-      {
-        "ticker": "PRX.AS",
-        "name": "Prosus N.V.",
+        "ticker": "ASML.AS",
+        "name": "ASML Holding N.V.",
         "signal": "buy",
-        "conviction_score": 0.461635,
-        "price": 29.275
-      },
-      {
-        "ticker": "ADYEN.AS",
-        "name": "Adyen N.V.",
-        "signal": "buy",
-        "conviction_score": 0.39499999999999996,
-        "price": 831.9
+        "conviction_score": 0.3477,
+        "price": 1168.2
       }
     ],
     "anticipated_exits": [
       {
         "action": "sell",
-        "ticker": "ASML.AS",
-        "name": "ASML Holding N.V.",
+        "ticker": "ADYEN.AS",
+        "name": "Adyen N.V.",
         "reason": "No longer in the top conviction target set",
-        "shares": 0.109243,
-        "price": 1131.6,
-        "value": 123.62
+        "shares": 0.16468,
+        "price": 868.4,
+        "value": 143.01
       }
     ],
     "anticipated_grace_holds": [],
@@ -130,34 +114,56 @@
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "reason": "Top-up to equal weight",
-        "value": 123.4,
-        "price": 35.73,
-        "target_value": 131.31,
+        "value": 130.09,
+        "price": 35.96,
+        "target_value": 134.42,
         "conviction_score": 0.8917,
         "signal": "strong_buy"
-      }
-    ],
-    "anticipated_holds": [],
-    "skipped": [
+      },
       {
+        "action": "buy",
         "ticker": "ASM.AS",
         "name": "ASM International NV",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 131.31,
+        "reason": "Top-up to equal weight",
+        "value": 12.66,
+        "price": 606.6,
+        "target_value": 134.42,
         "conviction_score": 0.5813,
         "signal": "buy"
-      },
+      }
+    ],
+    "anticipated_holds": [
+      {
+        "action": "hold",
+        "ticker": "RAND.AS",
+        "name": "Randstad N.V.",
+        "reason": "Already near equal-weight target",
+        "value": 134.36,
+        "target_value": 134.42,
+        "conviction_score": 0.6833,
+        "signal": "buy"
+      }
+    ],
+    "skipped": [
       {
         "ticker": "PRX.AS",
         "name": "Prosus N.V.",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 131.31,
-        "conviction_score": 0.461635,
+        "target_value": 134.42,
+        "conviction_score": 0.567885,
+        "signal": "buy"
+      },
+      {
+        "ticker": "ASML.AS",
+        "name": "ASML Holding N.V.",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 134.42,
+        "conviction_score": 0.3477,
         "signal": "buy"
       }
     ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 8 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s)."
+    "summary": "Next rebalance would target 8 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -166,7 +172,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 60.74,
+      "mark": 62.28,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -177,7 +183,7 @@
       "source": "paper",
       "severity": "watch",
       "message": "Underwater \u2014 re-check hypothesis: research verdict caution; still buy",
-      "mark": 29.275,
+      "mark": 30.035,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -188,7 +194,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 4.339,
+      "mark": 4.377,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -197,9 +203,9 @@
       "ticker": "ADYEN.AS",
       "name": "Adyen N.V.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 831.9,
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 868.4,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -210,7 +216,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 86.54,
+      "mark": 88.2,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -220,19 +226,8 @@
       "name": "ASML Holding N.V.",
       "source": "paper",
       "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 1131.6,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "neutral"
-    },
-    {
-      "ticker": "ASML.AS",
-      "name": "ASML Holding N.V.",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Underwater \u2014 re-check hypothesis: left buy tier (hold); research verdict neutral",
-      "mark": 1131.6,
+      "message": "Underwater \u2014 re-check hypothesis: research verdict neutral; conviction 35% below intact floor",
+      "mark": 1168.2,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -243,7 +238,7 @@
       "source": "paper",
       "severity": "watch",
       "message": "Underwater \u2014 re-check hypothesis: research verdict neutral; still buy",
-      "mark": 587.6,
+      "mark": 606.6,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -254,7 +249,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 41.45,
+      "mark": 41.65,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -265,7 +260,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 35.73,
+      "mark": 35.96,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -3375,24 +3370,41 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-27T07:36:53.607273+00:00",
+        "portfolio_value": 899.56,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 9,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.8363
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-26T07:38:49.411779+00:00",
+    "last_mark_at": "2026-11-27T07:36:53.607273+00:00",
     "rebalance_state": {
       "exit_streak": {
-        "ASML.AS": 1
+        "ADYEN.AS": 1
       },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (1 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "aex",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-26T07:38:49.482232+00:00",
+    "generated_at": "2026-11-27T07:36:53.677969+00:00",
     "observe_only": true,
     "open_count": 18,
     "closed_count": 0,
@@ -3466,12 +3478,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "checkpoints_added_this_pass": 2
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-26T07:38:49.484359+00:00",
+    "generated_at": "2026-11-27T07:36:53.679879+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -3536,7 +3548,7 @@
     "hold_recovery": {
       "open": {
         "count": 5,
-        "recovered_to_breakeven": 1,
+        "recovered_to_breakeven": 2,
         "close_reasons": {
           "open": 5
         }
@@ -3567,8 +3579,8 @@
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 2,
-      "swap_rotations": 1
+      "hold_episodes": 0,
+      "swap_rotations": 2
     }
   },
   "hypothesis_integrity": {
@@ -3576,8 +3588,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-26T07:38:49.488450+00:00",
-    "as_of": "2026-11-26T07:38:49.411779+00:00",
+    "updated_at": "2026-11-27T07:36:53.683027+00:00",
+    "as_of": "2026-11-27T07:36:53.607273+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3592,8 +3604,8 @@
     "holding_count": 9,
     "underwater_count": 3,
     "thesis_status_counts": {
-      "intact": 6,
-      "weakening": 3,
+      "intact": 5,
+      "weakening": 4,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -3601,7 +3613,7 @@
       "holding_count": 9,
       "loser_count": 3,
       "loser_share": 0.3333,
-      "loser_nav_share": 0.3468,
+      "loser_nav_share": 0.349,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
@@ -3612,7 +3624,7 @@
         "cheapness": 0.0,
         "quality": 0.0,
         "dividend": 0.0,
-        "garp": 0.3333,
+        "garp": 0.0,
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
@@ -3633,23 +3645,22 @@
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": true,
-        "deep_underwater": true,
-        "unrealized_pct": -0.1698,
-        "mark": 29.275,
+        "deep_underwater": false,
+        "unrealized_pct": -0.1482,
+        "mark": 30.035,
         "avg_cost": 35.2618,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4616,
+        "conviction_score": 0.5679,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
           "quality",
           "dividend",
+          "garp",
           "risk"
         ],
-        "failed_families": [
-          "garp"
-        ],
+        "failed_families": [],
         "research_verdict": "caution",
         "reasons": [
           "research verdict caution",
@@ -3660,7 +3671,7 @@
           "still buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 46%"
+          "conviction 57%"
         ],
         "weaken_reasons": [
           "research verdict caution"
@@ -3673,9 +3684,9 @@
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": true,
-        "deep_underwater": true,
-        "unrealized_pct": -0.1539,
-        "mark": 587.6,
+        "deep_underwater": false,
+        "unrealized_pct": -0.1265,
+        "mark": 606.6,
         "avg_cost": 694.4578,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -3713,12 +3724,12 @@
         "recommended_action": "watch_review",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.1483,
-        "mark": 1131.6,
+        "unrealized_pct": -0.1208,
+        "mark": 1168.2,
         "avg_cost": 1328.6355,
-        "signal": "hold",
+        "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.3086,
+        "conviction_score": 0.3477,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3730,20 +3741,19 @@
         "failed_families": [],
         "research_verdict": "neutral",
         "reasons": [
-          "left buy tier (hold)",
           "research verdict neutral",
-          "conviction 31% below intact floor",
-          "cheapness family still passes",
-          "data_quality 1.00"
+          "conviction 35% below intact floor",
+          "still buy",
+          "cheapness family still passes"
         ],
         "intact_reasons": [
+          "still buy",
           "cheapness family still passes",
           "data_quality 1.00"
         ],
         "weaken_reasons": [
-          "left buy tier (hold)",
           "research verdict neutral",
-          "conviction 31% below intact floor"
+          "conviction 35% below intact floor"
         ],
         "broken_reasons": []
       },
@@ -3754,8 +3764,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0395,
-        "mark": 86.54,
+        "unrealized_pct": -0.021,
+        "mark": 88.2,
         "avg_cost": 90.0965,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -3789,55 +3799,14 @@
         "broken_reasons": []
       },
       {
-        "ticker": "ADYEN.AS",
-        "name": "Adyen N.V.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0378,
-        "mark": 831.9,
-        "avg_cost": 864.5797,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.395,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "risk"
-        ],
-        "failed_families": [
-          "dividend",
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 39%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 39%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "KPN.AS",
         "name": "Koninklijke KPN N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0054,
-        "mark": 4.339,
+        "unrealized_pct": 0.0033,
+        "mark": 4.377,
         "avg_cost": 4.3627,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -3871,14 +3840,55 @@
         "broken_reasons": []
       },
       {
+        "ticker": "ADYEN.AS",
+        "name": "Adyen N.V.",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0044,
+        "mark": 868.4,
+        "avg_cost": 864.5797,
+        "signal": "hold",
+        "timing_signal": "neutral",
+        "conviction_score": 0.2656,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "risk"
+        ],
+        "failed_families": [
+          "dividend",
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "left buy tier (hold)",
+          "conviction 27% below intact floor",
+          "research accumulate",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00"
+        ],
+        "weaken_reasons": [
+          "left buy tier (hold)",
+          "conviction 27% below intact floor"
+        ],
+        "broken_reasons": []
+      },
+      {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 35.73,
+        "unrealized_pct": 0.0064,
+        "mark": 35.96,
         "avg_cost": 35.73,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -3911,55 +3921,14 @@
         "broken_reasons": []
       },
       {
-        "ticker": "AKZA.AS",
-        "name": "Akzo Nobel N.V.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.009,
-        "mark": 60.74,
-        "avg_cost": 60.1999,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.4775,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 48%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 48%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "RAND.AS",
         "name": "Randstad N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.012,
-        "mark": 41.45,
+        "unrealized_pct": 0.0168,
+        "mark": 41.65,
         "avg_cost": 40.96,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -3990,6 +3959,47 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
+      },
+      {
+        "ticker": "AKZA.AS",
+        "name": "Akzo Nobel N.V.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0346,
+        "mark": 62.28,
+        "avg_cost": 60.1999,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.5487,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 55%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 55%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -3999,7 +4009,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-26T07:38:49.492904+00:00",
+    "generated_at": "2026-11-27T07:36:53.686731+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -4073,7 +4083,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-26T07:38:49.502623+00:00",
+    "generated_at": "2026-11-27T07:36:53.694742+00:00",
     "open_count": 6,
     "closed_count": 21,
     "scored_count": 12,
@@ -4134,14 +4144,14 @@
       "recommit_scored": 9
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
-    "marked_this_pass": 5,
+    "ingested_this_pass": 0,
+    "marked_this_pass": 6,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-26T07:38:49.411779+00:00",
+    "generated_at": "2026-11-27T07:36:53.607273+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -4191,14 +4201,14 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 1,
+      "tagged_on_book": 0,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-26T07:38:49.411779+00:00",
+    "generated_at": "2026-11-27T07:36:53.607273+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -4206,10 +4216,10 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 3,
-    "card_count": 3,
+    "proposal_count": 2,
+    "card_count": 2,
     "verdict_counts": {
-      "agree": 3,
+      "agree": 2,
       "veto": 0,
       "abstain": 0
     },
@@ -4218,25 +4228,108 @@
         "agree": 2,
         "veto": 0,
         "abstain": 0
-      },
-      "buy": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
       }
     },
     "disagree_vs_heuristic_count": 0,
     "cards": [
       {
-        "ticker": "ASM.AS",
-        "name": "ASM International NV",
+        "ticker": "PRX.AS",
+        "name": "Prosus N.V.",
         "algo_action": "rebuy_skip",
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "Explicit rebuy block from insufficient cash after higher-conviction fills; does not imply a thesis exit.",
-          "Effective screen signal remains buy with still_buyish true and rank_drop 0 versus entry rank 4, so hold-gate capacity-bump risk is low if rebuy is deferred.",
-          "Research overlay is bound with neutral verdict; skipping rebuy for cash prioritization is consistent with low-churn intent."
+          "still_buyish is false while effective screen signal is hold, so skipping rebuy is consistent with not treating the name as an active buy cohort member.",
+          "rank_drop is 0 versus entry, but departure from buyish status dominates versus a capacity-only hold gate.",
+          "algo_reason cites insufficient cash; with hold posture and research_verdict caution, deferring rebuy does not conflict with low-churn intent."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 5
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 5
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-27T07:36:53.607273+00:00",
+        "proposal_id": "buy_tier_level:PRX.AS:rebuy_skip:2026-11-27T07:36:53.607273+00:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "ASML.AS",
+        "name": "ASML Holding N.V.",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "still_buyish is true with screen_signal buy and rank_drop 0, so the skip is driven by portfolio cash priority rather than a fundamental exit.",
+          "algo_reason states insufficient cash after higher-conviction fills; that is an explicit rebuy block, not a rank-based sell.",
+          "research_verdict neutral and overlay_bound true leave no decisive leave-cohort signal to override the cash-allocation skip."
         ],
         "evidence": [
           {
@@ -4254,13 +4347,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 4
+            "value": 8
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 4
+            "value": 8
           },
           {
             "kind": "rank_drop",
@@ -4292,8 +4385,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-26T07:38:49.411779+00:00",
-        "proposal_id": "buy_tier_level:ASM.AS:rebuy_skip:2026-11-26T07:38:49.411779+00:00",
+        "logged_at": "2026-11-27T07:36:53.607273+00:00",
+        "proposal_id": "buy_tier_level:ASML.AS:rebuy_skip:2026-11-27T07:36:53.607273+00:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -4320,200 +4413,6 @@
         },
         "schema_version": 1,
         "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "PRX.AS",
-        "name": "Prosus N.V.",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Rebuy_skip matches non-buyish posture: effective screen signal is hold and still_buyish is false.",
-          "Research overlay bound with caution verdict supports not forcing rebuy when cash is constrained.",
-          "Rank unchanged from entry (rank_drop 0) but leave-buy-cohort signal is decisive via hold screen, not a capacity-bump sell case."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "hold"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 7
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 7
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "caution"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-26T07:38:49.411779+00:00",
-        "proposal_id": "buy_tier_level:PRX.AS:rebuy_skip:2026-11-26T07:38:49.411779+00:00",
-        "meta": {
-          "still_buyish": false,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "caution",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Top conviction rank 1 with strong_buy screen signal and still_buyish true supports automated buy.",
-          "Research accumulate verdict with overlay bound aligns with entry.",
-          "Rank_drop 0 at entry preserves highest-conviction slot in the buyish set."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 1
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.8917
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-26T07:38:49.411779+00:00",
-        "proposal_id": "buy_tier_level:AD.AS:buy:2026-11-26T07:38:49.411779+00:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Buy into buyish target set \u2014 agree with algo selection."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
       }
     ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
@@ -4521,32 +4420,27 @@
       "attempted": true,
       "ok": true,
       "fallback": null,
-      "llm_card_count": 3
+      "llm_card_count": 2
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-26T07:38:49.411779+00:00",
+      "generated_at": "2026-11-27T07:36:53.607273+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 3,
+      "card_count": 2,
       "verdict_counts": {
-        "agree": 3,
+        "agree": 2,
         "veto": 0,
         "abstain": 0
       },
       "by_algo_action": {
         "rebuy_skip": {
           "agree": 2,
-          "veto": 0,
-          "abstain": 0
-        },
-        "buy": {
-          "agree": 1,
           "veto": 0,
           "abstain": 0
         }
@@ -4566,7 +4460,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-26T07:38:54.978275+00:00",
+  "generated_at": "2026-11-27T07:36:58.773629+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

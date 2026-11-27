@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-26T07:39:02.069013+00:00
+Track: `buy_tier_level_native` · updated 2026-11-27T07:37:08.531693+00:00
 
 ## Portfolio loser feedback
 
@@ -10,10 +10,10 @@ Track: `buy_tier_level_native` · updated 2026-11-26T07:39:02.069013+00:00
 
 ## Holding reviews
 
-### UMI.BR — intact / hold_tolerate (-9.5%)
+### UMI.BR — intact / hold_tolerate (-7.1%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 79%
+- conviction 78%

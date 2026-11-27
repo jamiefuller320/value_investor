@@ -1,6 +1,6 @@
 # Hypothesis outcome link
 
-Track: `ai_judgment` · 2026-11-26T07:40:41.214345+00:00
+Track: `ai_judgment` · 2026-11-27T07:38:07.864044+00:00
 
 ## Readiness
 

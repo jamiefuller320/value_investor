@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-26T07:39:36.064910+00:00
+Track: `buy_tier_level_native` · updated 2026-11-27T07:37:30.927705+00:00
 
 ## Portfolio loser feedback
 
@@ -13,7 +13,7 @@ Track: `buy_tier_level_native` · updated 2026-11-26T07:39:36.064910+00:00
 
 ## Holding reviews
 
-### GALP.LS — intact / hold_tolerate (-10.3%)
+### GALP.LS — intact / hold_tolerate (-9.8%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate

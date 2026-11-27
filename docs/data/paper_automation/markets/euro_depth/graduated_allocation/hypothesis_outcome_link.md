@@ -1,6 +1,6 @@
 # Hypothesis outcome link
 
-Track: `graduated_allocation` · 2026-11-26T07:41:39.388345+00:00
+Track: `graduated_allocation` · 2026-11-27T07:38:47.554213+00:00
 
 ## Readiness
 

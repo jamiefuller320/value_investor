@@ -367,15 +367,15 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 710.38,
-    "estimated_spend_usd_this_week": 380.88,
+    "estimated_spend_usd_this_cycle": 711.18,
+    "estimated_spend_usd_this_week": 381.68,
     "week_id": "2026-W48",
     "cycle_id": "2026-11-d8",
     "weekly_ops_cap_usd": 640.0,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "token_usage_weekly_warning_raw_usd": null,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 350.88,
+    "estimated_spend_weekly_ops_usd_this_week": 351.68,
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder) and strategy-book memos. On 2026-11-22 the owner lifted the practical memo cap because Composer credit is spare. The safety ceiling is $640 a week, four times the busier of the previous $160 L694 observe ceiling and the $124.50 weekly_ops cap. Current memo volume cannot reach it. A cycle-surplus revert stays at this ceiling. Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
@@ -574,7 +574,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-11-27T04:24:07.034614+00:00",
+  "updated_at": "2026-11-27T07:40:48.599324+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -604,10 +604,10 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-11-26T06:53:57.526156+00:00",
+      "run_at": "2026-11-27T06:53:44.375042+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 42,
+      "screen_shortlist": 41,
       "research": {
         "model": "composer-2.5",
         "research_cap": 100,
@@ -642,17 +642,22 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 640.0,
-        "estimated_spend_weekly_ops_usd_this_week": 242.4,
+        "estimated_spend_weekly_ops_usd_this_week": 351.68,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 399.6,
+        "remaining_usd_before": 289.12,
         "dedupe": {
-          "already_researched_count": 563,
-          "fresh_skipped_count": 563,
-          "rememo_eligible_count": 0,
-          "rememo_eligible_sample": [],
-          "skipped_count": 390,
+          "already_researched_count": 568,
+          "fresh_skipped_count": 567,
+          "rememo_eligible_count": 1,
+          "rememo_eligible_sample": [
+            {
+              "ticker": "TTE.PA",
+              "reason": "strong_grade_large_body_lag_27"
+            }
+          ],
+          "skipped_count": 396,
           "skipped_sample": [
             {
               "market": "euro_depth",
@@ -676,11 +681,6 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "ANDR.VI",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "C5H.IR",
               "reason": "fresh_memo"
             },
@@ -691,7 +691,7 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "OIZ.IR",
+              "ticker": "ERIC-B.ST",
               "reason": "fresh_memo"
             },
             {
@@ -701,17 +701,22 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "ERIC-B.ST",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "ACKB.BR",
+              "ticker": "OIZ.IR",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
               "ticker": "DTE.DE",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "ANDR.VI",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "ACKB.BR",
               "reason": "fresh_memo"
             },
             {
@@ -750,8 +755,8 @@
               "reason": "fresh_memo"
             },
             {
-              "market": "euro_depth",
-              "ticker": "SHELL.AS",
+              "market": "sp500",
+              "ticker": "FIS",
               "reason": "fresh_memo"
             }
           ],
@@ -760,47 +765,37 @@
         },
         "targets": [
           {
-            "market": "sp500",
-            "ticker": "RL",
-            "name": "Ralph Lauren Corporation",
+            "market": "euro_depth",
+            "ticker": "TTE.PA",
+            "name": "TotalEnergies SE",
             "signal": "buy",
-            "conviction_score": 0.345
-          },
-          {
-            "market": "asx200",
-            "ticker": "A2M.AX",
-            "name": "The a2 Milk Company Limited",
-            "signal": "buy",
-            "conviction_score": 0.2635
+            "conviction_score": 0.5917
           },
           {
             "market": "aim",
-            "ticker": "YNGA.L",
-            "name": "Young & Co.'s Brewery, P.L.C.",
+            "ticker": "POLR.L",
+            "name": "Polar Capital Holdings Plc",
             "signal": "buy",
-            "conviction_score": 0.3455
-          },
-          {
-            "market": "ftse_mib",
-            "ticker": "TIT.MI",
-            "name": "Telecom Italia S.p.A.",
-            "signal": "buy",
-            "conviction_score": 0.2073
-          },
-          {
-            "market": "sti",
-            "ticker": "5E2.SI",
-            "name": "Seatrium Limited",
-            "signal": "buy",
-            "conviction_score": 0.3526
+            "conviction_score": 0.3399
           }
         ],
-        "executed": 5,
-        "created": 5,
+        "executed": 2,
+        "created": 2,
         "updated": 0,
         "errors": [],
-        "estimated_spend_usd": 2.0,
-        "remaining_usd_after": 397.6
+        "rememo_seeds": [
+          {
+            "ticker": "TTE.PA",
+            "focus_market": "euro_depth",
+            "action": "seeded",
+            "home_market": "euro_stoxx50",
+            "canonical_bodies": 150,
+            "home_bodies_before": 145,
+            "home_bodies_after": 150
+          }
+        ],
+        "estimated_spend_usd": 0.8,
+        "remaining_usd_after": 288.32
       },
       "graduation": {
         "graduated": false,

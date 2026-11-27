@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-26T07:37:28.884799+00:00
+Track: `buy_tier_level` · updated 2026-11-27T07:35:42.701863+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **16** / 35 (46% count, 44% NAV)
+- Losers: **16** / 36 (44% count, 44% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -68,7 +68,7 @@ Track: `buy_tier_level` · updated 2026-11-26T07:37:28.884799+00:00
 
 ### NVDA — weakening / watch_review (-10.2%)
 - research verdict neutral
-- still buy
+- still strong_buy
 - cheapness family still passes
 
 ### CSCO — intact / hold_tolerate (-9.2%)
@@ -85,7 +85,7 @@ Track: `buy_tier_level` · updated 2026-11-26T07:37:28.884799+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 42%
+- conviction 47%
 
 ### QCOM — weakening / watch_review (-6.9%)
 - research verdict caution
@@ -146,6 +146,27 @@ Track: `buy_tier_level` · updated 2026-11-26T07:37:28.884799+00:00
 - still buy
 - data_quality 0.90
 
+### GEHC — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 88%
+
+### REGN — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 79%
+
+### CPRT — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 43%
+
 ### KDP — intact / hold_tolerate (+0.1%)
 - still buy
 - research accumulate
@@ -205,12 +226,6 @@ Track: `buy_tier_level` · updated 2026-11-26T07:37:28.884799+00:00
 - still buy
 - research accumulate
 
-### GILD — weakening / watch_review (+6.2%)
-- left buy tier (hold)
-- conviction 26% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### PEP — intact / hold_tolerate (+7.1%)
 - still strong_buy
 - research accumulate
@@ -231,10 +246,3 @@ Track: `buy_tier_level` · updated 2026-11-26T07:37:28.884799+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 74%
-
-### NXPI — intact / hold_tolerate (+10.9%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 65%

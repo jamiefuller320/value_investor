@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-26T07:37:37.149602+00:00
+Track: `buy_tier_level_native` · updated 2026-11-27T07:35:51.040193+00:00
 
 ## Portfolio loser feedback
 
@@ -59,11 +59,11 @@ Track: `buy_tier_level_native` · updated 2026-11-26T07:37:37.149602+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 52%
+- conviction 53%
 
 ### NVDA — weakening / watch_review (-10.2%)
 - research verdict neutral
-- still buy
+- still strong_buy
 - cheapness family still passes
 
 ### QCOM — weakening / watch_review (-9.5%)
@@ -114,7 +114,7 @@ Track: `buy_tier_level_native` · updated 2026-11-26T07:37:37.149602+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 42%
+- conviction 47%
 
 ### PCAR — weakening / watch_review (-1.4%)
 - research verdict neutral
@@ -150,6 +150,20 @@ Track: `buy_tier_level_native` · updated 2026-11-26T07:37:37.149602+00:00
 - cheapness family no longer passes
 - still buy
 - data_quality 0.90
+
+### GEHC — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 88%
+
+### REGN — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 79%
 
 ### KDP — intact / hold_tolerate (+0.1%)
 - still buy
@@ -198,23 +212,10 @@ Track: `buy_tier_level_native` · updated 2026-11-26T07:37:37.149602+00:00
 - data_quality 1.00
 - conviction 87%
 
-### NXPI — intact / hold_tolerate (+5.6%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 65%
-
 ### AMGN — weakening / watch_review (+5.7%)
 - cheapness family no longer passes
 - still buy
 - research accumulate
-
-### GILD — weakening / watch_review (+6.2%)
-- left buy tier (hold)
-- conviction 26% below intact floor
-- research accumulate
-- cheapness family still passes
 
 ### MDLZ — intact / hold_tolerate (+11.4%)
 - still buy

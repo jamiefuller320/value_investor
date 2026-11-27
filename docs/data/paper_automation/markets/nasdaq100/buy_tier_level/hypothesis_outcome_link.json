@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-26T07:37:28.893635+00:00",
+  "generated_at": "2026-11-27T07:35:42.707880+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 41,
+    "closed_total": 43,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 30,
+    "open_with_thesis": 28,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,13 +27,13 @@
         }
       },
       "broken": {
-        "closed_count": 17,
-        "recovery_rate": 0.9412,
-        "sold_underwater_rate": 0.0588,
-        "mean_peak_unrealized_pct": 0.0725,
-        "mean_trough_unrealized_pct": 0.0629,
+        "closed_count": 19,
+        "recovery_rate": 0.9474,
+        "sold_underwater_rate": 0.0526,
+        "mean_peak_unrealized_pct": 0.0803,
+        "mean_trough_unrealized_pct": 0.0634,
         "outcome_labels": {
-          "recovered": 16,
+          "recovered": 18,
           "sold_underwater": 1
         }
       },
@@ -63,7 +63,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 41,
+    "hold_closed_with_thesis": 43,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -2514,7 +2514,7 @@
       "ticker": "NXPI",
       "name": "NXP Semiconductors N.V.",
       "started_at": "2026-10-30T03:54:14.264721-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -2550,14 +2550,22 @@
           "unrealized_pct": 0.1162,
           "peak_unrealized_pct": 0.2147,
           "trough_unrealized_pct": 0.1162
+        },
+        {
+          "scored_at": "2026-11-27T02:35:42.618531-05:00",
+          "days_after": 28,
+          "price": 242.96,
+          "unrealized_pct": 0.1095,
+          "peak_unrealized_pct": 0.2308,
+          "trough_unrealized_pct": 0.0738
         }
       ],
       "peak_unrealized_pct": 0.2308,
       "trough_unrealized_pct": 0.0738,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-27T02:35:42.618531-05:00",
+      "linked_sell_trade_id": "7d1894f5-eff2-42ad-8b7f-330ed1440723"
     },
     {
       "episode_id": "buy_tier_level:GEHC:2026-10-30T03:54:14.264721-04:00",
@@ -3814,7 +3822,7 @@
       "ticker": "GILD",
       "name": "Gilead Sciences, Inc.",
       "started_at": "2026-11-26T02:37:28.787443-05:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -3846,9 +3854,9 @@
       "peak_unrealized_pct": 0.0619,
       "trough_unrealized_pct": 0.0619,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-27T02:35:42.618531-05:00",
+      "linked_sell_trade_id": "61d8a0bc-fe53-4c01-afac-8b585afe883e"
     }
   ],
   "swap_rotations": [
@@ -4771,6 +4779,13 @@
           "avg_sell_return": -0.0971,
           "avg_buy_return": 0.0552,
           "replacement_delta": 0.1523
+        },
+        {
+          "scored_at": "2026-11-27T02:35:42.618531-05:00",
+          "days_after": 28,
+          "avg_sell_return": -0.1116,
+          "avg_buy_return": 0.0454,
+          "replacement_delta": 0.1571
         }
       ],
       "sell_returns_since_rotation": {
@@ -5852,7 +5867,15 @@
           "cost": 0.06
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-27T02:35:42.618531-05:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0066,
+          "avg_buy_return": 0.0065,
+          "replacement_delta": 0.0132
+        }
+      ],
       "sell_returns_since_rotation": {
         "CPRT": 0.0542,
         "CSX": -0.0033,
@@ -6166,6 +6189,98 @@
       "buy_returns_since_rotation": {
         "ADP": 0.0,
         "AMAT": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-27T02:35:42.618531-05:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-27T02:35:42.618531-05:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "NXPI",
+          "price": 242.96,
+          "shares": 0.134078,
+          "gross": 32.58,
+          "cost": 0.06,
+          "avg_cost_at_exit": 218.98,
+          "realized_pct": 0.1095,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.1095
+        },
+        {
+          "ticker": "GILD",
+          "price": 176.74,
+          "shares": 0.15537,
+          "gross": 27.46,
+          "cost": 0.05,
+          "avg_cost_at_exit": 166.43,
+          "realized_pct": 0.0619,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0619
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "GEHC",
+          "price": 83.33,
+          "shares": 0.305794,
+          "gross": 25.48,
+          "cost": 0.04
+        },
+        {
+          "ticker": "REGN",
+          "price": 981.87,
+          "shares": 0.025952,
+          "gross": 25.48,
+          "cost": 0.04
+        },
+        {
+          "ticker": "CPRT",
+          "price": 33.165,
+          "shares": 0.267217,
+          "gross": 8.86,
+          "cost": 0.02
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "NXPI": 0.0,
+        "GILD": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "GEHC": 0.0,
+        "REGN": 0.0,
+        "CPRT": 0.0
       },
       "verdict": null,
       "closed_at": null

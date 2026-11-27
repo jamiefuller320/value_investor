@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `still_in_buy_set` · updated 2026-11-26T07:41:06.760189+00:00
+Track: `still_in_buy_set` · updated 2026-11-27T07:38:25.829121+00:00
 
 ## Portfolio loser feedback
 
@@ -10,21 +10,21 @@ Track: `still_in_buy_set` · updated 2026-11-26T07:41:06.760189+00:00
 
 ## Holding reviews
 
-### BOL.ST — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 70%
-
-### OIZ.IR — intact / hold_tolerate (+0.2%)
+### OIZ.IR — intact / hold_tolerate (-3.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
 
-### DG.PA — intact / hold_tolerate (+4.6%)
+### BOL.ST — intact / hold_tolerate (-0.7%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 69%
+
+### DG.PA — intact / hold_tolerate (+5.2%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "track_id": "archive_near_miss",
-  "generated_at": "2026-11-26T07:31:51.975996+00:00",
+  "generated_at": "2026-11-27T07:31:47.243215+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -69,13 +69,17 @@
     "ready_for_probability_analysis": true,
     "hold_closed_count": 1614,
     "swap_closed_count": 1614,
-    "hold_with_data_quality_count": 1614,
+    "hold_with_data_quality_count": 1636,
     "gaps": [],
     "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
   },
   "hold_recovery": {
     "open": {
-      "count": 0
+      "count": 22,
+      "recovered_to_breakeven": 0,
+      "close_reasons": {
+        "open": 22
+      }
     },
     "closed": {
       "count": 1614,
@@ -90,7 +94,10 @@
   },
   "swap_rotation": {
     "open": {
-      "count": 0
+      "count": 22,
+      "verdicts": {
+        "open": 22
+      }
     },
     "closed": {
       "count": 1614,
@@ -103,13 +110,13 @@
   },
   "note": "Archive near-miss + held-book observe sim \u2014 priors only; pair with live learning_tracks_exit_timing.json for paper-track evidence. Wider gate: min_conviction=0.28, max_episodes_per_week=25.",
   "scope": "archive_near_miss",
-  "snapshot_count": 72,
+  "snapshot_count": 73,
   "episodes_opened": {
-    "hold_recovery": 1614,
-    "hold_recovery_near_miss": 1614,
+    "hold_recovery": 1636,
+    "hold_recovery_near_miss": 1636,
     "hold_recovery_held_book": 0,
-    "swap_rotation": 1614,
-    "swap_rotation_near_miss": 1614,
+    "swap_rotation": 1636,
+    "swap_rotation_near_miss": 1636,
     "swap_rotation_log_book": 0
   },
   "by_conviction_band": {
