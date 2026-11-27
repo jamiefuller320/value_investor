@@ -48,6 +48,7 @@ from value_investor.strategy_book_demo_mirror import (
     reconcile,
     run_mirror,
     send_window,
+    slippage_dashboard_strip,
 )
 from value_investor.t212_client import DEMO_BASE, LIVE_BASE
 
@@ -325,6 +326,13 @@ def test_strategy_book_demo_dry_run_without_key_writes_would_place(
         (tmp_path / "docs/data/strategy_book_demo_ledger.json").read_text(encoding="utf-8")
     )
     assert saved["plans"][0]["observe_data_commit"] == "abc123"
+    strip = json.loads(
+        (tmp_path / "docs/data/strategy_book_demo_slippage.json").read_text(encoding="utf-8")
+    )
+    assert strip == slippage_dashboard_strip(saved)
+    assert strip["influences_live"] is False
+    assert strip["feeds_strategy_book"] is False
+    assert strip["replaces_half_spread"] is False
 
 
 def test_strategy_book_demo_refuses_live_host_and_ignores_live_secrets(
@@ -346,7 +354,10 @@ def test_strategy_book_demo_refuses_live_host_and_ignores_live_secrets(
     assert "TRADING212_API_KEY" not in workflow
     assert "TRADING212_DEMO_API_KEY" in workflow
     assert "docs/data/strategy_book_demo_ledger.json" in workflow
-    assert "docs/data/strategy_book_demo_ledger.json" in EMAIL.read_text(encoding="utf-8")
+    assert "docs/data/strategy_book_demo_slippage.json" in workflow
+    email = EMAIL.read_text(encoding="utf-8")
+    assert "docs/data/strategy_book_demo_ledger.json" in email
+    assert "docs/data/strategy_book_demo_slippage.json" in email
     assert "Does not place orders" in CLIENT.read_text(encoding="utf-8")
 
     seen: list[str] = []
@@ -1912,6 +1923,7 @@ def test_strategy_book_demo_only_if_due_makes_no_call_and_no_write(tmp_path: Pat
     assert store["placement"] == "skipped_nothing_due"
     assert store["plans"][0]["action"] == "waiting"
     assert not (tmp_path / "docs/data/strategy_book_demo_ledger.json").exists()
+    assert not (tmp_path / "docs/data/strategy_book_demo_slippage.json").exists()
     fake = FakeTransport()
     run_mirror(
         repo_root=tmp_path,
@@ -2013,6 +2025,7 @@ def test_strategy_book_demo_near_close_workflow_wiring() -> None:
     assert "TRADING212_API_KEY" not in workflow
     assert "--only-if-due" in workflow and "--place" in workflow
     assert "docs/data/strategy_book_demo_ledger.json" in workflow
+    assert "docs/data/strategy_book_demo_slippage.json" in workflow
     group = re.search(r"concurrency:\n\s+group: (\S+)", workflow)
     forward_group = re.search(r"concurrency:\n\s+group: (\S+)", FORWARD.read_text("utf-8"))
     assert group and forward_group and group.group(1) == forward_group.group(1)
@@ -2023,3 +2036,84 @@ def test_strategy_book_demo_near_close_workflow_wiring() -> None:
     assert ".github/workflows/strategy-book-demo-near-close.yml" in imports
     for minute in sorted({minute for _, minute in NEAR_CLOSE_SLOTS_UTC}):
         assert f"--job strategy-book-demo-near-close-{minute:02d}" in imports
+
+
+def test_demo_slippage_strip_is_observe_only_and_matches_the_ledger() -> None:
+    ledger = {
+        "influences_live": True,
+        "generated_at": "2026-11-26T04:13:03+00:00",
+        "slippage": {
+            "measured_count": 3,
+            "median_pct": -0.01,
+            "entry_on_time_count": 2,
+            "entry_on_time_median_pct": 0.002,
+            "on_time_count": 1,
+            "on_time_median_pct": -0.004,
+            "catchup_count": 0,
+            "catchup_median_pct": None,
+            "fx_fee_count": 1,
+            "fx_fee_median_pct": 0.0015,
+            "half_spread": 0.0005,
+        },
+    }
+    strip = slippage_dashboard_strip(ledger)
+    assert strip["influences_live"] is False
+    assert strip["observe_only"] is True
+    assert strip["feeds_strategy_book"] is False
+    assert strip["replaces_half_spread"] is False
+    assert strip["price_basis"] == "raw_fill_vs_book_adjusted_close"
+    assert strip["measured_count"] == 3
+    assert strip["median_pct"] == pytest.approx(-0.01)
+    assert strip["entry_on_time_median_pct"] == pytest.approx(0.002)
+    assert "half_spread" not in strip
+    assert "assumed half-spread is not replaced" in strip["note"]
+    assert "Does not feed the strategy book" in strip["note"]
+
+    from_fills = slippage_dashboard_strip(
+        {
+            "generated_at": "2026-11-26T04:13:03+00:00",
+            "fills": [
+                {"leg": "entry", "slippage": {"status": "measured", "slippage_pct": 0.02}},
+                {"leg": "entry", "slippage": {"status": "measured", "slippage_pct": -0.04}},
+                {"leg": "exit", "slippage": {"status": "insufficient_data"}},
+            ],
+        }
+    )
+    assert from_fills["measured_count"] == 2
+    assert from_fills["median_pct"] == pytest.approx(-0.01)
+    assert from_fills["feeds_strategy_book"] is False
+    assert from_fills["replaces_half_spread"] is False
+
+    repo = Path(__file__).resolve().parents[1]
+    committed_ledger = json.loads(
+        (repo / "docs/data/strategy_book_demo_ledger.json").read_text(encoding="utf-8")
+    )
+    committed = json.loads(
+        (repo / "docs/data/strategy_book_demo_slippage.json").read_text(encoding="utf-8")
+    )
+    assert committed == slippage_dashboard_strip(committed_ledger)
+    assert committed["measured_count"] >= 1
+    assert committed["median_pct"] == committed_ledger["slippage"]["median_pct"]
+
+    book_sources = (
+        "strategy_book_observe.py",
+        "strategy_book_forward.py",
+        "strategy_book_rules.py",
+        "market_trading_costs.py",
+    )
+    for name in book_sources:
+        text = (repo / "src/value_investor" / name).read_text(encoding="utf-8")
+        assert "strategy_book_demo_slippage" not in text
+        assert "slippage_dashboard_strip" not in text
+
+    app = (repo / "docs/app.js").read_text(encoding="utf-8")
+    strip_fn = app.split("function renderStrategyBookDemoSlippageStrip(", 1)[1].split(
+        "\nfunction ", 1
+    )[0]
+    assert "Median practice-account slippage" in strip_fn
+    assert "versus the book's adjusted close" in strip_fn
+    assert "Does not feed the strategy book" in strip_fn
+    assert "assumed half-spread is not replaced" in strip_fn
+    assert "button" not in strip_fn
+    assert "fair_cost" not in strip_fn
+    assert "promote" not in strip_fn

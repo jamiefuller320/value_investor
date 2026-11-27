@@ -605,6 +605,7 @@ const DASHBOARD_SIDECARS = [
   ["n201_value_mom_observe", "data/n201_value_mom_observe.json"],
   ["n206_plain_ey_observe", "data/n206_plain_ey_observe.json"],
   ["strategy_book_forward_status", "data/strategy_book_forward_status.json"],
+  ["strategy_book_demo_slippage", "data/strategy_book_demo_slippage.json"],
   ["n210_ai_judgment_observe", "data/n210_ai_judgment_observe.json"],
   ["chart_outcome_review", "data/chart_outcome_review.json"],
   ["engineering_tasks", "data/engineering_tasks.json"],
@@ -5759,16 +5760,76 @@ function resolveN206PipelineHealth(data) {
   };
 }
 
+function formatDemoSlippagePct(value) {
+  if (value == null || !Number.isFinite(Number(value))) return "—";
+  const n = Number(value) * 100;
+  const sign = n > 0 ? "+" : "";
+  return `${sign}${n.toFixed(2)}%`;
+}
+
+function renderStrategyBookDemoSlippageStrip(strip, { compact = false } = {}) {
+  const disclaimer =
+    "Observe-only. Does not feed the strategy book. The assumed half-spread is not replaced.";
+  if (!strip || typeof strip !== "object") {
+    return `<p class="small muted strategy-book-demo-slippage-strip" style="margin-bottom:0">${esc(
+      disclaimer
+    )} Practice-account slippage is not published yet.</p>`;
+  }
+  const count = Number(strip.measured_count);
+  const measured = Number.isFinite(count) ? count : 0;
+  if (measured < 1) {
+    return `<p class="small strategy-book-demo-slippage-strip" style="margin-bottom:0">Practice-account slippage is not measured yet. ${esc(
+      disclaimer
+    )}</p>`;
+  }
+  const median = formatDemoSlippagePct(strip.median_pct);
+  const headline = `Median practice-account slippage ${median} versus the book's adjusted close (${measured} measured fill${
+    measured === 1 ? "" : "s"
+  }).`;
+  if (compact) {
+    return `<p class="small strategy-book-demo-slippage-strip" style="margin-bottom:0">${esc(
+      headline
+    )} ${esc(disclaimer)}</p>`;
+  }
+  const bucket = (label, n, pct) =>
+    settingRow(label, `${esc(String(n ?? 0))} · median ${esc(formatDemoSlippagePct(pct))}`);
+  const fxCount = Number(strip.fx_fee_count);
+  const fxLine =
+    Number.isFinite(fxCount) && fxCount > 0
+      ? `<p class="small muted" style="margin:0.35rem 0 0">FX conversion fee median ${esc(
+          formatDemoSlippagePct(strip.fx_fee_median_pct)
+        )} on ${esc(String(fxCount))} converted fill${
+          fxCount === 1 ? "" : "s"
+        }. Not counted as price slippage.</p>`
+      : "";
+  return `
+    <div class="strategy-book-demo-slippage-strip" style="margin-top:0.65rem">
+      <p class="small" style="margin:0">${esc(
+        headline
+      )} Positive means the practice account paid more, or sold for less, than that close.</p>
+      ${bucket("On-time entries", strip.entry_on_time_count, strip.entry_on_time_median_pct)}
+      ${bucket("On-time exits", strip.on_time_count, strip.on_time_median_pct)}
+      ${bucket("Catch-ups", strip.catchup_count, strip.catchup_median_pct)}
+      ${fxLine}
+      <p class="small muted" style="margin:0.35rem 0 0">${esc(disclaimer)}</p>
+    </div>`;
+}
+
 function renderStrategyBookObserveSection(data, { compact = false } = {}) {
   const payload = data && data.strategy_book_forward_status;
   const sectionAttrs = compact
     ? ' class="automation-section automation-section-full strategy-book-observe-section analysis-observe-compact"'
     : ' class="automation-section automation-section-full strategy-book-observe-section"';
+  const slippageHtml = renderStrategyBookDemoSlippageStrip(
+    data && data.strategy_book_demo_slippage,
+    { compact }
+  );
   if (!payload || typeof payload !== "object") {
     return `
       <section${sectionAttrs}>
         <h2>Strategy book</h2>
         <p class="muted small">Forward status not published yet. The weekday job writes counts only until go-live.</p>
+        ${slippageHtml}
       </section>`;
   }
   const fresh = payload.freshness || {};
@@ -5787,6 +5848,7 @@ function renderStrategyBookObserveSection(data, { compact = false } = {}) {
         Read-only queue health. No promote button. Does not write strand A.
         ${compact ? "Compact strip." : "Full readout is this line."}
       </p>
+      ${slippageHtml}
     </section>`;
 }
 
@@ -7731,6 +7793,7 @@ function renderQueueHealthMonitor(data) {
       }, { compact: true })}
       ${renderStrategyBookObserveSection({
         strategy_book_forward_status: data.strategy_book_forward_status,
+        strategy_book_demo_slippage: data.strategy_book_demo_slippage,
       }, { compact: true })}
       ${renderN210PipelineHealthSection({
         queue_health: health,
@@ -14399,6 +14462,9 @@ function renderDashboard(data) {
   }
   if (parsed && parsed.tab === "analysis" && parsed.subpage) {
     analysisSectionId = normalizeAnalysisSection(parsed.subpage);
+  }
+  if (parsed && parsed.tab === "analysis" && parsed.model) {
+    investmentModelId = normalizeInvestmentModel(parsed.model);
   }
   if (parsed && parsed.tab === "automation" && parsed.subpage) {
     automationSectionId = normalizeAutomationSection(parsed.subpage);
