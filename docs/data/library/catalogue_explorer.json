@@ -6980,28 +6980,10 @@
     "ERCBD_EQ",
     "ERCGD_EQ",
     "ETGD_EQ",
-    "EUXD_EQ"
+    "EUXD_EQ",
+    "EUZD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "E3Td_EQ",
-      "venue": "DE",
-      "yahoo": "E3T.DE",
-      "isin": "CA59142H1073",
-      "name": "E3T",
-      "seconds": 86.067,
-      "outcome": "miss",
-      "at": "2026-11-27T01:12:36.651326+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.886
-      },
-      "screen_seconds": 84.886,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "E47d_EQ",
       "venue": "DE",
@@ -7742,6 +7724,25 @@
       },
       "screen_seconds": 84.87,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "EUZd_EQ",
+      "venue": "DE",
+      "yahoo": "EUZ.DE",
+      "isin": "DE0005659700",
+      "name": "EUZ",
+      "seconds": 2.605,
+      "outcome": "miss",
+      "at": "2026-11-27T01:56:03.224887+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.895
+      },
+      "screen_seconds": 0.895,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89276,43 +89277,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T01:46:08.540016+00:00"
+    },
+    {
+      "t212_ticker": "EUZd_EQ",
+      "yahoo": "EUZ.DE",
+      "name": "EUZ",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T01:56:03.224887+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "EUXd_EQ",
+    "t212_ticker": "EUZd_EQ",
     "venue": "DE",
-    "yahoo": "EUX.DE",
-    "isin": "DE0005660104",
-    "name": "EUX",
-    "seconds": 85.802,
+    "yahoo": "EUZ.DE",
+    "isin": "DE0005659700",
+    "name": "EUZ",
+    "seconds": 2.605,
     "outcome": "miss",
-    "at": "2026-11-27T01:55:53.605305+00:00",
+    "at": "2026-11-27T01:56:03.224887+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.87
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.895
     },
-    "screen_seconds": 84.87,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.895,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "EUZd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T01:55:53.605305+00:00",
+  "updated_at": "2026-11-27T01:56:03.224887+00:00",
   "totals": {
-    "screened": 6979,
+    "screened": 6980,
     "signals": {
-      "buy": 1951,
+      "buy": 1952,
       "avoid": 1527,
       "hold": 1429,
       "insufficient_data": 2032,
       "strong_buy": 40
     },
-    "signals_n": 6979,
-    "screen_seconds_sum": 88921.81900000043,
-    "screen_seconds_n": 6979,
+    "signals_n": 6980,
+    "screen_seconds_sum": 88922.71400000043,
+    "screen_seconds_n": 6980,
     "outcomes": {
-      "miss": 3164,
+      "miss": 3165,
       "saved": 3815
     }
   },
