@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 26 · Updated 2026-11-26T21:39:50.174283+00:00 · Mode: structured_verdict_update_
+_Version 27 · Updated 2026-11-27T01:18:51.523720+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.69
-Rationale: Yahoo per-answer billing commentary joins filing-backed FCF in mildly confirming Strong Buy; leverage and AI competition stay unresolved until 2 Dec results—no new primary filings in the pack.
+Rationale: The 27 Nov batch adds no headlines; filing-backed FY26 FCF (~$14.4bn) still mildly confirms Strong Buy; leverage and AI competition remain unresolved ahead of 2 Dec results.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -133,5 +133,10 @@ Leverage and competitive pre-earnings themes are unchanged ahead of 2 Dec result
 
 ### 2026-11-26T21:39:50.174283+00:00
 The 26 Nov batch adds Yahoo on shifting billing toward per-answer AI monetisation versus per-seat pricing, with Wall Street watching ahead of results.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
+Leverage and competitive pre-earnings themes are unchanged ahead of 2 Dec results.
+
+### 2026-11-27T01:18:51.523720+00:00
+The 27 Nov news batch adds no articles since the 26 Nov 21:39 UTC refresh.  
 No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
 Leverage and competitive pre-earnings themes are unchanged ahead of 2 Dec results.

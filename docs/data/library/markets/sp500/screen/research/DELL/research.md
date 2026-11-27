@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 19 · Updated 2026-11-26T21:43:12.204540+00:00 · Mode: structured_verdict_update_
+_Version 20 · Updated 2026-11-27T01:22:22.397809+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: On-file Q3 still confirms strong_buy; this batch repeats south-east Asian shipment-pause copy and BofA’s $100 target cut—sell-side AI-cycle scepticism, not new filings.
+Rationale: On-file Q3 8-K still supports growth; this batch is thin bullish AI-server press only—research mildly confirms strong_buy while leverage, cyclicality and regulatory risks persist.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -101,5 +101,10 @@ On-file Q3 FY2027 8-K figures are unchanged; no new SEC extracts.
 
 ### 2026-11-26T21:43:12.204540+00:00
 The 21:42 UTC batch largely repeats Nvidia-linked shipment-pause headlines for four south-east Asian markets, naming Dell among partners, plus press on BofA cutting its price target by $100 after record Q3.  
+On-file Q3 FY2027 8-K figures ($54.9bn revenue, $9.45 EPS, ~$132bn backlog) are unchanged; no new SEC extracts.  
+Screen remains **strong_buy**; leverage, cyclical and regulatory risks are unchanged.
+
+### 2026-11-27T01:22:22.397809+00:00
+The 01:22 UTC batch adds duplicate Motley Fool/Yahoo bullish AI-server growth headlines; no new Dell datapoints or filings.  
 On-file Q3 FY2027 8-K figures ($54.9bn revenue, $9.45 EPS, ~$132bn backlog) are unchanged; no new SEC extracts.  
 Screen remains **strong_buy**; leverage, cyclical and regulatory risks are unchanged.

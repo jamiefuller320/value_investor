@@ -1,6 +1,6 @@
 # Baker Hughes Company (BKR) — Research memo
 
-_Version 15 · Updated 2026-11-26T21:38:13.861636+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-27T01:17:33.258892+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Ichthys LNG rehash headlines support IET backlog momentum, but cooler near-term sentiment; Q3 revenue ~$8.0bn and TTM FCF ~$3.2bn still underpin accumulate vs strong buy with post-Chart earnings unverified.
+Rationale: Q3 ~$8.0bn revenue and ~$3.2bn TTM FCF still match the screen, but the 27 Nov batch is only a generic Yahoo valuation piece and post-Chart earnings remain unverified—accumulate, not full strong-buy confirmation.
 RiskTags: cyclical, leverage, competitive, regulatory
 
 ## Weekly updates
@@ -81,5 +81,10 @@ Normalised post-Chart BKR earnings remain unverified in supplied primary filings
 
 ### 2026-11-26T21:38:13.861636+00:00
 Evening 26 Nov batch adds Ichthys LNG valuation rehashes citing softer near-term share sentiment—no new SEC filing bodies in supplied sources.  
+Strong-buy screen unchanged with Q3 2026 revenue ~$8.0bn and TTM FCF ~$3.2bn per the screening snapshot.  
+Normalised post-Chart BKR earnings remain unverified in supplied primary filings.
+
+### 2026-11-27T01:17:33.258892+00:00
+27 Nov batch adds only a Yahoo “bargain after pullback” valuation rehash (26 Nov)—no new SEC filing bodies in supplied sources.  
 Strong-buy screen unchanged with Q3 2026 revenue ~$8.0bn and TTM FCF ~$3.2bn per the screening snapshot.  
 Normalised post-Chart BKR earnings remain unverified in supplied primary filings.

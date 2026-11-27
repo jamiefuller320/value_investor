@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 14 · Updated 2026-11-26T21:51:26.366895+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-27T01:32:45.938527+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.69
-Rationale: Bullish cycle-peak and 2027 oversold pieces are headline-only; ~$59bn TTM FCF supports the screen but zero model passes and unchanged cyclical risks keep accumulate versus strong buy.
+Rationale: Thanksgiving futures and a TSMC-over-MU hold headline are opinion-only; ~$59bn TTM FCF supports the screen but zero model passes and unchanged cyclical risks keep accumulate versus strong buy.
 RiskTags: cyclical, competitive, leverage, customer_concentration
 
 ## Weekly updates
@@ -76,3 +76,8 @@ Filing-based cyclical, leverage, competitive and customer-concentration risks ar
 Evening headlines add bullish memory cycle-peak commentary and a 2027 oversold-semiconductor list including MU, plus macro US-shut futures colour; no new filings or sourced financials.  
 Screen remains **strong buy** with ~$59bn TTM FCF and zero quantitative models passed.  
 Filing-based cyclical, leverage, competitive and customer-concentration risks are unchanged.
+
+### 2026-11-27T01:32:45.938527+00:00
+Thanksgiving futures coverage notes the Nasdaq rallying off lows; no MU-specific price or fundamentals in this batch.  
+A headline favours Taiwan Semi over Micron as a single AI semiconductor hold through 2030—competitive narrative only.  
+No new filings or sourced financials; screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed; filing-based risks unchanged.

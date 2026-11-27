@@ -1,6 +1,6 @@
 # Barrick Mining Corporation (ABX.TO) — Research memo
 
-_Version 21 · Updated 2026-11-26T21:36:36.220395+00:00 · Mode: structured_verdict_update_
+_Version 22 · Updated 2026-11-27T01:15:19.873680+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Verified Q2 MD&A and net cash still support accumulate versus the buy screen; softer Q3 EPS and gold sentiment block full confirmation, and Q3 13F flow headlines add no disclosed fundamentals.
+Rationale: Verified Q2 MD&A and net cash still support accumulate versus the buy screen; softer Q3 EPS and gold sentiment block full confirmation, and the 27 Nov news batch adds no disclosed fundamentals.
 RiskTags: cyclical, governance
 
 ## Weekly updates
@@ -111,5 +111,10 @@ No new Barrick regulatory filings with fundamentals in this pull.
 
 ### 2026-11-26T21:36:36.220395+00:00
 The 21:36 batch adds one item (26 Nov): Q3 13F coverage noting Duquesne opened a new Barrick stake alongside Newmont and Agnico Eagle; the summary discloses no new operating or financial data.  
+Verified Q2 MD&A, three filing bodies, and Yahoo Q3 diluted EPS ($0.80) are unchanged.  
+No new Barrick regulatory filings with fundamentals in this pull.
+
+### 2026-11-27T01:15:19.873680+00:00
+No material change: the 27 Nov news batch since the prior refresh returned zero Barrick articles.  
 Verified Q2 MD&A, three filing bodies, and Yahoo Q3 diluted EPS ($0.80) are unchanged.  
 No new Barrick regulatory filings with fundamentals in this pull.

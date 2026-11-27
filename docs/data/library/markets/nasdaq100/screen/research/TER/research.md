@@ -1,6 +1,6 @@
 # Teradyne, Inc. (TER) — Research memo
 
-_Version 13 · Updated 2026-11-26T21:56:36.753873+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-27T01:38:53.731338+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: Research weakens the buy case: no SEC filings after the 30 Oct 10-Q, ~$800m TTM FCF and thin automation headlines leave cyclical and competitive risks unresolved.
+Rationale: Research still weakens the buy case: the 27 Nov news batch is empty, no SEC filings after the 30 Oct 10-Q, and ~$800m TTM FCF leaves cyclical and competitive risks unresolved.
 RiskTags: cyclical, customer_concentration, competitive
 
 ## Weekly updates
@@ -72,4 +72,9 @@ Yahoo TTM free cash flow remains about $800m; the buy screen is unchanged and pr
 ### 2026-11-26T21:56:36.753873+00:00
 No material change since the 18:16 refresh: the 21:56 batch is only a generic November automation-stock screener, with no Teradyne-specific disclosure.  
 The filings index was refreshed; there are still no SEC bodies after the 30 Oct 2026 10-Q.  
+Yahoo TTM free cash flow remains about $800m; the buy screen and prior valuation and quality concerns are unchanged.
+
+### 2026-11-27T01:38:53.731338+00:00
+No material change since the 26 Nov 21:56 refresh: the 27 Nov 01:38 news batch is empty.  
+The filings index was refreshed at 01:38 UTC; there are still no SEC bodies after the 30 Oct 2026 10-Q.  
 Yahoo TTM free cash flow remains about $800m; the buy screen and prior valuation and quality concerns are unchanged.

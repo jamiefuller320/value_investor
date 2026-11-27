@@ -1,6 +1,6 @@
 # CVS Health Corporation (CVS) — Research memo
 
-_Version 15 · Updated 2026-11-26T21:41:32.963749+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-27T01:20:38.634130+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -83,3 +83,8 @@ No new SEC extracts beyond the 4 Nov Q3 10-Q; no material change to the accumula
 Since 17:55 UTC the news batch is empty; no new CVS headlines in the supplied pack.  
 No new SEC extracts beyond the 4 Nov Q3 10-Q.  
 No material change to the accumulate overlay versus the 17:55 refresh.
+
+### 2026-11-27T01:20:38.634130+00:00
+Since 26 Nov 21:41 UTC the news batch is empty; no new CVS headlines in the supplied pack.  
+No new SEC extracts beyond the 4 Nov Q3 10-Q.  
+No material change to the accumulate overlay versus the 26 Nov refresh.

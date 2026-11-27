@@ -1,6 +1,6 @@
 # OMV Aktiengesellschaft (OMV.VI) — Research memo
 
-_Version 7 · Updated 2026-11-26T21:59:28.165983+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-27T01:42:33.735619+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.69
-Rationale: On-file Q3 EPS €3.14 and ~€2.53bn TTM FCF confirm the strong-buy screen; the latest news batch is empty so broker and strategy risks are unchanged.
+Rationale: On-file Q3 EPS €3.14 and ~€2.53bn TTM FCF confirm the strong-buy screen; the empty 27 Nov news batch leaves cyclical, governance and strategy risks unchanged.
 RiskTags: cyclical, governance, regulatory, key_person
 
 ## Weekly updates
@@ -41,5 +41,10 @@ Strong_buy screen and accumulate overlay stand; chemistry-strategy noise does no
 
 ### 2026-11-26T21:59:28.165983+00:00
 No material change: `news_batch_20261126_215906` since the 18:19 UTC refresh contains no articles.  
+On-file Q3 2026 EPS €3.14, revenue €8.96bn and TTM free cash flow ~€2.53bn are unchanged; indexed filings are unchanged.  
+Strong_buy screen and accumulate overlay stand.
+
+### 2026-11-27T01:42:33.735619+00:00
+No material change: `news_batch_20261127_014150` since the 21:59 UTC refresh contains no articles.  
 On-file Q3 2026 EPS €3.14, revenue €8.96bn and TTM free cash flow ~€2.53bn are unchanged; indexed filings are unchanged.  
 Strong_buy screen and accumulate overlay stand.

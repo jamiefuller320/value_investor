@@ -1,6 +1,6 @@
 # GE Vernova Inc. (GEV) — Research memo
 
-_Version 13 · Updated 2026-11-26T21:47:32.462830+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-27T01:27:37.843378+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -70,6 +70,11 @@ One headline notes XLI adding General Electric on 24 Nov—not confirmed as GE V
 Filed FY2025 OCF $4.99bn and FCF $3.71bn unchanged; Yahoo TTM FCF (~$17.1bn) still far above annual filed figures; Wind and FCF-basis gaps unresolved.
 
 ### 2026-11-26T21:47:32.462830+00:00
+Incremental news batch since the prior run is empty; no new headlines or SEC filings in the supplied sources.  
+Filed FY2025 OCF $4.99bn and FCF $3.71bn are unchanged; Yahoo TTM FCF (~$17.1bn) still far exceeds annual filed cash flow underpinning the screen.  
+Wind execution and the FCF-basis gap from prior updates remain unresolved.
+
+### 2026-11-27T01:27:37.843378+00:00
 Incremental news batch since the prior run is empty; no new headlines or SEC filings in the supplied sources.  
 Filed FY2025 OCF $4.99bn and FCF $3.71bn are unchanged; Yahoo TTM FCF (~$17.1bn) still far exceeds annual filed cash flow underpinning the screen.  
 Wind execution and the FCF-basis gap from prior updates remain unresolved.

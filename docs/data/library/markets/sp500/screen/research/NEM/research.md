@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM) — Research memo
 
-_Version 13 · Updated 2026-11-26T21:51:44.490980+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-27T01:33:08.180311+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Sourced ~$10.1bn TTM free cash flow still supports the screen buy; Q3 13F buying versus trims and peer expansion headlines leave research neutral on the buy case.
+Rationale: Sourced ~$10.1bn TTM free cash flow still supports the screen buy; no new headlines or filings since the last refresh leave research neutral on the buy case.
 RiskTags: cyclical, regulatory, governance, litigation, customer_concentration
 
 ## Weekly updates
@@ -73,3 +73,8 @@ No material operational change versus the prior refresh.
 Since the 18:09 refresh, the batch adds a Q3 13F piece (11 funds bought NEM, six mostly trimmed) citing Duquesne’s new stake, plus an Agnico Eagle expansion headline that is peer-only.  
 No new SEC filings; screen TTM free cash flow (~$10.1bn) and quarterly cash flow in the file set are unchanged.  
 Headlines add institutional and competitive colour only; no material operational change.
+
+### 2026-11-27T01:33:08.180311+00:00
+News batch since the 26 Nov evening refresh is empty; no new articles in the supplied sources.  
+No new SEC filings; screen TTM free cash flow (~$10.1bn) and quarterly cash flow in the file set are unchanged.  
+No material change versus the prior refresh; buy screen and accumulate overlay unchanged.

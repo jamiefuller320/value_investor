@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM.AX) — Research memo
 
-_Version 7 · Updated 2026-11-26T21:52:28.711869+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-27T01:33:33.452504+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.66
-Rationale: Steady ~$7.3bn and ~$10.1bn TTM FCF support the overlay; 13F flow and peer capex headlines are non-filing—research stays neutral on the unchanged hold screen.
+Rationale: Empty post-21:52 news; steady ~$7.3bn and ~$10.1bn TTM FCF in sources—research stays neutral on the unchanged hold screen with zero model passes.
 RiskTags: cyclical, key_person, regulatory, other
 
 ## Weekly updates
@@ -43,3 +43,8 @@ Filings index refreshed at 18:09 with 20 items; no new company-specific disclosu
 Since 18:10, yfinance adds a peer Agnico expansion/cost piece and a 13F note (11 funds bought, six sold NEM last quarter).  
 Hold and zero model passes unchanged; filing-aligned ~$7.3bn and TTM ~$10.1bn FCF steady in sources.  
 Filings index refreshed at 21:52 with 20 items; no new company-specific disclosure in the batch.
+
+### 2026-11-27T01:33:33.452504+00:00
+News batch since the 26 Nov 21:52 refresh is empty; no new articles in the supplied sources.  
+Hold and zero model passes are unchanged; filing-aligned ~$7.3bn and TTM ~$10.1bn FCF remain steady in the file set.  
+Filings index refreshed at 01:33 on 27 Nov with 20 items; no new company-specific disclosure in the batch.

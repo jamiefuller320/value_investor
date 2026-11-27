@@ -1,6 +1,6 @@
 # Prosus N.V. (PRX.AS) — Research memo
 
-_Version 19 · Updated 2026-11-26T21:55:15.452371+00:00 · Mode: structured_verdict_update_
+_Version 20 · Updated 2026-11-27T01:36:53.252408+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.58
-Rationale: Research still weakens the buy: empty 21:54 batch; 25 Nov H1 profit and cash-flow headlines persist; Yahoo quarterly cash flow stays empty, so screen TTM FCF remains unverified.
+Rationale: Research still weakens the buy: empty 27 Nov batch; 25 Nov H1 profit and cash-flow headlines persist; Yahoo quarterly cash flow stays empty, so screen TTM FCF remains unverified.
 RiskTags: governance, customer_concentration, accounting, leverage, competitive
 
 ## Weekly updates
@@ -101,5 +101,10 @@ Yahoo `quarterly_cashflow` is still empty; 25 Nov H1 profit, cash-flow and Tence
 
 ### 2026-11-26T21:55:15.452371+00:00
 No new articles in the 21:54 incremental batch since the 18:13 refresh.  
+Filings index is unchanged on re-fetch; no new filing bodies in the pack.  
+Yahoo `quarterly_cashflow` remains empty; 25 Nov H1 profit, cash-flow and Tencent-disposal headlines remain the latest flow.
+
+### 2026-11-27T01:36:53.252408+00:00
+No new articles in the 27 Nov incremental batch since the 26 Nov 21:55 refresh.  
 Filings index is unchanged on re-fetch; no new filing bodies in the pack.  
 Yahoo `quarterly_cashflow` remains empty; 25 Nov H1 profit, cash-flow and Tencent-disposal headlines remain the latest flow.
