@@ -6942,28 +6942,10 @@
     "E35D_EQ",
     "E3MD_EQ",
     "E3TD_EQ",
-    "E47D_EQ"
+    "E47D_EQ",
+    "E4CD1_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "DISSd_EQ",
-      "venue": "DE",
-      "yahoo": "DISS.DE",
-      "isin": "DE0005538607",
-      "name": "DIS",
-      "seconds": 5.373,
-      "outcome": "miss",
-      "at": "2026-11-27T01:03:21.312515+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.063
-      },
-      "screen_seconds": 4.063,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "DJ5d_EQ",
       "venue": "DE",
@@ -7704,6 +7686,25 @@
       },
       "screen_seconds": 84.796,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "E4Cd1_EQ",
+      "venue": "DE",
+      "yahoo": "E4C.DE",
+      "isin": "DE0005854343",
+      "name": "E4C",
+      "seconds": 1.865,
+      "outcome": "miss",
+      "at": "2026-11-27T01:14:17.979109+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.851
+      },
+      "screen_seconds": 0.851,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89214,43 +89215,56 @@
         "error": null
       },
       "finished_at": "2026-11-27T01:12:28.934754+00:00"
+    },
+    {
+      "t212_ticker": "E4Cd1_EQ",
+      "yahoo": "E4C.DE",
+      "name": "E4C",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T01:14:17.979109+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "E47d_EQ",
+    "t212_ticker": "E4Cd1_EQ",
     "venue": "DE",
-    "yahoo": "E47.DE",
-    "isin": "AU0000187569",
-    "name": "E47",
-    "seconds": 86.244,
+    "yahoo": "E4C.DE",
+    "isin": "DE0005854343",
+    "name": "E4C",
+    "seconds": 1.865,
     "outcome": "miss",
-    "at": "2026-11-27T01:14:09.814348+00:00",
+    "at": "2026-11-27T01:14:17.979109+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.796
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.851
     },
-    "screen_seconds": 84.796,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.851,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "E4Cd1_EQ"
+    }
   },
-  "updated_at": "2026-11-27T01:14:09.814348+00:00",
+  "updated_at": "2026-11-27T01:14:17.979109+00:00",
   "totals": {
-    "screened": 6941,
+    "screened": 6942,
     "signals": {
-      "buy": 1948,
+      "buy": 1949,
       "avoid": 1525,
       "hold": 1421,
       "insufficient_data": 2007,
       "strong_buy": 40
     },
-    "signals_n": 6941,
-    "screen_seconds_sum": 86710.01000000045,
-    "screen_seconds_n": 6941,
+    "signals_n": 6942,
+    "screen_seconds_sum": 86710.86100000044,
+    "screen_seconds_n": 6942,
     "outcomes": {
-      "miss": 3126,
+      "miss": 3127,
       "saved": 3815
     }
   },
