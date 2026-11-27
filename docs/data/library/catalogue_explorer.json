@@ -6910,28 +6910,10 @@
     "DLXD_EQ",
     "DMID_EQ",
     "DMJD_EQ",
-    "DML2D_EQ"
+    "DML2D_EQ",
+    "DMPD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "D09d_EQ",
-      "venue": "DE",
-      "yahoo": "D09.DE",
-      "isin": "CA11285B1085",
-      "name": "D09",
-      "seconds": 5.02,
-      "outcome": "miss",
-      "at": "2026-11-27T00:57:54.587657+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.036
-      },
-      "screen_seconds": 4.036,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "D1NCd_EQ",
       "venue": "DE",
@@ -7672,6 +7654,25 @@
       },
       "screen_seconds": 4.007,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "DMPd_EQ",
+      "venue": "DE",
+      "yahoo": "DMP.DE",
+      "isin": "DE000A2GS5D8",
+      "name": "DMP",
+      "seconds": 1.875,
+      "outcome": "miss",
+      "at": "2026-11-27T01:04:42.962580+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.66
+      },
+      "screen_seconds": 0.66,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -88582,43 +88583,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T01:04:00.625215+00:00"
+    },
+    {
+      "t212_ticker": "DMPd_EQ",
+      "yahoo": "DMP.DE",
+      "name": "DMP",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T01:04:42.962580+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DML2d_EQ",
+    "t212_ticker": "DMPd_EQ",
     "venue": "DE",
-    "yahoo": "DML2.DE",
-    "isin": "AU0000421851",
-    "name": "DML2",
-    "seconds": 4.918,
+    "yahoo": "DMP.DE",
+    "isin": "DE000A2GS5D8",
+    "name": "DMP",
+    "seconds": 1.875,
     "outcome": "miss",
-    "at": "2026-11-27T01:04:34.775123+00:00",
+    "at": "2026-11-27T01:04:42.962580+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.007
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.66
     },
-    "screen_seconds": 4.007,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.66,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "DMPd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T01:04:34.775123+00:00",
+  "updated_at": "2026-11-27T01:04:42.962580+00:00",
   "totals": {
-    "screened": 6909,
+    "screened": 6910,
     "signals": {
-      "buy": 1939,
+      "buy": 1940,
       "avoid": 1523,
       "hold": 1417,
       "insufficient_data": 1990,
       "strong_buy": 40
     },
-    "signals_n": 6909,
-    "screen_seconds_sum": 86383.63100000047,
-    "screen_seconds_n": 6909,
+    "signals_n": 6910,
+    "screen_seconds_sum": 86384.29100000048,
+    "screen_seconds_n": 6910,
     "outcomes": {
-      "miss": 3094,
+      "miss": 3095,
       "saved": 3815
     }
   },
