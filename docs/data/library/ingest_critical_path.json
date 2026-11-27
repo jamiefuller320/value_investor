@@ -1,58 +1,32 @@
 {
-  "market_id": "euro_depth",
-  "assessed_at": "2026-11-27T07:19:30.746584+00:00",
-  "unmeasured": [],
+  "market_id": "ftse_mib",
+  "assessed_at": "2026-11-27T07:50:18.898874+00:00",
+  "unmeasured": [
+    "TIT.MI"
+  ],
   "zero_body": [],
-  "indexed_without_body": [
-    {
-      "ticker": "EVN.VI",
-      "indexed_without_body": 3,
-      "filings_total": 5,
-      "filings_with_body": 2
-    },
-    {
-      "ticker": "ESSITY-B.ST",
-      "indexed_without_body": 1,
-      "filings_total": 24,
-      "filings_with_body": 23
-    },
-    {
-      "ticker": "UCB.BR",
-      "indexed_without_body": 1,
-      "filings_total": 2,
-      "filings_with_body": 1
-    }
-  ],
+  "indexed_without_body": [],
   "thin_need_discovery": [
-    "ACKB.BR",
-    "APAM.AS",
-    "BAS.DE",
-    "UCB.BR",
-    "DQ7A.IR",
-    "IFX.DE"
+    "PST.MI",
+    "FCT.MI"
   ],
-  "thin_need_bodies": [
-    "EVN.VI",
-    "UCB.BR"
-  ],
-  "primary_blocker": "indexed_without_body",
+  "thin_need_bodies": [],
+  "primary_blocker": "unmeasured",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "EVN.VI",
-    "ESSITY-B.ST",
-    "UCB.BR"
+    "TIT.MI"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (3 tickers, top: EVN.VI(3), ESSITY-B.ST(1), UCB.BR(1))",
-    "Discovery/IR seed for 6 thin ticker(s) that already have bodies for every indexed filing",
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 3,
-    "indexed_without_body_rows": 5,
-    "thin_need_discovery": 6,
-    "thin_need_bodies": 2
+    "indexed_without_body_tickers": 0,
+    "indexed_without_body_rows": 0,
+    "thin_need_discovery": 2,
+    "thin_need_bodies": 0
   }
 }
