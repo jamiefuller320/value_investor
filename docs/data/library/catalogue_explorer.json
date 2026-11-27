@@ -6929,28 +6929,10 @@
     "DS5D_EQ",
     "DS81D_EQ",
     "DSND_EQ",
-    "DSZD_EQ"
+    "DSZD_EQ",
+    "DTD2D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "DDLd_EQ",
-      "venue": "DE",
-      "yahoo": "DDL.DE",
-      "isin": "JP3491000000",
-      "name": "DDL",
-      "seconds": 5.225,
-      "outcome": "miss",
-      "at": "2026-11-27T01:01:13.275274+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.01
-      },
-      "screen_seconds": 4.01,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "DEFd_EQ",
       "venue": "DE",
@@ -7691,6 +7673,25 @@
       },
       "screen_seconds": 4.063,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "DTD2d_EQ",
+      "venue": "DE",
+      "yahoo": "DTD2.DE",
+      "isin": "DE0001262152",
+      "name": "DTD2",
+      "seconds": 1.769,
+      "outcome": "miss",
+      "at": "2026-11-27T01:07:50.330651+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.846
+      },
+      "screen_seconds": 0.846,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -88665,43 +88666,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T01:07:20.587852+00:00"
+    },
+    {
+      "t212_ticker": "DTD2d_EQ",
+      "yahoo": "DTD2.DE",
+      "name": "DTD2",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T01:07:50.330651+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DSZd_EQ",
+    "t212_ticker": "DTD2d_EQ",
     "venue": "DE",
-    "yahoo": "DSZ.DE",
-    "isin": "MHY2066G1044",
-    "name": "DSZ",
-    "seconds": 5.31,
+    "yahoo": "DTD2.DE",
+    "isin": "DE0001262152",
+    "name": "DTD2",
+    "seconds": 1.769,
     "outcome": "miss",
-    "at": "2026-11-27T01:07:42.377164+00:00",
+    "at": "2026-11-27T01:07:50.330651+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.063
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.846
     },
-    "screen_seconds": 4.063,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.846,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "DTD2d_EQ"
+    }
   },
-  "updated_at": "2026-11-27T01:07:42.377164+00:00",
+  "updated_at": "2026-11-27T01:07:50.330651+00:00",
   "totals": {
-    "screened": 6928,
+    "screened": 6929,
     "signals": {
-      "buy": 1947,
+      "buy": 1948,
       "avoid": 1525,
       "hold": 1417,
       "insufficient_data": 1999,
       "strong_buy": 40
     },
-    "signals_n": 6928,
-    "screen_seconds_sum": 86432.42500000044,
-    "screen_seconds_n": 6928,
+    "signals_n": 6929,
+    "screen_seconds_sum": 86433.27100000044,
+    "screen_seconds_n": 6929,
     "outcomes": {
-      "miss": 3113,
+      "miss": 3114,
       "saved": 3815
     }
   },
