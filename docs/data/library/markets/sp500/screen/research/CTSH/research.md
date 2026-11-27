@@ -1,6 +1,6 @@
 # Cognizant Technology Solutions Corporation (CTSH) — Research memo
 
-_Version 18 · Updated 2026-11-27T17:56:26.767801+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-27T21:40:11.498702+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: The 27 Nov batch adds only Pzena/Q2-rebound commentary; Q3 ~$5.66bn revenue and $925m quarter FCF still anchor Strong Buy—unconfirmed Capital IQ talks and mixed sell-side leave research confirming without added conviction.
+Rationale: Routine insider-sale headline only; Q3 ~$5.66bn revenue and $925m quarter FCF still support Strong Buy—unconfirmed Capital IQ talks and mixed sell-side leave research confirming without added conviction.
 RiskTags: regulatory, competitive, cyclical, customer_concentration, litigation, accounting, leverage
 
 ## Weekly updates
@@ -96,5 +96,10 @@ Unconfirmed Capital IQ talks and mixed sell-side themes are otherwise unchanged.
 
 ### 2026-11-27T17:56:26.767801+00:00
 The 27 Nov 17:56 batch adds two duplicate Yahoo headlines (Q2 rebound, Pzena Q3 commentary); no new company filings in the pack.  
+Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged, last EDGAR 29 Oct 2026.  
+Unconfirmed Capital IQ talks and mixed sell-side themes are otherwise unchanged.
+
+### 2026-11-27T21:40:11.498702+00:00
+The 27 Nov 21:39 batch adds one headline on CEO Singisetti selling 8,333 shares under a plan—routine governance flow, not new fundamentals.  
 Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged, last EDGAR 29 Oct 2026.  
 Unconfirmed Capital IQ talks and mixed sell-side themes are otherwise unchanged.

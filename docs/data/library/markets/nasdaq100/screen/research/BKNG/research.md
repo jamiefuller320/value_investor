@@ -1,6 +1,6 @@
 # Booking Holdings Inc. (BKNG) — Research memo
 
-_Version 17 · Updated 2026-11-27T17:53:03.457475+00:00 · Mode: structured_verdict_update_
+_Version 18 · Updated 2026-11-27T21:37:00.980530+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Yahoo $210 price piece and options stubs add noise only; re-fetched EDGAR (22 bodies) and unchanged buy screen still confirm accumulate amid regulatory, cyclical, competitive and leverage risks.
+Rationale: Empty 21:36 UTC news batch; EDGAR re-fetch still shows 23 filings and 22 bodies—unchanged buy screen confirms accumulate amid regulatory, cyclical, competitive and leverage risks.
 RiskTags: regulatory, cyclical, competitive, leverage
 
 ## Weekly updates
@@ -93,3 +93,8 @@ No material change.
 Since the 03:50 UTC refresh, the 17:52 batch adds a Yahoo $210 price-target piece and two options-chart stubs; no new fundamental disclosures.
 EDGAR re-fetch at 17:52 UTC still shows 23 filings and 22 bodies with no new extracts.
 Filing-backed fundamentals and the buy screen are unchanged.
+
+### 2026-11-27T21:37:00.980530+00:00
+No articles in the 21:36 UTC news batch since the 17:53 UTC pull.  
+EDGAR re-fetch at 21:36 UTC still shows 23 filings and 22 bodies with no new extracts.  
+No material change.

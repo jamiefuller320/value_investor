@@ -1,6 +1,6 @@
 # Beach Energy Limited (BPT.AX) — Research memo
 
-_Version 16 · Updated 2026-11-27T18:15:29.616140+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-27T22:10:16.525443+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -86,5 +86,10 @@ No material change versus the prior structured verdict update.
 
 ### 2026-11-27T18:15:29.616140+00:00
 No indexed news in the 27 Nov evening batch since the morning refresh; Santos–Taroom commentary remains the latest coverage in sources.  
+Refreshed Yahoo FY26 figures are unchanged (FCF $155.5m vs cash dividends $159.6m); quarterly cash flow is still empty and the adjusted screen signal remains hold.  
+No material change versus the prior structured verdict update.
+
+### 2026-11-27T22:10:16.525443+00:00
+No indexed news in the 27 Nov 22:09 batch since the evening refresh; Santos–Taroom commentary remains the latest coverage in sources.  
 Refreshed Yahoo FY26 figures are unchanged (FCF $155.5m vs cash dividends $159.6m); quarterly cash flow is still empty and the adjusted screen signal remains hold.  
 No material change versus the prior structured verdict update.

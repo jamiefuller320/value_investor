@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 17 · Updated 2026-11-27T18:07:55.269175+00:00 · Mode: structured_verdict_update_
+_Version 18 · Updated 2026-11-27T21:54:04.740019+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.69
-Rationale: Friday’s memory-chip rebound is sentiment-only; ~$59bn TTM FCF still supports the screen, but DRAM-pricing cuts, Huawei HBM rivalry and zero model passes keep accumulate versus strong buy.
+Rationale: TrendForce’s early-2028 price-decline view clashes with the CEO’s scarcity thesis; ~$59bn TTM FCF still supports the screen, but zero model passes and cyclical pricing risk keep accumulate versus strong buy.
 RiskTags: cyclical, competitive, leverage, customer_concentration
 
 ## Weekly updates
@@ -89,5 +89,10 @@ Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passe
 
 ### 2026-11-27T18:07:55.269175+00:00
 On 27 Nov, MU and peer memory names bounced with the chip rally (roughly 3–6%) after mid-week selloffs; coverage mixes Huawei HBM rivalry, GF Securities DRAM price cuts, China cloud order pullbacks and memory-pricing caution with bullish rebound pieces.  
+No new filings or sourced financials in this batch.  
+Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed; filing-based risks unchanged.
+
+### 2026-11-27T21:54:04.740019+00:00
+Evening headlines add TrendForce versus CEO Mehrotra on 2028 memory pricing, MU up ~4% with the sector rebound, and Yahoo’s $32bn take-or-pay commitment narrative; Jim Cramer bullish colour only.  
 No new filings or sourced financials in this batch.  
 Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed; filing-based risks unchanged.

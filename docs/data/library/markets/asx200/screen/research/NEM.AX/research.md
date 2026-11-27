@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM.AX) — Research memo
 
-_Version 10 · Updated 2026-11-27T18:08:51.354634+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-11-27T21:55:11.621387+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.67
-Rationale: New buy screen but zero model passes; steady ~$7.3bn filing and ~$10.1bn TTM FCF in files support cash narrative, while cyclical gold softness in press keeps research neutral on the buy case.
+Confidence: 0.68
+Rationale: Buy screen and zero model passes are unchanged; ~$7.3bn filing and ~$10.1bn TTM FCF in files still support cash, while a rising-cost/floor headline is cyclical colour only—research neutral on buy timing.
 RiskTags: cyclical, key_person, regulatory, other
 
 ## Weekly updates
@@ -58,3 +58,8 @@ Filings index refreshed at 04:06 with 20 items; no new company-specific disclosu
 Screen signal moves to **buy** (new); zero model passes and ~$7.3bn filing / ~$10.1bn TTM FCF are unchanged in the snapshot.  
 One yfinance item on dividend-paying gold miners (cash vs past payout cuts); not NEM-specific.  
 Filings index refreshed 18:08 with 20 items; no new company disclosure in the batch.
+
+### 2026-11-27T21:55:11.621387+00:00
+Since the 18:08 refresh, yfinance adds a NEM cost/floor headline; the supplied summary is not operational.  
+Buy screen and zero model passes are unchanged; filing ~$7.3bn and TTM ~$10.1bn FCF remain steady in sources.  
+Filings index refreshed at 21:54 with 20 items; no new company disclosure in the batch.

@@ -1,6 +1,6 @@
 # NIKE, Inc. (NKE) — Research memo
 
-_Version 16 · Updated 2026-11-27T18:09:10.585517+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-27T21:55:28.091780+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.66
-Rationale: Commentary cites tougher footwear competition and a slow CEO-led reset; with no new filings, Aug-2026 10-Q revenue and Q1 cash-flow weakness still weaken the screen buy.
+Rationale: Empty evening news batch; with no new filings, Aug-2026 10-Q revenue and Q1 cash-flow weakness plus prior competition, tariff and FY27 reset themes still weaken the screen buy.
 RiskTags: cyclical, competitive, regulatory, customer_concentration
 
 ## Weekly updates
@@ -87,4 +87,9 @@ Q2 FY27 on 17 Dec remains outside the supplied sources.
 ### 2026-11-27T18:09:10.585517+00:00
 Since the 04:06 refresh, the batch is commentary only: JPMorgan flags tougher athletic-footwear competition for Adidas/Puma peers; a piece stresses CEO Hill’s candid, multi-year turnaround framing—no new SEC filings.  
 Aug-2026 10-Q revenue decline, weak Q1 cash flow, and prior Vietnam tariff and FY27 reset themes are unchanged in the file set.  
+Q2 FY27 on 17 Dec remains outside the supplied sources.
+
+### 2026-11-27T21:55:28.091780+00:00
+News batch since the 18:09 refresh is empty; no new company filings or headlines.  
+Aug-2026 10-Q revenue decline, weak Q1 cash flow, and prior Vietnam tariff, competition and FY27 reset themes are unchanged in the file set.  
 Q2 FY27 on 17 Dec remains outside the supplied sources.

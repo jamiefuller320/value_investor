@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 29 · Updated 2026-11-27T17:55:07.252962+00:00 · Mode: structured_verdict_update_
+_Version 30 · Updated 2026-11-27T21:39:07.710198+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.69
-Rationale: 27 Nov pre-earnings coverage flags licence weakness, Erste downgrade and buyback leverage, yet filing-backed FY26 FCF (~$14.4bn) still mildly confirms Strong Buy before 2 Dec results.
+Rationale: Since the 17:55 refresh only sector-wide futures commentary appears; licence weakness and buyback leverage still temper Strong Buy, while filing-backed FY26 FCF (~$14.4bn) mildly confirms ahead of 2 Dec results.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -148,3 +148,8 @@ No material change.
 The 27 Nov batch adds dense pre-earnings commentary ahead of 2 Dec results: IBD/Yahoo cite selling pressure, licence-revenue weakness and debt-funded buybacks; Erste Group downgrade is noted in coverage.  
 AI per-answer pricing and cheapness-versus-earnings pieces mix with a modest Friday rebound above ~$200; no new primary filings.  
 Filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged; leverage and competitive AI themes are unchanged.
+
+### 2026-11-27T21:39:07.710198+00:00
+The 21:38 UTC batch adds only a sector-wide IBD market-futures wrap; no CRM-specific headlines.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
+Leverage and competitive pre-earnings themes are unchanged ahead of 2 Dec results.

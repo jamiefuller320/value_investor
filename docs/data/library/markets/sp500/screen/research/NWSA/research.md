@@ -1,6 +1,6 @@
 # News Corporation (NWSA) — Research memo
 
-_Version 6 · Updated 2026-11-27T18:09:36.209660+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-27T21:55:47.125836+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: A routine 27 Nov repurchase 8-K and buyback headlines lightly support capital return; Q1 beat still mildly confirms the buy screen while zero families pass and negative Sep-quarter FCF cap conviction.
+Rationale: Empty evening news batch; Q1 FY2027 beat and routine buyback filings mildly confirm the buy screen while zero families pass and negative Sep-quarter FCF cap conviction.
 RiskTags: competitive, governance, litigation, cyclical
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Screen buy signal unchanged; research overlay still accumulate versus raw buy.
 Two press items cite the $1bn programme and a 27 Nov 8-K; the filing body is routine ASX repurchase disclosure only (Item 8.01), with no new operating detail in the batch.  
 Q1 FY2027 themes unchanged: earnings beat, negative Sep-quarter FCF ($89m), zero families passing.  
 Screen buy and accumulate overlay unchanged.
+
+### 2026-11-27T21:55:47.125836+00:00
+News batch since the 27 Nov afternoon refresh is empty; no SEC filings after the routine 27 Nov repurchase 8-K.  
+Q1 FY2027 themes unchanged: earnings beat, negative Sep-quarter FCF ($89m), zero quantitative families passing.  
+Screen buy signal and accumulate research overlay unchanged.

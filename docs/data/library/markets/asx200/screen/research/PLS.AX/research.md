@@ -1,6 +1,6 @@
 # PLS Group Limited (PLS.AX) — Research memo
 
-_Version 16 · Updated 2026-11-27T18:11:37.034888+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-27T22:04:03.414912+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.62
-Rationale: Research still weakens the buy: press-only short interest, registry stakes and sector rally add no new filings; cyclical lithium, leverage and offtake risks persist; screen TTM FCF unverified.
+Rationale: Empty evening news batch; no new filings since 28 Oct Sep-quarter and 24 Nov AGM; cyclical lithium, leverage and offtake risks still weaken the screen buy; TTM FCF unverified.
 RiskTags: cyclical, leverage, customer_concentration, competitive, liquidity
 
 ## Weekly updates
@@ -87,3 +87,8 @@ Screen stays **buy**; Yahoo quarterly cashflow is still empty, so TTM FCF is unv
 Four incremental headlines since 04:09 UTC cover short-interest ranking, JPMorgan and Northern Trust voting notices, and resources-rally commentary—no verified operating disclosure in the pack.  
 Filing index unchanged on re-fetch at 18:11 UTC; latest operating materials remain the 28 Oct FY27 Sep-quarter pack plus 24 Nov AGM.  
 Screen stays **buy**; Yahoo quarterly cashflow is still empty, so TTM FCF is unverified.
+
+### 2026-11-27T22:04:03.414912+00:00
+No articles in the incremental news batch since the 18:11 UTC refresh; filing index unchanged on re-fetch at 22:03 UTC.  
+Latest operating disclosure remains the 28 Oct FY27 Sep-quarter pack plus 24 Nov AGM; no new ASX operating filings.  
+Screen stays buy; Yahoo quarterly cashflow is still empty, so TTM FCF is unverified.
