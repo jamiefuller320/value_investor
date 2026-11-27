@@ -1,38 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-27T02:38:18.709996+00:00",
+  "generated_at": "2026-11-27T07:52:56.494624+00:00",
   "observe_only": true,
   "open_ideas": 697,
   "with_trigger": 38,
   "met": [
-    {
-      "id": "N220",
-      "title": "Archive pack incomplete-unit retry / leftover queue",
-      "status": "open",
-      "first_met_at": "2026-11-25T07:53:54.864396+00:00",
-      "conditions": [
-        {
-          "condition": {
-            "file": "docs/data/universe_filing_archive_pack_run.json",
-            "path": "unit_status_counts.no_bodies",
-            "op": ">=",
-            "value": 2
-          },
-          "state": "met",
-          "actual": 12
-        },
-        {
-          "condition": {
-            "file": "docs/data/universe_filing_archive_status.json",
-            "path": "capacity_isolation.isolation_ok",
-            "op": "==",
-            "value": true
-          },
-          "state": "met",
-          "actual": true
-        }
-      ]
-    },
     {
       "id": "N259",
       "title": "Exit challenger scored on capital-days return, with trend-led exits and no fixed time cap",
@@ -102,7 +74,19 @@
       ]
     }
   ],
-  "unknown": [],
+  "unknown": [
+    {
+      "id": "N220",
+      "title": "Archive pack incomplete-unit retry / leftover queue",
+      "status": "open",
+      "unknown_since": "2026-11-27T07:50:00.589635+00:00",
+      "invalid": false,
+      "reasons": [
+        "unit_status_counts.no_bodies not in docs/data/universe_filing_archive_pack_run.json",
+        "capacity_isolation.isolation_ok not in docs/data/universe_filing_archive_status.json"
+      ]
+    }
+  ],
   "unmet": [
     "N13",
     "N135",
