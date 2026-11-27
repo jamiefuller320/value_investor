@@ -15698,6 +15698,24 @@ def test_fetch_filings_ir_allowlist_ftse_mib_azm_mi_builtins_eng_20261107_02(
     assert "AZM.MI" in _BUILTIN_IR_URLS
 
 
+def test_fetch_filings_ir_allowlist_ftse_mib_tit_mi_builtins_eng_20261127_01(
+    tmp_path: Path,
+):
+    """eng-20261127-01: TIT.MI buy_tier_no_key_bodies — gruppotim.it FY2025 annual + H1-2025 PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("TIT.MI", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert {row["period"] for row in rows} == {"annual", "interim"}
+    annual = next(row for row in rows if row["period"] == "annual")
+    interim = next(row for row in rows if row["period"] == "interim")
+    assert "Annual%20report%202025.pdf" in annual["url"]
+    assert "Semestrale" in interim["url"]
+    assert "TIT.MI" in _BUILTIN_IR_URLS
+
+
 def test_parked_source_hunter_azm_mi_ftse_mib_has_fetchable_ir():
     """eng-20261107-02: AZM.MI eMarket STORAGE FY2025 relazione + H1-2025 results PDFs fetch and validate."""
     assert "AZM.MI" not in PARKED_SOURCE_HUNTER_SKIP
@@ -15718,6 +15736,28 @@ def test_parked_source_hunter_azm_mi_ftse_mib_has_fetchable_ir():
     assert len(body_i) >= 35000
     assert "Azimut Holding" in body_i
     valid_i, reason_i = _validate_ir_allowlist_body_content(interim[0], body_i, ticker="AZM.MI")
+    assert valid_i, reason_i
+
+
+def test_parked_source_hunter_tit_mi_ftse_mib_has_fetchable_ir():
+    """eng-20261127-01: TIT.MI gruppotim.it FY2025 annual + H1-2025 semestrale PDFs fetch and validate."""
+    assert "TIT.MI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("TIT.MI")
+    assert len(rows) == 2
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) == 1
+    assert len(interim) == 1
+    body = fetch_filing_body(annual[0]["url"])
+    assert body
+    assert len(body) >= 50000
+    assert "TIM" in body.upper()
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="TIT.MI")
+    assert valid, reason
+    body_i = fetch_filing_body(interim[0]["url"])
+    assert body_i
+    assert len(body_i) >= 35000
+    valid_i, reason_i = _validate_ir_allowlist_body_content(interim[0], body_i, ticker="TIT.MI")
     assert valid_i, reason_i
 
 
