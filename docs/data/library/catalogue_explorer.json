@@ -7149,28 +7149,10 @@
     "IALD_EQ",
     "IBID_EQ",
     "IBUD_EQ",
-    "ICQD_EQ"
+    "ICQD_EQ",
+    "IDID_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HGEAd_EQ",
-      "venue": "DE",
-      "yahoo": "HGEA.DE",
-      "isin": "DE000A3CMGN3",
-      "name": "HGEA",
-      "seconds": 2.551,
-      "outcome": "miss",
-      "at": "2026-11-27T22:44:13.609419+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.375
-      },
-      "screen_seconds": 1.375,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "HGNCd_EQ",
       "venue": "DE",
@@ -7910,6 +7892,25 @@
         "seconds": 86.023
       },
       "screen_seconds": 86.023,
+      "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "IDId_EQ",
+      "venue": "DE",
+      "yahoo": "IDI.DE",
+      "isin": "US45867G1013",
+      "name": "IDI",
+      "seconds": 95.028,
+      "outcome": "saved",
+      "at": "2026-11-27T23:28:02.187059+00:00",
+      "rows": 2,
+      "screen": {
+        "signal": "insufficient_data",
+        "fits": false,
+        "data_quality_score": 0.0,
+        "seconds": 86.385
+      },
+      "screen_seconds": 86.385,
       "signal": "insufficient_data"
     }
   ],
@@ -90571,41 +90572,54 @@
     }
   ],
   "last": {
-    "t212_ticker": "ICQd_EQ",
+    "t212_ticker": "IDId_EQ",
     "venue": "DE",
-    "yahoo": "ICQ.DE",
-    "isin": "SE0001200015",
-    "name": "ICQ",
-    "seconds": 87.494,
-    "outcome": "miss",
-    "at": "2026-11-27T23:26:21.023209+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "IDI.DE",
+    "isin": "US45867G1013",
+    "name": "IDI",
+    "seconds": 95.028,
+    "outcome": "saved",
+    "at": "2026-11-27T23:28:02.187059+00:00",
+    "rows": 2,
+    "filings": [
+      {
+        "title": null,
+        "date": "2025-12-31",
+        "url": "https://filings.xbrl.org/96950022J37K8UHSJH76/2025-12-31/ESEF/FR/0/idi-2025-12-31-1-fr/reports/idi-2025-12-31-1-fr.xhtml",
+        "has_body": true
+      },
+      {
+        "title": null,
+        "date": "2024-12-31",
+        "url": "https://filings.xbrl.org/96950022J37K8UHSJH76/2024-12-31/ESEF/FR/0/idi-2024-12-31-0-fr/reports/idi-2024-12-31-fr.xhtml",
+        "has_body": true
+      }
+    ],
     "screen": {
       "signal": "insufficient_data",
       "fits": false,
       "data_quality_score": 0.0,
-      "seconds": 86.023
+      "seconds": 86.385
     },
-    "screen_seconds": 86.023,
+    "screen_seconds": 86.385,
     "signal": "insufficient_data"
   },
-  "updated_at": "2026-11-27T23:26:21.023209+00:00",
+  "updated_at": "2026-11-27T23:28:02.187059+00:00",
   "totals": {
-    "screened": 7148,
+    "screened": 7149,
     "signals": {
       "buy": 1980,
       "avoid": 1541,
       "hold": 1444,
-      "insufficient_data": 2143,
+      "insufficient_data": 2144,
       "strong_buy": 40
     },
-    "signals_n": 7148,
-    "screen_seconds_sum": 93777.18700000041,
-    "screen_seconds_n": 7148,
+    "signals_n": 7149,
+    "screen_seconds_sum": 93863.57200000041,
+    "screen_seconds_n": 7149,
     "outcomes": {
       "miss": 3333,
-      "saved": 3815
+      "saved": 3816
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
