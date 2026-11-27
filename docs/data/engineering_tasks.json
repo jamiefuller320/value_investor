@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-11-27T01:06:06.324324+00:00",
+  "compiled_at": "2026-11-27T01:11:36.499851+00:00",
   "run_at": null,
   "task_count": 317,
   "tasks": [
@@ -4716,6 +4716,54 @@
       "merged_at": "2026-09-16T16:11:25.884730+00:00"
     },
     {
+      "id": "eng-20261110-09",
+      "area": "scoring",
+      "title": "Workflow fix: library ingest maintenance failure",
+      "summary": "GitHub workflow library-ingest-maintenance.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/45918463751",
+      "priority": "high",
+      "priority_score": 90.0,
+      "source": "workflow_failure",
+      "evidence": {
+        "workflow": "library-ingest-maintenance.yml",
+        "run_id": "45918463751",
+        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/45918463751",
+        "signature": null
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        ".github/workflows/library-ingest-maintenance.yml",
+        "src/value_investor/scoring/",
+        "src/value_investor/summary.py",
+        "src/value_investor/library_screen.py",
+        "src/value_investor/library_ingest_dispatch.py",
+        "src/value_investor/library_ingest_escalation.py",
+        "src/value_investor/library_ingest_loop.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py",
+        "tests/test_workflow_failure_tasks.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20261110-09.md",
+      "branch_name": "cursor/eng-20261110-09-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1345",
+      "pr_number": 1345,
+      "completed_at": "2026-11-10T07:41:13.741591+00:00",
+      "merged_at": "2026-11-10T07:59:43.866599+00:00",
+      "no_diff_count": 0
+    },
+    {
       "id": "eng-20261112-02",
       "area": "scoring",
       "title": "Workflow fix: library ingest sprint 2 failure",
@@ -4851,66 +4899,6 @@
       "cancelled_reason": "workflow automation-orchestrator.yml recovered (success run 44702401659 after failure 44690653873)",
       "cancelled_at": "2026-11-20T09:55:49.843226+00:00",
       "cancelled_policy": "workflow_recovered"
-    },
-    {
-      "id": "eng-20261110-09",
-      "area": "scoring",
-      "title": "Workflow fix: library ingest maintenance failure",
-      "summary": "GitHub workflow library-ingest-maintenance.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/42775794752",
-      "priority": "high",
-      "priority_score": 90.0,
-      "source": "workflow_failure",
-      "evidence": {
-        "workflow": "library-ingest-maintenance.yml",
-        "run_id": "42775794752",
-        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/42775794752",
-        "signature": null,
-        "verify_status": "passed",
-        "verify_chain_root_id": "eng-20261110-09",
-        "verified_at": "2026-11-10T07:59:43.861857+00:00",
-        "verify_pytest": {
-          "returncode": 0,
-          "paths": [
-            "tests/test_pipeline.py",
-            "tests/test_summary.py",
-            "tests/test_workflow_failure_tasks.py"
-          ],
-          "output_tail": "........................................................................ [ 21%]\n........................................................................ [ 43%]\n........................................................................ [ 65%]\n........................................................................ [ 86%]\n............................................                             [100%]\n=============================== warnings summary ===============================\ntests/test_pipeline.py::test_enrich_universe_with_filing_metrics_extracts_adjusted_eps_growth\ntests/test_pipeline.py::test_enrich_universe_with_filing_metrics_extracts_basic_eps_growth\ntests/test_pipeline.py::test_enrich_universe_with_filing_metrics_extracts_diluted_eps_growth\ntests/test_pipeline.py::test_fcf_overlay_models_exclude_divergent_screen_ttm\ntests/test_pipeline.py::test_suppress_fcf_yield_passes_skips_when_company_fcf_is_canonical\n  /home/runner/work/value_investor/value_investor/src/value_investor/scoring/fcf.py:3761: Pandas4Warning: Setting a value on a DataFrame via .at with a key that does not exist in the index is deprecated and will raise a KeyError in a future version. Use .loc instead.\n    out.at[index, \"earnings_growth\"] = filing_growth\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n332 passed, 5 warnings in 52.99s"
-        }
-      },
-      "acceptance_criteria": [
-        "Export or overlay behaviour is covered by a unit test",
-        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
-        "No edits under blocked_paths"
-      ],
-      "allowed_paths": [
-        ".github/workflows/library-ingest-maintenance.yml",
-        "src/value_investor/scoring/",
-        "src/value_investor/summary.py",
-        "src/value_investor/library_screen.py",
-        "src/value_investor/library_ingest_dispatch.py",
-        "src/value_investor/library_ingest_escalation.py",
-        "src/value_investor/library_ingest_loop.py",
-        "tests/test_pipeline.py",
-        "tests/test_summary.py",
-        "tests/test_workflow_failure_tasks.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "merged",
-      "result_path": "output/engineering_result_eng-20261110-09.md",
-      "branch_name": "cursor/eng-20261110-09-1de3",
-      "no_diff_count": 0,
-      "completed_at": "2026-11-10T07:41:13.741591+00:00",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1345",
-      "pr_number": 1345,
-      "merged_at": "2026-11-10T07:59:43.866599+00:00"
     },
     {
       "id": "eng-20261004-06",
@@ -20844,5 +20832,6 @@
     "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
   },
-  "library_market_id": "sti"
+  "library_market_id": "sti",
+  "workflow_failure_compiled": true
 }
