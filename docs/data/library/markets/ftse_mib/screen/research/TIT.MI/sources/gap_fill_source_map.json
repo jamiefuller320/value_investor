@@ -2,11 +2,11 @@
   "ticker": "TIT.MI",
   "company_name": "Telecom Italia S.p.A.",
   "market": "ftse_mib",
-  "built_at": "2026-11-27T13:50:07.619804+00:00",
+  "built_at": "2026-11-27T16:50:36.089642+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
-      "filings_bodies": false,
+      "filings_bodies": true,
       "yahoo_financials": true,
       "yahoo_quarterly_cashflow": true,
       "yahoo_quarterly_income": true,
@@ -17,26 +17,24 @@
       "macro_context": true,
       "alternate_news": true
     },
-    "thin": [
-      "filings_bodies"
-    ],
-    "filings_body_files": 0,
-    "filings_indexed_bodies": 0,
+    "thin": [],
+    "filings_body_files": 2,
+    "filings_indexed_bodies": 2,
     "filings_summary": {
-      "total": 0,
-      "annual": 0,
-      "interim": 0,
+      "total": 2,
+      "annual": 1,
+      "interim": 1,
       "trading_update": 0,
       "other": 0,
-      "with_body": 0,
+      "with_body": 2,
       "period_coverage": {
         "annual": {
-          "total": 0,
-          "with_body": 0
+          "total": 1,
+          "with_body": 1
         },
         "interim": {
-          "total": 0,
-          "with_body": 0
+          "total": 1,
+          "with_body": 1
         },
         "trading_update": {
           "total": 0,
@@ -50,12 +48,12 @@
     },
     "period_coverage": {
       "annual": {
-        "total": 0,
-        "with_body": 0
+        "total": 1,
+        "with_body": 1
       },
       "interim": {
-        "total": 0,
-        "with_body": 0
+        "total": 1,
+        "with_body": 1
       },
       "trading_update": {
         "total": 0,
@@ -66,7 +64,7 @@
         "with_body": 0
       }
     },
-    "news_article_count": 64,
+    "news_article_count": 65,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
@@ -83,22 +81,22 @@
   "body_refetch": {
     "attempted": 0,
     "fetched": 0,
-    "with_body_before": 0,
-    "with_body_after": 0,
+    "with_body_before": 2,
+    "with_body_after": 2,
     "note": "refetch_missing_filing_bodies"
   },
   "ch_refetch": {
     "attempted": 0,
     "fetched": 0,
-    "with_body_before": 0,
-    "with_body_after": 0,
+    "with_body_before": 2,
+    "with_body_after": 2,
     "note": "no missing CH bodies"
   },
   "investegate_refetch": {
     "attempted": 0,
     "fetched": 0,
-    "with_body_before": 0,
-    "with_body_after": 0,
+    "with_body_before": 2,
+    "with_body_after": 2,
     "google_news_rejected": 0,
     "misattributed_pruned": 0,
     "note": "no missing Investegate/LSE bodies"
@@ -106,16 +104,46 @@
   "ticker_rns_refetch": {
     "attempted": 0,
     "fetched": 0,
-    "with_body_before": 0,
-    "with_body_after": 0,
+    "with_body_before": 2,
+    "with_body_after": 2,
     "pruned": 0,
     "note": "no missing ticker_rns_api bodies"
   },
-  "ir_refetch": {},
+  "ir_refetch": {
+    "attempted": 0,
+    "fetched": 0,
+    "failed": 0,
+    "with_body_before": 2,
+    "with_body_after": 2,
+    "investegate_fallbacks": 0,
+    "skipped_unfetchable": 0,
+    "retry_cleared": 0,
+    "deadline_hit": false,
+    "merge": {
+      "added": 0,
+      "migrated_urls": 0,
+      "url_deduped": 0,
+      "total_allowlist": 2,
+      "note": "merge_ir_allowlist_filings"
+    },
+    "shared_body_propagated": 0,
+    "ir_metadata_reconciled": 0,
+    "note": "refetch_ir_presentation_sources",
+    "mandatory": true,
+    "allowlist_count": 2,
+    "ir_presentation_metrics": {
+      "bridge_count": 0,
+      "segment_split_count": 0,
+      "lease_maturity_count": 0,
+      "dividend_policy_count": 0,
+      "management_fcf_definition_count": 0,
+      "mandatory": true
+    }
+  },
   "screen_run_manifest": {
     "ticker": "TIT.MI",
     "run_at": "2026-11-25T10:27:37.796545+00:00",
-    "attached_at": "2026-11-27T13:50:06.652741+00:00",
+    "attached_at": "2026-11-27T16:50:35.045398+00:00",
     "history_run_path": "docs/data/history/run_20261125_102737.json.gz",
     "history_models_path": "docs/data/history/models_20261125_102737.json.gz",
     "universe_meta": {
@@ -155,7 +183,7 @@
     "bridge_count": 0,
     "segment_split_count": 0,
     "lease_maturity_count": 0,
-    "mandatory": false,
+    "mandatory": true,
     "path": "docs/data/library/markets/ftse_mib/screen/research/TIT.MI/sources/ir_presentation_metrics.json"
   },
   "filing_interim_financials": {
@@ -172,32 +200,7 @@
   },
   "alternate_news_added": 0,
   "alternate_news_path": "docs/data/library/markets/ftse_mib/screen/research/TIT.MI/sources/alternate_news.json",
-  "planned_alternate_sources": [
-    {
-      "id": "companies_house_accounts",
-      "label": "Companies House filed accounts / annual report PDF",
-      "why": "RNS body extracts are often thin; filed PDF/iXBRL accounts hold consolidated statements plus pension, borrowings/covenant, cash-flow, segment notes, contract assets, and joint-venture disclosures",
-      "score": "3"
-    },
-    {
-      "id": "company_ir_presentation",
-      "label": "Company IR / results presentation PDF",
-      "why": "Bridge tables for FCF, working capital, and segment margin often sit outside Yahoo",
-      "score": "3"
-    },
-    {
-      "id": "investegate_rns_full",
-      "label": "Full Investegate / RNS HTML body re-pull",
-      "why": "Index may list filings without downloadable bodies",
-      "score": "3"
-    },
-    {
-      "id": "exchange_filings_full",
-      "label": "Exchange filing full-text re-pull",
-      "why": "Announcement index without body text",
-      "score": "3"
-    }
-  ],
+  "planned_alternate_sources": [],
   "evidence_ladder": [
     "filings_bodies",
     "filings_index",
