@@ -7048,28 +7048,10 @@
     "G7PAD_EQ",
     "G9YD_EQ",
     "GAPD_EQ",
-    "GAZD_EQ"
+    "GAZD_EQ",
+    "GBFD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FLId_EQ",
-      "venue": "DE",
-      "yahoo": "FLI.DE",
-      "isin": "AU000000FLT9",
-      "name": "FLI",
-      "seconds": 86.113,
-      "outcome": "miss",
-      "at": "2026-11-27T02:27:31.146253+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.933
-      },
-      "screen_seconds": 84.933,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "FLM1d_EQ",
       "venue": "DE",
@@ -7810,6 +7792,25 @@
       },
       "screen_seconds": 4.517,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "GBFd_EQ",
+      "venue": "DE",
+      "yahoo": "GBF.DE",
+      "isin": "DE0005909006",
+      "name": "GBF",
+      "seconds": 2.438,
+      "outcome": "miss",
+      "at": "2026-11-27T22:32:18.840282+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.296
+      },
+      "screen_seconds": 1.296,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89852,43 +89853,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T22:31:59.092285+00:00"
+    },
+    {
+      "t212_ticker": "GBFd_EQ",
+      "yahoo": "GBF.DE",
+      "name": "GBF",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T22:32:18.840282+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "GAZd_EQ",
+    "t212_ticker": "GBFd_EQ",
     "venue": "DE",
-    "yahoo": "GAZ.DE",
-    "isin": "US3682872078",
-    "name": "OGZD",
-    "seconds": 5.8,
+    "yahoo": "GBF.DE",
+    "isin": "DE0005909006",
+    "name": "GBF",
+    "seconds": 2.438,
     "outcome": "miss",
-    "at": "2026-11-27T22:32:10.802305+00:00",
+    "at": "2026-11-27T22:32:18.840282+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.517
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.296
     },
-    "screen_seconds": 4.517,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.296,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "GBFd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T22:32:10.802305+00:00",
+  "updated_at": "2026-11-27T22:32:18.840282+00:00",
   "totals": {
-    "screened": 7047,
+    "screened": 7048,
     "signals": {
-      "buy": 1965,
+      "buy": 1966,
       "avoid": 1530,
       "hold": 1433,
       "insufficient_data": 2079,
       "strong_buy": 40
     },
-    "signals_n": 7047,
-    "screen_seconds_sum": 91252.80600000042,
-    "screen_seconds_n": 7047,
+    "signals_n": 7048,
+    "screen_seconds_sum": 91254.10200000042,
+    "screen_seconds_n": 7048,
     "outcomes": {
-      "miss": 3232,
+      "miss": 3233,
       "saved": 3815
     }
   },
