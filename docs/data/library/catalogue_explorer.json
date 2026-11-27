@@ -7158,28 +7158,10 @@
     "IKLD_EQ",
     "ILM1D_EQ",
     "IM4D_EQ",
-    "IMRD_EQ"
+    "IMRD_EQ",
+    "INHD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HLEd_EQ",
-      "venue": "DE",
-      "yahoo": "HLE.DE",
-      "isin": "DE000A13SX22",
-      "name": "HLE",
-      "seconds": 3.108,
-      "outcome": "miss",
-      "at": "2026-11-27T22:52:31.120260+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 1.578
-      },
-      "screen_seconds": 1.578,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "HLGd1_EQ",
       "venue": "DE",
@@ -7920,6 +7902,25 @@
       },
       "screen_seconds": 83.69,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "INHd_EQ",
+      "venue": "DE",
+      "yahoo": "INH.DE",
+      "isin": "DE0006200108",
+      "name": "INH",
+      "seconds": 2.545,
+      "outcome": "miss",
+      "at": "2026-11-27T23:37:51.516440+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.913
+      },
+      "screen_seconds": 0.913,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -90585,43 +90586,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T23:34:36.816926+00:00"
+    },
+    {
+      "t212_ticker": "INHd_EQ",
+      "yahoo": "INH.DE",
+      "name": "INH",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T23:37:51.516440+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "IMRd_EQ",
+    "t212_ticker": "INHd_EQ",
     "venue": "DE",
-    "yahoo": "IMR.DE",
-    "isin": "CH0329023102",
-    "name": "IMR",
-    "seconds": 85.972,
+    "yahoo": "INH.DE",
+    "isin": "DE0006200108",
+    "name": "INH",
+    "seconds": 2.545,
     "outcome": "miss",
-    "at": "2026-11-27T23:37:43.162042+00:00",
+    "at": "2026-11-27T23:37:51.516440+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.9,
-      "seconds": 83.69
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.913
     },
-    "screen_seconds": 83.69,
-    "signal": "hold"
+    "screen_seconds": 0.913,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "INHd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T23:37:43.162042+00:00",
+  "updated_at": "2026-11-27T23:37:51.516440+00:00",
   "totals": {
-    "screened": 7157,
+    "screened": 7158,
     "signals": {
-      "buy": 1981,
+      "buy": 1982,
       "avoid": 1542,
       "hold": 1445,
       "insufficient_data": 2149,
       "strong_buy": 40
     },
-    "signals_n": 7157,
-    "screen_seconds_sum": 94379.40000000042,
-    "screen_seconds_n": 7157,
+    "signals_n": 7158,
+    "screen_seconds_sum": 94380.31300000042,
+    "screen_seconds_n": 7158,
     "outcomes": {
-      "miss": 3341,
+      "miss": 3342,
       "saved": 3816
     }
   },
