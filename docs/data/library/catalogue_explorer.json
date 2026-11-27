@@ -7173,28 +7173,10 @@
     "ISMD_EQ",
     "IU2D_EQ",
     "IUQD_EQ",
-    "IURD_EQ"
+    "IURD_EQ",
+    "IVUD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HUKId_EQ",
-      "venue": "DE",
-      "yahoo": "HUKI.DE",
-      "isin": "FI0009000459",
-      "name": "HUKI",
-      "seconds": 87.743,
-      "outcome": "miss",
-      "at": "2026-11-27T23:05:53.323928+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 86.208
-      },
-      "screen_seconds": 86.208,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "HXCKd_EQ",
       "venue": "DE",
@@ -7935,6 +7917,25 @@
       },
       "screen_seconds": 0.783,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "IVUd_EQ",
+      "venue": "DE",
+      "yahoo": "IVU.DE",
+      "isin": "DE0007448508",
+      "name": "IVU",
+      "seconds": 2.577,
+      "outcome": "miss",
+      "at": "2026-11-27T23:52:35.002005+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.024
+      },
+      "screen_seconds": 1.024,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -90608,43 +90609,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T23:37:51.516440+00:00"
+    },
+    {
+      "t212_ticker": "IVUd_EQ",
+      "yahoo": "IVU.DE",
+      "name": "IVU",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T23:52:35.002005+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "IURd_EQ",
+    "t212_ticker": "IVUd_EQ",
     "venue": "DE",
-    "yahoo": "IUR.DE",
-    "isin": "DE0006208408",
-    "name": "IUR",
-    "seconds": 1.979,
+    "yahoo": "IVU.DE",
+    "isin": "DE0007448508",
+    "name": "IVU",
+    "seconds": 2.577,
     "outcome": "miss",
-    "at": "2026-11-27T23:52:25.830835+00:00",
+    "at": "2026-11-27T23:52:35.002005+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 0.783
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.024
     },
-    "screen_seconds": 0.783,
-    "signal": "avoid"
+    "screen_seconds": 1.024,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "IVUd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T23:52:25.830835+00:00",
+  "updated_at": "2026-11-27T23:52:35.002005+00:00",
   "totals": {
-    "screened": 7172,
+    "screened": 7173,
     "signals": {
-      "buy": 1982,
+      "buy": 1983,
       "avoid": 1544,
       "hold": 1448,
       "insufficient_data": 2158,
       "strong_buy": 40
     },
-    "signals_n": 7172,
-    "screen_seconds_sum": 95155.5150000004,
-    "screen_seconds_n": 7172,
+    "signals_n": 7173,
+    "screen_seconds_sum": 95156.53900000041,
+    "screen_seconds_n": 7173,
     "outcomes": {
-      "miss": 3356,
+      "miss": 3357,
       "saved": 3816
     }
   },
