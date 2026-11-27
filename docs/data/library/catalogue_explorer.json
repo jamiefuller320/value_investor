@@ -7105,28 +7105,10 @@
     "HDDD_EQ",
     "HDP1D_EQ",
     "HE8D_EQ",
-    "HEG0D_EQ"
+    "HEG0D_EQ",
+    "HEND_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "GOUd_EQ",
-      "venue": "DE",
-      "yahoo": "GOU.DE",
-      "isin": "CA1520061021",
-      "name": "GOU",
-      "seconds": 5.911,
-      "outcome": "miss",
-      "at": "2026-11-27T22:35:17.240460+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.646
-      },
-      "screen_seconds": 4.646,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "GPBd_EQ",
       "venue": "DE",
@@ -7867,6 +7849,25 @@
       },
       "screen_seconds": 4.41,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HENd_EQ",
+      "venue": "DE",
+      "yahoo": "HEN.DE",
+      "isin": "DE0006048408",
+      "name": "HEN",
+      "seconds": 2.468,
+      "outcome": "miss",
+      "at": "2026-11-27T22:42:13.774261+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.945
+      },
+      "screen_seconds": 0.945,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89981,43 +89982,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T22:41:53.900508+00:00"
+    },
+    {
+      "t212_ticker": "HENd_EQ",
+      "yahoo": "HEN.DE",
+      "name": "HEN",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T22:42:13.774261+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HEG0d_EQ",
+    "t212_ticker": "HENd_EQ",
     "venue": "DE",
-    "yahoo": "HEG0.DE",
-    "isin": "CA3814951008",
-    "name": "HEG0",
-    "seconds": 5.565,
+    "yahoo": "HEN.DE",
+    "isin": "DE0006048408",
+    "name": "HEN",
+    "seconds": 2.468,
     "outcome": "miss",
-    "at": "2026-11-27T22:42:05.216481+00:00",
+    "at": "2026-11-27T22:42:13.774261+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.41
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.945
     },
-    "screen_seconds": 4.41,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.945,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HENd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T22:42:05.216481+00:00",
+  "updated_at": "2026-11-27T22:42:13.774261+00:00",
   "totals": {
-    "screened": 7104,
+    "screened": 7105,
     "signals": {
-      "buy": 1974,
+      "buy": 1975,
       "avoid": 1534,
       "hold": 1441,
       "insufficient_data": 2115,
       "strong_buy": 40
     },
-    "signals_n": 7104,
-    "screen_seconds_sum": 91439.25100000041,
-    "screen_seconds_n": 7104,
+    "signals_n": 7105,
+    "screen_seconds_sum": 91440.19600000042,
+    "screen_seconds_n": 7105,
     "outcomes": {
-      "miss": 3289,
+      "miss": 3290,
       "saved": 3815
     }
   },
