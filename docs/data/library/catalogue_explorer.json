@@ -6892,28 +6892,10 @@
     "DBAND_EQ",
     "DDLD_EQ",
     "DEFD_EQ",
-    "DEQD_EQ"
+    "DEQD_EQ",
+    "DEXD1_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "CSCd_EQ",
-      "venue": "DE",
-      "yahoo": "CSC.DE",
-      "isin": "US1344291091",
-      "name": "CSC",
-      "seconds": 2.997,
-      "outcome": "miss",
-      "at": "2026-11-26T15:23:32.907721+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.95,
-        "seconds": 1.004
-      },
-      "screen_seconds": 1.004,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "CSH1d_EQ",
       "venue": "DE",
@@ -7654,6 +7636,25 @@
       },
       "screen_seconds": 0.777,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "DEXd1_EQ",
+      "venue": "DE",
+      "yahoo": "DEX.DE",
+      "isin": "DE0005146807",
+      "name": "DEX",
+      "seconds": 2.009,
+      "outcome": "miss",
+      "at": "2026-11-27T01:01:38.136856+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.804
+      },
+      "screen_seconds": 0.804,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -88540,43 +88541,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T01:00:33.167769+00:00"
+    },
+    {
+      "t212_ticker": "DEXd1_EQ",
+      "yahoo": "DEX.DE",
+      "name": "DEX",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T01:01:38.136856+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DEQd_EQ",
+    "t212_ticker": "DEXd1_EQ",
     "venue": "DE",
-    "yahoo": "DEQ.DE",
-    "isin": "DE0007480204",
-    "name": "DEQ",
-    "seconds": 1.726,
+    "yahoo": "DEX.DE",
+    "isin": "DE0005146807",
+    "name": "DEX",
+    "seconds": 2.009,
     "outcome": "miss",
-    "at": "2026-11-27T01:01:29.390414+00:00",
+    "at": "2026-11-27T01:01:38.136856+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 1.0,
-      "seconds": 0.777
+      "seconds": 0.804
     },
-    "screen_seconds": 0.777,
-    "signal": "hold"
+    "screen_seconds": 0.804,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "DEXd1_EQ"
+    }
   },
-  "updated_at": "2026-11-27T01:01:29.390414+00:00",
+  "updated_at": "2026-11-27T01:01:38.136856+00:00",
   "totals": {
-    "screened": 6891,
+    "screened": 6892,
     "signals": {
-      "buy": 1936,
+      "buy": 1937,
       "avoid": 1522,
       "hold": 1415,
       "insufficient_data": 1978,
       "strong_buy": 40
     },
-    "signals_n": 6891,
-    "screen_seconds_sum": 86332.96700000046,
-    "screen_seconds_n": 6891,
+    "signals_n": 6892,
+    "screen_seconds_sum": 86333.77100000046,
+    "screen_seconds_n": 6892,
     "outcomes": {
-      "miss": 3076,
+      "miss": 3077,
       "saved": 3815
     }
   },
