@@ -7093,28 +7093,10 @@
     "H5ED_EQ",
     "H730D_EQ",
     "H9WD_EQ",
-    "HABD_EQ"
+    "HABD_EQ",
+    "HAGD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "GFJ1d_EQ",
-      "venue": "DE",
-      "yahoo": "GFJ1.DE",
-      "isin": "LU2358378979",
-      "name": "LRND",
-      "seconds": 6.674,
-      "outcome": "miss",
-      "at": "2026-11-27T22:33:14.279518+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 5.114
-      },
-      "screen_seconds": 5.114,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "GFTd_EQ",
       "venue": "DE",
@@ -7855,6 +7837,25 @@
       },
       "screen_seconds": 4.469,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HAGd_EQ",
+      "venue": "DE",
+      "yahoo": "HAG.DE",
+      "isin": "DE000HAG0005",
+      "name": "HAG",
+      "seconds": 2.251,
+      "outcome": "miss",
+      "at": "2026-11-27T22:40:11.171011+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.644
+      },
+      "screen_seconds": 0.644,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89929,43 +89930,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T22:36:56.873115+00:00"
+    },
+    {
+      "t212_ticker": "HAGd_EQ",
+      "yahoo": "HAG.DE",
+      "name": "HAG",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T22:40:11.171011+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HABd_EQ",
+    "t212_ticker": "HAGd_EQ",
     "venue": "DE",
-    "yahoo": "HAB.DE",
-    "isin": "DE000A3H2333",
-    "name": "HABA",
-    "seconds": 5.972,
+    "yahoo": "HAG.DE",
+    "isin": "DE000HAG0005",
+    "name": "HAG",
+    "seconds": 2.251,
     "outcome": "miss",
-    "at": "2026-11-27T22:40:03.241087+00:00",
+    "at": "2026-11-27T22:40:11.171011+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.469
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.644
     },
-    "screen_seconds": 4.469,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.644,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HAGd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T22:40:03.241087+00:00",
+  "updated_at": "2026-11-27T22:40:11.171011+00:00",
   "totals": {
-    "screened": 7092,
+    "screened": 7093,
     "signals": {
-      "buy": 1969,
+      "buy": 1970,
       "avoid": 1534,
       "hold": 1441,
       "insufficient_data": 2108,
       "strong_buy": 40
     },
-    "signals_n": 7092,
-    "screen_seconds_sum": 91407.3740000004,
-    "screen_seconds_n": 7092,
+    "signals_n": 7093,
+    "screen_seconds_sum": 91408.0180000004,
+    "screen_seconds_n": 7093,
     "outcomes": {
-      "miss": 3277,
+      "miss": 3278,
       "saved": 3815
     }
   },
