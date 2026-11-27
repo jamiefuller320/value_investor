@@ -1275,7 +1275,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     # Simply Wall St forecast shells only; seed SGX annual reports and 1H2025 statutory FS.
     "5E2.SI": [
         "https://links.sgx.com/FileOpen/Seatrium_AGM%202026_AR.ashx?App=Announcement&FileID=880042",
-        "https://links.sgx.com/FileOpen/1.%20Seatrium%20Limited%20Annual%20Report%202024.ashx?App=Announcement&FileID=837006",
+        "https://links.sgx.com/FileOpen/Annual%20Report%202024.ashx?App=Announcement&FileID=837006",
         "https://links.sgx.com/1.0.0/corporate-announcements/PLZIPXWSMUL9X22L/853795_1H2025%20Financial%20Statements.pdf",
     ],
 }
@@ -1647,6 +1647,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "C6L": ("Singapore Airlines", "Singapore Airlines Limited", "SIA"),
     # sti G13.SI SGX allowlist — GENS / FileOpen Annual Report* slugs need issuer match.
     "G13": ("Genting Singapore", "Genting Singapore Limited", "GENS"),
+    # sti 5E2.SI SGX allowlist — numeric announcement PDF slugs lack Seatrium tokens.
+    "5E2": ("Seatrium Limited", "Seatrium", "Seatrium Ltd"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
     "HM-B": (
