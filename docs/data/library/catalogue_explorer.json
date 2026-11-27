@@ -7103,28 +7103,10 @@
     "HCLD_EQ",
     "HCMD_EQ",
     "HDDD_EQ",
-    "HDP1D_EQ"
+    "HDP1D_EQ",
+    "HE8D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "GNNd_EQ",
-      "venue": "DE",
-      "yahoo": "GNN.DE",
-      "isin": "DK0010272632",
-      "name": "GNN",
-      "seconds": 4.008,
-      "outcome": "miss",
-      "at": "2026-11-27T22:34:54.545278+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.45,
-        "seconds": 2.841
-      },
-      "screen_seconds": 2.841,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "GNU1d_EQ",
       "venue": "DE",
@@ -7865,6 +7847,25 @@
       },
       "screen_seconds": 3.032,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HE8d_EQ",
+      "venue": "DE",
+      "yahoo": "HE8.DE",
+      "isin": "DE000A42D2N5",
+      "name": "HE8",
+      "seconds": 2.216,
+      "outcome": "miss",
+      "at": "2026-11-27T22:41:53.900508+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.9,
+        "seconds": 0.888
+      },
+      "screen_seconds": 0.888,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89971,43 +89972,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T22:41:31.367349+00:00"
+    },
+    {
+      "t212_ticker": "HE8d_EQ",
+      "yahoo": "HE8.DE",
+      "name": "HE8",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T22:41:53.900508+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HDP1d_EQ",
+    "t212_ticker": "HE8d_EQ",
     "venue": "DE",
-    "yahoo": "HDP1.DE",
-    "isin": "US04280A1007",
-    "name": "HDP1",
-    "seconds": 4.316,
+    "yahoo": "HE8.DE",
+    "isin": "DE000A42D2N5",
+    "name": "HE8",
+    "seconds": 2.216,
     "outcome": "miss",
-    "at": "2026-11-27T22:41:41.534131+00:00",
+    "at": "2026-11-27T22:41:53.900508+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.4125,
-      "seconds": 3.032
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.9,
+      "seconds": 0.888
     },
-    "screen_seconds": 3.032,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.888,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HE8d_EQ"
+    }
   },
-  "updated_at": "2026-11-27T22:41:41.534131+00:00",
+  "updated_at": "2026-11-27T22:41:53.900508+00:00",
   "totals": {
-    "screened": 7102,
+    "screened": 7103,
     "signals": {
-      "buy": 1973,
+      "buy": 1974,
       "avoid": 1534,
       "hold": 1441,
       "insufficient_data": 2114,
       "strong_buy": 40
     },
-    "signals_n": 7102,
-    "screen_seconds_sum": 91433.9530000004,
-    "screen_seconds_n": 7102,
+    "signals_n": 7103,
+    "screen_seconds_sum": 91434.84100000041,
+    "screen_seconds_n": 7103,
     "outcomes": {
-      "miss": 3287,
+      "miss": 3288,
       "saved": 3815
     }
   },
