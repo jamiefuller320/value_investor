@@ -7043,28 +7043,10 @@
     "G2OD_EQ",
     "G3CD_EQ",
     "G401D_EQ",
-    "G6D2D_EQ"
+    "G6D2D_EQ",
+    "G6P0D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FHWd_EQ",
-      "venue": "DE",
-      "yahoo": "FHW.DE",
-      "isin": "DE0005767909",
-      "name": "FHW",
-      "seconds": 86.196,
-      "outcome": "miss",
-      "at": "2026-11-27T02:20:17.045936+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.865
-      },
-      "screen_seconds": 84.865,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "FIEd_EQ",
       "venue": "DE",
@@ -7805,6 +7787,25 @@
       },
       "screen_seconds": 5.099,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "G6P0d_EQ",
+      "venue": "DE",
+      "yahoo": "G6P0.DE",
+      "isin": "DE000A40KXC8",
+      "name": "G6P0",
+      "seconds": 2.079,
+      "outcome": "miss",
+      "at": "2026-11-27T22:31:28.655338+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.9,
+        "seconds": 0.979
+      },
+      "screen_seconds": 0.979,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89831,43 +89832,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T22:27:28.296551+00:00"
+    },
+    {
+      "t212_ticker": "G6P0d_EQ",
+      "yahoo": "G6P0.DE",
+      "name": "G6P0",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T22:31:28.655338+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "G6D2d_EQ",
+    "t212_ticker": "G6P0d_EQ",
     "venue": "DE",
-    "yahoo": "G6D2.DE",
-    "isin": "CA86881M1041",
-    "name": "G6D2",
-    "seconds": 6.198,
+    "yahoo": "G6P0.DE",
+    "isin": "DE000A40KXC8",
+    "name": "G6P0",
+    "seconds": 2.079,
     "outcome": "miss",
-    "at": "2026-11-27T22:31:20.834073+00:00",
+    "at": "2026-11-27T22:31:28.655338+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 5.099
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.9,
+      "seconds": 0.979
     },
-    "screen_seconds": 5.099,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.979,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "G6P0d_EQ"
+    }
   },
-  "updated_at": "2026-11-27T22:31:20.834073+00:00",
+  "updated_at": "2026-11-27T22:31:28.655338+00:00",
   "totals": {
-    "screened": 7042,
+    "screened": 7043,
     "signals": {
-      "buy": 1963,
+      "buy": 1964,
       "avoid": 1530,
       "hold": 1433,
       "insufficient_data": 2076,
       "strong_buy": 40
     },
-    "signals_n": 7042,
-    "screen_seconds_sum": 91237.43200000042,
-    "screen_seconds_n": 7042,
+    "signals_n": 7043,
+    "screen_seconds_sum": 91238.41100000043,
+    "screen_seconds_n": 7043,
     "outcomes": {
-      "miss": 3227,
+      "miss": 3228,
       "saved": 3815
     }
   },
