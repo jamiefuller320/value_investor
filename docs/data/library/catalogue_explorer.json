@@ -6915,28 +6915,10 @@
     "DMRED1_EQ",
     "DN3D_EQ",
     "DNOD_EQ",
-    "DNQD_EQ"
+    "DNQD_EQ",
+    "DOUD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "D4Sd_EQ",
-      "venue": "DE",
-      "yahoo": "D4S.DE",
-      "isin": "JP3475350009",
-      "name": "D4S",
-      "seconds": 4.841,
-      "outcome": "miss",
-      "at": "2026-11-27T00:58:47.610675+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.886
-      },
-      "screen_seconds": 3.886,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "D65d_EQ",
       "venue": "DE",
@@ -7677,6 +7659,25 @@
       },
       "screen_seconds": 4.044,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "DOUd_EQ",
+      "venue": "DE",
+      "yahoo": "DOU.DE",
+      "isin": "DE000BEAU1Y4",
+      "name": "DOU",
+      "seconds": 1.81,
+      "outcome": "miss",
+      "at": "2026-11-27T01:05:33.276055+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.893
+      },
+      "screen_seconds": 0.893,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -88595,43 +88596,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T01:04:42.962580+00:00"
+    },
+    {
+      "t212_ticker": "DOUd_EQ",
+      "yahoo": "DOU.DE",
+      "name": "DOU",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T01:05:33.276055+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DNQd_EQ",
+    "t212_ticker": "DOUd_EQ",
     "venue": "DE",
-    "yahoo": "DNQ.DE",
-    "isin": "NO0010096985",
-    "name": "DNQ",
-    "seconds": 4.948,
+    "yahoo": "DOU.DE",
+    "isin": "DE000BEAU1Y4",
+    "name": "DOU",
+    "seconds": 1.81,
     "outcome": "miss",
-    "at": "2026-11-27T01:05:25.229282+00:00",
+    "at": "2026-11-27T01:05:33.276055+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.044
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.893
     },
-    "screen_seconds": 4.044,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.893,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "DOUd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T01:05:25.229282+00:00",
+  "updated_at": "2026-11-27T01:05:33.276055+00:00",
   "totals": {
-    "screened": 6914,
+    "screened": 6915,
     "signals": {
-      "buy": 1940,
+      "buy": 1941,
       "avoid": 1524,
       "hold": 1417,
       "insufficient_data": 1993,
       "strong_buy": 40
     },
-    "signals_n": 6914,
-    "screen_seconds_sum": 86397.40000000046,
-    "screen_seconds_n": 6914,
+    "signals_n": 6915,
+    "screen_seconds_sum": 86398.29300000046,
+    "screen_seconds_n": 6915,
     "outcomes": {
-      "miss": 3099,
+      "miss": 3100,
       "saved": 3815
     }
   },
