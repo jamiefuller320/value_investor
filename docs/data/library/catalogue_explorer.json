@@ -6955,28 +6955,10 @@
     "ECFD_EQ",
     "ECKD_EQ",
     "ED4D1_EQ",
-    "EDGAD_EQ"
+    "EDGAD_EQ",
+    "EDLD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "DOUd_EQ",
-      "venue": "DE",
-      "yahoo": "DOU.DE",
-      "isin": "DE000BEAU1Y4",
-      "name": "DOU",
-      "seconds": 1.81,
-      "outcome": "miss",
-      "at": "2026-11-27T01:05:33.276055+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.893
-      },
-      "screen_seconds": 0.893,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "DP4Ad_EQ",
       "venue": "DE",
@@ -7717,6 +7699,25 @@
       },
       "screen_seconds": 85.134,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "EDLd_EQ",
+      "venue": "DE",
+      "yahoo": "EDL.DE",
+      "isin": "DE0005649503",
+      "name": "EDL",
+      "seconds": 3.693,
+      "outcome": "miss",
+      "at": "2026-11-27T01:28:47.001796+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.915
+      },
+      "screen_seconds": 0.915,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89235,43 +89236,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T01:14:17.979109+00:00"
+    },
+    {
+      "t212_ticker": "EDLd_EQ",
+      "yahoo": "EDL.DE",
+      "name": "EDL",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T01:28:47.001796+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "EDGAd_EQ",
+    "t212_ticker": "EDLd_EQ",
     "venue": "DE",
-    "yahoo": "EDGA.DE",
-    "isin": "ZAE000018123",
-    "name": "EDGA",
-    "seconds": 86.027,
+    "yahoo": "EDL.DE",
+    "isin": "DE0005649503",
+    "name": "EDL",
+    "seconds": 3.693,
     "outcome": "miss",
-    "at": "2026-11-27T01:28:37.066022+00:00",
+    "at": "2026-11-27T01:28:47.001796+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.134
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.915
     },
-    "screen_seconds": 85.134,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.915,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "EDLd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T01:28:37.066022+00:00",
+  "updated_at": "2026-11-27T01:28:47.001796+00:00",
   "totals": {
-    "screened": 6954,
+    "screened": 6955,
     "signals": {
-      "buy": 1949,
+      "buy": 1950,
       "avoid": 1527,
       "hold": 1422,
       "insufficient_data": 2016,
       "strong_buy": 40
     },
-    "signals_n": 6954,
-    "screen_seconds_sum": 87477.34400000045,
-    "screen_seconds_n": 6954,
+    "signals_n": 6955,
+    "screen_seconds_sum": 87478.25900000044,
+    "screen_seconds_n": 6955,
     "outcomes": {
-      "miss": 3139,
+      "miss": 3140,
       "saved": 3815
     }
   },
