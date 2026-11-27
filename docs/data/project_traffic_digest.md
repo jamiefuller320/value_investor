@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-27T12:33:47.790324+00:00`
+Generated: `2026-11-27T17:33:45.290540+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,18 +33,19 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `parked_hunter`/verified PR #1488 `eng-20261127-01` — Hunt fetchable IR source for parked ftse_mib leftover TIT.MI
+- `parked_hunter`/verified PR #1487 `eng-20261127-03` — Hunt fetchable IR source for parked aim leftover POLR.L
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 419
-- `validate failed` — 10×
+- Occasion count: 423
+- `validate failed` — 12×
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate check failed` — 7×
 - `merge_conflict:dirty` — 6×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate job failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
-- `ruff_format` — 2×
+- `merge conflict with main` — 3×
 
 ## Merge authority
 - Status: **scoped_auto_merge**
