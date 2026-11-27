@@ -7046,28 +7046,10 @@
     "G6D2D_EQ",
     "G6P0D_EQ",
     "G7PAD_EQ",
-    "G9YD_EQ"
+    "G9YD_EQ",
+    "GAPD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FJKd_EQ",
-      "venue": "DE",
-      "yahoo": "FJK.DE",
-      "isin": "JP3811000003",
-      "name": "FJK",
-      "seconds": 86.655,
-      "outcome": "miss",
-      "at": "2026-11-27T02:24:25.922169+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.93
-      },
-      "screen_seconds": 84.93,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "FKMd_EQ",
       "venue": "DE",
@@ -7808,6 +7790,25 @@
       },
       "screen_seconds": 4.699,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "GAPd_EQ",
+      "venue": "DE",
+      "yahoo": "GAP.DE",
+      "isin": "US3647601083",
+      "name": "GAP",
+      "seconds": 2.495,
+      "outcome": "miss",
+      "at": "2026-11-27T22:31:59.092285+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.858
+      },
+      "screen_seconds": 0.858,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89842,43 +89843,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T22:31:28.655338+00:00"
+    },
+    {
+      "t212_ticker": "GAPd_EQ",
+      "yahoo": "GAP.DE",
+      "name": "GAP",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T22:31:59.092285+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "G9Yd_EQ",
+    "t212_ticker": "GAPd_EQ",
     "venue": "DE",
-    "yahoo": "G9Y.DE",
-    "isin": "JP3385820000",
-    "name": "G9Y",
-    "seconds": 5.816,
+    "yahoo": "GAP.DE",
+    "isin": "US3647601083",
+    "name": "GAP",
+    "seconds": 2.495,
     "outcome": "miss",
-    "at": "2026-11-27T22:31:51.177729+00:00",
+    "at": "2026-11-27T22:31:59.092285+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.699
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.858
     },
-    "screen_seconds": 4.699,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.858,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "GAPd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T22:31:51.177729+00:00",
+  "updated_at": "2026-11-27T22:31:59.092285+00:00",
   "totals": {
-    "screened": 7045,
+    "screened": 7046,
     "signals": {
-      "buy": 1964,
+      "buy": 1965,
       "avoid": 1530,
       "hold": 1433,
       "insufficient_data": 2078,
       "strong_buy": 40
     },
-    "signals_n": 7045,
-    "screen_seconds_sum": 91247.43100000042,
-    "screen_seconds_n": 7045,
+    "signals_n": 7046,
+    "screen_seconds_sum": 91248.28900000041,
+    "screen_seconds_n": 7046,
     "outcomes": {
-      "miss": 3230,
+      "miss": 3231,
       "saved": 3815
     }
   },
