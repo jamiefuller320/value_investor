@@ -721,6 +721,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.emarketstorage.it/sites/default/files/comunicati/2026-04/20260402_181268.pdf",
         "https://www.emarketstorage.it/sites/default/files/comunicati/2025-07/20250731_170567.pdf",
     ],
+    # ftse_mib parked leftover — eng-20261127-01: TIT.MI buy_tier_no_key_bodies; ESEF thin;
+    # gruppotim.it FY2025 English annual + H1-2025 semestrale statutory PDFs.
+    "TIT.MI": [
+        "https://www.gruppotim.it/content/dam/gt/investitori/doc---report-finanziari/2025/Annual%20report%202025.pdf",
+        "https://www.gruppotim.it/content/dam/gt/investitori/doc---report-finanziari/2025/Relazione%20Finanziaria%20Semestrale%20al%2030%20Giugno%202025.pdf",
+    ],
     # ftse_mib buy-tier deepen — eng-20261005-01 / eng-20261010-02: TEN.MI unmeasured — Yahoo base
     # TEN collides with Tsakos on SEC; pin Tenaris S.A. FY2025 20-F + Q1 2026 FS 6-K (CIK 1190723).
     "TEN.MI": [
@@ -6481,6 +6487,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # eng-20261107-02: AZM.MI — emarketstorage CONSOB comunicati slugs are date_hash only.
     "https://www.emarketstorage.it/sites/default/files/comunicati/2026-04/20260402_181268.pdf": "annual",
     "https://www.emarketstorage.it/sites/default/files/comunicati/2025-07/20250731_170567.pdf": "interim",
+    # eng-20261127-01: TIT.MI — Finanziaria slug false-matches aif token; semestrale is H1 interim.
+    "https://www.gruppotim.it/content/dam/gt/investitori/doc---report-finanziari/2025/Relazione%20Finanziaria%20Semestrale%20al%2030%20Giugno%202025.pdf": "interim",
     # eng-20261103-09: SMR.AX — "6.-Website-Report.pdf" has no half-year token (would classify other).
     "https://www.stanmore.au/wp-content/uploads/2026/08/6.-Website-Report.pdf": "interim",
 }
