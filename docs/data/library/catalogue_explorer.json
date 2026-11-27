@@ -7125,28 +7125,10 @@
     "HMUD_EQ",
     "HNLD_EQ",
     "HNX1D_EQ",
-    "HOOD_EQ"
+    "HOOD_EQ",
+    "HOTD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "H2Ad_EQ",
-      "venue": "DE",
-      "yahoo": "H2A.DE",
-      "isin": "LU0472835155",
-      "name": "H2A",
-      "seconds": 2.536,
-      "outcome": "miss",
-      "at": "2026-11-27T22:38:47.985136+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 1.132
-      },
-      "screen_seconds": 1.132,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "H2Od_EQ",
       "venue": "DE",
@@ -7887,6 +7869,25 @@
       },
       "screen_seconds": 85.273,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HOTd_EQ",
+      "venue": "DE",
+      "yahoo": "HOT.DE",
+      "isin": "DE0006070006",
+      "name": "HOT",
+      "seconds": 3.106,
+      "outcome": "miss",
+      "at": "2026-11-27T22:57:43.524200+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.344
+      },
+      "screen_seconds": 1.344,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -90520,43 +90521,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T22:54:21.637100+00:00"
+    },
+    {
+      "t212_ticker": "HOTd_EQ",
+      "yahoo": "HOT.DE",
+      "name": "HOT",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T22:57:43.524200+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HOOd_EQ",
+    "t212_ticker": "HOTd_EQ",
     "venue": "DE",
-    "yahoo": "HOO.DE",
-    "isin": "KYG4412G1010",
-    "name": "HOO",
-    "seconds": 86.561,
+    "yahoo": "HOT.DE",
+    "isin": "DE0006070006",
+    "name": "HOT",
+    "seconds": 3.106,
     "outcome": "miss",
-    "at": "2026-11-27T22:57:34.771504+00:00",
+    "at": "2026-11-27T22:57:43.524200+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.273
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.344
     },
-    "screen_seconds": 85.273,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.344,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HOTd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T22:57:34.771504+00:00",
+  "updated_at": "2026-11-27T22:57:43.524200+00:00",
   "totals": {
-    "screened": 7124,
+    "screened": 7125,
     "signals": {
-      "buy": 1977,
+      "buy": 1978,
       "avoid": 1540,
       "hold": 1442,
       "insufficient_data": 2125,
       "strong_buy": 40
     },
-    "signals_n": 7124,
-    "screen_seconds_sum": 92225.91300000041,
-    "screen_seconds_n": 7124,
+    "signals_n": 7125,
+    "screen_seconds_sum": 92227.2570000004,
+    "screen_seconds_n": 7125,
     "outcomes": {
-      "miss": 3309,
+      "miss": 3310,
       "saved": 3815
     }
   },
