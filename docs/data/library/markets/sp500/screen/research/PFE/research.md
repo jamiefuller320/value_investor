@@ -1,6 +1,6 @@
 # Pfizer, Inc. (PFE) — Research memo
 
-_Version 16 · Updated 2026-11-27T04:08:43.306426+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-27T18:10:50.101986+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.69
-Rationale: Research still weakens the buy case: the 04:08 batch is empty; no new filings; Japan/Canada LNP litigation, dividend-cliff debate and US pricing remain unresolved in-file.
+Rationale: Research still weakens the buy case: the 18:10 batch adds dividend–patent-cliff press versus BMS only; no new filings; Japan/Canada LNP litigation and US pricing remain unresolved in-file.
 RiskTags: regulatory, competitive, leverage, litigation, accounting
 
 ## Weekly updates
@@ -84,3 +84,8 @@ No new SEC filings since the 3 Nov Q3 packet; Japan/Canada LNP litigation and US
 No material change since the 01:35 refresh.  
 The 04:08 news batch is empty; no Pfizer-specific fundamental news.  
 No new SEC filings since the 3 Nov Q3 packet; Japan/Canada LNP litigation and US drug-pricing themes are unchanged in the file set.
+
+### 2026-11-27T18:10:50.101986+00:00
+The 18:10 batch adds Pfizer–Bristol Myers dividend and patent-expiry commentary plus options quote pages; ABBV and Kymera items are sector-only.  
+No new SEC filings since the 3 Nov Q3 packet.  
+Japan/Canada LNP litigation and US drug-pricing themes are unchanged in the file set.

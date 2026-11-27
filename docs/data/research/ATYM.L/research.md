@@ -1,6 +1,6 @@
 # Atalaya Mining Copper, S.A. (ATYM.L) — Research memo
 
-_Version 17 · Updated 2026-11-27T03:49:45.628690+00:00 · Mode: structured_verdict_update_
+_Version 18 · Updated 2026-11-27T17:52:46.974592+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -92,4 +92,9 @@ Buy screen remains stable with accumulate timing; filing vs screen TTM FCF basis
 ### 2026-11-27T03:49:45.628690+00:00
 No material change since the 27 Nov 02:34 refresh: the 12 Nov Q3/YTD RNS, 11 Nov Tharsis close and routine 20 Nov RNS are unchanged in the filing set.  
 The news batch since 02:34 UTC (to 27 Nov 03:49) returned no new articles.  
+Buy screen remains stable with accumulate timing; filing vs screen TTM FCF basis mismatch unchanged.
+
+### 2026-11-27T17:52:46.974592+00:00
+No material change since the 27 Nov 03:49 refresh: the 12 Nov Q3/YTD RNS, 11 Nov Tharsis close and routine 20 Nov RNS are unchanged in the filing set.  
+The news batch since 03:49 UTC (to 27 Nov 17:52) returned no new articles.  
 Buy screen remains stable with accumulate timing; filing vs screen TTM FCF basis mismatch unchanged.

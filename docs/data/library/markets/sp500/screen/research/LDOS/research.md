@@ -1,6 +1,6 @@
 # Leidos Holdings, Inc. (LDOS) — Research memo
 
-_Version 15 · Updated 2026-11-27T04:02:00.463330+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-27T18:04:41.705517+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.76
-Rationale: Empty 04:01 news batch adds nothing new; Q3 beat and ~$1.96bn TTM FCF still support the strong-buy screen, but VBA recompete, probes and leverage keep accumulate.
+Rationale: Empty 18:04 news batch adds nothing new; Q3 beat and ~$1.96bn TTM FCF still support the strong-buy screen, but VBA recompete, probes and leverage keep accumulate.
 RiskTags: customer_concentration, regulatory, litigation, leverage, competitive, accounting
 
 ## Weekly updates
@@ -80,5 +80,10 @@ VBA 2027 recompete, open DOJ/SEC probes and post-Entrust leverage remain the mai
 
 ### 2026-11-27T04:02:00.463330+00:00
 No material change: the news batch since 2026-11-27T01:29 UTC is empty.  
+Strong-buy screen and Q3 snapshot (revenue ~$4.63bn, EPS ~$3.28, TTM FCF ~$1.96bn) are unchanged.  
+VBA 2027 recompete, open DOJ/SEC probes and post-Entrust leverage remain the main research offsets.
+
+### 2026-11-27T18:04:41.705517+00:00
+No material change: the news batch since 2026-11-27T04:02 UTC is empty.  
 Strong-buy screen and Q3 snapshot (revenue ~$4.63bn, EPS ~$3.28, TTM FCF ~$1.96bn) are unchanged.  
 VBA 2027 recompete, open DOJ/SEC probes and post-Entrust leverage remain the main research offsets.

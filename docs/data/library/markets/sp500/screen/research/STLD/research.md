@@ -1,6 +1,6 @@
 # Steel Dynamics, Inc. (STLD) — Research memo
 
-_Version 1 · Updated 2026-11-06T07:31:49.984256+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-11-27T18:17:07.277743+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,13 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: SEC FY25 OCF−CapEx FCF (~$502m) covered dividends (~$291m) at ~1.7× and 9M26 filings show strong earnings, but the screen’s ~1.4% FCF yield fail and earnings-quality fail keep the adjusted Hold overlay intact versus raw Buy.
+Confidence: 0.69
+Rationale: Filing-backed buyback and strong 9M cash generation support the buy screen, but unchanged ~1.4% FCF-yield and earnings-quality fails keep research on accumulate rather than a full quant buy.
 RiskTags: cyclical, leverage, competitive
+
+## Weekly updates
+
+### 2026-11-27T18:17:07.277743+00:00
+8-K (10 Nov) disclosed a further $3.0bn share-repurchase authorisation and the Q4 2026 cash dividend.  
+Since 6 Nov, news is largely post-earnings pullback and third-party valuation pieces; one item cites firmer US steel demand but also input-cost and debt risks.  
+No new interim filing after the 30 Sep 10-Q; on-file 9M results and screen FCF-yield tension are unchanged.

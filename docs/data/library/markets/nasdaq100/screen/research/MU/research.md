@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 16 · Updated 2026-11-27T04:05:33.013447+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-27T18:07:55.269175+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.69
-Rationale: A $32bn customer-commitment headline and 2027 list inclusion are bullish colour only; ~$59bn TTM FCF supports the screen but zero model passes and unchanged cyclical risks keep accumulate versus strong buy.
+Rationale: Friday’s memory-chip rebound is sentiment-only; ~$59bn TTM FCF still supports the screen, but DRAM-pricing cuts, Huawei HBM rivalry and zero model passes keep accumulate versus strong buy.
 RiskTags: cyclical, competitive, leverage, customer_concentration
 
 ## Weekly updates
@@ -86,3 +86,8 @@ No new filings or sourced financials; screen remains strong buy with ~$59bn TTM 
 Follow-on Thanksgiving macro futures colour repeats Nasdaq-off-lows trading; no new MU price or fundamentals.  
 Yahoo cites a $32bn customer-commitment narrative and MU on a 2027 hedge-fund tech list—editorial only, not new filings or sourced financials.  
 Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed; filing-based risks are unchanged.
+
+### 2026-11-27T18:07:55.269175+00:00
+On 27 Nov, MU and peer memory names bounced with the chip rally (roughly 3–6%) after mid-week selloffs; coverage mixes Huawei HBM rivalry, GF Securities DRAM price cuts, China cloud order pullbacks and memory-pricing caution with bullish rebound pieces.  
+No new filings or sourced financials in this batch.  
+Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed; filing-based risks unchanged.

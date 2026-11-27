@@ -1,6 +1,6 @@
 # OMV Aktiengesellschaft (OMV.VI) — Research memo
 
-_Version 9 · Updated 2026-11-27T04:14:36.643900+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-27T18:16:12.266341+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.69
-Rationale: On-file Q3 EPS €3.14 and ~€2.53bn TTM FCF confirm the strong-buy screen; the empty 04:14 UTC news batch leaves cyclical, governance and strategy risks unchanged.
+Rationale: On-file Q3 EPS €3.14 and ~€2.53bn TTM FCF still confirm the strong-buy screen; Raiffeisen Hold (27 Nov) adds broker caution but discloses no new fundamentals.
 RiskTags: cyclical, governance, regulatory, key_person
 
 ## Weekly updates
@@ -53,3 +53,8 @@ Strong_buy screen and accumulate overlay stand.
 No material change: `news_batch_20261127_041410` since the 01:42 UTC refresh contains no articles.  
 On-file Q3 2026 EPS €3.14, revenue €8.96bn and TTM free cash flow ~€2.53bn are unchanged; indexed filings are unchanged.  
 Strong_buy screen and accumulate overlay stand.
+
+### 2026-11-27T18:16:12.266341+00:00
+`news_batch_20261127_181548` adds three items: Raiffeisen downgrades to Hold, plus Zacks and InvestingPro value-style headlines (27 Nov).  
+On-file Q3 2026 EPS €3.14, revenue €8.96bn and TTM free cash flow ~€2.53bn are unchanged; indexed filings are unchanged.  
+Strong_buy screen and accumulate overlay stand; broker-caution theme is reinforced without filing-backed change.

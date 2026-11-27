@@ -1,6 +1,6 @@
 # Cisco Systems, Inc. (CSCO) — Research memo
 
-_Version 15 · Updated 2026-11-27T03:53:00.752525+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-27T17:56:08.326564+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: The 03:52 UTC batch adds only a generic CSCO:CA investment-guide headline; unchanged Q1 FY27 EPS $1.14 on ~$18.5bn revenue still confirms accumulate with the buy screen.
+Confidence: 0.72
+Rationale: Unchanged Q1 FY27 EPS $1.14 on ~$18.5bn revenue plus Zacks Strong Buy and ETF inflows confirm the buy screen; rising short interest is post-earnings sentiment only.
 RiskTags: competitive, cyclical, leverage, governance
 
 ## Weekly updates
@@ -83,3 +83,8 @@ No new SEC filing bodies in the supplied sources.
 The 03:52 UTC batch adds one generic Stock Traders Daily CSCO:CA investment-guide headline; no company-specific Cisco events since the 01:19 pass.  
 No new SEC filing bodies in the supplied sources.  
 **Buy** screen unchanged at Q1 FY27 EPS $1.14 on ~$18.5bn revenue; post-earnings margin, insider-sale and governance themes are unchanged.
+
+### 2026-11-27T17:56:08.326564+00:00
+The 17:55 UTC batch adds Benzinga short-interest rise post-Q1, a Zacks #1 Strong Buy piece, ~$87.4m ETF net buying on 25 Nov, and Jeetu Patel patching-timing security colour.  
+No new SEC filing bodies in the supplied sources.  
+**Buy** screen unchanged at Q1 FY27 EPS $1.14 on ~$18.5bn revenue; margin, insider-sale and governance narratives from earlier passes are unchanged.

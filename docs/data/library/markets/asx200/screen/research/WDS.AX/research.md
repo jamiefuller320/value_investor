@@ -1,6 +1,6 @@
 # Woodside Energy Group Ltd (WDS.AX) — Research memo
 
-_Version 1 · Updated 2026-11-27T08:22:05.368758+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-11-27T18:18:35.050484+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,5 +9,12 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.72
-Rationale: Filings match the screen’s FY25 operating cash flow ($7.2bn) but Yahoo IFRS free cash flow is −$0.8bn versus filing-adjusted $1.9bn; both are below ~$2.1bn dividends, with H1 2026 cover thinner—this weakens the buy case.
+Rationale: Screen FY25 operating cash flow ($7.2bn) aligns with filings, but Yahoo IFRS free cash flow is −$0.8bn versus filing-adjusted $1.9bn; both trail ~$2.0bn dividends and H1 2026 cover is thinner—this weakens the buy case.
 RiskTags: cyclical, leverage, regulatory
+
+## Weekly updates
+
+### 2026-11-27T18:18:35.050484+00:00
+The evening batch is only third-party pieces (Scarborough/Louisiana 2027, value screens, Brent-linked oil macro)—no new ASX disclosures since the morning refresh.  
+Refreshed Yahoo FY25 cash metrics are unchanged (OCF $7.2bn, IFRS FCF −$0.8bn); quarterly cash flow in sources is still empty.  
+No material change versus the prior structured verdict update.

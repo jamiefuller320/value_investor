@@ -1,6 +1,6 @@
 # Hewlett Packard Enterprise Company (HPE) — Research memo
 
-_Version 15 · Updated 2026-11-27T04:14:09.141182+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-27T18:15:47.329633+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.56
-Rationale: Furnished beat-and-raise and buyback still fit the strong-buy screen, but no filings or news since the 23 November 8-K leaves Q4 margin, inventory and working-capital risks unverified.
+Rationale: Beat-and-raise and buyback still align with the strong-buy screen, but absent post-23 Nov filings and ongoing margin or inventory headlines leave key Q4 risks only partly verified.
 RiskTags: cyclical, leverage, competitive, accounting, litigation, customer_concentration, governance, liquidity
 
 ## Weekly updates
@@ -83,3 +83,8 @@ Periodic reports in the supplied set still end at the Q3 10-Q (31 July 2026); Q4
 No material change.  
 The 27 November news batch returned no articles; the filing index still shows no SEC items after the 23 November 8-K.  
 Periodic reports in the supplied set still end at the Q3 10-Q (31 July 2026); Q4 detail remains only in furnished 8-K materials.
+
+### 2026-11-27T18:15:47.329633+00:00
+Afternoon coverage adds a value-oriented HPE vs AMD piece; Dell and Supermicro headlines extend post-earnings AI-margin scepticism in the sector.  
+No new SEC items since the 23 November 8-K; periodic reports in the set still end at the Q3 10-Q (31 July 2026).  
+No material change to furnished beat-and-raise versus margin, inventory and working-capital worries.

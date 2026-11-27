@@ -1,6 +1,6 @@
 # Capstone Copper Corp. (CSC.AX) — Research memo
 
-_Version 22 · Updated 2026-11-27T03:52:39.066590+00:00 · Mode: structured_verdict_update_
+_Version 23 · Updated 2026-11-27T17:55:38.052928+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.57
-Rationale: The 27 Nov 03:52 batch adds no headlines; Q3 EBITDA momentum and low-end 2026 guidance are unchanged, so research stays neutral on the screen hold signal with filing gaps unresolved.
+Rationale: The 27 Nov 17:55 batch adds one Kalkine pipeline piece without filings; Q3 EBITDA and low-end 2026 guidance are unchanged, so research stays neutral on hold with gaps unresolved.
 RiskTags: cyclical, regulatory, leverage, liquidity, litigation, other
 
 ## Weekly updates
@@ -117,4 +117,9 @@ No material change; primary interim financial disclosure gaps in the pack persis
 ### 2026-11-27T03:52:39.066590+00:00
 No new articles in the 27 Nov 03:52 incremental news batch since the 01:19 refresh.  
 Q3 record adjusted-EBITDA, low-end 2026 production guidance and an unsubstantiated Cozamin close in indexed filing bodies remain the active narrative.  
+No material change; primary interim financial disclosure gaps in the pack persist.
+
+### 2026-11-27T17:55:38.052928+00:00
+One new Kalkine article (27 Nov) highlights project-pipeline focus; no indexed primary disclosure in the pack.  
+Q3 record adjusted-EBITDA, low-end 2026 production guidance and an unsubstantiated Cozamin close in indexed filing bodies remain unchanged.  
 No material change; primary interim financial disclosure gaps in the pack persist.

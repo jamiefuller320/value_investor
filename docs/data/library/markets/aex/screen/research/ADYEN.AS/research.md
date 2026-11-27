@@ -1,15 +1,15 @@
 # Adyen N.V. (ADYEN.AS) — Research memo
 
-_Version 17 · Updated 2026-11-27T04:13:21.746408+00:00 · Mode: structured_verdict_update_
+_Version 18 · Updated 2026-11-27T18:15:07.438260+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: neutral
 Risk: medium
-Confidence: 0.68
-Rationale: Filed FY2025 growth and positive FCF still support the buy screen; the empty 04:12 UTC news batch is neutral, while unverified TTM FCF and the planned co-CEO handover keep the overlay cautious.
+Confidence: 0.65
+Rationale: Research is neutral on hold: on-file FY2025 revenue, EPS and positive FCF are unchanged, but unverified screen TTM FCF and the planned co-CEO handover offer no fresh push past patience.
 RiskTags: competitive, regulatory, accounting, key_person
 
 ## Weekly updates
@@ -93,3 +93,8 @@ Buy screen and accumulate overlay are unchanged; the planned co-CEO handover rem
 No indexed news since the 01:40 verdict refresh (`news_batch_20261127_041238.json` is empty).  
 Filed FY2025 revenue, EPS and positive FCF are unchanged; Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.  
 Buy screen and accumulate overlay are unchanged; the planned co-CEO handover remains the main research watch item.
+
+### 2026-11-27T18:15:07.438260+00:00
+Quant screen is now **hold** (new trend); on-file FY2025 revenue, EPS and positive FCF are unchanged.  
+Since the 04:13 UTC refresh, indexed news is one 27 Nov Dutch Black Friday and share-price piece; no new issuer filings in the batch.  
+Yahoo quarterly cash flow remains empty, so screen TTM FCF stays unverified; the planned co-CEO handover remains the main watch item.

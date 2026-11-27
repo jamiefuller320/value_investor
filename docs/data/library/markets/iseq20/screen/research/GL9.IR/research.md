@@ -1,6 +1,6 @@
 # Glanbia plc (GL9.IR) — Research memo
 
-_Version 16 · Updated 2026-11-27T04:00:25.697133+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-27T18:03:41.161720+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -87,4 +87,9 @@ Raised FY2026 adjusted-EPS outlook versus Morgan Stanley competition and whey-co
 ### 2026-11-27T04:00:25.697133+00:00
 No new articles in the 27 Nov 04:00 news batch since the 01:27 refresh.  
 FY2025 screen OCF ($368.5m) and FCF (~$284m) are unchanged; Yahoo quarterly cashflow is still empty, so TTM FCF remains unverified.  
+Raised FY2026 adjusted-EPS outlook versus Morgan Stanley competition and whey-cost warnings is still the main tension in the file set.
+
+### 2026-11-27T18:03:41.161720+00:00
+No new articles in the 27 Nov 18:03 news batch since the 04:00 refresh.
+FY2025 screen OCF ($368.5m) and FCF (~$284m) unchanged; Yahoo quarterly cashflow still empty, so TTM FCF remains unverified.
 Raised FY2026 adjusted-EPS outlook versus Morgan Stanley competition and whey-cost warnings is still the main tension in the file set.

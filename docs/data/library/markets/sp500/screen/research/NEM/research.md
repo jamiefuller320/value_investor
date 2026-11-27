@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM) — Research memo
 
-_Version 15 · Updated 2026-11-27T04:05:54.976371+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-27T18:08:08.695176+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Sourced ~$10.1bn TTM free cash flow still supports the screen buy; empty news since the last refresh leaves research neutral on the buy case.
+Rationale: Sourced ~$10.1bn TTM free cash flow still supports the screen buy; a generic miner-dividend headline only leaves research neutral on timing.
 RiskTags: cyclical, regulatory, governance, litigation, customer_concentration
 
 ## Weekly updates
@@ -83,3 +83,8 @@ No material change versus the prior refresh; buy screen and accumulate overlay u
 News batch since the 01:33 refresh is empty; no new articles in the supplied sources.  
 No new SEC filings; screen TTM free cash flow (~$10.1bn) and quarterly cash flow in the file set are unchanged.  
 No material change versus the prior refresh; buy screen and accumulate overlay unchanged.
+
+### 2026-11-27T18:08:08.695176+00:00
+Since the 04:05 refresh, the batch adds one Yahoo sector piece on dividend-paying gold miners; nothing NEM-specific on operations.
+No new SEC filings; screen TTM free cash flow (~$10.1bn) and quarterly cash flow in the file set are unchanged.
+No material operational change versus the prior refresh.

@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 31 · Updated 2026-11-27T04:10:36.368918+00:00 · Mode: structured_verdict_update_
+_Version 32 · Updated 2026-11-27T18:12:46.741686+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.58
-Rationale: On-file FCF stays exceptional after the 27 November refresh, but an empty news batch and no new SNDK guidance leave NAND-cycle risks unchanged—research still weakens the strong-buy case.
+Rationale: Post-holiday rebound press adds no issuer guidance; on-file cash generation stays exceptional but unresolved 2027 NAND cycle fears still weaken the strong-buy case.
 RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
@@ -147,3 +147,8 @@ On-file financials (fetched 27 November) still show very strong free cash flow (
 The 04:10 refresh news batch adds no articles since the 01:37 update; no new SNDK issuer disclosures in that slice.
 Financials re-fetched 27 November still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).
 2027 NAND oversupply debate, semis estimate-cut framing and post-split officer-sale press in the file set are unchanged.
+
+### 2026-11-27T18:12:46.741686+00:00
+On 27 November, SNDK led a sharp post-holiday memory rebound (press cites roughly 10–16% gains) after the month’s selloff; AI-chip optimism dominated headlines.  
+Commentary still pits bargain narratives against TrendForce warnings and 2027 NAND oversupply debate; no new SNDK issuer filings in the batch.  
+On-file financials still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).

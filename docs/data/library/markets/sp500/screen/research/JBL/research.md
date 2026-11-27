@@ -1,6 +1,6 @@
 # Jabil Inc. (JBL) — Research memo
 
-_Version 15 · Updated 2026-11-27T04:01:37.400821+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-27T18:04:27.590839+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.67
-Rationale: Empty 04:01 news and unchanged TTM cash metrics leave filing–screen EPS tension unresolved, mildly weakening the buy case.
+Rationale: Empty 18:04 news and unchanged TTM cash metrics leave filing–screen EPS tension unresolved, mildly weakening the buy case.
 RiskTags: cyclical, leverage, customer_concentration
 
 ## Weekly updates
@@ -82,4 +82,9 @@ Screen–filing earnings reconciliation remains unresolved; filing-backed risk p
 ### 2026-11-27T04:01:37.400821+00:00
 News since the 01:29 UTC refresh is empty; the 04:01 batch has no new Jabil-specific headlines.  
 04:01 financial pull is unchanged: TTM operating cash flow ~$2.0bn, free cash flow ~$1.37bn; net debt ~$1.64bn and negative tangible book persist.  
+Screen–filing earnings reconciliation remains unresolved; filing-backed risk profile unchanged.
+
+### 2026-11-27T18:04:27.590839+00:00
+News since the 04:01 UTC refresh is empty; the 18:04 batch has no Jabil-specific headlines.  
+18:04 financial pull is unchanged: TTM operating cash flow ~$2.0bn, free cash flow ~$1.37bn; net debt ~$1.64bn and negative tangible book persist.  
 Screen–filing earnings reconciliation remains unresolved; filing-backed risk profile unchanged.

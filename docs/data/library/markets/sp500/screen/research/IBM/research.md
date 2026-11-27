@@ -1,6 +1,6 @@
 # International Business Machines Corporation (IBM) — Research memo
 
-_Version 16 · Updated 2026-11-27T04:00:49.763880+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-27T18:03:57.756668+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.65
-Rationale: Third-party smart-hospital and quantum-list headlines add no issuer filings; unchanged leverage, pension and competitive risks keep accumulate as a moderate overlay on the buy screen.
+Rationale: Headlines cite resistance, a storage-stock comparison and mixed flows with no new filings; prior leverage, pension and competitive risks keep research neutral on the buy screen.
 RiskTags: leverage, pension, competitive, cyclical, litigation, regulatory
 
 ## Weekly updates
@@ -86,5 +86,10 @@ Q3 2026 screening snapshot and cash-flow inputs are unchanged.
 
 ### 2026-11-27T04:00:49.763880+00:00
 Since the 01:28 run, headlines cite third-party smart-hospital, data-centre and quantum-computing themes; they add no filing-backed issuer fundamentals.  
+No new SEC filing bodies beyond the 19 Nov yen-note 8-K already in the library.  
+Q3 2026 screening snapshot and cash-flow inputs are unchanged.
+
+### 2026-11-27T18:03:57.756668+00:00
+Since the 04:00 run, headlines flag technical resistance, a Western Digital comparison and mixed institutional buys and sells; none add filing-backed fundamentals.  
 No new SEC filing bodies beyond the 19 Nov yen-note 8-K already in the library.  
 Q3 2026 screening snapshot and cash-flow inputs are unchanged.

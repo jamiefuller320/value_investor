@@ -1,6 +1,6 @@
 # Cummins Inc. (CMI) — Research memo
 
-_Version 25 · Updated 2026-11-27T03:51:32.444531+00:00 · Mode: structured_verdict_update_
+_Version 26 · Updated 2026-11-27T17:54:43.901479+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: The 27 Nov 03:51 batch adds no headlines; Q3 diluted EPS of $8.25 and about $3.5bn TTM free cash flow still modestly confirm the strong buy case amid unchanged filing risks.
+Rationale: The 27 Nov 17:54 batch adds only peer data-centre headlines; Q3 diluted EPS of $8.25 and about $3.5bn TTM free cash flow still modestly confirm the strong buy case amid unchanged filing risks.
 RiskTags: regulatory, cyclical, customer_concentration, litigation, leverage
 
 ## Weekly updates
@@ -131,5 +131,10 @@ Prior Jump Financial, HOOPP and institutional-flow themes are unchanged; filing 
 
 ### 2026-11-27T03:51:32.444531+00:00
 The 03:51 UTC news batch adds no articles since the 01:18 UTC refresh.  
+Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.5bn; the screen remains a strong buy.  
+Prior institutional-flow and sentiment themes are unchanged; filing risk tags are unchanged.
+
+### 2026-11-27T17:54:43.901479+00:00
+The 17:54 UTC news batch adds two peer data-centre power pieces since 03:51 UTC; no Cummins-specific headlines.  
 Refreshed sources still show Q3 diluted EPS of $8.25 and TTM free cash flow of about $3.5bn; the screen remains a strong buy.  
 Prior institutional-flow and sentiment themes are unchanged; filing risk tags are unchanged.

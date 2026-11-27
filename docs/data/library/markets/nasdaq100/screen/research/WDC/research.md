@@ -1,6 +1,6 @@
 # Western Digital Corporation (WDC) — Research memo
 
-_Version 16 · Updated 2026-11-27T04:12:36.736546+00:00 · Mode: structured_verdict_update_
+_Version 17 · Updated 2026-11-27T18:14:19.159743+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.63
-Rationale: Q1 FY26 revenue and ~$4.29bn TTM FCF still confirm the buy screen; the empty 04:12 UTC news batch and no filings since 20 Nov leave cyclical and customer-concentration risks unresolved in the supplied sources.
+Rationale: Q1 FY26 revenue and ~$4.29bn TTM FCF still support the buy screen; Friday’s memory rebound and TrendForce DRAM pricing press add cycle colour but do not resolve customer concentration or accounting risks in the files.
 RiskTags: cyclical, customer_concentration, competitive, accounting
 
 ## Weekly updates
@@ -86,5 +86,10 @@ No new WDC filing appears in the supplied sources since the 20 Nov 8-K.
 
 ### 2026-11-27T04:12:36.736546+00:00
 No material change. The batch since the last refresh contains no new articles.  
+Q1 FY26 revenue of $4.38bn and TTM free cash flow of about $4.29bn are unchanged in the screening snapshot.  
+No new WDC filing appears in the supplied sources since the 20 Nov 8-K.
+
+### 2026-11-27T18:14:19.159743+00:00
+Friday’s batch reports a beaten-down memory rebound with WDC among the rally, TrendForce DRAM contract-pricing warnings through 2027, and a favourable WDC-vs-IBM comparison piece; much else is peer-led.  
 Q1 FY26 revenue of $4.38bn and TTM free cash flow of about $4.29bn are unchanged in the screening snapshot.  
 No new WDC filing appears in the supplied sources since the 20 Nov 8-K.
