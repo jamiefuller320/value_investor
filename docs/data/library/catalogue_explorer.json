@@ -6988,28 +6988,10 @@
     "EVTD_EQ",
     "EXLD_EQ",
     "EZP1D_EQ",
-    "F1YND_EQ"
+    "F1YND_EQ",
+    "F3CD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "EBEd_EQ",
-      "venue": "DE",
-      "yahoo": "EBE.DE",
-      "isin": "DE000A3EX2X7",
-      "name": "EBEN",
-      "seconds": 86.023,
-      "outcome": "miss",
-      "at": "2026-11-27T01:23:32.701967+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.625
-      },
-      "screen_seconds": 84.625,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "EBKd_EQ",
       "venue": "DE",
@@ -7750,6 +7732,25 @@
       },
       "screen_seconds": 84.8,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "F3Cd_EQ",
+      "venue": "DE",
+      "yahoo": "F3C.DE",
+      "isin": "DE0007568578",
+      "name": "F3C",
+      "seconds": 2.151,
+      "outcome": "miss",
+      "at": "2026-11-27T02:01:20.923489+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.915
+      },
+      "screen_seconds": 0.915,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89324,43 +89325,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T01:58:07.715638+00:00"
+    },
+    {
+      "t212_ticker": "F3Cd_EQ",
+      "yahoo": "F3C.DE",
+      "name": "F3C",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T02:01:20.923489+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "F1YNd_EQ",
+    "t212_ticker": "F3Cd_EQ",
     "venue": "DE",
-    "yahoo": "F1YN.DE",
-    "isin": "CA5503711080",
-    "name": "F1YN",
-    "seconds": 85.809,
+    "yahoo": "F3C.DE",
+    "isin": "DE0007568578",
+    "name": "F3C",
+    "seconds": 2.151,
     "outcome": "miss",
-    "at": "2026-11-27T02:01:12.179656+00:00",
+    "at": "2026-11-27T02:01:20.923489+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.8
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.915
     },
-    "screen_seconds": 84.8,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.915,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "F3Cd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T02:01:12.179656+00:00",
+  "updated_at": "2026-11-27T02:01:20.923489+00:00",
   "totals": {
-    "screened": 6987,
+    "screened": 6988,
     "signals": {
-      "buy": 1956,
+      "buy": 1957,
       "avoid": 1528,
       "hold": 1429,
       "insufficient_data": 2034,
       "strong_buy": 40
     },
-    "signals_n": 6987,
-    "screen_seconds_sum": 89179.33200000043,
-    "screen_seconds_n": 6987,
+    "signals_n": 6988,
+    "screen_seconds_sum": 89180.24700000043,
+    "screen_seconds_n": 6988,
     "outcomes": {
-      "miss": 3172,
+      "miss": 3173,
       "saved": 3815
     }
   },
