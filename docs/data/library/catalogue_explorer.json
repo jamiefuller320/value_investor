@@ -7072,28 +7072,10 @@
     "GQ2D_EQ",
     "GR8D_EQ",
     "GRUD_EQ",
-    "GRVD_EQ"
+    "GRVD_EQ",
+    "GS2CD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FURd_EQ",
-      "venue": "DE",
-      "yahoo": "FUR.DE",
-      "isin": "JP3826800009",
-      "name": "FUR",
-      "seconds": 6.44,
-      "outcome": "miss",
-      "at": "2026-11-27T22:29:21.721590+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 5.185
-      },
-      "screen_seconds": 5.185,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "FV6d_EQ",
       "venue": "DE",
@@ -7834,6 +7816,25 @@
       },
       "screen_seconds": 5.537,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "GS2Cd_EQ",
+      "venue": "DE",
+      "yahoo": "GS2C.DE",
+      "isin": "US36467W1099",
+      "name": "GS2C",
+      "seconds": 2.36,
+      "outcome": "miss",
+      "at": "2026-11-27T22:36:36.486453+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.213
+      },
+      "screen_seconds": 1.213,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89892,43 +89893,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T22:33:22.976935+00:00"
+    },
+    {
+      "t212_ticker": "GS2Cd_EQ",
+      "yahoo": "GS2C.DE",
+      "name": "GS2C",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T22:36:36.486453+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "GRVd_EQ",
+    "t212_ticker": "GS2Cd_EQ",
     "venue": "DE",
-    "yahoo": "GRV.DE",
-    "isin": "CNE100000338",
-    "name": "GRV",
-    "seconds": 6.97,
+    "yahoo": "GS2C.DE",
+    "isin": "US36467W1099",
+    "name": "GS2C",
+    "seconds": 2.36,
     "outcome": "miss",
-    "at": "2026-11-27T22:36:28.492680+00:00",
+    "at": "2026-11-27T22:36:36.486453+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 5.537
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.213
     },
-    "screen_seconds": 5.537,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.213,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "GS2Cd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T22:36:28.492680+00:00",
+  "updated_at": "2026-11-27T22:36:36.486453+00:00",
   "totals": {
-    "screened": 7071,
+    "screened": 7072,
     "signals": {
-      "buy": 1967,
+      "buy": 1968,
       "avoid": 1531,
       "hold": 1437,
       "insufficient_data": 2096,
       "strong_buy": 40
     },
-    "signals_n": 7071,
-    "screen_seconds_sum": 91338.62500000041,
-    "screen_seconds_n": 7071,
+    "signals_n": 7072,
+    "screen_seconds_sum": 91339.83800000041,
+    "screen_seconds_n": 7072,
     "outcomes": {
-      "miss": 3256,
+      "miss": 3257,
       "saved": 3815
     }
   },
