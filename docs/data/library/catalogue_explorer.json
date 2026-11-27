@@ -7117,28 +7117,10 @@
     "HIGHD_EQ",
     "HIKD_EQ",
     "HJIAD_EQ",
-    "HL2D_EQ"
+    "HL2D_EQ",
+    "HLAGD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "GTYd_EQ",
-      "venue": "DE",
-      "yahoo": "GTY.DE",
-      "isin": "DE000A0JJTG7",
-      "name": "GTY",
-      "seconds": 1.93,
-      "outcome": "miss",
-      "at": "2026-11-27T22:37:24.539844+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 1.0,
-        "seconds": 0.666
-      },
-      "screen_seconds": 0.666,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "GV6d_EQ",
       "venue": "DE",
@@ -7879,6 +7861,25 @@
       },
       "screen_seconds": 86.247,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "HLAGd_EQ",
+      "venue": "DE",
+      "yahoo": "HLAG.DE",
+      "isin": "DE000HLAG475",
+      "name": "HLAG",
+      "seconds": 2.861,
+      "outcome": "miss",
+      "at": "2026-11-27T22:52:22.422395+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.243
+      },
+      "screen_seconds": 1.243,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -90496,43 +90497,56 @@
         "error": null
       },
       "finished_at": "2026-11-27T22:52:05.407399+00:00"
+    },
+    {
+      "t212_ticker": "HLAGd_EQ",
+      "yahoo": "HLAG.DE",
+      "name": "HLAG",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T22:52:22.422395+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "HL2d_EQ",
+    "t212_ticker": "HLAGd_EQ",
     "venue": "DE",
-    "yahoo": "HL2.DE",
-    "isin": "CA35910P1099",
-    "name": "HL2",
-    "seconds": 87.47,
+    "yahoo": "HLAG.DE",
+    "isin": "DE000HLAG475",
+    "name": "HLAG",
+    "seconds": 2.861,
     "outcome": "miss",
-    "at": "2026-11-27T22:52:13.785483+00:00",
+    "at": "2026-11-27T22:52:22.422395+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 86.247
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.243
     },
-    "screen_seconds": 86.247,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.243,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "HLAGd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T22:52:13.785483+00:00",
+  "updated_at": "2026-11-27T22:52:22.422395+00:00",
   "totals": {
-    "screened": 7116,
+    "screened": 7117,
     "signals": {
-      "buy": 1975,
+      "buy": 1976,
       "avoid": 1538,
       "hold": 1441,
       "insufficient_data": 2122,
       "strong_buy": 40
     },
-    "signals_n": 7116,
-    "screen_seconds_sum": 91961.51300000041,
-    "screen_seconds_n": 7116,
+    "signals_n": 7117,
+    "screen_seconds_sum": 91962.75600000042,
+    "screen_seconds_n": 7117,
     "outcomes": {
-      "miss": 3301,
+      "miss": 3302,
       "saved": 3815
     }
   },
