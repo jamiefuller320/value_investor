@@ -6993,28 +6993,10 @@
     "F4S0D_EQ",
     "F5XD_EQ",
     "F6O1D_EQ",
-    "F8PD_EQ"
+    "F8PD_EQ",
+    "FAAD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ED4d1_EQ",
-      "venue": "DE",
-      "yahoo": "ED4.DE",
-      "isin": "CH0303692047",
-      "name": "ED4",
-      "seconds": 2.454,
-      "outcome": "miss",
-      "at": "2026-11-27T01:27:04.738659+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.95,
-        "seconds": 0.74
-      },
-      "screen_seconds": 0.74,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "EDGAd_EQ",
       "venue": "DE",
@@ -7755,6 +7737,25 @@
       },
       "screen_seconds": 84.91,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "FAAd_EQ",
+      "venue": "DE",
+      "yahoo": "FAA.DE",
+      "isin": "AT0000785407",
+      "name": "FAA",
+      "seconds": 2.345,
+      "outcome": "miss",
+      "at": "2026-11-27T02:07:39.326376+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.726
+      },
+      "screen_seconds": 0.726,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89337,43 +89338,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T02:01:20.923489+00:00"
+    },
+    {
+      "t212_ticker": "FAAd_EQ",
+      "yahoo": "FAA.DE",
+      "name": "FAA",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T02:07:39.326376+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "F8Pd_EQ",
+    "t212_ticker": "FAAd_EQ",
     "venue": "DE",
-    "yahoo": "F8P.DE",
-    "isin": "AU0000185993",
-    "name": "F8P",
-    "seconds": 85.914,
+    "yahoo": "FAA.DE",
+    "isin": "AT0000785407",
+    "name": "FAA",
+    "seconds": 2.345,
     "outcome": "miss",
-    "at": "2026-11-27T02:07:30.715787+00:00",
+    "at": "2026-11-27T02:07:39.326376+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.91
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.726
     },
-    "screen_seconds": 84.91,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.726,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "FAAd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T02:07:30.715787+00:00",
+  "updated_at": "2026-11-27T02:07:39.326376+00:00",
   "totals": {
-    "screened": 6992,
+    "screened": 6993,
     "signals": {
-      "buy": 1957,
+      "buy": 1958,
       "avoid": 1528,
       "hold": 1429,
       "insufficient_data": 2038,
       "strong_buy": 40
     },
-    "signals_n": 6992,
-    "screen_seconds_sum": 89520.22600000042,
-    "screen_seconds_n": 6992,
+    "signals_n": 6993,
+    "screen_seconds_sum": 89520.95200000041,
+    "screen_seconds_n": 6993,
     "outcomes": {
-      "miss": 3177,
+      "miss": 3178,
       "saved": 3815
     }
   },
