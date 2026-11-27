@@ -7013,28 +7013,10 @@
     "FLM1D_EQ",
     "FMGD_EQ",
     "FMKD_EQ",
-    "FMQD_EQ"
+    "FMQD_EQ",
+    "FMVD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ENGLd_EQ",
-      "venue": "DE",
-      "yahoo": "ENGL.DE",
-      "isin": "DE000A40ZVZ1",
-      "name": "ENG",
-      "seconds": 86.036,
-      "outcome": "miss",
-      "at": "2026-11-27T01:50:52.602407+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.82
-      },
-      "screen_seconds": 84.82,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "ENURd_EQ",
       "venue": "DE",
@@ -7775,6 +7757,25 @@
       },
       "screen_seconds": 83.393,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "FMVd_EQ",
+      "venue": "DE",
+      "yahoo": "FMV.DE",
+      "isin": "CA32076V1031",
+      "name": "FMV",
+      "seconds": 2.912,
+      "outcome": "miss",
+      "at": "2026-11-27T02:33:53.341310+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.759
+      },
+      "screen_seconds": 0.759,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89365,43 +89366,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T02:07:39.326376+00:00"
+    },
+    {
+      "t212_ticker": "FMVd_EQ",
+      "yahoo": "FMV.DE",
+      "name": "FMV",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T02:33:53.341310+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "FMQd_EQ",
+    "t212_ticker": "FMVd_EQ",
     "venue": "DE",
-    "yahoo": "FMQ.DE",
-    "isin": "US3024913036",
-    "name": "FMQ",
-    "seconds": 84.412,
+    "yahoo": "FMV.DE",
+    "isin": "CA32076V1031",
+    "name": "FMV",
+    "seconds": 2.912,
     "outcome": "miss",
-    "at": "2026-11-27T02:33:44.149769+00:00",
+    "at": "2026-11-27T02:33:53.341310+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.4125,
-      "seconds": 83.393
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.759
     },
-    "screen_seconds": 83.393,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.759,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "FMVd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T02:33:44.149769+00:00",
+  "updated_at": "2026-11-27T02:33:53.341310+00:00",
   "totals": {
-    "screened": 7012,
+    "screened": 7013,
     "signals": {
-      "buy": 1958,
+      "buy": 1959,
       "avoid": 1529,
       "hold": 1431,
       "insufficient_data": 2054,
       "strong_buy": 40
     },
-    "signals_n": 7012,
-    "screen_seconds_sum": 90879.81300000043,
-    "screen_seconds_n": 7012,
+    "signals_n": 7013,
+    "screen_seconds_sum": 90880.57200000044,
+    "screen_seconds_n": 7013,
     "outcomes": {
-      "miss": 3197,
+      "miss": 3198,
       "saved": 3815
     }
   },
