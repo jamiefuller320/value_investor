@@ -10034,6 +10034,82 @@ def test_filing_source_surface_g13_si_ir_allowlist_direct_eng_20261115_03():
     assert filing_source_surface("sti", "G13.SI") == "asia_filings+ir_allowlist_direct"
 
 
+def test_fetch_filings_ir_allowlist_sti_5e2_si_builtins_eng_20261127_02(tmp_path: Path):
+    """eng-20261127-02: sti buy-tier leftover 5E2.SI — SGX annual/interim statutory PDF seeds."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("5E2.SI", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    urls = [row["url"] for row in rows]
+    assert any("Seatrium_AGM%202026_AR" in url for url in urls)
+    assert any("Annual%20Report%202024" in url for url in urls)
+    assert any("1H2025%20Financial%20Statements" in url for url in urls)
+    assert all("links.sgx.com" in url for url in urls)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_5e2_si_index(tmp_path: Path):
+    """Empty 5E2.SI filings_index.json must gain IR rows for library sti measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("5E2.SI", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] == 3
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) == 3
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_parked_source_hunter_5e2_si_sti_has_fetchable_ir():
+    """eng-20261127-02: 5E2.SI (Seatrium) has live-fetchable SGX statutory PDF filings."""
+    assert "5E2.SI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("5E2.SI")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("links.sgx.com" in url for url in urls)
+    annual_url = next(url for url in urls if "Seatrium_AGM%202026_AR" in url)
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("SGX PDF body fetch unavailable (network) — retry later")
+    assert len(body) >= 50000
+    assert "seatrium" in body.lower()
+
+
+def test_ir_allowlist_period_classifies_5e2_si_ar_and_1h2025_fs_slugs():
+    """eng-20261127-02: Seatrium SGX slugs must map annual/interim (not %20f / other)."""
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/FileOpen/Seatrium_AGM%202026_AR.ashx?App=Announcement&FileID=880042"
+        )
+        == "annual"
+    )
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/1.0.0/corporate-announcements/PLZIPXWSMUL9X22L/853795_1H2025%20Financial%20Statements.pdf"
+        )
+        == "interim"
+    )
+
+
+def test_filing_source_surface_5e2_si_ir_allowlist_direct_eng_20261127_02():
+    """eng-20261127-02: sti 5E2.SI no_key_bodies must gain ir_allowlist_direct surface."""
+    from value_investor.research.filings import filing_source_surface, ir_allowlist_direct_eligible
+
+    assert ir_allowlist_direct_eligible("5E2.SI")
+    assert filing_source_surface("sti", "5E2.SI") == "asia_filings+ir_allowlist_direct"
+
+
 def test_parked_source_hunter_skip_0968_hk_hang_seng():
     """eng-20261017-11: 0968.HK leftover IWB is bot-gated TipRanks news, not missing HKEX filings."""
     assert "0968.HK" in PARKED_SOURCE_HUNTER_SKIP

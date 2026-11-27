@@ -1271,6 +1271,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://links.sgx.com/FileOpen/Annual%20Report%202024.ashx?App=Announcement&FileID=837141",
         "https://links.sgx.com/1.0.0/corporate-announcements/ICQRGNBFANVDT4A4/854607_GENS%201H2025%20SGX%20Results%20Announcement.pdf",
     ],
+    # sti buy-tier leftover — eng-20261127-02: 5E2.SI no_key_bodies; asia_filings indexed
+    # Simply Wall St forecast shells only; seed SGX annual reports and 1H2025 statutory FS.
+    "5E2.SI": [
+        "https://links.sgx.com/FileOpen/Seatrium_AGM%202026_AR.ashx?App=Announcement&FileID=880042",
+        "https://links.sgx.com/FileOpen/1.%20Seatrium%20Limited%20Annual%20Report%202024.ashx?App=Announcement&FileID=837006",
+        "https://links.sgx.com/1.0.0/corporate-announcements/PLZIPXWSMUL9X22L/853795_1H2025%20Financial%20Statements.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -6421,6 +6428,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://links.sgx.com/FileOpen/slide-q2fy2526.ashx?App=Announcement&FileID=867072": "interim",
     # eng-20261115-03: G13.SI — 1H2025 Results Announcement slug has no half-year token.
     "https://links.sgx.com/1.0.0/corporate-announcements/ICQRGNBFANVDT4A4/854607_GENS%201H2025%20SGX%20Results%20Announcement.pdf": "interim",
+    # eng-20261127-02: 5E2.SI — AGM_AR slug lacks annual token; 1H2025 FS has %20f false-positive.
+    "https://links.sgx.com/FileOpen/Seatrium_AGM%202026_AR.ashx?App=Announcement&FileID=880042": "annual",
+    "https://links.sgx.com/1.0.0/corporate-announcements/PLZIPXWSMUL9X22L/853795_1H2025%20Financial%20Statements.pdf": "interim",
     # eng-20261109-01: IMD.AX — Weblink Appendix 4D slug is numeric-only (would classify other).
     "https://wcsecure.weblink.com.au/pdf/IMD/03059253.pdf": "interim",
     # eng-20261115-02: NHC.AX — opaque ASX Appendix 4E hash slug (would classify other).
