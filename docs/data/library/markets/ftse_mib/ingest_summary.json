@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-27T17:43:07.130568+00:00",
+  "run_at": "2026-11-27T19:44:57.950663+00:00",
   "market_id": "ftse_mib",
   "targets": [
     "TIT.MI"
@@ -87,7 +87,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-27T17:42:56.214479+00:00",
+    "snapshot_at": "2026-11-27T19:43:33.536555+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
@@ -122,7 +122,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-27T17:43:07.107335+00:00",
+    "snapshot_at": "2026-11-27T19:43:43.692055+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
@@ -145,16 +145,15 @@
     "indexed_without_body_by_ticker": {},
     "parked_tickers": [
       "FCT.MI",
-      "PST.MI"
-    ],
-    "parked_count": 2,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
+      "PST.MI",
       "TIT.MI"
     ],
+    "parked_count": 3,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -165,10 +164,67 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "ftse_mib",
+    "to_market": "hang_seng",
+    "stream_markets_after": [
+      "hang_seng"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "ftse_mib",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "FCT.MI",
+        "PST.MI",
+        "TIT.MI"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "hang_seng",
+      "forced": true,
+      "prior_screen_at": "2026-11-27T06:53:44.375042+00:00",
+      "prior_age_days": 0,
+      "run_at": "2026-11-27T19:44:57.016983+00:00",
+      "shortlist_count": 23,
+      "ticker_count": 85
+    },
+    "at": "2026-11-27T19:44:02.684346+00:00",
+    "ingest_parity_recorded": false,
+    "gap_market_id": "ftse_mib",
+    "window_days": 2,
+    "gaps_before": {
+      "unmeasured": 1,
+      "zero_body": 0,
+      "thin": 2,
+      "indexed_without_body": 0,
+      "filing_gaps": 1
+    },
+    "gaps_after": {
+      "unmeasured": 0,
+      "zero_body": 0,
+      "thin": 3,
+      "indexed_without_body": 0,
+      "filing_gaps": 0
+    },
+    "gap_delta": {
+      "unmeasured": -1,
+      "zero_body": 0,
+      "thin": 1,
+      "indexed_without_body": 0,
+      "filing_gaps": -1
+    }
+  },
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-11-27T17:42:56.596236+00:00",
+    "assessed_at": "2026-11-27T19:43:34.016145+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -194,9 +250,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 10.100434390999993,
-  "budget_seconds": 2076.160403251648,
-  "leftover_seconds": 2066.059968860648,
+  "used_seconds": 9.12444502599999,
+  "budget_seconds": 2069.9346067905426,
+  "leftover_seconds": 2060.8101617645425,
   "blocker_ticker": null,
   "per_ticker_max_seconds": null,
   "pin_tickers": [
@@ -206,9 +262,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-11-27T17:43:07.114160+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-11-27T19:43:43.699841+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -234,6 +290,18 @@
         "indexed_without_body": 0,
         "thin": true,
         "source_surface": "euro_filings+ir_allowlist_direct"
+      },
+      {
+        "ticker": "TIT.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-11-27T19:43:43.699841+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true,
+        "source_surface": "euro_filings+ir_allowlist_direct"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -245,16 +313,40 @@
       "PST.MI",
       "TIT.MI"
     ],
-    "unparked_leftover": [
-      "TIT.MI"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/ftse_mib/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "ftse_mib"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "ftse_mib",
+    "ingest_exhausted_markets": [
+      "aex",
+      "aim",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,

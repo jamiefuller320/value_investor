@@ -574,7 +574,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-11-27T18:28:06.769615+00:00",
+  "updated_at": "2026-11-27T19:44:02.685163+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -587,7 +587,7 @@
     "psi20"
   ],
   "ingest_parallel_sprint": [
-    "ftse_mib"
+    "hang_seng"
   ],
   "ingest_parallel_sprint_2": [
     "sti"
@@ -893,14 +893,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-11-10T00:44:29.930315+00:00",
-        "parallel_stream": 1,
-        "from_market": "sti",
-        "to_market": null,
-        "stream_markets_after": [],
-        "ingest_parity_recorded": false
-      },
       {
         "reseeded": true,
         "market_queue_appended": false,
@@ -1891,6 +1883,39 @@
           "thin": 0,
           "indexed_without_body": -1,
           "filing_gaps": 0
+        }
+      },
+      {
+        "at": "2026-11-27T19:44:02.684346+00:00",
+        "parallel_stream": 1,
+        "from_market": "ftse_mib",
+        "to_market": "hang_seng",
+        "stream_markets_after": [
+          "hang_seng"
+        ],
+        "ingest_parity_recorded": false,
+        "gap_market_id": "ftse_mib",
+        "window_days": 2,
+        "gaps_before": {
+          "unmeasured": 1,
+          "zero_body": 0,
+          "thin": 2,
+          "indexed_without_body": 0,
+          "filing_gaps": 1
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 3,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": -1,
+          "zero_body": 0,
+          "thin": 1,
+          "indexed_without_body": 0,
+          "filing_gaps": -1
         }
       }
     ]
