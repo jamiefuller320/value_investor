@@ -7155,28 +7155,10 @@
     "IHB1D_EQ",
     "IHJND_EQ",
     "IK1D_EQ",
-    "IKLD_EQ"
+    "IKLD_EQ",
+    "ILM1D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "HJIAd_EQ",
-      "venue": "DE",
-      "yahoo": "HJIA.DE",
-      "isin": "AU0000265217",
-      "name": "HJIA",
-      "seconds": 87.578,
-      "outcome": "miss",
-      "at": "2026-11-27T22:50:40.384059+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 86.064
-      },
-      "screen_seconds": 86.064,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "HL2d_EQ",
       "venue": "DE",
@@ -7917,6 +7899,25 @@
       },
       "screen_seconds": 86.178,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "ILM1d_EQ",
+      "venue": "DE",
+      "yahoo": "ILM1.DE",
+      "isin": "DE000A1MMCC8",
+      "name": "ILM1",
+      "seconds": 2.579,
+      "outcome": "miss",
+      "at": "2026-11-27T23:34:36.816926+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.132
+      },
+      "screen_seconds": 1.132,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -90574,43 +90575,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T23:10:42.303694+00:00"
+    },
+    {
+      "t212_ticker": "ILM1d_EQ",
+      "yahoo": "ILM1.DE",
+      "name": "ILM1",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T23:34:36.816926+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "IKLd_EQ",
+    "t212_ticker": "ILM1d_EQ",
     "venue": "DE",
-    "yahoo": "IKL.DE",
-    "isin": "CA45257A1021",
-    "name": "IKL",
-    "seconds": 87.304,
+    "yahoo": "ILM1.DE",
+    "isin": "DE000A1MMCC8",
+    "name": "ILM1",
+    "seconds": 2.579,
     "outcome": "miss",
-    "at": "2026-11-27T23:34:24.702597+00:00",
+    "at": "2026-11-27T23:34:36.816926+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 86.178
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.132
     },
-    "screen_seconds": 86.178,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.132,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "ILM1d_EQ"
+    }
   },
-  "updated_at": "2026-11-27T23:34:24.702597+00:00",
+  "updated_at": "2026-11-27T23:34:36.816926+00:00",
   "totals": {
-    "screened": 7154,
+    "screened": 7155,
     "signals": {
-      "buy": 1980,
+      "buy": 1981,
       "avoid": 1542,
       "hold": 1444,
       "insufficient_data": 2148,
       "strong_buy": 40
     },
-    "signals_n": 7154,
-    "screen_seconds_sum": 94209.18000000042,
-    "screen_seconds_n": 7154,
+    "signals_n": 7155,
+    "screen_seconds_sum": 94210.31200000041,
+    "screen_seconds_n": 7155,
     "outcomes": {
-      "miss": 3338,
+      "miss": 3339,
       "saved": 3816
     }
   },
