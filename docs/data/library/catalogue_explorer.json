@@ -6985,28 +6985,10 @@
     "EVACD_EQ",
     "EVDD_EQ",
     "EVKD_EQ",
-    "EVTD_EQ"
+    "EVTD_EQ",
+    "EXLD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "E9Zd_EQ",
-      "venue": "DE",
-      "yahoo": "E9Z.DE",
-      "isin": "CA59132M1086",
-      "name": "E9Z",
-      "seconds": 86.035,
-      "outcome": "miss",
-      "at": "2026-11-27T01:18:55.117355+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.821
-      },
-      "screen_seconds": 84.821,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "EARd_EQ",
       "venue": "DE",
@@ -7747,6 +7729,25 @@
       },
       "screen_seconds": 0.796,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "EXLd_EQ",
+      "venue": "DE",
+      "yahoo": "EXL.DE",
+      "isin": "DE000A0LR9G9",
+      "name": "EXL",
+      "seconds": 1.735,
+      "outcome": "miss",
+      "at": "2026-11-27T01:58:07.715638+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.823
+      },
+      "screen_seconds": 0.823,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89313,43 +89314,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T01:57:51.055968+00:00"
+    },
+    {
+      "t212_ticker": "EXLd_EQ",
+      "yahoo": "EXL.DE",
+      "name": "EXL",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T01:58:07.715638+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "EVTd_EQ",
+    "t212_ticker": "EXLd_EQ",
     "venue": "DE",
-    "yahoo": "EVT.DE",
-    "isin": "DE0005664809",
-    "name": "EVT",
-    "seconds": 2.011,
+    "yahoo": "EXL.DE",
+    "isin": "DE000A0LR9G9",
+    "name": "EXL",
+    "seconds": 1.735,
     "outcome": "miss",
-    "at": "2026-11-27T01:57:59.480754+00:00",
+    "at": "2026-11-27T01:58:07.715638+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 0.95,
-      "seconds": 0.796
+      "seconds": 0.823
     },
-    "screen_seconds": 0.796,
-    "signal": "avoid"
+    "screen_seconds": 0.823,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "EXLd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T01:57:59.480754+00:00",
+  "updated_at": "2026-11-27T01:58:07.715638+00:00",
   "totals": {
-    "screened": 6984,
+    "screened": 6985,
     "signals": {
-      "buy": 1955,
+      "buy": 1956,
       "avoid": 1528,
       "hold": 1429,
       "insufficient_data": 2032,
       "strong_buy": 40
     },
-    "signals_n": 6984,
-    "screen_seconds_sum": 89008.84900000042,
-    "screen_seconds_n": 6984,
+    "signals_n": 6985,
+    "screen_seconds_sum": 89009.67200000043,
+    "screen_seconds_n": 6985,
     "outcomes": {
-      "miss": 3169,
+      "miss": 3170,
       "saved": 3815
     }
   },
