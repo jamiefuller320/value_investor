@@ -7074,28 +7074,10 @@
     "GRUD_EQ",
     "GRVD_EQ",
     "GS2CD_EQ",
-    "GSAD_EQ"
+    "GSAD_EQ",
+    "GSC1D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FYBd_EQ",
-      "venue": "DE",
-      "yahoo": "FYB.DE",
-      "isin": "DE000A1EWVY8",
-      "name": "FYB",
-      "seconds": 2.96,
-      "outcome": "miss",
-      "at": "2026-11-27T22:29:42.989979+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.9,
-        "seconds": 1.486
-      },
-      "screen_seconds": 1.486,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "FZMd_EQ",
       "venue": "DE",
@@ -7836,6 +7818,25 @@
       },
       "screen_seconds": 5.253,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "GSC1d_EQ",
+      "venue": "DE",
+      "yahoo": "GSC1.DE",
+      "isin": "DE000A1K0201",
+      "name": "GSC1",
+      "seconds": 2.214,
+      "outcome": "miss",
+      "at": "2026-11-27T22:36:56.873115+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.064
+      },
+      "screen_seconds": 1.064,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89902,43 +89903,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T22:36:36.486453+00:00"
+    },
+    {
+      "t212_ticker": "GSC1d_EQ",
+      "yahoo": "GSC1.DE",
+      "name": "GSC1",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T22:36:56.873115+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "GSAd_EQ",
+    "t212_ticker": "GSC1d_EQ",
     "venue": "DE",
-    "yahoo": "GSA.DE",
-    "isin": "IL0010825102",
-    "name": "GSA",
-    "seconds": 6.924,
+    "yahoo": "GSC1.DE",
+    "isin": "DE000A1K0201",
+    "name": "GSC1",
+    "seconds": 2.214,
     "outcome": "miss",
-    "at": "2026-11-27T22:36:49.025152+00:00",
+    "at": "2026-11-27T22:36:56.873115+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 5.253
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.064
     },
-    "screen_seconds": 5.253,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.064,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "GSC1d_EQ"
+    }
   },
-  "updated_at": "2026-11-27T22:36:49.025152+00:00",
+  "updated_at": "2026-11-27T22:36:56.873115+00:00",
   "totals": {
-    "screened": 7073,
+    "screened": 7074,
     "signals": {
-      "buy": 1968,
+      "buy": 1969,
       "avoid": 1531,
       "hold": 1437,
       "insufficient_data": 2097,
       "strong_buy": 40
     },
-    "signals_n": 7073,
-    "screen_seconds_sum": 91345.09100000041,
-    "screen_seconds_n": 7073,
+    "signals_n": 7074,
+    "screen_seconds_sum": 91346.1550000004,
+    "screen_seconds_n": 7074,
     "outcomes": {
-      "miss": 3258,
+      "miss": 3259,
       "saved": 3815
     }
   },
