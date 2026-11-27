@@ -6920,28 +6920,10 @@
     "DP4AD_EQ",
     "DP4BD_EQ",
     "DPMD_EQ",
-    "DPU0D_EQ"
+    "DPU0D_EQ",
+    "DR0D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "D7Nd_EQ",
-      "venue": "DE",
-      "yahoo": "D7N.DE",
-      "isin": "CNE100000114",
-      "name": "D7N",
-      "seconds": 5.404,
-      "outcome": "miss",
-      "at": "2026-11-27T00:59:40.569236+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.203
-      },
-      "screen_seconds": 4.203,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "D7Q1d_EQ",
       "venue": "DE",
@@ -7682,6 +7664,25 @@
       },
       "screen_seconds": 4.022,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "DR0d_EQ",
+      "venue": "DE",
+      "yahoo": "DR0.DE",
+      "isin": "DE000A0XYG76",
+      "name": "DR0",
+      "seconds": 1.957,
+      "outcome": "miss",
+      "at": "2026-11-27T01:06:24.600722+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.819
+      },
+      "screen_seconds": 0.819,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -88624,43 +88625,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T01:05:53.414880+00:00"
+    },
+    {
+      "t212_ticker": "DR0d_EQ",
+      "yahoo": "DR0.DE",
+      "name": "DR0",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T01:06:24.600722+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "DPU0d_EQ",
+    "t212_ticker": "DR0d_EQ",
     "venue": "DE",
-    "yahoo": "DPU0.DE",
-    "isin": "CA26139R1091",
-    "name": "DPU0",
-    "seconds": 4.943,
+    "yahoo": "DR0.DE",
+    "isin": "DE000A0XYG76",
+    "name": "DR0",
+    "seconds": 1.957,
     "outcome": "miss",
-    "at": "2026-11-27T01:06:16.432763+00:00",
+    "at": "2026-11-27T01:06:24.600722+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.022
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.819
     },
-    "screen_seconds": 4.022,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.819,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "DR0d_EQ"
+    }
   },
-  "updated_at": "2026-11-27T01:06:16.432763+00:00",
+  "updated_at": "2026-11-27T01:06:24.600722+00:00",
   "totals": {
-    "screened": 6919,
+    "screened": 6920,
     "signals": {
-      "buy": 1943,
+      "buy": 1944,
       "avoid": 1524,
       "hold": 1417,
       "insufficient_data": 1995,
       "strong_buy": 40
     },
-    "signals_n": 6919,
-    "screen_seconds_sum": 86412.30800000046,
-    "screen_seconds_n": 6919,
+    "signals_n": 6920,
+    "screen_seconds_sum": 86413.12700000046,
+    "screen_seconds_n": 6920,
     "outcomes": {
-      "miss": 3104,
+      "miss": 3105,
       "saved": 3815
     }
   },
