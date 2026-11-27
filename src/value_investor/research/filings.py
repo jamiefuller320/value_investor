@@ -321,6 +321,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.youngs.co.uk/wp-content/uploads/2024/09/2024-annual-report-website-01-04-2024.pdf",
         "https://www.youngs.co.uk/wp-content/uploads/2026/04/HY26-Interim-Accounts.pdf",
     ],
+    # eng-20261127-03: POLR.L buy-tier no_key_bodies — Investegate has interim RNS HTML only; polarcapital.co.uk static audited/interim PDFs fetch.
+    "POLR.L": [
+        "https://www.polarcapital.co.uk/static/documents/25_RNS_30.03.2025_Final_mJFpY0SkYp.pdf",
+        "https://www.polarcapital.co.uk/static/documents/PCH_Final_Results_31-March-2024.pdf",
+        "https://www.polarcapital.co.uk/static/documents/25_RNS_30.09.2024_Final_xqvcj9NChW.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
@@ -6428,6 +6434,10 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.sec.gov/Archives/edgar/data/1243429/000124342926000072/arcelormittalform6-kjuly30.htm": "interim",
     # eng-20261015-01: PRX.AS hy2026 condensed FS slug has no half-year token (would classify other).
     "https://www.prosus.com/~/media/Files/P/prosus-corp-v2/results-reports-and-events-archive/latest-results/hy2026/hy2026-summary-consolidated-financial-statements.pdf": "interim",
+    # eng-20261127-03: POLR.L — polarcapital.co.uk RNS_PDF slugs (25_RNS_* / PCH_Final_Results_*) lack period tokens.
+    "https://www.polarcapital.co.uk/static/documents/25_RNS_30.03.2025_Final_mJFpY0SkYp.pdf": "annual",
+    "https://www.polarcapital.co.uk/static/documents/PCH_Final_Results_31-March-2024.pdf": "annual",
+    "https://www.polarcapital.co.uk/static/documents/25_RNS_30.09.2024_Final_xqvcj9NChW.pdf": "interim",
     # eng-20261013-08: PEBB.L — Concrete5 IR filenames (AR_Interactive / ARA_2024 / HY_26) lack annual/interim tokens.
     "https://www.thepebblegroup.com/application/files/7117/7505/8006/272947_Pebble_Group_AR_Interactive.pdf": "annual",
     "https://www.thepebblegroup.com/application/files/3417/4587/6836/270065_Pebble_ARA_2024_INTERACTIVE3_FINAL.pdf": "annual",
