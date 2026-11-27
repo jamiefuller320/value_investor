@@ -17315,7 +17315,12 @@
         "parked_reason": "unfetchable_iwb",
         "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
         "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "hunter_resolution": "allowlist",
+        "bound_url": "https://www.panafricanresources.com/wp-content/uploads/2026/09/Pan-African-Resources-integrated-annual-report-2026.pdf",
+        "bound_document": "Integrated annual report, year ended 30 June 2026",
+        "fetch_referer": "https://www.panafricanresources.com/investors/financial-reports/",
+        "unparked_from_policy": "reburn_loop"
       },
       "acceptance_criteria": [
         "Inspect IR / exchange sources for PAF.L only — do not invent URLs",
@@ -17344,10 +17349,12 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "parked",
-      "parked_reason": "automation waste reburn — 7 engineering-agent failure(s) in 6h without an in-flight PR (PM stop_automation_waste)",
-      "parked_policy": "reburn_loop",
-      "parked_at": "2026-11-04T12:32:13.381072+00:00"
+      "status": "completed",
+      "branch_name": "cursor/paf-smr-filing-hunts-2de1",
+      "completed_at": "2026-11-26T09:20:00+00:00",
+      "no_diff_count": 0,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1485",
+      "pr_number": 1485
     },
     {
       "id": "eng-20261103-09",
@@ -17365,7 +17372,11 @@
         "parked_reason": "unfetchable_iwb",
         "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
         "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "hunter_resolution": "allowlist",
+        "bound_url": "https://www.stanmore.au/wp-content/uploads/2026/08/6.-Website-Report.pdf",
+        "bound_document": "Half-year report / Appendix 4D, six months ended 30 June 2026",
+        "unparked_from_policy": "reburn_loop"
       },
       "acceptance_criteria": [
         "Inspect IR / exchange sources for SMR.AX only — do not invent URLs",
@@ -17394,10 +17405,12 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "parked",
-      "parked_reason": "automation waste reburn — 3 engineering-agent failure(s) in 6h without an in-flight PR (PM stop_automation_waste)",
-      "parked_policy": "reburn_loop",
-      "parked_at": "2026-11-04T15:50:24.311165+00:00"
+      "status": "completed",
+      "branch_name": "cursor/paf-smr-filing-hunts-2de1",
+      "completed_at": "2026-11-26T09:20:00+00:00",
+      "no_diff_count": 0,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1485",
+      "pr_number": 1485
     },
     {
       "id": "eng-20261103-02",
@@ -20866,29 +20879,8 @@
     "evaluated_at": "2026-11-27T12:33:47.790324+00:00",
     "pause_active": false,
     "automation_waste_active": false,
-    "automation_waste_signals": [
-      {
-        "kind": "eng_agent_reburn",
-        "title": "Automation waste: engineering agent reburn",
-        "severity": "fail",
-        "summary": "3 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261103-09) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
-        "workflow": "engineering-agent.yml",
-        "task_ids": [
-          "eng-20261103-09"
-        ],
-        "failure_count": 3,
-        "window_hours": 6.0,
-        "auto_remediable": true,
-        "evidence": {
-          "open_count": 1,
-          "in_flight_pr": null,
-          "fail_threshold": 3
-        }
-      }
-    ],
-    "automation_waste_parked_task_ids": [
-      "eng-20261103-09"
-    ],
+    "automation_waste_signals": [],
+    "automation_waste_parked_task_ids": [],
     "automation_waste_cleared_at": "2026-11-04T17:32:59.305864+00:00",
     "last_change": {
       "resumed": true

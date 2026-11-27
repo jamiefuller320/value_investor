@@ -221,6 +221,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.lslps.co.uk/uploads/media_file/Annual%20Report%202025.pdf",
         "https://www.lslps.co.uk/uploads/media_file/Annual%20report%202024.pdf",
     ],
+    # eng-20261104-01: AIM leftover PAF.L parked unfetchable_iwb. Integrated annual report
+    # for the year ended 30 June 2026. Bare GET is Cloudflare 403; fetch needs the IR Referer.
+    "PAF.L": [
+        "https://www.panafricanresources.com/wp-content/uploads/2026/09/Pan-African-Resources-integrated-annual-report-2026.pdf",
+    ],
     # eng-20261102-01: ftse350 EZJ.L gap-closure had empty IR allowlist (0 refetch); Q4 CDN issuer PDFs.
     "EZJ.L": [
         "https://s203.q4cdn.com/522538739/files/doc_financials/2025/ar/easyJetARA25_DIGITAL_sm.pdf",
@@ -957,6 +962,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03127979-2A1693078",
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03062425-2A1656711",
     ],
+    # eng-20261103-09: asx200 leftover SMR.AX parked unfetchable_iwb. Half-year report /
+    # Appendix 4D for the six months ended 30 June 2026 (opaque "Website-Report" slug).
+    "SMR.AX": [
+        "https://www.stanmore.au/wp-content/uploads/2026/08/6.-Website-Report.pdf",
+    ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
     "GIB-A.TO": [
         "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm",
@@ -1585,6 +1595,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "NHC": ("New Hope", "New Hope Corporation", "New Hope Group"),
     # asx200 HVN.AX Markit allowlist — opaque documentKey URLs need issuer tokens for IR title gate.
     "HVN": ("Harvey Norman", "Harvey Norman Holdings", "Harvey Norman Holdings Limited"),
+    # eng-20261103-09: SMR.AX "6.-Website-Report.pdf" slug has no issuer token for the IR title gate.
+    "SMR": ("Stanmore", "Stanmore Resources", "Stanmore Resources Limited"),
     # sti J36.SI SGX allowlist — opaque 877984_JMH.pdf / 853959_JMH.pdf slugs need issuer
     # tokens for _ir_body_title_tokens_match (same pattern as FMG.AX / YAL.AX).
     "J36": ("Jardine Matheson", "Jardine Matheson Holdings"),
@@ -4203,11 +4215,29 @@ def _sanitize_http_url(url: str) -> str:
     return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, path, query, parsed.fragment))
 
 
+# Issuer PDFs that 403 a bare GET unless the IR page is sent as Referer (Cloudflare).
+_IR_ALLOWLIST_FETCH_REFERER: dict[str, str] = {
+    # eng-20261104-01: PAF.L FY2026 integrated annual report.
+    "https://www.panafricanresources.com/wp-content/uploads/2026/09/Pan-African-Resources-integrated-annual-report-2026.pdf": (
+        "https://www.panafricanresources.com/investors/financial-reports/"
+    ),
+}
+
+
+def _ir_allowlist_fetch_headers(url: str) -> dict[str, str]:
+    """Extra headers a specific allowlist URL needs before the body will download."""
+    referer = _IR_ALLOWLIST_FETCH_REFERER.get(str(url or "").strip())
+    if not referer:
+        return {}
+    return {"Referer": referer}
+
+
 def _http_get(url: str, *, headers: dict[str, str] | None = None, timeout: int = 30) -> bytes:
     url = _sanitize_http_url(url)
     request_headers = {
         "User-Agent": USER_AGENT,
         "Accept-Encoding": "gzip, deflate",
+        **_ir_allowlist_fetch_headers(url),
         **(headers or {}),
     }
     request = urllib.request.Request(url, headers=request_headers)
@@ -6441,6 +6471,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # eng-20261107-02: AZM.MI — emarketstorage CONSOB comunicati slugs are date_hash only.
     "https://www.emarketstorage.it/sites/default/files/comunicati/2026-04/20260402_181268.pdf": "annual",
     "https://www.emarketstorage.it/sites/default/files/comunicati/2025-07/20250731_170567.pdf": "interim",
+    # eng-20261103-09: SMR.AX — "6.-Website-Report.pdf" has no half-year token (would classify other).
+    "https://www.stanmore.au/wp-content/uploads/2026/08/6.-Website-Report.pdf": "interim",
 }
 
 
