@@ -7054,28 +7054,10 @@
     "GE9D_EQ",
     "GEGD_EQ",
     "GFGD_EQ",
-    "GFJ1D_EQ"
+    "GFJ1D_EQ",
+    "GFTD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "FNTNd_EQ",
-      "venue": "DE",
-      "yahoo": "FNTN.DE",
-      "isin": "DE000A0Z2ZZ5",
-      "name": "FNTN",
-      "seconds": 1.662,
-      "outcome": "miss",
-      "at": "2026-11-27T02:34:01.382188+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.745
-      },
-      "screen_seconds": 0.745,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "FOTd_EQ",
       "venue": "DE",
@@ -7816,6 +7798,25 @@
       },
       "screen_seconds": 5.114,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "GFTd_EQ",
+      "venue": "DE",
+      "yahoo": "GFT.DE",
+      "isin": "DE0005800601",
+      "name": "GFT",
+      "seconds": 3.072,
+      "outcome": "miss",
+      "at": "2026-11-27T22:33:22.976935+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.435
+      },
+      "screen_seconds": 1.435,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -89866,43 +89867,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-27T22:32:18.840282+00:00"
+    },
+    {
+      "t212_ticker": "GFTd_EQ",
+      "yahoo": "GFT.DE",
+      "name": "GFT",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-27T22:33:22.976935+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "GFJ1d_EQ",
+    "t212_ticker": "GFTd_EQ",
     "venue": "DE",
-    "yahoo": "GFJ1.DE",
-    "isin": "LU2358378979",
-    "name": "LRND",
-    "seconds": 6.674,
+    "yahoo": "GFT.DE",
+    "isin": "DE0005800601",
+    "name": "GFT",
+    "seconds": 3.072,
     "outcome": "miss",
-    "at": "2026-11-27T22:33:14.279518+00:00",
+    "at": "2026-11-27T22:33:22.976935+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 5.114
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.435
     },
-    "screen_seconds": 5.114,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.435,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "GFTd_EQ"
+    }
   },
-  "updated_at": "2026-11-27T22:33:14.279518+00:00",
+  "updated_at": "2026-11-27T22:33:22.976935+00:00",
   "totals": {
-    "screened": 7053,
+    "screened": 7054,
     "signals": {
-      "buy": 1966,
+      "buy": 1967,
       "avoid": 1531,
       "hold": 1434,
       "insufficient_data": 2082,
       "strong_buy": 40
     },
-    "signals_n": 7053,
-    "screen_seconds_sum": 91272.53000000042,
-    "screen_seconds_n": 7053,
+    "signals_n": 7054,
+    "screen_seconds_sum": 91273.96500000042,
+    "screen_seconds_n": 7054,
     "outcomes": {
-      "miss": 3238,
+      "miss": 3239,
       "saved": 3815
     }
   },
