@@ -1,6 +1,6 @@
 # NIKE, Inc. (NKE) — Research memo
 
-_Version 14 · Updated 2026-11-27T01:33:52.218415+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-27T04:06:40.366404+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.66
-Rationale: Options-data headline adds no filings; Aug-2026 10-Q revenue decline and weak Q1 cash flow still weaken the screen buy.
+Rationale: Proposed Vietnam tariff press highlights footwear sourcing exposure; with no new filings, Aug-2026 10-Q revenue and Q1 cash-flow weakness still weaken the screen buy.
 RiskTags: cyclical, competitive, regulatory, customer_concentration
 
 ## Weekly updates
@@ -77,4 +77,9 @@ Q2 FY27 on 17 Dec remains outside the supplied sources.
 ### 2026-11-27T01:33:52.218415+00:00
 Since the 26 Nov evening refresh, the batch is thin: one options-market data headline only—no new SEC filings.  
 Aug-2026 10-Q revenue and Q1 cash-flow pressure, plus prior FY27 reset themes, are unchanged in the file set.  
+Q2 FY27 on 17 Dec remains outside the supplied sources.
+
+### 2026-11-27T04:06:40.366404+00:00
+Since the 01:33 refresh, one commentary piece cites proposed US tariffs on Vietnam (20–35%) and ~95% of Nike footwear made in Vietnam, Indonesia and China in fiscal 2026—no new SEC filings.  
+Aug-2026 10-Q revenue decline and weak Q1 cash-flow pressure, plus prior FY27 reset themes, are unchanged in the file set.  
 Q2 FY27 on 17 Dec remains outside the supplied sources.

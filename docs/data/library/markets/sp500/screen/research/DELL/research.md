@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 20 · Updated 2026-11-27T01:22:22.397809+00:00 · Mode: structured_verdict_update_
+_Version 21 · Updated 2026-11-27T03:55:37.557511+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: On-file Q3 8-K still supports growth; this batch is thin bullish AI-server press only—research mildly confirms strong_buy while leverage, cyclicality and regulatory risks persist.
+Rationale: The 03:55 UTC batch adds no articles; on-file Q3 8-K still supports growth—research mildly confirms strong_buy while leverage, cyclicality and regulatory risks persist.
 RiskTags: leverage, cyclical, competitive, customer_concentration, regulatory, litigation
 
 ## Weekly updates
@@ -108,3 +108,8 @@ Screen remains **strong_buy**; leverage, cyclical and regulatory risks are uncha
 The 01:22 UTC batch adds duplicate Motley Fool/Yahoo bullish AI-server growth headlines; no new Dell datapoints or filings.  
 On-file Q3 FY2027 8-K figures ($54.9bn revenue, $9.45 EPS, ~$132bn backlog) are unchanged; no new SEC extracts.  
 Screen remains **strong_buy**; leverage, cyclical and regulatory risks are unchanged.
+
+### 2026-11-27T03:55:37.557511+00:00
+The 03:55 UTC news batch adds no articles since the 01:22 UTC refresh.  
+On-file Q3 FY2027 8-K figures are unchanged; no new SEC extracts.  
+No material change; leverage, cyclical and regulatory risks are unchanged.

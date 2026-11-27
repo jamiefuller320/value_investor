@@ -1,6 +1,6 @@
 # Adobe Inc. (ADBE) — Research memo
 
-_Version 18 · Updated 2026-11-27T01:15:36.477519+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-27T03:49:01.820326+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: Q3 FY2026 10-Q still backs revenue, ARR and cash flow; no new filings or Adobe-specific news in the 27 Nov batch, neutrally confirming the buy screen with competitive, regulatory, litigation and leverage risks unchanged.
+Rationale: Q3 FY2026 10-Q still backs revenue, ARR and cash flow; two Seeking Alpha Q4-preview headlines add sentiment only, neutrally confirming the buy screen with competitive, regulatory, litigation and leverage risks unchanged.
 RiskTags: competitive, regulatory, litigation, leverage
 
 ## Weekly updates
@@ -98,3 +98,8 @@ Q3 FY2026 10-Q (Aug 2026) remains the latest disclosure; quantitative screen sig
 No material change since the 26 Nov 21:36 UTC refresh.  
 The 27 Nov 01:15 news batch returned zero articles; no new SEC filings beyond the existing Q3 FY2026 10-Q pack.  
 Quantitative screen signal remains **buy**; filing-backed fundamentals are unchanged.
+
+### 2026-11-27T03:49:01.820326+00:00
+Since the 01:15 UTC refresh, the 03:48 news batch adds two Seeking Alpha items: a Q4 earnings preview and “slowdown is a choice, not an AI casualty” commentary.  
+Q3 FY2026 10-Q (Aug 2026) remains the latest SEC disclosure; filing-backed revenue, ARR and cash flow are unchanged.  
+Quantitative screen signal remains **buy**.

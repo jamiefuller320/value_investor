@@ -1,6 +1,6 @@
 # Gartner, Inc. (IT) — Research memo
 
-_Version 15 · Updated 2026-11-27T01:28:51.083979+00:00 · Mode: structured_verdict_update_
+_Version 16 · Updated 2026-11-27T04:01:08.432528+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: On-file Q3 still supports cash economics; the 27 Nov batch adds no Gartner-specific news—accumulate continues to moderate the strong-buy screen amid leverage, competitive, cyclical and litigation risks.
+Rationale: On-file Q3 still supports cash economics; the 04:00 news batch adds no Gartner-specific items—accumulate continues to moderate the strong-buy screen amid leverage, competitive, cyclical and litigation risks.
 RiskTags: competitive, leverage, cyclical, litigation
 
 ## Weekly updates
@@ -82,4 +82,9 @@ No material change to Q3 metrics, guidance or prior leverage, competitive, cycli
 ### 2026-11-27T01:28:51.083979+00:00
 No new SEC filings since the 19 Nov executive RSU 8-K; the Q3 2026 Form 10-Q and 3 Nov earnings 8-K remain the latest on file.  
 The 27 Nov news batch has no Gartner-specific items—only generic “IT” ticker noise (dividend, AI and Nvidia headlines).  
+No material change to Q3 metrics, guidance or prior leverage, competitive, cyclical and litigation themes.
+
+### 2026-11-27T04:01:08.432528+00:00
+No new SEC filings since the 19 Nov executive RSU 8-K; the Q3 2026 Form 10-Q and 3 Nov earnings 8-K remain the latest on file.  
+The 04:00 news batch has no Gartner-specific items—only quantum-computing stock listicles (generic “IT” ticker noise).  
 No material change to Q3 metrics, guidance or prior leverage, competitive, cyclical and litigation themes.

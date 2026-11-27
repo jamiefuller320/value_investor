@@ -1,6 +1,6 @@
 # Hewlett Packard Enterprise Company (HPE) — Research memo
 
-_Version 14 · Updated 2026-11-27T01:41:49.391841+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-27T04:14:09.141182+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -77,4 +77,9 @@ No material change to furnished beat-and-raise versus margin and working-capital
 ### 2026-11-27T01:41:49.391841+00:00
 No material change.
 The 27 November news batch returned no articles; the filing index still shows no SEC items after the 23 November 8-K.
+Periodic reports in the supplied set still end at the Q3 10-Q (31 July 2026); Q4 detail remains only in furnished 8-K materials.
+
+### 2026-11-27T04:14:09.141182+00:00
+No material change.  
+The 27 November news batch returned no articles; the filing index still shows no SEC items after the 23 November 8-K.  
 Periodic reports in the supplied set still end at the Q3 10-Q (31 July 2026); Q4 detail remains only in furnished 8-K materials.

@@ -1,6 +1,6 @@
 # Fresenius Medical Care AG (FME.DE) — Research memo
 
-_Version 17 · Updated 2026-11-27T01:24:41.178347+00:00 · Mode: structured_verdict_update_
+_Version 18 · Updated 2026-11-27T03:57:24.183735+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.44
-Rationale: Research still weakens strong buy: empty news since 26 Nov; Q3 US reimbursement and broker caution persist; TTM FCF ~€1.79bn; Investegate index and annual extract remain wrong/empty.
+Rationale: Research still weakens strong buy: empty news since 01:24 UTC; Q3 reimbursement and broker caution persist; TTM FCF ~€1.79bn; Investegate index and annual extract remain wrong/empty.
 RiskTags: regulatory, leverage, competitive, pension, key_person, other
 
 ## Weekly updates
@@ -92,4 +92,9 @@ Investegate bodies remain Future Metals NL (AIM FME); the annual company-numbers
 ### 2026-11-27T01:24:41.178347+00:00
 News batch since 26 Nov 21:44 UTC is empty; Q3 US reimbursement, broker caution and profit/guidance themes are unchanged.  
 27 Nov financials refetch is unchanged (Q3 revenue ~€4.9bn, TTM FCF ~€1.79bn); screen timing stays neutral.  
+Investegate bodies remain Future Metals NL (AIM FME); the annual company-numbers extract is still empty.
+
+### 2026-11-27T03:57:24.183735+00:00
+News batch since 27 Nov 01:24 UTC is empty; Q3 US reimbursement, broker caution and profit/guidance themes are unchanged.  
+03:56 financials refetch is unchanged (Q3 revenue ~€4.9bn, TTM FCF ~€1.79bn); screen timing stays neutral.  
 Investegate bodies remain Future Metals NL (AIM FME); the annual company-numbers extract is still empty.

@@ -1,6 +1,6 @@
 # GE Vernova Inc. (GEV) — Research memo
 
-_Version 14 · Updated 2026-11-27T01:27:37.843378+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-27T04:00:08.880152+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.60
-Rationale: Empty incremental batch; filed FY25 FCF $3.71bn still far below Yahoo TTM ~$17.1bn, with Wind execution and FCF-basis gaps unresolved—research still weakens the buy case.
+Rationale: Commentary highlights a ~$197bn backlog delivery test; filed FY25 FCF $3.71bn still far below Yahoo TTM ~$17.1bn—research still weakens the buy case.
 RiskTags: cyclical, regulatory, liquidity, pension, accounting, leverage
 
 ## Weekly updates
@@ -76,5 +76,10 @@ Wind execution and the FCF-basis gap from prior updates remain unresolved.
 
 ### 2026-11-27T01:27:37.843378+00:00
 Incremental news batch since the prior run is empty; no new headlines or SEC filings in the supplied sources.  
+Filed FY2025 OCF $4.99bn and FCF $3.71bn are unchanged; Yahoo TTM FCF (~$17.1bn) still far exceeds annual filed cash flow underpinning the screen.  
+Wind execution and the FCF-basis gap from prior updates remain unresolved.
+
+### 2026-11-27T04:00:08.880152+00:00
+One Yahoo piece frames a delivery test as backlog reaches ~$197bn; Coatue/Laffont listicle context only—no new SEC filings.  
 Filed FY2025 OCF $4.99bn and FCF $3.71bn are unchanged; Yahoo TTM FCF (~$17.1bn) still far exceeds annual filed cash flow underpinning the screen.  
 Wind execution and the FCF-basis gap from prior updates remain unresolved.

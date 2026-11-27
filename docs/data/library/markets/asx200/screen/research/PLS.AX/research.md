@@ -1,6 +1,6 @@
 # PLS Group Limited (PLS.AX) — Research memo
 
-_Version 14 · Updated 2026-11-27T01:36:26.454397+00:00 · Mode: structured_verdict_update_
+_Version 15 · Updated 2026-11-27T04:09:24.227913+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.62
-Rationale: Research still weakens the buy case: the Motley Fool broker-return piece adds no operating evidence; cyclical lithium, leverage and offtake risks persist; screen TTM FCF remains unverified.
+Rationale: Research still weakens the buy case: empty 04:08 news batch and no new filings; cyclical lithium, leverage and offtake risks persist; screen TTM FCF remains unverified.
 RiskTags: cyclical, leverage, customer_concentration, competitive
 
 ## Weekly updates
@@ -76,4 +76,9 @@ Screen stays **buy**; Yahoo quarterly cashflow is still empty, so TTM FCF is unv
 ### 2026-11-27T01:36:26.454397+00:00
 One incremental Motley Fool headline cites broker 12-month return targets for PLS; no verified operating disclosure in the pack.  
 Filing index unchanged on re-fetch at 01:36 UTC; latest operating materials remain the 28 Oct FY27 Sep-quarter pack plus 24 Nov AGM.  
+Screen stays **buy**; Yahoo quarterly cashflow is still empty, so TTM FCF is unverified.
+
+### 2026-11-27T04:09:24.227913+00:00
+No articles in the incremental news batch since the 01:36 UTC refresh; filing index unchanged on re-fetch at 04:08 UTC.  
+Latest operating disclosure remains the 28 Oct FY27 Sep-quarter pack plus 24 Nov AGM materials; no new ASX operating filings.  
 Screen stays **buy**; Yahoo quarterly cashflow is still empty, so TTM FCF is unverified.

@@ -1,6 +1,6 @@
 # Yangzijiang Shipbuilding (Holdings) Ltd. (BS6.SI) — Research memo
 
-_Version 27 · Updated 2026-11-27T01:17:45.458072+00:00 · Mode: structured_verdict_update_
+_Version 28 · Updated 2026-11-27T03:50:44.974811+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.49
-Rationale: Research weakens the buy case: FY2025 profits are strong but filed free cash flow trails dividends and TTM cash is unverified; cyclical, governance and accounting risks remain in corpus.
+Rationale: Research weakens the buy case: FY2025 earnings are strong but filed FCF trails cash dividends and TTM cash is unverified; cyclical, governance and accounting risks remain in the corpus.
 RiskTags: cyclical, governance, accounting
 
 ## Weekly updates
@@ -143,3 +143,8 @@ The screen still shows zero filed metrics; filing corpus unchanged (five bodies)
 The 27 Nov news batch adds one Simply Wall St valuation piece; no new company results or filings.  
 Yahoo annuals at 01:17 UTC are unchanged: FY2025 free cash flow (~CNY 2.51bn) still below cash dividends (~CNY 2.61bn); quarterly cashflow remains empty (TTM suppressed).  
 The screen still shows zero filed metrics; filing corpus unchanged (five bodies).
+
+### 2026-11-27T03:50:44.974811+00:00
+The 27 Nov 03:50 UTC news batch adds no articles since the 01:17 refresh.  
+Yahoo annuals at 03:50 UTC are unchanged: FY2025 free cash flow (~CNY 2.51bn) still below cash dividends (~CNY 2.61bn); quarterly cashflow empty (TTM suppressed).  
+The screen still shows zero filed metrics; filing corpus unchanged (five bodies)—no material change.

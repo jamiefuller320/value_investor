@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 30 · Updated 2026-11-27T01:37:49.345270+00:00 · Mode: structured_verdict_update_
+_Version 31 · Updated 2026-11-27T04:10:36.368918+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.58
-Rationale: Exceptional on-file FCF persists after the 27 November refresh, but an empty news batch and no new SNDK guidance leave NAND-cycle risks unchanged—research still weakens the strong-buy case.
+Rationale: On-file FCF stays exceptional after the 27 November refresh, but an empty news batch and no new SNDK guidance leave NAND-cycle risks unchanged—research still weakens the strong-buy case.
 RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
@@ -142,3 +142,8 @@ On-file financials (fetched 26 November) still show very strong free cash flow (
 No material change.
 The news batch since the 26 November refresh adds no articles and no new SNDK issuer disclosures.
 On-file financials (fetched 27 November) still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).
+
+### 2026-11-27T04:10:36.368918+00:00
+The 04:10 refresh news batch adds no articles since the 01:37 update; no new SNDK issuer disclosures in that slice.
+Financials re-fetched 27 November still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).
+2027 NAND oversupply debate, semis estimate-cut framing and post-split officer-sale press in the file set are unchanged.
