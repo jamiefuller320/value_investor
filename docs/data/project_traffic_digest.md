@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-27T01:08:22.221892+00:00`
+Generated: `2026-11-27T02:39:41.311133+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -45,6 +45,22 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `validate job failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `ruff_format` — 2×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 17 (open=17, resolved=0)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Learning-track verdict not statistically supported — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Price-only excess misstates track performance — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Sector headwind gate coverage gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Memo model comparison failed — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Strategy book demo reconciliation mismatch — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Strategy book demo FX order rejected — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
