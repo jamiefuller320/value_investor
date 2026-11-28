@@ -7440,28 +7440,10 @@
     "O7FD_EQ",
     "OA5D_EQ",
     "OAA1D_EQ",
-    "OBAD_EQ"
+    "OBAD_EQ",
+    "OBCKD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "NI7d_EQ",
-      "venue": "DE",
-      "yahoo": "NI7.DE",
-      "isin": "JP3749400002",
-      "name": "NI7",
-      "seconds": 6.259,
-      "outcome": "miss",
-      "at": "2026-11-28T08:05:55.763904+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.831
-      },
-      "screen_seconds": 4.831,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "NK1Ad_EQ",
       "venue": "DE",
@@ -8202,6 +8184,25 @@
       },
       "screen_seconds": 85.597,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "OBCKd_EQ",
+      "venue": "DE",
+      "yahoo": "OBCK.DE",
+      "isin": "DE000BCK2223",
+      "name": "OBCK",
+      "seconds": 2.52,
+      "outcome": "miss",
+      "at": "2026-11-28T08:56:15.820516+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.0
+      },
+      "screen_seconds": 1.0,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -92098,43 +92099,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T08:38:08.590950+00:00"
+    },
+    {
+      "t212_ticker": "OBCKd_EQ",
+      "yahoo": "OBCK.DE",
+      "name": "OBCK",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T08:56:15.820516+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "OBAd_EQ",
+    "t212_ticker": "OBCKd_EQ",
     "venue": "DE",
-    "yahoo": "OBA.DE",
-    "isin": "JP3190000004",
-    "name": "OBA",
-    "seconds": 87.114,
+    "yahoo": "OBCK.DE",
+    "isin": "DE000BCK2223",
+    "name": "OBCK",
+    "seconds": 2.52,
     "outcome": "miss",
-    "at": "2026-11-28T08:56:05.962286+00:00",
+    "at": "2026-11-28T08:56:15.820516+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.597
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.0
     },
-    "screen_seconds": 85.597,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.0,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "OBCKd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T08:56:05.962286+00:00",
+  "updated_at": "2026-11-28T08:56:15.820516+00:00",
   "totals": {
-    "screened": 7439,
+    "screened": 7440,
     "signals": {
-      "buy": 2007,
+      "buy": 2008,
       "avoid": 1557,
       "hold": 1473,
       "insufficient_data": 2362,
       "strong_buy": 40
     },
-    "signals_n": 7439,
-    "screen_seconds_sum": 103978.12600000048,
-    "screen_seconds_n": 7439,
+    "signals_n": 7440,
+    "screen_seconds_sum": 103979.12600000048,
+    "screen_seconds_n": 7440,
     "outcomes": {
-      "miss": 3622,
+      "miss": 3623,
       "saved": 3817
     }
   },
