@@ -7543,28 +7543,10 @@
     "QJED_EQ",
     "QM01D_EQ",
     "QMCD_EQ",
-    "QPXD_EQ"
+    "QPXD_EQ",
+    "QS51D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "PJFBd_EQ",
-      "venue": "DE",
-      "yahoo": "PJFB.DE",
-      "isin": "KYG7082H1276",
-      "name": "PJFB",
-      "seconds": 6.526,
-      "outcome": "miss",
-      "at": "2026-11-28T10:58:57.747263+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 5.352
-      },
-      "screen_seconds": 5.352,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "PJXCd_EQ",
       "venue": "DE",
@@ -8305,6 +8287,25 @@
       },
       "screen_seconds": 85.967,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "QS51d_EQ",
+      "venue": "DE",
+      "yahoo": "QS51.DE",
+      "isin": "CH1175448666",
+      "name": "QS51",
+      "seconds": 2.763,
+      "outcome": "miss",
+      "at": "2026-11-28T11:15:33.602557+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.384
+      },
+      "screen_seconds": 1.384,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -92265,43 +92266,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T11:05:43.212363+00:00"
+    },
+    {
+      "t212_ticker": "QS51d_EQ",
+      "yahoo": "QS51.DE",
+      "name": "QS51",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T11:15:33.602557+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "QPXd_EQ",
+    "t212_ticker": "QS51d_EQ",
     "venue": "DE",
-    "yahoo": "QPX.DE",
-    "isin": "CA69946Q1046",
-    "name": "QPX",
-    "seconds": 87.67,
+    "yahoo": "QS51.DE",
+    "isin": "CH1175448666",
+    "name": "QS51",
+    "seconds": 2.763,
     "outcome": "miss",
-    "at": "2026-11-28T11:15:23.229520+00:00",
+    "at": "2026-11-28T11:15:33.602557+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.967
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.384
     },
-    "screen_seconds": 85.967,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.384,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "QS51d_EQ"
+    }
   },
-  "updated_at": "2026-11-28T11:15:23.229520+00:00",
+  "updated_at": "2026-11-28T11:15:33.602557+00:00",
   "totals": {
-    "screened": 7542,
+    "screened": 7543,
     "signals": {
-      "buy": 2015,
+      "buy": 2016,
       "avoid": 1567,
       "hold": 1479,
       "insufficient_data": 2441,
       "strong_buy": 40
     },
-    "signals_n": 7542,
-    "screen_seconds_sum": 106760.09600000049,
-    "screen_seconds_n": 7542,
+    "signals_n": 7543,
+    "screen_seconds_sum": 106761.48000000049,
+    "screen_seconds_n": 7543,
     "outcomes": {
-      "miss": 3725,
+      "miss": 3726,
       "saved": 3817
     }
   },
