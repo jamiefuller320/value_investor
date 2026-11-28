@@ -7628,28 +7628,10 @@
     "SFQD_EQ",
     "SFTD_EQ",
     "SGFD_EQ",
-    "SGJHD_EQ"
+    "SGJHD_EQ",
+    "SGLD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "S0QAd_EQ",
-      "venue": "DE",
-      "yahoo": "S0QA.DE",
-      "isin": "MHY7542C1306",
-      "name": "S0QA",
-      "seconds": 87.633,
-      "outcome": "miss",
-      "at": "2026-11-28T12:12:41.948533+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.931
-      },
-      "screen_seconds": 85.931,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "S19d_EQ",
       "venue": "DE",
@@ -8390,6 +8372,25 @@
       },
       "screen_seconds": 84.888,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SGLd_EQ",
+      "venue": "DE",
+      "yahoo": "SGL.DE",
+      "isin": "DE0007235301",
+      "name": "SGL",
+      "seconds": 2.327,
+      "outcome": "miss",
+      "at": "2026-11-28T14:17:11.159786+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.974
+      },
+      "screen_seconds": 0.974,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -92760,43 +92761,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T14:12:29.654475+00:00"
+    },
+    {
+      "t212_ticker": "SGLd_EQ",
+      "yahoo": "SGL.DE",
+      "name": "SGL",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T14:17:11.159786+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SGJHd_EQ",
+    "t212_ticker": "SGLd_EQ",
     "venue": "DE",
-    "yahoo": "SGJH.DE",
-    "isin": "CNE1000004C8",
-    "name": "SGJH",
-    "seconds": 85.921,
+    "yahoo": "SGL.DE",
+    "isin": "DE0007235301",
+    "name": "SGL",
+    "seconds": 2.327,
     "outcome": "miss",
-    "at": "2026-11-28T14:17:03.341615+00:00",
+    "at": "2026-11-28T14:17:11.159786+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.888
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.974
     },
-    "screen_seconds": 84.888,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.974,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SGLd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T14:17:03.341615+00:00",
+  "updated_at": "2026-11-28T14:17:11.159786+00:00",
   "totals": {
-    "screened": 7627,
+    "screened": 7628,
     "signals": {
-      "buy": 2025,
+      "buy": 2026,
       "avoid": 1571,
       "hold": 1485,
       "insufficient_data": 2506,
       "strong_buy": 40
     },
-    "signals_n": 7627,
-    "screen_seconds_sum": 112345.45800000048,
-    "screen_seconds_n": 7627,
+    "signals_n": 7628,
+    "screen_seconds_sum": 112346.43200000048,
+    "screen_seconds_n": 7628,
     "outcomes": {
-      "miss": 3810,
+      "miss": 3811,
       "saved": 3817
     }
   },
