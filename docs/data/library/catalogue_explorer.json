@@ -7575,28 +7575,10 @@
     "RMZD_EQ",
     "RNFD_EQ",
     "ROMD_EQ",
-    "RPHAD_EQ"
+    "RPHAD_EQ",
+    "RPLD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "QB7d_EQ",
-      "venue": "DE",
-      "yahoo": "QB7.DE",
-      "isin": "DE0005202303",
-      "name": "QB7",
-      "seconds": 2.725,
-      "outcome": "miss",
-      "at": "2026-11-28T11:05:43.212363+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.65,
-        "seconds": 1.276
-      },
-      "screen_seconds": 1.276,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "QFPd_EQ",
       "venue": "DE",
@@ -8337,6 +8319,25 @@
       },
       "screen_seconds": 86.23,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "RPLd_EQ",
+      "venue": "DE",
+      "yahoo": "RPL.DE",
+      "isin": "FI4000603337",
+      "name": "RPL1",
+      "seconds": 2.59,
+      "outcome": "miss",
+      "at": "2026-11-28T11:56:23.481008+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.27
+      },
+      "screen_seconds": 1.27,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -92659,43 +92660,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T11:37:02.566571+00:00"
+    },
+    {
+      "t212_ticker": "RPLd_EQ",
+      "yahoo": "RPL.DE",
+      "name": "RPL1",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T11:56:23.481008+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "RPHAd_EQ",
+    "t212_ticker": "RPLd_EQ",
     "venue": "DE",
-    "yahoo": "RPHA.DE",
-    "isin": "ZAE000013181",
-    "name": "RPHA",
-    "seconds": 87.727,
+    "yahoo": "RPL.DE",
+    "isin": "FI4000603337",
+    "name": "RPL1",
+    "seconds": 2.59,
     "outcome": "miss",
-    "at": "2026-11-28T11:56:13.458116+00:00",
+    "at": "2026-11-28T11:56:23.481008+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 86.23
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.27
     },
-    "screen_seconds": 86.23,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.27,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "RPLd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T11:56:13.458116+00:00",
+  "updated_at": "2026-11-28T11:56:23.481008+00:00",
   "totals": {
-    "screened": 7574,
+    "screened": 7575,
     "signals": {
-      "buy": 2019,
+      "buy": 2020,
       "avoid": 1568,
       "hold": 1481,
       "insufficient_data": 2466,
       "strong_buy": 40
     },
-    "signals_n": 7574,
-    "screen_seconds_sum": 108917.85000000049,
-    "screen_seconds_n": 7574,
+    "signals_n": 7575,
+    "screen_seconds_sum": 108919.12000000049,
+    "screen_seconds_n": 7575,
     "outcomes": {
-      "miss": 3757,
+      "miss": 3758,
       "saved": 3817
     }
   },
