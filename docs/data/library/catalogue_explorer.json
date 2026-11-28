@@ -7535,28 +7535,10 @@
     "PZMD_EQ",
     "PZSD_EQ",
     "PZXD_EQ",
-    "QA4AD_EQ"
+    "QA4AD_EQ",
+    "QB7D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "PFSEd_EQ",
-      "venue": "DE",
-      "yahoo": "PFSE.DE",
-      "isin": "DE000PFSE253",
-      "name": "PFS0",
-      "seconds": 2.472,
-      "outcome": "miss",
-      "at": "2026-11-28T10:57:13.960254+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 1.292
-      },
-      "screen_seconds": 1.292,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "PFVd_EQ",
       "venue": "DE",
@@ -8297,6 +8279,25 @@
       },
       "screen_seconds": 5.414,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "QB7d_EQ",
+      "venue": "DE",
+      "yahoo": "QB7.DE",
+      "isin": "DE0005202303",
+      "name": "QB7",
+      "seconds": 2.725,
+      "outcome": "miss",
+      "at": "2026-11-28T11:05:43.212363+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.65,
+        "seconds": 1.276
+      },
+      "screen_seconds": 1.276,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -92249,43 +92250,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T11:05:04.743713+00:00"
+    },
+    {
+      "t212_ticker": "QB7d_EQ",
+      "yahoo": "QB7.DE",
+      "name": "QB7",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T11:05:43.212363+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "QA4Ad_EQ",
+    "t212_ticker": "QB7d_EQ",
     "venue": "DE",
-    "yahoo": "QA4A.DE",
-    "isin": "US37253A1034",
-    "name": "QA4A",
-    "seconds": 6.576,
+    "yahoo": "QB7.DE",
+    "isin": "DE0005202303",
+    "name": "QB7",
+    "seconds": 2.725,
     "outcome": "miss",
-    "at": "2026-11-28T11:05:32.924349+00:00",
+    "at": "2026-11-28T11:05:43.212363+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 5.414
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.65,
+      "seconds": 1.276
     },
-    "screen_seconds": 5.414,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.276,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "QB7d_EQ"
+    }
   },
-  "updated_at": "2026-11-28T11:05:32.924349+00:00",
+  "updated_at": "2026-11-28T11:05:43.212363+00:00",
   "totals": {
-    "screened": 7534,
+    "screened": 7535,
     "signals": {
-      "buy": 2014,
+      "buy": 2015,
       "avoid": 1566,
       "hold": 1479,
       "insufficient_data": 2435,
       "strong_buy": 40
     },
-    "signals_n": 7534,
-    "screen_seconds_sum": 106240.76200000047,
-    "screen_seconds_n": 7534,
+    "signals_n": 7535,
+    "screen_seconds_sum": 106242.03800000047,
+    "screen_seconds_n": 7535,
     "outcomes": {
-      "miss": 3717,
+      "miss": 3718,
       "saved": 3817
     }
   },
