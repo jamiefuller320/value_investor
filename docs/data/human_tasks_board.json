@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-27T07:53:50.727102+00:00",
+  "generated_at": "2026-11-28T02:37:18.179097+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-11-18",
   "counts": {
-    "new_info": 7,
+    "new_info": 6,
     "unacked": 26,
-    "acked": 35,
+    "acked": 36,
     "automated": 21,
     "human": 68
   },
@@ -29,7 +29,7 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary indistinguishable_from_noise",
-        "updated_at": "2026-11-27T07:52:56.473809+00:00",
+        "updated_at": "2026-11-28T02:37:01.901190+00:00",
         "fingerprint": "653b9f9ca8ea3ac7",
         "bullets": [
           "ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -56,51 +56,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "weekday-engineering-parked-backlog-clear",
-      "title": "Clear engineering parked backlog when dispatch pauses",
-      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
-      "automated": false,
-      "cadence": "weekday",
-      "section_id": "weekday",
-      "section_title": "Weekday (Mon–Fri)",
-      "doc_path": "docs/ops/ops-monitor.md",
-      "doc_anchor": "engineering-parked-backlog-clearing",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "4 attention-parked eng tasks",
-        "updated_at": "2026-11-27T07:50:21.972274+00:00",
-        "fingerprint": "d4969caf9637f43c",
-        "bullets": [
-          "Parked tasks: 5 (attention ~4)",
-          "Queue-clearing pause active: False — evaluated 2026-11-27T07:50:21.972274+00:00",
-          "Traffic pause active: False",
-          "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
-          "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
-          "eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX",
-          "eng-20261127-01: Hunt fetchable IR source for parked ftse_mib leftover TIT.MI",
-          "eng-20261127-02: Hunt fetchable IR source for parked sti leftover 5E2.SI"
-        ],
-        "source_keys": [
-          "engineering_tasks"
-        ],
-        "ack_sufficient": false,
-        "auto_ackable": false,
-        "ack_reason": "attention_parked_remaining"
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-26T02:39:50.092299+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "463c1c358411298f"
-      },
-      "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "sunday-shard-epoch0-watch",
       "title": "Watch shard epoch-0 and near-miss before forking AI",
       "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
@@ -115,17 +70,17 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-11-27T07:40:54.835269+00:00",
-        "fingerprint": "dcfdd0620ded246f",
+        "updated_at": "2026-11-28T01:00:03.057984+00:00",
+        "fingerprint": "2f9b8b863da0b7c8",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=33",
-          "ftse_mib: phase=0 ai=False knob=False holdings=6",
           "sti: phase=0 ai=False knob=False holdings=6",
           "aex: phase=0 ai=False knob=False holdings=9",
           "aim: phase=0 ai=False knob=False holdings=18",
           "atx: phase=0 ai=False knob=False holdings=5",
           "bel20: phase=0 ai=False knob=False holdings=1",
-          "cac40: phase=1 ai=False knob=False holdings=14"
+          "cac40: phase=1 ai=False knob=False holdings=14",
+          "dax: phase=1 ai=False knob=False holdings=4"
         ],
         "source_keys": [
           "market_status"
@@ -157,7 +112,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-11-27T07:23:23.428225+00:00",
+        "updated_at": "2026-11-28T00:31:52.742288+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -194,11 +149,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-11-26T08:48:52.342876+00:00",
-        "fingerprint": "2f4317177febbc85",
+        "updated_at": "2026-11-27T13:21:49.148230+00:00",
+        "fingerprint": "c36f1db67cbe2283",
         "bullets": [
-          "Occasions logged: 419",
-          "validate failed: 10",
+          "Occasions logged: 423",
+          "validate failed: 12",
           "PR mergeable=CONFLICTING against main: 7",
           "validate check failed: 7",
           "merge_conflict:dirty: 6",
@@ -1121,7 +1076,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-11-26T08:29:45.585888+00:00",
+        "updated_at": "2026-11-27T08:29:30.327648+00:00",
         "fingerprint": "8502bccd3c51ea03",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -1355,6 +1310,48 @@
       "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
+    },
+    {
+      "id": "weekday-engineering-parked-backlog-clear",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+      "automated": false,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "engineering-parked-backlog-clearing",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "0 attention-parked eng tasks · quiet (auto-ackable)",
+        "updated_at": "2026-11-28T02:37:15.769295+00:00",
+        "fingerprint": "463c1c358411298f",
+        "bullets": [
+          "Quiet after recover-queue — observe Acknowledge is sufficient (no list-parked triage).",
+          "Parked tasks: 1 (attention ~0)",
+          "Queue-clearing pause active: False — evaluated 2026-11-28T02:37:15.769295+00:00",
+          "Traffic pause active: False",
+          "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)"
+        ],
+        "source_keys": [
+          "engineering_tasks"
+        ],
+        "ack_sufficient": true,
+        "auto_ackable": true,
+        "ack_reason": "quiet_zero_attention_no_pause"
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-10-26T02:39:50.092299+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "463c1c358411298f"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": true,
+      "ack_sufficient": true
     },
     {
       "id": "sunday-matched30-twins",
@@ -2078,7 +2075,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-11-26T08:29:45.583231+00:00",
+        "updated_at": "2026-11-27T08:29:30.325015+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
