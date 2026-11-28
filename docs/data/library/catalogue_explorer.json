@@ -7495,28 +7495,10 @@
     "PD2D_EQ",
     "PE1D_EQ",
     "PEHD_EQ",
-    "PF0D_EQ"
+    "PF0D_EQ",
+    "PFSED_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "OKLd_EQ",
-      "venue": "DE",
-      "yahoo": "OKL.DE",
-      "isin": "NO0003733800",
-      "name": "OKL",
-      "seconds": 86.887,
-      "outcome": "miss",
-      "at": "2026-11-28T09:17:07.849579+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 85.644
-      },
-      "screen_seconds": 85.644,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "OL11d_EQ",
       "venue": "DE",
@@ -8257,6 +8239,25 @@
       },
       "screen_seconds": 4.973,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "PFSEd_EQ",
+      "venue": "DE",
+      "yahoo": "PFSE.DE",
+      "isin": "DE000PFSE253",
+      "name": "PFS0",
+      "seconds": 2.472,
+      "outcome": "miss",
+      "at": "2026-11-28T10:57:13.960254+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.292
+      },
+      "screen_seconds": 1.292,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -92185,43 +92186,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T10:56:08.262784+00:00"
+    },
+    {
+      "t212_ticker": "PFSEd_EQ",
+      "yahoo": "PFSE.DE",
+      "name": "PFS0",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T10:57:13.960254+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "PF0d_EQ",
+    "t212_ticker": "PFSEd_EQ",
     "venue": "DE",
-    "yahoo": "PF0.DE",
-    "isin": "CA64119M1059",
-    "name": "PF0",
-    "seconds": 6.124,
+    "yahoo": "PFSE.DE",
+    "isin": "DE000PFSE253",
+    "name": "PFS0",
+    "seconds": 2.472,
     "outcome": "miss",
-    "at": "2026-11-28T10:57:04.036560+00:00",
+    "at": "2026-11-28T10:57:13.960254+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.973
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.292
     },
-    "screen_seconds": 4.973,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.292,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "PFSEd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T10:57:04.036560+00:00",
+  "updated_at": "2026-11-28T10:57:13.960254+00:00",
   "totals": {
-    "screened": 7494,
+    "screened": 7495,
     "signals": {
-      "buy": 2011,
+      "buy": 2012,
       "avoid": 1557,
       "hold": 1476,
       "insufficient_data": 2410,
       "strong_buy": 40
     },
-    "signals_n": 7494,
-    "screen_seconds_sum": 106085.14900000049,
-    "screen_seconds_n": 7494,
+    "signals_n": 7495,
+    "screen_seconds_sum": 106086.44100000049,
+    "screen_seconds_n": 7495,
     "outcomes": {
-      "miss": 3677,
+      "miss": 3678,
       "saved": 3817
     }
   },
