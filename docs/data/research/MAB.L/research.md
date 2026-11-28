@@ -1,6 +1,6 @@
 # Mitchells & Butlers plc (MAB.L) — Research memo
 
-_Version 4 · Updated 2026-11-28T01:05:16.989012+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-28T03:47:24.149651+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -26,5 +26,10 @@ No material change to the FY26 trading, leverage or post-amortisation cash-flow 
 
 ### 2026-11-28T01:05:16.989012+00:00
 28 Nov news pull returned no articles since the 27 Nov evening refresh.  
+Buy screen and FCF hold overlay unchanged; filing FCF £187m vs screen TTM £103.9m still unreconciled in snapshot.  
+No material change to FY26 trading, leverage or post-amortisation cash-flow in supplied sources.
+
+### 2026-11-28T03:47:24.149651+00:00
+28 Nov 03:46 UTC news pull returned no articles since the 01:05 refresh.  
 Buy screen and FCF hold overlay unchanged; filing FCF £187m vs screen TTM £103.9m still unreconciled in snapshot.  
 No material change to FY26 trading, leverage or post-amortisation cash-flow in supplied sources.

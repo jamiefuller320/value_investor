@@ -1,6 +1,6 @@
 # Cisco Systems, Inc. (CSCO) — Research memo
 
-_Version 18 · Updated 2026-11-28T00:51:36.705971+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-28T03:37:01.614839+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Unchanged Q1 FY27 EPS $1.14 on ~$18.5bn revenue and filing-backed AI networking momentum still support the buy screen; the latest news is price colour only.
+Rationale: Unchanged Q1 FY27 EPS $1.14 on ~$18.5bn revenue; DXC and Qumulo AI-security partnerships mildly support the buy screen with no new SEC bodies.
 RiskTags: competitive, cyclical, leverage, governance
 
 ## Weekly updates
@@ -98,3 +98,8 @@ No new SEC filing bodies in the supplied sources.
 Since the 27 Nov evening pass, one MarketBeat headline repeats a ~3% share gain; no company-specific fundamentals or disclosures.  
 No new SEC filing bodies in the supplied sources.  
 **Buy** screen unchanged at Q1 FY27 EPS $1.14 on ~$18.5bn revenue; margin, insider-sale and governance themes from earlier passes are unchanged.
+
+### 2026-11-28T03:37:01.614839+00:00
+Since the 00:51 pass, one headline covers DXC AgenticOps and Qumulo ransomware partnerships with Hypershield; fundamentals are unchanged.  
+No new SEC filing bodies in the supplied sources.  
+**Buy** screen still shows Q1 FY27 EPS $1.14 on ~$18.5bn revenue; earlier margin, insider-sale and governance themes are unchanged.

@@ -1,6 +1,6 @@
 # Dell Technologies Inc. (DELL) — Research memo
 
-_Version 24 · Updated 2026-11-28T00:56:39.560577+00:00 · Mode: structured_verdict_update_
+_Version 25 · Updated 2026-11-28T03:39:25.813277+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -126,5 +126,10 @@ Screen remains **hold**; leverage, cyclical and regulatory risks are unchanged.
 
 ### 2026-11-28T00:56:39.560577+00:00
 The 00:56 UTC news batch adds no articles since the 27 Nov 21:42 UTC refresh.  
+On-file Q3 FY2027 8-K figures ($54.9bn revenue, $9.45 EPS, ~$132bn backlog) are unchanged; no new SEC extracts.  
+Screen remains **hold**; leverage, cyclical and regulatory risks are unchanged.
+
+### 2026-11-28T03:39:25.813277+00:00
+The 03:39 UTC news batch adds no articles since the 00:56 UTC refresh.  
 On-file Q3 FY2027 8-K figures ($54.9bn revenue, $9.45 EPS, ~$132bn backlog) are unchanged; no new SEC extracts.  
 Screen remains **hold**; leverage, cyclical and regulatory risks are unchanged.

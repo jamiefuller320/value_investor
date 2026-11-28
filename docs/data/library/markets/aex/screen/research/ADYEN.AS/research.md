@@ -1,6 +1,6 @@
 # Adyen N.V. (ADYEN.AS) — Research memo
 
-_Version 20 · Updated 2026-11-28T01:17:08.087456+00:00 · Mode: structured_verdict_update_
+_Version 21 · Updated 2026-11-28T03:59:04.895100+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -106,5 +106,10 @@ The **hold** screen signal and planned co-CEO handover are unchanged; valuation 
 
 ### 2026-11-28T01:17:08.087456+00:00
 No indexed news since the 27 Nov refresh (`news_batch_20261128_011616.json` is empty).  
+On-file FY2025 revenue, EPS and positive FCF are unchanged; Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.  
+The **hold** screen signal and planned co-CEO handover are unchanged.
+
+### 2026-11-28T03:59:04.895100+00:00
+No indexed news since the 28 Nov 01:17 UTC refresh (`news_batch_20261128_035833.json` is empty).  
 On-file FY2025 revenue, EPS and positive FCF are unchanged; Yahoo quarterly cash flow is still empty, so screen TTM FCF remains unverified.  
 The **hold** screen signal and planned co-CEO handover are unchanged.

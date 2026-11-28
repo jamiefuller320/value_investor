@@ -1,6 +1,6 @@
 # Watkin Jones Plc (WJG.L) — Research memo
 
-_Version 4 · Updated 2026-11-28T01:21:23.878147+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-28T04:04:09.703050+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -28,3 +28,8 @@ Refreshed Yahoo/filing cash metrics still show ~£14m TTM OCF/FCF outflow; quant
 No material change.  
 News batch since the prior refresh is empty; latest indexed RNS remains the 28 Aug FY26 trading update and FY26 full-year results are not in this batch.  
 ~£14m TTM OCF/FCF outflow and quant **buy** with adjusted **hold** are unchanged in supplied sources.
+
+### 2026-11-28T04:04:09.703050+00:00
+No material change.
+04:03 news batch is empty; latest indexed RNS remains the 28 Aug FY26 trading update and FY26 full-year results are not in this batch.
+~£14m TTM OCF/FCF outflow and quant buy with adjusted hold are unchanged in supplied sources.

@@ -1,6 +1,6 @@
 # Whitehaven Coal Limited (WHC.AX) — Research memo
 
-_Version 4 · Updated 2026-11-28T01:20:35.064000+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-28T04:03:25.319307+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -24,6 +24,11 @@ News batch since the prior refresh is empty; latest filings remain 5 Nov AGM and
 FY26 leverage, cyclical earnings and unverified screen FCF metrics are unchanged in supplied sources.
 
 ### 2026-11-28T01:20:35.064000+00:00
+No material change.  
+News batch since the prior refresh is empty; latest filings remain 5 Nov AGM and 29 Oct buy-back update.  
+FY26 leverage, cyclical earnings and unverified screen FCF are unchanged in supplied sources.
+
+### 2026-11-28T04:03:25.319307+00:00
 No material change.  
 News batch since the prior refresh is empty; latest filings remain 5 Nov AGM and 29 Oct buy-back update.  
 FY26 leverage, cyclical earnings and unverified screen FCF are unchanged in supplied sources.

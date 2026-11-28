@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 19 · Updated 2026-11-28T01:09:10.909847+00:00 · Mode: structured_verdict_update_
+_Version 20 · Updated 2026-11-28T03:50:27.504400+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.69
-Rationale: Editorial bullish colour only; ~$59bn TTM FCF still supports the screen, but zero model passes and cyclical pricing risk keep accumulate versus strong buy.
+Rationale: ~$59bn TTM FCF supports the strong-buy screen, but editorial-only news, zero model passes and cyclical pricing keep research at accumulate, not full strong buy.
 RiskTags: cyclical, competitive, leverage, customer_concentration
 
 ## Weekly updates
@@ -101,3 +101,8 @@ Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passe
 Late batch is one Yahoo Jim Cramer “comically cheap” retail-holder piece; no new filings or sourced financials.  
 Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed.  
 Filing-based cyclical, leverage, competitive and customer-concentration risks are unchanged.
+
+### 2026-11-28T03:50:27.504400+00:00
+No material change.  
+Follow-on batch only repeats the Yahoo Jim Cramer “comically cheap” piece already in the 01:09 refresh; no new filings or sourced financials.  
+Screen stays strong buy with ~$59bn TTM FCF and zero quantitative models passed; filing-based risks unchanged.

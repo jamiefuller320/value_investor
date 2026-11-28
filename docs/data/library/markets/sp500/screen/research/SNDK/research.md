@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 34 · Updated 2026-11-28T01:14:24.942609+00:00 · Mode: structured_verdict_update_
+_Version 35 · Updated 2026-11-28T03:55:52.396186+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.58
-Rationale: Empty 28 Nov news batch and no new issuer filings; exceptional on-file cash unchanged while unresolved 2027 NAND cycle fears and value-trap debate still weaken the strong-buy case.
+Rationale: Empty 03:55 news batch and no new issuer filings; exceptional on-file cash is unchanged while unresolved 2027 NAND cycle fears and the value-trap debate still weaken the strong-buy case.
 RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
@@ -162,3 +162,8 @@ On-file financials still show very strong free cash flow (~$11.5bn FY, ~$17.4bn 
 The 28 Nov news batch is empty since the 27 Nov evening refresh; no new SNDK issuer disclosures in that slice.  
 Financials re-fetched 28 November still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).  
 The 2027 NAND oversupply debate, semis estimate-cut framing and post-holiday rebound press in the file set are unchanged.
+
+### 2026-11-28T03:55:52.396186+00:00
+No material change since the 01:14 refresh: the 03:55 news batch adds no articles and no new SNDK issuer disclosures.  
+On-file financials (fetched 28 November) still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).  
+Post-holiday memory rebound press and the 2027 NAND oversupply / value-trap debate in the file set are unchanged.

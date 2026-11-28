@@ -1,6 +1,6 @@
 # Kuaishou Technology (1024.HK) — Research memo
 
-_Version 35 · Updated 2026-11-28T00:44:33.460160+00:00 · Mode: structured_verdict_update_
+_Version 36 · Updated 2026-11-28T03:29:52.976301+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.72
-Rationale: Filed Q3 operating loss and higher Kling AI spend still weaken the buy screen; Sep-26 EPS −0.22 aligns with HKEX but quarterly cash flow is empty, so TTM FCF remains unverified.
+Rationale: Filed Q3 operating loss and heavier Kling spend still weaken the buy screen; the 8K Kling headline is incremental and quarterly cash flow is empty, so TTM FCF stays unverified.
 RiskTags: regulatory, competitive, leverage, key_person, other
 
 ## Weekly updates
@@ -183,3 +183,8 @@ HKEX index refreshed at 21:34 UTC; Q3/nine-month results to 30 Sep 2026 unchange
 No material change: the 28 Nov news batch since the 27 Nov 21:34 refresh returned zero Kuaishou articles.  
 Yahoo pack refreshed at 00:44 UTC—quarterly income still through Sep 2026 (Q3 diluted EPS −0.22); quarterly cash flow remains empty (TTM suppressed).  
 HKEX index refreshed at 00:44 UTC; Q3/nine-month results to 30 Sep 2026 unchanged; no new in-window filings.
+
+### 2026-11-28T03:29:52.976301+00:00
+Since the 00:44 UTC refresh, the news batch adds one Yahoo piece on Kling’s 8K image model launch, framed against muted revenue disclosure after results.  
+Yahoo pack refreshed at 03:29 UTC—quarterly income still through Sep 2026 (Q3 diluted EPS −0.22); quarterly cash flow remains empty (TTM suppressed).  
+HKEX Q3/nine-month results to 30 Sep 2026 are unchanged; no new in-window filings.

@@ -1,6 +1,6 @@
 # Open Text Corporation (OTEX.TO) — Research memo
 
-_Version 4 · Updated 2026-11-28T01:11:16.529552+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-28T03:52:46.903587+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.68
-Rationale: Overnight batch is empty and filing bodies remain absent; ~$6.0bn debt, zero model passes, and softer Q1 FY27 revenue still weaken the strong buy screen case.
+Rationale: 03:52 batch is empty and filing bodies remain absent; ~$6.0bn debt, zero model passes, and softer Q1 FY27 revenue still weaken the strong buy screen case.
 RiskTags: leverage, competitive, accounting
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Filing bodies remain absent; third-party value/cloud pieces in the manifest are 
 No OTEX-specific headlines in the 28 Nov batch since the 27 Nov evening refresh; material unchanged.  
 Refreshed financials (01:10 UTC) still show FY26 FCF ~$808m, total debt ~$6.0bn, and Q1 FY27 revenue $1.24bn (down YoY).  
 Filing index still shows zero bodies; screened fundamentals and third-party cloud narrative unchanged.
+
+### 2026-11-28T03:52:46.903587+00:00
+No OTEX-specific headlines in the 28 Nov 03:52 batch since 01:11 UTC; material unchanged.  
+Refreshed financials (03:52 UTC) still show FY26 FCF ~$808m, total debt ~$6.0bn, and Q1 FY27 revenue $1.24bn (down YoY).  
+Filing index still has zero bodies; screened fundamentals unchanged.

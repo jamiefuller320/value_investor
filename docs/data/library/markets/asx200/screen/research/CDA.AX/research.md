@@ -1,6 +1,6 @@
 # Codan Limited (CDA.AX) — Research memo
 
-_Version 4 · Updated 2026-11-28T00:49:20.900222+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-28T03:35:11.264213+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -26,4 +26,9 @@ No material change to the research picture versus the prior 27 Nov verdict.
 ### 2026-11-28T00:49:20.900222+00:00
 No articles in the 28 Nov news batch since the 27 Nov evening refresh; corpus unchanged.  
 Financials and filings re-fetched; Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.  
+No material change versus the prior verdict.
+
+### 2026-11-28T03:35:11.264213+00:00
+The 03:34 UTC news batch adds no articles since the midnight refresh; the H1 FY27 trading update and earlier Kalkine pieces are unchanged in corpus.  
+Financials were re-fetched; Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.  
 No material change versus the prior verdict.

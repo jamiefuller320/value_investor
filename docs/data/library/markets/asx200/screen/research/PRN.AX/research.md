@@ -1,6 +1,6 @@
 # Perenti Limited (PRN.AX) — Research memo
 
-_Version 18 · Updated 2026-11-28T01:18:58.980196+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-28T04:01:27.024317+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -96,5 +96,10 @@ No new ASX filing bodies with accounts in this pack.
 
 ### 2026-11-28T01:18:58.980196+00:00
 No material change: the news batch since the prior refresh (after 22:11 UTC on 27 Nov) is empty.  
+Buy screen, Geita backlog narrative, zero passed models, and empty Yahoo quarterly cashflow are unchanged.  
+No new ASX filing bodies with accounts in this pack.
+
+### 2026-11-28T04:01:27.024317+00:00
+No material change: the news batch since the prior refresh (after 01:18 UTC on 28 Nov) is empty.  
 Buy screen, Geita backlog narrative, zero passed models, and empty Yahoo quarterly cashflow are unchanged.  
 No new ASX filing bodies with accounts in this pack.

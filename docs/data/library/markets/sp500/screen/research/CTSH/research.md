@@ -1,6 +1,6 @@
 # Cognizant Technology Solutions Corporation (CTSH) — Research memo
 
-_Version 20 · Updated 2026-11-28T00:52:09.029196+00:00 · Mode: structured_verdict_update_
+_Version 21 · Updated 2026-11-28T03:37:26.047370+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: The 28 Nov batch repeats a CEO insider-sale headline only; Q3 ~$5.66bn revenue and $925m quarter FCF still support Strong Buy—unconfirmed Capital IQ talks leave research confirming without added conviction.
+Rationale: No new articles in the supplied batch; Q3 revenue about $5.66bn and quarter FCF $925m still confirm the strong buy case amid unconfirmed Capital IQ talks and mixed sell-side views.
 RiskTags: regulatory, competitive, cyclical, customer_concentration, litigation, accounting, leverage
 
 ## Weekly updates
@@ -106,5 +106,10 @@ Unconfirmed Capital IQ talks and mixed sell-side themes are otherwise unchanged.
 
 ### 2026-11-28T00:52:09.029196+00:00
 The 28 Nov batch since the 27 Nov refresh adds one duplicate MarketBeat headline on CEO insider selling—not new fundamentals.  
+Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged, last EDGAR 29 Oct 2026.  
+Unconfirmed Capital IQ talks and mixed sell-side themes are otherwise unchanged.
+
+### 2026-11-28T03:37:26.047370+00:00
+The 28 Nov 03:37 news batch since the prior refresh contains no articles.  
 Refreshed sources still show Q3 revenue about $5.66bn and quarter free cash flow $925m; filings index unchanged, last EDGAR 29 Oct 2026.  
 Unconfirmed Capital IQ talks and mixed sell-side themes are otherwise unchanged.

@@ -1,6 +1,6 @@
 # OMV Aktiengesellschaft (OMV.VI) — Research memo
 
-_Version 12 · Updated 2026-11-28T01:18:21.065364+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-28T04:00:47.481776+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.69
-Rationale: On-file Q3 EPS €3.14 and ~€2.53bn TTM FCF still confirm the strong-buy screen; the empty 28 Nov news batch adds nothing new beyond prior valuation-caution headlines.
+Rationale: On-file Q3 EPS €3.14 and ~€2.53bn TTM FCF still confirm the strong-buy screen; the TPAO-cooperation press headline adds no filing-backed change.
 RiskTags: cyclical, governance, regulatory, key_person
 
 ## Weekly updates
@@ -66,5 +66,10 @@ Strong_buy screen and accumulate overlay stand; the headline raises valuation ca
 
 ### 2026-11-28T01:18:21.065364+00:00
 No material change: `news_batch_20261128_011804` since the 22:11 UTC refresh contains no articles.  
+On-file Q3 2026 EPS €3.14, revenue €8.96bn and TTM free cash flow ~€2.53bn are unchanged; indexed filings are unchanged.  
+Strong_buy screen and accumulate overlay stand.
+
+### 2026-11-28T04:00:47.481776+00:00
+`news_batch_20261128_040019` adds one item: Börse Express on TPAO exploring five years of cooperation with OMV (28 Nov); the article body is not in sources.  
 On-file Q3 2026 EPS €3.14, revenue €8.96bn and TTM free cash flow ~€2.53bn are unchanged; indexed filings are unchanged.  
 Strong_buy screen and accumulate overlay stand.

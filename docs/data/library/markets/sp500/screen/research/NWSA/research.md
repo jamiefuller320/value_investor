@@ -1,6 +1,6 @@
 # News Corporation (NWSA) — Research memo
 
-_Version 8 · Updated 2026-11-28T01:10:38.347443+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-28T03:52:20.891813+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -46,5 +46,10 @@ Screen buy signal and accumulate research overlay unchanged.
 
 ### 2026-11-28T01:10:38.347443+00:00
 News batch since the 27 Nov evening refresh is empty; no SEC filings after the routine 27 Nov repurchase 8-K.  
+Q1 FY2027 themes unchanged: earnings beat, negative Sep-quarter FCF ($89m), and zero quantitative families passing.  
+Screen buy signal and accumulate research overlay unchanged.
+
+### 2026-11-28T03:52:20.891813+00:00
+News batch since the early 28 Nov refresh is empty; filings index shows no SEC items after the routine 27 Nov repurchase 8-K.  
 Q1 FY2027 themes unchanged: earnings beat, negative Sep-quarter FCF ($89m), and zero quantitative families passing.  
 Screen buy signal and accumulate research overlay unchanged.

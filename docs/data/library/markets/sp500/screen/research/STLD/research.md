@@ -1,6 +1,6 @@
 # Steel Dynamics, Inc. (STLD) — Research memo
 
-_Version 4 · Updated 2026-11-28T01:19:23.424739+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-28T04:01:49.361458+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.69
-Rationale: Filing-backed buyback and strong 9M cash generation support the buy screen, but the empty 28 Nov news batch and unchanged FCF-yield/earnings-quality tensions keep research on accumulate.
+Rationale: Filing-backed $3.0bn repurchase and strong nine-month cash generation support the buy screen, but empty incremental news and persistent FCF-yield tensions keep research on accumulate.
 RiskTags: cyclical, leverage, competitive
 
 ## Weekly updates
@@ -28,3 +28,8 @@ On-file buyback, 9M cash flow, and screen FCF-yield / earnings-quality tensions 
 No material change.  
 The 28 November news batch returned no articles; no new SEC filings after the 10 November 8-K ($3.0bn repurchase and Q4 2026 dividend).  
 Latest interim remains the 30 September 10-Q; on-file buyback, 9M cash flow, and screen FCF-yield tensions are unchanged.
+
+### 2026-11-28T04:01:49.361458+00:00
+No material change.  
+The 28 November news batch (since the 01:19 refresh) returned no articles.  
+No new SEC filings after the 10 November 8-K; latest interim remains the 30 September 10-Q.

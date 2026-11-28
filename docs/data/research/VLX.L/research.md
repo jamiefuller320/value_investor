@@ -1,6 +1,6 @@
 # Volex plc (VLX.L) — Research memo
 
-_Version 20 · Updated 2026-11-28T01:15:54.419763+00:00 · Mode: structured_verdict_update_
+_Version 21 · Updated 2026-11-28T03:57:59.982662+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -107,4 +107,9 @@ The 12 Nov half-year report remains indexed; interim P&L is still absent from th
 ### 2026-11-28T01:15:54.419763+00:00
 No material change since the 22:08 UTC refresh: **buy** screen (deteriorating trend) and the three-way FCF gap are unchanged (filing £35M / screen TTM £38.7M / company-adj $22.3M).  
 The 01:15 UTC news batch has **no articles** since then—no new RNS or headlines.  
+The 12 Nov half-year report remains indexed; interim P&L is still absent from the financials extract.
+
+### 2026-11-28T03:57:59.982662+00:00
+No material change since the 01:15 UTC refresh: **buy** screen (deteriorating trend) and the three-way FCF gap are unchanged (filing £35M / screen TTM £38.7M / company-adj $22.3M).  
+The 03:57 UTC news batch has **no articles** since then—no new RNS or headlines.  
 The 12 Nov half-year report remains indexed; interim P&L is still absent from the financials extract.

@@ -1,6 +1,6 @@
 # UnitedHealth Group Incorporated (UNH) — Research memo
 
-_Version 21 · Updated 2026-11-28T01:19:36.039767+00:00 · Mode: structured_verdict_update_
+_Version 22 · Updated 2026-11-28T04:01:58.255760+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -111,5 +111,10 @@ No new interim SEC filing body in this pack; firm-specific CMS payment impact re
 
 ### 2026-11-28T01:19:36.039767+00:00
 No articles in the 28 Nov news batch since the prior refresh.  
+CMS star-rating litigation and Medicare Advantage reimbursement stress from 24 Nov are unchanged; screen strong_buy cash metrics and Q3 diluted EPS of $4.56 are unchanged.  
+No new interim SEC filing body in this pack; firm-specific CMS payment impact remains unquantified.
+
+### 2026-11-28T04:01:58.255760+00:00
+No articles in the news batch since the prior refresh (fetched 2026-11-28T04:01:51 UTC).  
 CMS star-rating litigation and Medicare Advantage reimbursement stress from 24 Nov are unchanged; screen strong_buy cash metrics and Q3 diluted EPS of $4.56 are unchanged.  
 No new interim SEC filing body in this pack; firm-specific CMS payment impact remains unquantified.

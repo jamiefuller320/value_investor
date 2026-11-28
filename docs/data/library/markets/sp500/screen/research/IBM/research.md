@@ -1,6 +1,6 @@
 # International Business Machines Corporation (IBM) — Research memo
 
-_Version 19 · Updated 2026-11-28T01:03:13.426433+00:00 · Mode: structured_verdict_update_
+_Version 20 · Updated 2026-11-28T03:45:29.323584+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.65
-Rationale: A dividend-yield headline after a reported share drop adds no filing-backed change; prior leverage, pension and competitive risks keep research neutral on the buy screen.
+Rationale: Empty news since the prior run adds no filing-backed change; unchanged leverage, pension and competitive risks keep research neutral on the buy screen.
 RiskTags: leverage, pension, competitive, cyclical, litigation, regulatory
 
 ## Weekly updates
@@ -101,5 +101,10 @@ Q3 2026 screening snapshot and cash-flow inputs are unchanged.
 
 ### 2026-11-28T01:03:13.426433+00:00
 Since the 27 Nov run, one Motley Fool piece notes dividend continuity and yield after a reported ~26% share drop; it adds no filing-backed fundamentals.  
+No new SEC filing bodies beyond the 19 Nov yen-note 8-K already in the library.  
+Q3 2026 screening snapshot and cash-flow inputs are unchanged.
+
+### 2026-11-28T03:45:29.323584+00:00
+The 28 Nov 03:45 news batch contains no IBM-specific articles since the 01:03 structured run.  
 No new SEC filing bodies beyond the 19 Nov yen-note 8-K already in the library.  
 Q3 2026 screening snapshot and cash-flow inputs are unchanged.

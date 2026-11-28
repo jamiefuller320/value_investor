@@ -1,6 +1,6 @@
 # Premier Foods plc (PFD.L) — Research memo
 
-_Version 23 · Updated 2026-11-28T01:11:52.807230+00:00 · Mode: structured_verdict_update_
+_Version 24 · Updated 2026-11-28T03:53:28.514398+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Empty news since the prior refresh; H1 refinancing and top-end FY guidance still support the strong-buy screen, but FCF definition gaps and liquidity optics cap conviction.
+Rationale: Empty 03:52 news batch; 12 Nov H1 refi and top-end FY guidance still support the strong-buy screen, but FCF, ROE and liquidity optics gaps remain unresolved in sources.
 RiskTags: customer_concentration, regulatory, pension, competitive, liquidity, leverage
 
 ## Weekly updates
@@ -123,3 +123,8 @@ Strong-buy screen persists; accumulate overlay unchanged, with screen FCF, ROE a
 No new RNS or indexed filings since the 27 Nov refresh; the 28 Nov news batch is empty.  
 12 Nov H1 themes (Oct bond redemption, top-end FY guidance, 1.12p interim dividend) remain the only material disclosures in sources.  
 Strong-buy screen persists; accumulate overlay unchanged, with screen FCF, ROE and liquidity optics still unresolved.
+
+### 2026-11-28T03:53:28.514398+00:00
+No new RNS or indexed filings since the 01:11 UTC refresh; the 03:52 UTC news batch is empty.  
+12 Nov H1 themes (Oct bond redemption, top-end FY guidance, 1.12p interim dividend) remain the only material disclosures in sources.  
+Strong-buy screen persists (third week); accumulate overlay unchanged, with screen FCF, ROE and liquidity optics still unresolved.

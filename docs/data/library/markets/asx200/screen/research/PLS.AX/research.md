@@ -1,6 +1,6 @@
 # PLS Group Limited (PLS.AX) — Research memo
 
-_Version 18 · Updated 2026-11-28T01:12:52.455748+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-28T03:54:29.431893+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -96,4 +96,9 @@ Screen stays buy; Yahoo quarterly cashflow is still empty, so TTM FCF is unverif
 ### 2026-11-28T01:12:52.455748+00:00
 Incremental news batch since the 27 Nov 22:04 UTC refresh is empty; filing index unchanged on re-fetch at 01:12 UTC.  
 Latest operating disclosure remains the 28 Oct FY27 Sep-quarter pack plus 24 Nov AGM materials; no new ASX operating filings.  
+Screen stays **buy**; Yahoo quarterly cashflow is still empty, so TTM FCF is unverified.
+
+### 2026-11-28T03:54:29.431893+00:00
+Incremental news batch since the 01:12 UTC refresh is empty (fetched 03:53 UTC); filing index unchanged on re-fetch at 03:54 UTC.  
+Latest operating disclosure remains the 28 Oct FY27 Sep-quarter pack plus 24 Nov AGM; no new ASX operating filings.  
 Screen stays **buy**; Yahoo quarterly cashflow is still empty, so TTM FCF is unverified.

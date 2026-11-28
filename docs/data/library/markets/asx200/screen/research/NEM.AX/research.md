@@ -1,6 +1,6 @@
 # Newmont Corporation (NEM.AX) — Research memo
 
-_Version 12 · Updated 2026-11-28T01:10:03.174416+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-28T03:51:45.753677+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Sourced ~$10.1bn TTM and ~$7.3bn filing FCF still support cash; empty 28 Nov news and no new filings leave research neutral on timing versus the buy screen.
+Rationale: Sourced ~$7.3bn filing and ~$10.1bn TTM FCF still support cash; empty news and no new filings leave research neutral on timing versus the buy screen.
 RiskTags: cyclical, key_person, regulatory, other
 
 ## Weekly updates
@@ -68,3 +68,8 @@ Filings index refreshed at 21:54 with 20 items; no new company disclosure in the
 News batch since the 27 Nov 21:55 refresh is empty; no new articles in the supplied sources.  
 Buy screen and zero model passes are unchanged; filing ~$7.3bn and TTM ~$10.1bn FCF remain steady in the file set.  
 Filings index refreshed at 01:09 on 28 Nov with 20 items; no new company-specific disclosure in the batch.
+
+### 2026-11-28T03:51:45.753677+00:00
+News batch since the 28 Nov 01:10 refresh is empty; no new articles in the supplied sources.  
+Buy screen and zero model passes are unchanged; filing ~$7.3bn and TTM ~$10.1bn FCF remain steady in the file set.  
+Filings index refreshed at 03:51 on 28 Nov with 20 items; no new company-specific disclosure in the batch.
