@@ -7631,28 +7631,10 @@
     "SGJHD_EQ",
     "SGLD_EQ",
     "SHAD_EQ",
-    "SHDD_EQ"
+    "SHDD_EQ",
+    "SHFD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "S3Yd_EQ",
-      "venue": "DE",
-      "yahoo": "S3Y.DE",
-      "isin": "CA8464811097",
-      "name": "S3Y",
-      "seconds": 87.563,
-      "outcome": "miss",
-      "at": "2026-11-28T12:17:27.545455+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 86.246
-      },
-      "screen_seconds": 86.246,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "S4Ad_EQ",
       "venue": "DE",
@@ -8393,6 +8375,25 @@
       },
       "screen_seconds": 84.753,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SHFd_EQ",
+      "venue": "DE",
+      "yahoo": "SHF.DE",
+      "isin": "DE0007203705",
+      "name": "SHF",
+      "seconds": 1.839,
+      "outcome": "miss",
+      "at": "2026-11-28T14:20:21.089677+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.658
+      },
+      "screen_seconds": 0.658,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -92771,43 +92772,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T14:17:11.159786+00:00"
+    },
+    {
+      "t212_ticker": "SHFd_EQ",
+      "yahoo": "SHF.DE",
+      "name": "SHF",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T14:20:21.089677+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SHDd_EQ",
+    "t212_ticker": "SHFd_EQ",
     "venue": "DE",
-    "yahoo": "SHD.DE",
-    "isin": "JP3351600006",
-    "name": "SHD",
-    "seconds": 85.981,
+    "yahoo": "SHF.DE",
+    "isin": "DE0007203705",
+    "name": "SHF",
+    "seconds": 1.839,
     "outcome": "miss",
-    "at": "2026-11-28T14:20:13.478722+00:00",
+    "at": "2026-11-28T14:20:21.089677+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.753
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.658
     },
-    "screen_seconds": 84.753,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.658,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SHFd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T14:20:13.478722+00:00",
+  "updated_at": "2026-11-28T14:20:21.089677+00:00",
   "totals": {
-    "screened": 7630,
+    "screened": 7631,
     "signals": {
-      "buy": 2026,
+      "buy": 2027,
       "avoid": 1571,
       "hold": 1485,
       "insufficient_data": 2508,
       "strong_buy": 40
     },
-    "signals_n": 7630,
-    "screen_seconds_sum": 112515.85400000047,
-    "screen_seconds_n": 7630,
+    "signals_n": 7631,
+    "screen_seconds_sum": 112516.51200000047,
+    "screen_seconds_n": 7631,
     "outcomes": {
-      "miss": 3813,
+      "miss": 3814,
       "saved": 3817
     }
   },
