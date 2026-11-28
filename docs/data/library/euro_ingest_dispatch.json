@@ -1,86 +1,82 @@
 {
-  "market_id": "euro_depth",
+  "market_id": "sti",
   "focus_market": "euro_depth",
-  "mode": "exhausted",
-  "reason": "Ingest avenues exhausted — parked 6 leftover thin/IWB name(s) (ACKB.BR, APAM.AS, BAS.DE, DQ7A.IR, ESSITY-B.ST, UCB.BR); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
+  "mode": "sprint",
+  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=1, thin=0, indexed_without_body=8)",
   "ingest_parity_met": false,
-  "ingest_exhausted": true,
-  "ingest_sprint_complete": true,
+  "ingest_exhausted": false,
+  "ingest_sprint_complete": false,
   "parked_tickers": [
-    "ACKB.BR",
-    "APAM.AS",
-    "BAS.DE",
-    "DQ7A.IR",
-    "ESSITY-B.ST",
-    "UCB.BR"
+    "ME8U.SI",
+    "N2IU.SI",
+    "U14.SI"
   ],
   "phase3_ready": false,
-  "current_phase": 3,
-  "next_phase": 3,
+  "current_phase": 0,
+  "next_phase": 1,
   "phase_blockers": [
-    "need 8 closed exit-shadow episodes (have 0)"
+    "no benchmark configured for sti"
   ],
   "filing_health": {
-    "snapshot_at": "2026-11-28T11:21:06.090155+00:00",
-    "market_id": "euro_depth",
-    "buy_tier_count": 41,
+    "snapshot_at": "2026-11-28T11:20:53.733748+00:00",
+    "market_id": "sti",
+    "buy_tier_count": 9,
     "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 5,
-    "indexed_without_body": 2,
-    "bodies_min": 1,
-    "bodies_median": 5,
-    "bodies_max": 150,
+    "zero_body_buy_tier": 1,
+    "thin_body_buy_tier": 0,
+    "indexed_without_body": 8,
+    "bodies_min": 4,
+    "bodies_median": 7.0,
+    "bodies_max": 14,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "ACKB.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "UCB.BR",
-      "DQ7A.IR"
+    "zero_body_tickers": [
+      "5E2.SI"
     ],
+    "thin_body_tickers": [],
     "indexed_without_body_tickers": [
-      "ESSITY-B.ST",
-      "UCB.BR"
+      "U14.SI",
+      "ME8U.SI",
+      "5E2.SI",
+      "N2IU.SI"
     ],
     "indexed_without_body_by_ticker": {
-      "ESSITY-B.ST": 1,
-      "UCB.BR": 1
+      "U14.SI": 4,
+      "ME8U.SI": 2,
+      "5E2.SI": 1,
+      "N2IU.SI": 1
     },
     "parked_tickers": [
-      "ACKB.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "DQ7A.IR",
-      "ESSITY-B.ST",
-      "UCB.BR"
+      "ME8U.SI",
+      "N2IU.SI",
+      "U14.SI"
     ],
-    "parked_count": 6,
+    "parked_count": 3,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body_tickers": [
+      "5E2.SI"
+    ],
+    "ingest_exhausted": false
   },
-  "filing_gaps": 0,
-  "max_daily_successes": 8,
-  "max_targets": 62,
-  "priority_slot_width": 0,
-  "priority_slot_unfilled": 0,
-  "priority_slot_ceiling": 24,
-  "cron_morning": false,
-  "cron_afternoon": false,
-  "cron_midafternoon": false,
-  "cron_evening": false,
+  "filing_gaps": 1,
+  "max_daily_successes": 4,
+  "max_targets": 24,
+  "priority_slot_width": null,
+  "priority_slot_unfilled": null,
+  "priority_slot_ceiling": null,
+  "cron_morning": true,
+  "cron_afternoon": true,
+  "cron_midafternoon": true,
+  "cron_evening": true,
   "cron_ladder_weekday": true,
   "cron_maintenance": true,
-  "should_run_sprint_ingest": false,
-  "should_run_maintenance_ingest": true,
-  "should_run_ingest": false,
-  "evaluated_at": "2026-11-28T11:21:06.102455+00:00",
+  "should_run_sprint_ingest": true,
+  "should_run_maintenance_ingest": false,
+  "should_run_ingest": true,
+  "evaluated_at": "2026-11-28T11:20:53.739605+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -155,7 +151,7 @@
         "no benchmark configured for sti"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-28T11:21:30.430629+00:00",
+        "snapshot_at": "2026-11-28T11:21:27.864317+00:00",
         "market_id": "sti",
         "buy_tier_count": 9,
         "unmeasured_buy_tier": 0,
@@ -213,7 +209,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-28T11:21:30.435301+00:00",
+      "evaluated_at": "2026-11-28T11:21:27.870109+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -247,13 +243,13 @@
   "ingest_cascade": {
     "enabled": true,
     "head_market": "euro_depth",
-    "head_at_parity": true,
-    "head_needs_fat_slot": false,
+    "head_at_parity": false,
+    "head_needs_fat_slot": true,
     "hour_utc": 11,
-    "skip_stream_2_now": false,
-    "stream_1_mode": "full",
-    "stream_2_mode": "full",
-    "reason": "Head euro_depth is at ingest parity — spare streams return to full caps (priority slot may shift on the next focus advance).",
+    "skip_stream_2_now": true,
+    "stream_1_mode": "spare",
+    "stream_2_mode": "spare",
+    "reason": "Head euro_depth still has filing gaps; stream 2 yields hour 11:00 UTC to the priority slot.",
     "config": {
       "enabled": true,
       "stream_1_target_fraction": 0.5,
