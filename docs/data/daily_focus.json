@@ -2,7 +2,7 @@
   "schema_version": 1,
   "local_date": "2026-11-28",
   "timezone": "Europe/London",
-  "generated_at": "2026-11-28T02:37:18.477342Z",
+  "generated_at": "2026-11-28T07:50:51.833985Z",
   "refresh_deadline_local": "04:00",
   "stale_for_local_date": false,
   "focus_lines": [
@@ -30,7 +30,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Absolute availability on the serve order — no rememo/ingest spray on a green set; do not steal P1 for N201 or seal D.",
@@ -99,7 +99,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Fat sprint empty — maintenance + spare auto-advance only; no fourth equal sprint; no parallel eng spray from hub ambers.",
@@ -254,9 +254,37 @@
       "should_dispatch_engineering": true
     },
     "deferred_triggers": {
-      "met_count": 3,
+      "met_count": 4,
       "unmet_count": 33,
       "met": [
+        {
+          "id": "N220",
+          "title": "Archive pack incomplete-unit retry / leftover queue",
+          "status": "open",
+          "first_met_at": "2026-11-28T07:50:34.386227+00:00",
+          "conditions": [
+            {
+              "condition": {
+                "file": "docs/data/universe_filing_archive_pack_run.json",
+                "path": "unit_status_counts.no_bodies",
+                "op": ">=",
+                "value": 2
+              },
+              "state": "met",
+              "actual": 11
+            },
+            {
+              "condition": {
+                "file": "docs/data/universe_filing_archive_status.json",
+                "path": "capacity_isolation.isolation_ok",
+                "op": "==",
+                "value": true
+              },
+              "state": "met",
+              "actual": true
+            }
+          ]
+        },
         {
           "id": "N259",
           "title": "Exit challenger scored on capital-days return, with trend-led exits and no fixed time cap",
@@ -308,12 +336,12 @@
           ]
         }
       ],
-      "generated_at": "2026-11-28T02:37:01.947786+00:00"
+      "generated_at": "2026-11-28T07:50:34.386227+00:00"
     },
     "focus_relevant": true,
     "post_sell_cue_digest": {
       "present": true,
-      "generated_at": "2026-11-28T02:33:19.212107+00:00",
+      "generated_at": "2026-11-28T07:47:54.532823+00:00",
       "item_count": 6,
       "timing_cue_count": 4,
       "selection_cue_count": 2,
@@ -346,7 +374,7 @@
       {
         "id": "defer",
         "label": "Deferred triggers",
-        "value": "met=3"
+        "value": "met=4"
       },
       {
         "id": "focus_relevance",
@@ -488,7 +516,7 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "euro_depth · ingest_deviation (focus/priority-slot head) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -611,7 +639,7 @@
         "ready": false,
         "ready_reason": "observe-safe Accept → deepen",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "sti · zero_body_stuck (spare sprint) — proposed triage: deepen. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -736,7 +764,7 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → park",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "sti · no_observe_benchmark (spare sprint) — proposed triage: park. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -861,7 +889,7 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "hang_seng · ingest_deviation (ingest_deviation) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -984,7 +1012,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Assessment scoreboard · primary indistinguishable_from_noise",
@@ -1012,7 +1040,7 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Assessment scoreboard · primary indistinguishable_from_noise",
-          "updated_at": "2026-11-28T02:37:01.901190+00:00",
+          "updated_at": "2026-11-28T07:50:34.349934+00:00",
           "fingerprint": "653b9f9ca8ea3ac7",
           "bullets": [
             "ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -1041,7 +1069,7 @@
       "closed": false,
       "review_detail": {
         "headline": "Assessment scoreboard · primary indistinguishable_from_noise",
-        "updated_at": "2026-11-28T02:37:01.901190+00:00",
+        "updated_at": "2026-11-28T07:50:34.349934+00:00",
         "fingerprint": "653b9f9ca8ea3ac7",
         "bullets": [
           "ai_judgment_matched30_fair: total return -6.2% vs FTAL.L -2.2% since 2026-10-15 — not yet distinguishable from the market. vs buy_tier_matched30_fair: +1.2% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -1186,7 +1214,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Admitted shard epoch-0 watch · 22",
@@ -1378,7 +1406,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Ingest deviations · 2 open",
@@ -1560,7 +1588,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: PR fix common issues",
@@ -1750,7 +1778,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Triage queue · 16 open",
@@ -1938,7 +1966,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Triage queue · 6 open",
@@ -2126,7 +2154,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2296,7 +2324,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2466,7 +2494,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2636,7 +2664,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2806,7 +2834,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2976,7 +3004,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3146,7 +3174,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3316,7 +3344,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3486,7 +3514,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3656,7 +3684,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3826,7 +3854,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3996,7 +4024,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4166,7 +4194,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4336,7 +4364,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4506,7 +4534,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4676,7 +4704,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -4846,7 +4874,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5016,7 +5044,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5186,7 +5214,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5356,7 +5384,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5526,7 +5554,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5696,7 +5724,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -5866,7 +5894,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -6036,7 +6064,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -6206,7 +6234,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -6376,7 +6404,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -6546,7 +6574,7 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "ops finding (warn): Deferred idea triggers met",
@@ -6682,7 +6710,7 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
@@ -6817,7 +6845,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite — Falsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply",
@@ -6951,7 +6979,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-11-28T02:37:18.477342Z",
+        "updated_at": "2026-11-28T07:50:51.833985Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Live hold/swap probability stays parked until closed cohorts mature — Falsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)",
@@ -9291,7 +9319,7 @@
   },
   "project_sync": {
     "notes_fingerprint": null,
-    "synced_at": "2026-11-28T02:37:18.477342Z",
+    "synced_at": "2026-11-28T07:50:51.833985Z",
     "method": "morning_builder_reads_committed_export_or_manual"
   },
   "illumination_hints": {
