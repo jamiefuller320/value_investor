@@ -7250,28 +7250,10 @@
     "KSB3D_EQ",
     "KSC1D_EQ",
     "KSTD_EQ",
-    "KTAD_EQ"
+    "KTAD_EQ",
+    "KWGD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "K3Rd_EQ",
-      "venue": "DE",
-      "yahoo": "K3R.DE",
-      "isin": "JP3765150002",
-      "name": "K3R",
-      "seconds": 5.277,
-      "outcome": "miss",
-      "at": "2026-11-28T00:23:23.164187+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.829
-      },
-      "screen_seconds": 3.829,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "K6Xd_EQ",
       "venue": "DE",
@@ -8012,6 +7994,25 @@
       },
       "screen_seconds": 0.669,
       "signal": "avoid"
+    },
+    {
+      "t212_ticker": "KWGd_EQ",
+      "venue": "DE",
+      "yahoo": "KWG.DE",
+      "isin": "DE0006578008",
+      "name": "KWG",
+      "seconds": 2.661,
+      "outcome": "miss",
+      "at": "2026-11-28T00:30:34.116507+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.681
+      },
+      "screen_seconds": 0.681,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -90741,43 +90742,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T00:29:53.460870+00:00"
+    },
+    {
+      "t212_ticker": "KWGd_EQ",
+      "yahoo": "KWG.DE",
+      "name": "KWG",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T00:30:34.116507+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "KTAd_EQ",
+    "t212_ticker": "KWGd_EQ",
     "venue": "DE",
-    "yahoo": "KTA.DE",
-    "isin": "DE000A2YN504",
-    "name": "KTA",
-    "seconds": 2.127,
+    "yahoo": "KWG.DE",
+    "isin": "DE0006578008",
+    "name": "KWG",
+    "seconds": 2.661,
     "outcome": "miss",
-    "at": "2026-11-28T00:30:25.479506+00:00",
+    "at": "2026-11-28T00:30:34.116507+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "avoid",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 0.669
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.681
     },
-    "screen_seconds": 0.669,
-    "signal": "avoid"
+    "screen_seconds": 0.681,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "KWGd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T00:30:25.479506+00:00",
+  "updated_at": "2026-11-28T00:30:34.116507+00:00",
   "totals": {
-    "screened": 7249,
+    "screened": 7250,
     "signals": {
-      "buy": 1989,
+      "buy": 1990,
       "avoid": 1546,
       "hold": 1453,
       "insufficient_data": 2221,
       "strong_buy": 40
     },
-    "signals_n": 7249,
-    "screen_seconds_sum": 96218.60000000046,
-    "screen_seconds_n": 7249,
+    "signals_n": 7250,
+    "screen_seconds_sum": 96219.28100000045,
+    "screen_seconds_n": 7250,
     "outcomes": {
-      "miss": 3433,
+      "miss": 3434,
       "saved": 3816
     }
   },
