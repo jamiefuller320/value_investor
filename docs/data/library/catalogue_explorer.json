@@ -7606,28 +7606,10 @@
     "S9YD_EQ",
     "SAE_DE_EQ",
     "SANTD_EQ",
-    "SAOAD_EQ"
+    "SAOAD_EQ",
+    "SAXD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "RK90d_EQ",
-      "venue": "DE",
-      "yahoo": "RK90.DE",
-      "isin": "CA0303381077",
-      "name": "RK90",
-      "seconds": 87.287,
-      "outcome": "miss",
-      "at": "2026-11-28T11:43:32.365600+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 86.127
-      },
-      "screen_seconds": 86.127,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "RKNd_EQ",
       "venue": "DE",
@@ -8368,6 +8350,25 @@
       },
       "screen_seconds": 84.782,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SAXd_EQ",
+      "venue": "DE",
+      "yahoo": "SAX.DE",
+      "isin": "DE0007493991",
+      "name": "SAX",
+      "seconds": 1.997,
+      "outcome": "miss",
+      "at": "2026-11-28T13:54:56.890108+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.753
+      },
+      "screen_seconds": 0.753,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -92714,43 +92715,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T11:59:52.478021+00:00"
+    },
+    {
+      "t212_ticker": "SAXd_EQ",
+      "yahoo": "SAX.DE",
+      "name": "SAX",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T13:54:56.890108+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SAOAd_EQ",
+    "t212_ticker": "SAXd_EQ",
     "venue": "DE",
-    "yahoo": "SAOA.DE",
-    "isin": "ZAE000006896",
-    "name": "SAOA",
-    "seconds": 85.785,
+    "yahoo": "SAX.DE",
+    "isin": "DE0007493991",
+    "name": "SAX",
+    "seconds": 1.997,
     "outcome": "miss",
-    "at": "2026-11-28T13:54:49.577684+00:00",
+    "at": "2026-11-28T13:54:56.890108+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.782
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.753
     },
-    "screen_seconds": 84.782,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.753,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SAXd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T13:54:49.577684+00:00",
+  "updated_at": "2026-11-28T13:54:56.890108+00:00",
   "totals": {
-    "screened": 7605,
+    "screened": 7606,
     "signals": {
-      "buy": 2022,
+      "buy": 2023,
       "avoid": 1568,
       "hold": 1483,
       "insufficient_data": 2492,
       "strong_buy": 40
     },
-    "signals_n": 7605,
-    "screen_seconds_sum": 111155.90700000049,
-    "screen_seconds_n": 7605,
+    "signals_n": 7606,
+    "screen_seconds_sum": 111156.66000000048,
+    "screen_seconds_n": 7606,
     "outcomes": {
-      "miss": 3788,
+      "miss": 3789,
       "saved": 3817
     }
   },
