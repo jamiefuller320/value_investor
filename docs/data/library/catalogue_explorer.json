@@ -7266,28 +7266,10 @@
     "LBMBD_EQ",
     "LE0D_EQ",
     "LECD_EQ",
-    "LEGD_EQ"
+    "LEGD_EQ",
+    "LEID_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "KEMd_EQ",
-      "venue": "DE",
-      "yahoo": "KEM.DE",
-      "isin": "FI0009004824",
-      "name": "KEM",
-      "seconds": 5.739,
-      "outcome": "miss",
-      "at": "2026-11-28T00:26:19.603575+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.828
-      },
-      "screen_seconds": 3.828,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "KGHAd_EQ",
       "venue": "DE",
@@ -8028,6 +8010,25 @@
       },
       "screen_seconds": 0.468,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "LEId_EQ",
+      "venue": "DE",
+      "yahoo": "LEI.DE",
+      "isin": "DE0006464506",
+      "name": "LEI",
+      "seconds": 2.431,
+      "outcome": "miss",
+      "at": "2026-11-28T00:51:08.257931+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.521
+      },
+      "screen_seconds": 0.521,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -91301,43 +91302,56 @@
         "error": null
       },
       "finished_at": "2026-11-28T00:42:33.790297+00:00"
+    },
+    {
+      "t212_ticker": "LEId_EQ",
+      "yahoo": "LEI.DE",
+      "name": "LEI",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T00:51:08.257931+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "LEGd_EQ",
+    "t212_ticker": "LEId_EQ",
     "venue": "DE",
-    "yahoo": "LEG.DE",
-    "isin": "DE000LEG1110",
-    "name": "LEG",
-    "seconds": 2.708,
+    "yahoo": "LEI.DE",
+    "isin": "DE0006464506",
+    "name": "LEI",
+    "seconds": 2.431,
     "outcome": "miss",
-    "at": "2026-11-28T00:50:59.380604+00:00",
+    "at": "2026-11-28T00:51:08.257931+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
+      "signal": "buy",
+      "fits": true,
       "data_quality_score": 1.0,
-      "seconds": 0.468
+      "seconds": 0.521
     },
-    "screen_seconds": 0.468,
-    "signal": "hold"
+    "screen_seconds": 0.521,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "LEId_EQ"
+    }
   },
-  "updated_at": "2026-11-28T00:50:59.380604+00:00",
+  "updated_at": "2026-11-28T00:51:08.257931+00:00",
   "totals": {
-    "screened": 7265,
+    "screened": 7266,
     "signals": {
-      "buy": 1991,
+      "buy": 1992,
       "avoid": 1546,
       "hold": 1454,
       "insufficient_data": 2234,
       "strong_buy": 40
     },
-    "signals_n": 7265,
-    "screen_seconds_sum": 97320.00100000044,
-    "screen_seconds_n": 7265,
+    "signals_n": 7266,
+    "screen_seconds_sum": 97320.52200000043,
+    "screen_seconds_n": 7266,
     "outcomes": {
-      "miss": 3449,
+      "miss": 3450,
       "saved": 3816
     }
   },
