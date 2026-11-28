@@ -1,6 +1,6 @@
 # Jabil Inc. (JBL) — Research memo
 
-_Version 17 · Updated 2026-11-27T21:48:03.781736+00:00 · Mode: structured_verdict_update_
+_Version 18 · Updated 2026-11-28T01:04:12.515747+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.67
-Rationale: 21:47 news is options-quote noise only; unchanged TTM cash metrics leave filing–screen EPS tension unresolved, mildly weakening the buy case.
+Rationale: GuruFocus valuation piece only; unchanged TTM cash metrics leave filing–screen EPS tension unresolved, mildly weakening the buy case.
 RiskTags: cyclical, leverage, customer_concentration
 
 ## Weekly updates
@@ -92,4 +92,9 @@ Screen–filing earnings reconciliation remains unresolved; filing-backed risk p
 ### 2026-11-27T21:48:03.781736+00:00
 Since the 18:04 UTC refresh, the 21:47 batch has only a listed-options quote page—no Jabil-specific fundamental news.  
 21:47 financial pull is unchanged: TTM operating cash flow ~$2.0bn, free cash flow ~$1.37bn; net debt ~$1.64bn and negative tangible book persist.  
+Screen–filing earnings reconciliation remains unresolved; filing-backed risk profile unchanged.
+
+### 2026-11-28T01:04:12.515747+00:00
+Since the 27 Nov refresh, GuruFocus cites GF Value $252.36 versus price $235.91 after a 3.4% gain—valuation commentary only, no filing catalyst.  
+01:03 financial pull is unchanged: TTM operating cash flow ~$2.0bn, free cash flow ~$1.37bn; net debt ~$1.64bn and negative tangible book persist.  
 Screen–filing earnings reconciliation remains unresolved; filing-backed risk profile unchanged.

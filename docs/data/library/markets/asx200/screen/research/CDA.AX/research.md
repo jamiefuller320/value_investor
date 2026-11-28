@@ -1,6 +1,6 @@
 # Codan Limited (CDA.AX) — Research memo
 
-_Version 3 · Updated 2026-11-27T21:38:05.431264+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-28T00:49:20.900222+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.62
-Rationale: Filing-backed H1 FY27 uplift and communications growth narrative support the screen, but rich multiples and unverified Yahoo TTM cash keep research only partly aligned with Buy.
+Rationale: Filing-backed H1 FY27 uplift and communications growth support the buy screen, but rich multiples and unverified Yahoo TTM cash keep research only partly aligned with Buy.
 RiskTags: cyclical, competitive, customer_concentration, key_person
 
 ## Weekly updates
@@ -22,3 +22,8 @@ News since 6 Nov reiterates lifted H1 FY27 communications revenue (~US$400–410
 No new articles in the 21:37 news batch since the afternoon refresh; the H1 FY27 trading-update filing and earlier Kalkine commentary are unchanged in corpus.  
 Financials were re-fetched; Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.  
 No material change to the research picture versus the prior 27 Nov verdict.
+
+### 2026-11-28T00:49:20.900222+00:00
+No articles in the 28 Nov news batch since the 27 Nov evening refresh; corpus unchanged.  
+Financials and filings re-fetched; Yahoo `quarterly_cashflow` is still empty, so screen TTM FCF remains unverified.  
+No material change versus the prior verdict.

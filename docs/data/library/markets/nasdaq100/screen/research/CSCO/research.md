@@ -1,6 +1,6 @@
 # Cisco Systems, Inc. (CSCO) — Research memo
 
-_Version 17 · Updated 2026-11-27T21:39:52.507697+00:00 · Mode: structured_verdict_update_
+_Version 18 · Updated 2026-11-28T00:51:36.705971+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -91,5 +91,10 @@ No new SEC filing bodies in the supplied sources.
 
 ### 2026-11-27T21:39:52.507697+00:00
 Since the 17:56 pass, one TradingKey headline cites a ~3% session gain on 27 Nov; no company-specific fundamentals or disclosures.  
+No new SEC filing bodies in the supplied sources.  
+**Buy** screen unchanged at Q1 FY27 EPS $1.14 on ~$18.5bn revenue; margin, insider-sale and governance themes from earlier passes are unchanged.
+
+### 2026-11-28T00:51:36.705971+00:00
+Since the 27 Nov evening pass, one MarketBeat headline repeats a ~3% share gain; no company-specific fundamentals or disclosures.  
 No new SEC filing bodies in the supplied sources.  
 **Buy** screen unchanged at Q1 FY27 EPS $1.14 on ~$18.5bn revenue; margin, insider-sale and governance themes from earlier passes are unchanged.

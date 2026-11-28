@@ -1,6 +1,6 @@
 # Sandisk Corporation (SNDK) — Research memo
 
-_Version 33 · Updated 2026-11-27T22:05:44.859344+00:00 · Mode: structured_verdict_update_
+_Version 34 · Updated 2026-11-28T01:14:24.942609+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.58
-Rationale: Nvidia–Kioxia SSD press supports AI flash demand but adds no issuer guidance; exceptional on-file cash leaves unresolved 2027 NAND cycle fears weakening the strong-buy case.
+Rationale: Empty 28 Nov news batch and no new issuer filings; exceptional on-file cash unchanged while unresolved 2027 NAND cycle fears and value-trap debate still weaken the strong-buy case.
 RiskTags: cyclical, competitive, customer_concentration, governance, regulatory
 
 ## Weekly updates
@@ -157,3 +157,8 @@ On-file financials still show very strong free cash flow (~$11.5bn FY, ~$17.4bn 
 Since the 18:12 refresh, press ties the post-Thanksgiving rebound to Nvidia–Kioxia GB200 SSD proof-of-concept coverage (roughly 12.85%); no SNDK issuer filings in the batch.  
 The 2027 NAND oversupply and bargain-versus-trap debate in the file set are unchanged.  
 On-file financials still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).
+
+### 2026-11-28T01:14:24.942609+00:00
+The 28 Nov news batch is empty since the 27 Nov evening refresh; no new SNDK issuer disclosures in that slice.  
+Financials re-fetched 28 November still show very strong free cash flow (~$11.5bn FY, ~$17.4bn TTM).  
+The 2027 NAND oversupply debate, semis estimate-cut framing and post-holiday rebound press in the file set are unchanged.

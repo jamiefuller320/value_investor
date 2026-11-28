@@ -1,6 +1,6 @@
 # Micron Technology, Inc. (MU) — Research memo
 
-_Version 18 · Updated 2026-11-27T21:54:04.740019+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-28T01:09:10.909847+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: high
 Confidence: 0.69
-Rationale: TrendForce’s early-2028 price-decline view clashes with the CEO’s scarcity thesis; ~$59bn TTM FCF still supports the screen, but zero model passes and cyclical pricing risk keep accumulate versus strong buy.
+Rationale: Editorial bullish colour only; ~$59bn TTM FCF still supports the screen, but zero model passes and cyclical pricing risk keep accumulate versus strong buy.
 RiskTags: cyclical, competitive, leverage, customer_concentration
 
 ## Weekly updates
@@ -96,3 +96,8 @@ Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passe
 Evening headlines add TrendForce versus CEO Mehrotra on 2028 memory pricing, MU up ~4% with the sector rebound, and Yahoo’s $32bn take-or-pay commitment narrative; Jim Cramer bullish colour only.  
 No new filings or sourced financials in this batch.  
 Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed; filing-based risks unchanged.
+
+### 2026-11-28T01:09:10.909847+00:00
+Late batch is one Yahoo Jim Cramer “comically cheap” retail-holder piece; no new filings or sourced financials.  
+Screen remains strong buy with ~$59bn TTM FCF and zero quantitative models passed.  
+Filing-based cyclical, leverage, competitive and customer-concentration risks are unchanged.

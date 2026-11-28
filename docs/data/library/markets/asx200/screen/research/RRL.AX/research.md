@@ -1,6 +1,6 @@
 # Regis Resources Limited (RRL.AX) — Research memo
 
-_Version 11 · Updated 2026-11-27T22:05:20.197794+00:00 · Mode: structured_verdict_update_
+_Version 12 · Updated 2026-11-28T01:13:53.417558+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: Research is neutral on strong buy this week: no new filings or news; Q1 FY27 and Duketon site visit stand, but empty key_metrics and McPhillamys heritage remain unresolved.
+Rationale: Research stays neutral on strong buy: empty 28 Nov news batch; no new ASX filings since Q1 FY27 and Duketon visit; empty key_metrics and McPhillamys heritage remain unresolved.
 RiskTags: cyclical, regulatory, other
 
 ## Weekly updates
@@ -61,4 +61,9 @@ Screen stays **strong_buy**; `key_metrics` are still empty and Yahoo quarterly c
 ### 2026-11-27T22:05:20.197794+00:00
 No articles in the incremental news batch since the 18:12 UTC refresh; the filing index was re-fetched at 22:05 UTC with no new ASX disclosures.
 Latest operating disclosure remains the 7 Oct Q1 FY27 update and the 1 Nov Duketon site visit.
+Screen stays **strong_buy**; `key_metrics` are still empty and Yahoo quarterly cashflow is suppressed, so TTM FCF is unverified.
+
+### 2026-11-28T01:13:53.417558+00:00
+No articles in the incremental news batch since the 27 Nov 22:05 UTC refresh; the filing index was re-fetched at 01:13 UTC with no new ASX disclosures.  
+Latest operating disclosure remains the 7 Oct Q1 FY27 update and the 1 Nov Duketon site visit.  
 Screen stays **strong_buy**; `key_metrics` are still empty and Yahoo quarterly cashflow is suppressed, so TTM FCF is unverified.

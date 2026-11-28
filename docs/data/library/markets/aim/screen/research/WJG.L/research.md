@@ -1,6 +1,6 @@
 # Watkin Jones Plc (WJG.L) — Research memo
 
-_Version 3 · Updated 2026-11-27T22:15:06.942183+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-28T01:21:23.878147+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.66
-Rationale: This batch adds no new RNS or news; unchanged ~£14m cash outflow and Aug FY26 profit guidance still weaken the buy screen despite unchanged quant buy/hold.
+Rationale: No new disclosure in this batch; unchanged ~£14m cash outflow and Aug FY26 full-year profit-near-H1 guidance still weaken the buy screen despite quant buy/hold.
 RiskTags: regulatory, cyclical, liquidity
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Yahoo metrics still show ~£14m TTM OCF/FCF outflow; the screen remains **buy** 
 Incremental news fetch since the earlier 27 Nov refresh returned no articles.  
 Filings index unchanged: no RNS after 28 Aug FY26 trading update; FY26 full-year results are not in this batch.  
 Refreshed Yahoo/filing cash metrics still show ~£14m TTM OCF/FCF outflow; quant **buy** with adjusted **hold** is unchanged.
+
+### 2026-11-28T01:21:23.878147+00:00
+No material change.  
+News batch since the prior refresh is empty; latest indexed RNS remains the 28 Aug FY26 trading update and FY26 full-year results are not in this batch.  
+~£14m TTM OCF/FCF outflow and quant **buy** with adjusted **hold** are unchanged in supplied sources.

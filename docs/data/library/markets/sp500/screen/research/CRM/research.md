@@ -1,6 +1,6 @@
 # Salesforce, Inc. (CRM) — Research memo
 
-_Version 30 · Updated 2026-11-27T21:39:07.710198+00:00 · Mode: structured_verdict_update_
+_Version 31 · Updated 2026-11-28T00:50:37.538146+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.69
-Rationale: Since the 17:55 refresh only sector-wide futures commentary appears; licence weakness and buyback leverage still temper Strong Buy, while filing-backed FY26 FCF (~$14.4bn) mildly confirms ahead of 2 Dec results.
+Rationale: The 28 Nov batch adds no CRM headlines; filing-backed FY26 FCF (~$14.4bn) still mildly confirms Strong Buy, while leverage and competitive pre-earnings themes temper conviction.
 RiskTags: leverage, competitive
 
 ## Weekly updates
@@ -151,5 +151,10 @@ Filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged; lever
 
 ### 2026-11-27T21:39:07.710198+00:00
 The 21:38 UTC batch adds only a sector-wide IBD market-futures wrap; no CRM-specific headlines.  
+No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
+Leverage and competitive pre-earnings themes are unchanged ahead of 2 Dec results.
+
+### 2026-11-28T00:50:37.538146+00:00
+The 28 Nov news batch adds no articles since the 27 Nov 21:39 UTC refresh.  
 No new primary filings; filing-backed FY26 FCF (~$14.4bn) and the Strong Buy screen are unchanged.  
 Leverage and competitive pre-earnings themes are unchanged ahead of 2 Dec results.

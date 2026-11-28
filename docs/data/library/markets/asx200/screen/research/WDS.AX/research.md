@@ -1,6 +1,6 @@
 # Woodside Energy Group Ltd (WDS.AX) — Research memo
 
-_Version 3 · Updated 2026-11-27T22:12:46.164900+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-28T01:20:06.224432+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -22,4 +22,9 @@ No material change versus the prior structured verdict update.
 ### 2026-11-27T22:12:46.164900+00:00
 News batch since the prior refresh is empty—no new headlines in sources.  
 22:12 pull leaves FY25 Yahoo OCF $7.2bn and IFRS FCF −$0.8bn unchanged; quarterly cash flow remains empty.  
+No material change.
+
+### 2026-11-28T01:20:06.224432+00:00
+News batch since 2026-11-27T22:12:46 UTC is empty—no new headlines in sources.  
+01:19 refresh leaves FY25 Yahoo OCF $7.2bn and IFRS FCF −$0.8bn unchanged; quarterly cash flow remains empty.  
 No material change.

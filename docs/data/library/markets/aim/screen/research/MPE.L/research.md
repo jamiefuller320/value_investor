@@ -1,6 +1,6 @@
 # M.P. Evans Group PLC (MPE.L) — Research memo
 
-_Version 18 · Updated 2026-11-27T21:53:42.246130+00:00 · Mode: structured_verdict_update_
+_Version 19 · Updated 2026-11-28T01:08:24.613322+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.78
-Rationale: Empty evening news batch; 27 Nov crop/production RNS still supports operations and £5m buyback—cyclical CPO pricing and El Niño caveats keep accumulate below full strong_buy.
+Rationale: Empty 01:05 news batch; no RNS after 27 Nov crop update—YTD growth and £5m buyback support ops, but cyclical CPO and El Niño caveats keep accumulate below strong_buy.
 RiskTags: cyclical, regulatory, pension, liquidity
 
 ## Weekly updates
@@ -97,4 +97,9 @@ Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal unchange
 ### 2026-11-27T21:53:42.246130+00:00
 News batch since the 18:07 refresh is empty; no new articles in the supplied sources.  
 Filings show no RNS after today’s crop & production update; substantive disclosures unchanged from that announcement.  
+Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal and accumulate overlay unchanged.
+
+### 2026-11-28T01:08:24.613322+00:00
+News batch since the 27 Nov evening refresh is empty; no new articles in the supplied sources.  
+Filings fetch at 01:06 UTC shows no RNS after 27 Nov crop & production update; substantive disclosures unchanged.  
 Screen TTM OCF US$149.3m and FCF US$124.5m unchanged; strong_buy signal and accumulate overlay unchanged.
