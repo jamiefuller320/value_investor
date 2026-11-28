@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-27T21:35:25.042016+00:00`
+Generated: `2026-11-28T00:39:34.548470+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,8 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `parked_hunter`/verified PR #1488 `eng-20261127-01` — Hunt fetchable IR source for parked ftse_mib leftover TIT.MI
-- `parked_hunter`/verified PR #1487 `eng-20261127-03` — Hunt fetchable IR source for parked aim leftover POLR.L
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 423
