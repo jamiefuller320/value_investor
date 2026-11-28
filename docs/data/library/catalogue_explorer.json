@@ -7336,28 +7336,10 @@
     "MJ8D_EQ",
     "MJTD_EQ",
     "MK2AD_EQ",
-    "MKOD_EQ"
+    "MKOD_EQ",
+    "MLLD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "M1Wd_EQ",
-      "venue": "DE",
-      "yahoo": "M1W.DE",
-      "isin": "CA38144C1005",
-      "name": "M1W",
-      "seconds": 86.666,
-      "outcome": "miss",
-      "at": "2026-11-28T01:26:12.805951+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.729
-      },
-      "screen_seconds": 84.729,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "M1Zd_EQ",
       "venue": "DE",
@@ -8098,6 +8080,25 @@
       },
       "screen_seconds": 4.769,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MLLd_EQ",
+      "venue": "DE",
+      "yahoo": "MLL.DE",
+      "isin": "DE0006214687",
+      "name": "MLL",
+      "seconds": 2.709,
+      "outcome": "miss",
+      "at": "2026-11-28T07:52:44.741038+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.081
+      },
+      "screen_seconds": 1.081,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -91411,43 +91412,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T01:50:16.906021+00:00"
+    },
+    {
+      "t212_ticker": "MLLd_EQ",
+      "yahoo": "MLL.DE",
+      "name": "MLL",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T07:52:44.741038+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MKOd_EQ",
+    "t212_ticker": "MLLd_EQ",
     "venue": "DE",
-    "yahoo": "MKO.DE",
-    "isin": "VGG1890L1076",
-    "name": "MKO",
-    "seconds": 6.428,
+    "yahoo": "MLL.DE",
+    "isin": "DE0006214687",
+    "name": "MLL",
+    "seconds": 2.709,
     "outcome": "miss",
-    "at": "2026-11-28T07:52:34.687615+00:00",
+    "at": "2026-11-28T07:52:44.741038+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.769
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.081
     },
-    "screen_seconds": 4.769,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.081,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MLLd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T07:52:34.687615+00:00",
+  "updated_at": "2026-11-28T07:52:44.741038+00:00",
   "totals": {
-    "screened": 7335,
+    "screened": 7336,
     "signals": {
-      "buy": 1996,
+      "buy": 1997,
       "avoid": 1550,
       "hold": 1463,
       "insufficient_data": 2286,
       "strong_buy": 40
     },
-    "signals_n": 7335,
-    "screen_seconds_sum": 101090.51600000047,
-    "screen_seconds_n": 7335,
+    "signals_n": 7336,
+    "screen_seconds_sum": 101091.59700000047,
+    "screen_seconds_n": 7336,
     "outcomes": {
-      "miss": 3519,
+      "miss": 3520,
       "saved": 3816
     }
   },
