@@ -7349,28 +7349,10 @@
     "MRGD_EQ",
     "MRXD_EQ",
     "MSAGD1_EQ",
-    "MSID_EQ"
+    "MSID_EQ",
+    "MTAD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "M8Gd_EQ",
-      "venue": "DE",
-      "yahoo": "M8G.DE",
-      "isin": "IE000ZVY0237",
-      "name": "VRV",
-      "seconds": 86.592,
-      "outcome": "miss",
-      "at": "2026-11-28T01:41:58.366858+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.683
-      },
-      "screen_seconds": 84.683,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "M98d_EQ",
       "venue": "DE",
@@ -8111,6 +8093,25 @@
       },
       "screen_seconds": 4.821,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MTAd_EQ",
+      "venue": "DE",
+      "yahoo": "MTA.DE",
+      "isin": "FI0009003727",
+      "name": "MTA",
+      "seconds": 2.617,
+      "outcome": "miss",
+      "at": "2026-11-28T07:55:26.617759+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.967
+      },
+      "screen_seconds": 0.967,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -91432,43 +91433,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T07:52:44.741038+00:00"
+    },
+    {
+      "t212_ticker": "MTAd_EQ",
+      "yahoo": "MTA.DE",
+      "name": "MTA",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T07:55:26.617759+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MSId_EQ",
+    "t212_ticker": "MTAd_EQ",
     "venue": "DE",
-    "yahoo": "MSI.DE",
-    "isin": "JP3888300005",
-    "name": "MSI",
-    "seconds": 6.571,
+    "yahoo": "MTA.DE",
+    "isin": "FI0009003727",
+    "name": "MTA",
+    "seconds": 2.617,
     "outcome": "miss",
-    "at": "2026-11-28T07:55:16.458902+00:00",
+    "at": "2026-11-28T07:55:26.617759+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.821
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.967
     },
-    "screen_seconds": 4.821,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.967,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MTAd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T07:55:16.458902+00:00",
+  "updated_at": "2026-11-28T07:55:26.617759+00:00",
   "totals": {
-    "screened": 7348,
+    "screened": 7349,
     "signals": {
-      "buy": 1997,
+      "buy": 1998,
       "avoid": 1551,
       "hold": 1465,
       "insufficient_data": 2295,
       "strong_buy": 40
     },
-    "signals_n": 7348,
-    "screen_seconds_sum": 101135.4330000005,
-    "screen_seconds_n": 7348,
+    "signals_n": 7349,
+    "screen_seconds_sum": 101136.4000000005,
+    "screen_seconds_n": 7349,
     "outcomes": {
-      "miss": 3532,
+      "miss": 3533,
       "saved": 3816
     }
   },
