@@ -7651,28 +7651,10 @@
     "SMHND_EQ",
     "SMKAD_EQ",
     "SMMD_EQ",
-    "SMOD_EQ"
+    "SMOD_EQ",
+    "SMP0D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SBXd_EQ",
-      "venue": "DE",
-      "yahoo": "SBX.DE",
-      "isin": "DE000A3E5A59",
-      "name": "SBX",
-      "seconds": 1.596,
-      "outcome": "miss",
-      "at": "2026-11-28T13:58:20.865920+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "avoid",
-        "fits": false,
-        "data_quality_score": 0.85,
-        "seconds": 0.629
-      },
-      "screen_seconds": 0.629,
-      "signal": "avoid"
-    },
     {
       "t212_ticker": "SC1Pd_EQ",
       "venue": "DE",
@@ -8413,6 +8395,25 @@
       },
       "screen_seconds": 84.707,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SMP0d_EQ",
+      "venue": "DE",
+      "yahoo": "SMP0.DE",
+      "isin": "FI4000552500",
+      "name": "SMP0",
+      "seconds": 1.641,
+      "outcome": "miss",
+      "at": "2026-11-28T14:38:06.983633+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.95,
+        "seconds": 0.742
+      },
+      "screen_seconds": 0.742,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -93162,43 +93163,56 @@
         "error": null
       },
       "finished_at": "2026-11-28T14:23:54.536823+00:00"
+    },
+    {
+      "t212_ticker": "SMP0d_EQ",
+      "yahoo": "SMP0.DE",
+      "name": "SMP0",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T14:38:06.983633+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SMOd_EQ",
+    "t212_ticker": "SMP0d_EQ",
     "venue": "DE",
-    "yahoo": "SMO.DE",
-    "isin": "JP3407400005",
-    "name": "SMO",
-    "seconds": 85.784,
+    "yahoo": "SMP0.DE",
+    "isin": "FI4000552500",
+    "name": "SMP0",
+    "seconds": 1.641,
     "outcome": "miss",
-    "at": "2026-11-28T14:38:00.161817+00:00",
+    "at": "2026-11-28T14:38:06.983633+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.707
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.95,
+      "seconds": 0.742
     },
-    "screen_seconds": 84.707,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.742,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SMP0d_EQ"
+    }
   },
-  "updated_at": "2026-11-28T14:38:00.161817+00:00",
+  "updated_at": "2026-11-28T14:38:06.983633+00:00",
   "totals": {
-    "screened": 7650,
+    "screened": 7651,
     "signals": {
-      "buy": 2027,
+      "buy": 2028,
       "avoid": 1573,
       "hold": 1492,
       "insufficient_data": 2518,
       "strong_buy": 40
     },
-    "signals_n": 7650,
-    "screen_seconds_sum": 113450.62800000048,
-    "screen_seconds_n": 7650,
+    "signals_n": 7651,
+    "screen_seconds_sum": 113451.37000000048,
+    "screen_seconds_n": 7651,
     "outcomes": {
-      "miss": 3833,
+      "miss": 3834,
       "saved": 3817
     }
   },
