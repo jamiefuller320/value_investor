@@ -7246,28 +7246,10 @@
     "KPOD_EQ",
     "KR8D_EQ",
     "KRND_EQ",
-    "KSB1D_EQ"
+    "KSB1D_EQ",
+    "KSB3D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "JUS1d_EQ",
-      "venue": "DE",
-      "yahoo": "JUS1.DE",
-      "isin": "JP3388200002",
-      "name": "JUS1",
-      "seconds": 5.12,
-      "outcome": "miss",
-      "at": "2026-11-28T00:22:38.204859+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.682
-      },
-      "screen_seconds": 3.682,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "K2Yd_EQ",
       "venue": "DE",
@@ -8008,6 +7990,25 @@
       },
       "screen_seconds": 3.842,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "KSB3d_EQ",
+      "venue": "DE",
+      "yahoo": "KSB3.DE",
+      "isin": "DE0006292030",
+      "name": "KSB3",
+      "seconds": 1.971,
+      "outcome": "miss",
+      "at": "2026-11-28T00:29:53.460870+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.485
+      },
+      "screen_seconds": 0.485,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -90729,43 +90730,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T00:29:33.413942+00:00"
+    },
+    {
+      "t212_ticker": "KSB3d_EQ",
+      "yahoo": "KSB3.DE",
+      "name": "KSB3",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T00:29:53.460870+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "KSB1d_EQ",
+    "t212_ticker": "KSB3d_EQ",
     "venue": "DE",
-    "yahoo": "KSB1.DE",
-    "isin": "DE0006292006",
-    "name": "KSB",
-    "seconds": 5.942,
+    "yahoo": "KSB3.DE",
+    "isin": "DE0006292030",
+    "name": "KSB3",
+    "seconds": 1.971,
     "outcome": "miss",
-    "at": "2026-11-28T00:29:45.331888+00:00",
+    "at": "2026-11-28T00:29:53.460870+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.842
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.485
     },
-    "screen_seconds": 3.842,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.485,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "KSB3d_EQ"
+    }
   },
-  "updated_at": "2026-11-28T00:29:45.331888+00:00",
+  "updated_at": "2026-11-28T00:29:53.460870+00:00",
   "totals": {
-    "screened": 7245,
+    "screened": 7246,
     "signals": {
-      "buy": 1988,
+      "buy": 1989,
       "avoid": 1545,
       "hold": 1453,
       "insufficient_data": 2219,
       "strong_buy": 40
     },
-    "signals_n": 7245,
-    "screen_seconds_sum": 96209.80300000047,
-    "screen_seconds_n": 7245,
+    "signals_n": 7246,
+    "screen_seconds_sum": 96210.28800000047,
+    "screen_seconds_n": 7246,
     "outcomes": {
-      "miss": 3429,
+      "miss": 3430,
       "saved": 3816
     }
   },
