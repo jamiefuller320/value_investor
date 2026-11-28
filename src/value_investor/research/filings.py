@@ -1271,6 +1271,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://links.sgx.com/FileOpen/Annual%20Report%202024.ashx?App=Announcement&FileID=837141",
         "https://links.sgx.com/1.0.0/corporate-announcements/ICQRGNBFANVDT4A4/854607_GENS%201H2025%20SGX%20Results%20Announcement.pdf",
     ],
+    # sti buy-tier zero_body — 5E2.SI Seatrium: asia_filings indexed only a Simply Wall St
+    # shell (0 bodies). SGX FY2025 annual report + 1H2026 condensed interim financial
+    # statements fetch. AGM*_AR slug has no annual token (period override below).
+    "5E2.SI": [
+        "https://links.sgx.com/1.0.0/corporate-announcements/VT3AYY5ZC44RU0T7/880042_Seatrium_AGM%202026_AR.pdf",
+        "https://links.sgx.com/1.0.0/corporate-announcements/ZM0D35B0EV95QEGD/898060_1H2026%20Interim%20Financial%20Statements.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -1640,6 +1647,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "C6L": ("Singapore Airlines", "Singapore Airlines Limited", "SIA"),
     # sti G13.SI SGX allowlist — GENS / FileOpen Annual Report* slugs need issuer match.
     "G13": ("Genting Singapore", "Genting Singapore Limited", "GENS"),
+    # sti 5E2.SI SGX allowlist — 1H2026 Interim Financial Statements slug has no issuer token.
+    "5E2": ("Seatrium", "Seatrium Limited"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
     "HM-B": (
@@ -6421,6 +6430,10 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://links.sgx.com/FileOpen/slide-q2fy2526.ashx?App=Announcement&FileID=867072": "interim",
     # eng-20261115-03: G13.SI — 1H2025 Results Announcement slug has no half-year token.
     "https://links.sgx.com/1.0.0/corporate-announcements/ICQRGNBFANVDT4A4/854607_GENS%201H2025%20SGX%20Results%20Announcement.pdf": "interim",
+    # 5E2.SI — Seatrium_AGM*_AR.pdf has no annual token (would classify other).
+    # 1H2026%20Financial slug false-matches the 20f token inside "%20f".
+    "https://links.sgx.com/1.0.0/corporate-announcements/VT3AYY5ZC44RU0T7/880042_Seatrium_AGM%202026_AR.pdf": "annual",
+    "https://links.sgx.com/1.0.0/corporate-announcements/ZM0D35B0EV95QEGD/898060_1H2026%20Interim%20Financial%20Statements.pdf": "interim",
     # eng-20261109-01: IMD.AX — Weblink Appendix 4D slug is numeric-only (would classify other).
     "https://wcsecure.weblink.com.au/pdf/IMD/03059253.pdf": "interim",
     # eng-20261115-02: NHC.AX — opaque ASX Appendix 4E hash slug (would classify other).

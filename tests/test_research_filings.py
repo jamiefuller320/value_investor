@@ -10034,6 +10034,90 @@ def test_filing_source_surface_g13_si_ir_allowlist_direct_eng_20261115_03():
     assert filing_source_surface("sti", "G13.SI") == "asia_filings+ir_allowlist_direct"
 
 
+def test_fetch_filings_ir_allowlist_sti_5e2_si_builtins(tmp_path: Path):
+    """sti 5E2.SI zero_body — Seatrium SGX FY2025 annual + 1H2026 interim statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("5E2.SI", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("880042_Seatrium_AGM%202026_AR.pdf" in url for url in urls)
+    assert any("898060_1H2026%20Interim%20Financial%20Statements.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    assert "5E2.SI" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_ir_allowlist_period_classifies_5e2_si_agm_ar_slug():
+    """Seatrium AGM*_AR slug must map to annual (not other)."""
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/1.0.0/corporate-announcements/VT3AYY5ZC44RU0T7/880042_Seatrium_AGM%202026_AR.pdf"
+        )
+        == "annual"
+    )
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/1.0.0/corporate-announcements/ZM0D35B0EV95QEGD/898060_1H2026%20Interim%20Financial%20Statements.pdf"
+        )
+        == "interim"
+    )
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_5e2_si_index(tmp_path: Path):
+    """Empty 5E2.SI filings_index.json must gain IR rows for the next sti deepen."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("5E2.SI", filings_dir)
+    assert meta["added"] == 2
+    assert meta["total_allowlist"] == 2
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) == 2
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_filing_source_surface_5e2_si_ir_allowlist_direct():
+    """sti 5E2.SI zero_body must gain ir_allowlist_direct so the next deepen refetches."""
+    from value_investor.research.filings import filing_source_surface, ir_allowlist_direct_eligible
+
+    assert ir_allowlist_direct_eligible("5E2.SI")
+    assert filing_source_surface("sti", "5E2.SI") == "asia_filings+ir_allowlist_direct"
+
+
+def test_parked_source_hunter_5e2_si_sti_has_fetchable_ir():
+    """5E2.SI (Seatrium) has live-fetchable SGX FY2025 annual and 1H2026 interim PDFs."""
+    assert "5E2.SI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("5E2.SI")
+    assert len(rows) == 2
+    by_period = {row["period"]: row for row in rows}
+    annual = _live_fetch_filing_body(by_period["annual"]["url"])
+    interim = _live_fetch_filing_body(by_period["interim"]["url"])
+    if not annual or not interim:
+        pytest.skip("SGX PDF body fetch unavailable (network) — retry later")
+    assert len(annual) >= 50000
+    assert "seatrium" in annual.lower()
+    assert "annual report" in annual.lower()
+    valid, reason = _validate_ir_allowlist_body_content(
+        by_period["annual"], annual, ticker="5E2.SI"
+    )
+    assert valid, reason
+    assert len(interim) >= 5000
+    assert "seatrium" in interim.lower()
+    assert "six months ended" in interim.lower()
+    valid, reason = _validate_ir_allowlist_body_content(
+        by_period["interim"], interim, ticker="5E2.SI"
+    )
+    assert valid, reason
+
+
 def test_parked_source_hunter_skip_0968_hk_hang_seng():
     """eng-20261017-11: 0968.HK leftover IWB is bot-gated TipRanks news, not missing HKEX filings."""
     assert "0968.HK" in PARKED_SOURCE_HUNTER_SKIP
