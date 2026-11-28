@@ -7195,28 +7195,10 @@
     "JATD_EQ",
     "JD1D_EQ",
     "JDCD_EQ",
-    "JEJD_EQ"
+    "JEJD_EQ",
+    "JEND_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ILM1d_EQ",
-      "venue": "DE",
-      "yahoo": "ILM1.DE",
-      "isin": "DE000A1MMCC8",
-      "name": "ILM1",
-      "seconds": 2.579,
-      "outcome": "miss",
-      "at": "2026-11-27T23:34:36.816926+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 1.132
-      },
-      "screen_seconds": 1.132,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "IM4d_EQ",
       "venue": "DE",
@@ -7957,6 +7939,25 @@
       },
       "screen_seconds": 3.791,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "JENd_EQ",
+      "venue": "DE",
+      "yahoo": "JEN.DE",
+      "isin": "DE000A2NB601",
+      "name": "JEN",
+      "seconds": 2.697,
+      "outcome": "miss",
+      "at": "2026-11-28T00:20:39.614982+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.634
+      },
+      "screen_seconds": 0.634,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -90646,43 +90647,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T00:08:03.170242+00:00"
+    },
+    {
+      "t212_ticker": "JENd_EQ",
+      "yahoo": "JEN.DE",
+      "name": "JEN",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T00:20:39.614982+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "JEJd_EQ",
+    "t212_ticker": "JENd_EQ",
     "venue": "DE",
-    "yahoo": "JEJ.DE",
-    "isin": "CA9279263037",
-    "name": "JEJ",
-    "seconds": 5.728,
+    "yahoo": "JEN.DE",
+    "isin": "DE000A2NB601",
+    "name": "JEN",
+    "seconds": 2.697,
     "outcome": "miss",
-    "at": "2026-11-28T00:20:30.477395+00:00",
+    "at": "2026-11-28T00:20:39.614982+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.791
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.634
     },
-    "screen_seconds": 3.791,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.634,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "JENd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T00:20:30.477395+00:00",
+  "updated_at": "2026-11-28T00:20:39.614982+00:00",
   "totals": {
-    "screened": 7194,
+    "screened": 7195,
     "signals": {
-      "buy": 1984,
+      "buy": 1985,
       "avoid": 1544,
       "hold": 1449,
       "insufficient_data": 2177,
       "strong_buy": 40
     },
-    "signals_n": 7194,
-    "screen_seconds_sum": 96049.54400000043,
-    "screen_seconds_n": 7194,
+    "signals_n": 7195,
+    "screen_seconds_sum": 96050.17800000044,
+    "screen_seconds_n": 7195,
     "outcomes": {
-      "miss": 3378,
+      "miss": 3379,
       "saved": 3816
     }
   },
