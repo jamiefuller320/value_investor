@@ -7424,28 +7424,10 @@
     "NR7D_EQ",
     "NRDD_EQ",
     "NRSAD_EQ",
-    "NSKD_EQ"
+    "NSKD_EQ",
+    "NTGD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "ND4d_EQ",
-      "venue": "DE",
-      "yahoo": "ND4.DE",
-      "isin": "BMG6716L1081",
-      "name": "ND4",
-      "seconds": 6.163,
-      "outcome": "miss",
-      "at": "2026-11-28T08:02:37.184229+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.927
-      },
-      "screen_seconds": 4.927,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "ND5d_EQ",
       "venue": "DE",
@@ -8186,6 +8168,25 @@
       },
       "screen_seconds": 85.559,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "NTGd_EQ",
+      "venue": "DE",
+      "yahoo": "NTG.DE",
+      "isin": "DE000A0KPPR7",
+      "name": "NTG",
+      "seconds": 4.987,
+      "outcome": "saved",
+      "at": "2026-11-28T08:38:08.590950+00:00",
+      "rows": 1,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.885
+      },
+      "screen_seconds": 0.885,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -92074,44 +92075,64 @@
         "error": null
       },
       "finished_at": "2026-11-28T08:23:38.442895+00:00"
+    },
+    {
+      "t212_ticker": "NTGd_EQ",
+      "yahoo": "NTG.DE",
+      "name": "NTG",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T08:38:08.590950+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "NSKd_EQ",
+    "t212_ticker": "NTGd_EQ",
     "venue": "DE",
-    "yahoo": "NSK.DE",
-    "isin": "JP3720800006",
-    "name": "NSK",
-    "seconds": 87.503,
-    "outcome": "miss",
-    "at": "2026-11-28T08:37:56.154052+00:00",
-    "rows": 0,
-    "filings": [],
+    "yahoo": "NTG.DE",
+    "isin": "DE000A0KPPR7",
+    "name": "NTG",
+    "seconds": 4.987,
+    "outcome": "saved",
+    "at": "2026-11-28T08:38:08.590950+00:00",
+    "rows": 1,
+    "filings": [
+      {
+        "title": null,
+        "date": "2021-09-30",
+        "url": "https://filings.xbrl.org/894500VOMCWL9QGT4H16/2021-09-30/ESEF/DK/0/ntg-2021-09-30/reports/ntg-2021-09-30.xhtml",
+        "has_body": true
+      }
+    ],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 85.559
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.885
     },
-    "screen_seconds": 85.559,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.885,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "NTGd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T08:37:56.154052+00:00",
+  "updated_at": "2026-11-28T08:38:08.590950+00:00",
   "totals": {
-    "screened": 7423,
+    "screened": 7424,
     "signals": {
-      "buy": 2006,
+      "buy": 2007,
       "avoid": 1554,
       "hold": 1472,
       "insufficient_data": 2351,
       "strong_buy": 40
     },
-    "signals_n": 7423,
-    "screen_seconds_sum": 103031.55900000047,
-    "screen_seconds_n": 7423,
+    "signals_n": 7424,
+    "screen_seconds_sum": 103032.44400000047,
+    "screen_seconds_n": 7424,
     "outcomes": {
       "miss": 3607,
-      "saved": 3816
+      "saved": 3817
     }
   },
   "cursor_reset_reason": "Rescreen US, Xetra, and LSE. Prior rows were scored on the wrong Yahoo symbol.",
