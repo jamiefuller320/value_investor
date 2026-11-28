@@ -7392,28 +7392,10 @@
     "NDX1D_EQ",
     "NE0D_EQ",
     "NEC1D_EQ",
-    "NEFD_EQ"
+    "NEFD_EQ",
+    "NEMD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MUBd_EQ",
-      "venue": "DE",
-      "yahoo": "MUB.DE",
-      "isin": "DE0006627201",
-      "name": "MUB",
-      "seconds": 2.744,
-      "outcome": "miss",
-      "at": "2026-11-28T07:56:03.386703+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 0.9,
-        "seconds": 1.072
-      },
-      "screen_seconds": 1.072,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "MUGd_EQ",
       "venue": "DE",
@@ -8154,6 +8136,25 @@
       },
       "screen_seconds": 3.218,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "NEMd_EQ",
+      "venue": "DE",
+      "yahoo": "NEM.DE",
+      "isin": "DE0006452907",
+      "name": "NEM",
+      "seconds": 5.113,
+      "outcome": "miss",
+      "at": "2026-11-28T08:04:15.411383+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.039
+      },
+      "screen_seconds": 1.039,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -91531,43 +91532,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T08:03:23.756237+00:00"
+    },
+    {
+      "t212_ticker": "NEMd_EQ",
+      "yahoo": "NEM.DE",
+      "name": "NEM",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T08:04:15.411383+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "NEFd_EQ",
+    "t212_ticker": "NEMd_EQ",
     "venue": "DE",
-    "yahoo": "NEF.DE",
-    "isin": "FI0009013296",
-    "name": "NEF",
-    "seconds": 4.951,
+    "yahoo": "NEM.DE",
+    "isin": "DE0006452907",
+    "name": "NEM",
+    "seconds": 5.113,
     "outcome": "miss",
-    "at": "2026-11-28T08:04:02.931357+00:00",
+    "at": "2026-11-28T08:04:15.411383+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.4125,
-      "seconds": 3.218
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.039
     },
-    "screen_seconds": 3.218,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.039,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "NEMd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T08:04:02.931357+00:00",
+  "updated_at": "2026-11-28T08:04:15.411383+00:00",
   "totals": {
-    "screened": 7391,
+    "screened": 7392,
     "signals": {
-      "buy": 2004,
+      "buy": 2005,
       "avoid": 1553,
       "hold": 1469,
       "insufficient_data": 2325,
       "strong_buy": 40
     },
-    "signals_n": 7391,
-    "screen_seconds_sum": 101288.11200000047,
-    "screen_seconds_n": 7391,
+    "signals_n": 7392,
+    "screen_seconds_sum": 101289.15100000048,
+    "screen_seconds_n": 7392,
     "outcomes": {
-      "miss": 3575,
+      "miss": 3576,
       "saved": 3816
     }
   },
