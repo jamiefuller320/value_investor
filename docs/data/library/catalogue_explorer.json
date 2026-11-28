@@ -7360,28 +7360,10 @@
     "MUR1D_EQ",
     "MUXD_EQ",
     "MVV11D_EQ",
-    "MW7D_EQ"
+    "MW7D_EQ",
+    "MWB0D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MD1d_EQ",
-      "venue": "DE",
-      "yahoo": "MD1.DE",
-      "isin": "NO0010159684",
-      "name": "MD1",
-      "seconds": 86.536,
-      "outcome": "miss",
-      "at": "2026-11-28T01:51:58.124374+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.776
-      },
-      "screen_seconds": 84.776,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "MDG1d_EQ",
       "venue": "DE",
@@ -8122,6 +8104,25 @@
       },
       "screen_seconds": 4.583,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MWB0d_EQ",
+      "venue": "DE",
+      "yahoo": "MWB0.DE",
+      "isin": "DE000A3EYLC7",
+      "name": "MWB0",
+      "seconds": 2.327,
+      "outcome": "miss",
+      "at": "2026-11-28T07:57:40.252633+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.75,
+        "seconds": 1.095
+      },
+      "screen_seconds": 1.095,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -91459,43 +91460,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T07:56:03.386703+00:00"
+    },
+    {
+      "t212_ticker": "MWB0d_EQ",
+      "yahoo": "MWB0.DE",
+      "name": "MWB0",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T07:57:40.252633+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MW7d_EQ",
+    "t212_ticker": "MWB0d_EQ",
     "venue": "DE",
-    "yahoo": "MW7.DE",
-    "isin": "JP3919800007",
-    "name": "MW7",
-    "seconds": 5.853,
+    "yahoo": "MWB0.DE",
+    "isin": "DE000A3EYLC7",
+    "name": "MWB0",
+    "seconds": 2.327,
     "outcome": "miss",
-    "at": "2026-11-28T07:57:30.654280+00:00",
+    "at": "2026-11-28T07:57:40.252633+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.583
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.75,
+      "seconds": 1.095
     },
-    "screen_seconds": 4.583,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.095,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MWB0d_EQ"
+    }
   },
-  "updated_at": "2026-11-28T07:57:30.654280+00:00",
+  "updated_at": "2026-11-28T07:57:40.252633+00:00",
   "totals": {
-    "screened": 7359,
+    "screened": 7360,
     "signals": {
-      "buy": 1999,
+      "buy": 2000,
       "avoid": 1551,
       "hold": 1467,
       "insufficient_data": 2302,
       "strong_buy": 40
     },
-    "signals_n": 7359,
-    "screen_seconds_sum": 101172.34800000051,
-    "screen_seconds_n": 7359,
+    "signals_n": 7360,
+    "screen_seconds_sum": 101173.44300000051,
+    "screen_seconds_n": 7360,
     "outcomes": {
-      "miss": 3543,
+      "miss": 3544,
       "saved": 3816
     }
   },
