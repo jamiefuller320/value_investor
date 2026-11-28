@@ -7388,28 +7388,10 @@
     "ND4D_EQ",
     "ND5D_EQ",
     "NDAD_EQ",
-    "NDH1D_EQ"
+    "NDH1D_EQ",
+    "NDX1D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MSId_EQ",
-      "venue": "DE",
-      "yahoo": "MSI.DE",
-      "isin": "JP3888300005",
-      "name": "MSI",
-      "seconds": 6.571,
-      "outcome": "miss",
-      "at": "2026-11-28T07:55:16.458902+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 4.821
-      },
-      "screen_seconds": 4.821,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "MTAd_EQ",
       "venue": "DE",
@@ -8150,6 +8132,25 @@
       },
       "screen_seconds": 4.742,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "NDX1d_EQ",
+      "venue": "DE",
+      "yahoo": "NDX1.DE",
+      "isin": "DE000A0D6554",
+      "name": "NDX1",
+      "seconds": 2.322,
+      "outcome": "miss",
+      "at": "2026-11-28T08:03:23.756237+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.088
+      },
+      "screen_seconds": 1.088,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -91519,43 +91520,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T08:03:00.688844+00:00"
+    },
+    {
+      "t212_ticker": "NDX1d_EQ",
+      "yahoo": "NDX1.DE",
+      "name": "NDX1",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T08:03:23.756237+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "NDH1d_EQ",
+    "t212_ticker": "NDX1d_EQ",
     "venue": "DE",
-    "yahoo": "NDH1.DE",
-    "isin": "CH0039821084",
-    "name": "NDH1",
-    "seconds": 5.973,
+    "yahoo": "NDX1.DE",
+    "isin": "DE000A0D6554",
+    "name": "NDX1",
+    "seconds": 2.322,
     "outcome": "miss",
-    "at": "2026-11-28T08:03:14.052867+00:00",
+    "at": "2026-11-28T08:03:23.756237+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.742
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.088
     },
-    "screen_seconds": 4.742,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.088,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "NDX1d_EQ"
+    }
   },
-  "updated_at": "2026-11-28T08:03:14.052867+00:00",
+  "updated_at": "2026-11-28T08:03:23.756237+00:00",
   "totals": {
-    "screened": 7387,
+    "screened": 7388,
     "signals": {
-      "buy": 2003,
+      "buy": 2004,
       "avoid": 1553,
       "hold": 1469,
       "insufficient_data": 2322,
       "strong_buy": 40
     },
-    "signals_n": 7387,
-    "screen_seconds_sum": 101273.93700000049,
-    "screen_seconds_n": 7387,
+    "signals_n": 7388,
+    "screen_seconds_sum": 101275.02500000049,
+    "screen_seconds_n": 7388,
     "outcomes": {
-      "miss": 3571,
+      "miss": 3572,
       "saved": 3816
     }
   },
