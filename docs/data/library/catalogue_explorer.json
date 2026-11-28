@@ -7659,28 +7659,10 @@
     "SOCD_EQ",
     "SON1D_EQ",
     "SP9D_EQ",
-    "SPACD_EQ"
+    "SPACD_EQ",
+    "SPGD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SEG1d_EQ",
-      "venue": "DE",
-      "yahoo": "SEG1.DE",
-      "isin": "CA8438142033",
-      "name": "SEG1",
-      "seconds": 86.007,
-      "outcome": "miss",
-      "at": "2026-11-28T14:07:43.056779+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.93
-      },
-      "screen_seconds": 84.93,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "SEHd_EQ",
       "venue": "DE",
@@ -8421,6 +8403,25 @@
       },
       "screen_seconds": 84.54,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "SPGd_EQ",
+      "venue": "DE",
+      "yahoo": "SPG.DE",
+      "isin": "DE000SPG1003",
+      "name": "SPG",
+      "seconds": 2.042,
+      "outcome": "miss",
+      "at": "2026-11-28T14:47:27.954120+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.732
+      },
+      "screen_seconds": 0.732,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -93178,43 +93179,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T14:38:06.983633+00:00"
+    },
+    {
+      "t212_ticker": "SPGd_EQ",
+      "yahoo": "SPG.DE",
+      "name": "SPG",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T14:47:27.954120+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "SPACd_EQ",
+    "t212_ticker": "SPGd_EQ",
     "venue": "DE",
-    "yahoo": "SPAC.DE",
-    "isin": "LU2333563281",
-    "name": "TNIE",
-    "seconds": 85.51,
+    "yahoo": "SPG.DE",
+    "isin": "DE000SPG1003",
+    "name": "SPG",
+    "seconds": 2.042,
     "outcome": "miss",
-    "at": "2026-11-28T14:47:20.686943+00:00",
+    "at": "2026-11-28T14:47:27.954120+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.54
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.732
     },
-    "screen_seconds": 84.54,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.732,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "SPGd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T14:47:20.686943+00:00",
+  "updated_at": "2026-11-28T14:47:27.954120+00:00",
   "totals": {
-    "screened": 7658,
+    "screened": 7659,
     "signals": {
-      "buy": 2028,
+      "buy": 2029,
       "avoid": 1573,
       "hold": 1493,
       "insufficient_data": 2524,
       "strong_buy": 40
     },
-    "signals_n": 7658,
-    "screen_seconds_sum": 113959.90200000047,
-    "screen_seconds_n": 7658,
+    "signals_n": 7659,
+    "screen_seconds_sum": 113960.63400000047,
+    "screen_seconds_n": 7659,
     "outcomes": {
-      "miss": 3841,
+      "miss": 3842,
       "saved": 3817
     }
   },
