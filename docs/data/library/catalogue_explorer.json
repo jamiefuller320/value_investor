@@ -7552,28 +7552,10 @@
     "R960D_EQ",
     "R9BD_EQ",
     "R9G0D_EQ",
-    "R9U2D_EQ"
+    "R9U2D_EQ",
+    "RAAD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "POH1d_EQ",
-      "venue": "DE",
-      "yahoo": "POH1.DE",
-      "isin": "GB0031215220",
-      "name": "POH1",
-      "seconds": 6.557,
-      "outcome": "miss",
-      "at": "2026-11-28T11:00:51.683188+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 5.213
-      },
-      "screen_seconds": 5.213,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "PP0d_EQ",
       "venue": "DE",
@@ -8314,6 +8296,25 @@
       },
       "screen_seconds": 86.269,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "RAAd_EQ",
+      "venue": "DE",
+      "yahoo": "RAA.DE",
+      "isin": "DE0007010803",
+      "name": "RAA",
+      "seconds": 2.804,
+      "outcome": "miss",
+      "at": "2026-11-28T11:27:00.025561+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 1.238
+      },
+      "screen_seconds": 1.238,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -92612,43 +92613,56 @@
         "error": null
       },
       "finished_at": "2026-11-28T11:24:17.056727+00:00"
+    },
+    {
+      "t212_ticker": "RAAd_EQ",
+      "yahoo": "RAA.DE",
+      "name": "RAA",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T11:27:00.025561+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "R9U2d_EQ",
+    "t212_ticker": "RAAd_EQ",
     "venue": "DE",
-    "yahoo": "R9U2.DE",
-    "isin": "CA39342L1085",
-    "name": "R9U2",
-    "seconds": 87.553,
+    "yahoo": "RAA.DE",
+    "isin": "DE0007010803",
+    "name": "RAA",
+    "seconds": 2.804,
     "outcome": "miss",
-    "at": "2026-11-28T11:26:49.768926+00:00",
+    "at": "2026-11-28T11:27:00.025561+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 86.269
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 1.238
     },
-    "screen_seconds": 86.269,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.238,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "RAAd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T11:26:49.768926+00:00",
+  "updated_at": "2026-11-28T11:27:00.025561+00:00",
   "totals": {
-    "screened": 7551,
+    "screened": 7552,
     "signals": {
-      "buy": 2016,
+      "buy": 2017,
       "avoid": 1567,
       "hold": 1480,
       "insufficient_data": 2448,
       "strong_buy": 40
     },
-    "signals_n": 7551,
-    "screen_seconds_sum": 107364.46400000049,
-    "screen_seconds_n": 7551,
+    "signals_n": 7552,
+    "screen_seconds_sum": 107365.70200000048,
+    "screen_seconds_n": 7552,
     "outcomes": {
-      "miss": 3734,
+      "miss": 3735,
       "saved": 3817
     }
   },
