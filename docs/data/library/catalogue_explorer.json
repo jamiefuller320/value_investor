@@ -7669,28 +7669,10 @@
     "SRTD1_EQ",
     "SSHD_EQ",
     "SSM1D_EQ",
-    "ST5D_EQ"
+    "ST5D_EQ",
+    "STMD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "SHAd_EQ",
-      "venue": "DE",
-      "yahoo": "SHA.DE",
-      "isin": "DE000SHA0100",
-      "name": "SHA0",
-      "seconds": 85.533,
-      "outcome": "miss",
-      "at": "2026-11-28T14:18:42.073420+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 84.669
-      },
-      "screen_seconds": 84.669,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "SHDd_EQ",
       "venue": "DE",
@@ -8431,6 +8413,25 @@
       },
       "screen_seconds": 0.565,
       "signal": "hold"
+    },
+    {
+      "t212_ticker": "STMd_EQ",
+      "venue": "DE",
+      "yahoo": "STM.DE",
+      "isin": "DE000STAB1L8",
+      "name": "STM",
+      "seconds": 1.922,
+      "outcome": "miss",
+      "at": "2026-11-28T14:55:37.410523+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.698
+      },
+      "screen_seconds": 0.698,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -93196,43 +93197,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T14:47:27.954120+00:00"
+    },
+    {
+      "t212_ticker": "STMd_EQ",
+      "yahoo": "STM.DE",
+      "name": "STM",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T14:55:37.410523+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "ST5d_EQ",
+    "t212_ticker": "STMd_EQ",
     "venue": "DE",
-    "yahoo": "ST5.DE",
-    "isin": "DE000A0LR936",
-    "name": "ST5",
-    "seconds": 1.663,
+    "yahoo": "STM.DE",
+    "isin": "DE000STAB1L8",
+    "name": "STM",
+    "seconds": 1.922,
     "outcome": "miss",
-    "at": "2026-11-28T14:55:30.097383+00:00",
+    "at": "2026-11-28T14:55:37.410523+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "hold",
-      "fits": false,
-      "data_quality_score": 0.95,
-      "seconds": 0.565
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.698
     },
-    "screen_seconds": 0.565,
-    "signal": "hold"
+    "screen_seconds": 0.698,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "STMd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T14:55:30.097383+00:00",
+  "updated_at": "2026-11-28T14:55:37.410523+00:00",
   "totals": {
-    "screened": 7668,
+    "screened": 7669,
     "signals": {
-      "buy": 2029,
+      "buy": 2030,
       "avoid": 1574,
       "hold": 1497,
       "insufficient_data": 2528,
       "strong_buy": 40
     },
-    "signals_n": 7668,
-    "screen_seconds_sum": 114385.42900000048,
-    "screen_seconds_n": 7668,
+    "signals_n": 7669,
+    "screen_seconds_sum": 114386.12700000049,
+    "screen_seconds_n": 7669,
     "outcomes": {
-      "miss": 3851,
+      "miss": 3852,
       "saved": 3817
     }
   },
