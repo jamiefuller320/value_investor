@@ -7315,28 +7315,10 @@
     "MA10D_EQ",
     "MAKD_EQ",
     "MARAD_EQ",
-    "MAT1D_EQ"
+    "MAT1D_EQ",
+    "MBBD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "LN3d_EQ",
-      "venue": "DE",
-      "yahoo": "LN3.DE",
-      "isin": "US47233W1099",
-      "name": "LN3",
-      "seconds": 84.811,
-      "outcome": "miss",
-      "at": "2026-11-28T01:00:47.062033+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.3375,
-        "seconds": 83.317
-      },
-      "screen_seconds": 83.317,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "LNLBd_EQ",
       "venue": "DE",
@@ -8077,6 +8059,25 @@
       },
       "screen_seconds": 84.63,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MBBd_EQ",
+      "venue": "DE",
+      "yahoo": "MBB.DE",
+      "isin": "DE000A0ETBQ4",
+      "name": "MBB",
+      "seconds": 2.802,
+      "outcome": "miss",
+      "at": "2026-11-28T01:47:02.217486+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.595
+      },
+      "screen_seconds": 0.595,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -91374,43 +91375,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T01:21:35.369795+00:00"
+    },
+    {
+      "t212_ticker": "MBBd_EQ",
+      "yahoo": "MBB.DE",
+      "name": "MBB",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T01:47:02.217486+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MAT1d_EQ",
+    "t212_ticker": "MBBd_EQ",
     "venue": "DE",
-    "yahoo": "MAT1.DE",
-    "isin": "JP3866800000",
-    "name": "MAT1",
-    "seconds": 86.217,
+    "yahoo": "MBB.DE",
+    "isin": "DE000A0ETBQ4",
+    "name": "MBB",
+    "seconds": 2.802,
     "outcome": "miss",
-    "at": "2026-11-28T01:46:53.549549+00:00",
+    "at": "2026-11-28T01:47:02.217486+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.63
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.595
     },
-    "screen_seconds": 84.63,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.595,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MBBd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T01:46:53.549549+00:00",
+  "updated_at": "2026-11-28T01:47:02.217486+00:00",
   "totals": {
-    "screened": 7314,
+    "screened": 7315,
     "signals": {
-      "buy": 1994,
+      "buy": 1995,
       "avoid": 1550,
       "hold": 1461,
       "insufficient_data": 2269,
       "strong_buy": 40
     },
-    "signals_n": 7314,
-    "screen_seconds_sum": 100287.97100000046,
-    "screen_seconds_n": 7314,
+    "signals_n": 7315,
+    "screen_seconds_sum": 100288.56600000046,
+    "screen_seconds_n": 7315,
     "outcomes": {
-      "miss": 3498,
+      "miss": 3499,
       "saved": 3816
     }
   },
