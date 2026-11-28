@@ -7293,28 +7293,10 @@
     "M0LYD_EQ",
     "M0ND_EQ",
     "M0YD_EQ",
-    "M11D_EQ"
+    "M11D_EQ",
+    "M12D_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "KWSd_EQ",
-      "venue": "DE",
-      "yahoo": "KWS.DE",
-      "isin": "DE0007074007",
-      "name": "KWS",
-      "seconds": 3.564,
-      "outcome": "miss",
-      "at": "2026-11-28T00:33:47.739050+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "buy",
-        "fits": true,
-        "data_quality_score": 1.0,
-        "seconds": 0.6
-      },
-      "screen_seconds": 0.6,
-      "signal": "buy"
-    },
     {
       "t212_ticker": "KY4d_EQ",
       "venue": "DE",
@@ -8055,6 +8037,25 @@
       },
       "screen_seconds": 84.83,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "M12d_EQ",
+      "venue": "DE",
+      "yahoo": "M12.DE",
+      "isin": "DE000A0STSQ8",
+      "name": "M12",
+      "seconds": 2.438,
+      "outcome": "miss",
+      "at": "2026-11-28T01:21:35.369795+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.779
+      },
+      "screen_seconds": 0.779,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -91344,43 +91345,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T01:08:48.407140+00:00"
+    },
+    {
+      "t212_ticker": "M12d_EQ",
+      "yahoo": "M12.DE",
+      "name": "M12",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T01:21:35.369795+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "M11d_EQ",
+    "t212_ticker": "M12d_EQ",
     "venue": "DE",
-    "yahoo": "M11.DE",
-    "isin": "AU000000FGR3",
-    "name": "M11",
-    "seconds": 87.533,
+    "yahoo": "M12.DE",
+    "isin": "DE000A0STSQ8",
+    "name": "M12",
+    "seconds": 2.438,
     "outcome": "miss",
-    "at": "2026-11-28T01:21:26.492161+00:00",
+    "at": "2026-11-28T01:21:35.369795+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.83
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.779
     },
-    "screen_seconds": 84.83,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.779,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "M12d_EQ"
+    }
   },
-  "updated_at": "2026-11-28T01:21:26.492161+00:00",
+  "updated_at": "2026-11-28T01:21:35.369795+00:00",
   "totals": {
-    "screened": 7292,
+    "screened": 7293,
     "signals": {
-      "buy": 1993,
+      "buy": 1994,
       "avoid": 1548,
       "hold": 1458,
       "insufficient_data": 2253,
       "strong_buy": 40
     },
-    "signals_n": 7292,
-    "screen_seconds_sum": 98932.27400000044,
-    "screen_seconds_n": 7292,
+    "signals_n": 7293,
+    "screen_seconds_sum": 98933.05300000044,
+    "screen_seconds_n": 7293,
     "outcomes": {
-      "miss": 3476,
+      "miss": 3477,
       "saved": 3816
     }
   },
