@@ -7352,28 +7352,10 @@
     "MSID_EQ",
     "MTAD_EQ",
     "MTS1D_EQ",
-    "MU1D_EQ"
+    "MU1D_EQ",
+    "MUBD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "MAKd_EQ",
-      "venue": "DE",
-      "yahoo": "MAK.DE",
-      "isin": "DE0006044001",
-      "name": "MAK",
-      "seconds": 2.697,
-      "outcome": "miss",
-      "at": "2026-11-28T01:43:47.596992+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "hold",
-        "fits": false,
-        "data_quality_score": 0.85,
-        "seconds": 0.614
-      },
-      "screen_seconds": 0.614,
-      "signal": "hold"
-    },
     {
       "t212_ticker": "MARAd_EQ",
       "venue": "DE",
@@ -8114,6 +8096,25 @@
       },
       "screen_seconds": 4.669,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "MUBd_EQ",
+      "venue": "DE",
+      "yahoo": "MUB.DE",
+      "isin": "DE0006627201",
+      "name": "MUB",
+      "seconds": 2.744,
+      "outcome": "miss",
+      "at": "2026-11-28T07:56:03.386703+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.9,
+        "seconds": 1.072
+      },
+      "screen_seconds": 1.072,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -91443,43 +91444,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T07:55:26.617759+00:00"
+    },
+    {
+      "t212_ticker": "MUBd_EQ",
+      "yahoo": "MUB.DE",
+      "name": "MUB",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T07:56:03.386703+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "MU1d_EQ",
+    "t212_ticker": "MUBd_EQ",
     "venue": "DE",
-    "yahoo": "MU1.DE",
-    "isin": "JP3891600003",
-    "name": "MU1",
-    "seconds": 6.071,
+    "yahoo": "MUB.DE",
+    "isin": "DE0006627201",
+    "name": "MUB",
+    "seconds": 2.744,
     "outcome": "miss",
-    "at": "2026-11-28T07:55:53.280834+00:00",
+    "at": "2026-11-28T07:56:03.386703+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 4.669
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.9,
+      "seconds": 1.072
     },
-    "screen_seconds": 4.669,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.072,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "MUBd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T07:55:53.280834+00:00",
+  "updated_at": "2026-11-28T07:56:03.386703+00:00",
   "totals": {
-    "screened": 7351,
+    "screened": 7352,
     "signals": {
-      "buy": 1998,
+      "buy": 1999,
       "avoid": 1551,
       "hold": 1465,
       "insufficient_data": 2297,
       "strong_buy": 40
     },
-    "signals_n": 7351,
-    "screen_seconds_sum": 101145.6440000005,
-    "screen_seconds_n": 7351,
+    "signals_n": 7352,
+    "screen_seconds_sum": 101146.7160000005,
+    "screen_seconds_n": 7352,
     "outcomes": {
-      "miss": 3535,
+      "miss": 3536,
       "saved": 3816
     }
   },
