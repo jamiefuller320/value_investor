@@ -7217,28 +7217,10 @@
     "K9JD_EQ",
     "KAJD_EQ",
     "KAOD_EQ",
-    "KAX2D_EQ"
+    "KAX2D_EQ",
+    "KBXD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "IXX1d_EQ",
-      "venue": "DE",
-      "yahoo": "IXX1.DE",
-      "isin": "DE0005759807",
-      "name": "IXX",
-      "seconds": 87.774,
-      "outcome": "miss",
-      "at": "2026-11-27T23:58:48.911573+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 86.25
-      },
-      "screen_seconds": 86.25,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "IYAAd_EQ",
       "venue": "DE",
@@ -7979,6 +7961,25 @@
       },
       "screen_seconds": 3.795,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "KBXd_EQ",
+      "venue": "DE",
+      "yahoo": "KBX.DE",
+      "isin": "DE000KBX1006",
+      "name": "KBX",
+      "seconds": 2.221,
+      "outcome": "miss",
+      "at": "2026-11-28T00:24:40.072183+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.579
+      },
+      "screen_seconds": 0.579,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -90676,43 +90677,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T00:20:39.614982+00:00"
+    },
+    {
+      "t212_ticker": "KBXd_EQ",
+      "yahoo": "KBX.DE",
+      "name": "KBX",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T00:24:40.072183+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "KAX2d_EQ",
+    "t212_ticker": "KBXd_EQ",
     "venue": "DE",
-    "yahoo": "KAX2.DE",
-    "isin": "CH0100837282",
-    "name": "KAX2",
-    "seconds": 5.246,
+    "yahoo": "KBX.DE",
+    "isin": "DE000KBX1006",
+    "name": "KBX",
+    "seconds": 2.221,
     "outcome": "miss",
-    "at": "2026-11-28T00:24:31.900135+00:00",
+    "at": "2026-11-28T00:24:40.072183+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 3.795
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.579
     },
-    "screen_seconds": 3.795,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.579,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "KBXd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T00:24:31.900135+00:00",
+  "updated_at": "2026-11-28T00:24:40.072183+00:00",
   "totals": {
-    "screened": 7216,
+    "screened": 7217,
     "signals": {
-      "buy": 1985,
+      "buy": 1986,
       "avoid": 1544,
       "hold": 1452,
       "insufficient_data": 2195,
       "strong_buy": 40
     },
-    "signals_n": 7216,
-    "screen_seconds_sum": 96120.51500000048,
-    "screen_seconds_n": 7216,
+    "signals_n": 7217,
+    "screen_seconds_sum": 96121.09400000048,
+    "screen_seconds_n": 7217,
     "outcomes": {
-      "miss": 3400,
+      "miss": 3401,
       "saved": 3816
     }
   },
