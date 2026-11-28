@@ -7532,28 +7532,10 @@
     "PXM0D_EQ",
     "PYRD_EQ",
     "PYVD_EQ",
-    "PZMD_EQ"
+    "PZMD_EQ",
+    "PZSD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "PE1d_EQ",
-      "venue": "DE",
-      "yahoo": "PE1.DE",
-      "isin": "US7034811015",
-      "name": "PE1",
-      "seconds": 6.766,
-      "outcome": "miss",
-      "at": "2026-11-28T10:56:35.983334+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 5.205
-      },
-      "screen_seconds": 5.205,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "PEHd_EQ",
       "venue": "DE",
@@ -8294,6 +8276,25 @@
       },
       "screen_seconds": 5.181,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "PZSd_EQ",
+      "venue": "DE",
+      "yahoo": "PZS.DE",
+      "isin": "DE0006942808",
+      "name": "PZS",
+      "seconds": 2.744,
+      "outcome": "miss",
+      "at": "2026-11-28T11:05:04.743713+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 0.85,
+        "seconds": 1.194
+      },
+      "screen_seconds": 1.194,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -92238,43 +92239,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T10:57:24.339729+00:00"
+    },
+    {
+      "t212_ticker": "PZSd_EQ",
+      "yahoo": "PZS.DE",
+      "name": "PZS",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T11:05:04.743713+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "PZMd_EQ",
+    "t212_ticker": "PZSd_EQ",
     "venue": "DE",
-    "yahoo": "PZM.DE",
-    "isin": "CA69863Q1037",
-    "name": "PZM",
-    "seconds": 6.37,
+    "yahoo": "PZS.DE",
+    "isin": "DE0006942808",
+    "name": "PZS",
+    "seconds": 2.744,
     "outcome": "miss",
-    "at": "2026-11-28T11:04:54.455821+00:00",
+    "at": "2026-11-28T11:05:04.743713+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 5.181
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 0.85,
+      "seconds": 1.194
     },
-    "screen_seconds": 5.181,
-    "signal": "insufficient_data"
+    "screen_seconds": 1.194,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "PZSd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T11:04:54.455821+00:00",
+  "updated_at": "2026-11-28T11:05:04.743713+00:00",
   "totals": {
-    "screened": 7531,
+    "screened": 7532,
     "signals": {
-      "buy": 2013,
+      "buy": 2014,
       "avoid": 1566,
       "hold": 1479,
       "insufficient_data": 2433,
       "strong_buy": 40
     },
-    "signals_n": 7531,
-    "screen_seconds_sum": 106228.94900000046,
-    "screen_seconds_n": 7531,
+    "signals_n": 7532,
+    "screen_seconds_sum": 106230.14300000046,
+    "screen_seconds_n": 7532,
     "outcomes": {
-      "miss": 3714,
+      "miss": 3715,
       "saved": 3817
     }
   },
