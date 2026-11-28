@@ -7282,28 +7282,10 @@
     "LPKD_EQ",
     "LR8D_EQ",
     "LRA0D_EQ",
-    "LRS1D_EQ"
+    "LRS1D_EQ",
+    "LSXD_EQ"
   ],
   "runs": [
-    {
-      "t212_ticker": "KPOd_EQ",
-      "venue": "DE",
-      "yahoo": "KPO.DE",
-      "isin": "JP3228600007",
-      "name": "KPO",
-      "seconds": 5.328,
-      "outcome": "miss",
-      "at": "2026-11-28T00:29:13.311220+00:00",
-      "rows": 0,
-      "screen": {
-        "signal": "insufficient_data",
-        "fits": false,
-        "data_quality_score": 0.0,
-        "seconds": 3.869
-      },
-      "screen_seconds": 3.869,
-      "signal": "insufficient_data"
-    },
     {
       "t212_ticker": "KR8d_EQ",
       "venue": "DE",
@@ -8044,6 +8026,25 @@
       },
       "screen_seconds": 84.579,
       "signal": "insufficient_data"
+    },
+    {
+      "t212_ticker": "LSXd_EQ",
+      "venue": "DE",
+      "yahoo": "LSX.DE",
+      "isin": "DE0005754402",
+      "name": "LSX",
+      "seconds": 2.161,
+      "outcome": "miss",
+      "at": "2026-11-28T01:08:48.407140+00:00",
+      "rows": 0,
+      "screen": {
+        "signal": "buy",
+        "fits": true,
+        "data_quality_score": 1.0,
+        "seconds": 0.589
+      },
+      "screen_seconds": 0.589,
+      "signal": "buy"
     }
   ],
   "handoffs": [
@@ -91325,43 +91326,56 @@
       "signal": "buy",
       "status": "pending",
       "queued_at": "2026-11-28T00:51:08.257931+00:00"
+    },
+    {
+      "t212_ticker": "LSXd_EQ",
+      "yahoo": "LSX.DE",
+      "name": "LSX",
+      "signal": "buy",
+      "status": "pending",
+      "queued_at": "2026-11-28T01:08:48.407140+00:00"
     }
   ],
   "last": {
-    "t212_ticker": "LRS1d_EQ",
+    "t212_ticker": "LSXd_EQ",
     "venue": "DE",
-    "yahoo": "LRS1.DE",
-    "isin": "LU2290523658",
-    "name": "HTG",
-    "seconds": 86.814,
+    "yahoo": "LSX.DE",
+    "isin": "DE0005754402",
+    "name": "LSX",
+    "seconds": 2.161,
     "outcome": "miss",
-    "at": "2026-11-28T01:08:40.125983+00:00",
+    "at": "2026-11-28T01:08:48.407140+00:00",
     "rows": 0,
     "filings": [],
     "screen": {
-      "signal": "insufficient_data",
-      "fits": false,
-      "data_quality_score": 0.0,
-      "seconds": 84.579
+      "signal": "buy",
+      "fits": true,
+      "data_quality_score": 1.0,
+      "seconds": 0.589
     },
-    "screen_seconds": 84.579,
-    "signal": "insufficient_data"
+    "screen_seconds": 0.589,
+    "signal": "buy",
+    "handoff": {
+      "status": "pending",
+      "signal": "buy",
+      "t212_ticker": "LSXd_EQ"
+    }
   },
-  "updated_at": "2026-11-28T01:08:40.125983+00:00",
+  "updated_at": "2026-11-28T01:08:48.407140+00:00",
   "totals": {
-    "screened": 7281,
+    "screened": 7282,
     "signals": {
-      "buy": 1992,
+      "buy": 1993,
       "avoid": 1547,
       "hold": 1457,
       "insufficient_data": 2245,
       "strong_buy": 40
     },
-    "signals_n": 7281,
-    "screen_seconds_sum": 98252.48300000043,
-    "screen_seconds_n": 7281,
+    "signals_n": 7282,
+    "screen_seconds_sum": 98253.07200000044,
+    "screen_seconds_n": 7282,
     "outcomes": {
-      "miss": 3465,
+      "miss": 3466,
       "saved": 3816
     }
   },
